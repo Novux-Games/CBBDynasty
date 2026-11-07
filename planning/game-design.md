@@ -1,321 +1,707 @@
-# Dynasty: College Basketball — Game Design (Planning)
+# Dynasty: College Basketball — Game Design Document
 
 **Platform:** Android (mobile)  
 **Mode:** Dynasty / program builder — men's college basketball  
-**Status:** Planning — systems outline from design prep (Nov 2025)  
-**Default era:** **2026–27** season year at new dynasty start
+**Document type:** Planning GDD (implementation-ready outline)  
+**Default era:** **2026–27** at new dynasty start  
+**Last updated:** 2025-11-07
 
 ---
 
-## Vision (working)
+## Contents
 
-Build a deep **program dynasty** sim where the player runs a Division I men's basketball program across years: coaching, roster, recruiting (including NIL), facilities, conference politics, and a full seasonal calendar through March Madness — with **all ~365 D-I teams** and **real conference structure** as a design target.
-
----
-
-## Scope pillars
-
-| Pillar | Direction |
-|--------|-----------|
-| **Teams** | ~365 NCAA Division I men's programs |
-| **Conferences** | Real conference alignment and sizes (e.g. SEC/Big Ten → 20 league games) |
-| **Roster** | Current NCAA-style limits (15-player cap, scholarship rules below) |
-| **Time model** | Calendar-driven flow used across all game eras; **default start 2026–27** |
-| **Identity data** | **Generic default** or **imported** team/conference pack (JSON / URL), same schema as real-world layout |
-| **Depth** | Offseason is as important as in-season play |
-
----
-
-## Licensing, identity packs & save safety
-
-**Goal:** Real schools, conferences, and league **structure** (~365 D-I, real conference formats) without baking sensitive marks into core save data.
-
-This is **not legal advice** — confirm import UX and user-facing disclaimers with counsel before release.
-
-### Chosen approach (design lock)
-
-| Layer | Behavior |
-|-------|----------|
-| **Ship default** | **Generic** names and presentation; **same data schema** as real-world (IDs, conference sizes, schedule rules, tournament templates). |
-| **Optional import** | User supplies **JSON file** or **URL** to an identity pack (teams, conferences, colors, display strings, logos if allowed). |
-| **Runtime swap** | Player can **revert to default** or **re-import** anytime from settings; operation is a **display/identity overlay**, not a destructive world rebuild. |
-| **Save integrity** | Dynasty progress (rosters, history, sim state) stays keyed on **stable internal IDs**; swapping packs **must not corrupt** saves. |
-
-**Implementation principles:**
-
-- **One schema** for default and imported packs — validators reject malformed imports; partial apply is not allowed (all-or-nothing per import).
-- **Version stamp** on packs (e.g. `membershipYear: "2026-27"`) for UI warnings when pack era ≠ dynasty era.
-- Avoid **real player/coach likenesses** in marketing; in-game personas remain procedural/fictional unless licensed.
-- **NIL in-game** stays **abstract economics** (budget, deals, reputation), not real athlete IP.
-- **Disclaimer** on import: user attests rights to supplied assets; base game remains unofficial.
-
-### Other paths (reference only)
-
-| Approach | Notes |
-|----------|--------|
-| Official / partner license | Optional future; not required for v1 identity model |
-| Historical marks | Special packs later; same import pipeline |
-
-**Decision log:**
-
-- [x] Generic default + JSON/URL import, swappable without save corruption
-- [ ] Final disclaimer copy and store policy for URL imports
-- [ ] Pursue any institutional or media partnership
+1. [Vision & pillars](#vision--pillars)
+2. [Core loop](#core-loop)
+3. [Identity packs & save model](#identity-packs--save-model)
+4. [World scale & simulation](#world-scale--simulation)
+5. [Roster, eligibility & redshirt](#roster-eligibility--redshirt)
+6. [Offseason (authoritative calendar)](#offseason-authoritative-calendar)
+7. [Recruiting engine](#recruiting-engine)
+8. [NIL & program economy](#nil--program-economy)
+9. [Coaching carousel & contracts](#coaching-carousel--contracts)
+10. [Facilities, fundraising & upgrades](#facilities-fundraising--upgrades)
+11. [Conference realignment](#conference-realignment)
+12. [Preseason](#preseason)
+13. [Scheduling & regular season](#scheduling--regular-season)
+14. [Season simulation](#season-simulation)
+15. [Postseason & selection](#postseason--selection)
+16. [Awards & media](#awards--media)
+17. [Mobile UX, automation & notifications](#mobile-ux-automation--notifications)
+18. [Vertical slice & milestones](#vertical-slice--milestones)
+19. [Glossary](#glossary)
+20. [Document history](#document-history)
 
 ---
 
-## Roster & scholarships
+## Vision & pillars
 
-Aligned with **current rules** (tune annually if NCAA/NIL rules change in product roadmap):
+### Vision
 
-| Rule | Design |
+A **program dynasty** where running a D-I men's hoops school feels like a year-round job: **offseason** portal wars and recruiting, **preseason** schedule craft and hype, **season** survival on the calendar, **March** as the payoff. The world runs **~365 programs** with **real conference mechanics** (schedule size, tiebreakers, tournament shapes) while **display identity** stays swappable and save-safe.
+
+### Pillars
+
+| Pillar | Commitment |
+|--------|------------|
+| **Scale** | Full D-I men's membership (~365) |
+| **Structure** | Real conference sizes & rules (data-driven templates) |
+| **Roster law** | 15-man cap, scholarship flexibility, walk-ons |
+| **Calendar** | One master timeline for every game year |
+| **Offseason depth** | Recruiting + portal + carousel + facilities = co-equal with games |
+| **Identity** | Generic default; optional JSON/URL packs; no save corruption on swap |
+| **Era** | 2026–27 bootstrap content; dynasty can advance many years |
+
+### Non-goals (v1 planning)
+
+- Playable on-court action at NBA 2K fidelity (sim depth TBD; dynasty-first).
+- Licensed NCAA / school trademarks in the base APK.
+- Real player likenesses or real NIL deals tied to individuals.
+- Women's basketball (future SKU / expansion).
+
+---
+
+## Core loop
+
+```
+OFFSEASON → PRESEASON → REGULAR SEASON → POSTSEASON → (advance year)
+     ↑__________________________________________________|
+```
+
+**Player fantasy beats**
+
+1. **Build the roster** — portal, recruiting, NIL, cuts, pro-day/draft fallout.
+2. **Build the program** — facilities, grades, fundraising, conference trajectory.
+3. **Build the résumé** — schedule smart, win the right games, own March.
+4. **Build the legend** — coach progression, carousel drama, multi-decade archives.
+
+**Session types (mobile)**
+
+| Session | Typical length | Activity |
+|---------|----------------|----------|
+| **Micro** | 1–3 min | Sim one day, one recruiting action, one upgrade |
+| **Standard** | 10–15 min | Clear a week, recruiting board, schedule tweak |
+| **Event** | 20+ min | Selection Sunday, conference tournament run, bracket play |
+
+---
+
+## Identity packs & save model
+
+### Design lock
+
+| Rule | Detail |
 |------|--------|
-| **Roster cap** | **15 players maximum** |
-| **Scholarships** | Up to **15**; programs **need not** award all 15 |
-| **Walk-ons** | **Preferred walk-ons** allowed; still bound by 15-man cap |
-| **Redshirt** | Standard **redshirt** seasons; **medical redshirt** when eligibility rules are met (injury threshold / games played — tune to era) |
+| **Default ship** | Generic names, generic logos, full **structural** fidelity (IDs, conferences, formats). |
+| **Import** | Local **JSON** or remote **URL** (HTTPS); same schema as default. |
+| **Swap** | Revert to default or re-import anytime; **never** rewrite dynasty history. |
+| **Keys** | All simulation entities use **opaque stable IDs** (`teamId`, `confId`); display strings live in pack overlay. |
 
-**Implications for sim:**
+### Pack schema (conceptual)
 
-- Scholarship management is a **resource puzzle** (partial vs full rides, walk-on development arcs).
-- Roster construction interacts with **transfer portal**, **graduation**, **draft losses**, and **cuts** in offseason windows.
+Packs are validated **atomically**. Invalid pack → reject; no partial apply.
+
+```json
+{
+  "packVersion": 1,
+  "membershipYear": "2026-27",
+  "disclaimerAcceptedRequired": true,
+  "conferences": [
+    {
+      "id": "conf-sec",
+      "displayName": "Southeast Conference",
+      "leagueGameCount": 20,
+      "standingsTiebreakers": ["h2h", "h2h-point-diff", "record-vs-top-teams"],
+      "tournamentTemplateId": "tpl-sec-16",
+      "ncaaAutoBidSlot": 1
+    }
+  ],
+  "teams": [
+    {
+      "id": "team-001",
+      "conferenceId": "conf-sec",
+      "displayName": "State University",
+      "shortName": "ST",
+      "colors": { "primary": "#003366", "secondary": "#CCCCCC" },
+      "arenaBaseName": "Arena",
+      "logoUri": null
+    }
+  ],
+  "tournamentTemplates": [],
+  "rulesetYear": 2026
+}
+```
+
+**Required templates in default pack**
+
+- Conference **round-robin or matrix** schedule generators per `leagueGameCount`.
+- **TournamentTemplate** per conference (bracket size, byes, reseeding, venue neutral/home).
+- **NCAA** opening-round slot map (76 → 64).
+
+### Save partitioning
+
+| Save layer | Pack-dependent? | Notes |
+|------------|-------------------|--------|
+| Dynasty metadata | No | Start year, difficulty, coach career |
+| Program state | IDs only | Prestige, facility grades, budgets |
+| People | No likeness | Generated players/coaches |
+| History | IDs only | Results, stats archive |
+| Display cache | Yes | Rebuilt on pack swap |
+
+**Post-swap behavior:** Recompute display names/logos; log `packId` + `membershipYear` in dynasty metadata; show non-blocking warning if pack year ≠ current dynasty year.
+
+### Legal UX (ship checklist)
+
+- [ ] Import screen: user attestation + unofficial disclaimer.
+- [ ] URL fetch: domain allowlist option, size cap, signature optional (future).
+- [ ] Store listing: no implied NCAA endorsement.
 
 ---
 
-## Macro calendar (all eras)
+## World scale & simulation
 
-One **master calendar** drives exhibition, non-conference, conference play, postseason, and offseason phases.
+### Programs
 
-### Season (in-year)
+- **~365** D-I teams simulated each season (player's school + full league results for bracket/bubble).
+- **Sim granularity:** Week/day calendar for user team; batch sim for non-user games same day.
+- **User role:** Head coach (single program dynasty); no in-game athletic director job swap (AD actions folded into coach UI).
 
-| Phase | Timing | Notes |
-|-------|--------|--------|
-| **Exhibition** | Throughout **October** | Up to **3** exhibition games |
-| **Non-conference** | **November – December** | User scheduling / sim |
-| **Conference / mix** | **January** | Full league schedule for large conferences; smaller leagues may mix non-conference |
-| **Conference** | **February** | League play focus |
-| **Conference tournaments** | **Early March** | Formats researched per real conference |
-| **Selection Sunday** | **Mid-March** | Bracket reveal |
-| **March Madness** | **Mid-March → early April** | See postseason |
-| **Coach skill upgrades** | **Each Sunday in season** (optional **auto**) | Same upgrade system as preseason |
+### Ruleset evolution
 
-### Offseason (between seasons)
+- `rulesetYear` in pack ties to **portal windows**, **calendar dates**, **scholarship limits**.
+- When dynasty year advances, engine loads **rulesetYear + (dynastyYear - startYear)** patches from data (e.g. portal deadline shifts).
 
-See **Offseason systems** below — recruiting, portal, carousel, facilities, etc.
+### Performance (planning targets)
 
-### Preseason (before exhibitions)
-
-See **Preseason** — scheduling, coach upgrades, automated workouts.
+- Offseason: batch recruit AI for non-user schools overnight-style between user sessions.
+- In-season: sim non-user games in <200ms aggregate per day on mid-tier Android (goal, not benchmark yet).
 
 ---
 
-## Offseason systems
+## Roster, eligibility & redshirt
 
-### 1. Coaching carousel
+### Hard limits
 
-- **Deep carousel** — hires, fires, poaching, contract years, performance pressure.
-- **Coaching contract management** — salary, length, buyouts, extension decisions (player and AI programs).
-- Ties into **program prestige**, **boosters**, and **postseason success**.
+| Rule | Value |
+|------|--------|
+| Roster max | **15** |
+| Scholarships max | **15** (may use fewer) |
+| Walk-ons | Allowed; count toward 15 |
 
-### 2. Roster churn
+### Class & eligibility
 
-| Channel | Description |
-|---------|-------------|
-| **Graduation** | Class cycle; senior leadership loss |
-| **NBA draft** | Early entrants; stay/go decisions where applicable |
-| **Transfer portal** | Entries and arrivals |
-| **Cuts** | Roster trimming in designated **offseason window** |
+- **Eligibility years** tracked per player (games played, redshirt flags).
+- **Academic standing** per player: eligible / at-risk / ineligible for next game.
+- **Incompletes** at term boundary can bench player for postseason (configurable strictness by difficulty).
 
-**Offseason week 1 — transfer window + pro days**
+### Redshirt
 
-- **First week of offseason** opens the **transfer portal window** (aligned with portal gameplay).
-- **Pro days** (offseason, not preseason):
-  - **Graduates** and **declaring undergraduates** participate this week.
-  - Influences **stay/go** and **draft stock** before final roster decisions.
-- **NBA draft results** publish at **week 1 of recruiting** (start of the 5-week recruiting phase), after pro-day declarations resolve.
+| Type | Trigger |
+|------|---------|
+| **Standard redshirt** | User (preseason) elects; player plays **0** games (exhibitions exempt or count per ruleset — **exhibitions do not count** toward redshirt games played). |
+| **Medical redshirt** | In-season injury; games played ≤ ruleset threshold; medical staff grade affects approval odds in edge cases. |
 
-### 3. Recruiting & transfer portal (**5 weeks**)
+### Procedural roster events
 
-- **Recruiting window:** fixed **5-week** offseason phase (not in-season recruiting — design lock unless changed later).
-- **Custom recruiting engine** — not a clone of legacy CBB sims; supports **visits** as a mechanic within our ruleset (timing, budgets, and outcomes defined in recruiting spec).
-- **NIL:** integrated as a **recruiting / retention** factor (abstract deals and budget, not real individuals).
-- **Recruiting budget:**
-  - Earned from **academic grades** (program APR/grades metaphor — exact formula TBD).
-  - **Upgrades** made this offseason can improve **next year's** recruiting cycle (facilities, staff, NIL collectives, etc.).
+- **Graduation** — fixed class year.
+- **Early draft entry** — pro days + declare; withdrawal deadline before draft results week (see offseason).
+- **Portal in/out** — separate from high school recruiting board.
+- **Cuts** — offseason window; must land ≤15 by roster lock before exhibitions.
 
-### 4. Summer workouts (automated)
+---
 
-- Progression driven by:
-  - **Head coach** quality / development traits
-  - **Facility grade** (arena, practice, strength, medical, etc.)
-- Player development outcomes feed **preseason ratings** and **scheme fit**.
+## Offseason (authoritative calendar)
 
-### 5. Offseason window: cuts, conference movement, fundraising
+Offseason length: **~14 weeks** (tunable); user advances **week** or **day** in portal/recruiting sub-windows.
 
-| System | Behavior |
-|--------|----------|
-| **Cuts** | Trim to 15; scholarship redistribution |
-| **Conference changes** | Programs **accept or decline** invites based on **performance** and conference logic — **no relegation** |
-| **Fundraising / upgrades** | Raise funds; improve **arena** and **facilities** |
-| **Naming rights** | Sell **arena naming** (revenue vs fan pride tradeoffs — TBD) |
+| Week | Phase | Player highlights |
+|------|--------|-------------------|
+| **1** | **Transfer portal (cycle 1)** + **pro days** | Portal entries/responses; grad/early-entry pro day participation; stay-go decisions for declarations |
+| **2–3** | **Coaching carousel** (peak) | AI hires/fires; user contract extension; poaching risk |
+| **4** | **Cuts & roster lock prep** | Scholarship allocation; walk-on offers |
+| **5** | **Draft withdrawal deadline** | Last chance to return for withdrawing early entrants (before results) |
+| **6–10** | **Recruiting (5 weeks)** | HS + portal targets; visits; NIL pitches; commitments |
+| **6** | **NBA draft results** (recruiting **week 1**) | Published mock/order reveal; early entrants leave; scholarship opens |
+| **7–10** | Portal **cycle 2** (optional overlap) | Late portal fills for AI; user can scout portal commits in recruiting UI |
+| **11** | **Summer workouts** (auto) | Development deltas from coach + facilities |
+| **12–13** | **Fundraising & upgrades** | Arena/facility spend; naming rights deal |
+| **14** | **Conference offers** + **schedule prep unlock** | Accept/decline realignment; preseason scheduling opens |
+
+**Notes**
+
+- **Coaching carousel** can spawn events in weeks 2–14 at lower intensity (assistant offers, extension pressure).
+- **Graduation** processed at offseason start (week 0 rollover).
+- **Summer workouts** also apply passive gains to returning players who skipped pro-day declare drama.
+
+### Pro days & draft timeline (edge-case spec)
+
+| Event | Timing |
+|-------|--------|
+| Pro day participation | Offseason **week 1** |
+| Declare / stay | Week 1 decisions; can revisit until withdrawal deadline |
+| **Withdrawal deadline** | Offseason **week 5** |
+| **Draft results posted** | **Recruiting week 1** (offseason week 6) |
+| Who attends pro day | **Graduates** + **undergraduates who declared** |
+
+If player withdraws by week 5 → retains eligibility; if not withdrawn before draft results → either drafted (roster exit) or undrafted free agent exit per user/NBA odds model.
+
+---
+
+## Recruiting engine
+
+**Design lock:** Custom engine (not cloned from legacy sims). **No in-season recruiting window.** Visits are core.
+
+### Pools
+
+| Pool | Source |
+|------|--------|
+| **High school** | Generated class per year (national + regional ratings) |
+| **JUCO** | Smaller band, age-2 eligibility |
+| **Portal** | Offseason + optional in-season window per ruleset year |
+| **Walk-on** | Local tryout pool (low prestige schools) |
+
+### Resources per 5-week window
+
+| Resource | Earned / spent on |
+|----------|-------------------|
+| **Recruiting budget** | Calls, scouting, visits (see academics) |
+| **Visit slots** | Official visits (cap per week, boost for home vs away) |
+| **Coach hours** | HC + assistants; better staff = more efficient actions |
+| **NIL cap** | Soft annual cap; retention vs recruit split (see NIL) |
+
+### Visit model
+
+| Visit type | Effect |
+|------------|--------|
+| **Unofficial** | Cheap; small interest bump; unlimited with diminishing returns |
+| **Official** | Costs visit slot + budget; large interest; can schedule **visit weekends** (batch 3 targets) |
+| **Home strategy** | Last visit before commit weighted higher |
+
+**Interest meter (0–100)** per recruit: prestige, playing time pitch, NIL, major, distance, coach charisma, recent tourney success.
+
+**Commitment**
+
+- Soft commit → can decommit with reputation hit.
+- Hard commit → roster slot reserved; flipping costs NIL + prestige.
+- **Signing** end of recruiting week 5 → binding for HS; portal uses entry date rules.
+
+### Recruiting board UX
+
+- **Tabs:** HS / Portal / JUCO / Committed / Lost
+- **Filters:** Position, stars, region, fit (scheme), NIL demand
+- **Actions swipe-friendly:** Scout, call, offer, visit, NIL bump, drop
+- **Auto-assist:** "Suggest visits" based on budget and board rank (optional)
+
+### AI recruiting
+
+- AI schools spend budget from same grade-derived formula.
+- Top programs prioritize **archetype fits** and **NIL**.
+- User gets **news feed** of top-50 national commits (identity pack names).
+
+---
+
+## NIL & program economy
+
+### Abstract NIL (no real persons)
+
+| Concept | Behavior |
+|---------|----------|
+| **Collective strength** | Program-level 0–100; upgraded by fundraising and success |
+| **Player deal points** | Per-player allocation from collective budget |
+| **Recruit demand** | Each recruit has `nilAsk`; failing ask lowers interest |
+| **Retention** | Upperclassmen request raises after breakout seasons |
+
+### Boosters & fundraising
+
+- Offseason **fundraising mini-phase**: choose events (gala, alumni game, donor drive).
+- Success → **cash** + **collective boost** + **facility seed money**.
+- **Arena naming rights:** one-time cash infusion; slight prestige hit if name is silly; reversible in fiction only via rebrand cost.
+
+### Academic grades → recruiting budget
+
+**Program academics grade (0–100)** computed each spring from:
+
+| Input | Weight (tunable) |
+|-------|----------------|
+| Team GPA | 30% |
+| APR-style retention | 40% |
+| Eligibility incidents | −20% penalty stack |
+| Academic facility grade | +10% cap bonus |
+
+**Recruiting budget formula (v1)**
+
+```
+baseBudget = prestigeTierTable[prestige]
+gradeMultiplier = 0.6 + (academicsGrade / 100) * 0.8   // 0.6x – 1.4x
+facilityBonus = 1 + 0.05 * (recruitingFacilityGrade - 3)  // grade 1–10
+recruitingBudget = floor(baseBudget * gradeMultiplier * facilityBonus)
+```
+
+**Upgrades done in offseason 12–13** apply to **next year's** recruiting cycle (+1 facility tier → next year `facilityBonus`).
+
+### Cash sinks
+
+- Coach buyouts (carousel)
+- Facility construction
+- NIL pool (in-season retention top-ups limited)
+
+---
+
+## Coaching carousel & contracts
+
+### Coach entity
+
+- **Overall** + **skill tree** (recruiting, player dev, in-game tactics, portal retention, NIL charm).
+- **Skill points:** earned on level-up; spend preseason + **each Sunday** in season; **auto-spend** optional with priority list.
+
+### Contract fields
+
+| Field | Notes |
+|-------|-------|
+| Years remaining | 1–6 typical |
+| Salary | Affects AD satisfaction |
+| Buyout | User or AI pays to leave |
+| Performance goals | Sweet 16, .500 conf, etc. |
+
+### Carousel AI (behavior spec)
+
+| Factor | Effect on AI |
+|--------|----------------|
+| Last season wins | Job security |
+| Postseason run | Extension + poach immunity short window |
+| Prestige mismatch | Mid-major success → power offers |
+| Age / tenure | Regression to mean on firing |
+| Portal exodus | Firing risk |
+
+**User interaction**
+
+- Accept extension, renegotiate, resign.
+- **Interview offers** from other schools (prestige check).
+- Firing → choose new job from offer list or unemployed (spectate sim optional mode TBD).
+
+### Assistant coaches (light v1)
+
+- Aggregate into **staff grade** bumping visit efficiency and development; full assistant sim optional v2.
+
+---
+
+## Facilities, fundraising & upgrades
+
+### Facility categories (grades 1–10)
+
+| Category | Affects |
+|----------|---------|
+| **Arena** | Home revenue, attendance, recruit wow factor |
+| **Practice gym** | Development, scheme prep |
+| **Strength & sports science** | Injury recovery, summer gains |
+| **Medical** | Medical redshirt odds, injury duration |
+| **Academic center** | Grades, eligibility recovery |
+| **Recruiting lounge** | Visit success, budget efficiency |
+
+### Upgrade flow
+
+- Spend **cash** + **weeks** (construction overlaps recruiting late weeks).
+- **Naming rights** on arena: +cash, display name override in pack layer (`arenaDisplayName`).
+
+---
+
+## Conference realignment
+
+**Design lock:** **No relegation.** Conferences can **invite** programs; user/AI **accept or decline**.
+
+### Invite score (AI conference commissioner)
+
+```
+inviteScore = 0.35 * onCourtSuccess
+            + 0.25 * programPrestige
+            + 0.20 * marketSize
+            + 0.10 * academicsGrade
+            + 0.10 * facilityGrade
+```
+
+- Top conferences poach from mids when **inviteScore > threshold** and **conference has slot** (real membership caps from pack).
+- User receives **offer card** offseason week 14 with **pros/cons** (travel, competition, recruiting tier).
+
+### Schedule impact
+
+- Conference change effective **next season**; conference games regenerate from template.
 
 ---
 
 ## Preseason
 
-### Scheduling
+### Flow (after offseason week 14)
+
+1. **Roster finalization** — confirm redshirts.
+2. **Regular season schedule** — non-conference + conference auto + optional tournament.
+3. **Coach upgrades** — manual or auto.
+4. **Preseason workouts** — automated deltas.
+5. **Media & preview rankings** — national + conference poll sim; sets expectation meter.
+6. **Exhibition scheduling** — up to **3** in **October** (UX: calendar picker, opponent search, travel).
+
+### Exhibitions vs scrimmages
+
+| Type | Counts toward record | Counts toward redshirt games |
+|------|----------------------|------------------------------|
+| **Exhibition** | No | No |
+| **Closed scrimmage** | No | No (narrative event only) |
+
+Exhibitions affect **morale** and **poll momentum** slightly; injuries can occur.
+
+### Media & preview rankings
+
+- **Preseason Top 25** (national) + conference poll.
+- **User storyline:** "overrated/underrated" tag if disparity vs roster OVR.
+- Updates partially after exhibitions (small bump).
+
+---
+
+## Scheduling & regular season
+
+### Caps
 
 | Constraint | Value |
-|------------|--------|
-| **Regular season cap** | **32** games total |
-| **Conference games** | Up to **20** (depends on conference size; e.g. SEC/Big Ten) |
-| **Non-conference + conference** | Must sum within 32-game cap |
-| **Tournaments** | **4 games**; joining a tournament uses **28** other games + tournament (32 hard cap) |
+|------------|-------|
+| Total regular season games | **32** max |
+| Conference games | Up to **20** (from conference template) |
+| exempt tournament | **4** games → **28** other games |
 
-**Design tasks:**
+### Scheduling UX
 
-- Solver or UI for **valid schedules** (conference matrix + user non-conference choices + optional exempt tournaments).
-- Conference offices may auto-fill **league games**; user picks **non-conference** and **early-season events**.
+- **Conference:** auto-generated round-robin/matrix from template.
+- **User picks:** non-conference opponents (date windows Nov–Dec, limited Jan slots for small conferences).
+- **Tournaments:** join preseason; bracket injected; 4-game cap.
+- **Validation:** solver prevents over-cap; highlights conflict days.
 
-### Coach upgrades
+### In-season calendar (typical 2026–27 shape)
 
-- Spend **skill points** when available (preseason + weekly in-season per above).
-- **Auto-upgrade** toggle for casual play.
+| Month | Focus |
+|-------|-------|
+| Oct | ≤3 exhibitions |
+| Nov–Dec | Non-conference |
+| Jan | Conference (large) or mix (small) |
+| Feb | Conference |
+| Early Mar | Conference tournaments |
+| Mid Mar | Selection Sunday |
+| Mid Mar–early Apr | NCAA tournament |
 
-### Preseason workouts
+### Conference standings & tiebreakers
 
-- **Automated** (like summer); sets readiness, chemistry baselines, injury risk modifiers if used.
+**Data-driven stack** per conference in pack (`standingsTiebreakers` array).
 
-### Preseason features (scoped)
+**Supported tiebreaker modules (implement in order)**
 
-| Feature | Plan |
-|---------|------|
-| **Media & preview rankings** | Polls / preview pieces entering exhibitions; updates form and scheduling leverage |
-| **Exhibition scheduling UX** | Pick up to **3** October exhibitions (dates, opponents, home/away) with calendar feedback |
-| **Redshirt / medical redshirt** | Preseason confirmation of redshirt intent; in-season injury paths toward medical redshirt (see Roster) |
-| **Recruiting carryover** | Offseason visit results and commitments **display** in roster/recruiting UI; no in-season recruiting window |
+1. **Head-to-head** (mini-league if 3+ tied)
+2. **Head-to-head point differential**
+3. **Conference record** (already tied at this step)
+4. **Record vs top N** in conference
+5. **Record vs common opponents**
+6. **Point differential** (all conf games)
+7. **Coin flip** (logged for absurdities)
+
+NCAA seeding uses **conference tournament champion** as auto bid; remaining at-large from résumé.
 
 ---
 
-## Season gameplay
+## Season simulation
 
-- **Calendar** is source of truth for sim speed and player tasks.
-- **Games:** sim or play (play scope TBD — full game vs possession sim vs coach mode).
-- **Weekly rhythm:** Sunday coach upgrades; midweek games; recruiting **off** during season (locked).
+### Game sim modes (product)
 
-### In-season simulation layers (scoped)
+| Mode | v1 priority |
+|------|-------------|
+| **Sim to end** | P0 |
+| **Sim quarter/half** | P1 |
+| **Play-by-play read** | P1 |
+| **User play possession** | P2 / post-MVP |
 
-All layers below are **in scope** for the sim; league and selection logic should use **tiebreakers and ordering rules grounded in real NCAA/conference data** (seeded from research tables per conference / NCAA).
+### In-season systems (all in scope)
 
-| Layer | Behavior |
+| System | Spec summary |
+|--------|----------------|
+| **Injuries** | Severity tiers; games missed; medical staff reduces duration |
+| **Suspensions** | Administrative; X games |
+| **Academic eligibility** | Rolling grades; bench ineligible |
+| **Portal (in-season)** | Ruleset-driven window; user can lose players midseason |
+| **Chemistry** | Roster stability + coaching; affects clutch sim |
+| **Fatigue** | Back-to-back penalties optional |
+
+### NET-style résumé (selection)
+
+Per team, maintain:
+
+| Metric | Use |
+|--------|-----|
+| **Net efficiency** | Quality indicator |
+| **Quad schedule** | Wins/losses buckets 1–4 (home/neutral/road vs NET) |
+| **KenPom-like rating** | Hidden true strength |
+| **SOS / non-conf strength** | Bubble breaker |
+| **Recent form** | Last 10 weight for bubble |
+
+All **inspired by** real metrics; labels in UI are generic ("Resume Index", "Tier wins") unless pack enables fan names.
+
+### Weekly rhythm
+
+- **Sunday:** coach skill points (notification).
+- **Tue–Sat:** games per schedule.
+- **Monday:** optional news digest (injuries, polls).
+
+---
+
+## Postseason & selection
+
+### Conference tournaments
+
+Each conference uses a **TournamentTemplate**:
+
+```json
+{
+  "id": "tpl-sec-16",
+  "bracketSize": 16,
+  "seeds": 16,
+  "byes": [],
+  "reseedingAfterRound": false,
+  "sitePolicy": "neutral-primary",
+  "rounds": [
+    { "name": "R1", "games": 8 },
+    { "name": "QF", "games": 4 },
+    { "name": "SF", "games": 2 },
+    { "name": "F", "games": 1 }
+  ]
+}
+```
+
+**Research deliverable:** one template per conference in default 2026–27 pack (priority: power + player conference).
+
+### NCAA field: 76 teams
+
+| Slot type | Count |
+|-----------|-------|
+| Auto bids | 32 (conference champions) |
+| At-large | 44 |
+| **Total** | **76** |
+
+### Opening round (12 games → 64)
+
+**Structural plan (First Four analog)**
+
+- **8 teams** play **4 games** for **4 seeds** into 64-bracket (last four in at-large/high seed play-in).
+- **4 teams** play **2 games** for **2 remaining 16-seeds** (autobid play-in concept).
+- Total **6 opening-round sessions × 2 teams = 12 games** (matches 76 − 64 = 12 teams eliminated).
+
+Winners **inherit** the seed line assigned on Selection Sunday (not reseeded into different region after win).
+
+### Bracket construction
+
+- **4 regions**, 16 teams each after opening round.
+- **S-curve** seeding with **conference conflict rules** (no same-conference until Sweet 16 if possible).
+- **User bracket view** + sim; national semifinals at **Final Four** site.
+
+### Selection Sunday (committee sim)
+
+**Auto bid lock** after conference finals.
+
+**At-large ordering:**
+
+1. Lock autobids.
+2. Rank remaining by **composite resume score** (NET + quad wins + bad losses penalty).
+3. Take top 44 at-large + autobids = 76.
+4. Assign **seeds 1–16** per region via S-curve.
+5. Assign **opening-round matchups** to lowest at-large seeds and designated play-in autobids.
+
+**Bubble drama UI:** last four in / last four out screen for user if involved.
+
+---
+
+## Awards & media
+
+### Cadence
+
+| Award | When |
+|-------|------|
+| **Weekly honors** | Optional mid-season |
+| **All-conference** | After conference tournament |
+| **National awards** | After tournament (POY, coach, all-america teams) |
+| **Hall of fame (dynasty)** | Career archive milestones |
+
+### Media systems
+
+- **Polls:** weekly AP-style top 25 (sim voters).
+- **Bracketology:** updates weekly in February in news feed.
+- **User stories:** win streaks, upset alerts, portal steals.
+
+---
+
+## Mobile UX, automation & notifications
+
+### Automation toggles (global)
+
+| System | Auto options |
+|--------|----------------|
+| Coach skills | Auto-spend with priority tree |
+| Summer/preseason workouts | Always auto |
+| Recruiting | Auto-maintain board (caps) |
+| Non-user games | Always batch sim |
+
+### Manual must-feel-good
+
+- Recruiting visits & NIL on borderline targets
+- Opening-round / tournament rounds for user team
+- Conference accept/decline
+- Schedule non-conference rivals
+
+### Notifications (Android)
+
+| Event | Priority |
 |-------|----------|
-| **Injuries** | Availability, recovery, medical staff / facility modifiers |
-| **Suspensions** | Discipline and eligibility holds |
-| **Academic eligibility** | Grades, incompletes, APR pressure tied to recruiting budget meta |
-| **In-season transfer portal** | Modeled per **calendar year** of the dynasty when real rules change |
-| **Conference standings** | **Real-style tiebreakers** (head-to-head, record vs shared opponents, etc.) per conference pack data |
-| **Selection metrics** | NET / quadrant-style résumé inputs for bubble and seeding (committee spec; not claiming official accuracy) |
+| Recruiting commit / decommit | High |
+| Portal offer accepted | High |
+| Job offer / fired | High |
+| Selection Sunday | High |
+| Sunday coach points | Medium |
+| Game day tip-off | Medium (user opt-in) |
+| Fundraising complete | Low |
+
+### Accessibility
+
+- Large tap targets on calendar.
+- Color-blind safe pack colors; pattern overlays for jersey sim.
 
 ---
 
-## Postseason
+## Vertical slice & milestones
 
-### Conference championships
+### Recommended slice (engineering)
 
-- **Research task:** document each conference's **bracket format**, seeding, byes, and venue rules.
-- Store as **data-driven templates** per conference.
+**One conference (10–14 teams) + full offseason→Selection Sunday for user team**
 
-### NCAA tournament (March Madness)
+Includes: portal week 1, 5-week recruiting, schedule cap, 10-game mini-season, conference tourney, 76-field selection, opening round sim.
 
-| Element | Plan |
-|---------|------|
-| **Field** | **76 teams** |
-| **Opening round** | **12 games** → winners join **field of 64** |
-| **Bracket** | Standard 64-team path to champion |
-| **Culmination** | **Final Four** + **national championship** |
+### Milestone map
 
-**Selection Sunday:**
+| Milestone | Delivers |
+|-----------|----------|
+| **M0** | Calendar kernel + stable IDs + pack loader |
+| **M1** | Roster + games sim stub + standings tiebreakers |
+| **M2** | Offseason weeks 1–10 recruiting portal |
+| **M3** | Full D-I membership sim + NET |
+| **M4** | Conference templates + NCAA bracket |
+| **M5** | Polish UX + notifications + import URL |
 
-- Auto committee logic (TBD): résumé, auto bids, bubble, metrics inspired by real selection without claiming official accuracy.
+### Remaining product decisions (short list)
 
----
-
-## Teams & conferences (content)
-
-| Item | Target |
-|------|--------|
-| D-I membership | **~365** programs |
-| Conferences | Real-world alignment and sizes |
-| Game counts | Per-conference schedule generators (up to 20 league games) |
-| Realignment | Offseason offers; performance-driven; **no relegation** |
-
-**Content pipeline:**
-
-- **Default membership year:** **2026–27** at dynasty start (realignment data and schedule generators keyed to this era).
-- **Import packs** may target other years; game warns on mismatch but does not block play.
-- Update path for annual realignment: new default pack versions + optional URL imports; **internal IDs stable** across pack swaps.
+- On-court **playable** priority vs sim-only ship.
+- URL pack **signing** (trusted community repo).
+- **Multiplayer** none in scope.
 
 ---
 
-## Systems map (high level)
+## Glossary
 
-```
-Year loop (default start: 2026–27)
-├── Offseason
-│   ├── Week 1: transfer window + pro days (grads / early entry)
-│   ├── Coaching carousel & contracts
-│   ├── Graduation / portal / cuts / draft declarations
-│   ├── Recruiting (5 wks) + NIL + budget from grades — draft results posted week 1
-│   ├── Summer workouts (auto)
-│   └── Fundraising, upgrades, naming rights, conference offers
-├── Preseason
-│   ├── Schedule build (32 cap, tournaments)
-│   ├── Media & preview rankings
-│   ├── Exhibition scheduling UX (≤3, October)
-│   ├── Coach upgrades (+ auto)
-│   └── Preseason workouts (auto); redshirt / medical redshirt state
-├── Season (calendar)
-│   ├── Oct: exhibitions (≤3)
-│   ├── Nov–Dec: non-conference
-│   ├── Jan–Feb: conference (± mix)
-│   ├── Weekly: coach upgrades (Sun)
-│   └── Early Mar: conference tournaments
-└── Postseason
-    ├── Selection Sunday
-    ├── Opening round (12) → 64
-    └── Final Four & championship
-```
-
----
-
-## Open questions & next design passes
-
-**Enough to start?** Yes — this is sufficient for **vertical slice planning**, **data model sketch**, and **calendar prototype**. Below are the highest-value follow-ups.
-
-### Must research
-
-- [ ] Real **conference tournament** formats (all leagues in scope or tiered by priority).
-- [ ] **Opening round** / First Four style bracket math for field of 76 → 64.
-- [ ] NCAA rule changes timeline if game spans multiple real years.
-
-### Must specify (mechanics)
-
-- [ ] NIL economy: ceilings, boosters, collective vs individual, retention vs recruiting.
-- [ ] Grade → recruiting budget formula and facility upgrade payoffs.
-- [ ] AI coaching carousel aggression and contract math.
-- [ ] Conference invite logic (no relegation but promotion-style moves).
-
-### Product / UX
-
-- [ ] Sim depth on mobile (what's manual vs auto each phase).
-- [ ] Notifications for carousel, portal, recruiting, selection Sunday.
-
-### Remaining backlog
-
-- Awards, all-conference, and national player honors cadence
-- Scrimmages vs exhibitions (copy / rules clarity)
-- NBA early-entry withdrawal deadline vs pro-day week ordering (edge cases)
-- Recruiting engine spec (visits, NIL, custom board UX)
+| Term | Meaning |
+|------|---------|
+| **Pack** | Identity overlay JSON (teams, names, templates) |
+| **Ruleset year** | NCAA rule configuration for that real-world year |
+| **Resume score** | Composite for bubble/seeding |
+| **Opening round** | 12-game First Four phase (76→64) |
+| **Grade multiplier** | Academics → recruiting budget |
 
 ---
 
@@ -325,3 +711,4 @@ Year loop (default start: 2026–27)
 |------|--------|
 | 2025-11-07 | Initial organization from game design prep notes |
 | 2025-11-07 | Identity import (JSON/URL), preseason scope, sim layers, 2026–27 default era |
+| 2025-11-07 | Deep finish: offseason calendar, recruiting/NIL, selection math, tiebreakers, UX, milestones |
