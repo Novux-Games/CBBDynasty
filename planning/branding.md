@@ -49,11 +49,15 @@ Suggested contrast (for implementation QA):
 
 ## Adaptive icon (Android)
 
-| Layer | Spec |
-|-------|------|
-| **Background** | Solid `#181a25` |
-| **Foreground** | `app-logo.svg` (or exported foreground PNG/SVG safe zone) |
-| **Shape** | System mask (circle / squircle); keep critical logo art in center **66%** safe zone |
+Layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/adaptive-icon/):
+
+| File | Role |
+|------|------|
+| `adaptive-icon-background.svg` | Solid `#181a25` |
+| `adaptive-icon-foreground.svg` | White **icon only** (N mark) |
+| `adaptive-icon-canvas.svg` | Full square preview (canvas + icon) |
+
+**Shape:** System mask (circle / squircle); mark scaled to center **~66%** safe zone.
 
 ---
 
