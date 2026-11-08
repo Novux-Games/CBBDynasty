@@ -434,6 +434,7 @@ recruitingBudget = floor(baseBudget * gradeMultiplier * facilityBonus)
 ### Assistant coaches (light v1)
 
 - Aggregate into **staff grade** bumping visit efficiency and development; full assistant sim optional v2.
+- **UI:** assistants use **coach cards**; support staff (e.g. trainers) are list-only — trainers **`eligibleForHeadCoach: false`** ([`coach-card.md`](coach-card.md)).
 
 ---
 

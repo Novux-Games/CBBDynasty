@@ -182,7 +182,7 @@ Bottom tabs remain available; hubs stack or replace main content per navigation 
 
 #### Staff
 
-Full layout: [`coach-card.md`](coach-card.md#staff-school-hub) + [staff detail sheets](coach-card.md#staff-detail-sheet).
+Full layout: [`coach-card.md`](coach-card.md#staff-school-hub) (HC + assistants = coach cards; support = list only).
 
 | Block | Content |
 |-------|---------|
@@ -191,7 +191,7 @@ Full layout: [`coach-card.md`](coach-card.md#staff-school-hub) + [staff detail s
 | **Staff grade** | Aggregate program chip |
 | **Manage** | Hire, fire, poach, candidate pool (user school) |
 
-Tap HC → coach card preview. Tap any other row → staff detail sheet (Overview · **History** · Contract; HC résumé tabs when applicable).
+Tap **HC or assistant** → coach card preview. **Support** rows are not tappable — **Manage** only (user school).
 
 #### Roster
 
@@ -235,7 +235,7 @@ Full spec: [`coach-card.md`](coach-card.md).
 
 **Full card tabs:** Overview · Contract · History · Hall of Fame · Draft.
 
-**Edit** (user HC only): default schemes, skill points (Sunday), contract — tied to game-design carousel/contract systems. Assistant and support staff management stays on **School hub → Staff**, not the coach card.
+**Edit** (user HC only): default schemes, skill points (Sunday), contract. **Assistants** use coach card for profile/contract; **support** has no card — Staff tab **Manage** only. Trainers cannot become head coaches.
 
 ---
 
@@ -346,3 +346,4 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History
 | 2025-11-08 | Link player cards doc |
 | 2025-11-08 | School Staff section; coach card doc |
 | 2025-11-08 | School Staff tab; AD trust; staff detail sheets |
+| 2025-11-08 | Assistants = coach cards; support list-only |
