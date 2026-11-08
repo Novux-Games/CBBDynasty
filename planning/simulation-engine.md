@@ -51,45 +51,79 @@ The simulation engine is responsible for:
 
 Plain-language answers to planning questions — locked unless this doc is revised.
 
-### “Determinism” (same save, same outcome?)
+### Randomness — “not every game will be the same” (what we meant by #3)
 
-**Meaning:** If you simulate the *same* scheduled game twice **without changing** lineup, gameplan, injuries, or global seed inputs, do you get the **same** result?
+**You’re right:** every game should feel different. Opponents, rosters, pace, foul trouble, and rolls inside the engine guarantee that **Kentucky–Duke ≠ Kentucky–Samford** and that **Tuesday’s game ≠ Saturday’s game**.
 
-| Rule | Choice |
-|------|--------|
-| **Once a game is simmed, it is final** | Result + box score **persist** in the save; reloading the save does **not** re-roll. |
-| **Before sim** | Changing lineup/gameplan **should** change outcomes (new input → new sim). |
-| **Optional setting (later)** | “Locked seed preview” for QA only — not default player experience. |
+The **only** thing we were asking about is a **save-file exploit**, not “boring identical basketball”:
 
-So: not “press sim until you win,” but also not “identical inputs forever” across roster changes.
+| Situation | Expected behavior |
+|-----------|-------------------|
+| Normal play | Outcomes vary game to game; upsets happen; stats differ every night. |
+| You sim **Tuesday vs State**, get **81–76**, save, quit the app | When you load that save, Tuesday is still **81–76** — the result is **written to the file**. |
+| You sim Tuesday, don’t like the loss, **reload save and sim Tuesday again** | **Not allowed** — no “reroll this game” unless we add a **cheat/sandbox** mode later. |
+| You change **lineup or gameplan**, then sim (first time or in a **new** dynasty) | New inputs → **new** outcome (still random within reason). |
 
-### “NET / résumé — derived vs hybrid?”
+**Analogy:** like a season of real basketball on disk. Nights differ; you don’t get to erase a bad loss by reloading.
 
-| Term | Meaning |
-|------|---------|
-| **Derived (chosen)** | Efficiency, tier wins, SOS, and bubble sort keys are **computed only from sim outputs** (box scores, schedule locations, opponent strength). |
-| **Hybrid (not used)** | Injecting external real-world ratings or manual overrides per team. |
+**Design lock:**
 
-Opponent strength updates iteratively as the season sim progresses (weak early-season NET snaps, stabilizes by February). See [Résumé metrics](#résumé-metrics-net--selection-inputs).
+- **Variety:** yes — possession outcomes use RNG weighted by ratings, gameplan, home court, fatigue.
+- **Integrity:** final scores **stick** in the save so the bracket and NET stay consistent.
 
-### “Performance budget”
+### Résumé / NET (#8) — as real as possible
 
-**Meaning:** How fast must the phone finish work?
+**Goal:** Bubble talk, quadrant records, and seed lines should **feel like Selection Sunday**, not a made-up number.
 
-| Work unit | Target (engineering goal — tune on device) |
-|-----------|---------------------------------------------|
-| **User game** (40 min clock, all possessions) | Readable speed: ~**2–3 seconds wall-clock per possession** while user watches; **fast-sim** skips display delay |
-| **Rest of D-I that day** | When user hits **Advance Day/Week**, sim **all other games scheduled that day** in one batch |
-| **Typical day** | ~30–80 games league-wide (not 365 — only teams with a game that date) |
-| **Storage** | Text box scores for every completed game are **acceptable**; compress optional |
+| Principle | Detail |
+|-----------|--------|
+| **No imported real-world ratings** | We don’t paste KenPom/NET CSVs for 2026 teams. |
+| **Yes real NCAA-style logic** | Metrics and sort keys **mirror** how the committee actually reasons: efficiency, **where** you played, **who** you played, quality wins, bad losses, late form. |
 
-Text output keeps CPU heavier than GPU; batch day sim should run on a **background worker** with cancel-safe progress UI.
+Engine maintains a **NET-analog ranking** updated **after each day’s games**:
 
-### “Golden tests / regression fixtures”
+1. **Adjusted offensive & defensive efficiency** (points per 100 possessions; opponent-adjusted iteratively — same convergence *idea* as public NET).
+2. **Team value index** — blend of efficiency margin, opponent strength, and game-location difficulty (neutral > road > home for the *value of a win* framing where applicable).
+3. **Quadrants 1–4** — each game bucketed by **location** (H/N/A) and **opponent NET tier** at game date; track **W–L per quadrant** like résumé sheets.
+4. **SOS & non-conference strength** — opponents’ rolling strength; bad losses vs weak tiers flagged.
+5. **Last 10 / late-season form** — weighted for bubble ordering.
+6. **Eye-test tie noise** — tiny jitter only for **ties** in sort order, not to override résumé (keeps standings stable).
 
-**Meaning:** Saved **tiny scenarios** (fixed rosters + gameplan + schedule) with **expected box score ranges** so code changes do not break “star scoring 24 when team scores 81.”
+Selection Sunday in [`game-design.md`](game-design.md) reads these tables; formulas live in **tuning JSON** with documented real-world inspiration (labels in UI: “Resume / NET” unless identity pack renames).
 
-Optional but recommended for CI; not player-facing.
+Early season: NET is **volatile** (few games); by conference play NET **stabilizes** — intentional.
+
+### Performance (#9) — what was the actual question?
+
+**Question:** On a typical phone, how **snappy** should sim feel?
+
+This is **not** “how realistic is basketball.” It’s UX/engineering targets:
+
+| Work unit | Target (tune on device) |
+|-----------|-------------------------|
+| **Watch mode** | ~**2–3 seconds** between possession lines (your spec); skippable |
+| **Fast-sim user game** | As fast as CPU allows (no artificial delay) |
+| **Advance day** | Sim every other game that date in background; show progress bar; shouldn’t feel “frozen” |
+| **Storage** | Full text box scores for all games — **fine** |
+
+We’ll profile on a mid-tier Android when code exists; numbers above are **design targets**, not promises.
+
+### Regression fixtures (#14) — decided
+
+**Ship engineering tests** (player never sees them):
+
+| ID | Scenario | Assert |
+|----|----------|--------|
+| `slugfest` | Two defensive teams, slow pace | Total points each side 45–75; sum(player PTS) = team PTS |
+| `shootout` | Two high-OVR fast-pace teams | Total 150–220 combined; pace within band |
+| `foul_trouble` | Star picks up 4 PF in 1H | PF ≥ 4; minutes still reconcile |
+| `blowout` | 95 OVR vs 60 OVR | Margin ≥ 20; no incoherent shooting lines |
+| `upset_band` | 12-point underdog wins ~15% in Monte Carlo | Win rate 5–25% over 500 trials (tuning guardrail) |
+| `ot_path` | Tie at regulation forced via test harness | OT played; winner by 2+ |
+
+**Location:** `testdata/sim/fixtures/` when repo has code; mirror summaries in `planning/fixtures/README.md` for design traceability.
+
+**When:** Run on every engine change in CI once the module exists.
 
 ---
 
@@ -264,33 +298,58 @@ If validation fails during dev builds: **assert/log** and reject result. In rele
 
 ## Résumé metrics (NET / selection inputs)
 
-All **derived** after games finalize:
+**As real as possible** — computed **only** from sim games, using **NCAA-realistic structure**.
 
-| Metric | Source |
-|--------|--------|
-| Offensive / defensive efficiency | Points per 100 possessions from box scores |
-| Adjusted efficiency | Opponent strength iteration (schedule-weighted) |
-| Quad/Tier record | Home/road + opponent strength buckets |
-| SOS | Opponent adj. efficiency aggregate |
-| Recent form | Rolling last N games |
+### Per-game inputs (frozen at tip time for résumé)
 
-**Schedule location** comes from schedule table; **opponent strength** from their games already played — so metrics evolve realistically through the season.
+- Date, location (**H / N / A**)
+- Opponent ID
+- Opponent **NET rank tier** at game date (1–4 quadrants)
+- Result, score, possessions (from box score)
 
-Selection Sunday logic in game-design consumes these tables; engine **only maintains the numbers**.
+### Rolling team outputs (recomputed nightly)
+
+| Output | Use |
+|--------|-----|
+| **AdjO / AdjD** | Efficiency per 100 poss., opponent-adjusted |
+| **AdjEM (margin)** | AdjO − AdjD |
+| **NET rank** | Total ordering 1–365; primary sort for tiers |
+| **Quadrant records** | Q1–Q4 W–L |
+| **SOS / NC SOS** | Opponent strength aggregates |
+| **Quality wins / bad losses** | Flags vs tier thresholds |
+| **L10** | Last 10 games weight |
+| **Road/neutral résumé** | Committee tie sheets |
+
+### Quadrant bucketing (real pattern)
+
+For each completed game, assign **one** quadrant from opponent NET position at **that date** and game location (e.g. home vs top-50 NET → Q1). Threshold tables in tuning JSON; calibrate so **~40%** of D-I games land Q1/Q2 combined in a typical season (sanity stat).
+
+### Selection committee handoff
+
+Export `ResumeSnapshot` per team at Selection Sunday:
+
+- NET rank, quadrant lines, SOS, adj. efficiency, notable wins/losses list
+- No manual overrides
+
+[`game-design.md`](game-design.md) committee sim **sorts** on this snapshot; engine does not pick the bracket UI narrative.
 
 ---
 
 ## Randomness & saves
 
+**In-game:** each possession uses weighted randomness → **different games, different stories**.
+
+**After final:** result is **persisted**; load save → read box score, don’t sim again.
+
 ```
-gameSeed = hash(dynastySeed, gameId, gameDate, difficultyPreset)
+gameSeed = hash(dynastySeed, gameId, gameDate, lineupHash, gameplanHash, difficultyPreset)
 ```
 
-- **dynastySeed** created at new dynasty.
-- Each **final** game stores `gameSeed` used + result (reproducible for debugging).
-- **Reloading save** reads stored results — does not re-run RNG for FINAL games.
+- Used **once** when game moves SCHEDULED → FINAL.
+- Stored on game record for **debug replay** (dev tools), not player rerolls.
+- New dynasty → new `dynastySeed` → different league-wide paths.
 
-Variance between playthroughs comes from different schedules, injuries, and user choices — not from re-rolling saved history.
+**Not the goal:** identical scores every season. **Is the goal:** one coherent timeline per save file.
 
 ---
 
@@ -335,16 +394,9 @@ Balance passes edit JSON/CSV in repo; code reads tables at load.
 
 ---
 
-## Regression fixtures (optional)
+## Regression fixtures
 
-Maintain `planning/fixtures/` (or `testdata/sim/`) with:
-
-- 5-on-5 low-total defensive slugfest
-- High-pace shootout
-- Foul trouble (star with 4 PF early)
-- Overtime game
-
-Each fixture: inputs + expected team points band + stat sum checks. Used in automated tests when build pipeline exists.
+See [Clarifications — #14 decided](#regression-fixtures-14--decided) for the fixture list and assertions.
 
 ---
 
@@ -364,3 +416,4 @@ Each fixture: inputs + expected team points band + stat sum checks. Used in auto
 | Date | Change |
 |------|--------|
 | 2025-11-08 | Initial simulation engine spec from design Q&A |
+| 2025-11-08 | Clarify saves vs variety; real-style NET; perf question; fixture list |

@@ -99,7 +99,7 @@ Full specification: **[`planning/simulation-engine.md`](simulation-engine.md)**.
 | **Calendar** | User game can sim when scheduled; **other games that day stay unplayed** until **Advance Day/Week** |
 | **League** | ~**365** teams; only teams **with a game that date** sim; **full box scores** stored for every completed game |
 | **Stats** | Full college box score; coherence checks (team totals = player sums) |
-| **Résumé / NET** | **Fully derived** from sim results — no external rating injection |
+| **Résumé / NET** | **As real as possible** (quadrants, SOS, adj. efficiency) — **only** from sim results, no imported CSVs |
 | **Saves** | Offline local files; simmed games are **final** (not re-rolled on load) |
 | **Play-by-play** | Readable **during** sim; after game, persist **box score + team stats** only |
 
@@ -548,6 +548,8 @@ Gameplay is **sim-only**; see **[`simulation-engine.md`](simulation-engine.md)**
 
 ### NET-style résumé (selection)
 
+**Maintained by the simulation engine** from completed box scores — see [`simulation-engine.md`](simulation-engine.md#résumé-metrics-net--selection-inputs). Game design consumes:
+
 Per team, maintain:
 
 | Metric | Use |
@@ -729,3 +731,4 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-07 | Identity import (JSON/URL), preseason scope, sim layers, 2026–27 default era |
 | 2025-11-07 | Deep finish: offseason calendar, recruiting/NIL, selection math, tiebreakers, UX, milestones |
 | 2025-11-08 | Linked `simulation-engine.md`; text-based offline sim, day-advance league batching |
+| 2025-11-08 | NET realism note; save integrity vs per-game variety (simulation doc) |
