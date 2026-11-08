@@ -14,6 +14,7 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | Coach card + School Staff | **Done** | [`coach-card.md`](coach-card.md) |
 | Recruiting engine | **Done** | [`recruiting-engine.md`](recruiting-engine.md) |
 | Offseason frame | **Future doc when you ask** (like in-season `game-frame`) | — |
+| League branding / membership | **v1** (names + anchors TBD colors) | [`league-branding.md`](league-branding.md) |
 | NIL on player card | **Overview valuation** (recruiting commit) | [`player-cards.md`](player-cards.md) |
 | GOAT / History depth | **Defer** | [`game-frame.md`](game-frame.md) |
 | Notifications | Use game-design mobile UX list | [`game-design.md`](game-design.md) |

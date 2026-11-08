@@ -12,6 +12,7 @@
 **Strategy:** **[`strategy-schemes.md`](strategy-schemes.md)** — O/D presets, halftime, preview/watch  
 **Coach UI:** **[`coach-card.md`](coach-card.md)** — coach preview, card tabs, School staff  
 **Recruiting:** **[`recruiting-engine.md`](recruiting-engine.md)** — pools, 4-week window, NIL + points  
+**League identity:** **[`league-branding.md`](league-branding.md)** — conference/team real ↔ universe mapping  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start  
 **Last updated:** 2025-11-08
