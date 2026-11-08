@@ -334,7 +334,7 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History
 | Doc | Covers |
 |-----|--------|
 | **`offseason-frame.md`** | Portal, carousel, recruiting shell, week/day advance |
-| **`postseason-frame.md`** | Conference brackets, Selection Sunday, 76-field + Collegiate Invitational |
+| **`postseason-frame.md`** | Conference brackets, Selection Sunday, NCBA 76-field + NCI |
 | **`transfer-portal-engine.md`** | Portal cycles, retention, in-season window |
 | **`selection-engine.md`** | Resume math, seeds, bubble ordering |
 

@@ -73,6 +73,7 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 | Game systems | [`game-design.md`](game-design.md) |
 | In-season UI | [`game-frame.md`](game-frame.md) |
 | League names (real ↔ universe) | [`league-branding.md`](league-branding.md) · reference [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) |
+| NCBA / March Mayhem / early events | [`ncba-branding.md`](ncba-branding.md) |
 
 ---
 
@@ -82,3 +83,4 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 |------|--------|
 | 2025-11-08 | Initial branding: title, logo path, studio, `#181a25` |
 | 2025-11-08 | Official title: **Dynasty: College Basketball** |
+| 2025-11-08 | Link `ncba-branding.md` |

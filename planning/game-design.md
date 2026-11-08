@@ -13,6 +13,7 @@
 **Coach UI:** **[`coach-card.md`](coach-card.md)** — coach preview, card tabs, School staff  
 **Recruiting:** **[`recruiting-engine.md`](recruiting-engine.md)** — pools, 4-week window, NIL + points  
 **League identity:** **[`league-branding.md`](league-branding.md)** — conference/team real ↔ universe mapping  
+**NCBA universe:** **[`ncba-branding.md`](ncba-branding.md)** — national body, March Mayhem, early events  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start (**Season 1**)  
 **Last updated:** 2025-11-08
@@ -179,7 +180,7 @@ Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 
 - Conference **round-robin or matrix** schedule generators per `leagueGameCount`.
 - **TournamentTemplate** per conference (bracket size, byes, reseeding, venue neutral/home).
-- **NCAA** opening-round slot map (76 → 64).
+- **NCBA** Opening Round slot map (76 → 64).
 
 ### Save partitioning
 
@@ -387,7 +388,7 @@ recruitingBudget = floor(baseBudget * gradeMultiplier * facilityBonus)
 | Years remaining | 1–6 typical |
 | Salary | Affects AD satisfaction |
 | Buyout | User or AI pays to leave |
-| Performance goals | Sweet 16, .500 conf, etc. |
+| Performance goals | Super 16, .500 conf, etc. |
 
 ### Carousel AI (behavior spec)
 
@@ -511,14 +512,14 @@ Exhibitions affect **morale** and **poll momentum** slightly; injuries can occur
 |------------|-------|
 | Total regular season games | **32** max |
 | Conference games | Up to **20** (from conference template) |
-| exempt tournament | **4** games → **28** other games |
+| Early-season event | **Up to 4** games (counts toward 32); see [`ncba-branding.md`](ncba-branding.md) |
 
 ### Scheduling UX
 
 - **Conference:** auto-generated round-robin/matrix from template.
 - **User picks:** non-conference opponents (date windows Nov–Dec, limited Jan slots for small conferences).
-- **Tournaments:** join preseason; bracket injected; 4-game cap.
-- **Validation:** solver prevents over-cap; highlights conflict days.
+- **Early-season events:** User selects **one** catalog event (or none) during preseason — **Island Classic**, **Caribbean Showdown**, **Blue Blood Tip-Off**, **Desert Shootout** ([`ncba-branding.md`](ncba-branding.md#early-season-holiday-events-regular-season)). Bracket injected; **max 4 games**; **one event per team per regular season** (conference + NCBA/NCI postseason separate).
+- **Validation:** solver prevents over-cap, **double-booked events**, and second event enrollment; highlights conflict days.
 
 ### In-season calendar (typical 2026–27 shape)
 
@@ -530,7 +531,7 @@ Exhibitions affect **morale** and **poll momentum** slightly; injuries can occur
 | Feb | Conference |
 | Early Mar | Conference tournaments |
 | Mid Mar | Selection Sunday |
-| Mid Mar–early Apr | NCAA tournament |
+| Mid Mar–early Apr | **NCBA Men's BB Tournament** (March Mayhem) |
 
 ### Conference standings & tiebreakers
 
@@ -546,7 +547,7 @@ Exhibitions affect **morale** and **poll momentum** slightly; injuries can occur
 6. **Point differential** (all conf games)
 7. **Coin flip** (logged for absurdities)
 
-NCAA seeding uses **conference tournament champion** as auto bid; remaining at-large from résumé.
+**NCBA** seeding uses **conference tournament champion** as auto bid; remaining at-large from résumé.
 
 ---
 
@@ -604,8 +605,8 @@ Programs in **D-II → D-I reclass** (`postseasonEligible: false`) are on the **
 | Postseason stage | Rule |
 |------------------|------|
 | **Conference tournament** | Cannot qualify or participate while `postseasonEligible` is false |
-| **NCAA tournament** | No automatic bid; **not** eligible for at-large selection |
-| **Secondary postseason** (e.g. NIT-style) | Excluded while in transition |
+| **NCBA Men's BB Tournament** | No automatic bid; **not** eligible for at-large selection |
+| **NCI** (National College Invitational) | Excluded while in transition |
 
 **Season numbering:** **Season 1** = **2026–27** calendar (first playable year on a new dynasty). Later seasons advance the displayed year (`2027–28`, …) in step with `dynastySeasonIndex`.
 
@@ -638,7 +639,9 @@ Each conference uses a **TournamentTemplate**:
 
 **Design lock:** **real** bracket format per conference (size, byes, reseeding, sites) for **2026–27** — one `TournamentTemplate` per conference in the default pack.
 
-### NCAA field: 76 teams
+### NCBA Men's BB Tournament — 76 teams
+
+Universe names: [`ncba-branding.md`](ncba-branding.md). **March Mayhem** is the event brand in UI/news.
 
 | Slot type | Count |
 |-----------|-------|
@@ -646,9 +649,9 @@ Each conference uses a **TournamentTemplate**:
 | At-large | 44 |
 | **Total** | **76** |
 
-### Opening round (12 games → 64)
+### Opening Round (12 games → 64)
 
-**Structural plan (First Four analog)**
+**UI label:** **Opening Round** (First Four–style play-in).
 
 - **8 teams** play **4 games** for **4 seeds** into 64-bracket (last four in at-large/high seed play-in).
 - **4 teams** play **2 games** for **2 remaining 16-seeds** (autobid play-in concept).
@@ -656,11 +659,20 @@ Each conference uses a **TournamentTemplate**:
 
 Winners **inherit** the seed line assigned on Selection Sunday (not reseeded into different region after win).
 
-### Bracket construction
+### Bracket construction & round labels
 
-- **4 regions**, 16 teams each after opening round.
-- **S-curve** seeding with **conference conflict rules** (no same-conference until Sweet 16 if possible).
-- **User bracket view** + sim; national semifinals at **Final Four** site.
+- **4 regions**, 16 teams each after Opening Round.
+- **S-curve** seeding with **conference conflict rules** (no same-conference until **Super 16** if possible).
+- **User bracket view** + sim; national semifinals at **Championship 4** site.
+
+| Round (structural) | Universe label |
+|--------------------|----------------|
+| Round of 64 | **Round 1** |
+| Round of 32 | **Round 2** |
+| Sweet 16 | **Super 16** |
+| Elite 8 | **Great 8** |
+| Final Four | **Championship 4** |
+| Title game | **National Championship** |
 
 ### Selection Sunday (committee sim)
 
@@ -676,15 +688,15 @@ Winners **inherit** the seed line assigned on Selection Sunday (not reseeded int
 
 **Bubble drama UI:** last four in / last four out screen for user if involved.
 
-### Secondary national bracket (NIT-style)
+### NCI — National College Invitational (32 teams)
 
 | Rule | Value |
 |------|--------|
-| **Field** | **32** teams, postseason-eligible, **not** in the 76-team national bracket |
-| **Selection** | Resume rank + committee sim after Selection Sunday; **no** automatic bids |
-| **Structure** | Campus-hosted **round 1** where template allows; later rounds neutral sites |
-| **Universe label** | Default pack: **Collegiate Invitational** (pack override for display name) |
-| **Tracking** | Coach **Achievements** tab — secondary W–L, titles ([`coach-card.md`](coach-card.md)) |
+| **Field** | **32** teams — **next 32** on the Selection Sunday resume list after the **76** NCBA teams (ranks **77–108**), postseason-eligible only |
+| **Selection** | Automatic from ordering; **no** separate invite committee |
+| **Structure** | Campus-hosted **Round 1** where template allows; later rounds neutral sites |
+| **Universe label** | **NCI** — National College Invitational ([`ncba-branding.md`](ncba-branding.md)) |
+| **Tracking** | Coach **Achievements** tab — NCI W–L, titles ([`coach-card.md`](coach-card.md)) |
 
 Reclass programs with `postseasonEligible: false` are **ineligible**.
 
@@ -756,7 +768,7 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | **Possession sim** | 40-min engine, coherence checks, box scores — [`simulation-engine.md`](simulation-engine.md) |
 | **Dynasty systems** | Offseason, recruiting, portal, facilities |
 | **Full league** | 365-team scheduling, daily batch sim, derived résumé |
-| **March** | Conference templates, 76-field bracket, opening round, **Collegiate Invitational** |
+| **March** | Conference templates, NCBA 76-field, Opening Round, **NCI** |
 | **Ship** | Full 2D UI, automation toggles, notifications, **JSON/URL identity import** |
 
 ### Remaining product decisions (short list)
@@ -771,9 +783,12 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | Term | Meaning |
 |------|---------|
 | **Pack** | Identity overlay JSON (teams, names, templates) |
-| **Ruleset year** | NCAA rule configuration for that real-world year |
+| **Ruleset year** | Real-world rule configuration for that calendar year |
 | **Resume score** | Composite for bubble/seeding |
-| **Opening round** | 12-game First Four phase (76→64) |
+| **NCBA** | National College Basketball Association (universe NCAA) |
+| **NCI** | National College Invitational — 32 teams after NCBA field |
+| **Opening Round** | 12-game play-in phase (76→64) |
+| **March Mayhem** | Universe brand for March postseason |
 | **Grade multiplier** | Academics → recruiting budget |
 
 ---
@@ -795,4 +810,5 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-08 | Remove product v1/v2 scope language; design locks only |
 | 2025-11-08 | Restore full-product specs (staff, walk-ons, secondary postseason, unemployed coach) |
 | 2025-11-08 | HS/JUCO recruit seed moved to preseason (Top 60 in-season) |
+| 2025-11-08 | NCBA/NCI/March Mayhem; early events; round labels — `ncba-branding.md` |
 | 2025-11-08 | Linked `player-cards.md` |

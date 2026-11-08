@@ -124,18 +124,18 @@ Career totals as **head coach** unless a row says “at current school.” Scope
 |--------|--------|
 | **Record** | W–L |
 | **Win %** | Wins ÷ (W + L) |
-| **Tournament record** | NCAA tournament games W–L |
-| **Tournament win %** | NCAA tourney wins ÷ tourney games |
-| **National titles** | NCAA championships |
-| **Final Fours** | |
-| **Tournament appearances** | NCAA bids |
+| **Tournament record** | **NCBA Men's BB Tournament** games W–L |
+| **Tournament win %** | NCBA tourney wins ÷ tourney games |
+| **National titles** | **NCBA** National Championships |
+| **Final Fours** | **Championship 4** appearances |
+| **Tournament appearances** | NCBA (76-team field) bids |
 | **Conference regular-season championships** | outright or co-champion per conference tiebreaker rules |
 | **Conference tournament championships** | conference bracket winner (auto-bid path separate from regular-season title) |
-| **Secondary tournament record** | **Collegiate Invitational** (32-team field) W–L — [`game-design.md`](game-design.md#secondary-national-bracket-nit-style) |
-| **Secondary tournament win %** | Wins ÷ games in secondary bracket |
-| **Secondary tournament wins** | Collegiate Invitational **championships** |
+| **Secondary tournament record** | **NCI** (National College Invitational) W–L — [`game-design.md`](game-design.md#nci--national-college-invitational-32-teams) |
+| **Secondary tournament win %** | Wins ÷ NCI games |
+| **Secondary tournament wins** | **NCI championships** |
 
-Pack may override display name; stats keys stay `secondaryPostseason*`.
+Display via [`ncba-branding.md`](ncba-branding.md); stats keys stay `secondaryPostseason*`.
 
 ### Strategy
 
@@ -175,7 +175,7 @@ Deep contract management for **user head coach**; **read-only** mirror for scout
 | **Total contract length** | Original term |
 | **Salary** | Annual; affects AD trust / budget story |
 | **Buyout** | Cost to leave or for school to fire you |
-| **Performance goals** | Sweet 16, .500 conference, win total, etc. |
+| **Performance goals** | Super 16, .500 conference, win total, etc. |
 | **Extension offers** | Incoming from AD when trust high |
 | **Renegotiate** | Adjust years/salary when allowed |
 | **Resign / retire** | Exit to carousel |
@@ -400,3 +400,4 @@ Same patterns as HC Contract but scoped to assistant deals; poach CTA when viewi
 | 2025-11-08 | Staff History tab: season/school/position/result for all staff |
 | 2025-11-08 | Assistants use coach card; support staff list-only; trainers ineligible for HC |
 | 2025-11-08 | Collegiate Invitational achievements; GA promotion; staff log on School history |
+| 2025-11-08 | NCBA / NCI achievement labels (`ncba-branding.md`) |

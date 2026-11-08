@@ -685,11 +685,15 @@ After a program completes **transition year 4** in offseason, set `postseasonEli
 
 ## National body & tournaments
 
+Authoritative universe names: [`ncba-branding.md`](ncba-branding.md).
+
 | Real (reference) | Universe (default pack) | Notes |
 |-------------------|-------------------------|--------|
-| NCAA | **National Collegiate Basketball Association (NCBA)** | Pack may override display strings |
-| NCAA tournament / March Madness | **National Championship** / **March Classic** | 76-team field — [`game-design.md`](game-design.md#postseason--selection) |
-| NIT | **Collegiate Invitational** | 32-team secondary field — [`game-design.md`](game-design.md#secondary-national-bracket-nit-style) |
+| NCAA | **NCBA** — National College Basketball Association | |
+| March Madness | **March Mayhem** | |
+| NCAA tournament | **NCBA Men's BB Tournament** (76 teams) | [`game-design.md`](game-design.md#postseason--selection) |
+| NIT | **NCI** — National College Invitational (32 teams) | Next 32 after NCBA field |
+| Maui / Atlantis / Champions-style / Feast Week events | Island Classic, Caribbean Showdown, Blue Blood Tip-Off, Desert Shootout | One early event per team per season |
 
 ---
 
@@ -718,3 +722,4 @@ After a program completes **transition year 4** in offseason, set `postseasonEli
 | 2025-11-08 | Align 361 certified; link directory; exclude 4 transition programs |
 | 2025-11-08 | Include 365 in pack; 4 reclass ineligible for postseason until year 4 done |
 | 2025-11-08 | Reclass years labeled Season 1 (2026–27) bootstrap |
+| 2025-11-08 | NCBA/NCI/March Mayhem + early events (`ncba-branding.md`) |
