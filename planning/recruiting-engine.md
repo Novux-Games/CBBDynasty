@@ -45,14 +45,14 @@ Portal star bands use the **portal pool only** (see [Star distribution](#star-di
 
 ### Four-week recruiting period
 
-| Recruiting week | Offseason anchor (v1) | Highlights |
+| Recruiting week | Offseason anchor | Highlights |
 |-----------------|----------------------|------------|
 | **1** | Offseason week 6 | Portal class **opens** for offers; **NBA draft results** post (opens scholarships); HS/JUCO board live |
 | **2** | Offseason week 7 | Full spend of weekly recruiting points / NIL |
 | **3** | Offseason week 8 | Peak commits & NIL pushes |
 | **4** | Offseason week 9 | Signing close; hard commits lock |
 
-**No in-season HS/JUCO recruiting window** in v1 (portal in-season remains ruleset-toggled in game-design).
+**No in-season HS/JUCO recruiting window** (portal in-season remains ruleset-toggled in game-design).
 
 User advances **week** (or day, if enabled) inside recruiting like other offseason phases.
 
@@ -68,7 +68,7 @@ Each **season**, generate independent pools:
 | **Junior college** | **+1,500** (fixed add-on) | Same board as HS |
 | **Transfer portal** | **All entrants** that window (varies by year/sim) | **Separate sub-tab** only |
 
-**Walk-ons** (local tryouts) optional v1 — low-prestige schools; see game-design if enabled.
+**Walk-ons** (local tryouts) optional — low-prestige schools; see game-design if enabled.
 
 **Geography:** Programs store **`homeCity`** + **`homeState`** ([`league-branding.md`](league-branding.md#geography--recruiting)). **Recruiting pipeline** keys off **`homeState`** (in-state / regional bias). Cities stay on the school record for travel, schedule, and UI; national pool is primary.
 
@@ -87,7 +87,7 @@ Stars are assigned **inside each pool** from hidden rating percentiles. **Do not
 | **3★** | Next **30%** (20%–50%) | ~600 players |
 | **2★** | Remainder **50%–100%** | ~1,000 players |
 
-**v1 lock:** no 1★ band — every seeded HS/JUCO/portal player carries 2★–5★. The 20–50% / 50–100% split matches real-world “most offers are 3★–2★” without a long tail of unrated prospects.
+**Design lock:** no 1★ band — every seeded HS/JUCO/portal player carries 2★–5★. The 20–50% / 50–100% split matches real-world “most offers are 3★–2★” without a long tail of unrated prospects.
 
 **JUCO (1,500):** same bands → ~30 5★, ~270 4★, etc., independent of HS counts.
 
@@ -175,7 +175,7 @@ Two spend tracks each **recruiting week**:
 
 | Resource | Use |
 |----------|-----|
-| **Recruiting points** | Calls, scouting upgrades, persistent interest gains (no visit system in v1) |
+| **Recruiting points** | Calls, scouting upgrades, persistent interest gains (no campus visit system) |
 | **NIL dollars** (or **deal points** — one global format) | Allocated offers toward a recruit’s **valuation** / ask |
 
 ### Budget setup (annual)
@@ -196,7 +196,7 @@ Each of **4 recruiting weeks**, user receives:
 - **Recruiting points** weekly allowance (see carryover below)
 - Ability to assign / adjust **NIL dollars** toward targets (subject to annual NIL cap)
 
-**Carryover (v1 lock):** at week end, **50%** of **unspent recruiting points** roll into the next week’s pool (rounded down). The other 50% expires. NIL unspent does **not** roll week-to-week unless tied to an annual pool remainder rule in NIL doc (annual cap only in v1).
+**Carryover (design lock):** at week end, **50%** of **unspent recruiting points** roll into the next week’s pool (rounded down). The other 50% expires. NIL unspent does **not** roll week-to-week unless tied to an annual pool remainder rule in NIL doc (annual pool cap only).
 
 Coach upgrades purchased during offseason may increase **week 1** totals or per-week drip.
 
@@ -216,7 +216,7 @@ Coach upgrades purchased during offseason may increase **week 1** totals or per-
 | **Playing time pitch** | Optional action |
 | **Recent success** | Tourney run, poll rank |
 
-**Recruiting points** spent on: scout deeper (sharpen letters), call, scholarship offer, priority bump. **No campus visits in v1** (no official/unofficial visit slots or visit actions).
+**Recruiting points** spent on: scout deeper (sharpen letters), call, scholarship offer, priority bump. **No campus visits** (no official/unofficial visit slots or visit actions).
 
 **NIL** committed at offer time writes toward signing number on [`player-cards.md`](player-cards.md) Overview when hard commit lands.
 
@@ -308,13 +308,13 @@ After signing, recruits appear on **Committed** and (when appropriate) next seas
 
 ---
 
-## v1 locks (summary)
+## Design locks (summary)
 
 | Topic | Decision |
 |-------|----------|
 | **3★ / 2★** | **20–50%** = 3★, **50–100%** = 2★ (with 5★ / 4★ bands above) |
 | **Recruiting point carryover** | **50%** of unused points to next week; rest expires |
-| **Visits** | **None** in v1 — points-only actions |
+| **Visits** | **None** — points-only actions |
 | **Top 60 (recruits)** | **Fixed** after class seed |
 | **HS class size** | **Uniform random 2,000–4,000** per season |
 
@@ -331,5 +331,6 @@ After signing, recruits appear on **Committed** and (when appropriate) next seas
 | Date | Change |
 |------|--------|
 | 2025-11-08 | Initial recruiting engine from user spec |
-| 2025-11-08 | v1 locks: star bands, 50% carryover, no visits, fixed Top 60, uniform HS count |
+| 2025-11-08 | Design locks: star bands, 50% carryover, no visits, fixed Top 60, uniform HS count |
+| 2025-11-08 | Rename v1 locks section → design locks; scrub v1 wording |
 | 2025-11-08 | Recruiting pipeline uses homeState; schools also store homeCity |

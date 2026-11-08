@@ -309,7 +309,7 @@ If player withdraws by week 5 → retains eligibility; if not withdrawn before d
 
 **Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — 4-week period, 2–4K HS + 1.5K JUCO, portal sub-tab, recruiting points + NIL, letter grades, prestige 0–99.
 
-**Brief:** Custom engine; **no in-season HS/JUCO window**; class **seeded in early offseason**; portal recruits available **recruiting week 1**; star bands **per pool** (top 2% = 5★); combined HS/JUCO board; hidden ratings with **A–F** scout view; **no visits v1**; **50%** recruiting point carryover week-to-week; **Top 60** fixed after seed.
+**Brief:** Custom engine; **no in-season HS/JUCO window**; class **seeded in early offseason**; portal recruits available **recruiting week 1**; star bands **per pool** (top 2% = 5★); combined HS/JUCO board; hidden ratings with **A–F** scout view; **no campus visits**; **50%** recruiting point carryover week-to-week; **Top 60** fixed after seed.
 
 ---
 
@@ -341,7 +341,7 @@ If player withdraws by week 5 → retains eligibility; if not withdrawn before d
 | Eligibility incidents | −20% penalty stack |
 | Academic facility grade | +10% cap bonus |
 
-**Recruiting budget formula (v1)**
+**Recruiting budget formula**
 
 ```
 baseBudget = prestigeTierTable[prestige]
@@ -392,9 +392,9 @@ recruitingBudget = floor(baseBudget * gradeMultiplier * facilityBonus)
 - **Interview offers** from other schools (prestige check).
 - Firing → choose new job from offer list or unemployed (spectate sim optional mode TBD).
 
-### Assistant coaches (light v1)
+### Assistant coaches
 
-- Aggregate into **staff grade** bumping visit efficiency and development; full assistant sim optional v2.
+- Each assistant uses a **coach card** with ratings and history ([`coach-card.md`](coach-card.md)). Staff grades still bump development and prep; carousel can poach assistants from other programs.
 - **UI:** assistants use **coach cards**; support staff (e.g. trainers) are list-only — trainers **`eligibleForHeadCoach: false`** ([`coach-card.md`](coach-card.md)).
 
 ---
@@ -747,4 +747,5 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-08 | Linked `game-frame.md` (in-season UI shell) |
 | 2025-11-08 | 365-team pack; reclass postseason ineligibility until 4-year transition |
 | 2025-11-08 | Season 1 = 2026–27; reclass years anchored to dynasty start |
+| 2025-11-08 | Remove product v1/v2 scope language; design locks only |
 | 2025-11-08 | Linked `player-cards.md` |

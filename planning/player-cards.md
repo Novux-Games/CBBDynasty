@@ -111,7 +111,7 @@ Same numbers as Ratings tab headline (read-only here):
 
 ### NIL valuation
 
-Single **Overview** line — no extra tab in v1.
+Single **Overview** line — no extra tab.
 
 | Rule | Detail |
 |------|--------|
