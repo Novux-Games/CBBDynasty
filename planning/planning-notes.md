@@ -10,9 +10,9 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | Game preview | **Ratings + RPI**, no GP required | [`game-frame.md`](game-frame.md) |
 | Watch sim | **2s** possession delay; 3–30 game clock | [`strategy-schemes.md`](strategy-schemes.md) |
 | Conference tournaments | **Real formats** | [`game-design.md`](game-design.md) |
-| News | Headlines; static top 50 recruit preview; dynamic draft | [`game-frame.md`](game-frame.md) |
+| News | Headlines; Top 60 recruit board; dynamic draft | [`game-frame.md`](game-frame.md), [`recruiting-engine.md`](recruiting-engine.md) |
 | Coach card + School Staff | **Done** | [`coach-card.md`](coach-card.md) |
-| Recruiting engine | **Future doc when you ask** | — |
+| Recruiting engine | **Done** | [`recruiting-engine.md`](recruiting-engine.md) |
 | Offseason frame | **Future doc when you ask** (like in-season `game-frame`) | — |
 | NIL on player card | **Overview valuation** (recruiting commit) | [`player-cards.md`](player-cards.md) |
 | GOAT / History depth | **Defer** | [`game-frame.md`](game-frame.md) |
@@ -41,3 +41,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | 2025-11-08 | Tracker from user follow-up batch |
 | 2025-11-08 | NIL on Overview; clarify future docs vs backlog |
 | 2025-11-08 | Coach card + School Staff |
+| 2025-11-08 | recruiting-engine.md |

@@ -11,6 +11,7 @@
 **Lineup:** **[`positions-and-lineup.md`](positions-and-lineup.md)** — PG/SG/SF/PF/C, interchange, default starters  
 **Strategy:** **[`strategy-schemes.md`](strategy-schemes.md)** — O/D presets, halftime, preview/watch  
 **Coach UI:** **[`coach-card.md`](coach-card.md)** — coach preview, card tabs, School staff  
+**Recruiting:** **[`recruiting-engine.md`](recruiting-engine.md)** — pools, 4-week window, NIL + points  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start  
 **Last updated:** 2025-11-08
@@ -272,9 +273,9 @@ Offseason length: **~14 weeks** (tunable); user advances **week** or **day** in 
 | **2–3** | **Coaching carousel** (peak) | AI hires/fires; user contract extension; poaching risk |
 | **4** | **Cuts & roster lock prep** | Scholarship allocation; walk-on offers |
 | **5** | **Draft withdrawal deadline** | Last chance to return for withdrawing early entrants (before results) |
-| **6–10** | **Recruiting (5 weeks)** | HS + portal targets; visits; NIL pitches; commitments |
-| **6** | **NBA draft results** (recruiting **week 1**) | Published mock/order reveal; early entrants leave; scholarship opens |
-| **7–10** | Portal **cycle 2** (optional overlap) | Late portal fills for AI; user can scout portal commits in recruiting UI |
+| **6–9** | **Recruiting (4 weeks)** | HS + JUCO + portal — see [`recruiting-engine.md`](recruiting-engine.md) |
+| **6** | **NBA draft results** (recruiting **week 1**) | Published mock/order reveal; early entrants leave; scholarship opens; portal board opens |
+| **10** | Portal **cycle 2** (optional overlap) | Late portal fills for AI if ruleset enables |
 | **11** | **Summer workouts** (auto) | Development deltas from coach + facilities |
 | **12–13** | **Fundraising & upgrades** | Arena/facility spend; naming rights deal |
 | **14** | **Conference offers** + **schedule prep unlock** | Accept/decline realignment; preseason scheduling opens |
@@ -301,54 +302,9 @@ If player withdraws by week 5 → retains eligibility; if not withdrawn before d
 
 ## Recruiting engine
 
-**Design lock:** Custom engine (not cloned from legacy sims). **No in-season recruiting window.** Visits are core.
+**Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — 4-week period, 2–4K HS + 1.5K JUCO, portal sub-tab, recruiting points + NIL, letter grades, prestige 0–99.
 
-### Pools
-
-| Pool | Source |
-|------|--------|
-| **High school** | Generated class per year (national + regional ratings) |
-| **JUCO** | Smaller band, age-2 eligibility |
-| **Portal** | Offseason + optional in-season window per ruleset year |
-| **Walk-on** | Local tryout pool (low prestige schools) |
-
-### Resources per 5-week window
-
-| Resource | Earned / spent on |
-|----------|-------------------|
-| **Recruiting budget** | Calls, scouting, visits (see academics) |
-| **Visit slots** | Official visits (cap per week, boost for home vs away) |
-| **Coach hours** | HC + assistants; better staff = more efficient actions |
-| **NIL cap** | Soft annual cap; retention vs recruit split (see NIL) |
-
-### Visit model
-
-| Visit type | Effect |
-|------------|--------|
-| **Unofficial** | Cheap; small interest bump; unlimited with diminishing returns |
-| **Official** | Costs visit slot + budget; large interest; can schedule **visit weekends** (batch 3 targets) |
-| **Home strategy** | Last visit before commit weighted higher |
-
-**Interest meter (0–100)** per recruit: prestige, playing time pitch, NIL, major, distance, coach charisma, recent tourney success.
-
-**Commitment**
-
-- Soft commit → can decommit with reputation hit.
-- Hard commit → roster slot reserved; flipping costs NIL + prestige.
-- **Signing** end of recruiting week 5 → binding for HS; portal uses entry date rules.
-
-### Recruiting board UX
-
-- **Tabs:** HS / Portal / JUCO / Committed / Lost
-- **Filters:** Position, stars, region, fit (scheme), NIL demand
-- **Actions swipe-friendly:** Scout, call, offer, visit, NIL bump, drop
-- **Auto-assist:** "Suggest visits" based on budget and board rank (optional)
-
-### AI recruiting
-
-- AI schools spend budget from same grade-derived formula.
-- Top programs prioritize **archetype fits** and **NIL**.
-- User gets **news feed** of top-50 national commits (identity pack names).
+**Brief:** Custom engine; **no in-season HS/JUCO window**; class **seeded in early offseason**; portal recruits available **recruiting week 1**; star bands **per pool** (top 2% = 5★); combined HS/JUCO board; hidden ratings with **A–F** scout view.
 
 ---
 

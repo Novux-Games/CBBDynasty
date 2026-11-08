@@ -289,9 +289,9 @@ Superset of dashboard News tab.
 |---------------|---------|
 | **Stories** | **Headlines only** (with date) — obvious types: upsets, rankings, injuries, commitments, bracket, etc. |
 | **Draft** | **Top 60** draft pool — **dynamic** as season/pro days evolve |
-| **Recruits** | **Top 50** — **static preview** of **~2K auto-generated** recruits that class; season pool reference |
+| **Recruits** | **Top 60** incoming class — seeded in offseason; see [`recruiting-engine.md`](recruiting-engine.md) |
 
-Offseason recruiting depth in dedicated doc later.
+**Draft** tab = pro/draft pool; **Recruits** tab = high school / JUCO recruit rankings (not portal).
 
 ---
 
