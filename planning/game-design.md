@@ -50,13 +50,13 @@
 
 ### Vision
 
-A **program dynasty** where running a D-I men's hoops school feels like a year-round job: **offseason** portal wars and recruiting, **preseason** schedule craft and hype, **season** survival on the calendar, **March** as the payoff. The default identity pack ships **361 fully certified** programs (**32 conferences**); the real **365**-program field adds **4** provisional reclass members ([`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) · [`league-branding.md`](league-branding.md)) — dynasty treatment **TBD**. Real conference mechanics (schedule size, tiebreakers, tournament shapes) while **display identity** stays swappable and save-safe.
+A **program dynasty** where running a D-I men's hoops school feels like a year-round job: **offseason** portal wars and recruiting, **preseason** schedule craft and hype, **season** survival on the calendar, **March** as the payoff. The default pack runs **365** active D-I programs across **32 conferences** ([`league-branding.md`](league-branding.md), [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md)); **4** remain in **D-II→D-I reclass** and are **postseason-ineligible** until the **4-year** transition completes. Real conference mechanics (schedule size, tiebreakers, tournament shapes) while **display identity** stays swappable and save-safe.
 
 ### Pillars
 
 | Pillar | Commitment |
 |--------|------------|
-| **Scale** | **361** certified D-I programs in default pack (365-field w/ 4 transition — TBD) |
+| **Scale** | **365** D-I programs in default pack (4 reclass — no postseason until transition done) |
 | **Structure** | Real conference sizes & rules (data-driven templates) |
 | **Roster law** | 15-man cap, scholarship flexibility, walk-ons |
 | **Calendar** | One master timeline for every game year |
@@ -163,6 +163,8 @@ Packs are validated **atomically**. Invalid pack → reject; no partial apply.
       "shortName": "ST",
       "homeCity": "Springfield",
       "homeState": "ST",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
       "colors": { "primary": "#003366", "secondary": "#CCCCCC" },
       "arenaBaseName": "Arena",
       "logoUri": null
@@ -203,7 +205,7 @@ Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 
 ### Programs
 
-- **361** certified teams in the default league graph (**365** including provisionals — product TBD); each **calendar day** only scheduled teams play.
+- **365** teams in the default league graph; each **calendar day** only scheduled teams play.
 - **User role:** Head coach (single program dynasty); AD-style actions folded into coach UI.
 
 ### When games run vs when the save commits
@@ -562,6 +564,22 @@ All **inspired by** real metrics; labels in UI are generic ("Resume Index", "Tie
 
 ## Postseason & selection
 
+### Reclass transition — postseason ineligibility
+
+Programs in **D-II → D-I reclass** (`postseasonEligible: false`) are on the **365** membership list and play **full regular-season** / conference schedules. They are **excluded** from:
+
+| Postseason stage | Rule |
+|------------------|------|
+| **Conference tournament** | Cannot qualify or participate while `postseasonEligible` is false |
+| **NCAA tournament** | No automatic bid; **not** eligible for at-large selection |
+| **Secondary postseason** (e.g. NIT-style) | Excluded while in transition |
+
+**Transition clock:** `reclassTransitionYear` **1–4** on the team record (NCAA Bylaw 20-style **4-year** window). Each **offseason** advance increments the year for programs still in reclass. When a program **completes year 4**, set `postseasonEligible: true` and clear transition flags — same as newly **certified** members (e.g. Stonehill/Lindenwood path in [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md)).
+
+**2026–27 default pack** snapshot: Mercyhurst & West Georgia (**year 3**); New Haven (**year 2**); West Florida (**year 1**) — see [`league-branding.md`](league-branding.md#provisional-transition-programs).
+
+Conference tournaments still award **auto bids** only to **eligible** champions; if an ineligible team would have won, implementation uses conference template rules (next eligible finisher / seed policy in data).
+
 ### Conference tournaments
 
 Each conference uses a **TournamentTemplate**:
@@ -690,7 +708,7 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | **Calendar & saves** | Day/week kernel, local persistence, stable IDs, pack overlay |
 | **Possession sim** | 40-min engine, coherence checks, box scores — [`simulation-engine.md`](simulation-engine.md) |
 | **Dynasty systems** | Offseason, recruiting, portal, facilities |
-| **Full league** | 361-team scheduling (365 option later), daily batch sim, derived résumé |
+| **Full league** | 365-team scheduling, daily batch sim, derived résumé |
 | **March** | Conference templates, 76-field bracket, opening round |
 | **Ship** | 2D UI, sliders, notifications, optional identity import |
 
@@ -725,4 +743,5 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-08 | `simulation-engine.md` scoped to possession game sim only |
 | 2025-11-08 | Save on week advance; replay games if reopened before checkpoint |
 | 2025-11-08 | Linked `game-frame.md` (in-season UI shell) |
+| 2025-11-08 | 365-team pack; reclass postseason ineligibility until 4-year transition |
 | 2025-11-08 | Linked `player-cards.md` |

@@ -72,7 +72,7 @@ MEMBERSHIP: list[tuple[str, list[str]]] = [
     ]),
     ("conf-ascu", [
         "Bellarmine Knights", "Florida Gulf Coast Eagles (FGCU)", "Jacksonville Dolphins", "Lipscomb Bisons",
-        "North Florida Ospreys", "Queens Royals", "Stetson Hatters",
+        "North Florida Ospreys", "Queens Royals", "Stetson Hatters", "West Florida Argonauts",
     ]),
     ("conf-c12", [
         "Arizona Wildcats", "Arizona State Sun Devils", "Baylor Bears", "BYU Cougars", "Cincinnati Bearcats",
@@ -156,7 +156,8 @@ MEMBERSHIP: list[tuple[str, list[str]]] = [
     ]),
     ("conf-nec", [
         "Central Connecticut Blue Devils", "Chicago State Cougars", "Fairleigh Dickinson Knights (FDU)",
-        "Le Moyne Dolphins", "LIU Sharks", "Stonehill Skyhawks", "Wagner Seahawks",
+        "Le Moyne Dolphins", "LIU Sharks", "Mercyhurst Lakers", "New Haven Chargers",
+        "Stonehill Skyhawks", "Wagner Seahawks",
     ]),
     ("conf-ova", [
         "Eastern Illinois Panthers", "Lindenwood Lions", "Morehead State Eagles", "SIU Edwardsville Cougars (SIUE)",
@@ -209,6 +210,7 @@ MEMBERSHIP: list[tuple[str, list[str]]] = [
     ("conf-uac", [
         "Abilene Christian Wildcats", "Austin Peay Governors", "Central Arkansas Bears", "Eastern Kentucky Colonels",
         "Little Rock Trojans", "North Alabama Lions", "Tarleton State Texans", "UT Arlington Mavericks",
+        "West Georgia Wolves",
     ]),
     ("conf-wcc", [
         "Denver Pioneers", "Loyola Marymount Lions (LMU)", "Pacific Tigers", "Pepperdine Waves",
@@ -217,13 +219,18 @@ MEMBERSHIP: list[tuple[str, list[str]]] = [
     ]),
 ]
 
-# Excluded from default pack — 365-field provisional members ([`2026-NCAA-Directory.md`](../2026-NCAA-Directory.md)).
-TRANSITION_TEAMS: list[tuple[str, str, str]] = [
-    ("conf-nec", "Mercyhurst Lakers", "Mid-transition (Year 3)"),
-    ("conf-nec", "New Haven Chargers", "Early-transition (Year 2)"),
-    ("conf-ascu", "West Florida Argonauts", "Early-transition (Year 1)"),
-    ("conf-uac", "West Georgia Wolves", "Mid-transition (Year 3)"),
-]
+# D-II → D-I reclass — in pack, **`postseasonEligible: false`** until 4-year transition completes.
+# (real name, transition year 1–4 in 2026–27 snapshot)
+TRANSITION_BY_NAME: dict[str, tuple[int, str]] = {
+    "Mercyhurst Lakers": (3, "Mid-transition"),
+    "New Haven Chargers": (2, "Early-transition"),
+    "West Florida Argonauts": (1, "Early-transition"),
+    "West Georgia Wolves": (3, "Mid-transition"),
+}
+
+CERTIFIED_COUNT = 361
+POSTSEASON_ELIGIBLE_LABEL = "Yes"
+POSTSEASON_INELIGIBLE_LABEL = "**No** (reclass)"
 
 TEAM_OVERRIDES: dict[str, str] = {
     "Duke Blue Devils": "Crown University Sovereigns",
@@ -315,8 +322,8 @@ def main() -> None:
         "# League branding — conferences & teams (reference mapping)",
         "",
         "**Product:** [Dynasty: College Basketball](branding.md) · default **universe** names for identity packs.",
-        f"**Membership:** **{team_total} fully certified** D-I men's programs · **{len(CONFERENCES)} conferences** · **2026–27** ([`2026-NCAA-Directory.md`](2026-NCAA-Directory.md)).",
-        "**Not in this file:** **4** provisional reclass members (365 total field) — [Transition programs](#provisional-transition-programs) (inclusion TBD).",
+        f"**Membership:** **{team_total}** active D-I programs · **{len(CONFERENCES)} conferences** · **2026–27** ([`2026-NCAA-Directory.md`](2026-NCAA-Directory.md)) "
+        f"({CERTIFIED_COUNT} certified + {len(TRANSITION_BY_NAME)} in reclass transition).",
         "**Purpose:** Keep **real-world reference** alongside **ship-safe display** names for a **shippable** default pack.",
         "**Geography:** Every program has **`homeState`** + **`homeCity`** (reference campus). **`homeState`** drives **[recruiting pipeline](recruiting-engine.md)**; **`homeCity`** is stored for schedule/travel/display and pack fidelity.",
         "**Related:** [`game-design.md`](game-design.md#identity-packs--save-model), [`branding.md`](branding.md), [`recruiting-engine.md`](recruiting-engine.md).",
@@ -351,7 +358,7 @@ def main() -> None:
         "",
         "## Teams by conference",
         "",
-        "Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`**.",
+        "Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`**, **postseason** (reclass programs ineligible until transition complete).",
         "",
     ])
 
@@ -369,11 +376,12 @@ def main() -> None:
         lines.append("")
         lines.append(f"*Real league: {real_conf}* · `{conf_id}` · **{len(teams)} teams**")
         lines.append("")
-        lines.append("| `teamId` | Real (reference) | Universe (default pack) | `homeCity` | `homeState` |")
-        lines.append("|----------|-------------------|-------------------------|------------|-------------|")
+        lines.append("| `teamId` | Real (reference) | Universe (default pack) | `homeCity` | `homeState` | Postseason |")
+        lines.append("|----------|-------------------|-------------------------|------------|-------------|------------|")
         for idx, real in enumerate(teams, 1):
             tid, uni, state, city = universe_team(real, conf_id, idx)
-            lines.append(f"| `{tid}` | {real} | {uni} | {city} | {state} |")
+            postseason = POSTSEASON_INELIGIBLE_LABEL if real in TRANSITION_BY_NAME else POSTSEASON_ELIGIBLE_LABEL
+            lines.append(f"| `{tid}` | {real} | {uni} | {city} | {state} | {postseason} |")
         lines.append("")
 
     lines.extend([
@@ -392,14 +400,17 @@ def main() -> None:
         "",
         "## Provisional / transition programs",
         "",
-        "Omitted from the **361** certified default pack. Still scheduled in the real **365** field per directory; **dynasty inclusion TBD**.",
+        "All **4** are **in the default pack** and play **regular season** / conference schedules. They are **ineligible for postseason** (conference tournament + national bracket) until they **complete the 4-year** D-II→D-I reclass window — see [`game-design.md`](game-design.md) postseason gates.",
         "",
-        "| Conference | Real (reference) | Transition status |",
-        "|------------|------------------|-------------------|",
+        "| Real (reference) | Transition year (2026–27) | `postseasonEligible` |",
+        "|------------------|----------------------------|----------------------|",
     ])
-    for cid, name, status in TRANSITION_TEAMS:
-        real_conf = conf_by_id[cid][0]
-        lines.append(f"| {real_conf} (`{cid}`) | {name} | {status} |")
+    for name, (year, label) in sorted(TRANSITION_BY_NAME.items(), key=lambda x: x[0]):
+        lines.append(f"| {name} | Year {year} ({label}) | `false` |")
+    lines.extend([
+        "",
+        "Dynasty sim advances transition year each offseason; when a program finishes **year 4**, flip to **certified** and `postseasonEligible: true` (pack/save field).",
+    ])
     lines.extend([
         "",
         "---",
@@ -425,7 +436,7 @@ def main() -> None:
         "| **Source of truth (reference)** | [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) — certification tier copy |",
         "| **Regeneration** | `python3 planning/tools/generate_league_branding.py` after membership edits |",
         "",
-        f"**Certified pack count:** {team_total} teams · {len(CONFERENCES)} conferences · +4 transition (excluded).",
+        f"**Pack count:** {team_total} teams · {len(CONFERENCES)} conferences · {CERTIFIED_COUNT} postseason-eligible · {len(TRANSITION_BY_NAME)} reclass (no postseason until transition complete).",
         "",
         "---",
         "",
@@ -437,13 +448,14 @@ def main() -> None:
         "| 2025-11-08 | **Rebuild:** 2026–27 D-I list — 32 conferences, Metro/UAC, membership moves |",
         "| 2025-11-08 | Geography: `homeState` (recruiting) + `homeCity` on all programs |",
         "| 2025-11-08 | Align 361 certified; link directory; exclude 4 transition programs |",
+        "| 2025-11-08 | Include 365 in pack; 4 reclass ineligible for postseason until year 4 done |",
         "",
     ])
 
     out.write_text("\n".join(lines), encoding="utf-8")
     print(f"Wrote {out} — {len(CONFERENCES)} conferences, {team_total} teams")
-    if team_total != 361:
-        print(f"WARNING: expected 361 certified teams, got {team_total}")
+    if team_total != 365:
+        print(f"WARNING: expected 365 active teams, got {team_total}")
 
 
 if __name__ == "__main__":
