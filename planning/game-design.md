@@ -4,6 +4,7 @@
 **Presentation:** Text-based **2D** sim (Campus Dynasty–style); **offline** with **local save files**  
 **Mode:** Dynasty / program builder — men's college basketball  
 **Game sim:** **[`simulation-engine.md`](simulation-engine.md)** — possession engine only (clock, box score)  
+**In-season UI:** **[`game-frame.md`](game-frame.md)** — dashboard, tabs, hubs  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start  
 **Last updated:** 2025-11-08
@@ -15,24 +16,25 @@
 1. [Vision & pillars](#vision--pillars)
 2. [Core loop](#core-loop)
 3. [Simulation engine (brief)](#simulation-engine-brief)
-4. [Identity packs & save model](#identity-packs--save-model)
-5. [World scale & league simulation](#world-scale--league-simulation)
-6. [Roster, eligibility & redshirt](#roster-eligibility--redshirt)
-7. [Offseason (authoritative calendar)](#offseason-authoritative-calendar)
-8. [Recruiting engine](#recruiting-engine)
-9. [NIL & program economy](#nil--program-economy)
-10. [Coaching carousel & contracts](#coaching-carousel--contracts)
-11. [Facilities, fundraising & upgrades](#facilities-fundraising--upgrades)
-12. [Conference realignment](#conference-realignment)
-13. [Preseason](#preseason)
-14. [Scheduling & regular season](#scheduling--regular-season)
-15. [Season gameplay & prep](#season-gameplay--prep)
-16. [Postseason & selection](#postseason--selection)
-17. [Awards & media](#awards--media)
-18. [Mobile UX, automation & notifications](#mobile-ux-automation--notifications)
-19. [Engineering milestones](#engineering-milestones)
-20. [Glossary](#glossary)
-21. [Document history](#document-history)
+4. [In-season game frame (brief)](#in-season-game-frame-brief)
+5. [Identity packs & save model](#identity-packs--save-model)
+6. [World scale & league simulation](#world-scale--league-simulation)
+7. [Roster, eligibility & redshirt](#roster-eligibility--redshirt)
+8. [Offseason (authoritative calendar)](#offseason-authoritative-calendar)
+9. [Recruiting engine](#recruiting-engine)
+10. [NIL & program economy](#nil--program-economy)
+11. [Coaching carousel & contracts](#coaching-carousel--contracts)
+12. [Facilities, fundraising & upgrades](#facilities-fundraising--upgrades)
+13. [Conference realignment](#conference-realignment)
+14. [Preseason](#preseason)
+15. [Scheduling & regular season](#scheduling--regular-season)
+16. [Season gameplay & prep](#season-gameplay--prep)
+17. [Postseason & selection](#postseason--selection)
+18. [Awards & media](#awards--media)
+19. [Mobile UX, automation & notifications](#mobile-ux-automation--notifications)
+20. [Engineering milestones](#engineering-milestones)
+21. [Glossary](#glossary)
+22. [Document history](#document-history)
 
 ---
 
@@ -99,6 +101,19 @@ OFFSEASON → PRESEASON → REGULAR SEASON → POSTSEASON → (advance year)
 | **Output** | Full box score; live text during sim |
 | **League** | Same `simulateGame` for user watch and batch; **when** to call it = calendar (below) |
 | **Saves** | **Week advance** checkpoints local file; **replay** simmed games if app closed before then |
+
+---
+
+## In-season game frame (brief)
+
+Full navigation and screens: **[`game-frame.md`](game-frame.md)**.
+
+| Area | Summary |
+|------|---------|
+| **Bottom tabs** | Roster · Calendar · **Dashboard** · News (headlines only) |
+| **Dashboard** | Team overview, notifications, last game, next game + **game preview** (win %, predicted score, team compare, H2H) |
+| **Hamburger hubs** | School, Strategy, Statistics, Rankings, News (full), History |
+| **School hub** | Overview, roster, schedule, stats, history, records, HOF, drafted players (same layout for other schools view-only) |
 
 ---
 
@@ -743,3 +758,4 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-08 | NET realism note; save integrity vs per-game variety (simulation doc) |
 | 2025-11-08 | `simulation-engine.md` scoped to possession game sim only |
 | 2025-11-08 | Save on week advance; replay games if reopened before checkpoint |
+| 2025-11-08 | Linked `game-frame.md` (in-season UI shell) |
