@@ -75,11 +75,25 @@ At-a-glance card(s) for **your program**:
 | Field (examples) | Notes |
 |------------------|--------|
 | Overall record | W–L |
-| National rank | Poll / power index placement |
+| National poll | **Top 25** poll placement when ranked; unranked shows `—` (poll is a **callout**, not the full ordering) |
 | Conference rank | League standing |
-| Projected seed | Bracketology-style seed line |
+| **Current ranking** | **Overall resume rank** among all teams (full table on the back end — see [Rankings hub](#rankings-hub)); not a seed line or bracketology chip |
 | Conference affiliation | From identity pack |
 | (extend) | Streak, home/away split, last 10 — optional rows |
+
+### Current ranking (dashboard)
+
+Shows **`#NN`** = your program’s place in the **national composite resume list** (same ordering that drives Selection Sunday / [`game-design.md`](game-design.md#selection-sunday-committee-sim)). **Every** team has a rank in data; the UI only **surfaces Top 25** in the Rankings hub callout.
+
+**Eligibility color** on the dashboard chip (tier from **projected field**, not rank number alone — **32 auto bids** mean a team outside the raw “top 76” by résumé can still project **NCBA** as a conference champion):
+
+| Color | Meaning |
+|-------|---------|
+| **Green** | Projected **NCBA Men's BB Tournament** field (76 teams) — at-large or **conference auto-bid** path |
+| **Yellow** | Not projected NCBA, but in **NCI** band (**next 32** after the 76-team projection among eligible teams) |
+| **Red** | Projected **outside** NCBA and NCI, or **`postseasonEligible: false`** (reclass) |
+
+Tap **Current ranking** → Rankings hub (full list or filtered slice). During **conference tournament week**, colors may lock or update as auto bids are claimed.
 
 ### Notifications
 
@@ -274,8 +288,11 @@ Tap player → player preview / card; tap team → School hub (view).
 
 | View | Content |
 |------|---------|
-| **Top 25** | National poll-style list |
+| **Top 25** | National **poll-style callout** (AP analogue) — marketing-friendly short list |
+| **National resume** | **Full** composite ranking **#1–#365** (eligible teams); same order as dashboard **Current ranking**; optional tier filter (NCBA / NCI / out) |
 | **Conference rankings** | Standings per conference (W–L, conf record, tiebreaker note on drill-down) |
+
+**Top 25** and **National resume** are different products: poll ≠ resume order. Resume list rows may show the same **green / yellow / red** tier chips as the dashboard.
 
 Tap team → School hub.
 
@@ -351,5 +368,6 @@ Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`g
 | 2025-11-08 | School Staff section; coach card doc |
 | 2025-11-08 | GOAT list formula; companion doc index (offseason/postseason/portal) |
 | 2025-11-08 | Recruit Top 60: preseason seed, in-season News |
+| 2025-11-08 | Dashboard: Current ranking + NCBA/NCI tier colors; full resume list in Rankings |
 | 2025-11-08 | School Staff tab; AD trust; staff detail sheets |
 | 2025-11-08 | Assistants = coach cards; support list-only |
