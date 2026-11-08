@@ -1,7 +1,7 @@
 # Game frame — in-season (coach loaded)
 
 **When this applies:** Coach and dynasty exist; player is in **in-season** play (regular season, conference tournament, postseason — not full offseason UI).  
-**Companion:** [`game-design.md`](game-design.md) (systems), [`simulation-engine.md`](simulation-engine.md) (game sim).  
+**Companion:** [`game-design.md`](game-design.md) (systems), [`simulation-engine.md`](simulation-engine.md) (game sim), [`player-cards.md`](player-cards.md).  
 **Last updated:** 2025-11-08
 
 ---
@@ -131,7 +131,7 @@ Same roster model as School hub roster, at bottom-nav depth.
 | **Reserves** | Rotation (regular minutes) |
 | **Bench warmers** | Deep bench / low-minute |
 
-Tap player → player card (stats, role, bio fields — detail doc later).
+Tap player → [`player-cards.md`](player-cards.md) preview → View more.
 
 ---
 
@@ -253,7 +253,7 @@ Leaderboards:
 
 - Sub-menu: **choose conference** → same stat categories for that league only.
 
-Tap player → player card; tap team → School hub (view).
+Tap player → player preview / card; tap team → School hub (view).
 
 ---
 
@@ -330,3 +330,4 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History
 | Date | Change |
 |------|--------|
 | 2025-11-08 | Initial in-season game frame from user spec |
+| 2025-11-08 | Link player cards doc |
