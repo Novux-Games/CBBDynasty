@@ -54,8 +54,8 @@ Layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/adaptive-icon/):
 | File | Role |
 |------|------|
 | `adaptive-icon-background.svg` | Solid `#181a25` |
-| `adaptive-icon-foreground.svg` | **Icon only** — raster layer from [`app-logo.svg`](../Public-Assets/app-logo.svg) |
-| `adaptive-icon-canvas.svg` | Full square preview (canvas + icon) |
+| `adaptive-icon-foreground.svg` | **Icon mark** cropped from [`app-logo.svg`](../Public-Assets/app-logo.svg) (top icon layer), fills foreground |
+| `adaptive-icon-canvas.svg` | **Full lockup** from `app-logo.svg` on `#181a25`, scaled to fit (see `generate-from-app-logo.py`) |
 
 **Shape:** System mask (circle / squircle); mark scaled to center **~66%** safe zone.
 

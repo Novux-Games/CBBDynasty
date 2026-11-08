@@ -1,16 +1,17 @@
-# Adaptive app icons — Dynasty College Basketball
+# Adaptive app icons
 
-Android **adaptive icon** layers (108×108 dp). Brand background: `#181a25`.
+**Source:** [`../app-logo.svg`](../app-logo.svg) only.
 
-**Source of truth:** [`../app-logo.svg`](../app-logo.svg) only — not Novux studio marks.
+| Asset | What it is |
+|-------|------------|
+| `adaptive-icon-background.svg` | Solid `#181a25` (Android background layer) |
+| `adaptive-icon-foreground.svg` / `.png` | **Icon mark only** — cropped from the top icon layer in `app-logo.svg`, scaled to fill the foreground layer |
+| `adaptive-icon-canvas.svg` / `.png` | **Full logo lockup** on `#181a25`, scaled to fit the square (~6% margin) — store / preview, not a tiny pasted bitmap |
 
-| File | Role |
-|------|------|
-| `adaptive-icon-background.svg` | Launcher **background** (`#181a25`) |
-| `adaptive-icon-foreground.svg` | **Icon only** — 158×158 raster layer embedded in `app-logo.svg` |
-| `adaptive-icon-canvas.svg` | **Preview** — `#181a25` + full logo composite from `app-logo.svg` (765×726 layer) |
-| `generate-from-app-logo.py` | Regenerate foreground/canvas/PNGs after `app-logo.svg` changes |
+Regenerate after logo changes:
 
-**PNG** (432×432): `*.png` alongside each SVG for Android `res/` import.
+```bash
+python3 Public-Assets/adaptive-icon/generate-from-app-logo.py
+```
 
-Extracted reference PNGs: `app-logo-extract-icon-158.png`, `app-logo-extract-full-765x726.png`.
+Do **not** use Novux studio icons or hand-place small PNGs in the corner of a 108dp canvas.
