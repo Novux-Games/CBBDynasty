@@ -181,10 +181,22 @@ Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 - **~365** D-I teams in the league graph; each **calendar day** only scheduled teams play (not 365 games per day).
 - **User role:** Head coach (single program dynasty); AD-style actions folded into coach UI.
 
-### When results exist
+### When games run vs when the save commits
 
-- **Advance Day/Week** triggers batch sim for all **still-scheduled** games on each day rolled forward.
-- Results feed standings, polls, injuries, and **[résumé metrics](simulation-engine.md#résumé-metrics-net--selection-inputs)**.
+| Action | Effect |
+|--------|--------|
+| **Sim user game** | Possession sim runs; result held in **current week** session state |
+| **Advance day** | Roll calendar; batch-sim other **scheduled** games that date (same week state) |
+| **Advance week** | **Write save**; week’s results, standings, stats, and league outcomes become **final** |
+
+Until **week advance**, nothing from that week is treated as permanent on disk.
+
+### Replays
+
+- **Fully close and reopen** the app **before** week advance → user may **replay** games already simmed this week (new lineup/gameplan allowed).
+- **After** week advance → those games are **locked** in the local save; no replay without cheat/sandbox.
+
+In-week variety is normal (different sim runs, different scores). **Locked** only after the weekly checkpoint.
 
 ### Ruleset evolution
 
