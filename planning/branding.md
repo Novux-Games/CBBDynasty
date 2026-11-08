@@ -54,7 +54,7 @@ Layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/adaptive-icon/):
 | File | Role |
 |------|------|
 | `adaptive-icon-background.svg` | Solid `#181a25` |
-| `adaptive-icon-foreground.svg` | White **icon only** (N mark) |
+| `adaptive-icon-foreground.svg` | **Icon only** — raster layer from [`app-logo.svg`](../Public-Assets/app-logo.svg) |
 | `adaptive-icon-canvas.svg` | Full square preview (canvas + icon) |
 
 **Shape:** System mask (circle / squircle); mark scaled to center **~66%** safe zone.
