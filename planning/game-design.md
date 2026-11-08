@@ -1,5 +1,7 @@
 # Dynasty: College Basketball — Game Design Document
 
+> **Branding:** [**Dynasty College Basketball**](branding.md) · Novux Studios · bg `#181a25` · logo [`Public-Assets/app-logo.svg`](../Public-Assets/app-logo.svg)
+
 **Platform:** Android (mobile)  
 **Presentation:** Text-based **2D** sim (Campus Dynasty–style); **offline** with **local save files**  
 **Mode:** Dynasty / program builder — men's college basketball  
