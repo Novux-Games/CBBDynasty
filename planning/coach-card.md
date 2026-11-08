@@ -18,8 +18,9 @@
 7. [Hall of Fame](#hall-of-fame)
 8. [Draft](#draft)
 9. [Staff (School hub)](#staff-school-hub)
-10. [Edit mode](#edit-mode)
-11. [Cross-links](#cross-links)
+10. [Staff detail sheet](#staff-detail-sheet)
+11. [Edit mode](#edit-mode)
+12. [Cross-links](#cross-links)
 
 ---
 
@@ -119,7 +120,8 @@ Career totals as **head coach** unless a row says “at current school.” Scope
 | **National titles** | NCAA championships |
 | **Final Fours** | |
 | **Tournament appearances** | NCAA bids |
-| **Conference titles** | Regular-season and/or tournament auto-bids per game-design conference rules (display both if tracked separately; v1 may show **conference tournament titles** as primary chip) |
+| **Conference regular-season championships** | outright or co-champion per conference tiebreaker rules |
+| **Conference tournament championships** | conference bracket winner (auto-bid path separate from regular-season title) |
 | **Secondary tournament record** | Postseason **secondary** bracket W–L (NIT-style; league structure **TBD** — likely mirror real NIT eligibility/format in data) |
 | **Secondary tournament win %** | Wins ÷ games in secondary bracket |
 | **Secondary tournament wins** | **Championships** in secondary bracket (e.g. NIT titles when that template ships) |
@@ -197,6 +199,7 @@ Assistant contracts and staff salaries live under [Staff (School hub)](#staff-sc
 | Postseason line (conf tourney, NCAA, secondary) |
 | Awards (coach of year chips) |
 | **Skill points earned** (optional subline) |
+| Conf. RS champ / conf. tourney champ | Separate chips when either earned that season |
 
 Tap row → expand **season detail**: full schedule summary, tourney path, roster link, news headlines tag (implementation).
 
@@ -237,19 +240,33 @@ Distinct from **School hub → Drafted players** (program alumni list); this tab
 
 ## Staff (School hub)
 
-Replaces the old **Head coach–only** block on **School hub → Overview** ([`game-frame.md`](game-frame.md#school-hub)).
+Full **Staff** tab on School hub ([`game-frame.md`](game-frame.md#school-hub)). **Overview** may show a one-line HC + “View staff” shortcut; depth lives on the **Staff** tab.
 
-### School hub — Staff section
+### School hub — Staff tab
 
 | Element | Behavior |
 |---------|----------|
+| **AD trust** | **User school only** — relationship meter with athletics director; drives extensions, firing leash, goal difficulty (see below) |
 | **Head coach row** | Name, record snippet; tap → [coach preview](#entry-flow) |
-| **Assistants** | Associate / assistant / position coaches (names, roles, headline specialty rating) |
-| **Support staff** | Trainers, recruiting ops, video, etc. (v1 list depth TBD) |
-| **Manage** | **User school only:** hire, fire, promote, offer contract |
-| **Staff grade** | Aggregate chip (replaces “light v1” only-in-systems — now visible here) |
+| **Assistants** | Associate / assistant / position coaches (names, roles, headline specialty rating); tap → [staff detail sheet](#staff-detail-sheet) |
+| **Support staff** | Trainers, recruiting ops, video, etc. (v1 list depth TBD); tap → staff detail sheet |
+| **Manage** | **User school only:** hire, fire, promote, offer contract, poach |
+| **Staff grade** | Aggregate chip from filled roles (visit efficiency, development — [`game-design.md`](game-design.md)) |
 
 **Other schools:** view staff roster; **poach** flows start from a staff row when carousel / offseason rules allow.
+
+### AD trust (user school)
+
+Placed on **School hub → Staff** tab (not on coach card preview).
+
+| Display | Detail |
+|---------|--------|
+| **Meter** | 0–100 (or tiered Low / Steady / Strong) with short AD name from pack |
+| **Trend** | Optional `↑` / `↓` chip after bad loss streak, tourney run, missed goals |
+| **What it affects** | Extension willingness, buyout negotiation, time-to-fire warnings, optional facility / budget narrative hooks |
+| **Inputs (systems)** | Win trajectory vs contract goals, postseason results, scandal/eligibility events, conference expectations |
+
+**Coach card Contract tab** references AD trust (e.g. “AD trust: Strong — extension likely”) but the **canonical meter** sits on Staff tab so it reads as a **program ↔ coach** relationship, not a personal profile stat.
 
 ### Hiring sources
 
@@ -264,9 +281,68 @@ Replaces the old **Head coach–only** block on **School hub → Overview** ([`g
 | Surface | What it shows |
 |---------|----------------|
 | **Coach card** | **Head coach** identity, HC ratings, contract, HC history/HOF/draft |
-| **School Staff** | Full bench + support; assistant contracts; poaching |
+| **School Staff tab** | AD trust, full bench + support, hire/fire/poach |
 
-Assistants do **not** open full coach card tabs; they use a **staff detail sheet** (ratings by role, contract, poach offer). Link from staff row optional later if a staff “card” doc is added.
+---
+
+## Staff detail sheet
+
+Mirrors **coach card UX** (preview → **[View more]** full sheet) for **assistants** and **support staff** — not the head coach (HC uses [coach card](#entry-flow)).
+
+### Entry flow
+
+```
+Tap staff row (School Staff tab, candidate pool, poach target)
+        │
+        ▼
+   Staff preview (modal / sheet)
+   · Role, school, headline rating, contract snippet
+   · [View more] ──────────────────┐
+        │                           │
+   dismiss                          ▼
+                     Full staff detail sheet
+```
+
+### Chrome
+
+Same pattern as coach card: **Back**, **Name**, **Edit** when user may renegotiate/fire (user school staff only).
+
+Identity strip: portrait, **role title**, current school.
+
+### Tabs (full sheet)
+
+| Tab | Purpose |
+|-----|---------|
+| **Overview** | Bio, team card (tap → School hub), information, role ratings, contract summary |
+| **Contract** | Salary, years left, buyout, poach/offer flows when applicable |
+
+**Conditional tabs** — only if this person has **prior head-coaching career** in the save (data flag `hasHeadCoachCareer`):
+
+| Tab | When shown |
+|-----|------------|
+| **History** | One+ seasons as HC |
+| **Achievements** | HC record, win %, tourney lines (same rows as coach card, including separate conf RS / tourney titles) |
+| **Hall of Fame** | Players coached as HC |
+| **Draft** | Players coached as HC who were drafted |
+
+Staff with **no** HC history: **omit** History, Achievements, HOF, and Draft entirely (no empty placeholders).
+
+### Overview (staff)
+
+| Block | Notes |
+|-------|--------|
+| **Team card** | Same as coach card — school logo, name, season record → School hub |
+| **Information** | Age, **years in role** (assistant/support tenure), **years at school**, contract overview (years / years left); **no** prestige row unless they are current HC (N/A for assistants) |
+| **Ratings** | Role-specific 0–99 stats (examples: **Recruiting**, **Development**, **Scouting** for assistants; **Sports science**, **Medical** for support). Map to [`game-design.md`](game-design.md) staff grade contributions. |
+| **Strategy** | **Omitted** for non-HC staff (no default O/D schemes) |
+
+### Contract (staff)
+
+Shorter than HC: salary, term, years left, buyout, **poach offer** CTA when scouting from another school. User school: fire / extend from Edit.
+
+### Former head coaches on staff
+
+If an assistant **was** an HC elsewhere: conditional tabs populate from archived HC career; optional **“Open head coach card”** deep link for full coach-card parity when viewing historical HC stops.
 
 ---
 
@@ -292,6 +368,8 @@ Assistants do **not** open full coach card tabs; they use a **staff detail sheet
 |------|-----|
 | Overview team card | School hub |
 | School hub Staff → HC row | Coach preview → full card |
+| School hub Staff → other row | Staff preview → detail sheet |
+| School hub Staff tab | AD trust (user school) |
 | Strategy hub | Per-game scheme overrides defaults shown on Overview |
 | Carousel / AD events | Contract tab |
 | Statistics / news “coach of year” | Coach preview |
@@ -314,3 +392,4 @@ Assistants do **not** open full coach card tabs; they use a **staff detail sheet
 | Date | Change |
 |------|--------|
 | 2025-11-08 | Initial coach card spec from user (mirror player card UX) |
+| 2025-11-08 | Staff tab + AD trust; staff detail sheets; split conf titles |
