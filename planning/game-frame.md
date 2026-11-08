@@ -174,11 +174,24 @@ Bottom tabs remain available; hubs stack or replace main content per navigation 
 
 | Block | Content |
 |-------|---------|
-| **Staff** | Head coach row + assistants & support staff; tap HC → [`coach-card.md`](coach-card.md) preview; **Manage** (user school) → hire, fire, poach — see [`coach-card.md#staff-school-hub`](coach-card.md#staff-school-hub) |
+| **Staff (teaser)** | Head coach name + record; **View staff** → Staff tab |
 | **Info** | Conference, prestige, overall record, conference record, top-25 record, strength of schedule, **power index**, etc. |
 | **Rankings** | National + conference placement snapshot |
 | **Ratings** | Team offensive/defensive ratings (display layer) |
 | **Record** | Current season W–L breakdown |
+
+#### Staff
+
+Full layout: [`coach-card.md`](coach-card.md#staff-school-hub) + [staff detail sheets](coach-card.md#staff-detail-sheet).
+
+| Block | Content |
+|-------|---------|
+| **AD trust** | User school only — meter on this tab |
+| **Roster** | HC, assistants, support staff |
+| **Staff grade** | Aggregate program chip |
+| **Manage** | Hire, fire, poach, candidate pool (user school) |
+
+Tap HC → coach card preview. Tap any other row → staff detail sheet.
 
 #### Roster
 
@@ -313,7 +326,7 @@ Cards **accumulate** as dynasty seasons complete; national content includes team
 ```
 Bottom:  Roster | Calendar | Dashboard | News
 Hamburger: School | Strategy | Statistics | Rankings | News | History
-           └─ School: Overview (Staff) | Roster | Schedule | Stats | History | Records | HOF | Drafted
+           └─ School: Overview | Staff | Roster | Schedule | Stats | History | Records | HOF | Drafted
 ```
 
 ### Open (later docs)
@@ -332,3 +345,4 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History
 | 2025-11-08 | Initial in-season game frame from user spec |
 | 2025-11-08 | Link player cards doc |
 | 2025-11-08 | School Staff section; coach card doc |
+| 2025-11-08 | School Staff tab; AD trust; staff detail sheets |
