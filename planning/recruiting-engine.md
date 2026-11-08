@@ -70,7 +70,7 @@ Each **season**, generate independent pools:
 
 **Walk-ons** (local tryouts) optional v1 — low-prestige schools; see game-design if enabled.
 
-Regional flavor (home state bias on interest) optional; national pool is primary.
+**Geography (v1):** **`homeState` only** — each program and recruit carries a US state/DC code ([`league-branding.md`](league-branding.md#geography--recruiting)). Drives in-state / regional pipeline bias on interest. No city or mileage sim in v1; national pool is primary.
 
 ---
 
@@ -212,7 +212,7 @@ Coach upgrades purchased during offseason may increase **week 1** totals or per-
 | **School grade letters** on recruit’s priority dimensions | e.g. facilities-focused recruit cares about Facilities grade |
 | **NIL offered** vs recruit **valuation** | Underfunding stalls interest |
 | **Coach recruiting** + staff | Charisma / point efficiency |
-| **Distance / conference** | Recruit preferences |
+| **Home state / region** | In-state & nearby-state pipeline vs program `homeState` |
 | **Playing time pitch** | Optional action |
 | **Recent success** | Tourney run, poll rank |
 
@@ -244,7 +244,7 @@ Offseason shell (dedicated frame TBD) or hub from dashboard notification — **R
 
 | Filter | |
 |--------|---|
-| Position, stars, state/region, HS vs JUCO, archetype fit, NIL ask tier | |
+| Position, stars, **home state**, HS vs JUCO, archetype fit, NIL ask tier | |
 
 | Action | Spends |
 |--------|--------|
@@ -332,3 +332,4 @@ After signing, recruits appear on **Committed** and (when appropriate) next seas
 |------|--------|
 | 2025-11-08 | Initial recruiting engine from user spec |
 | 2025-11-08 | v1 locks: star bands, 50% carryover, no visits, fixed Top 60, uniform HS count |
+| 2025-11-08 | Geography = homeState only (recruiting pipeline) |

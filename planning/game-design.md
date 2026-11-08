@@ -161,6 +161,7 @@ Packs are validated **atomically**. Invalid pack → reject; no partial apply.
       "conferenceId": "conf-sec",
       "displayName": "State University",
       "shortName": "ST",
+      "homeState": "ST",
       "colors": { "primary": "#003366", "secondary": "#CCCCCC" },
       "arenaBaseName": "Arena",
       "logoUri": null

@@ -3,7 +3,11 @@
 from __future__ import annotations
 
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from home_states_2026 import HOME_STATES_BY_CONF
 
 # Real conference name, universe display name, confId, short code
 CONFERENCES = [
@@ -216,18 +220,18 @@ MEMBERSHIP: list[tuple[str, list[str]]] = [
     ]),
 ]
 
-TEAM_OVERRIDES: dict[str, tuple[str, str]] = {
-    "Duke Blue Devils": ("Crown University Sovereigns", "Durham, NC"),
-    "North Carolina Tar Heels": ("Tar River Commonwealth", "Chapel Hill, NC"),
-    "Kentucky Wildcats": ("Bluegrass Commonwealth Lynx", "Lexington, KY"),
-    "Kansas Jayhawks": ("Jaydale Commonwealth", "Lawrence, KS"),
-    "UCLA Bruins": ("Westwood Harbor Guardians", "Los Angeles, CA"),
-    "USC Trojans": ("South Bay Argonauts", "Los Angeles, CA"),
-    "Gonzaga Bulldogs": ("Spokane River Mastiffs", "Spokane, WA"),
-    "Villanova Wildcats": ("Main Line Lynx", "Villanova, PA"),
-    "UConn Huskies": ("Storrs Sled Dogs", "Storrs, CT"),
-    "Hawaiʻi Rainbow Warriors": ("Honolulu Rainbow Guard", "Honolulu, HI"),
-    "California Golden Bears (Cal)": ("Bay Golden Bruins", "Berkeley, CA"),
+TEAM_OVERRIDES: dict[str, str] = {
+    "Duke Blue Devils": "Crown University Sovereigns",
+    "North Carolina Tar Heels": "Tar River Commonwealth",
+    "Kentucky Wildcats": "Bluegrass Commonwealth Lynx",
+    "Kansas Jayhawks": "Jaydale Commonwealth",
+    "UCLA Bruins": "Westwood Harbor Guardians",
+    "USC Trojans": "South Bay Argonauts",
+    "Gonzaga Bulldogs": "Spokane River Mastiffs",
+    "Villanova Wildcats": "Main Line Lynx",
+    "UConn Huskies": "Storrs Sled Dogs",
+    "Hawaiʻi Rainbow Warriors": "Honolulu Rainbow Guard",
+    "California Golden Bears (Cal)": "Bay Golden Bruins",
 }
 
 MASCOT_SWAP = {
@@ -248,15 +252,6 @@ MULTI_MASCOTS = sorted([
     "Blue Hose", "Runnin' Bulldogs", "Golden Lions", "Delta Devils", "Mountain Hawks", "Fighting Illini",
 ], key=len, reverse=True)
 
-ANCHOR_HINTS = {
-    "Albany": "Albany, NY", "Duke": "Durham, NC", "North Carolina": "Chapel Hill, NC",
-    "Kansas": "Lawrence, KS", "Kentucky": "Lexington, KY", "UCLA": "Los Angeles, CA",
-    "Gonzaga": "Spokane, WA", "Villanova": "Villanova, PA", "UConn": "Storrs, CT",
-    "Hawaiʻi": "Honolulu, HI", "Notre Dame": "Notre Dame, IN", "Texas": "Austin, TX",
-    "Memphis": "Memphis, TN", "Charlotte": "Charlotte, NC",
-}
-
-
 def strip_paren(name: str) -> str:
     return re.sub(r"\s*\([^)]*\)", "", name).strip()
 
@@ -272,10 +267,17 @@ def split_team(real: str) -> tuple[str, str]:
     return " ".join(parts[:-1]), parts[-1]
 
 
+def home_state(conf_id: str, idx: int) -> str:
+    states = HOME_STATES_BY_CONF[conf_id]
+    if idx < 1 or idx > len(states):
+        raise IndexError(f"home state index for {conf_id} #{idx}")
+    return states[idx - 1]
+
+
 def universe_team(real: str, conf_id: str, idx: int) -> tuple[str, str, str]:
+    state = home_state(conf_id, idx)
     if real in TEAM_OVERRIDES:
-        uni, anchor = TEAM_OVERRIDES[real]
-        return f"team-{conf_id}-{idx:03d}", uni, anchor
+        return f"team-{conf_id}-{idx:03d}", TEAM_OVERRIDES[real], state
 
     school, mascot = split_team(real)
     school_clean = strip_paren(school)
@@ -292,17 +294,11 @@ def universe_team(real: str, conf_id: str, idx: int) -> tuple[str, str, str]:
     if tokens and tokens[0] in metro_prefix:
         rest = " ".join(tokens[1:])
         uni_school = metro_prefix[tokens[0]] + (f" {rest}" if rest else "")
-    elif school_clean in ANCHOR_HINTS:
-        uni_school = f"{ANCHOR_HINTS[school_clean].split(',')[0]} Metro"
     elif school_clean.replace("St.", "Saint") != school_clean:
         uni_school = school_clean.replace("St.", "Saint")
 
     universe = f"{uni_school} {new_mascot}".strip()
-    anchor = ANCHOR_HINTS.get(tokens[0] if tokens else "", ANCHOR_HINTS.get(school_clean, "TBD — align city/market in pack JSON"))
-    if anchor.startswith("TBD"):
-        anchor = f"{school_clean.split()[0]} region — align city/market in pack JSON"
-
-    return f"team-{conf_id}-{idx:03d}", universe, anchor
+    return f"team-{conf_id}-{idx:03d}", universe, state
 
 
 def main() -> None:
@@ -317,10 +313,10 @@ def main() -> None:
         "**Membership:** **Active 2026–27** NCAA Division I men's basketball — **{nconf} conferences**, **{nteams} teams** (per user reference list).".format(
             nconf=len(CONFERENCES), nteams=team_total
         ),
-        "**Purpose:** Keep **real-world reference** alongside **ship-safe display** names so schedules, geography, colors, and tournament fidelity stay accurate.",
-        "**Related:** [`game-design.md`](game-design.md#identity-packs--save-model), [`branding.md`](branding.md).",
+        "**Purpose:** Keep **real-world reference** alongside **ship-safe display** names. **Geography in sim:** **`homeState` only** (US state / DC) — used for **[recruiting pipeline](recruiting-engine.md)** (in-state / regional bias). Not city, market, or travel distance in v1.",
+        "**Related:** [`game-design.md`](game-design.md#identity-packs--save-model), [`branding.md`](branding.md), [`recruiting-engine.md`](recruiting-engine.md).",
         "**Last updated:** 2025-11-08",
-        "**Status:** v2 membership rebuild; universe names from generator + flagship overrides — polish colors/cities in pack JSON.",
+        "**Status:** v2 membership; universe names + `homeState`; colors/logos in pack JSON (not geography fields).",
         "",
         "---",
         "",
@@ -328,9 +324,10 @@ def main() -> None:
         "",
         "1. [Conferences](#conferences)",
         "2. [Teams by conference](#teams-by-conference)",
-        "3. [National body & tournaments (TBD)](#national-body--tournaments-tbd)",
-        "4. [Pack authoring notes](#pack-authoring-notes)",
-        "5. [Document history](#document-history)",
+        "3. [Geography & recruiting](#geography--recruiting)",
+        "4. [National body & tournaments (TBD)](#national-body--tournaments-tbd)",
+        "5. [Pack authoring notes](#pack-authoring-notes)",
+        "6. [Document history](#document-history)",
         "",
         "---",
         "",
@@ -349,9 +346,17 @@ def main() -> None:
         "",
         "## Teams by conference",
         "",
-        "Columns: stable `teamId`, real program (editor reference), universe display name, geography anchor for pack data (city / colors — **flesh out in JSON**).",
+        "Columns: stable `teamId`, real program (editor reference), universe display name, **`homeState`** (recruiting pipeline).",
         "",
     ])
+
+    for conf_id, teams in MEMBERSHIP:
+        if conf_id not in HOME_STATES_BY_CONF:
+            raise KeyError(conf_id)
+        if len(teams) != len(HOME_STATES_BY_CONF[conf_id]):
+            raise ValueError(
+                f"{conf_id}: {len(teams)} teams vs {len(HOME_STATES_BY_CONF[conf_id])} home states"
+            )
 
     for conf_id, teams in MEMBERSHIP:
         real_conf, uni_conf, _, _ = conf_by_id[conf_id]
@@ -359,14 +364,25 @@ def main() -> None:
         lines.append("")
         lines.append(f"*Real league: {real_conf}* · `{conf_id}` · **{len(teams)} teams**")
         lines.append("")
-        lines.append("| `teamId` | Real (reference) | Universe (default pack) | Geography anchor |")
-        lines.append("|----------|-------------------|-------------------------|------------------|")
+        lines.append("| `teamId` | Real (reference) | Universe (default pack) | `homeState` |")
+        lines.append("|----------|-------------------|-------------------------|-------------|")
         for idx, real in enumerate(teams, 1):
-            tid, uni, anchor = universe_team(real, conf_id, idx)
-            lines.append(f"| `{tid}` | {real} | {uni} | {anchor} |")
+            tid, uni, state = universe_team(real, conf_id, idx)
+            lines.append(f"| `{tid}` | {real} | {uni} | {state} |")
         lines.append("")
 
     lines.extend([
+        "---",
+        "",
+        "## Geography & recruiting",
+        "",
+        "| Rule | Detail |",
+        "|------|--------|",
+        "| **`homeState`** | Two-letter state (or DC) on each team row; stored on program in save/pack |",
+        "| **Recruiting** | HS/JUCO recruits tagged with home state; interest/pipeline weights for in-state and regional proximity |",
+        "| **Not in v1** | City, metro, mileage, or arena address for sim logic |",
+        "| **Colors / logos** | Pack overlay only — unrelated to `homeState` |",
+        "",
         "---",
         "",
         "## National body & tournaments (TBD)",
@@ -384,7 +400,8 @@ def main() -> None:
         "| Rule | Detail |",
         "|------|--------|",
         "| **IDs** | Simulation uses `confId` / `teamId` only; display strings from pack overlay |",
-        "| **Colors & logos** | Map from real reference in pack JSON; universe name does not block hex fidelity |",
+        "| **`homeState`** | Required for default pack; drives recruiting pipeline only |",
+        "| **Colors & logos** | Pack JSON overlay; not geography fields |",
         "| **Realignment** | Metro (ex-MAAC), UAC (ex-WAC), Pac-12 remnant, MW + UC Davis, Big West + Utah Valley, etc. reflected in this snapshot |",
         "| **Regeneration** | `python3 planning/tools/generate_league_branding.py` after membership edits |",
         "",
@@ -398,6 +415,7 @@ def main() -> None:
         "|------|--------|",
         "| 2025-11-08 | Initial conference + team mapping |",
         "| 2025-11-08 | **Rebuild:** 2026–27 D-I list — 32 conferences, Metro/UAC, membership moves |",
+        "| 2025-11-08 | Geography = `homeState` only (recruiting pipeline) |",
         "",
     ])
 
