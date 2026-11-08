@@ -318,7 +318,6 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History
 
 ### Open (later docs)
 
-- Player card layout
 - Offseason frame (recruiting / portal shell)
 - Notifications taxonomy
 - Scheme preset catalog

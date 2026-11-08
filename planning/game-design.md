@@ -5,6 +5,7 @@
 **Mode:** Dynasty / program builder — men's college basketball  
 **Game sim:** **[`simulation-engine.md`](simulation-engine.md)** — possession engine only (clock, box score)  
 **In-season UI:** **[`game-frame.md`](game-frame.md)** — dashboard, tabs, hubs  
+**Player UI:** **[`player-cards.md`](player-cards.md)** — preview, card tabs, ratings  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start  
 **Last updated:** 2025-11-08
