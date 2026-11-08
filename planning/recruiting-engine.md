@@ -49,7 +49,7 @@ Portal star bands use the **portal pool only** (see [Star distribution](#star-di
 |-----------------|----------------------|------------|
 | **1** | Offseason week 6 | Portal class **opens** for offers; **NBA draft results** post (opens scholarships); HS/JUCO board live |
 | **2** | Offseason week 7 | Full spend of weekly recruiting points / NIL |
-| **3** | Offseason week 8 | Peak visits & commits |
+| **3** | Offseason week 8 | Peak commits & NIL pushes |
 | **4** | Offseason week 9 | Signing close; hard commits lock |
 
 **No in-season HS/JUCO recruiting window** in v1 (portal in-season remains ruleset-toggled in game-design).
@@ -64,7 +64,7 @@ Each **season**, generate independent pools:
 
 | Pool | Count | Mixed in UI? |
 |------|-------|----------------|
-| **High school** | **Random integer 2,000–4,000** (uniform or weighted — tunable) | Yes — single **HS + JUCO** board |
+| **High school** | **Uniform random integer 2,000–4,000** per season (not tied to year, prestige, or user) | Yes — single **HS + JUCO** board |
 | **Junior college** | **+1,500** (fixed add-on) | Same board as HS |
 | **Transfer portal** | **All entrants** that window (varies by year/sim) | **Separate sub-tab** only |
 
@@ -86,6 +86,8 @@ Stars are assigned **inside each pool** from hidden rating percentiles. **Do not
 | **4★** | Next **18%** (cumulatively top **20%**, excluding 5★ band) | ~360 players |
 | **3★** | Next **30%** (20%–50%) | ~600 players |
 | **2★** | Remainder **50%–100%** | ~1,000 players |
+
+**v1 lock:** no 1★ band — every seeded HS/JUCO/portal player carries 2★–5★. The 20–50% / 50–100% split matches real-world “most offers are 3★–2★” without a long tail of unrated prospects.
 
 **JUCO (1,500):** same bands → ~30 5★, ~270 4★, etc., independent of HS counts.
 
@@ -110,7 +112,7 @@ Stars are assigned **inside each pool** from hidden rating percentiles. **Do not
 |------|--------|
 | **True attributes** | Full 0–99 (and archetype tags) exist in save data from seeding |
 | **Recruit UI** | **No** public 0–99 on board or unscoped card — show **letter grades A–F** instead |
-| **Reveal** | Scouting actions / visits / commits raise fidelity (e.g. `B+` → firmer band, then post-commit full [`player-cards.md`](player-cards.md) ratings next season) |
+| **Reveal** | **Scouting** (recruiting points) + commits raise fidelity (e.g. `B+` → firmer band; post-commit full [`player-cards.md`](player-cards.md) ratings next season) |
 
 ### Letter grade rows (examples)
 
@@ -138,11 +140,11 @@ Each program carries **letter grades A–F** on dimensions (examples):
 
 | Dimension | Affects |
 |-----------|---------|
-| **Facilities** | Visit wow, recruit interest baseline |
+| **Facilities** | Campus appeal, recruit interest baseline |
 | **Academics** | APR/GPA story, some recruit tags |
 | **Conference prestige** | National schedule / brand |
 | **Program prestige** (historical success) | Baseline interest |
-| **Arena / recruiting lounge** | Visit efficiency |
+| **Arena / recruiting lounge** | Recruiting efficiency |
 
 (Additional sinks from [`game-design.md`](game-design.md) facilities table — arena, practice, strength, medical, academic center, recruiting lounge.)
 
@@ -163,7 +165,7 @@ Mapping A–F → points is data-driven JSON; **better letter → higher prestig
 |-------|--------|
 | **Head coach recruiting rating** | Interest bump, efficiency of recruiting point spend |
 | **Coach skill tree** (recruiting / NIL charm) | From [`coach-card.md`](coach-card.md) / upgrades |
-| **Assistant recruiting grades** | Staff grade → visit efficiency |
+| **Assistant recruiting grades** | Staff grade → recruiting point efficiency |
 
 ---
 
@@ -173,7 +175,7 @@ Two spend tracks each **recruiting week**:
 
 | Resource | Use |
 |----------|-----|
-| **Recruiting points** | Calls, scouting upgrades, visits, persistent interest gains |
+| **Recruiting points** | Calls, scouting upgrades, persistent interest gains (no visit system in v1) |
 | **NIL dollars** (or **deal points** — one global format) | Allocated offers toward a recruit’s **valuation** / ask |
 
 ### Budget setup (annual)
@@ -191,8 +193,10 @@ Annual pools set at **recruiting phase start** (and previewable when class seeds
 
 Each of **4 recruiting weeks**, user receives:
 
-- **Recruiting points** to spend (unused points may **expire** at week end or **bank** partially — **TBD** in [Open](#open--tbd))
+- **Recruiting points** weekly allowance (see carryover below)
 - Ability to assign / adjust **NIL dollars** toward targets (subject to annual NIL cap)
+
+**Carryover (v1 lock):** at week end, **50%** of **unspent recruiting points** roll into the next week’s pool (rounded down). The other 50% expires. NIL unspent does **not** roll week-to-week unless tied to an annual pool remainder rule in NIL doc (annual cap only in v1).
 
 Coach upgrades purchased during offseason may increase **week 1** totals or per-week drip.
 
@@ -207,12 +211,12 @@ Coach upgrades purchased during offseason may increase **week 1** totals or per-
 | **programPrestige** (0–99) | Baseline |
 | **School grade letters** on recruit’s priority dimensions | e.g. facilities-focused recruit cares about Facilities grade |
 | **NIL offered** vs recruit **valuation** | Underfunding stalls interest |
-| **Coach recruiting** + staff | Charisma / visit efficiency |
+| **Coach recruiting** + staff | Charisma / point efficiency |
 | **Distance / conference** | Recruit preferences |
 | **Playing time pitch** | Optional action |
 | **Recent success** | Tourney run, poll rank |
 
-**Recruiting points** spent on: scout deeper (sharpen letters), call, visit, scholarship offer, priority bump.
+**Recruiting points** spent on: scout deeper (sharpen letters), call, scholarship offer, priority bump. **No campus visits in v1** (no official/unofficial visit slots or visit actions).
 
 **NIL** committed at offer time writes toward signing number on [`player-cards.md`](player-cards.md) Overview when hard commit lands.
 
@@ -246,9 +250,8 @@ Offseason shell (dedicated frame TBD) or hub from dashboard notification — **R
 |--------|--------|
 | Scout | Recruiting points |
 | Call | Points |
-| Visit (unofficial / official) | Points (+ slot if official — **TBD**) |
 | NIL bump | NIL dollars |
-| Scholarship offer | Points + slot |
+| Scholarship offer | Points |
 | Drop | — |
 
 Tap recruit → **recruit sheet** (preview): stars, letters, NIL ask, interest, actions — **not** full player card until commit.
@@ -259,7 +262,7 @@ Tap recruit → **recruit sheet** (preview): stars, letters, NIL ask, interest, 
 
 | List | Source | When |
 |------|--------|------|
-| **Top 60 recruits** | Hidden ratings across **seeded HS + JUCO** (portal excluded until entered) | After seeding; updates lightly as commits reshuffle perception (**TBD**) |
+| **Top 60 recruits** | Hidden ratings across **seeded HS + JUCO** (portal excluded) | **Fixed order after seed** — does not move during the 4 recruiting weeks (no breakout scout reorder) |
 | **News hub → Recruits** | Same Top 60 reference | [`game-frame.md`](game-frame.md) |
 
 Distinct from **Top 60 draft** pool (in-season / pro-day dynamic) — recruit Top 60 is **incoming class** oriented.
@@ -305,17 +308,20 @@ After signing, recruits appear on **Committed** and (when appropriate) next seas
 
 ---
 
+## v1 locks (summary)
+
+| Topic | Decision |
+|-------|----------|
+| **3★ / 2★** | **20–50%** = 3★, **50–100%** = 2★ (with 5★ / 4★ bands above) |
+| **Recruiting point carryover** | **50%** of unused points to next week; rest expires |
+| **Visits** | **None** in v1 — points-only actions |
+| **Top 60 (recruits)** | **Fixed** after class seed |
+| **HS class size** | **Uniform random 2,000–4,000** per season |
+
 ## Open / TBD
 
-Items not locked in this pass — confirm when you want them pinned:
-
-| Topic | Question |
-|-------|----------|
-| **3★ / 2★ bands** | Confirm 20–50% = 3★, 50–100% = 2★ or adjust |
-| **Unused recruiting points** | Expire weekly vs bank to next week |
-| **Official visit slots** | Per-week cap from game-design vs simplified points-only |
-| **Top 60 updates** | Static after seed vs bump on scouting “breakout” |
-| **HS pool RNG** | Uniform 2K–4K vs prestige-weighted class size |
+| Topic | Notes |
+|-------|--------|
 | **Offseason frame UI** | Full shell doc (companion to `game-frame.md`) |
 
 ---
@@ -325,3 +331,4 @@ Items not locked in this pass — confirm when you want them pinned:
 | Date | Change |
 |------|--------|
 | 2025-11-08 | Initial recruiting engine from user spec |
+| 2025-11-08 | v1 locks: star bands, 50% carryover, no visits, fixed Top 60, uniform HS count |

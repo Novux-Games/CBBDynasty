@@ -305,7 +305,7 @@ If player withdraws by week 5 → retains eligibility; if not withdrawn before d
 
 **Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — 4-week period, 2–4K HS + 1.5K JUCO, portal sub-tab, recruiting points + NIL, letter grades, prestige 0–99.
 
-**Brief:** Custom engine; **no in-season HS/JUCO window**; class **seeded in early offseason**; portal recruits available **recruiting week 1**; star bands **per pool** (top 2% = 5★); combined HS/JUCO board; hidden ratings with **A–F** scout view.
+**Brief:** Custom engine; **no in-season HS/JUCO window**; class **seeded in early offseason**; portal recruits available **recruiting week 1**; star bands **per pool** (top 2% = 5★); combined HS/JUCO board; hidden ratings with **A–F** scout view; **no visits v1**; **50%** recruiting point carryover week-to-week; **Top 60** fixed after seed.
 
 ---
 
