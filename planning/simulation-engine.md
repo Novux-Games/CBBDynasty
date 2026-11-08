@@ -17,8 +17,9 @@
 7. [Output](#output)
 8. [Statistical coherence](#statistical-coherence)
 9. [Randomness](#randomness)
-10. [Watch mode vs fast-sim](#watch-mode-vs-fast-sim)
-11. [Tuning data](#tuning-data)
+10. [Playback: watch, speed, sim to end](#playback-watch-speed-sim-to-end)
+11. [Why track a shot clock?](#why-track-a-shot-clock)
+12. [Tuning data](#tuning-data)
 
 ---
 
@@ -38,27 +39,34 @@ simulateGame(input: GameSimInput) → GameSimResult
 
 ## Possession loop & clock
 
-### Regulation
+### Regulation (men’s CBB rules)
 
-- **40:00** college game, **two halves** (20:00 each).
-- **35-second** shot clock per possession (reset on change of possession, offensive rebound, etc. per college rules simplified in tuning table).
-- **Overtime:** 5:00 periods until winner.
+| Rule | Value |
+|------|--------|
+| **Game clock** | **40:00**, **two halves** (20:00 each) |
+| **Shot clock** | **30 seconds** (NCAA men’s) |
+| **Shot-clock reset** | Change of possession → **30**; offensive rebound → **20** (per current NCAA table in tuning JSON) |
+| **Overtime** | **5:00** periods until winner |
+
+The engine is **possession-based** (one terminal event chain per trip), not continuous physics. **Game clock** and **shot clock** are **game-state timers** that stay correct for stats, log text, and rule outcomes — independent of how fast the **UI** plays possession lines.
 
 ### One possession
 
 1. Determine **five players** on floor per team (rotation logic).
-2. Apply **gameplan** weights (pace, shot profile emphasis, foul aggressiveness).
-3. Resolve **one terminal event** (or chained events for bonus FTs, and-1, etc.).
-4. **Subtract game clock:** **3–30 seconds** per possession depending on event (pace + gameplan shift the distribution).
+2. Initialize / carry **shot clock** for offense (30 on new trip, 20 after offensive rebound, etc.).
+3. Apply **gameplan** weights (pace, shot profile, foul aggressiveness).
+4. Sample or resolve **time used** on this trip (0–shot clock cap) → drives late-clock branches and **shot-clock violations**.
+5. Resolve **terminal event** (or chain: and-1, bonus FTs, etc.).
+6. **Subtract game clock** by time used (and stoppages); clamp to half/game end.
 
-| Event flavor | Typical game-clock shave |
-|--------------|---------------------------|
+| Event flavor | Typical time used (game + shot clock) |
+|--------------|----------------------------------------|
 | Quick turnover | 3–6 sec |
 | Quick shot | 8–14 sec |
 | Foul / stoppage | 12–18 sec |
-| Shot-clock exhaust | up to 30 sec (≤ time left in half) |
+| Shot-clock violation | **30** (or remaining on clock) |
 
-5. Update stats, shot clock, foul counts, score; check end of half/game/OT.
+7. Update stats, fouls, score; reset shot clock on change of possession; check end of half/game/OT.
 
 Half ends when game clock hits 0:00; track **made basket** ending a half if clock at 0 on release (tuning).
 
@@ -177,13 +185,35 @@ Fail in dev → error. Release → retry possession rolls capped N times; last r
 
 ---
 
-## Watch mode vs fast-sim
+## Playback: watch, speed, sim to end
 
-**Watch mode:** **2 seconds** wall-clock between possession lines; **3–30 seconds** game clock shaved per possession ([`strategy-schemes.md`](strategy-schemes.md)). **Halftime:** pause sim for coach adjustments; second half uses updated prep.
+Same `simulateGame` run for all modes — only **UI pacing** changes. Final score and box score are **identical** for the same input + RNG seed (if seed exposed) regardless of speed.
 
-**Fast-sim:** no wall-clock delay. Optional user speed setting later.
+| Mode | Behavior |
+|------|----------|
+| **Watch** | Default **2 s** wall-clock between possession log lines ([`strategy-schemes.md`](strategy-schemes.md)); halftime pause for prep |
+| **Scaling speed** | User multiplier on wall-clock delay (e.g. 0.5×, 2×, 4×) — does **not** change game clock or shot clock inside the sim |
+| **Sim to end** | UI streams no lines (or a summary); engine completes the full possession loop immediately — same result as watching every line |
 
-This doc does **not** set phone performance targets for “advance day” or storage — that is outside **game sim**.
+**Halftime:** only affects **watched** runs — caller pauses after half, merges updated prep, resumes second half.
+
+League **batch sim** (advance day) always uses **sim to end** internally.
+
+---
+
+## Why track a shot clock?
+
+Possessions are simulated **discretely** (one trip → one outcome chain), so it is fair to ask why a **30-second** shot clock exists if we are not simulating every dribble.
+
+| Reason | Detail |
+|--------|--------|
+| **Rule outcomes** | **Shot-clock violation** is a real turnover type in CBB; text log and AST/TO stats need it. |
+| **Time used** | Each trip consumes **0–30 s** of **game clock**; without a shot-clock cap, pace tuning cannot match real possession length or **~60–70** trips per team. |
+| **Late clock** | When sampled time is high (e.g. 22–30 s), tuning bumps **contested shots**, turnovers, and foul rates — “late clock” behavior without animating the floor. |
+| **After OReb** | **20-second** reset creates a different distribution than a fresh **30** — affects extend-the-possession sequences. |
+| **Not for UI speed** | Shot clock is **in-sim**; **scaling speed / sim to end** only change how fast the **player reads** the log, not whether the rule exists. |
+
+**What we do *not* do:** sub-second simulation or 24-second real-time countdown in the UI. The shot clock is **state + sampled time used** (or a small number of sub-phases if tuning requires it), not a visible ticking timer unless the UI chooses to display the sampled value on each line.
 
 ---
 
@@ -205,3 +235,4 @@ Balance lives in data files (pace tables, foul rates, shot distributions), not h
 | 2025-11-08 | Initial draft (over-scoped) |
 | 2025-11-08 | Narrowed to possession game sim only |
 | 2025-11-08 | Re-sim policy → week-advance save (game design) |
+| 2025-11-08 | 30 s shot clock; playback modes; why shot clock in possession sim |

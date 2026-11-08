@@ -92,8 +92,9 @@ Per your spec — see [`game-frame.md`](game-frame.md):
 
 | Setting | Value |
 |---------|--------|
-| Wall-clock between possession lines | **2 seconds** (fixed default; user setting optional later) |
-| Game clock shaved per possession | **3–30 seconds** ([`simulation-engine.md`](simulation-engine.md)) |
+| Wall-clock between possession lines | **2 seconds** (default); user **scaling speed** multiplies this |
+| **Sim to end** | Same engine, no per-line delay ([`simulation-engine.md`](simulation-engine.md#playback-watch-speed-sim-to-end)) |
+| In-sim time per possession | **3–30 s** game clock; **30 s** shot clock cap ([`simulation-engine.md`](simulation-engine.md)) |
 | Halftime | Coach adjustments, then resume |
 
 ---
