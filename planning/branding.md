@@ -49,15 +49,15 @@ Suggested contrast (for implementation QA):
 
 ## Adaptive icon (Android)
 
-Layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/adaptive-icon/):
+Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/adaptive-icon/):
 
 | File | Role |
 |------|------|
-| `adaptive-icon-background.svg` | Solid `#181a25` |
-| `adaptive-icon-foreground.svg` | **Icon mark** cropped from [`app-logo.svg`](../Public-Assets/app-logo.svg) (top icon layer), fills foreground |
-| `adaptive-icon-canvas.svg` | **Full lockup** from `app-logo.svg` on `#181a25`, scaled to fit (see `generate-from-app-logo.py`) |
+| `adaptive-icon-background.svg` | Background layer — `#181a25` |
+| `adaptive-icon-foreground.png` | Foreground layer — **icon mark** cropped from [`app-logo.svg`](../Public-Assets/app-logo.svg) |
+| `adaptive-icon-canvas.png` | Optional square preview — full lockup on `#181a25` (not the launcher foreground layer) |
 
-**Shape:** System mask (circle / squircle); mark scaled to center **~66%** safe zone.
+Regenerate foreground/canvas PNGs from `app-logo.svg` when the logo changes; do not add studio marks or separate generator tooling in `Public-Assets` unless requested.
 
 ---
 
