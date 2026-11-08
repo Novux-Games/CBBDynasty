@@ -109,6 +109,21 @@ Same numbers as Ratings tab headline (read-only here):
 | **OFF** |
 | **DEF** |
 
+### NIL valuation
+
+Single **Overview** line — no extra tab in v1.
+
+| Rule | Detail |
+|------|--------|
+| **What it shows** | **Program NIL valuation** for this player: what you **committed at signing** (recruiting or portal), in abstract **dollars** or **deal points** (one format for the whole game). |
+| **Source** | Written when recruit hard-commits / portal player joins; stored on player record. |
+| **Display** | e.g. `NIL: $142,000/yr` or `NIL deal: 78 pts` — pick one style in UI theme. |
+| **Retention bumps** | If offseason renegotiation raises the deal, update this number; optional small `↑` chip the season it changed. |
+| **Visitors** | Scouting opponent: show **valuation** if known (committed deal); uncommitted HS in recruiting stay off roster cards until signed. |
+| **Ratings tab** | Unchanged — NIL does not add attribute rows. |
+
+Keeps NIL **legible** without a finance minigame on the card; full collective budget stays in game-design / offseason UI later.
+
 ### Projected draft position
 
 From national **Top 60** pool when player is **draft-eligible** and ranked — see [`player-archetypes.md`](player-archetypes.md#draft-projection-overview).
@@ -289,12 +304,6 @@ Tap → expand season detail or read-only mini stat block.
 
 ---
 
-## NIL (later on card)
-
-**Planned:** NIL deal strength / collective slice on **Overview** or sub-section when [`game-design.md`](game-design.md) NIL doc merges into player UI — not blocking current card tabs.
-
----
-
 ## Edit mode
 
 **Edit** (header) visible when player is on **user roster** and editing is allowed by game phase (strategy/usage/redshirt — rules TBD in strategy doc).
@@ -329,3 +338,4 @@ Tap → expand season detail or read-only mini stat block.
 |------|--------|
 | 2025-11-08 | Initial player card spec from user |
 | 2025-11-08 | Clarify stats layers: Games vs averages vs totals vs career math |
+| 2025-11-08 | NIL valuation on Overview (recruiting commit) |

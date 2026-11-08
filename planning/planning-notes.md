@@ -11,10 +11,10 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | Watch sim | **2s** possession delay; 3–30 game clock | [`strategy-schemes.md`](strategy-schemes.md) |
 | Conference tournaments | **Real formats** | [`game-design.md`](game-design.md) |
 | News | Headlines; static top 50 recruit preview; dynamic draft | [`game-frame.md`](game-frame.md) |
-| Coach hub / More | **Later doc** | — |
-| Recruiting engine | **Later doc** | — |
-| Offseason frame | **Soon** | — |
-| NIL on player card | **Later** | [`player-cards.md`](player-cards.md) |
+| Coach hub / More | **Future doc when you ask** (not a backlog item for you now) | — |
+| Recruiting engine | **Future doc when you ask** | — |
+| Offseason frame | **Future doc when you ask** (like in-season `game-frame`) | — |
+| NIL on player card | **Overview valuation** (recruiting commit) | [`player-cards.md`](player-cards.md) |
 | GOAT / History depth | **Defer** | [`game-frame.md`](game-frame.md) |
 | Notifications | Use game-design mobile UX list | [`game-design.md`](game-design.md) |
 
@@ -28,8 +28,15 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. No extra toggles until
 
 ---
 
+## “Still on the list” — what that meant
+
+**Offseason frame** and **recruiting doc** are **new planning files you said you’d do later** (same idea as `game-frame.md`, but for portal/recruiting/offseason screens). They are **not** missing requirements for the player card or in-season frame — only write them when you want that pass.
+
+---
+
 ## Document history
 
 | Date | Change |
 |------|--------|
 | 2025-11-08 | Tracker from user follow-up batch |
+| 2025-11-08 | NIL on Overview; clarify future docs vs backlog |
