@@ -98,6 +98,7 @@ OFFSEASON → PRESEASON → REGULAR SEASON → POSTSEASON → (advance year)
 | **User leverage** | Lineup, rotation, **gameplan** before tip |
 | **Output** | Full box score; live text during sim |
 | **League** | Same `simulateGame` for user watch and batch; **when** to call it = calendar (below) |
+| **Saves** | **Week advance** checkpoints local file; **replay** simmed games if app closed before then |
 
 ---
 
@@ -544,7 +545,7 @@ Gameplay is **sim-only**; see **[`simulation-engine.md`](simulation-engine.md)**
 
 ### NET-style résumé (selection)
 
-**Maintained by the simulation engine** from completed box scores — see [`simulation-engine.md`](simulation-engine.md#résumé-metrics-net--selection-inputs). Game design consumes:
+**Maintained by the dynasty layer** from **week-finalized** box scores ([`simulation-engine.md`](simulation-engine.md) supplies each game’s box score). Game design consumes:
 
 Per team, maintain:
 
@@ -728,3 +729,5 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-07 | Deep finish: offseason calendar, recruiting/NIL, selection math, tiebreakers, UX, milestones |
 | 2025-11-08 | Linked `simulation-engine.md`; text-based offline sim, day-advance league batching |
 | 2025-11-08 | NET realism note; save integrity vs per-game variety (simulation doc) |
+| 2025-11-08 | `simulation-engine.md` scoped to possession game sim only |
+| 2025-11-08 | Save on week advance; replay games if reopened before checkpoint |

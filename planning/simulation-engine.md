@@ -172,7 +172,8 @@ Fail in dev → error. Release → retry possession rolls capped N times; last r
 - **Between games:** different matchups and rolls → different scores (not “same game every time”).
 - **Within a run:** weighted RNG on each possession.
 - **Same inputs, new run:** can produce a different result (basketball variance).
-- **Whether the player can re-run the same scheduled game** after loading a save is **not** defined here — that is save/dynasty rules in game design.
+
+**Re-sim same matchup:** allowed until the dynasty layer **commits the week** (see game-design: save on **week advance**; reload before that → replay). The possession engine is stateless; the caller decides whether to run again.
 
 ---
 
@@ -204,3 +205,4 @@ Balance lives in data files (pace tables, foul rates, shot distributions), not h
 |------|--------|
 | 2025-11-08 | Initial draft (over-scoped) |
 | 2025-11-08 | Narrowed to possession game sim only |
+| 2025-11-08 | Re-sim policy → week-advance save (game design) |
