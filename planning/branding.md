@@ -1,4 +1,4 @@
-# Branding — Dynasty College Basketball
+# Branding — Dynasty: College Basketball
 
 **Last updated:** 2025-11-08
 
@@ -8,12 +8,12 @@
 
 | Field | Value |
 |-------|--------|
-| **Game title** | **Dynasty College Basketball** |
+| **Game title** | **Dynasty: College Basketball** |
 | **Repo / code name** | `CBBDynasty` (workspace) |
 | **Studio** | **Novux Studios** |
 | **Studio URL** | [https://novux.dev](https://novux.dev) |
 
-Use **Dynasty College Basketball** on store listings, splash, and in-app title bar unless a shorter label is required (e.g. “Dynasty CBB” for icon-safe text — TBD).
+Use **Dynasty: College Basketball** on store listings, splash, and in-app title bar unless a shorter label is required (e.g. “Dynasty CBB” for icon-safe text — TBD).
 
 ---
 
@@ -54,7 +54,7 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 | File | Role |
 |------|------|
 | `adaptive-icon-background.svg` | Background layer — `#181a25` |
-| `adaptive-icon-foreground.png` | Foreground layer — **icon mark** cropped from [`app-logo.svg`](../Public-Assets/app-logo.svg) |
+| `adaptive-icon-foreground.png` | Foreground layer — transparent logo (432×432) |
 | `adaptive-icon-canvas.png` | `#181A25` + `adaptive-icon-foreground.png` composited (logo on brand background only) |
 
 ---
@@ -80,3 +80,4 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 | Date | Change |
 |------|--------|
 | 2025-11-08 | Initial branding: title, logo path, studio, `#181a25` |
+| 2025-11-08 | Official title: **Dynasty: College Basketball** |

@@ -1,4 +1,4 @@
-# Dynasty College Basketball
+# Dynasty: College Basketball
 
 **Studio:** [Novux Studios](https://novux.dev)
 
