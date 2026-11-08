@@ -26,7 +26,7 @@ GEO_BY_CONF: dict[str, list[tuple[str, str]]] = {
     ],
     "conf-ascu": [
         ("KY", "Louisville"), ("FL", "Fort Myers"), ("FL", "Jacksonville"), ("TN", "Nashville"),
-        ("FL", "Jacksonville"), ("NC", "Charlotte"), ("FL", "DeLand"), ("FL", "Pensacola"),
+        ("FL", "Jacksonville"), ("NC", "Charlotte"), ("FL", "DeLand"),
     ],
     "conf-c12": [
         ("AZ", "Tucson"), ("AZ", "Tempe"), ("TX", "Waco"), ("UT", "Provo"),
@@ -57,8 +57,8 @@ GEO_BY_CONF: dict[str, list[tuple[str, str]]] = {
     ],
     "conf-gwc": [
         ("CA", "Riverside"), ("CA", "San Luis Obispo"), ("CA", "Bakersfield"), ("CA", "Fullerton"),
-        ("CA", "Northridge"), ("CA", "Long Beach"), ("CA", "Irvine"), ("CA", "Riverside"),
-        ("CA", "La Jolla"), ("CA", "Santa Barbara"), ("UT", "Orem"),
+        ("CA", "Northridge"), ("CA", "Long Beach"), ("CA", "Sacramento"), ("CA", "Irvine"),
+        ("CA", "Riverside"), ("CA", "La Jolla"), ("CA", "Santa Barbara"), ("UT", "Orem"),
     ],
     "conf-cca": [
         ("NC", "Buies Creek"), ("SC", "Charleston"), ("PA", "Philadelphia"), ("NC", "Elon"),
@@ -106,12 +106,12 @@ GEO_BY_CONF: dict[str, list[tuple[str, str]]] = {
     ],
     "conf-nec": [
         ("CT", "New Britain"), ("IL", "Chicago"), ("NJ", "Teaneck"), ("NY", "Syracuse"),
-        ("NY", "Brooklyn"), ("PA", "Erie"), ("CT", "West Haven"), ("MA", "Easton"),
-        ("NY", "Staten Island"),
+        ("NY", "Brooklyn"), ("MA", "Easton"), ("NY", "Staten Island"),
     ],
     "conf-ova": [
         ("IL", "Charleston"), ("MO", "St. Charles"), ("KY", "Morehead"), ("IL", "Edwardsville"),
-        ("MO", "Cape Girardeau"), ("IN", "Evansville"), ("TN", "Martin"), ("IL", "Macomb"),
+        ("MO", "Cape Girardeau"), ("IN", "Evansville"), ("TN", "Nashville"), ("TN", "Martin"),
+        ("IL", "Macomb"),
     ],
     "conf-pr12": [
         ("ID", "Boise"), ("CO", "Fort Collins"), ("CA", "Fresno"), ("WA", "Spokane"),
@@ -156,7 +156,6 @@ GEO_BY_CONF: dict[str, list[tuple[str, str]]] = {
     "conf-uac": [
         ("TX", "Abilene"), ("TN", "Clarksville"), ("AR", "Conway"), ("KY", "Richmond"),
         ("AR", "Little Rock"), ("AL", "Florence"), ("TX", "Stephenville"), ("TX", "Arlington"),
-        ("GA", "Carrollton"),
     ],
     "conf-wcc": [
         ("CO", "Denver"), ("CA", "Los Angeles"), ("CA", "Stockton"), ("CA", "Malibu"),

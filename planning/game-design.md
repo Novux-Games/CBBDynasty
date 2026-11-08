@@ -50,13 +50,13 @@
 
 ### Vision
 
-A **program dynasty** where running a D-I men's hoops school feels like a year-round job: **offseason** portal wars and recruiting, **preseason** schedule craft and hype, **season** survival on the calendar, **March** as the payoff. The world runs **~365 programs** with **real conference mechanics** (schedule size, tiebreakers, tournament shapes) while **display identity** stays swappable and save-safe.
+A **program dynasty** where running a D-I men's hoops school feels like a year-round job: **offseason** portal wars and recruiting, **preseason** schedule craft and hype, **season** survival on the calendar, **March** as the payoff. The default identity pack ships **361 fully certified** programs (**32 conferences**); the real **365**-program field adds **4** provisional reclass members ([`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) · [`league-branding.md`](league-branding.md)) — dynasty treatment **TBD**. Real conference mechanics (schedule size, tiebreakers, tournament shapes) while **display identity** stays swappable and save-safe.
 
 ### Pillars
 
 | Pillar | Commitment |
 |--------|------------|
-| **Scale** | Full D-I men's membership (~365) |
+| **Scale** | **361** certified D-I programs in default pack (365-field w/ 4 transition — TBD) |
 | **Structure** | Real conference sizes & rules (data-driven templates) |
 | **Roster law** | 15-man cap, scholarship flexibility, walk-ons |
 | **Calendar** | One master timeline for every game year |
@@ -203,7 +203,7 @@ Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 
 ### Programs
 
-- **~365** D-I teams in the league graph; each **calendar day** only scheduled teams play (not 365 games per day).
+- **361** certified teams in the default league graph (**365** including provisionals — product TBD); each **calendar day** only scheduled teams play.
 - **User role:** Head coach (single program dynasty); AD-style actions folded into coach UI.
 
 ### When games run vs when the save commits
@@ -690,7 +690,7 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | **Calendar & saves** | Day/week kernel, local persistence, stable IDs, pack overlay |
 | **Possession sim** | 40-min engine, coherence checks, box scores — [`simulation-engine.md`](simulation-engine.md) |
 | **Dynasty systems** | Offseason, recruiting, portal, facilities |
-| **Full league** | 365-team scheduling, daily batch sim, derived résumé |
+| **Full league** | 361-team scheduling (365 option later), daily batch sim, derived résumé |
 | **March** | Conference templates, 76-field bracket, opening round |
 | **Ship** | 2D UI, sliders, notifications, optional identity import |
 

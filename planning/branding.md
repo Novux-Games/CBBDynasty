@@ -72,7 +72,7 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 |-----|------|
 | Game systems | [`game-design.md`](game-design.md) |
 | In-season UI | [`game-frame.md`](game-frame.md) |
-| League names (real ↔ universe) | [`league-branding.md`](league-branding.md) |
+| League names (real ↔ universe) | [`league-branding.md`](league-branding.md) · reference [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) |
 
 ---
 

@@ -73,7 +73,6 @@ MEMBERSHIP: list[tuple[str, list[str]]] = [
     ("conf-ascu", [
         "Bellarmine Knights", "Florida Gulf Coast Eagles (FGCU)", "Jacksonville Dolphins", "Lipscomb Bisons",
         "North Florida Ospreys", "Queens Royals", "Stetson Hatters",
-        "West Florida Argonauts (D-II transition)",
     ]),
     ("conf-c12", [
         "Arizona Wildcats", "Arizona State Sun Devils", "Baylor Bears", "BYU Cougars", "Cincinnati Bearcats",
@@ -106,8 +105,8 @@ MEMBERSHIP: list[tuple[str, list[str]]] = [
     ("conf-gwc", [
         "Cal Baptist Lancers", "Cal Poly Mustangs", "Cal State Bakersfield Roadrunners",
         "Cal State Fullerton Titans", "Cal State Northridge Matadors (CSUN)", "Long Beach State Beach",
-        "UC Irvine Anteaters", "UC Riverside Highlanders", "UC San Diego Tritons", "UC Santa Barbara Gauchos",
-        "Utah Valley Wolverines",
+        "Sacramento State Hornets", "UC Irvine Anteaters", "UC Riverside Highlanders", "UC San Diego Tritons",
+        "UC Santa Barbara Gauchos", "Utah Valley Wolverines",
     ]),
     ("conf-cca", [
         "Campbell Fighting Camels", "College of Charleston Cougars", "Drexel Dragons", "Elon Phoenix",
@@ -157,13 +156,12 @@ MEMBERSHIP: list[tuple[str, list[str]]] = [
     ]),
     ("conf-nec", [
         "Central Connecticut Blue Devils", "Chicago State Cougars", "Fairleigh Dickinson Knights (FDU)",
-        "Le Moyne Dolphins", "LIU Sharks", "Mercyhurst Lakers", "New Haven Chargers",
-        "Stonehill Skyhawks", "Wagner Seahawks",
+        "Le Moyne Dolphins", "LIU Sharks", "Stonehill Skyhawks", "Wagner Seahawks",
     ]),
     ("conf-ova", [
         "Eastern Illinois Panthers", "Lindenwood Lions", "Morehead State Eagles", "SIU Edwardsville Cougars (SIUE)",
-        "Southeast Missouri State Redhawks (SEMO)", "Southern Indiana Screaming Eagles", "UT Martin Skyhawks",
-        "Western Illinois Leathernecks",
+        "Southeast Missouri State Redhawks (SEMO)", "Southern Indiana Screaming Eagles", "Tennessee State Tigers",
+        "UT Martin Skyhawks", "Western Illinois Leathernecks",
     ]),
     ("conf-pr12", [
         "Boise State Broncos", "Colorado State Rams", "Fresno State Bulldogs", "Gonzaga Bulldogs",
@@ -211,13 +209,20 @@ MEMBERSHIP: list[tuple[str, list[str]]] = [
     ("conf-uac", [
         "Abilene Christian Wildcats", "Austin Peay Governors", "Central Arkansas Bears", "Eastern Kentucky Colonels",
         "Little Rock Trojans", "North Alabama Lions", "Tarleton State Texans", "UT Arlington Mavericks",
-        "West Georgia Wolves",
     ]),
     ("conf-wcc", [
         "Denver Pioneers", "Loyola Marymount Lions (LMU)", "Pacific Tigers", "Pepperdine Waves",
         "Portland Pilots", "Saint Mary's Gaels", "San Diego Toreros", "San Francisco Dons",
         "Santa Clara Broncos", "Seattle U Redhawks",
     ]),
+]
+
+# Excluded from default pack — 365-field provisional members ([`2026-NCAA-Directory.md`](../2026-NCAA-Directory.md)).
+TRANSITION_TEAMS: list[tuple[str, str, str]] = [
+    ("conf-nec", "Mercyhurst Lakers", "Mid-transition (Year 3)"),
+    ("conf-nec", "New Haven Chargers", "Early-transition (Year 2)"),
+    ("conf-ascu", "West Florida Argonauts", "Early-transition (Year 1)"),
+    ("conf-uac", "West Georgia Wolves", "Mid-transition (Year 3)"),
 ]
 
 TEAM_OVERRIDES: dict[str, str] = {
@@ -310,9 +315,8 @@ def main() -> None:
         "# League branding — conferences & teams (reference mapping)",
         "",
         "**Product:** [Dynasty: College Basketball](branding.md) · default **universe** names for identity packs.",
-        "**Membership:** **Active 2026–27** NCAA Division I men's basketball — **{nconf} conferences**, **{nteams} teams** (per user reference list).".format(
-            nconf=len(CONFERENCES), nteams=team_total
-        ),
+        f"**Membership:** **{team_total} fully certified** D-I men's programs · **{len(CONFERENCES)} conferences** · **2026–27** ([`2026-NCAA-Directory.md`](2026-NCAA-Directory.md)).",
+        "**Not in this file:** **4** provisional reclass members (365 total field) — [Transition programs](#provisional-transition-programs) (inclusion TBD).",
         "**Purpose:** Keep **real-world reference** alongside **ship-safe display** names for a **shippable** default pack.",
         "**Geography:** Every program has **`homeState`** + **`homeCity`** (reference campus). **`homeState`** drives **[recruiting pipeline](recruiting-engine.md)**; **`homeCity`** is stored for schedule/travel/display and pack fidelity.",
         "**Related:** [`game-design.md`](game-design.md#identity-packs--save-model), [`branding.md`](branding.md), [`recruiting-engine.md`](recruiting-engine.md).",
@@ -325,9 +329,10 @@ def main() -> None:
         "1. [Conferences](#conferences)",
         "2. [Teams by conference](#teams-by-conference)",
         "3. [Geography & recruiting](#geography--recruiting)",
-        "4. [National body & tournaments (TBD)](#national-body--tournaments-tbd)",
-        "5. [Pack authoring notes](#pack-authoring-notes)",
-        "6. [Document history](#document-history)",
+        "4. [Provisional / transition programs](#provisional-transition-programs)",
+        "5. [National body & tournaments (TBD)](#national-body--tournaments-tbd)",
+        "6. [Pack authoring notes](#pack-authoring-notes)",
+        "7. [Document history](#document-history)",
         "",
         "---",
         "",
@@ -385,6 +390,20 @@ def main() -> None:
         "",
         "---",
         "",
+        "## Provisional / transition programs",
+        "",
+        "Omitted from the **361** certified default pack. Still scheduled in the real **365** field per directory; **dynasty inclusion TBD**.",
+        "",
+        "| Conference | Real (reference) | Transition status |",
+        "|------------|------------------|-------------------|",
+    ])
+    for cid, name, status in TRANSITION_TEAMS:
+        real_conf = conf_by_id[cid][0]
+        lines.append(f"| {real_conf} (`{cid}`) | {name} | {status} |")
+    lines.extend([
+        "",
+        "---",
+        "",
         "## National body & tournaments (TBD)",
         "",
         "| Real (reference) | Universe (planned) | Notes |",
@@ -403,9 +422,10 @@ def main() -> None:
         "| **`homeCity` / `homeState`** | Required on every team in default pack JSON |",
         "| **Colors & logos** | Pack JSON overlay |",
         "| **Realignment** | Metro (ex-MAAC), UAC (ex-WAC), Pac-12 remnant, MW + UC Davis, Big West + Utah Valley, etc. reflected in this snapshot |",
+        "| **Source of truth (reference)** | [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) — certification tier copy |",
         "| **Regeneration** | `python3 planning/tools/generate_league_branding.py` after membership edits |",
         "",
-        f"**Membership count (this file):** {team_total} teams · {len(CONFERENCES)} conferences.",
+        f"**Certified pack count:** {team_total} teams · {len(CONFERENCES)} conferences · +4 transition (excluded).",
         "",
         "---",
         "",
@@ -416,13 +436,14 @@ def main() -> None:
         "| 2025-11-08 | Initial conference + team mapping |",
         "| 2025-11-08 | **Rebuild:** 2026–27 D-I list — 32 conferences, Metro/UAC, membership moves |",
         "| 2025-11-08 | Geography: `homeState` (recruiting) + `homeCity` on all programs |",
+        "| 2025-11-08 | Align 361 certified; link directory; exclude 4 transition programs |",
         "",
     ])
 
     out.write_text("\n".join(lines), encoding="utf-8")
     print(f"Wrote {out} — {len(CONFERENCES)} conferences, {team_total} teams")
-    if team_total != 365:
-        print(f"WARNING: expected 365 teams, got {team_total}")
+    if team_total != 361:
+        print(f"WARNING: expected 361 certified teams, got {team_total}")
 
 
 if __name__ == "__main__":

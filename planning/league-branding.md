@@ -1,7 +1,8 @@
 # League branding — conferences & teams (reference mapping)
 
 **Product:** [Dynasty: College Basketball](branding.md) · default **universe** names for identity packs.
-**Membership:** **Active 2026–27** NCAA Division I men's basketball — **32 conferences**, **363 teams** (per user reference list).
+**Membership:** **361 fully certified** D-I men's programs · **32 conferences** · **2026–27** ([`2026-NCAA-Directory.md`](2026-NCAA-Directory.md)).
+**Not in this file:** **4** provisional reclass members (365 total field) — [Transition programs](#provisional-transition-programs) (inclusion TBD).
 **Purpose:** Keep **real-world reference** alongside **ship-safe display** names for a **shippable** default pack.
 **Geography:** Every program has **`homeState`** + **`homeCity`** (reference campus). **`homeState`** drives **[recruiting pipeline](recruiting-engine.md)**; **`homeCity`** is stored for schedule/travel/display and pack fidelity.
 **Related:** [`game-design.md`](game-design.md#identity-packs--save-model), [`branding.md`](branding.md), [`recruiting-engine.md`](recruiting-engine.md).
@@ -14,9 +15,10 @@
 1. [Conferences](#conferences)
 2. [Teams by conference](#teams-by-conference)
 3. [Geography & recruiting](#geography--recruiting)
-4. [National body & tournaments (TBD)](#national-body--tournaments-tbd)
-5. [Pack authoring notes](#pack-authoring-notes)
-6. [Document history](#document-history)
+4. [Provisional / transition programs](#provisional-transition-programs)
+5. [National body & tournaments (TBD)](#national-body--tournaments-tbd)
+6. [Pack authoring notes](#pack-authoring-notes)
+7. [Document history](#document-history)
 
 ---
 
@@ -147,7 +149,7 @@ Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`*
 
 ### Atlantic Sun Collegiate Union
 
-*Real league: Atlantic Sun Conference (ASUN)* · `conf-ascu` · **8 teams**
+*Real league: Atlantic Sun Conference (ASUN)* · `conf-ascu` · **7 teams**
 
 | `teamId` | Real (reference) | Universe (default pack) | `homeCity` | `homeState` |
 |----------|-------------------|-------------------------|------------|-------------|
@@ -158,7 +160,6 @@ Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`*
 | `team-conf-ascu-005` | North Florida Ospreys | North Florida Ospreys | Jacksonville | FL |
 | `team-conf-ascu-006` | Queens Royals | Queens Royals | Charlotte | NC |
 | `team-conf-ascu-007` | Stetson Hatters | Stetson Hatters | DeLand | FL |
-| `team-conf-ascu-008` | West Florida Argonauts (D-II transition) | West Florida Argonauts | Pensacola | FL |
 
 ### Central Twelve Conference
 
@@ -262,7 +263,7 @@ Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`*
 
 ### Golden West Conference
 
-*Real league: Big West Conference* · `conf-gwc` · **11 teams**
+*Real league: Big West Conference* · `conf-gwc` · **12 teams**
 
 | `teamId` | Real (reference) | Universe (default pack) | `homeCity` | `homeState` |
 |----------|-------------------|-------------------------|------------|-------------|
@@ -272,11 +273,12 @@ Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`*
 | `team-conf-gwc-004` | Cal State Fullerton Titans | Cal State Fullerton Titans | Fullerton | CA |
 | `team-conf-gwc-005` | Cal State Northridge Matadors (CSUN) | Cal State Northridge Matadors | Northridge | CA |
 | `team-conf-gwc-006` | Long Beach State Beach | Long Beach State Beach | Long Beach | CA |
-| `team-conf-gwc-007` | UC Irvine Anteaters | UC Irvine Anteaters | Irvine | CA |
-| `team-conf-gwc-008` | UC Riverside Highlanders | UC Riverside Highlanders | Riverside | CA |
-| `team-conf-gwc-009` | UC San Diego Tritons | UC San Diego Tritons | La Jolla | CA |
-| `team-conf-gwc-010` | UC Santa Barbara Gauchos | UC Santa Barbara Gauchos | Santa Barbara | CA |
-| `team-conf-gwc-011` | Utah Valley Wolverines | Utah Valley Wolverines | Orem | UT |
+| `team-conf-gwc-007` | Sacramento State Hornets | Sacramento State Hornets | Sacramento | CA |
+| `team-conf-gwc-008` | UC Irvine Anteaters | UC Irvine Anteaters | Irvine | CA |
+| `team-conf-gwc-009` | UC Riverside Highlanders | UC Riverside Highlanders | Riverside | CA |
+| `team-conf-gwc-010` | UC San Diego Tritons | UC San Diego Tritons | La Jolla | CA |
+| `team-conf-gwc-011` | UC Santa Barbara Gauchos | UC Santa Barbara Gauchos | Santa Barbara | CA |
+| `team-conf-gwc-012` | Utah Valley Wolverines | Utah Valley Wolverines | Orem | UT |
 
 ### Coastal Colonial Association
 
@@ -440,7 +442,7 @@ Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`*
 
 ### Northeastern Exchange Conference
 
-*Real league: Northeast Conference (NEC)* · `conf-nec` · **9 teams**
+*Real league: Northeast Conference (NEC)* · `conf-nec` · **7 teams**
 
 | `teamId` | Real (reference) | Universe (default pack) | `homeCity` | `homeState` |
 |----------|-------------------|-------------------------|------------|-------------|
@@ -449,14 +451,12 @@ Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`*
 | `team-conf-nec-003` | Fairleigh Dickinson Knights (FDU) | Fairleigh Dickinson Knights | Teaneck | NJ |
 | `team-conf-nec-004` | Le Moyne Dolphins | Le Moyne Dolphins | Syracuse | NY |
 | `team-conf-nec-005` | LIU Sharks | LIU Sharks | Brooklyn | NY |
-| `team-conf-nec-006` | Mercyhurst Lakers | Mercyhurst Lakers | Erie | PA |
-| `team-conf-nec-007` | New Haven Chargers | New Haven Chargers | West Haven | CT |
-| `team-conf-nec-008` | Stonehill Skyhawks | Stonehill Skyhawks | Easton | MA |
-| `team-conf-nec-009` | Wagner Seahawks | Wagner Seahawks | Staten Island | NY |
+| `team-conf-nec-006` | Stonehill Skyhawks | Stonehill Skyhawks | Easton | MA |
+| `team-conf-nec-007` | Wagner Seahawks | Wagner Seahawks | Staten Island | NY |
 
 ### Ohio Valley Alliance
 
-*Real league: Ohio Valley Conference (OVC)* · `conf-ova` · **8 teams**
+*Real league: Ohio Valley Conference (OVC)* · `conf-ova` · **9 teams**
 
 | `teamId` | Real (reference) | Universe (default pack) | `homeCity` | `homeState` |
 |----------|-------------------|-------------------------|------------|-------------|
@@ -466,8 +466,9 @@ Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`*
 | `team-conf-ova-004` | SIU Edwardsville Cougars (SIUE) | SIU Edwardsville Cougars | Edwardsville | IL |
 | `team-conf-ova-005` | Southeast Missouri State Redhawks (SEMO) | Southeast Missouri State Redhawks | Cape Girardeau | MO |
 | `team-conf-ova-006` | Southern Indiana Screaming Eagles | Southern Indiana Screaming Hawks | Evansville | IN |
-| `team-conf-ova-007` | UT Martin Skyhawks | UT Martin Skyhawks | Martin | TN |
-| `team-conf-ova-008` | Western Illinois Leathernecks | Western Illinois Leathernecks | Macomb | IL |
+| `team-conf-ova-007` | Tennessee State Tigers | Tennessee State Cougars | Nashville | TN |
+| `team-conf-ova-008` | UT Martin Skyhawks | UT Martin Skyhawks | Martin | TN |
+| `team-conf-ova-009` | Western Illinois Leathernecks | Western Illinois Leathernecks | Macomb | IL |
 
 ### Pacific Rim Twelve
 
@@ -619,7 +620,7 @@ Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`*
 
 ### United Athletic Collegiate
 
-*Real league: United Athletic Conference (UAC) (formerly WAC)* · `conf-uac` · **9 teams**
+*Real league: United Athletic Conference (UAC) (formerly WAC)* · `conf-uac` · **8 teams**
 
 | `teamId` | Real (reference) | Universe (default pack) | `homeCity` | `homeState` |
 |----------|-------------------|-------------------------|------------|-------------|
@@ -631,7 +632,6 @@ Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`*
 | `team-conf-uac-006` | North Alabama Lions | North Alabama Monarchs | Florence | AL |
 | `team-conf-uac-007` | Tarleton State Texans | Tarleton State Texans | Stephenville | TX |
 | `team-conf-uac-008` | UT Arlington Mavericks | UT Arlington Mavericks | Arlington | TX |
-| `team-conf-uac-009` | West Georgia Wolves | West Georgia Wolves | Carrollton | GA |
 
 ### Western Coast Collegiate
 
@@ -663,6 +663,19 @@ Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`*
 
 ---
 
+## Provisional / transition programs
+
+Omitted from the **361** certified default pack. Still scheduled in the real **365** field per directory; **dynasty inclusion TBD**.
+
+| Conference | Real (reference) | Transition status |
+|------------|------------------|-------------------|
+| Northeast Conference (NEC) (`conf-nec`) | Mercyhurst Lakers | Mid-transition (Year 3) |
+| Northeast Conference (NEC) (`conf-nec`) | New Haven Chargers | Early-transition (Year 2) |
+| Atlantic Sun Conference (ASUN) (`conf-ascu`) | West Florida Argonauts | Early-transition (Year 1) |
+| United Athletic Conference (UAC) (formerly WAC) (`conf-uac`) | West Georgia Wolves | Mid-transition (Year 3) |
+
+---
+
 ## National body & tournaments (TBD)
 
 | Real (reference) | Universe (planned) | Notes |
@@ -681,9 +694,10 @@ Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`*
 | **`homeCity` / `homeState`** | Required on every team in default pack JSON |
 | **Colors & logos** | Pack JSON overlay |
 | **Realignment** | Metro (ex-MAAC), UAC (ex-WAC), Pac-12 remnant, MW + UC Davis, Big West + Utah Valley, etc. reflected in this snapshot |
+| **Source of truth (reference)** | [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) — certification tier copy |
 | **Regeneration** | `python3 planning/tools/generate_league_branding.py` after membership edits |
 
-**Membership count (this file):** 363 teams · 32 conferences.
+**Certified pack count:** 361 teams · 32 conferences · +4 transition (excluded).
 
 ---
 
@@ -694,3 +708,4 @@ Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`*
 | 2025-11-08 | Initial conference + team mapping |
 | 2025-11-08 | **Rebuild:** 2026–27 D-I list — 32 conferences, Metro/UAC, membership moves |
 | 2025-11-08 | Geography: `homeState` (recruiting) + `homeCity` on all programs |
+| 2025-11-08 | Align 361 certified; link directory; exclude 4 transition programs |
