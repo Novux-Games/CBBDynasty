@@ -5,7 +5,7 @@
 **Mode:** Dynasty / program builder — men's college basketball  
 **Game sim:** **[`simulation-engine.md`](simulation-engine.md)** — possession engine only (clock, box score)  
 **In-season UI:** **[`game-frame.md`](game-frame.md)** — dashboard, tabs, hubs  
-**Player UI:** **[`player-cards.md`](player-cards.md)** — preview, card tabs, ratings  
+**Player UI:** **[`player-cards.md`](player-cards.md)** — preview, card tabs, ratings; **[`player-archetypes.md`](player-archetypes.md)** — archetypes, draft rank  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start  
 **Last updated:** 2025-11-08
@@ -760,3 +760,4 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-08 | `simulation-engine.md` scoped to possession game sim only |
 | 2025-11-08 | Save on week advance; replay games if reopened before checkpoint |
 | 2025-11-08 | Linked `game-frame.md` (in-season UI shell) |
+| 2025-11-08 | Linked `player-cards.md` |

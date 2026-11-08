@@ -89,7 +89,7 @@ Tab bar sits under identity strip; content scrolls per tab.
 | Hometown |
 | Grade |
 | Position |
-| **Archetype** | e.g. Stretch four, Combo guard — display label |
+| **Archetype** | Primary label from [`player-archetypes.md`](player-archetypes.md) |
 | Experience | Years of college eligibility used / remaining |
 
 ### Measurements
@@ -111,8 +111,13 @@ Same numbers as Ratings tab headline (read-only here):
 
 ### Projected draft position
 
-- Shown when applicable (declaree, senior, pro prospect).
-- Copy pattern: “Lottery”, “Mid first”, “Early second”, “UDFA”, or **None** / hidden for non-prospects.
+From national **Top 60** pool when player is **draft-eligible** and ranked — see [`player-archetypes.md`](player-archetypes.md#draft-projection-overview).
+
+| Display |
+|---------|
+| `Draft: #N` (1–60) |
+| Optional sublabel: Lottery / First round / Early second / Late second |
+| Otherwise **`N/A`** |
 
 ---
 
