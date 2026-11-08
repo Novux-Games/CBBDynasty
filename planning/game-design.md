@@ -6,6 +6,7 @@
 **Game sim:** **[`simulation-engine.md`](simulation-engine.md)** — possession engine only (clock, box score)  
 **In-season UI:** **[`game-frame.md`](game-frame.md)** — dashboard, tabs, hubs  
 **Player UI:** **[`player-cards.md`](player-cards.md)** — preview, card tabs, ratings; **[`player-archetypes.md`](player-archetypes.md)** — archetypes, draft rank  
+**Lineup:** **[`positions-and-lineup.md`](positions-and-lineup.md)** — PG/SG/SF/PF/C, interchange, default starters  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start  
 **Last updated:** 2025-11-08

@@ -42,9 +42,9 @@ Or single line: `Projected draft: #14 (Lottery)` — UI choice.
 
 Each player has **one primary archetype** on the Overview tab. Archetype is **fixed** for the season unless a development event changes it (rare; optional later).
 
-**Positions:** archetypes sit on G / F / C; assignment uses position + rating shape.
+**Positions:** players list **PG, SG, SF, PF, or C** ([`positions-and-lineup.md`](positions-and-lineup.md)); archetype rolls within that group.
 
-### Guards (G)
+### Guards (PG / SG)
 
 | Archetype | Identity |
 |-----------|----------|
@@ -55,7 +55,7 @@ Each player has **one primary archetype** on the Overview tab. Archetype is **fi
 | **Slashing guard** | Drives and finishes; gets to the rim, draws fouls |
 | **Facilitator** | Distributor; assists over scoring, modest shooting |
 
-### Forwards (F)
+### Forwards (SF / PF)
 
 | Archetype | Identity |
 |-----------|----------|
@@ -66,7 +66,7 @@ Each player has **one primary archetype** on the Overview tab. Archetype is **fi
 | **Athletic wing** | Transition, cuts, finish at rim; jack-of-all-trades tendency |
 | **Glue guy** | Role forward; moderate ratings, defense and hustle archetype |
 
-### Centers (C)
+### Centers (C only)
 
 | Archetype | Identity |
 |-----------|----------|
@@ -80,7 +80,7 @@ Each player has **one primary archetype** on the Overview tab. Archetype is **fi
 
 Rough priority when creating/rostering a player:
 
-1. Use **position** (G / F / C).
+1. Use **listed position** (PG / SG / SF / PF / C).
 2. Compare **highest attribute skew** (shooting vs handle vs defense vs rebounding).
 3. Pick **one** archetype from that position’s table.
 

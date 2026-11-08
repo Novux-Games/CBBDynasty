@@ -116,7 +116,7 @@ Final roster/career design lives elsewhere. For **this sim**, each player must p
 | Field | Sim use |
 |-------|---------|
 | `playerId` | Stat lines |
-| `position` | G / F / C — validity, matchup table |
+| `position` | **PG / SG / SF / PF / C** — listed; slots & interchange in [`positions-and-lineup.md`](positions-and-lineup.md) |
 | `height`, `weight` | Rebound & finish nudges |
 | `overall`, `offensive`, `defensive` | Outcome weights |
 | `shooting` | Tendencies + make skills (2PT, 3PT, FT); caller-defined struct |

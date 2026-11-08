@@ -234,7 +234,7 @@ Pre-sim control surface (no mid-game inputs).
 | Section | Behavior |
 |---------|----------|
 | **Scheme** | Pick **offensive** and **defensive** scheme from **5–6 presets** each (e.g. motion, pick-roll, transition, pack-line, press — names TBD in data) |
-| **Rotation** | Lineup management: minute targets, slot starters/reserves; **reset to default** via algorithm (best five + minute distribution by OVR/position) |
+| **Rotation** | Five slots **PG–C**; minute targets; **reset to default** = max-OVR legal starting five ([`positions-and-lineup.md`](positions-and-lineup.md); PG↔SG, SF↔PF) |
 | **Usage** | Per-player usage targets (starters / go-to options) feeding sim shot distribution |
 
 Changes apply to **next** sim; in-week replay before week advance can use new strategy.
