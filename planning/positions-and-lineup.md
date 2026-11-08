@@ -39,7 +39,9 @@ A game **starting five** fills five **slots**: PG, SG, SF, PF, C.
 - **Frontcourt:** SF ↔ PF  
 - **Center:** no interchange (unless a future rule adds “small-ball C” — not in scope)
 
-A player in a slot may be **out of listed position** (e.g. listed PG at SG) for that game; sim and minutes still use their ratings.
+A player in a slot may be **out of listed position** (e.g. listed PG at SG). **Simulation uses that player’s ratings in the slot they’re playing** — a **84 OVR** listed PG at **SG** should produce **better outcomes** than a **72 OVR** listed SG at SG. Interchange is about default UI, not pretending the backup guard is stronger because of the letter on his card.
+
+Optional tiny **position comfort** nudge (e.g. listed PG at SG −0 to −2 on a subset of rolls) may exist in tuning; it must **not** flip order so 72 listed SG outplays 84 slotted at SG. Primary driver remains OVR/OFF/DEF and attributes.
 
 ---
 
@@ -69,8 +71,8 @@ Tie-break: stable player ID order.
 | B | PG | 84 | Bench PG |
 | C | SG | 72 | **Starting SG** |
 
-- Default **does not** start B at SG even though 84 &gt; 72.
-- User may move **B** from bench PG → **starting SG** (legal interchange).
+- Default **does not** start B at SG even though 84 > 72.
+- User may move **B** from bench PG → **starting SG** (legal interchange). **Sim expects B to outperform C** in that slot.
 
 ### Empty slot
 
@@ -118,3 +120,4 @@ Matchups and archetype nudges use **slot played** optional for scheme (e.g. “d
 |------|--------|
 | 2025-11-08 | PG/SG/SF/PF/C + interchange + default starter algorithm |
 | 2025-11-08 | Default starters: best OVR per **listed** position; interchange manual only |
+| 2025-11-08 | Out-of-position slot: better player’s ratings win in sim (e.g. 84 PG at SG) |
