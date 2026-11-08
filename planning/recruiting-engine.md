@@ -1,6 +1,6 @@
 # Recruiting engine
 
-**Context:** Offseason **4-week** recruiting period; HS/JUCO pools seeded earlier in offseason so national boards can publish.  
+**Context:** HS/JUCO pools **seeded in preseason** (Top 60 visible all season); **4-week** recruiting period in **offseason** for offers/commits.  
 **Companion:** Offseason calendar [`game-design.md`](game-design.md#offseason-authoritative-calendar), NIL [`game-design.md`](game-design.md#nil--program-economy), player display [`player-cards.md`](player-cards.md), archetypes [`player-archetypes.md`](player-archetypes.md).  
 **Last updated:** 2025-11-08
 
@@ -31,9 +31,16 @@
 
 | When | What |
 |------|------|
-| **Early offseason** (before recruiting week 1) | Generate **HS** and **JUCO** pools for the incoming class; roll hidden true ratings; assign **stars** per pool rules; build **national recruit rankings** (feeds News **Top 60** and in-engine boards) |
+| **Preseason** (start of each calendar year — [`game-design.md`](game-design.md#preseason)) | Generate **HS** and **JUCO** pools for the **next enrolling class**; roll hidden ratings; assign **stars**; compute **Top 60** national order |
 
-Seeding in offseason is what allows **Top 60 recruit rankings** to exist before the player spends recruiting weeks (preview in News hub, filters on board).
+Seeding in **preseason** — not offseason — so **Top 60 recruits** live in **News** for the entire **regular season** (November–March). The class is already ranked while you coach; **recruiting spend** (points, NIL, offers) opens in **offseason weeks 6–9** only.
+
+| Phase | HS/JUCO access |
+|-------|----------------|
+| **Regular season** | **Top 60** + read-only class browse (letters/stars); **no** offers or commits |
+| **Offseason weeks 6–9** | Full **Recruiting** board — scout, spend, sign ([Four-week recruiting period](#four-week-recruiting-period)) |
+
+**New dynasty:** **Season 1** runs the same **preseason seed** before the first exhibitions so **Top 60** is available from tipoff of year one.
 
 ### Transfer portal
 
@@ -48,12 +55,12 @@ Portal star bands use the **portal pool only** (see [Star distribution](#star-di
 
 | Recruiting week | Offseason anchor | Highlights |
 |-----------------|----------------------|------------|
-| **1** | Offseason week 6 | Portal class **opens** for offers; **NBA draft results** post (opens scholarships); HS/JUCO board live |
+| **1** | Offseason week 6 | Portal class **opens** for offers; **NBA draft results** post (opens scholarships); HS/JUCO **active recruiting** opens (pool seeded last preseason) |
 | **2** | Offseason week 7 | Full spend of weekly recruiting points / NIL |
 | **3** | Offseason week 8 | Peak commits & NIL pushes |
 | **4** | Offseason week 9 | Signing close; hard commits lock |
 
-**No in-season HS/JUCO recruiting window** (portal in-season remains ruleset-toggled in game-design).
+**No in-season HS/JUCO recruiting actions** — offers/commits only in offseason weeks 6–9. (Portal in-season remains ruleset-toggled in game-design.)
 
 User advances **week** or **day** inside recruiting like other offseason phases.
 
@@ -61,7 +68,7 @@ User advances **week** or **day** inside recruiting like other offseason phases.
 
 ## Pools & scale
 
-Each **season**, generate independent pools:
+Each **preseason**, generate independent pools for the incoming class (same counts every year):
 
 | Pool | Count | Mixed in UI? |
 |------|-------|----------------|
@@ -263,8 +270,8 @@ Tap recruit → **recruit sheet** (preview): stars, letters, NIL ask, interest, 
 
 | List | Source | When |
 |------|--------|------|
-| **Top 60 recruits** | Hidden ratings across **seeded HS + JUCO** (portal excluded) | **Fixed order after seed** — does not move during the 4 recruiting weeks (no breakout scout reorder) |
-| **News hub → Recruits** | Same Top 60 reference | [`game-frame.md`](game-frame.md) |
+| **Top 60 recruits** | Hidden ratings across **seeded HS + JUCO** (portal excluded) | **Fixed at preseason seed** — visible **all regular season** + offseason; order **does not** update during the 4 recruiting weeks |
+| **News hub → Recruits** | Same Top 60 reference | [`game-frame.md`](game-frame.md) — in-season |
 
 Distinct from **Top 60 draft** pool (in-season / pro-day dynamic) — recruit Top 60 is **incoming class** oriented.
 
@@ -348,4 +355,5 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | 2025-11-08 | Design locks: star bands, 50% carryover, no visits, fixed Top 60, uniform HS count |
 | 2025-11-08 | Rename v1 locks section → design locks; scrub v1 wording |
 | 2025-11-08 | Walk-ons + Portal Top 40 full product specs |
+| 2025-11-08 | HS/JUCO seed in preseason; Top 60 during regular season |
 | 2025-11-08 | Recruiting pipeline uses homeState; schools also store homeCity |

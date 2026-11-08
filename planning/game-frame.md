@@ -289,7 +289,7 @@ Superset of dashboard News tab.
 |---------------|---------|
 | **Stories** | **Headlines only** (with date) — obvious types: upsets, rankings, injuries, commitments, bracket, etc. |
 | **Draft** | **Top 60** draft pool — **dynamic** as season/pro days evolve |
-| **Recruits** | **Top 60** incoming class — seeded in offseason; see [`recruiting-engine.md`](recruiting-engine.md) |
+| **Recruits** | **Top 60** incoming class — seeded **preseason**; live **all regular season**; see [`recruiting-engine.md`](recruiting-engine.md) |
 
 **Draft** tab = pro/draft pool; **Recruits** tab = high school / JUCO recruit rankings (not portal).
 
@@ -350,5 +350,6 @@ Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`g
 | 2025-11-08 | Link player cards doc |
 | 2025-11-08 | School Staff section; coach card doc |
 | 2025-11-08 | GOAT list formula; companion doc index (offseason/postseason/portal) |
+| 2025-11-08 | Recruit Top 60: preseason seed, in-season News |
 | 2025-11-08 | School Staff tab; AD trust; staff detail sheets |
 | 2025-11-08 | Assistants = coach cards; support list-only |

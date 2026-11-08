@@ -322,7 +322,7 @@ If player withdraws by week 5 → retains eligibility; if not withdrawn before d
 
 **Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — 4-week period, 2–4K HS + 1.5K JUCO, portal sub-tab, recruiting points + NIL, letter grades, prestige 0–99.
 
-**Brief:** Custom engine; **no in-season HS/JUCO window**; class **seeded in early offseason**; portal recruits available **recruiting week 1**; star bands **per pool** (top 2% = 5★); combined HS/JUCO board; hidden ratings with **A–F** scout view; **no campus visits**; **50%** recruiting point carryover week-to-week; **Top 60** fixed after seed.
+**Brief:** HS/JUCO class **seeded in preseason** (**Top 60** in News all regular season); **no in-season recruiting actions**; **4-week** spend window **offseason weeks 6–9**; portal recruits recruitable **recruiting week 1**; star bands **per pool** (top 2% = 5★); combined HS/JUCO board; **A–F** scout view; **no campus visits**; **50%** point carryover week-to-week.
 
 ---
 
@@ -476,14 +476,15 @@ inviteScore = 0.35 * onCourtSuccess
 
 ## Preseason
 
-### Flow (after offseason week 14)
+### Flow (after offseason week 14 — or **Season 1 start** before any prior offseason)
 
-1. **Roster finalization** — confirm redshirts.
-2. **Regular season schedule** — non-conference + conference auto + optional tournament.
-3. **Coach upgrades** — manual or auto.
-4. **Preseason workouts** — automated deltas.
-5. **Media & preview rankings** — national + conference poll sim; sets expectation meter.
-6. **Exhibition scheduling** — up to **3** in **October** (UX: calendar picker, opponent search, travel).
+1. **Incoming class seed** — generate **HS + JUCO** pools; **Top 60** publish to News ([`recruiting-engine.md`](recruiting-engine.md#class-seeding-hs--juco)).
+2. **Roster finalization** — confirm redshirts.
+3. **Regular season schedule** — non-conference + conference auto + optional tournament.
+4. **Coach upgrades** — manual or auto.
+5. **Preseason workouts** — automated deltas.
+6. **Media & preview rankings** — national + conference poll sim; sets expectation meter.
+7. **Exhibition scheduling** — up to **3** in **October** (UX: calendar picker, opponent search, travel).
 
 ### Exhibitions vs scrimmages
 
@@ -793,4 +794,5 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-08 | Season 1 = 2026–27; reclass years anchored to dynasty start |
 | 2025-11-08 | Remove product v1/v2 scope language; design locks only |
 | 2025-11-08 | Restore full-product specs (staff, walk-ons, secondary postseason, unemployed coach) |
+| 2025-11-08 | HS/JUCO recruit seed moved to preseason (Top 60 in-season) |
 | 2025-11-08 | Linked `player-cards.md` |
