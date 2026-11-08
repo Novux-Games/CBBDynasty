@@ -155,31 +155,60 @@ Display: row per attribute; shooting expands or nests three subs.
 
 ## Stats
 
-Four cards (stacked vertically; each card is a section).
+Four cards (stacked vertically). **Three layers:**
+
+| Layer | Tab / card | What it is |
+|-------|------------|------------|
+| **Each game** | **Games** | That night’s line (PTS, AST, …) + result |
+| **This season summary** | **Stats** cards 1–2 | Averages & totals across current season GP |
+| **Whole college career** | **Stats** cards 3–4 | Same idea, all seasons at this program / career |
+
+### How the math works
+
+**Games played (GP)** — only games that count toward official stats (week-finalized games per game-design).
+
+**Season averages (card 1)** — for counting stats, one number for the season:
+
+`average = season total ÷ GP`
+
+Examples: PPG = points ÷ GP; **FGM** on this card = season FGM ÷ GP (e.g. “7.2 made per game”); **FG%** = season FGM ÷ season FGA (not an average of weekly percentages).
+
+**Season totals (card 2)** — sums for this season only (whole numbers): points, assists, rebounds, steals, blocks, turnovers. No per-game breakdown here.
+
+**Career averages (card 3)** — **career** rate stats, not “average of each season’s averages”:
+
+| Stat | Formula |
+|------|---------|
+| PPG, APG, RPG, SPG, BPG, TOPG | **Career total** of that stat ÷ **career GP** (all seasons combined) |
+| FG%, 3P%, FT% | **Career** makes ÷ **career** attempts (one blended percentage) |
+
+So career PPG is “how many points per game he’s averaged across every college game in the save,” and career FG% is “lifetime makes ÷ lifetime attempts.” There is **no** career FGM/FGA line on this card — only the percentages, per your spec.
+
+**Career totals (card 4)** — career sums (points, assists, rebounds, steals, blocks, turnovers).
 
 ### 1. Season averages
 
 Spell out labels in app (not only abbreviations in UI copy where specified).
 
-| Stat |
-|------|
-| Points per game (PPG) |
-| Assists per game (APG) |
-| Rebounds per game (RPG) |
-| Steals per game (SPG) |
-| Blocks per game (BPG) |
-| Turnovers per game (TOPG) |
-| Field goals made (FGM) |
-| Field goals attempted (FGA) |
-| Field goal percentage (FG%) |
-| Three-pointers made (3PM) |
-| Three-pointers attempted (3PA) |
-| Three-point percentage (3P%) |
-| Free throws made (FTM) |
-| Free throws attempted (FTA) |
-| Free throw percentage (FT%) |
+| Stat | Meaning on this card |
+|------|----------------------|
+| Points per game (PPG) | Season points ÷ GP |
+| Assists per game (APG) | Season assists ÷ GP |
+| Rebounds per game (RPG) | Season rebounds ÷ GP |
+| Steals per game (SPG) | Season steals ÷ GP |
+| Blocks per game (BPG) | Season blocks ÷ GP |
+| Turnovers per game (TOPG) | Season turnovers ÷ GP |
+| Field goals made (FGM) | Season FGM ÷ GP |
+| Field goals attempted (FGA) | Season FGA ÷ GP |
+| Field goal percentage (FG%) | Season FGM ÷ season FGA |
+| Three-pointers made (3PM) | Season 3PM ÷ GP |
+| Three-pointers attempted (3PA) | Season 3PA ÷ GP |
+| Three-point percentage (3P%) | Season 3PM ÷ season 3PA |
+| Free throws made (FTM) | Season FTM ÷ GP |
+| Free throws attempted (FTA) | Season FTA ÷ GP |
+| Free throw percentage (FT%) | Season FTM ÷ season FTA |
 
-*Note: FGM/FGA/FTM/FTA on averages card are **per-game** made/attempted unless you later switch to efficiency-only; document implementation as per-game averages.*
+Individual **games** stay on the **Games** tab; **season counting totals** (e.g. 412 points) stay on **Season totals**.
 
 ### 2. Season totals
 
@@ -193,6 +222,8 @@ Spell out labels in app (not only abbreviations in UI copy where specified).
 | Turnovers |
 
 ### 3. Career averages
+
+Career rate stats only (see table above). No career FGM/FGA on this card — shooting volume is implied by career totals + GP, or prior seasons on **History**.
 
 | Stat |
 |------|
@@ -286,3 +317,4 @@ Tap → expand season detail or read-only mini stat block.
 | Date | Change |
 |------|--------|
 | 2025-11-08 | Initial player card spec from user |
+| 2025-11-08 | Clarify stats layers: Games vs averages vs totals vs career math |
