@@ -78,9 +78,9 @@ Second half sim uses updated prep; first half stats and score **fixed**.
 
 **Watch flow:** possessions run at **2 seconds** wall-clock until half; pause for halftime UI; resume at 2s/possession for second half.
 
-### Mid-week / rotation “lock” (clarification)
+### Strategy edits & week save (**design lock** — confirmed)
 
-Planning question was whether strategy edits are blocked on certain days. **Current rule:**
+Whether strategy edits are blocked on certain days:
 
 | When | Edit lineup / rotation / usage / scheme? |
 |------|-------------------------------------------|
@@ -117,3 +117,4 @@ Per your spec — see [`game-frame.md`](game-frame.md):
 | Date | Change |
 |------|--------|
 | 2025-11-08 | O/D presets, gameplan + halftime, preview/watch notes |
+| 2025-11-08 | Strategy edit / week-advance rules marked design lock |

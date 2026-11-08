@@ -24,6 +24,8 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 
 Pre-game: schemes, rotation, usage. Halftime: same knobs. No extra toggles until coach doc.
 
+**Strategy / rotation timing (locked):** edit before sim + halftime; replay with new prep before week advance; after week advance, that week’s results final, prep for next games.
+
 ---
 
 ## Document history
