@@ -45,29 +45,36 @@ A player in a slot may be **out of listed position** (e.g. listed PG at SG) for 
 
 ## Default starters algorithm
 
-**Reset to default** in Strategy hub runs this logic:
+**Reset to default** in Strategy hub uses **listed position only** — it never auto-slides a PG into SG (or SF into PF) to maximize OVR.
 
-1. Consider top **10** rotation players by OVR (or full roster if ≤10).
-2. Assign exactly one player to each slot **PG, SG, SF, PF, C** such that:
-   - eligibility rules above are met;
-   - **sum of OVR of the five starters is maximized** (same as picking the best legal starting five).
+Per slot:
 
-3. Tie-break: higher OVR at listed position, then player ID stable order.
+| Slot | Default starter |
+|------|-----------------|
+| **PG** | Highest **OVR** among players **listed PG** |
+| **SG** | Highest **OVR** among players **listed SG** |
+| **SF** | Highest **OVR** among players **listed SF** |
+| **PF** | Highest **OVR** among players **listed PF** |
+| **C** | Highest **OVR** among players **listed C** |
 
-### Example (your case)
+Tie-break: stable player ID order.
 
-| Player | Listed | OVR |
-|--------|--------|-----|
-| A | PG | 91 |
-| B | PG | 84 |
-| C | SG | 72 |
-| (others fill SF, PF, C) | | |
+**Interchange is manual only** for the starting five. Eligibility still allows PG-at-SG when the **user** sets it; the game does not do that on reset/default.
 
-- C cannot beat A/B for PG/SG backcourt alone at SG if we only put C at SG (72).
-- Best backcourt: **PG slot = A (91)**, **SG slot = B (84)** — listed PG at SG is allowed.
-- **C (72)** moves to bench (or sixth man), not default SG.
+### Example
 
-Low-OVR player at his **listed** slot can lose the start to a **higher OVR interchange** player even if the latter’s list is PG/SG or SF/PF pair.
+| Player | Listed | OVR | Default role |
+|--------|--------|-----|----------------|
+| A | PG | 91 | **Starting PG** |
+| B | PG | 84 | Bench PG |
+| C | SG | 72 | **Starting SG** |
+
+- Default **does not** start B at SG even though 84 &gt; 72.
+- User may move **B** from bench PG → **starting SG** (legal interchange).
+
+### Empty slot
+
+If no one is **listed** for a slot (e.g. no SG on roster), that slot stays **unfilled** in default and UI prompts to assign a starter (user may use interchange). No automatic cross-list promotion on reset.
 
 ---
 
@@ -110,3 +117,4 @@ Matchups and archetype nudges use **slot played** optional for scheme (e.g. “d
 | Date | Change |
 |------|--------|
 | 2025-11-08 | PG/SG/SF/PF/C + interchange + default starter algorithm |
+| 2025-11-08 | Default starters: best OVR per **listed** position; interchange manual only |
