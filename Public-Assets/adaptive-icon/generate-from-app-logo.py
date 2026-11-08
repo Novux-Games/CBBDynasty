@@ -28,7 +28,7 @@ def main() -> None:
     if len(imgs) < 3:
         raise SystemExit(f"Expected embedded images in {APP_LOGO}")
 
-  # First 158x158 = icon layer; first 765x726 = full mark from app-logo.svg
+    # First 158x158 = icon layer; first 765x726 = full mark from app-logo.svg
     icon_b64 = imgs[0][2]
     full_b64 = imgs[2][2]
 
