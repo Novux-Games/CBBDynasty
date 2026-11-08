@@ -387,7 +387,7 @@ Same patterns as HC Contract but scoped to assistant deals; poach CTA when viewi
 | Offensive / Defensive | Tactics branch of skill tree |
 | Training | Player development |
 | Recruiting | Recruiting / NIL charm |
-| Staff grade (School hub) | Assistant aggregate bumping visits & development |
+| Staff grade (School hub) | Assistant aggregate bumping pitch efficiency & development |
 
 ---
 
@@ -399,3 +399,4 @@ Same patterns as HC Contract but scoped to assistant deals; poach CTA when viewi
 | 2025-11-08 | Staff tab + AD trust; staff detail sheets; split conf titles |
 | 2025-11-08 | Staff History tab: season/school/position/result for all staff |
 | 2025-11-08 | Assistants use coach card; support staff list-only; trainers ineligible for HC |
+| 2025-11-08 | Collegiate Invitational achievements; GA promotion; staff log on School history |
