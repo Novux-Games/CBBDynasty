@@ -3,7 +3,7 @@
 **Platform:** Android (mobile)  
 **Presentation:** Text-based **2D** sim (Campus Dynasty–style); **offline** with **local save files**  
 **Mode:** Dynasty / program builder — men's college basketball  
-**Simulation:** See **[`simulation-engine.md`](simulation-engine.md)** — possession sim, calendar batching, box scores  
+**Game sim:** **[`simulation-engine.md`](simulation-engine.md)** — possession engine only (clock, box score)  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start  
 **Last updated:** 2025-11-08
@@ -90,18 +90,14 @@ OFFSEASON → PRESEASON → REGULAR SEASON → POSTSEASON → (advance year)
 
 ## Simulation engine (brief)
 
-Full specification: **[`planning/simulation-engine.md`](simulation-engine.md)**.
+**Possession game sim only:** [`simulation-engine.md`](simulation-engine.md). Dynasty layer owns calendar, saves, NET, recruiting.
 
-| Topic | Game-design summary |
-|-------|---------------------|
-| **Style** | Text-forward **2D**; possession-by-possession **40-minute** clock; **sim-only** |
-| **User leverage** | Lineup, rotation, **gameplan** before tip — no mid-game control |
-| **Calendar** | User game can sim when scheduled; **other games that day stay unplayed** until **Advance Day/Week** |
-| **League** | ~**365** teams; only teams **with a game that date** sim; **full box scores** stored for every completed game |
-| **Stats** | Full college box score; coherence checks (team totals = player sums) |
-| **Résumé / NET** | **As real as possible** (quadrants, SOS, adj. efficiency) — **only** from sim results, no imported CSVs |
-| **Saves** | Offline local files; simmed games are **final** (not re-rolled on load) |
-| **Play-by-play** | Readable **during** sim; after game, persist **box score + team stats** only |
+| Topic | Summary |
+|-------|---------|
+| **Style** | Text **2D**; **40:00** clock; **3–30 sec** game time per possession |
+| **User leverage** | Lineup, rotation, **gameplan** before tip |
+| **Output** | Full box score; live text during sim |
+| **League** | Same `simulateGame` for user watch and batch; **when** to call it = calendar (below) |
 
 ---
 

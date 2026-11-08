@@ -1,413 +1,200 @@
-# Dynasty: College Basketball — Simulation Engine
+# Game simulation — possession engine
 
-**Companion to:** [`game-design.md`](game-design.md)  
-**Product shape:** Text-based **2D** dynasty sim (Campus Dynasty–class presentation), **offline**, **local save files**  
-**Gameplay lock:** **Sim-only** — no on-court user control; impact comes from **lineup**, **rotation**, and **gameplan** set before tip.  
-**Last updated:** 2025-11-08
+**Scope:** This document is **only** how **one basketball game** is simulated: clock, possessions, outcomes, box score.  
+**Not here:** recruiting, roster creation, calendar, saves, NET, brackets, UI layout — see [`game-design.md`](game-design.md).  
+**Product:** Text-based **2D**, **sim-only**; user affects **lineup**, **rotation**, and **gameplan** before tip, not during play.
 
 ---
 
 ## Contents
 
-1. [Purpose & boundaries](#purpose--boundaries)
-2. [Clarifications (design Q&A)](#clarifications-design-qa)
-3. [Calendar & when games run](#calendar--when-games-run)
-4. [Possession model & clock](#possession-model--clock)
-5. [Player & team ratings](#player--team-ratings)
-6. [Game prep inputs (user leverage)](#game-prep-inputs-user-leverage)
-7. [Box scores, play-by-play & archives](#box-scores-play-by-play--archives)
-8. [World sim at 365 teams](#world-sim-at-365-teams)
-9. [Statistical coherence](#statistical-coherence)
-10. [Résumé metrics (NET / selection inputs)](#résumé-metrics-net--selection-inputs)
-11. [Randomness & saves](#randomness--saves)
-12. [Difficulty sliders](#difficulty-sliders)
-13. [Performance & threading](#performance--threading)
-14. [Data-driven tuning](#data-driven-tuning)
-15. [Regression fixtures (optional)](#regression-fixtures-optional)
-16. [Open implementation notes](#open-implementation-notes)
+1. [Contract](#contract)
+2. [Possession loop & clock](#possession-loop--clock)
+3. [What can happen on a possession](#what-can-happen-on-a-possession)
+4. [Rotation & fouls (in sim)](#rotation--fouls-in-sim)
+5. [Prep inputs](#prep-inputs)
+6. [Participant data (inputs only)](#participant-data-inputs-only)
+7. [Output](#output)
+8. [Statistical coherence](#statistical-coherence)
+9. [Randomness](#randomness)
+10. [Watch mode vs fast-sim](#watch-mode-vs-fast-sim)
+11. [Tuning data](#tuning-data)
 
 ---
 
-## Purpose & boundaries
+## Contract
 
-The simulation engine is responsible for:
+**In:** two sides, each with a roster slice for this game, prep (lineup / rotation / gameplan), environment (home/away/neutral, optional modifiers the caller passes in).
 
-| Owns | Does not own |
-|------|----------------|
-| Possession-by-possession game resolution | Recruiting UI / NIL negotiation screens |
-| Full box scores & team totals | Identity pack display strings |
-| Day/week advancement batch sim | Cloud sync, multiplayer |
-| Schedule → game instances | Coach skill tree UI |
-| Player stat aggregation, season/ career stats | Carousel narrative scripting |
-| Résumé metrics derived from results | Committee presentation polish |
+**Out:** final score, full box score, team totals, optional possession log for this run.
 
-**Storage:** All dynasty state and completed game artifacts live in **local files** (format TBD in tech architecture doc). No network required to play.
-
-**Presentation:** **2D text-forward** UI (scores, logs, tables, minimal graphic court optional). Engine outputs structured data; UI renders it.
-
----
-
-## Clarifications (design Q&A)
-
-Plain-language answers to planning questions — locked unless this doc is revised.
-
-### Randomness — “not every game will be the same” (what we meant by #3)
-
-**You’re right:** every game should feel different. Opponents, rosters, pace, foul trouble, and rolls inside the engine guarantee that **Kentucky–Duke ≠ Kentucky–Samford** and that **Tuesday’s game ≠ Saturday’s game**.
-
-The **only** thing we were asking about is a **save-file exploit**, not “boring identical basketball”:
-
-| Situation | Expected behavior |
-|-----------|-------------------|
-| Normal play | Outcomes vary game to game; upsets happen; stats differ every night. |
-| You sim **Tuesday vs State**, get **81–76**, save, quit the app | When you load that save, Tuesday is still **81–76** — the result is **written to the file**. |
-| You sim Tuesday, don’t like the loss, **reload save and sim Tuesday again** | **Not allowed** — no “reroll this game” unless we add a **cheat/sandbox** mode later. |
-| You change **lineup or gameplan**, then sim (first time or in a **new** dynasty) | New inputs → **new** outcome (still random within reason). |
-
-**Analogy:** like a season of real basketball on disk. Nights differ; you don’t get to erase a bad loss by reloading.
-
-**Design lock:**
-
-- **Variety:** yes — possession outcomes use RNG weighted by ratings, gameplan, home court, fatigue.
-- **Integrity:** final scores **stick** in the save so the bracket and NET stay consistent.
-
-### Résumé / NET (#8) — as real as possible
-
-**Goal:** Bubble talk, quadrant records, and seed lines should **feel like Selection Sunday**, not a made-up number.
-
-| Principle | Detail |
-|-----------|--------|
-| **No imported real-world ratings** | We don’t paste KenPom/NET CSVs for 2026 teams. |
-| **Yes real NCAA-style logic** | Metrics and sort keys **mirror** how the committee actually reasons: efficiency, **where** you played, **who** you played, quality wins, bad losses, late form. |
-
-Engine maintains a **NET-analog ranking** updated **after each day’s games**:
-
-1. **Adjusted offensive & defensive efficiency** (points per 100 possessions; opponent-adjusted iteratively — same convergence *idea* as public NET).
-2. **Team value index** — blend of efficiency margin, opponent strength, and game-location difficulty (neutral > road > home for the *value of a win* framing where applicable).
-3. **Quadrants 1–4** — each game bucketed by **location** (H/N/A) and **opponent NET tier** at game date; track **W–L per quadrant** like résumé sheets.
-4. **SOS & non-conference strength** — opponents’ rolling strength; bad losses vs weak tiers flagged.
-5. **Last 10 / late-season form** — weighted for bubble ordering.
-6. **Eye-test tie noise** — tiny jitter only for **ties** in sort order, not to override résumé (keeps standings stable).
-
-Selection Sunday in [`game-design.md`](game-design.md) reads these tables; formulas live in **tuning JSON** with documented real-world inspiration (labels in UI: “Resume / NET” unless identity pack renames).
-
-Early season: NET is **volatile** (few games); by conference play NET **stabilizes** — intentional.
-
-### Performance (#9) — what was the actual question?
-
-**Question:** On a typical phone, how **snappy** should sim feel?
-
-This is **not** “how realistic is basketball.” It’s UX/engineering targets:
-
-| Work unit | Target (tune on device) |
-|-----------|-------------------------|
-| **Watch mode** | ~**2–3 seconds** between possession lines (your spec); skippable |
-| **Fast-sim user game** | As fast as CPU allows (no artificial delay) |
-| **Advance day** | Sim every other game that date in background; show progress bar; shouldn’t feel “frozen” |
-| **Storage** | Full text box scores for all games — **fine** |
-
-We’ll profile on a mid-tier Android when code exists; numbers above are **design targets**, not promises.
-
-### Regression fixtures (#14) — decided
-
-**Ship engineering tests** (player never sees them):
-
-| ID | Scenario | Assert |
-|----|----------|--------|
-| `slugfest` | Two defensive teams, slow pace | Total points each side 45–75; sum(player PTS) = team PTS |
-| `shootout` | Two high-OVR fast-pace teams | Total 150–220 combined; pace within band |
-| `foul_trouble` | Star picks up 4 PF in 1H | PF ≥ 4; minutes still reconcile |
-| `blowout` | 95 OVR vs 60 OVR | Margin ≥ 20; no incoherent shooting lines |
-| `upset_band` | 12-point underdog wins ~15% in Monte Carlo | Win rate 5–25% over 500 trials (tuning guardrail) |
-| `ot_path` | Tie at regulation forced via test harness | OT played; winner by 2+ |
-
-**Location:** `testdata/sim/fixtures/` when repo has code; mirror summaries in `planning/fixtures/README.md` for design traceability.
-
-**When:** Run on every engine change in CI once the module exists.
-
----
-
-## Calendar & when games run
-
-**365 teams** exist in the league; **each calendar day** only teams **scheduled that day** play.
-
-### State machine per game
+The engine does **not** decide *when* the game is played, whether it is saved, or what happens to the league — the **caller** does. Same engine for “user watches” and “silent batch sim.”
 
 ```
-SCHEDULED → (optional) USER_WATCHED_SIM → FINAL
-          → BATCH_SIM on advance → FINAL
+simulateGame(input: GameSimInput) → GameSimResult
 ```
-
-| Moment | Behavior |
-|--------|----------|
-| User’s game day | User may **watch** possession sim or **fast-sim** to end; result stored when complete |
-| Same day, other games | Remain **SCHEDULED** until user **advances day** (or week) |
-| On **Advance Day** | Engine sims **all SCHEDULED games that date** (except user’s game if already FINAL), then rolls calendar |
-| On **Advance Week** | Sim each intervening day in order (same rules per day) |
-
-**Week advance** is not “one game per team”; it is **iterate days**, sim all games on each day.
-
-### Ordering within a day
-
-1. Optional: prompt user if their game is SCHEDULED and today.
-2. User completes or skips to advance.
-3. Batch-sim remaining games for that date.
-4. Update standings, résumé metrics, injuries, news feed.
 
 ---
 
-## Possession model & clock
+## Possession loop & clock
 
-### Clock
+### Regulation
 
-- Regulation: **40 minutes** (college), **2 halves** (20:00 each) unless ruleset data says otherwise for future eras.
+- **40:00** college game, **two halves** (20:00 each).
+- **35-second** shot clock per possession (reset on change of possession, offensive rebound, etc. per college rules simplified in tuning table).
 - **Overtime:** 5:00 periods until winner.
 
-### Possession loop
+### One possession
 
-Each possession:
+1. Determine **five players** on floor per team (rotation logic).
+2. Apply **gameplan** weights (pace, shot profile emphasis, foul aggressiveness).
+3. Resolve **one terminal event** (or chained events for bonus FTs, and-1, etc.).
+4. **Subtract game clock:** **3–30 seconds** per possession depending on event (pace + gameplan shift the distribution).
 
-1. **Lineup on floor** (from rotation rules + fatigue/fouls).
-2. **Gameplan modifiers** (pace, focus, matchups — set pregame).
-3. Resolve event: turnover, foul, shot, bonus trip, etc.
-4. **Consume game clock:** random **3–30 seconds** per possession (distribution tuned by pace and event type).
+| Event flavor | Typical game-clock shave |
+|--------------|---------------------------|
+| Quick turnover | 3–6 sec |
+| Quick shot | 8–14 sec |
+| Foul / stoppage | 12–18 sec |
+| Shot-clock exhaust | up to 30 sec (≤ time left in half) |
 
-| Event class | Typical clock shave |
-|-------------|---------------------|
-| Immediate turnover / steal | ~3–6 sec |
-| Quick shot | ~8–14 sec |
-| Foul, halt play | ~12–18 sec |
-| Full shot-clock usage | up to **30** sec (cap at possession time remaining) |
+5. Update stats, shot clock, foul counts, score; check end of half/game/OT.
 
-5. **Wall-clock delay** when user is watching: **~2–3 seconds** between possessions (skipped in fast-sim).
+Half ends when game clock hits 0:00; track **made basket** ending a half if clock at 0 on release (tuning).
 
-### Shot clock (logical)
+### Possessions per game
 
-- Engine tracks **35-second** shot clock (ruleset table).
-- Violation → turnover possession.
-- Clock shave and shot-clock are **consistent** (cannot shave 30s game clock in 5s of shot clock without a reset event).
-
-### Outputs per possession (for live log)
-
-Short text line, e.g.:
-
-`14:32 | HOME | Smith 3PT miss | Long REB | Away possession`
-
-Full log available **during** sim; not all lines persisted after game ends (see [Archives](#box-scores-play-by-play--archives)).
-
-### Stats tracked (full box score)
-
-**Player:** MIN, PTS, FGM/A, 3PM/A, FTM/A, ORB, DRB, REB, AST, STL, BLK, TO, PF (+ optional +/-)  
-**Team:** same aggregates, FG%, 3P%, FT%, points in paint, bench points, fouls, etc. as needed for UI and résumé.
-
-**Minutes:** derived from possessions where player is on floor (consistent with 40:00 team total).
+Target band **~60–70** possessions per team (college pace); tuning adjusts from gameplan.
 
 ---
 
-## Player & team ratings
+## What can happen on a possession
 
-### Roster player attributes (sim inputs)
+Non-exhaustive; implementation uses weighted rolls from participant ratings + gameplan + situation (score differential late, fouls to give).
 
-| Field | Role in sim |
-|-------|-------------|
-| **Position** | G/F/C (lineup validity, matchup table) |
-| **Class grade** | Fr–Sr (+ RS flag affects narrative, not OVR directly) |
-| **Height / weight** | Rebounding, finish, small matchup nudges |
-| **Draft potential** | Pro-day / draft story; slight late-game clutch bias optional |
-| **Overall** | Master weight in outcome rolls |
-| **Offensive rating** | Usage efficiency, shot creation |
-| **Defensive rating** | Stop probability, steal/block bias |
-| **Potential** | Offseason growth only |
-| **Shooting profile** | Generated per player: tendency + 2P/3P/FT skill splits |
+| Category | Examples |
+|----------|----------|
+| **Turnover** | Steal, bad pass, offensive foul, shot-clock violation, travel |
+| **Shot** | 2PT/3PT attempt → make/miss; block; foul on shot → FTs |
+| **Free throws** | Bonus / double bonus sequences |
+| **Rebound** | Offensive → same team new possession; defensive → change |
+| **Jump ball / alternate possession** | Tie-up rare event |
 
-**Shooting data (randomized at generation):** e.g. `threePointTendency`, `midRangeTendency`, `driveTendency`, `freeThrowPctSkill` — stable for career unless development changes.
-
-Recruits generate with the same schema at lower bands; development arcs use **potential**.
-
-### Team pregame strength
-
-Blends:
-
-- On-floor lineup ratings (top 8 rotation by default)
-- Home court (arena grade)
-- Coach tactical grade (prep, not click-by-click)
-- Fatigue / injury flags
+Each event emits **one text line** for live log (see [Output](#output)).
 
 ---
 
-## Game prep inputs (user leverage)
+## Rotation & fouls (in sim)
 
-**No mid-game user control.** Before tip:
+- **Starting lineup** from prep; substitutions from **rotation rules** (minutes bands, foul trouble pull, fatigue).
+- **Disqualification** at 5 personal fouls (or ruleset table).
+- **Minutes:** accumulated while on floor; team total should align with 200 player-minutes per team per regulation (coherence check).
 
-| Input | Effect |
-|-------|--------|
-| **Starting lineup** | Who begins each half |
-| **Rotation depth / minutes bands** | Who subs in |
-| **Gameplan** | Pace tier, inside-outside emphasis, deny star, foul strategy late |
-| **Matchups** | Optional: who guards their #1 scorer |
-
-Coach **skill tree** and **scheme fit** modify effectiveness of gameplan (see game-design coaching section). During sim, only AI rotation rules and gameplan execute.
+No user substitution UI **during** sim — only auto per prep.
 
 ---
 
-## Box scores, play-by-play & archives
+## Prep inputs
 
-| Phase | What user sees |
-|-------|----------------|
-| **During sim** | Live possession text stream + running score |
-| **After final** | **Box score + team stats** (persisted forever in save) |
-| **After final** | **No full play-by-play archive** (by design — saves space); optional “last 10 possessions” summary in recap only |
+Set **before** `simulateGame` runs; frozen for that run.
 
-**League-wide:** Every completed game stores at minimum:
+| Input | Sim use |
+|-------|---------|
+| **Starting lineup** | Opening minutes each half |
+| **Rotation / minutes bands** | Who replaces whom, target minutes |
+| **Gameplan** | Pace, inside/outside bias, 3PT rate cap/floor, deny-primary, late-game foul strategy |
+| **Optional matchup hint** | Primary defender on opponent’s top usage player |
 
-- Final score, date, teams, location
-- Full player + team box score
-- Game ID for résumé recompute
+Coach quality / home environment: if used, caller passes **scalar modifiers** on `GameSimInput` (engine does not load coach career).
 
 ---
 
-## World sim at 365 teams
+## Participant data (inputs only)
 
-| Concept | Detail |
-|---------|--------|
-| Membership | ~365 teams in schedule graph |
-| Games per day | Only matchups on that date |
-| User team | Same possession engine as AI games |
-| AI gameplan | Chosen by AI coach profile + opponent scouts |
-| Standings | Update after each day’s batch |
+Final roster/career design lives elsewhere. For **this sim**, each player must provide at least:
 
-AI programs do not “play” before the calendar says so — avoids 365× simultaneous results and matches dynasty pacing.
+| Field | Sim use |
+|-------|---------|
+| `playerId` | Stat lines |
+| `position` | G / F / C — validity, matchup table |
+| `height`, `weight` | Rebound & finish nudges |
+| `overall`, `offensive`, `defensive` | Outcome weights |
+| `shooting` | Tendencies + make skills (2PT, 3PT, FT); caller-defined struct |
+
+Class year, draft potential, recruiting story, etc. **not read** by the possession engine unless later mapped into these numbers.
+
+---
+
+## Output
+
+### Live (during `simulateGame`)
+
+- Stream of possession lines, e.g.  
+  `14:32 | HOME | #12 3PT miss | #3 REB | AWAY ball`
+- Running score, clock, half.
+
+### Returned struct
+
+| Field | Notes |
+|-------|-------|
+| `finalScore` | Home / away |
+| `boxScore` | Full player + team stats |
+| `periodsPlayed` | Regulation + OT count |
+| `possessionLog` | Full text log for this run (caller may discard) |
+
+**After the game (product):** UI may show only box score + team stats; that is a **product** choice, not engine logic.
+
+### Stats
+
+**Player:** MIN, PTS, FGM/A, 3PM/A, FTM/A, ORB, DRB, REB, AST, STL, BLK, TO, PF  
+**Team:** aggregates + shooting %, fouls, points off TO, etc. as needed for display.
 
 ---
 
 ## Statistical coherence
 
-**Hard rule:** Box score totals must **reconcile**.
+Before returning `GameSimResult`:
 
-| Check | Example |
-|-------|---------|
-| Team PTS = sum player PTS | No 11 team points with a 24-pt scorer |
-| FGA/FGM team = sum players | |
-| Team FGM* types ≤ team FGA | |
-| Minutes plausible | Lineup math ≈ 200 player-minutes per team |
-| Possessions ≈ pace | Estimated possessions within band for both teams |
+| Rule |
+|------|
+| Team PTS = sum of player PTS |
+| Team FGA/FGM/… = sums of players |
+| FGM ≤ FGA, 3PM ≤ 3PA, FTM ≤ FTA |
+| Team points match scoreboard |
+| Reasonable minutes vs possessions |
 
-If validation fails during dev builds: **assert/log** and reject result. In release: **re-sim possession** with capped retries, then fallback minimal correction (last resort — should be rare).
-
----
-
-## Résumé metrics (NET / selection inputs)
-
-**As real as possible** — computed **only** from sim games, using **NCAA-realistic structure**.
-
-### Per-game inputs (frozen at tip time for résumé)
-
-- Date, location (**H / N / A**)
-- Opponent ID
-- Opponent **NET rank tier** at game date (1–4 quadrants)
-- Result, score, possessions (from box score)
-
-### Rolling team outputs (recomputed nightly)
-
-| Output | Use |
-|--------|-----|
-| **AdjO / AdjD** | Efficiency per 100 poss., opponent-adjusted |
-| **AdjEM (margin)** | AdjO − AdjD |
-| **NET rank** | Total ordering 1–365; primary sort for tiers |
-| **Quadrant records** | Q1–Q4 W–L |
-| **SOS / NC SOS** | Opponent strength aggregates |
-| **Quality wins / bad losses** | Flags vs tier thresholds |
-| **L10** | Last 10 games weight |
-| **Road/neutral résumé** | Committee tie sheets |
-
-### Quadrant bucketing (real pattern)
-
-For each completed game, assign **one** quadrant from opponent NET position at **that date** and game location (e.g. home vs top-50 NET → Q1). Threshold tables in tuning JSON; calibrate so **~40%** of D-I games land Q1/Q2 combined in a typical season (sanity stat).
-
-### Selection committee handoff
-
-Export `ResumeSnapshot` per team at Selection Sunday:
-
-- NET rank, quadrant lines, SOS, adj. efficiency, notable wins/losses list
-- No manual overrides
-
-[`game-design.md`](game-design.md) committee sim **sorts** on this snapshot; engine does not pick the bracket UI narrative.
+Fail in dev → error. Release → retry possession rolls capped N times; last resort abort game sim with logged error (should be rare).
 
 ---
 
-## Randomness & saves
+## Randomness
 
-**In-game:** each possession uses weighted randomness → **different games, different stories**.
-
-**After final:** result is **persisted**; load save → read box score, don’t sim again.
-
-```
-gameSeed = hash(dynastySeed, gameId, gameDate, lineupHash, gameplanHash, difficultyPreset)
-```
-
-- Used **once** when game moves SCHEDULED → FINAL.
-- Stored on game record for **debug replay** (dev tools), not player rerolls.
-- New dynasty → new `dynastySeed` → different league-wide paths.
-
-**Not the goal:** identical scores every season. **Is the goal:** one coherent timeline per save file.
+- **Between games:** different matchups and rolls → different scores (not “same game every time”).
+- **Within a run:** weighted RNG on each possession.
+- **Same inputs, new run:** can produce a different result (basketball variance).
+- **Whether the player can re-run the same scheduled game** after loading a save is **not** defined here — that is save/dynasty rules in game design.
 
 ---
 
-## Difficulty sliders
+## Watch mode vs fast-sim
 
-**Defaults are fixed balanced logic.** Sliders scale coefficients, not separate sim forks.
+**Gameplay (from you):** possession sim with **~2–3 seconds of real time between possession lines** when the user is watching; clock shaves **3–30 seconds of game time** per possession.
 
-| Slider (example) | Affects |
-|----------------|---------|
-| Injury rate | Injury event probability |
-| Upset frequency | Underdog efficiency bump |
-| Fairness / chaos | Turnover variance |
-| Sim speed display | Wall-clock delay only |
+**Open (only thing worth answering when you care):**  
+Should that **2–3 second delay** be a **user setting** (slow / default / instant text), or one fixed speed? Engine supports both: caller passes `displayMode: WATCH | FAST`; WATCH invokes an optional callback between possessions so the UI can wait.
 
-Defaults documented in tuning JSON; sliders persist per dynasty.
+This doc does **not** set phone performance targets for “advance day” or storage — that is outside **game sim**.
 
 ---
 
-## Performance & threading
+## Tuning data
 
-| Mode | Approach |
-|------|----------|
-| User watching | Main thread or UI thread dispatches possession events; engine step on worker |
-| Day batch | Background job sims N games serially or **parallel per game** (embarrassingly parallel); merge results on completion |
-| Save IO | Write box scores append-only per season file or SQLite — tech choice later |
+Balance lives in data files (pace tables, foul rates, shot distributions), not hard-coded. Game sim reads:
 
-Parallel day-sim is allowed; **user game** should not block other games on same day until advance.
-
----
-
-## Data-driven tuning
-
-**Not a phased “v1 only” engine** — shipping game uses data tables for:
-
-- Pace distributions, clock shave ranges
-- Shot selection weights by gameplan
-- Foul rates, fatigue curves
-- Home court by arena grade
-- Slider default coefficients
-
-Balance passes edit JSON/CSV in repo; code reads tables at load.
-
----
-
-## Regression fixtures
-
-See [Clarifications — #14 decided](#regression-fixtures-14--decided) for the fixture list and assertions.
-
----
-
-## Open implementation notes
-
-| Topic | Next decision |
-|-------|----------------|
-| Save file format | JSON lines, SQLite, or hybrid |
-| Kotlin vs other runtime | Android-first; engine should stay UI-agnostic module |
-| Optional URL pack import | Offline play unaffected; import is one-time file fetch at user initiative |
-| Halftime adjustments | Auto-only from coach grade or fixed gameplan tiers |
+- Game-clock shave distributions
+- Shot-clock rules
+- Event probability weights vs rating gaps
+- Home/neutral modifiers **when caller supplies them**
 
 ---
 
@@ -415,5 +202,5 @@ See [Clarifications — #14 decided](#regression-fixtures-14--decided) for the f
 
 | Date | Change |
 |------|--------|
-| 2025-11-08 | Initial simulation engine spec from design Q&A |
-| 2025-11-08 | Clarify saves vs variety; real-style NET; perf question; fixture list |
+| 2025-11-08 | Initial draft (over-scoped) |
+| 2025-11-08 | Narrowed to possession game sim only |
