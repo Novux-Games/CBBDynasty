@@ -19,8 +19,9 @@
 9. [National rankings (Top 60)](#national-rankings-top-60)
 10. [AI recruiting](#ai-recruiting)
 11. [Commitments & signing](#commitments--signing)
-12. [Cross-links](#cross-links)
-13. [Open / TBD](#open--tbd)
+12. [Walk-ons](#walk-ons)
+13. [Cross-links](#cross-links)
+14. [Open / TBD](#open--tbd)
 
 ---
 
@@ -54,7 +55,7 @@ Portal star bands use the **portal pool only** (see [Star distribution](#star-di
 
 **No in-season HS/JUCO recruiting window** (portal in-season remains ruleset-toggled in game-design).
 
-User advances **week** (or day, if enabled) inside recruiting like other offseason phases.
+User advances **week** or **day** inside recruiting like other offseason phases.
 
 ---
 
@@ -68,7 +69,7 @@ Each **season**, generate independent pools:
 | **Junior college** | **+1,500** (fixed add-on) | Same board as HS |
 | **Transfer portal** | **All entrants** that window (varies by year/sim) | **Separate sub-tab** only |
 
-**Walk-ons** (local tryouts) optional — low-prestige schools; see game-design if enabled.
+**Walk-ons** — see [Walk-ons](#walk-ons) (all schools; tryouts after main recruiting window).
 
 **Geography:** Programs store **`homeCity`** + **`homeState`** ([`league-branding.md`](league-branding.md#geography--recruiting)). **Recruiting pipeline** keys off **`homeState`** (in-state / regional bias). Cities stay on the school record for travel, schedule, and UI; national pool is primary.
 
@@ -267,7 +268,7 @@ Tap recruit → **recruit sheet** (preview): stars, letters, NIL ask, interest, 
 
 Distinct from **Top 60 draft** pool (in-season / pro-day dynamic) — recruit Top 60 is **incoming class** oriented.
 
-Portal entrants can appear on a **portal rank** list inside portal tab (pool-local percentiles), not mixed into HS/JUCO Top 60 unless design later adds “reclass” row (**defer**).
+**Portal Top 40** — ranked list inside the portal sub-tab (pool-local percentiles); **never** mixed into HS/JUCO Top 60.
 
 ---
 
@@ -292,6 +293,19 @@ Batch sim between user sessions for non-user offers/commits.
 | **Portal** | Commit when offer accepted; roster attach per portal ruleset |
 
 After signing, recruits appear on **Committed** and (when appropriate) next season roster preview; uncommitted HS/JUCO remain in sim as open or walk-on fodder for AI.
+
+---
+
+## Walk-ons
+
+Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting UX:
+
+| Element | Behavior |
+|---------|----------|
+| **Entry** | Offseason notification after **recruiting week 4** |
+| **Board** | Small list (5–15) of **local** prospects; letter grades like HS pool |
+| **Actions** | Offer walk-on spot (no scholarship); requires open roster slot |
+| **Limit** | Max **2** new walk-ons per season |
 
 ---
 
@@ -333,4 +347,5 @@ After signing, recruits appear on **Committed** and (when appropriate) next seas
 | 2025-11-08 | Initial recruiting engine from user spec |
 | 2025-11-08 | Design locks: star bands, 50% carryover, no visits, fixed Top 60, uniform HS count |
 | 2025-11-08 | Rename v1 locks section → design locks; scrub v1 wording |
+| 2025-11-08 | Walk-ons + Portal Top 40 full product specs |
 | 2025-11-08 | Recruiting pipeline uses homeState; schools also store homeCity |

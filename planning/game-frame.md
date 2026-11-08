@@ -305,7 +305,7 @@ Superset of dashboard News tab.
 | **POTY** | Player of the year |
 | **National records** | New record events |
 | **National hall of fame** | League-wide HOF entries |
-| **GOAT list** | Curated / computed greatest players list (criteria TBD) |
+| **GOAT list** | **Computed** dynasty archive ranking — composite of win shares, national titles as key contributor, POTY, All-America teams, peak OVR seasons; **top 25** overall + **top 5** per position; refreshes each offseason |
 
 Cards **accumulate** as dynasty seasons complete; national content includes teams beyond user school.
 
@@ -329,12 +329,16 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History
            └─ School: Overview | Staff | Roster | Schedule | Stats | History | Records | HOF | Drafted
 ```
 
-### Open (later docs)
+### Companion docs (planned, same depth as this file)
 
-- Offseason frame (recruiting / portal shell)
-- Notifications taxonomy
-- Scheme preset catalog
-- Postseason frame (bracket UI)
+| Doc | Covers |
+|-----|--------|
+| **`offseason-frame.md`** | Portal, carousel, recruiting shell, week/day advance |
+| **`postseason-frame.md`** | Conference brackets, Selection Sunday, 76-field + Collegiate Invitational |
+| **`transfer-portal-engine.md`** | Portal cycles, retention, in-season window |
+| **`selection-engine.md`** | Resume math, seeds, bubble ordering |
+
+Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`game-design.md`](game-design.md#notifications-android).
 
 ---
 
@@ -345,5 +349,6 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History
 | 2025-11-08 | Initial in-season game frame from user spec |
 | 2025-11-08 | Link player cards doc |
 | 2025-11-08 | School Staff section; coach card doc |
+| 2025-11-08 | GOAT list formula; companion doc index (offseason/postseason/portal) |
 | 2025-11-08 | School Staff tab; AD trust; staff detail sheets |
 | 2025-11-08 | Assistants = coach cards; support list-only |

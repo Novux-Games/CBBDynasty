@@ -44,10 +44,13 @@
 | **Defensive scheme** | Preset table above |
 | **Starting five + rotation** | [`positions-and-lineup.md`](positions-and-lineup.md) |
 | **Usage** | Per-player usage targets (Strategy hub) |
+| **Primary defensive assignment** | Map opponent **slot** (PG–C) to your defender; default = best match from lineup |
+| **Deny primary scorer** | On/off — extra pressure on assignment; higher foul + fatigue risk ([`simulation-engine.md`](simulation-engine.md)) |
+| **Late-game foul strategy** | **Standard** / **Foul early** / **Protect lead** — endgame possession decisions |
 
 No separate **pace slider** — **pace comes from offensive preset** + opponent scheme interaction (tuning JSON).
 
-**Later-phase prep knobs** (spec TBD): deny-star toggle, late-game foul strategy. Coach **default** O/D schemes: [`coach-card.md`](coach-card.md#strategy).
+Coach **default** O/D schemes (season baseline, not per-game): [`coach-card.md`](coach-card.md#strategy).
 
 ### Halftime (in-season)
 
@@ -106,3 +109,4 @@ Per your spec — see [`game-frame.md`](game-frame.md):
 | 2025-11-08 | O/D presets, gameplan + halftime, preview/watch notes |
 | 2025-11-08 | Strategy edit / week-advance rules marked design lock |
 | 2025-11-08 | Ship **7** offensive and **7** defensive presets |
+| 2025-11-08 | Full gameplan: matchup assignment, deny-star, late-game fouls |

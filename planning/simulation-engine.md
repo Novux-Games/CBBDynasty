@@ -111,7 +111,7 @@ Set **before** `simulateGame` runs; frozen for that run.
 | **Starting lineup** | Opening minutes each half |
 | **Rotation / minutes bands** | Who replaces whom, target minutes |
 | **Gameplan** | Pace, inside/outside bias, 3PT rate cap/floor, deny-primary, late-game foul strategy |
-| **Optional matchup hint** | Primary defender on opponent’s top usage player |
+| **Defensive assignment** | Per-slot matchup from gameplan; **deny primary** boosts pressure on assignment |
 
 Coach quality / home environment: if used, caller passes **scalar modifiers** on `GameSimInput` (engine does not load coach career).
 

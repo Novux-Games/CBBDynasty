@@ -131,11 +131,11 @@ Career totals as **head coach** unless a row says “at current school.” Scope
 | **Tournament appearances** | NCAA bids |
 | **Conference regular-season championships** | outright or co-champion per conference tiebreaker rules |
 | **Conference tournament championships** | conference bracket winner (auto-bid path separate from regular-season title) |
-| **Secondary tournament record** | Postseason **secondary** bracket W–L (NIT-style; league structure **TBD** — likely mirror real NIT eligibility/format in data) |
+| **Secondary tournament record** | **Collegiate Invitational** (32-team field) W–L — [`game-design.md`](game-design.md#secondary-national-bracket-nit-style) |
 | **Secondary tournament win %** | Wins ÷ games in secondary bracket |
-| **Secondary tournament wins** | **Championships** in secondary bracket (e.g. NIT titles when that template ships) |
+| **Secondary tournament wins** | Collegiate Invitational **championships** |
 
-**TBD (product):** exact secondary-tournament slot map and label in UI (`NIT`, generic “Secondary Tourney”, or pack-named). Achievement rows ship **with** the bracket template; show `—` until league sim exposes the bracket.
+Pack may override display name; stats keys stay `secondaryPostseason*`.
 
 ### Strategy
 
@@ -260,7 +260,7 @@ Full **Staff** tab on School hub ([`game-frame.md`](game-frame.md#school-hub)). 
 | **Assistants** | Names, roles, headline rating; tap → [assistant coach card](#assistant-coach-card) |
 | **Support staff** | Trainers, video, ops, etc. — **list only** (name, role, rating chip); **no card**; user school **Manage** → inline contract / fire / replace |
 | **Manage** | **User school only:** hire, fire, promote, offer contract, poach |
-| **Staff grade** | Aggregate chip from filled roles (visit efficiency, development — [`game-design.md`](game-design.md)) |
+| **Staff grade** | Aggregate chip from filled roles (recruiting pitch efficiency, development — [`game-design.md`](game-design.md)) |
 
 **Other schools:** view staff roster; **poach** flows start from a staff row when carousel / offseason rules allow.
 
@@ -283,7 +283,7 @@ Placed on **School hub → Staff** tab (not on coach card preview).
 |--------|--------|
 | **Candidate pool** | Generated **coaches** (HC/assistant track) and **support** hires separately; trainers never offered as HC carousel candidates |
 | **Other schools** | Poach with buyout / reputation cost; AI may counter |
-| **In-house promotion** | Optional: bump GA → assistant (TBD) |
+| **In-house promotion** | **Graduate assistant** on staff list → after **2** seasons, promote to **assistant** with generated Recruiting/Dev/Scouting ratings |
 
 ### Relationship to coach card
 
@@ -299,7 +299,7 @@ Placed on **School hub → Staff** tab (not on coach card preview).
 | **UI** | Row on Staff tab: name, role, contribution rating, salary snippet (optional) |
 | **Interaction** | **No** preview / View more. User school: **Manage** opens compact sheet (extend, fire, replace from pool) |
 | **Carousel** | **Trainers** and other support **`eligibleForHeadCoach: false`** — never promoted to HC; not in HC job candidate lists |
-| **Career tracking** | Support seasons **not** stored on coach cards; optional program staff log (implementation) only if needed for flavor |
+| **Career tracking** | Support tenure on **School hub → History** staff log (name, role, seasons); not on individual coach cards |
 
 ---
 

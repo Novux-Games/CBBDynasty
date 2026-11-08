@@ -1,7 +1,7 @@
 # Player archetypes & draft projection
 
 **Used on:** [`player-cards.md`](player-cards.md) (Overview archetype, draft line).  
-**Scope:** Display + light sim tendency tags (not a separate position).
+**Scope:** Display + **sim tendency** tags (not a separate position).
 
 ---
 
@@ -84,12 +84,12 @@ Rough priority when creating/rostering a player:
 2. Compare **highest attribute skew** (shooting vs handle vs defense vs rebounding).
 3. Pick **one** archetype from that position’s table.
 
-Archetype may nudge **shot selection** in [`simulation-engine.md`](simulation-engine.md) via small weights (tuning table); OVR/OFF/DEF remain primary.
+Archetype nudges **shot selection and matchup behavior** in [`simulation-engine.md`](simulation-engine.md) via tuning weights; OVR/OFF/DEF remain primary.
 
 ### UI
 
 - Overview **Information** row: `Archetype: 3-and-D wing` (title case).
-- Optional Ratings tab: one-line flavor text (not required for launch).
+- **Ratings** tab: one-line archetype flavor text under attribute blocks.
 
 ---
 

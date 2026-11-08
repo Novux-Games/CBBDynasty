@@ -110,7 +110,7 @@ slotEligible(player, slot):
   C   if player.position == C
 ```
 
-Matchups and archetype nudges use **slot played** optional for scheme (e.g. “defend their SG”) — TBD in strategy doc.
+Matchups and archetype nudges use **slot played** from prep; defensive assignments are set in [`strategy-schemes.md`](strategy-schemes.md#gameplan-fields-locked-for-planning).
 
 ---
 

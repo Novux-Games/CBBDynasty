@@ -15,7 +15,7 @@
 2. [Teams by conference](#teams-by-conference)
 3. [Geography & recruiting](#geography--recruiting)
 4. [Provisional / transition programs](#provisional-transition-programs)
-5. [National body & tournaments (TBD)](#national-body--tournaments-tbd)
+5. [National body & tournaments](#national-body--tournaments)
 6. [Pack authoring notes](#pack-authoring-notes)
 7. [Document history](#document-history)
 
@@ -683,13 +683,13 @@ After a program completes **transition year 4** in offseason, set `postseasonEli
 
 ---
 
-## National body & tournaments (TBD)
+## National body & tournaments
 
-| Real (reference) | Universe (planned) | Notes |
-|-------------------|-------------------|--------|
-| NCAA | **National Collegiate Basketball Association (NCBA)** or **Dynasty Collegiate Association (DCA)** | Final label TBD |
-| NCAA tournament / March Madness | **National Championship** / **March Classic** | Bracket structure per game-design |
-| NIT | **Secondary National Invitational** | Tie to coach-card secondary postseason |
+| Real (reference) | Universe (default pack) | Notes |
+|-------------------|-------------------------|--------|
+| NCAA | **National Collegiate Basketball Association (NCBA)** | Pack may override display strings |
+| NCAA tournament / March Madness | **National Championship** / **March Classic** | 76-team field — [`game-design.md`](game-design.md#postseason--selection) |
+| NIT | **Collegiate Invitational** | 32-team secondary field — [`game-design.md`](game-design.md#secondary-national-bracket-nit-style) |
 
 ---
 

@@ -196,7 +196,7 @@ Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 ### Legal UX (ship checklist)
 
 - [ ] Import screen: user attestation + unofficial disclaimer.
-- [ ] URL fetch: domain allowlist option, size cap, signature optional (future).
+- [ ] URL fetch: **domain allowlist**, **5 MB** cap, optional **signature** verification on pack manifest.
 - [ ] Store listing: no implied NCAA endorsement.
 
 ---
@@ -244,7 +244,20 @@ In-week variety is normal (different sim runs, different scores). **Locked** onl
 |------|--------|
 | Roster max | **15** |
 | Scholarships max | **15** (may use fewer) |
-| Walk-ons | Allowed; count toward 15 |
+| Walk-ons | Allowed; count toward 15; see [Walk-ons](#walk-ons) |
+
+### Walk-ons
+
+| Rule | Detail |
+|------|--------|
+| **Who** | Any program; especially common at low-prestige schools |
+| **When** | **Offseason week 10** (after main recruiting window): **walk-on tryouts** |
+| **Pool** | **5–15** local prospects per school, `homeState` weighted to program |
+| **Ratings** | Local band — mostly **2★** with rare **3★**; hidden 0–99 in low-60s band |
+| **Scholarship** | **No** initial aid; may **earn scholarship** next offseason if minutes / dev thresholds met |
+| **Cap** | Up to **2 new walk-ons** per year; still subject to **15-man** roster max |
+
+Walk-ons use the same **player card** / roster pipeline as scholarship players ([`recruiting-engine.md`](recruiting-engine.md#walk-ons)).
 
 ### Class & eligibility
 
@@ -280,7 +293,7 @@ Offseason length: **~14 weeks** (tunable); user advances **week** or **day** in 
 | **5** | **Draft withdrawal deadline** | Last chance to return for withdrawing early entrants (before results) |
 | **6–9** | **Recruiting (4 weeks)** | HS + JUCO + portal — see [`recruiting-engine.md`](recruiting-engine.md) |
 | **6** | **NBA draft results** (recruiting **week 1**) | Published mock/order reveal; early entrants leave; scholarship opens; portal board opens |
-| **10** | Portal **cycle 2** (optional overlap) | Late portal fills for AI if ruleset enables |
+| **10** | **Transfer portal (cycle 2)** | When `ruleset.portalCycle2` is true for the year — late entries for AI + user |
 | **11** | **Summer workouts** (auto) | Development deltas from coach + facilities |
 | **12–13** | **Fundraising & upgrades** | Arena/facility spend; naming rights deal |
 | **14** | **Conference offers** + **schedule prep unlock** | Accept/decline realignment; preseason scheduling opens |
@@ -390,12 +403,31 @@ recruitingBudget = floor(baseBudget * gradeMultiplier * facilityBonus)
 
 - Accept extension, renegotiate, resign.
 - **Interview offers** from other schools (prestige check).
-- Firing → choose new job from offer list or unemployed (spectate sim optional mode TBD).
+- Firing or resignation → **Job center** (offseason peak; lighter in-season):
 
-### Assistant coaches
+| Choice | Behavior |
+|--------|----------|
+| **Accept offer** | Immediate move; prior program continues under AI HC |
+| **Decline all & wait** | **Unemployed coach** — league keeps simming; you get **weekly offer cards** in carousel window; no roster/recruiting/schedule control until hired |
+| **Take interim / mid-major offer** | Any open posting on the board; prestige gates still apply |
 
-- Each assistant uses a **coach card** with ratings and history ([`coach-card.md`](coach-card.md)). Staff grades still bump development and prep; carousel can poach assistants from other programs.
-- **UI:** assistants use **coach cards**; support staff (e.g. trainers) are list-only — trainers **`eligibleForHeadCoach: false`** ([`coach-card.md`](coach-card.md)).
+**Unemployed mode:** watch any game, browse jobs, read news, advance calendar. Dynasty **does not pause** the world.
+
+### Assistant coaches & staff labor market
+
+Full **assistant simulation** — not a single aggregate number hiding individuals ([`coach-card.md`](coach-card.md)).
+
+| Element | Spec |
+|---------|------|
+| **Slots** | **3** assistants default; **4th** slot when `programPrestige ≥ 85` |
+| **Coach cards** | Each assistant: **Recruiting / Development / Scouting** (0–99), contract, history snapshots |
+| **Staff grade** | Weighted blend of filled roles + HC skill; drives development tick and **recruiting pitch efficiency** (no campus visit system) |
+| **Support staff** | Trainers, video, ops — **Staff tab rows only**; `eligibleForHeadCoach: false` |
+| **Hiring** | Offseason **carousel weeks** + Staff **Manage**; poach with buyout |
+| **Promotion** | **GA → assistant** after **2** seasons on staff track; assistants can enter **HC candidate pool** via ratings + tenure |
+| **AI** | Schools hire/fire/poach assistants; user assistants can be poached |
+
+Assistants feed **recruiting AI**, **summer development**, and **scout letter accuracy** on the board.
 
 ---
 
@@ -410,7 +442,7 @@ recruitingBudget = floor(baseBudget * gradeMultiplier * facilityBonus)
 | **Strength & sports science** | Injury recovery, summer gains |
 | **Medical** | Medical redshirt odds, injury duration |
 | **Academic center** | Grades, eligibility recovery |
-| **Recruiting lounge** | Visit success, budget efficiency |
+| **Recruiting lounge** | Recruit pitch efficiency, NIL presentation, budget efficiency |
 
 ### Upgrade flow
 
@@ -536,7 +568,7 @@ Gameplay is **sim-only**; see **[`simulation-engine.md`](simulation-engine.md)**
 | **Academic eligibility** | Rolling grades; bench ineligible |
 | **Portal (in-season)** | Ruleset-driven window; user can lose players midseason |
 | **Chemistry** | Roster stability + coaching; affects clutch sim |
-| **Fatigue** | Back-to-back penalties optional |
+| **Fatigue** | Back-to-back games, travel, and press schemes apply **standard** stamina penalties in sim |
 
 ### NET-style résumé (selection)
 
@@ -643,6 +675,18 @@ Winners **inherit** the seed line assigned on Selection Sunday (not reseeded int
 
 **Bubble drama UI:** last four in / last four out screen for user if involved.
 
+### Secondary national bracket (NIT-style)
+
+| Rule | Value |
+|------|--------|
+| **Field** | **32** teams, postseason-eligible, **not** in the 76-team national bracket |
+| **Selection** | Resume rank + committee sim after Selection Sunday; **no** automatic bids |
+| **Structure** | Campus-hosted **round 1** where template allows; later rounds neutral sites |
+| **Universe label** | Default pack: **Collegiate Invitational** (pack override for display name) |
+| **Tracking** | Coach **Achievements** tab — secondary W–L, titles ([`coach-card.md`](coach-card.md)) |
+
+Reclass programs with `postseasonEligible: false` are **ineligible**.
+
 ---
 
 ## Awards & media
@@ -651,7 +695,7 @@ Winners **inherit** the seed line assigned on Selection Sunday (not reseeded int
 
 | Award | When |
 |-------|------|
-| **Weekly honors** | Optional mid-season |
+| **Weekly honors** | **Weekly** during conference play (player + conference POTW) |
 | **All-conference** | After conference tournament |
 | **National awards** | After tournament (POY, coach, all-america teams) |
 | **Hall of fame (dynasty)** | Career archive milestones |
@@ -677,7 +721,7 @@ Winners **inherit** the seed line assigned on Selection Sunday (not reseeded int
 
 ### Manual must-feel-good
 
-- Recruiting visits & NIL on borderline targets
+- Recruiting points & NIL on borderline targets
 - Opening-round / tournament rounds for user team
 - Conference accept/decline
 - Schedule non-conference rivals
@@ -711,8 +755,8 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | **Possession sim** | 40-min engine, coherence checks, box scores — [`simulation-engine.md`](simulation-engine.md) |
 | **Dynasty systems** | Offseason, recruiting, portal, facilities |
 | **Full league** | 365-team scheduling, daily batch sim, derived résumé |
-| **March** | Conference templates, 76-field bracket, opening round |
-| **Ship** | 2D UI, sliders, notifications, optional identity import |
+| **March** | Conference templates, 76-field bracket, opening round, **Collegiate Invitational** |
+| **Ship** | Full 2D UI, automation toggles, notifications, **JSON/URL identity import** |
 
 ### Remaining product decisions (short list)
 
@@ -748,4 +792,5 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-08 | 365-team pack; reclass postseason ineligibility until 4-year transition |
 | 2025-11-08 | Season 1 = 2026–27; reclass years anchored to dynasty start |
 | 2025-11-08 | Remove product v1/v2 scope language; design locks only |
+| 2025-11-08 | Restore full-product specs (staff, walk-ons, secondary postseason, unemployed coach) |
 | 2025-11-08 | Linked `player-cards.md` |

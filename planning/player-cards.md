@@ -280,7 +280,7 @@ Career rate stats only (see table above). No career FGM/FGA on this card — sho
 | **PTS, AST, REB, STL, BLK, TO** | Line for that game |
 | **Result** | W/L + score (e.g. `W 81–76`) |
 
-Tap row → optional: box score for that game or stay on line (TBD).
+Tap row → **box score sheet** for that game (stats line + team score).
 
 Only games **after week finalize** appear in official totals; in-week sims follow same week-replay rules as game-design.
 
@@ -306,7 +306,7 @@ Tap → expand season detail or read-only mini stat block.
 
 ## Edit mode
 
-**Edit** (header) visible when player is on **user roster** and editing is allowed by game phase (strategy/usage/redshirt — rules TBD in strategy doc).
+**Edit** (header) visible when player is on **user roster** and game phase allows ([`strategy-schemes.md`](strategy-schemes.md#strategy-edits--week-save-design-lock--confirmed) — same week-save rules as lineup).
 
 - Overview/Ratings may show read-only with edit routing to Strategy hub or inline editors (implementation).
 - Opponent / recruit view-only: **no Edit** button.
