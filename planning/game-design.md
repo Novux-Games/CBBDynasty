@@ -1,10 +1,12 @@
 # Dynasty: College Basketball — Game Design Document
 
 **Platform:** Android (mobile)  
+**Presentation:** Text-based **2D** sim (Campus Dynasty–style); **offline** with **local save files**  
 **Mode:** Dynasty / program builder — men's college basketball  
+**Simulation:** See **[`simulation-engine.md`](simulation-engine.md)** — possession sim, calendar batching, box scores  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start  
-**Last updated:** 2025-11-07
+**Last updated:** 2025-11-08
 
 ---
 
@@ -12,24 +14,25 @@
 
 1. [Vision & pillars](#vision--pillars)
 2. [Core loop](#core-loop)
-3. [Identity packs & save model](#identity-packs--save-model)
-4. [World scale & simulation](#world-scale--simulation)
-5. [Roster, eligibility & redshirt](#roster-eligibility--redshirt)
-6. [Offseason (authoritative calendar)](#offseason-authoritative-calendar)
-7. [Recruiting engine](#recruiting-engine)
-8. [NIL & program economy](#nil--program-economy)
-9. [Coaching carousel & contracts](#coaching-carousel--contracts)
-10. [Facilities, fundraising & upgrades](#facilities-fundraising--upgrades)
-11. [Conference realignment](#conference-realignment)
-12. [Preseason](#preseason)
-13. [Scheduling & regular season](#scheduling--regular-season)
-14. [Season simulation](#season-simulation)
-15. [Postseason & selection](#postseason--selection)
-16. [Awards & media](#awards--media)
-17. [Mobile UX, automation & notifications](#mobile-ux-automation--notifications)
-18. [Vertical slice & milestones](#vertical-slice--milestones)
-19. [Glossary](#glossary)
-20. [Document history](#document-history)
+3. [Simulation engine (brief)](#simulation-engine-brief)
+4. [Identity packs & save model](#identity-packs--save-model)
+5. [World scale & league simulation](#world-scale--league-simulation)
+6. [Roster, eligibility & redshirt](#roster-eligibility--redshirt)
+7. [Offseason (authoritative calendar)](#offseason-authoritative-calendar)
+8. [Recruiting engine](#recruiting-engine)
+9. [NIL & program economy](#nil--program-economy)
+10. [Coaching carousel & contracts](#coaching-carousel--contracts)
+11. [Facilities, fundraising & upgrades](#facilities-fundraising--upgrades)
+12. [Conference realignment](#conference-realignment)
+13. [Preseason](#preseason)
+14. [Scheduling & regular season](#scheduling--regular-season)
+15. [Season gameplay & prep](#season-gameplay--prep)
+16. [Postseason & selection](#postseason--selection)
+17. [Awards & media](#awards--media)
+18. [Mobile UX, automation & notifications](#mobile-ux-automation--notifications)
+19. [Engineering milestones](#engineering-milestones)
+20. [Glossary](#glossary)
+21. [Document history](#document-history)
 
 ---
 
@@ -51,11 +54,12 @@ A **program dynasty** where running a D-I men's hoops school feels like a year-r
 | **Identity** | Generic default; optional JSON/URL packs; no save corruption on swap |
 | **Era** | 2026–27 bootstrap content; dynasty can advance many years |
 
-### Non-goals (v1 planning)
+### Non-goals
 
-- Playable on-court action at NBA 2K fidelity (sim depth TBD; dynasty-first).
+- Real-time player-controlled on-court action (inputs are **prep only** — see simulation doc).
 - Licensed NCAA / school trademarks in the base APK.
 - Real player likenesses or real NIL deals tied to individuals.
+- Online multiplayer, cloud saves, or always-on internet.
 - Women's basketball (future SKU / expansion).
 
 ---
@@ -81,6 +85,23 @@ OFFSEASON → PRESEASON → REGULAR SEASON → POSTSEASON → (advance year)
 | **Micro** | 1–3 min | Sim one day, one recruiting action, one upgrade |
 | **Standard** | 10–15 min | Clear a week, recruiting board, schedule tweak |
 | **Event** | 20+ min | Selection Sunday, conference tournament run, bracket play |
+
+---
+
+## Simulation engine (brief)
+
+Full specification: **[`planning/simulation-engine.md`](simulation-engine.md)**.
+
+| Topic | Game-design summary |
+|-------|---------------------|
+| **Style** | Text-forward **2D**; possession-by-possession **40-minute** clock; **sim-only** |
+| **User leverage** | Lineup, rotation, **gameplan** before tip — no mid-game control |
+| **Calendar** | User game can sim when scheduled; **other games that day stay unplayed** until **Advance Day/Week** |
+| **League** | ~**365** teams; only teams **with a game that date** sim; **full box scores** stored for every completed game |
+| **Stats** | Full college box score; coherence checks (team totals = player sums) |
+| **Résumé / NET** | **Fully derived** from sim results — no external rating injection |
+| **Saves** | Offline local files; simmed games are **final** (not re-rolled on load) |
+| **Play-by-play** | Readable **during** sim; after game, persist **box score + team stats** only |
 
 ---
 
@@ -156,23 +177,26 @@ Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 
 ---
 
-## World scale & simulation
+## World scale & league simulation
 
 ### Programs
 
-- **~365** D-I teams simulated each season (player's school + full league results for bracket/bubble).
-- **Sim granularity:** Week/day calendar for user team; batch sim for non-user games same day.
-- **User role:** Head coach (single program dynasty); no in-game athletic director job swap (AD actions folded into coach UI).
+- **~365** D-I teams in the league graph; each **calendar day** only scheduled teams play (not 365 games per day).
+- **User role:** Head coach (single program dynasty); AD-style actions folded into coach UI.
+
+### When results exist
+
+- **Advance Day/Week** triggers batch sim for all **still-scheduled** games on each day rolled forward.
+- Results feed standings, polls, injuries, and **[résumé metrics](simulation-engine.md#résumé-metrics-net--selection-inputs)**.
 
 ### Ruleset evolution
 
 - `rulesetYear` in pack ties to **portal windows**, **calendar dates**, **scholarship limits**.
 - When dynasty year advances, engine loads **rulesetYear + (dynastyYear - startYear)** patches from data (e.g. portal deadline shifts).
 
-### Performance (planning targets)
+### Offseason sim
 
-- Offseason: batch recruit AI for non-user schools overnight-style between user sessions.
-- In-season: sim non-user games in <200ms aggregate per day on mid-tier Android (goal, not benchmark yet).
+- Batch recruit AI for non-user schools between user sessions (offline, local saves).
 
 ---
 
@@ -501,16 +525,15 @@ NCAA seeding uses **conference tournament champion** as auto bid; remaining at-l
 
 ---
 
-## Season simulation
+## Season gameplay & prep
 
-### Game sim modes (product)
+Gameplay is **sim-only**; see **[`simulation-engine.md`](simulation-engine.md)** for possession loop, clock, and archives.
 
-| Mode | v1 priority |
-|------|-------------|
-| **Sim to end** | P0 |
-| **Sim quarter/half** | P1 |
-| **Play-by-play read** | P1 |
-| **User play possession** | P2 / post-MVP |
+| Mode | Behavior |
+|------|----------|
+| **Watch sim** | Possession text ~2–3s apart; full 40-minute game |
+| **Fast sim** | Same engine, no wall-clock delay |
+| **Prep** | Lineup, rotation, gameplan before tip |
 
 ### In-season systems (all in scope)
 
@@ -666,30 +689,23 @@ Winners **inherit** the seed line assigned on Selection Sunday (not reseeded int
 
 ---
 
-## Vertical slice & milestones
+## Engineering milestones
 
-### Recommended slice (engineering)
+Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 
-**One conference (10–14 teams) + full offseason→Selection Sunday for user team**
-
-Includes: portal week 1, 5-week recruiting, schedule cap, 10-game mini-season, conference tourney, 76-field selection, opening round sim.
-
-### Milestone map
-
-| Milestone | Delivers |
-|-----------|----------|
-| **M0** | Calendar kernel + stable IDs + pack loader |
-| **M1** | Roster + games sim stub + standings tiebreakers |
-| **M2** | Offseason weeks 1–10 recruiting portal |
-| **M3** | Full D-I membership sim + NET |
-| **M4** | Conference templates + NCAA bracket |
-| **M5** | Polish UX + notifications + import URL |
+| Track | Delivers |
+|-------|----------|
+| **Calendar & saves** | Day/week kernel, local persistence, stable IDs, pack overlay |
+| **Possession sim** | 40-min engine, coherence checks, box scores — [`simulation-engine.md`](simulation-engine.md) |
+| **Dynasty systems** | Offseason, recruiting, portal, facilities |
+| **Full league** | 365-team scheduling, daily batch sim, derived résumé |
+| **March** | Conference templates, 76-field bracket, opening round |
+| **Ship** | 2D UI, sliders, notifications, optional identity import |
 
 ### Remaining product decisions (short list)
 
-- On-court **playable** priority vs sim-only ship.
-- URL pack **signing** (trusted community repo).
-- **Multiplayer** none in scope.
+- Local save format (SQLite vs files).
+- URL pack **signing** for optional one-time import while offline play remains default.
 
 ---
 
@@ -712,3 +728,4 @@ Includes: portal week 1, 5-week recruiting, schedule cap, 10-game mini-season, c
 | 2025-11-07 | Initial organization from game design prep notes |
 | 2025-11-07 | Identity import (JSON/URL), preseason scope, sim layers, 2026–27 default era |
 | 2025-11-07 | Deep finish: offseason calendar, recruiting/NIL, selection math, tiebreakers, UX, milestones |
+| 2025-11-08 | Linked `simulation-engine.md`; text-based offline sim, day-advance league batching |
