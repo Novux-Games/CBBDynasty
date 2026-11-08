@@ -7,6 +7,7 @@
 **In-season UI:** **[`game-frame.md`](game-frame.md)** — dashboard, tabs, hubs  
 **Player UI:** **[`player-cards.md`](player-cards.md)** — preview, card tabs, ratings; **[`player-archetypes.md`](player-archetypes.md)** — archetypes, draft rank  
 **Lineup:** **[`positions-and-lineup.md`](positions-and-lineup.md)** — PG/SG/SF/PF/C, interchange, default starters  
+**Strategy:** **[`strategy-schemes.md`](strategy-schemes.md)** — O/D presets, halftime, preview/watch  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start  
 **Last updated:** 2025-11-08
@@ -557,7 +558,7 @@ Gameplay is **sim-only**; see **[`simulation-engine.md`](simulation-engine.md)**
 
 | Mode | Behavior |
 |------|----------|
-| **Watch sim** | Possession text ~2–3s apart; full 40-minute game |
+| **Watch sim** | **2s** per possession; **halftime** adjustments ([`strategy-schemes.md`](strategy-schemes.md)) |
 | **Fast sim** | Same engine, no wall-clock delay |
 | **Prep** | Lineup, rotation, gameplan before tip |
 
@@ -619,7 +620,7 @@ Each conference uses a **TournamentTemplate**:
 }
 ```
 
-**Research deliverable:** one template per conference in default 2026–27 pack (priority: power + player conference).
+**Design lock:** **real** bracket format per conference (size, byes, reseeding, sites) for **2026–27** — one `TournamentTemplate` per conference in the default pack.
 
 ### NCAA field: 76 teams
 

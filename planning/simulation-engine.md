@@ -179,10 +179,9 @@ Fail in dev → error. Release → retry possession rolls capped N times; last r
 
 ## Watch mode vs fast-sim
 
-**Gameplay (from you):** possession sim with **~2–3 seconds of real time between possession lines** when the user is watching; clock shaves **3–30 seconds of game time** per possession.
+**Watch mode:** **2 seconds** wall-clock between possession lines; **3–30 seconds** game clock shaved per possession ([`strategy-schemes.md`](strategy-schemes.md)). **Halftime:** pause sim for coach adjustments; second half uses updated prep.
 
-**Open (only thing worth answering when you care):**  
-Should that **2–3 second delay** be a **user setting** (slow / default / instant text), or one fixed speed? Engine supports both: caller passes `displayMode: WATCH | FAST`; WATCH invokes an optional callback between possessions so the UI can wait.
+**Fast-sim:** no wall-clock delay. Optional user speed setting later.
 
 This doc does **not** set phone performance targets for “advance day” or storage — that is outside **game sim**.
 

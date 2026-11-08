@@ -1,0 +1,119 @@
+# Strategy: schemes, gameplan, halftime
+
+**UI:** Strategy hub in [`game-frame.md`](game-frame.md).  
+**Sim:** [`simulation-engine.md`](simulation-engine.md) reads prep + halftime overrides.  
+**Last updated:** 2025-11-08
+
+---
+
+## Offensive scheme presets
+
+| Preset | Identity (sim tendency) |
+|--------|-------------------------|
+| **Balanced** | Neutral shot mix, average pace |
+| **Motion** | Cuts, screens, eg, lower iso, moderate pace |
+| **Drive** | Rim pressure, foul draw, kick-outs |
+| **Set** | Quick-hitter actions, half-court sets, lower pace variance |
+| **Early** | Transition, push after misses/makes, higher pace |
+
+**Optional adds (data toggle if we want 6th):**
+
+| Preset | Identity |
+|--------|----------|
+| **Perimeter** | High 3PA rate, spacing, drive & kick |
+| **Post** | Interior touches, PF/C usage bump |
+
+Ship with **5** user listed; add Perimeter/Post later without new UI if tables allow.
+
+---
+
+## Defensive scheme presets
+
+| Preset | Identity |
+|--------|----------|
+| **Man-to-Man** | Standard; matchup-driven |
+| **2-3 Zone** | Pack paint, contest threes from wings |
+| **3-2 Zone** | Pressure perimeter, weak interior |
+| **1-3-1 Zone** | Trap edges, lengthy, gamble passing lanes |
+| **Box-and-One** | Four protect star, one chases primary scorer |
+
+**Optional adds:**
+
+| Preset | Identity |
+|--------|----------|
+| **Full-court press** | Turnover chase; fatigue cost |
+| **Switching man** | P&R switch-all; perimeter switchability matters |
+
+Ship with **5** user listed.
+
+---
+
+## Gameplan fields (locked for planning)
+
+### Pre-game (before tip)
+
+| Field | Source |
+|-------|--------|
+| **Offensive scheme** | Preset table above |
+| **Defensive scheme** | Preset table above |
+| **Starting five + rotation** | [`positions-and-lineup.md`](positions-and-lineup.md) |
+| **Usage** | Per-player usage targets (Strategy hub) |
+
+No separate “pace slider” for v1 — **pace comes from offensive preset** + opponent scheme interaction (tuning JSON).
+
+**Not required from user now:** deny-star toggle, late-game foul strategy — omit until coach doc or v2 unless you ask for them.
+
+### Halftime (in-season)
+
+When game clock hits **half**, user may **adjust as coach** before second half sim resumes:
+
+| Halftime adjustment | Allowed |
+|---------------------|---------|
+| Change **offensive** or **defensive** scheme | Yes |
+| **Rotation / minutes** emphasis | Yes |
+| **Usage** tweaks | Yes |
+| Swap **starters** for second half (legal slots) | Yes |
+
+Second half sim uses updated prep; first half stats and score **fixed**.
+
+**Watch flow:** possessions run at **2 seconds** wall-clock until half; pause for halftime UI; resume at 2s/possession for second half.
+
+### Mid-week / rotation “lock” (clarification)
+
+Planning question was whether strategy edits are blocked on certain days. **Current rule:**
+
+| When | Edit lineup / rotation / usage / scheme? |
+|------|-------------------------------------------|
+| Any time before **that game’s** sim | Yes |
+| **Halftime** of watched game | Yes (second half only) |
+| After game sim, before **week advance** | Yes (replay same game allowed — new prep) |
+| **After week advance** | That week’s games locked; prep applies to **next** games |
+
+Nothing special about “Tuesday vs Thursday” within the week.
+
+---
+
+## Game preview (no games played)
+
+Per your spec — see [`game-frame.md`](game-frame.md):
+
+- **Win %** and **predicted score** from **team ratings** + **RPI** (résumé index), **not** from games played this season.
+- Works in **preseason** and **week zero** of schedule.
+
+---
+
+## Watch sim timing
+
+| Setting | Value |
+|---------|--------|
+| Wall-clock between possession lines | **2 seconds** (fixed default; user setting optional later) |
+| Game clock shaved per possession | **3–30 seconds** ([`simulation-engine.md`](simulation-engine.md)) |
+| Halftime | Coach adjustments, then resume |
+
+---
+
+## Document history
+
+| Date | Change |
+|------|--------|
+| 2025-11-08 | O/D presets, gameplan + halftime, preview/watch notes |

@@ -289,6 +289,12 @@ Tap → expand season detail or read-only mini stat block.
 
 ---
 
+## NIL (later on card)
+
+**Planned:** NIL deal strength / collective slice on **Overview** or sub-section when [`game-design.md`](game-design.md) NIL doc merges into player UI — not blocking current card tabs.
+
+---
+
 ## Edit mode
 
 **Edit** (header) visible when player is on **user roster** and editing is allowed by game phase (strategy/usage/redshirt — rules TBD in strategy doc).

@@ -102,8 +102,8 @@ Opened from **Next game** (and parallel entry from Calendar before tip).
 
 | Section | Content |
 |---------|---------|
-| **Win prediction %** | Model from ratings + home + résumé |
-| **Predicted score** | Point estimate (e.g. 78–71) |
+| **Win prediction %** | **Team ratings + RPI** — works **with zero games played** |
+| **Predicted score** | Same model output (e.g. 78–71) |
 | **Team preview** | Side-by-side comparison (PPG, RPG, efficiency, pace, key ranks) |
 | **Matchup** | **Head-to-head history** vs this opponent (all-time or dynasty-era; W–L, last meetings, scores) |
 
@@ -221,7 +221,7 @@ Reached from School overview (head coach tap) or hamburger flow.
 | **Overview** | Portrait, age/tenure, career record at school, skills summary |
 | **Contract overview** | Years, salary, buyout, goals |
 | **AD trust** | Relationship meter; affects extensions / leash |
-| **More** | Skill tree entry, career accolades, (TBD achievements) |
+| **More** | Routes to full **Coach** tab / hub (detailed in a later doc) |
 
 **Edit** path from preview → contract negotiation, skill points (Sunday), extension — tied to game-design carousel/contract systems.
 
@@ -233,9 +233,10 @@ Pre-sim control surface (no mid-game inputs).
 
 | Section | Behavior |
 |---------|----------|
-| **Scheme** | Pick **offensive** and **defensive** scheme from **5–6 presets** each (e.g. motion, pick-roll, transition, pack-line, press — names TBD in data) |
+| **Scheme** | Offense & defense presets — [`strategy-schemes.md`](strategy-schemes.md) |
 | **Rotation** | Five slots **PG–C**; minute targets; **reset to default** = best OVR at each **listed** position ([`positions-and-lineup.md`](positions-and-lineup.md); PG↔SG / SF↔PF **manual** only) |
-| **Usage** | Per-player usage targets (starters / go-to options) feeding sim shot distribution |
+| **Usage** | Per-player usage targets feeding sim shot distribution |
+| **Halftime** | Adjust scheme / rotation / usage before 2nd half when watching sim |
 
 Changes apply to **next** sim; in-week replay before week advance can use new strategy.
 
@@ -274,11 +275,11 @@ Superset of dashboard News tab.
 
 | Tab / section | Content |
 |---------------|---------|
-| **Stories** | Top headlines **with date**; same story copy as dashboard, full list |
-| **Draft** | **Top 60** players in national draft pool |
-| **Recruits** | **Top 50** recruits nationally |
+| **Stories** | **Headlines only** (with date) — obvious types: upsets, rankings, injuries, commitments, bracket, etc. |
+| **Draft** | **Top 60** draft pool — **dynamic** as season/pro days evolve |
+| **Recruits** | **Top 50** — **static preview** of **~2K auto-generated** recruits that class; season pool reference |
 
-Offseason recruiting depth may expand here later; in-season focus is board visibility.
+Offseason recruiting depth in dedicated doc later.
 
 ---
 
