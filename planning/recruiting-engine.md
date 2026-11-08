@@ -70,7 +70,7 @@ Each **season**, generate independent pools:
 
 **Walk-ons** (local tryouts) optional v1 — low-prestige schools; see game-design if enabled.
 
-**Geography (v1):** **`homeState` only** — each program and recruit carries a US state/DC code ([`league-branding.md`](league-branding.md#geography--recruiting)). Drives in-state / regional pipeline bias on interest. No city or mileage sim in v1; national pool is primary.
+**Geography:** Programs store **`homeCity`** + **`homeState`** ([`league-branding.md`](league-branding.md#geography--recruiting)). **Recruiting pipeline** keys off **`homeState`** (in-state / regional bias). Cities stay on the school record for travel, schedule, and UI; national pool is primary.
 
 ---
 
@@ -332,4 +332,4 @@ After signing, recruits appear on **Committed** and (when appropriate) next seas
 |------|--------|
 | 2025-11-08 | Initial recruiting engine from user spec |
 | 2025-11-08 | v1 locks: star bands, 50% carryover, no visits, fixed Top 60, uniform HS count |
-| 2025-11-08 | Geography = homeState only (recruiting pipeline) |
+| 2025-11-08 | Recruiting pipeline uses homeState; schools also store homeCity |

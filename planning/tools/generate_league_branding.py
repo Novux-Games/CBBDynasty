@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from home_states_2026 import HOME_STATES_BY_CONF
+from team_geography_2026 import GEO_BY_CONF, HOME_STATES_BY_CONF
 
 # Real conference name, universe display name, confId, short code
 CONFERENCES = [
@@ -267,17 +267,17 @@ def split_team(real: str) -> tuple[str, str]:
     return " ".join(parts[:-1]), parts[-1]
 
 
-def home_state(conf_id: str, idx: int) -> str:
-    states = HOME_STATES_BY_CONF[conf_id]
-    if idx < 1 or idx > len(states):
-        raise IndexError(f"home state index for {conf_id} #{idx}")
-    return states[idx - 1]
+def campus_geo(conf_id: str, idx: int) -> tuple[str, str]:
+    rows = GEO_BY_CONF[conf_id]
+    if idx < 1 or idx > len(rows):
+        raise IndexError(f"geo index for {conf_id} #{idx}")
+    return rows[idx - 1]
 
 
-def universe_team(real: str, conf_id: str, idx: int) -> tuple[str, str, str]:
-    state = home_state(conf_id, idx)
+def universe_team(real: str, conf_id: str, idx: int) -> tuple[str, str, str, str]:
+    state, city = campus_geo(conf_id, idx)
     if real in TEAM_OVERRIDES:
-        return f"team-{conf_id}-{idx:03d}", TEAM_OVERRIDES[real], state
+        return f"team-{conf_id}-{idx:03d}", TEAM_OVERRIDES[real], state, city
 
     school, mascot = split_team(real)
     school_clean = strip_paren(school)
@@ -298,7 +298,7 @@ def universe_team(real: str, conf_id: str, idx: int) -> tuple[str, str, str]:
         uni_school = school_clean.replace("St.", "Saint")
 
     universe = f"{uni_school} {new_mascot}".strip()
-    return f"team-{conf_id}-{idx:03d}", universe, state
+    return f"team-{conf_id}-{idx:03d}", universe, state, city
 
 
 def main() -> None:
@@ -313,10 +313,10 @@ def main() -> None:
         "**Membership:** **Active 2026–27** NCAA Division I men's basketball — **{nconf} conferences**, **{nteams} teams** (per user reference list).".format(
             nconf=len(CONFERENCES), nteams=team_total
         ),
-        "**Purpose:** Keep **real-world reference** alongside **ship-safe display** names. **Geography in sim:** **`homeState` only** (US state / DC) — used for **[recruiting pipeline](recruiting-engine.md)** (in-state / regional bias). Not city, market, or travel distance in v1.",
+        "**Purpose:** Keep **real-world reference** alongside **ship-safe display** names for a **shippable** default pack.",
+        "**Geography:** Every program has **`homeState`** + **`homeCity`** (reference campus). **`homeState`** drives **[recruiting pipeline](recruiting-engine.md)**; **`homeCity`** is stored for schedule/travel/display and pack fidelity.",
         "**Related:** [`game-design.md`](game-design.md#identity-packs--save-model), [`branding.md`](branding.md), [`recruiting-engine.md`](recruiting-engine.md).",
         "**Last updated:** 2025-11-08",
-        "**Status:** v2 membership; universe names + `homeState`; colors/logos in pack JSON (not geography fields).",
         "",
         "---",
         "",
@@ -346,16 +346,16 @@ def main() -> None:
         "",
         "## Teams by conference",
         "",
-        "Columns: stable `teamId`, real program (editor reference), universe display name, **`homeState`** (recruiting pipeline).",
+        "Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`**.",
         "",
     ])
 
     for conf_id, teams in MEMBERSHIP:
-        if conf_id not in HOME_STATES_BY_CONF:
+        if conf_id not in GEO_BY_CONF:
             raise KeyError(conf_id)
-        if len(teams) != len(HOME_STATES_BY_CONF[conf_id]):
+        if len(teams) != len(GEO_BY_CONF[conf_id]):
             raise ValueError(
-                f"{conf_id}: {len(teams)} teams vs {len(HOME_STATES_BY_CONF[conf_id])} home states"
+                f"{conf_id}: {len(teams)} teams vs {len(GEO_BY_CONF[conf_id])} geo rows"
             )
 
     for conf_id, teams in MEMBERSHIP:
@@ -364,11 +364,11 @@ def main() -> None:
         lines.append("")
         lines.append(f"*Real league: {real_conf}* · `{conf_id}` · **{len(teams)} teams**")
         lines.append("")
-        lines.append("| `teamId` | Real (reference) | Universe (default pack) | `homeState` |")
-        lines.append("|----------|-------------------|-------------------------|-------------|")
+        lines.append("| `teamId` | Real (reference) | Universe (default pack) | `homeCity` | `homeState` |")
+        lines.append("|----------|-------------------|-------------------------|------------|-------------|")
         for idx, real in enumerate(teams, 1):
-            tid, uni, state = universe_team(real, conf_id, idx)
-            lines.append(f"| `{tid}` | {real} | {uni} | {state} |")
+            tid, uni, state, city = universe_team(real, conf_id, idx)
+            lines.append(f"| `{tid}` | {real} | {uni} | {city} | {state} |")
         lines.append("")
 
     lines.extend([
@@ -378,10 +378,10 @@ def main() -> None:
         "",
         "| Rule | Detail |",
         "|------|--------|",
-        "| **`homeState`** | Two-letter state (or DC) on each team row; stored on program in save/pack |",
-        "| **Recruiting** | HS/JUCO recruits tagged with home state; interest/pipeline weights for in-state and regional proximity |",
-        "| **Not in v1** | City, metro, mileage, or arena address for sim logic |",
-        "| **Colors / logos** | Pack overlay only — unrelated to `homeState` |",
+        "| **`homeCity`** | Campus city on every program; pack + save field; schedule/travel/display |",
+        "| **`homeState`** | US state / DC; **recruiting pipeline** (in-state / regional bias on recruits) |",
+        "| **Recruits** | `homeState` (and city when seeded) for geography; pipeline uses **state** |",
+        "| **Colors / logos** | Pack overlay; separate from city/state |",
         "",
         "---",
         "",
@@ -400,8 +400,8 @@ def main() -> None:
         "| Rule | Detail |",
         "|------|--------|",
         "| **IDs** | Simulation uses `confId` / `teamId` only; display strings from pack overlay |",
-        "| **`homeState`** | Required for default pack; drives recruiting pipeline only |",
-        "| **Colors & logos** | Pack JSON overlay; not geography fields |",
+        "| **`homeCity` / `homeState`** | Required on every team in default pack JSON |",
+        "| **Colors & logos** | Pack JSON overlay |",
         "| **Realignment** | Metro (ex-MAAC), UAC (ex-WAC), Pac-12 remnant, MW + UC Davis, Big West + Utah Valley, etc. reflected in this snapshot |",
         "| **Regeneration** | `python3 planning/tools/generate_league_branding.py` after membership edits |",
         "",
@@ -415,7 +415,7 @@ def main() -> None:
         "|------|--------|",
         "| 2025-11-08 | Initial conference + team mapping |",
         "| 2025-11-08 | **Rebuild:** 2026–27 D-I list — 32 conferences, Metro/UAC, membership moves |",
-        "| 2025-11-08 | Geography = `homeState` only (recruiting pipeline) |",
+        "| 2025-11-08 | Geography: `homeState` (recruiting) + `homeCity` on all programs |",
         "",
     ])
 
