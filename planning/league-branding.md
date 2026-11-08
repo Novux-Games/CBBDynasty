@@ -670,14 +670,16 @@ Columns: `teamId`, real reference, universe name, **`homeCity`**, **`homeState`*
 
 All **4** are **in the default pack** and play **regular season** / conference schedules. They are **ineligible for postseason** (conference tournament + national bracket) until they **complete the 4-year** D-II→D-I reclass window — see [`game-design.md`](game-design.md) postseason gates.
 
-| Real (reference) | Transition year (2026–27) | `postseasonEligible` |
-|------------------|----------------------------|----------------------|
+**Season clock:** **Season 1** in dynasty = **2026–27** calendar year. Values below are **`reclassTransitionYear` at new-dynasty start** (Season 1); each **offseason** increments for programs still in reclass.
+
+| Real (reference) | `reclassTransitionYear` (Season 1) | `postseasonEligible` (Season 1) |
+|------------------|-----------------------------------|--------------------------------|
 | Mercyhurst Lakers | Year 3 (Mid-transition) | `false` |
 | New Haven Chargers | Year 2 (Early-transition) | `false` |
 | West Florida Argonauts | Year 1 (Early-transition) | `false` |
 | West Georgia Wolves | Year 3 (Mid-transition) | `false` |
 
-Dynasty sim advances transition year each offseason; when a program finishes **year 4**, flip to **certified** and `postseasonEligible: true` (pack/save field).
+After a program completes **transition year 4** in offseason, set `postseasonEligible: true` for the **next** in-game season (e.g. Mercyhurst/West Georgia at year 3 in Season 1 → eligible starting **Season 3**).
 
 ---
 
@@ -715,3 +717,4 @@ Dynasty sim advances transition year each offseason; when a program finishes **y
 | 2025-11-08 | Geography: `homeState` (recruiting) + `homeCity` on all programs |
 | 2025-11-08 | Align 361 certified; link directory; exclude 4 transition programs |
 | 2025-11-08 | Include 365 in pack; 4 reclass ineligible for postseason until year 4 done |
+| 2025-11-08 | Reclass years labeled Season 1 (2026–27) bootstrap |

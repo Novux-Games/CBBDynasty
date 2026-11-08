@@ -220,7 +220,7 @@ MEMBERSHIP: list[tuple[str, list[str]]] = [
 ]
 
 # D-II → D-I reclass — in pack, **`postseasonEligible: false`** until 4-year transition completes.
-# (real name, transition year 1–4 in 2026–27 snapshot)
+# Bootstrap: transition year as of **Season 1** (in-game) = calendar **2026–27** (new dynasty start).
 TRANSITION_BY_NAME: dict[str, tuple[int, str]] = {
     "Mercyhurst Lakers": (3, "Mid-transition"),
     "New Haven Chargers": (2, "Early-transition"),
@@ -402,14 +402,16 @@ def main() -> None:
         "",
         "All **4** are **in the default pack** and play **regular season** / conference schedules. They are **ineligible for postseason** (conference tournament + national bracket) until they **complete the 4-year** D-II→D-I reclass window — see [`game-design.md`](game-design.md) postseason gates.",
         "",
-        "| Real (reference) | Transition year (2026–27) | `postseasonEligible` |",
-        "|------------------|----------------------------|----------------------|",
+        "**Season clock:** **Season 1** in dynasty = **2026–27** calendar year. Values below are **`reclassTransitionYear` at new-dynasty start** (Season 1); each **offseason** increments for programs still in reclass.",
+        "",
+        "| Real (reference) | `reclassTransitionYear` (Season 1) | `postseasonEligible` (Season 1) |",
+        "|------------------|-----------------------------------|--------------------------------|",
     ])
     for name, (year, label) in sorted(TRANSITION_BY_NAME.items(), key=lambda x: x[0]):
         lines.append(f"| {name} | Year {year} ({label}) | `false` |")
     lines.extend([
         "",
-        "Dynasty sim advances transition year each offseason; when a program finishes **year 4**, flip to **certified** and `postseasonEligible: true` (pack/save field).",
+        "After a program completes **transition year 4** in offseason, set `postseasonEligible: true` for the **next** in-game season (e.g. Mercyhurst/West Georgia at year 3 in Season 1 → eligible starting **Season 3**).",
     ])
     lines.extend([
         "",
@@ -449,6 +451,7 @@ def main() -> None:
         "| 2025-11-08 | Geography: `homeState` (recruiting) + `homeCity` on all programs |",
         "| 2025-11-08 | Align 361 certified; link directory; exclude 4 transition programs |",
         "| 2025-11-08 | Include 365 in pack; 4 reclass ineligible for postseason until year 4 done |",
+        "| 2025-11-08 | Reclass years labeled Season 1 (2026–27) bootstrap |",
         "",
     ])
 

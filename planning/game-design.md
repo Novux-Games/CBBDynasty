@@ -14,7 +14,7 @@
 **Recruiting:** **[`recruiting-engine.md`](recruiting-engine.md)** — pools, 4-week window, NIL + points  
 **League identity:** **[`league-branding.md`](league-branding.md)** — conference/team real ↔ universe mapping  
 **Document type:** Planning GDD (implementation-ready outline)  
-**Default era:** **2026–27** at new dynasty start  
+**Default era:** **2026–27** at new dynasty start (**Season 1**)  
 **Last updated:** 2025-11-08
 
 ---
@@ -574,9 +574,11 @@ Programs in **D-II → D-I reclass** (`postseasonEligible: false`) are on the **
 | **NCAA tournament** | No automatic bid; **not** eligible for at-large selection |
 | **Secondary postseason** (e.g. NIT-style) | Excluded while in transition |
 
-**Transition clock:** `reclassTransitionYear` **1–4** on the team record (NCAA Bylaw 20-style **4-year** window). Each **offseason** advance increments the year for programs still in reclass. When a program **completes year 4**, set `postseasonEligible: true` and clear transition flags — same as newly **certified** members (e.g. Stonehill/Lindenwood path in [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md)).
+**Season numbering:** **Season 1** = **2026–27** calendar (first playable year on a new dynasty). Later seasons advance the displayed year (`2027–28`, …) in step with `dynastySeasonIndex`.
 
-**2026–27 default pack** snapshot: Mercyhurst & West Georgia (**year 3**); New Haven (**year 2**); West Florida (**year 1**) — see [`league-branding.md`](league-branding.md#provisional-transition-programs).
+**Transition clock:** `reclassTransitionYear` **1–4** on the team record (NCAA Bylaw 20-style **4-year** window). Pack values are the **Season 1** bootstrap; each **offseason** increments the year for programs still in reclass. When a program **finishes year 4** in offseason, set `postseasonEligible: true` for the **next** season — same certification path as recent members (Stonehill/Lindenwood in [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md)).
+
+**Season 1 bootstrap** (`reclassTransitionYear`): Mercyhurst & West Georgia **3**; New Haven **2**; West Florida **1** — all `postseasonEligible: false`. Eligibility timing: West Florida **Season 5**; New Haven **Season 4**; Mercyhurst & West Georgia **Season 3**. See [`league-branding.md`](league-branding.md#provisional-transition-programs).
 
 Conference tournaments still award **auto bids** only to **eligible** champions; if an ineligible team would have won, implementation uses conference template rules (next eligible finisher / seed policy in data).
 
@@ -744,4 +746,5 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-08 | Save on week advance; replay games if reopened before checkpoint |
 | 2025-11-08 | Linked `game-frame.md` (in-season UI shell) |
 | 2025-11-08 | 365-team pack; reclass postseason ineligibility until 4-year transition |
+| 2025-11-08 | Season 1 = 2026–27; reclass years anchored to dynasty start |
 | 2025-11-08 | Linked `player-cards.md` |
