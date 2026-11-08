@@ -6,7 +6,7 @@
 
 ---
 
-## Offensive scheme presets
+## Offensive scheme presets (7)
 
 | Preset | Identity (sim tendency) |
 |--------|-------------------------|
@@ -15,19 +15,12 @@
 | **Drive** | Rim pressure, foul draw, kick-outs |
 | **Set** | Quick-hitter actions, half-court sets, lower pace variance |
 | **Early** | Transition, push after misses/makes, higher pace |
-
-**Optional adds (data toggle if we want 6th):**
-
-| Preset | Identity |
-|--------|----------|
 | **Perimeter** | High 3PA rate, spacing, drive & kick |
 | **Post** | Interior touches, PF/C usage bump |
 
-Ship with **5** user listed; add Perimeter/Post later without new UI if tables allow.
-
 ---
 
-## Defensive scheme presets
+## Defensive scheme presets (7)
 
 | Preset | Identity |
 |--------|----------|
@@ -36,15 +29,8 @@ Ship with **5** user listed; add Perimeter/Post later without new UI if tables a
 | **3-2 Zone** | Pressure perimeter, weak interior |
 | **1-3-1 Zone** | Trap edges, lengthy, gamble passing lanes |
 | **Box-and-One** | Four protect star, one chases primary scorer |
-
-**Optional adds:**
-
-| Preset | Identity |
-|--------|----------|
 | **Full-court press** | Turnover chase; fatigue cost |
 | **Switching man** | P&R switch-all; perimeter switchability matters |
-
-Ship with **5** user listed.
 
 ---
 
@@ -118,3 +104,4 @@ Per your spec — see [`game-frame.md`](game-frame.md):
 |------|--------|
 | 2025-11-08 | O/D presets, gameplan + halftime, preview/watch notes |
 | 2025-11-08 | Strategy edit / week-advance rules marked design lock |
+| 2025-11-08 | Ship **7** offensive and **7** defensive presets |
