@@ -11,7 +11,7 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | Watch sim | **2s** possession delay; 3–30 game clock | [`strategy-schemes.md`](strategy-schemes.md) |
 | Conference tournaments | **Real formats** | [`game-design.md`](game-design.md) |
 | News | Headlines; static top 50 recruit preview; dynamic draft | [`game-frame.md`](game-frame.md) |
-| Coach hub / More | **Future doc when you ask** (not a backlog item for you now) | — |
+| Coach card + School Staff | **Done** | [`coach-card.md`](coach-card.md) |
 | Recruiting engine | **Future doc when you ask** | — |
 | Offseason frame | **Future doc when you ask** (like in-season `game-frame`) | — |
 | NIL on player card | **Overview valuation** (recruiting commit) | [`player-cards.md`](player-cards.md) |
@@ -22,7 +22,7 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 
 ## Gameplan — nothing else needed from you (for now)
 
-Pre-game: schemes, rotation, usage. Halftime: same knobs. No extra toggles until coach doc.
+Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** schemes on coach card Overview; per-game prep unchanged in Strategy hub.
 
 **Strategy / rotation timing (locked):** edit before sim + halftime; replay with new prep before week advance; after week advance, that week’s results final, prep for next games.
 
@@ -40,3 +40,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. No extra toggles until
 |------|--------|
 | 2025-11-08 | Tracker from user follow-up batch |
 | 2025-11-08 | NIL on Overview; clarify future docs vs backlog |
+| 2025-11-08 | Coach card + School Staff |

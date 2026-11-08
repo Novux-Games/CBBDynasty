@@ -1,7 +1,7 @@
 # Game frame — in-season (coach loaded)
 
 **When this applies:** Coach and dynasty exist; player is in **in-season** play (regular season, conference tournament, postseason — not full offseason UI).  
-**Companion:** [`game-design.md`](game-design.md) (systems), [`simulation-engine.md`](simulation-engine.md) (game sim), [`player-cards.md`](player-cards.md).  
+**Companion:** [`game-design.md`](game-design.md) (systems), [`simulation-engine.md`](simulation-engine.md) (game sim), [`player-cards.md`](player-cards.md), [`coach-card.md`](coach-card.md).  
 **Last updated:** 2025-11-08
 
 ---
@@ -174,7 +174,7 @@ Bottom tabs remain available; hubs stack or replace main content per navigation 
 
 | Block | Content |
 |-------|---------|
-| **Head coach** | Name, record; tap → **Coach** (preview); edit → Coach tab / contract flows |
+| **Staff** | Head coach row + assistants & support staff; tap HC → [`coach-card.md`](coach-card.md) preview; **Manage** (user school) → hire, fire, poach — see [`coach-card.md#staff-school-hub`](coach-card.md#staff-school-hub) |
 | **Info** | Conference, prestige, overall record, conference record, top-25 record, strength of schedule, **power index**, etc. |
 | **Rankings** | National + conference placement snapshot |
 | **Ratings** | Team offensive/defensive ratings (display layer) |
@@ -214,16 +214,15 @@ Bottom tabs remain available; hubs stack or replace main content per navigation 
 
 ## Coach
 
-Reached from School overview (head coach tap) or hamburger flow.
+Full spec: [`coach-card.md`](coach-card.md).
 
-| Section | Content |
-|---------|---------|
-| **Overview** | Portrait, age/tenure, career record at school, skills summary |
-| **Contract overview** | Years, salary, buyout, goals |
-| **AD trust** | Relationship meter; affects extensions / leash |
-| **More** | Routes to full **Coach** tab / hub (detailed in a later doc) |
+**Entry:** School hub **Staff** (head coach row), coach preview from offers/news, or dynasty shortcuts.
 
-**Edit** path from preview → contract negotiation, skill points (Sunday), extension — tied to game-design carousel/contract systems.
+**Preview (sheet):** name, school, record, headline ratings; **[View more]** → full coach card.
+
+**Full card tabs:** Overview · Contract · History · Hall of Fame · Draft.
+
+**Edit** (user HC only): default schemes, skill points (Sunday), contract — tied to game-design carousel/contract systems. Assistant and support staff management stays on **School hub → Staff**, not the coach card.
 
 ---
 
@@ -314,7 +313,7 @@ Cards **accumulate** as dynasty seasons complete; national content includes team
 ```
 Bottom:  Roster | Calendar | Dashboard | News
 Hamburger: School | Strategy | Statistics | Rankings | News | History
-           └─ School: Overview | Roster | Schedule | Stats | History | Records | HOF | Drafted
+           └─ School: Overview (Staff) | Roster | Schedule | Stats | History | Records | HOF | Drafted
 ```
 
 ### Open (later docs)
@@ -332,3 +331,4 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History
 |------|--------|
 | 2025-11-08 | Initial in-season game frame from user spec |
 | 2025-11-08 | Link player cards doc |
+| 2025-11-08 | School Staff section; coach card doc |

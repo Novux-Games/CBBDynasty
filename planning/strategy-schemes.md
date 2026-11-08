@@ -47,7 +47,7 @@
 
 No separate “pace slider” for v1 — **pace comes from offensive preset** + opponent scheme interaction (tuning JSON).
 
-**Not required from user now:** deny-star toggle, late-game foul strategy — omit until coach doc or v2 unless you ask for them.
+**Not required from user now:** deny-star toggle, late-game foul strategy — omit until v2 unless you ask for them. Coach **default** O/D schemes: [`coach-card.md`](coach-card.md#strategy).
 
 ### Halftime (in-season)
 
