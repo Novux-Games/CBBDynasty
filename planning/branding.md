@@ -55,9 +55,7 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 |------|------|
 | `adaptive-icon-background.svg` | Background layer — `#181a25` |
 | `adaptive-icon-foreground.png` | Foreground layer — **icon mark** cropped from [`app-logo.svg`](../Public-Assets/app-logo.svg) |
-| `adaptive-icon-canvas.png` | Optional square preview — full lockup on `#181a25` (not the launcher foreground layer) |
-
-Regenerate foreground/canvas PNGs from `app-logo.svg` when the logo changes; do not add studio marks or separate generator tooling in `Public-Assets` unless requested.
+| `adaptive-icon-canvas.png` | `#181A25` + `adaptive-icon-foreground.png` composited (logo on brand background only) |
 
 ---
 
