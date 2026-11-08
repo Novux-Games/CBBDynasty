@@ -191,7 +191,7 @@ Full layout: [`coach-card.md`](coach-card.md#staff-school-hub) + [staff detail s
 | **Staff grade** | Aggregate program chip |
 | **Manage** | Hire, fire, poach, candidate pool (user school) |
 
-Tap HC → coach card preview. Tap any other row → staff detail sheet.
+Tap HC → coach card preview. Tap any other row → staff detail sheet (Overview · **History** · Contract; HC résumé tabs when applicable).
 
 #### Roster
 

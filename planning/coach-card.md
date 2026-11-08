@@ -314,18 +314,35 @@ Identity strip: portrait, **role title**, current school.
 | Tab | Purpose |
 |-----|---------|
 | **Overview** | Bio, team card (tap → School hub), information, role ratings, contract summary |
+| **History** | Season-by-season **résumé snapshot** (all staff; see below) |
 | **Contract** | Salary, years left, buyout, poach/offer flows when applicable |
 
-**Conditional tabs** — only if this person has **prior head-coaching career** in the save (data flag `hasHeadCoachCareer`):
+**Conditional tabs** — only if this person has **head-coaching career** in the save (data flag `hasHeadCoachCareer`):
 
 | Tab | When shown |
 |-----|------------|
-| **History** | One+ seasons as HC |
 | **Achievements** | HC record, win %, tourney lines (same rows as coach card, including separate conf RS / tourney titles) |
 | **Hall of Fame** | Players coached as HC |
 | **Draft** | Players coached as HC who were drafted |
 
-Staff with **no** HC history: **omit** History, Achievements, HOF, and Draft entirely (no empty placeholders).
+Staff with **no** HC career: **omit** Achievements, HOF, and Draft (no empty placeholders). **History** is always available once they have one logged season in the save.
+
+### History (staff)
+
+Lightweight career log — **not** the deep coach-card History tab (schedule detail, skill points, etc.). One row per **season** the person appears on a staff record.
+
+| Column | Content |
+|--------|---------|
+| **Season** | Year label (e.g. `2026–27`) |
+| **School** | Program name (pack display) |
+| **Position** | Role that season: Head coach, Associate HC, Assistant, Recruiting coordinator, Trainer, etc. |
+| **Result** | **Team result that season** — typically program **W–L** (and optional postseason line, e.g. `24–10 · S16`) |
+
+Tap row → optional expand: conference record, staff-only note (e.g. “Joined week 4”) — no full schedule dump in v1.
+
+Includes **every stop**: assistant years at other schools, support roles, and **head-coach seasons** (position = Head coach; same result field). Ex-HCs do **not** need a separate History tab on the coach card for staff UI purposes; coach card History remains the **deep** HC archive when opened from the HC row.
+
+**Current season:** top row; updates after **week advance** when team record changes.
 
 ### Overview (staff)
 
@@ -342,7 +359,7 @@ Shorter than HC: salary, term, years left, buyout, **poach offer** CTA when scou
 
 ### Former head coaches on staff
 
-If an assistant **was** an HC elsewhere: conditional tabs populate from archived HC career; optional **“Open head coach card”** deep link for full coach-card parity when viewing historical HC stops.
+**History** lists HC seasons like any other row (position Head coach + team result). **Achievements / HOF / Draft** tabs aggregate full HC career. Optional **“Open head coach card”** on an HC History row for deep coach-card History when that season was as user or scouted HC.
 
 ---
 
@@ -393,3 +410,4 @@ If an assistant **was** an HC elsewhere: conditional tabs populate from archived
 |------|--------|
 | 2025-11-08 | Initial coach card spec from user (mirror player card UX) |
 | 2025-11-08 | Staff tab + AD trust; staff detail sheets; split conf titles |
+| 2025-11-08 | Staff History tab: season/school/position/result for all staff |
