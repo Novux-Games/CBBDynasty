@@ -10,6 +10,7 @@
 **Player UI:** **[`player-cards.md`](player-cards.md)** — preview, card tabs, ratings; **[`player-archetypes.md`](player-archetypes.md)** — archetypes, draft rank  
 **Lineup:** **[`positions-and-lineup.md`](positions-and-lineup.md)** — PG/SG/SF/PF/C, interchange, default starters  
 **Strategy:** **[`strategy-schemes.md`](strategy-schemes.md)** — O/D presets, halftime, preview/watch  
+**Coach UI:** **[`coach-card.md`](coach-card.md)** — coach preview, card tabs, School staff  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start  
 **Last updated:** 2025-11-08
@@ -433,6 +434,7 @@ recruitingBudget = floor(baseBudget * gradeMultiplier * facilityBonus)
 ### Assistant coaches (light v1)
 
 - Aggregate into **staff grade** bumping visit efficiency and development; full assistant sim optional v2.
+- **UI:** assistants use **coach cards**; support staff (e.g. trainers) are list-only — trainers **`eligibleForHeadCoach: false`** ([`coach-card.md`](coach-card.md)).
 
 ---
 
