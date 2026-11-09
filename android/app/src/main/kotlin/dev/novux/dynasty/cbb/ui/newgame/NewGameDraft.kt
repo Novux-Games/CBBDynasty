@@ -1,12 +1,12 @@
 package dev.novux.dynasty.cbb.ui.newgame
 
 import androidx.compose.runtime.Immutable
+import dev.novux.dynasty.cbb.core.coach.CoachCreateProfile
 
 /**
- * In-memory wizard draft — fields filled in steps 4.2–4.7.
+ * In-memory wizard draft — persisted to SQLite on sign contract (4.6).
  */
 @Immutable
 data class NewGameDraft(
-    val coachFirstName: String = "",
-    val coachLastName: String = "",
+    val coach: CoachCreateProfile = CoachCreateProfile(),
 )

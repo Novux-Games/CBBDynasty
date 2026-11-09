@@ -45,6 +45,11 @@ class IdentityPackIndex private constructor(
 
     fun allTeamIds(): Set<String> = teamsById.keys
 
+    fun allTeamDisplays(): List<TeamDisplayOverlay> =
+        teamsById.values
+            .mapNotNull { team(it.id) }
+            .sortedBy { it.displayName.lowercase() }
+
     companion object {
         fun from(pack: IdentityPack): IdentityPackIndex {
             val teams = pack.teams.associateBy { it.id }

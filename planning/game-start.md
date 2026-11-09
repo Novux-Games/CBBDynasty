@@ -126,6 +126,7 @@ New
 | **Home → New** | [`DynastyApp`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/DynastyApp.kt) → `AppRoute.NewGame` |
 | **Steps 1–6 shell** | [`ui/newgame`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/newgame/) — progress, **Back** / **Next**; step bodies ship in **4.2–4.7** |
 | **Empty-slot gate** | Same snackbar as legacy bootstrap when all ten saves are full |
+| **Step 1 coach + avatar** | [`CoachCreateProfile`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/coach/CoachCreateProfile.kt), [`CoachInfoStepContent`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/newgame/CoachInfoStepContent.kt) — held in `NewGameDraft` until sign |
 
 ---
 

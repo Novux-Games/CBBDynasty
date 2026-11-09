@@ -15,17 +15,24 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.coach.CoachCreateValidator
+import dev.novux.dynasty.cbb.core.pack.TeamDisplayOverlay
+import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 
-/** Multi-step **New** flow — BUILD 4.1; step bodies ship in 4.2–4.7. */
+/** Multi-step **New** flow — [planning/game-start.md#new-game-wizard-overview]. */
 @Composable
 fun NewGameWizardScreen(
     saveSlotRepository: SaveSlotRepository,
+    packRepository: PackRepository,
     onExitWizard: () -> Unit,
     onNoEmptySlot: () -> Unit,
 ) {
     val navController = rememberNavController()
     var slotGatePassed by remember { mutableStateOf(false) }
+    var draft by remember { mutableStateOf(NewGameDraft()) }
+    var coachShowErrors by remember { mutableStateOf(false) }
+    var schools by remember { mutableStateOf<List<TeamDisplayOverlay>>(emptyList()) }
 
     LaunchedEffect(Unit) {
         saveSlotRepository.ensureInitialized()
@@ -36,6 +43,12 @@ fun NewGameWizardScreen(
         } else {
             slotGatePassed = true
         }
+    }
+
+    LaunchedEffect(slotGatePassed) {
+        if (!slotGatePassed) return@LaunchedEffect
+        val session = packRepository.ensureEmbeddedLoaded()
+        schools = session.index.allTeamDisplays()
     }
 
     if (!slotGatePassed) {
@@ -50,10 +63,11 @@ fun NewGameWizardScreen(
         NewGameStep.entries.forEach { step ->
             composable(NewGameStep.routeFor(step)) {
                 val isLast = step == NewGameStep.SignContract
+                val isCoach = step == NewGameStep.Coach
                 NewGameStepScaffold(
                     step = step,
                     onBack = {
-                        when (val previous = step.previous) {
+                        when (step.previous) {
                             null -> onExitWizard()
                             else -> navController.popBackStack()
                         }
@@ -62,8 +76,12 @@ fun NewGameWizardScreen(
                         null
                     } else {
                         {
-                            step.next?.let { next ->
-                                navController.navigate(NewGameStep.routeFor(next))
+                            if (isCoach && CoachCreateValidator.validate(draft.coach) != null) {
+                                coachShowErrors = true
+                            } else {
+                                step.next?.let { next ->
+                                    navController.navigate(NewGameStep.routeFor(next))
+                                }
                             }
                         }
                     },
@@ -71,14 +89,21 @@ fun NewGameWizardScreen(
                         if (isLast) R.string.new_step_sign_title else R.string.new_wizard_next,
                     ),
                 ) {
-                    NewGameStepPlaceholderBody(step = step)
-                    if (isLast) {
-                        Text(
-                            text = stringResource(R.string.new_step_sign_stub),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.fillMaxSize(),
+                    when (step) {
+                        NewGameStep.Coach -> CoachInfoStepContent(
+                            profile = draft.coach,
+                            schools = schools,
+                            onProfileChange = { draft = draft.copy(coach = it) },
+                            showValidationErrors = coachShowErrors,
                         )
+                        NewGameStep.SignContract -> {
+                            Text(
+                                text = stringResource(R.string.new_step_sign_stub),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        else -> NewGameStepPlaceholderBody(step = step)
                     }
                 }
             }

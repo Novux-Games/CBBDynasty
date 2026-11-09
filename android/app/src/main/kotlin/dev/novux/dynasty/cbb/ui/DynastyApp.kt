@@ -129,6 +129,7 @@ fun DynastyApp(
                 composable(AppRoute.NewGame.route) {
                     NewGameWizardScreen(
                         saveSlotRepository = saveSlotRepository,
+                        packRepository = LocalContext.current.requireDynastyApplication().packRepository,
                         onExitWizard = { navController.popBackStack() },
                         onNoEmptySlot = {
                             scope.launch {
