@@ -7,6 +7,7 @@ import dev.novux.dynasty.cbb.core.save.DynastySchema
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.save.SaveSlotSummary
 import dev.novux.dynasty.cbb.core.save.SaveSlots
+import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import dev.novux.dynasty.cbb.database.dynasty.toEntity
 import dev.novux.dynasty.cbb.database.dynasty.toDomain
@@ -19,6 +20,7 @@ import java.util.UUID
 
 class SaveSlotRepository(
     private val database: DynastyDatabase,
+    private val weekCheckpointRepository: WeekCheckpointRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -71,6 +73,7 @@ class SaveSlotRepository(
         val dynastyId = summary.dynastyId ?: return null
         if (summary.isEmpty) return null
         val metadata = metadataDao.getById(dynastyId)?.toDomain() ?: return null
+        val weekCheckpoint = weekCheckpointRepository.loadOrBootstrap(metadata)
         val now = System.currentTimeMillis()
         val updatedSummary = summary.copy(lastPlayedAtEpochMillis = now)
         slotDao.update(entity.copy(lastPlayedAtEpochMillis = now))
@@ -79,6 +82,7 @@ class SaveSlotRepository(
             dynastyId = dynastyId,
             summary = updatedSummary,
             metadata = metadata,
+            weekCheckpoint = weekCheckpoint,
         )
     }
 
@@ -89,6 +93,7 @@ class SaveSlotRepository(
         database.withTransaction {
             if (!dynastyId.isNullOrBlank()) {
                 metadataDao.deleteById(dynastyId)
+                weekCheckpointRepository.deleteForDynasty(dynastyId)
             }
             slotDao.clearSlot(slotIndex)
         }
@@ -116,6 +121,7 @@ class SaveSlotRepository(
 
         database.withTransaction {
             metadataDao.upsert(metadata.toEntity())
+            weekCheckpointRepository.insertBootstrapCalendar(metadata)
             slotDao.upsert(
                 SaveSlotEntity(
                     slotIndex = slotIndex,
@@ -131,6 +137,7 @@ class SaveSlotRepository(
             )
         }
 
+        val weekCheckpoint = weekCheckpointRepository.loadOrBootstrap(metadata)
         val summary = SaveSlotSummary(
             slotIndex = slotIndex,
             isEmpty = false,
@@ -148,6 +155,7 @@ class SaveSlotRepository(
             dynastyId = dynastyId,
             summary = summary,
             metadata = metadata,
+            weekCheckpoint = weekCheckpoint,
         )
     }
 

@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.core.save
 
+import dev.novux.dynasty.cbb.core.calendar.checkpoint.WeekCheckpointState
+
 /**
  * UI / API summary for one save slot — [docs/ADR-001-dynasty-save-backend.md].
  */
@@ -21,4 +23,5 @@ data class LoadedDynasty(
     val dynastyId: String,
     val summary: SaveSlotSummary,
     val metadata: DynastyMetadata,
+    val weekCheckpoint: WeekCheckpointState,
 )

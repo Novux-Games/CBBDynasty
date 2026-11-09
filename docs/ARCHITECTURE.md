@@ -9,7 +9,7 @@ Planning remains authoritative in [`planning/`](../planning/). This doc describe
 | Module | Role |
 |--------|------|
 | **`android/app`** | Jetpack Compose UI, navigation, Android shell ([`app-shell.md`](../planning/app-shell.md), [`game-start.md`](../planning/game-start.md)) |
-| **`android/core`** | JVM Kotlin — calendar phases, save slot models, constants, simulation/dynasty logic (JUnit, no device) |
+| **`android/core`** | JVM Kotlin — calendar phases, **week checkpoint** semantics, save models, simulation/dynasty logic (JUnit, no device) |
 | **`android/database`** | Room / SQLite — save slots table ([ADR-001](ADR-001-dynasty-save-backend.md)) |
 
 ## Package map (`app`)
@@ -22,7 +22,7 @@ Planning remains authoritative in [`planning/`](../planning/). This doc describe
 | `data/settings` | DataStore app preferences |
 | `data/save` | `SaveSlotRepository`, active session holder |
 | `data` | Identity pack import (JSON) — in progress |
-| `domain` | Week advance, calendar state machines — in progress |
+| `data/calendar` | `WeekCheckpointRepository` — persist provisional sims, week advance |
 
 ## Package map (`database`)
 
@@ -30,6 +30,7 @@ Planning remains authoritative in [`planning/`](../planning/). This doc describe
 |---------|------|
 | `save` | `SaveSlotEntity`, DAO, mappers |
 | `dynasty` | `DynastyMetadataEntity`, DAO, mappers (schema v1) |
+| `calendar` | `dynasty_calendar`, `provisional_games`, checkpoint mappers |
 
 ## Build
 

@@ -83,6 +83,15 @@ Corrupt save → error sheet; offer delete slot.
 
 **New** (bootstrap until wizard ships): first empty slot → placeholder school/coach labels + metadata row; wizard will replace display names and attach `teamId`.
 
+### Week checkpoint (implemented)
+
+| Rule | Code |
+|------|------|
+| Sim results **provisional** until **Advance week** | [`WeekCheckpointState`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/calendar/checkpoint/WeekCheckpointState.kt) |
+| **Replay** same game while provisional | `stageSim` bumps `simGeneration` |
+| **After advance** | Provisional bucket cleared; games locked ([GDD](../planning/game-design.md#when-games-run-vs-when-the-save-commits)) |
+| Persistence | [`WeekCheckpointRepository`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/data/calendar/WeekCheckpointRepository.kt) |
+
 ---
 
 ## New game wizard (overview)
