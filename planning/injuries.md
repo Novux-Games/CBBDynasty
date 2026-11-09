@@ -73,7 +73,7 @@ Per completed game (each team):
 
 ## Injury bank
 
-**Authoritative catalog:** [`balance-2026.json`](../assets/balance/balance-2026.json) → `injuries.bank[]` (**40** entries, v2).
+**Authoritative catalog:** [`balance-2026.json`](../assets/balance/balance-2026.json) → `injuries.bank[]` (**40** entries).
 
 | Field | Meaning |
 |-------|---------|
@@ -286,6 +286,6 @@ injuries: [{ playerId, injuryId, bodyPart?, weeksRemaining, severity, occurredIn
 |------|--------|
 | 2026-11-09 | Initial spec — random bank, duration ranges, medical RS gates |
 | 2026-11-09 | Sim hook, lineup, UI, news, data model, phase rules |
-| 2026-11-09 | Auto lineup on injury; bank v1 (25 rows + bodyPart) |
-| 2026-11-09 | Bank v2 (40 rows); auto-restore starters + top reserve on return |
+| 2026-11-09 | Auto lineup on injury; bank 25 rows + `bodyPart` |
+| 2026-11-09 | Bank expanded to 40 rows; auto-restore starters + top reserve on return |
 | 2026-11-09 | **Weeks remaining** (calendar tick; bye weeks count) |

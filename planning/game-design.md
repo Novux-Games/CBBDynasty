@@ -679,7 +679,7 @@ Universe round labels: [`ncba-branding.md`](ncba-branding.md).
 
 ### In-app notifications (Dashboard feed)
 
-**No OS push in v1** — authoritative catalog: [`notifications.md`](notifications.md).
+**No OS push** — authoritative catalog: [`notifications.md`](notifications.md).
 
 | Tier | Examples |
 |------|----------|

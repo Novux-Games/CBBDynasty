@@ -1,6 +1,6 @@
 # In-app notifications (Dashboard feed)
 
-**Context:** **No OS / push notifications** in v1. Players run a **text-first dynasty in-session**; alerts are **in-app rows** on the **Dashboard notification feed** ([`game-frame.md`](game-frame.md#notifications)). Tap → deep link.
+**Context:** Alerts are **in-app rows** on the **Dashboard notification feed** ([`game-frame.md`](game-frame.md#notifications)) — **not** OS push. Players run a text-first dynasty in-session; tap a row → deep link.
 
 **Not the same as:**
 
@@ -34,8 +34,8 @@
 
 | Rule | Detail |
 |------|--------|
-| **In-app only** | **No** Android tray, lock screen, or background push in v1 |
-| **Default on** | New dynasty: notification **feed visible** on Dashboard (user may mute categories in Settings later — optional v1) |
+| **In-app only** | **No** Android tray, lock screen, or background push |
+| **Default on** | New dynasty: notification **feed visible** on Dashboard (per-category mute in Settings may ship later) |
 | **Stories ≠ notifications** | Commits, upsets, league injuries, bracketology → **News** only |
 | **User-school focus** | Feed emphasizes **your program**; not a dump of 365-team league churn |
 | **Portal** | Offseason Weeks 1–5 events only |
@@ -133,11 +133,11 @@ Tap feed row → navigate with Dashboard under back stack:
 
 ---
 
-## Out of scope
+## Excluded
 
 | Item | Notes |
 |------|--------|
-| **OS push** | Not v1; game is played with app open |
+| **OS push** | Product uses in-app feed only |
 | In-season portal | Design lock |
 | Stories in notification feed | Design lock |
 | Per-possession watch events | Live sim UI |

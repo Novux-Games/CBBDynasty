@@ -53,7 +53,7 @@
 
 Promises are **binding commitments** the user (or AI coach) makes at offer/sign. They are stored on the player and shown on the card.
 
-### Promise types (v1 — pick exactly one)
+### Promise types (design lock — pick exactly one)
 
 | Type | User sets (examples) | Tracked against |
 |------|----------------------|-----------------|

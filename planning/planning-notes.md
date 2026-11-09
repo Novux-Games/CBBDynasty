@@ -35,6 +35,12 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 
 ---
 
+## Documentation rule — full product, not “v1”
+
+Planning and player-facing copy describe **the game we are building**, not a staged MVP. Do **not** write “v1”, “not in v1”, “v2 feature”, or “ships later” for product scope. Say **design lock**, **excluded**, or name the behavior. Technical version fields (`balanceSchemaVersion`, `packVersion`, import format revision) stay as-is.
+
+---
+
 ## Engineering rule — app updates must not break saves
 
 **Policy:** Every store / APK update is **backward compatible** with existing dynasty slots on device. Players who update **keep** their careers; we **migrate** data when the DB shape changes — never “wipe and resync” as the default.

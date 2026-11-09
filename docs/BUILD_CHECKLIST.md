@@ -179,7 +179,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 8.4 | `[ ]` School hub data (prestige, SOS, NET on card) | Read-only opponent schools | [game-frame](../planning/game-frame.md) | `ui.school` |
 | 8.5 | `[ ]` Job security + AD trust | Coach card + Staff tab | [coach-card](../planning/coach-card.md) | — |
 | 8.6 | `[ ]` **Loyalty** (0–99) + **one promise** per tenure | Kept/broken → portal / declare rolls; card chips | [player-loyalty-promises](../planning/player-loyalty-promises.md), [player-cards](../planning/player-cards.md) | `:core/player` |
-| 8.7 | `[ ]` **Injury** state + medical redshirt + **auto lineup** | Save fields per spec; `weeksRemaining` + snapshots; `applyInjuryLineupAdjust` / `applyInjuryReturnLineupAdjust`; medical RS hard gates; medical staff −1 week (minor) | [injuries](../planning/injuries.md) | `:core/injuries` |
+| 8.7 | `[ ]` **Injury** state + medical redshirt + **auto lineup** | Save fields per spec; `weeksRemaining` + snapshots; lineup adjust on injury/return; medical RS gates; bank **40** rows | [injuries](../planning/injuries.md) | `:core/injuries` |
 | 8.8 | `[ ]` **Injury UX** (postgame + cards + strategy) | Postgame sheet; roster `OUT` / `{N}w`; greyed in Strategy; optional dashboard deep links | [injuries](../planning/injuries.md#player-ui), [injuries#medical-redshirt](../planning/injuries.md#medical-redshirt), [dashboard-tasks](../planning/dashboard-tasks.md) | `ui.postgame`, `ui.strategy` |
 
 ---
@@ -343,6 +343,7 @@ Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.20**), **dashboard
 | **This file** | **Required:** new/updated step(s), **Done when**, spec links, and [index](#locked-specs--build-steps-index) row — same change set as planning |
 | **Shipped code** | Mark step `[x]` in the phase table |
 | **History** | Row in [Document history](#document-history) below |
+| **Wording** | No **product** “v1 / not in v1 / MVP” labels — use **design lock** or **excluded**; schema/file versions (`packVersion`, Room) are fine |
 
 ### Document history
 
@@ -353,6 +354,6 @@ Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.20**), **dashboard
 | 2026-11-09 | Recruiting action costs, refunds, visits, Signing Day week 6; offseason → 10 weeks |
 | 2026-11-09 | Fix Phase 6 steps 6.17–6.20; move Signing Day out of Phase 15; correct OS week labels 7–10 |
 | 2026-11-09 | Injuries sim output, persistence, lineup block, news — per injuries.md |
-| 2026-11-09 | Injury bank v2 (40), auto lineup + return restore; **weeksRemaining** + bye-week tick (8.7, 9.7, 10.8, 2.6) |
+| 2026-11-09 | Injury bank (40 rows), auto lineup + return restore; **weeksRemaining** + bye-week tick (8.7, 9.7, 10.8, 2.6) |
 | 2026-11-09 | **Full** locked-spec index (all Done planning docs); **8.8** injury UX; injury wired through 9.4/9.6/9.8/10.2 |
 | 2026-11-09 | In-app `notifications.md` (no push); **16.1** |
