@@ -110,7 +110,7 @@ When the user’s team has a national invite: show **`{NCBA|NCI|HC} #{seed}`** (
 ### Last game
 
 - Summary line: opponent, score, W/L.
-- **Actions:** view **box score**, **team/player stats**, recap.
+- **Actions:** view **box score**, **team/player stats**, **postgame report** (mini article — [`preseason.md`](preseason.md#preseason-report--game-reports)), recap.
 
 ### Next game
 
