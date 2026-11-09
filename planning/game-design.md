@@ -344,16 +344,15 @@ Dynasty still supports a **0-game redshirt season** for development (exhibitions
 | **Next year** | Recomputed after **[End of Season](season-review.md)** prestige/conference moves (preview on review) |
 | **Spend** | Allocate to recruits at offer/commit and **retention** bumps ([`offseason.md`](offseason.md)); unspent rules in balance JSON |
 
-**Anchor (your numbers — tune in pack/balance, not invented per save):**
+**Anchor — blue blood (prestige 90–99, power-tier conferences only):** **~$9.7M – $13.2M** — example band, not tied to one real league.
 
-| Band (example) | Annual pool (prestige at top of band) |
-|----------------|----------------------------------------|
-| **SEC flagship** (e.g. Kentucky, Duke-tier in power leagues) | **~$9.7M – $13.2M** |
-| Power conferences below flagship | Scale down on prestige curve within conference table |
-| Mid-major | Order of magnitude below power bands |
-| Low-major | Minimal collective — recruiting points + promises matter more |
+| Driver | Behavior |
+|--------|----------|
+| **Conference tier** | Each `confId` maps to **power / upper / mid / low** in `balance-2026.json` → `nil.annualPoolByConferenceTier` |
+| **Prestige &lt; 90** | Linear **min→max** annual pool inside that tier (`programPrestige` / 99) |
+| **Prestige 90–99** | If tier `blueBloodEligible`: use **`blueBloodPoolBand`** lerp (9.7M→13.2M); else cap at tier max |
 
-Exact conference rows live in **`balance-2026.json` → `nil.annualPoolByConferenceTier`** (and prestige lerp). [`game-start.md`](game-start.md) **contract sheet** shows preview for the chosen school.
+[`game-start.md`](game-start.md) **contract sheet** previews pool for the chosen school.
 
 ### Abstract NIL (no real persons)
 

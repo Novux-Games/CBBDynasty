@@ -131,12 +131,57 @@
   },
   "nil": {
     "currency": "usd_annual",
-    "secFlagshipPrestigeTop": {
+    "prestigeInterpolation": "linear_within_tier_0_to_99",
+    "blueBloodPoolBand": {
       "prestigeMin": 90,
+      "prestigeMax": 99,
       "annualPoolMinUsd": 9700000,
-      "annualPoolMaxUsd": 13200000
+      "annualPoolMaxUsd": 13200000,
+      "note": "Blue-blood programs only; applies when conference tier sets blueBloodEligible true"
     },
-    "annualPoolByConferenceTier": []
+    "annualPoolByConferenceTier": [
+      {
+        "tierId": "power",
+        "label": "Power (flagship leagues)",
+        "conferenceIds": ["conf-sedc", "conf-g10", "conf-c12", "conf-acrown", "conf-epc"],
+        "annualPoolMinUsd": 1800000,
+        "annualPoolMaxUsd": 8500000,
+        "blueBloodEligible": true
+      },
+      {
+        "tierId": "upper",
+        "label": "Upper mid-major / strong multi-bid",
+        "conferenceIds": ["conf-aucc", "conf-cat10", "conf-pvc", "conf-rmwc", "conf-wcc", "conf-pr12"],
+        "annualPoolMinUsd": 900000,
+        "annualPoolMaxUsd": 4500000,
+        "blueBloodEligible": false
+      },
+      {
+        "tierId": "mid",
+        "label": "Mid-major",
+        "conferenceIds": [
+          "conf-ucc", "conf-sbc", "conf-cca", "conf-lhl", "conf-summit", "conf-nsc",
+          "conf-mac", "conf-ascu", "conf-metro", "conf-gwc", "conf-uac", "conf-psc",
+          "conf-gcc", "conf-scf", "conf-ova"
+        ],
+        "annualPoolMinUsd": 350000,
+        "annualPoolMaxUsd": 2200000,
+        "blueBloodEligible": false
+      },
+      {
+        "tierId": "low",
+        "label": "Low-major",
+        "conferenceIds": ["conf-nac", "conf-nec", "conf-meac", "conf-scal", "conf-psl", "conf-fel"],
+        "annualPoolMinUsd": 120000,
+        "annualPoolMaxUsd": 850000,
+        "blueBloodEligible": false
+      }
+    ],
+    "resolveAnnualPoolUsd": {
+      "prestigeBelow90": "lerp tier annualPoolMinUsd..annualPoolMaxUsd by programPrestige/99",
+      "prestige90PlusBlueBloodEligible": "lerp blueBloodPoolBand by (prestige-blueBloodPoolBand.prestigeMin)/(prestigeMax-min)",
+      "prestige90PlusNotEligible": "cap at tier annualPoolMaxUsd"
+    }
   },
   "player": {
     "loyalty": {

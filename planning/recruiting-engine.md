@@ -353,7 +353,7 @@ Loads the **customized roster engine** for incoming commits (and portal signees 
 
 ### NIL (annual)
 
-**Annual collective $** — conference × prestige bands (e.g. SEC flagship **~$9.7M–$13.2M**). Authoritative: [`game-design.md`](game-design.md#annual-collective-pool-design-lock). Separate from recruiting **points**.
+**Annual collective $** — conference tier × prestige; blue blood **90–99** on power leagues **~$9.7M–$13.2M**. Authoritative: [`game-design.md`](game-design.md#annual-collective-pool-design-lock). Separate from recruiting **points**.
 
 | Driver | Behavior |
 |--------|----------|
