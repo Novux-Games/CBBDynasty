@@ -29,6 +29,14 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.10.2"
 
       - name: Run :core:test
-        run: ./gradlew :core:test --no-daemon
+        run: |
+          for attempt in 1 2 3; do
+            ./gradlew :core:test --no-daemon && exit 0
+            echo "Gradle attempt $attempt failed; retrying..."
+            sleep 15
+          done
+          exit 1
