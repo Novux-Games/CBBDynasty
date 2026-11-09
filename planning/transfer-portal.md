@@ -18,7 +18,7 @@
 8. [National recruiting (Weeks 2–5)](#national-recruiting-weeks-25)
 9. [AI entry drivers](#ai-entry-drivers)
 10. [AI spend](#ai-spend)
-11. [UX — News (design lock)](#ux--news-design-lock)
+11. [UX — Hub-first (design lock)](#ux--hub-first-design-lock)
 12. [UX — Dashboard (follow-up)](#ux--dashboard-follow-up)
 
 ---
