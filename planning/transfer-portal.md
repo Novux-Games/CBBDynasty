@@ -161,7 +161,7 @@ User sees **outcomes** only (who entered), not internal reason.
 
 ## UX — Dashboard optional tasks (portal only)
 
-**Scope:** **Offseason Weeks 2–5** only. **Optional** — never block **Advance week** ([`game-frame.md`](game-frame.md#dashboard-task-gate)). **HS/JUCO** dashboard nudges are a **recruiting follow-up** doc — not here.
+**Index:** [`dashboard-tasks.md`](dashboard-tasks.md#offseason) (all phases). **Scope here:** **Offseason Weeks 2–5** only. **Optional** — never block **Advance week** ([`game-frame.md`](game-frame.md#dashboard-task-gate)). **HS/JUCO** nudges: [`recruiting-engine.md`](recruiting-engine.md#in-season-dashboard-tasks).
 
 | Trigger | Task (examples) | Deep link |
 |---------|------------------|-----------|
@@ -175,10 +175,6 @@ User sees **outcomes** only (who entered), not internal reason.
 **Week 1:** **Roster / Transfer** tabs on Players Leaving — **not** duplicated as dashboard optional cards.
 
 **Sim-week / advance:** Unfinished optional portal nudges → confirm line + **AI user-school** portal spend on **Recommended** (same family as [`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week) — portal slice only).
-
-### Recruiting dashboard tasks
-
-**Follow-up** (separate planning pass) — drip, HS watchlist, rival commits, etc. [`recruiting-engine.md`](recruiting-engine.md#in-season-dashboard-tasks).
 
 ---
 

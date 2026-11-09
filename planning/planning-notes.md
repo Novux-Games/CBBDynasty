@@ -21,8 +21,9 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | RS schedule cap | **32** games; **28** builder slots only with 4-game event | [`game-design.md`](game-design.md#scheduling--regular-season), [`preseason.md`](preseason.md#8--schedule-regular-season-games) |
 | Transfer portal | **Done** | [`transfer-portal.md`](transfer-portal.md) |
 | News hub (portal) | **Done** | [`news-hub.md`](news-hub.md) |
-| Portal dashboard tasks | **Done** | [`transfer-portal.md`](transfer-portal.md#ux--dashboard-optional-tasks-portal-only) |
-| Recruiting dashboard tasks | **Follow-up** | [`recruiting-engine.md`](recruiting-engine.md#in-season-dashboard-tasks) |
+| Dashboard tasks (master index) | **Done** | [`dashboard-tasks.md`](dashboard-tasks.md) |
+| Portal dashboard tasks | **Done** | [`transfer-portal.md`](transfer-portal.md#ux--dashboard-optional-tasks-portal-only) → index |
+| Recruiting dashboard tasks | **Done** (triggers) | [`recruiting-engine.md`](recruiting-engine.md#in-season-dashboard-tasks) → index |
 | AI recruiting | **Done** — Recommended parity; **hidden** from UI | [`recruiting-engine.md`](recruiting-engine.md#ai-recruiting) |
 | Recruit rankings UI | **Top 60 full list** — not T25-style | [`recruiting-engine.md`](recruiting-engine.md#national-rankings-top-60) |
 | GOAT / History depth | **Specced** (computed GOAT list) | [`game-frame.md`](game-frame.md#history-hub) |

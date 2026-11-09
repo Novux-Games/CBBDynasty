@@ -1,7 +1,7 @@
 # Game frame — dynasty shell (all phases)
 
 **When this applies:** After the dynasty is created — **offseason**, **preseason**, **exhibition / regular season**, **conference & national postseason**, and **End of Season** review. **One chrome** for the whole career (no separate “offseason app”). **Before this shell:** [`game-start.md`](game-start.md). **March bracket labels & hub content:** [`postseason-frame.md`](postseason-frame.md) (same shell).  
-**Companion:** [`game-design.md`](game-design.md) (systems), [`simulation-engine.md`](simulation-engine.md) (game sim), [`player-cards.md`](player-cards.md), [`coach-card.md`](coach-card.md). **Task lists by phase:** [`offseason.md`](offseason.md), [`preseason.md`](preseason.md), [`season-review.md`](season-review.md).  
+**Companion:** [`game-design.md`](game-design.md) (systems), [`simulation-engine.md`](simulation-engine.md) (game sim), [`player-cards.md`](player-cards.md), [`coach-card.md`](coach-card.md). **Task lists by phase:** [`dashboard-tasks.md`](dashboard-tasks.md) (master index), [`offseason.md`](offseason.md), [`preseason.md`](preseason.md), [`season-review.md`](season-review.md).  
 **Last updated:** 2026-11-09
 
 ---
@@ -68,9 +68,9 @@
 
 | Phase | Required before advance | Optional dashboard tasks (examples) |
 |-------|-------------------------|-------------------------------------|
-| **Offseason** | Weekly obligations per [`offseason.md`](offseason.md) | Extra portal scouting, facilities, etc. when surfaced |
+| **Offseason** | Weekly obligations per [`offseason.md`](offseason.md) | See [`dashboard-tasks.md`](dashboard-tasks.md#offseason) + portal [`transfer-portal.md`](transfer-portal.md#ux--dashboard-optional-tasks-portal-only) |
 | **Preseason** | Full **8-task** checklist ([`preseason.md`](preseason.md#task-checklist)) | — |
-| **Exhibition / RS / conf tourney / postseason** | **None** when on a **bye**; otherwise see note below | **Game** — prep + play/sim when scheduled; **Recruiting** — when cycle is open and week has actionable items ([`recruiting-engine.md`](recruiting-engine.md#in-season-dashboard-tasks)); coach points, injuries, strategy edits as rules surface them |
+| **Exhibition / RS / conf tourney / postseason** | **None** when on a **bye**; otherwise see note below | Full list: [`dashboard-tasks.md`](dashboard-tasks.md#in-season-exhibitions--postseason) |
 | **End of Season** | Season review acknowledged → advance to offseason ([`season-review.md`](season-review.md)) | — |
 
 **In-season games:** A scheduled user game always appears as an **optional** task (“Play vs …” / “Sim vs …”). The user may **Advance week** without completing it; advance triggers [sim-week confirmation](#advance-week-confirmation-sim-week) instead of hard-blocking.

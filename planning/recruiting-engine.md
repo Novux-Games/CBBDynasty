@@ -98,7 +98,7 @@ Headlines in **News** for blue-chip commits league-wide; your targets also spawn
 
 ### In-season dashboard tasks
 
-While the [year-long cycle](#year-long-recruiting-cycle-design-lock) is open, the dashboard **must** list **optional** recruiting tasks when any trigger fires (same card pattern as games):
+**Master index:** [`dashboard-tasks.md`](dashboard-tasks.md). While the [year-long cycle](#year-long-recruiting-cycle-design-lock) is open, the dashboard **must** list **optional** recruiting tasks when any trigger fires (same card pattern as games):
 
 | Trigger (examples) | Task copy (examples) |
 |--------------------|-------------------------|
