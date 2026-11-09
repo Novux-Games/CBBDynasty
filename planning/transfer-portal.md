@@ -155,9 +155,9 @@ User sees **outcomes** only (who entered), not internal reason.
 
 | Rule | Detail |
 |------|--------|
-| **Primary** | **Recruiting → Transfer Portal** — spend, Recommended, board, commits |
-| **News hub** | **Supplementary** — Portal tab + Stories during Weeks 1–5 for league context; **not** a national ticker-first product ([`news-hub.md`](news-hub.md)) |
-| **Dashboard News** | Normal headline mix — portal lines appear, **no** portal-weighted priority bump |
+| **Act (gameplay)** | **Recruiting → Transfer Portal** — spend, Recommended, board, commits |
+| **Read — dashboard** | **News** bottom tab — **headlines only** (top **N**); portal stories included when recent ([`news-hub.md`](news-hub.md#surfaces)) |
+| **Read — depth** | **News hub** — full Stories + **Portal** tab (Top 40, trackers) Weeks 1–5; same headline pool, more UI |
 
 ## UX — Dashboard (follow-up)
 

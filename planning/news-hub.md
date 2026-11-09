@@ -1,7 +1,8 @@
 # News hub — product spec
 
-**Context:** League narrative + reference — **not** portal-primary. **Recruiting hub** owns portal **action** ([`transfer-portal.md`](transfer-portal.md#ux--hub-first-design-lock)). News hub adds Stories, optional **Portal** read-only tab in window, plus Recruits/Draft.  
-**Shell:** [`game-frame.md`](game-frame.md) — dashboard **News** tab (shallow) + hamburger **News** hub (full).  
+**Context:** **Read** layer for league story. **Act** on portal/recruiting in **Recruiting hub** ([`transfer-portal.md`](transfer-portal.md#ux--hub-first-design-lock)) — offers, spend, board.  
+**Two News surfaces, one headline pool:** dashboard shows a **short slice**; News hub shows **everything** + extra tabs. Portal commits/entries can appear in **both**; hub adds depth (Top 40, filters, full lists).  
+**Shell:** [`game-frame.md`](game-frame.md).  
 **Last updated:** 2026-11-09
 
 ---
@@ -23,10 +24,23 @@
 
 ## Surfaces
 
-| Surface | Depth | Role |
-|---------|-------|------|
-| **Dashboard → News** (bottom nav) | **Shallow** — top **N** headlines (tunable, e.g. 8–12) | Mixed feed — **no** portal priority weighting |
-| **Hamburger → News hub** | **Full** — tabs below | Read, filter, trackers |
+**Design lock:** **Same stories** power both UIs. Difference is **how much** you see, not a different product philosophy.
+
+| Surface | What you get | What you do **not** get |
+|---------|----------------|-------------------------|
+| **Dashboard → News** (bottom nav) | **Headlines only** — latest **N** (e.g. 8–12), including portal entries/commits when they’re in the top slice | Portal Top 40 table, filters, full Recruits `#1–#60`, Draft board, long archive scroll |
+| **Hamburger → News hub** | **Stories** (full chronology) + **Portal** / **Recruits** / **Draft** tabs | Offers, scouting spend, board edits (**Recruiting hub**) |
+
+```
+        headline generator (portal, HS, polls, …)
+                    │
+        ┌───────────┴───────────┐
+        ▼                       ▼
+  Dashboard News tab      News hub
+  (top N lines)            (Stories + tabs + detail)
+```
+
+**Hub-first** means **Recruiting** is where portal **gameplay** lives — not “hide portal from News.” Dashboard News **still shows** portal headlines when they rank in the recent top **N**.
 
 **Phase visibility**
 
@@ -146,7 +160,7 @@ Reuse **mini-article** pattern ([`preseason.md`](preseason.md#preseason-report--
 | **User portal sign** | **Commit** story (your school) |
 | **Sim-week** user portal AI | Same generators as league |
 
-**Priority:** Portal stories use **same** recency sort as other headlines — **no** artificial boost on dashboard or Stories tab.
+**Sort:** Headlines compete on **recency + story priority** (same queue for dashboard slice and hub Stories). Portal lines show on the dashboard whenever they’re recent enough to land in the top **N** — no separate “portal-only” dashboard mode.
 
 ---
 
@@ -164,7 +178,7 @@ Reuse **mini-article** pattern ([`preseason.md`](preseason.md#preseason-report--
 
 | Doc | Hook |
 |-----|------|
-| [`transfer-portal.md`](transfer-portal.md) | Calendar, Top 40 lock, News-heavy |
+| [`transfer-portal.md`](transfer-portal.md) | Calendar, hub-first UX |
 | [`recruiting-engine.md`](recruiting-engine.md) | Action hub, Top 60 recruits |
 | [`game-frame.md`](game-frame.md) | Chrome, shallow dashboard News |
 
@@ -174,4 +188,4 @@ Reuse **mini-article** pattern ([`preseason.md`](preseason.md#preseason-report--
 
 | Date | Change |
 |------|--------|
-| 2026-11-09 | Initial News hub deep dive — Portal tab + Stories taxonomy |
+| 2026-11-09 | Initial News hub — Portal tab supplementary to Recruiting hub |

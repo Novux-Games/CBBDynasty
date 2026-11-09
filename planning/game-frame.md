@@ -222,10 +222,11 @@ Tap player → [`player-cards.md`](player-cards.md) preview → View more.
 
 ## News tab (dashboard)
 
-**Shallow league feed** — biggest **headlines only** (top N stories).
+**Headlines only** — same story queue as **News hub**, truncated to top **N** (see [`news-hub.md`](news-hub.md#surfaces)).
 
-- Not the full News hub (no draft class board, full recruit list here).
-- Tap headline → story detail or deep link into **News hub** when needed.
+- Portal commits/entries can appear here when they’re in the recent slice — **not** a separate “lite portal” feed.
+- No Portal Top 40, full Recruits list, or Draft board on this tab.
+- Tap headline → story detail or **News hub** for full depth / tabs.
 
 ---
 
