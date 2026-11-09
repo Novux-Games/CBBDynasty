@@ -93,7 +93,7 @@ On **broken:** loyalty **down**, **transfer risk** ([below](#transfer-risk)), op
 
 | Trigger | Effect |
 |---------|--------|
-| **Broken promise** | Player eligible for **portal intent** next **Offseason Week 1** (or mid-season **intent** event if balance enables rare in-season unrest) |
+| **Broken promise** | Player eligible for **portal intent** at next **Offseason Week 1** only — **no** in-season transfer path ([`transfer-portal.md`](transfer-portal.md)) |
 | **Low loyalty** + benching | Adds weight to **≥1 user transfer** design lock ([`offseason.md`](offseason.md)) |
 | **Retention Week 1** | **Convince to stay** uses **loyalty**, **promise status**, NIL bump, coach ratings — kept promise is a strong positive |
 
