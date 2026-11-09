@@ -19,7 +19,7 @@
 9. [AI entry drivers](#ai-entry-drivers)
 10. [AI spend](#ai-spend)
 11. [UX — Hub-first (design lock)](#ux--hub-first-design-lock)
-12. [UX — Dashboard (follow-up)](#ux--dashboard-follow-up)
+12. [UX — Dashboard optional tasks (portal only)](#ux--dashboard-optional-tasks-portal-only)
 
 ---
 
@@ -159,11 +159,26 @@ User sees **outcomes** only (who entered), not internal reason.
 | **Read — dashboard** | **News** bottom tab — **headlines only** (top **N**); portal stories included when recent ([`news-hub.md`](news-hub.md#surfaces)) |
 | **Read — depth** | **News hub** — full Stories + **Portal** tab (Top 40, trackers) Weeks 1–5; same headline pool, more UI |
 
-## UX — Dashboard (follow-up)
+## UX — Dashboard optional tasks (portal only)
 
-| Topic | Status |
-|-------|--------|
-| **Optional portal tasks** Weeks 2–5 | **Follow-up** with in-season recruiting dashboard pattern — not locked in this doc |
+**Scope:** **Offseason Weeks 2–5** only. **Optional** — never block **Advance week** ([`game-frame.md`](game-frame.md#dashboard-task-gate)). **HS/JUCO** dashboard nudges are a **recruiting follow-up** doc — not here.
+
+| Trigger | Task (examples) | Deep link |
+|---------|------------------|-----------|
+| **Portal window** | “Transfer Portal — Offseason Week {2–5}” (dismissable) | Recruiting → **Portal** → **Recommended** |
+| **Week 2 lock** | “Portal Top 40 published” (ack / dismiss) | News hub **Portal** tab or Portal **Recommended** |
+| **Pipeline entrant** | “{Name} in portal ({prior school})” | Portal profile → **Add to board** |
+| **Open scholarships** | After Week 1 losses: “{K} slots open” when &lt; 15 and spend still available | Portal **Recommended** |
+| **Signing crunch** | “Signing week R{#} — 1.5× points” (flavor) | Portal hub |
+| **Watchlist nudge** | Rival commit / decommit on **your** portal board target | Portal sheet for that player |
+
+**Week 1:** **Roster / Transfer** tabs on Players Leaving — **not** duplicated as dashboard optional cards.
+
+**Sim-week / advance:** Unfinished optional portal nudges → confirm line + **AI user-school** portal spend on **Recommended** (same family as [`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week) — portal slice only).
+
+### Recruiting dashboard tasks
+
+**Follow-up** (separate planning pass) — drip, HS watchlist, rival commits, etc. [`recruiting-engine.md`](recruiting-engine.md#in-season-dashboard-tasks).
 
 ---
 
@@ -184,3 +199,4 @@ User sees **outcomes** only (who entered), not internal reason.
 | 2026-11-09 | Roster/Transfer tabs; considering vs entrant pool; 2026 eligibility; Top 40 @ Week 2 |
 | 2026-11-09 | Roster tab excludes portal entrants; mutual exclusion between tabs |
 | 2026-11-09 | Hub-first portal UX; news-hub supplementary |
+| 2026-11-09 | Portal-only optional dashboard tasks Weeks 2–5 |
