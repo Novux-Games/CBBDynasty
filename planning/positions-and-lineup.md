@@ -1,6 +1,6 @@
 # Positions & lineup
 
-**Used in:** [`game-frame.md`](game-frame.md) (Strategy → rotation), [`simulation-engine.md`](simulation-engine.md), [`player-cards.md`](player-cards.md).  
+**Used in:** [`game-frame.md`](game-frame.md) (Strategy → rotation), [`simulation-engine.md`](simulation-engine.md), [`player-cards.md`](player-cards.md), **Signing Day** position editor ([`recruiting-engine.md`](recruiting-engine.md#signing-day-position-editor)).  
 **Last updated:** 2025-11-08
 
 ---

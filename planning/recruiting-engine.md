@@ -37,7 +37,7 @@ Seeding in **preseason** — not offseason — so **Top 60 recruits** live in **
 
 | Phase | HS/JUCO access |
 |-------|----------------|
-| **Preseason → Signing (offseason week 5)** | Full **Recruiting** hub — scout, spend points/NIL, soft commits in-season; **hard sign** at cycle close |
+| **Preseason → Signing Day (offseason week 6)** | Full **Recruiting** hub — spend points/NIL, soft commits in-season; **hard sign** on **Signing Day** week after **R4** |
 | **After signing close** | Board read-only for enrolled class; next class seeds next **preseason** |
 
 **New dynasty:** **Season 1** runs the same **preseason seed** before the first exhibitions so **Top 60** is available from tipoff of year one.
@@ -74,7 +74,7 @@ Preseason (class seed)
 | Anchor | Calendar |
 |--------|----------|
 | **Cycle opens** | Preseason **Incoming Class Seed** completes — pools + Top 60 published |
-| **Cycle closes** | Offseason **week 5** (**Recruiting week 4** — signing) |
+| **Cycle closes** | Offseason **week 6** — **Signing Day** (after **R4** on week 5) |
 | **Portal sub-cycle** | Entrants from offseason **week 1**; portal sub-tab spend when window is open ([`offseason.md`](offseason.md)) — same hub, not a second app |
 
 ### Weekly economy
@@ -91,7 +91,7 @@ Next cycle’s weekly pool is set at **preseason** from **`programPrestige`** (a
 | Type | When |
 |------|------|
 | **Soft commit** | Anytime interest + offer thresholds met (including **in-season**) |
-| **Hard commit / sign** | **Signing close** at end of offseason **week 5** (binding; NIL snapshot) |
+| **Hard commit / sign** | **Signing Day** at end of offseason **week 6** (binding; NIL snapshot) |
 | **Decommit** | Allowed before hard sign; prestige hit per existing rules |
 
 Headlines in **News** for blue-chip commits league-wide; your targets also spawn **optional dashboard recruiting tasks** when action is recommended (see [In-season dashboard tasks](#in-season-dashboard-tasks)).
@@ -114,7 +114,7 @@ Headlines in **News** for blue-chip commits league-wide; your targets also spawn
 
 ### What does *not* change
 
-- Star bands, pool sizes, no visits, Top 60 fixed at seed, combined HS/JUCO board, portal sub-tab, walk-ons after main window.
+- Star bands, pool sizes, **official visits** (RS → **R4**), Top 60 fixed at seed, combined HS/JUCO board, portal sub-tab, walk-ons after **Signing Day**.
 - **Four recruiting week indices (R1–R4)** still map to **offseason weeks 2–5** for copy, NIL peaks, and crunch multiplier — they are **not** the only weeks you can spend.
 
 ### Transfer portal
@@ -137,7 +137,8 @@ Portal star bands on **final entrants** only; **Portal Top 40** locked at **star
 | **R1** | Offseason **week 2** | Portal **sub-tab** peak; **NBA draft results**; scholarships open after draft |
 | **R2** | Offseason **week 3** | Peak offers; NIL pushes |
 | **R3** | Offseason **week 4** | Commit wave; head-to-head resolution |
-| **R4** | Offseason **week 5** | **Signing close**; hard commits lock |
+| **R4** | Offseason **week 5** | Last **signing crunch** week; **official visits** close; last chance to soft-commit before Signing Day |
+| **Signing Day** | Offseason **week 6** | **Hard sign**; class locks; [Signing Day tasks](#signing-day-offseason-week-6) |
 
 Week 1 offseason = **retention** on your roster ([`offseason.md`](offseason.md#week-1--players-leaving)). In-season recruiting uses **optional** dashboard tasks only ([`game-frame.md`](game-frame.md#dashboard-task-gate)).
 
@@ -263,22 +264,69 @@ Two spend tracks while the **recruiting cycle** is open:
 | **Recruiting points** | **Relationship & evaluation labor** — scout, contact, offer, pitch (below) |
 | **NIL dollars** (or **deal points** — one global format) | **Money on the table** toward a recruit’s **valuation** / ask — **not** paid from the weekly points pool |
 
-### What recruiting points buy (design lock)
+### Weekly points accounting (design lock)
 
-**No campus visits** — the points pool is the entire “contact & evaluation” game. **NIL** is a separate spend when you put dollars toward a recruit’s ask.
+| Rule | Detail |
+|------|--------|
+| **Tier grant** | Each week while the cycle is open, add that cycle’s **fixed** prestige-tier **weekly pool** — the **assigned** pool size **does not change** week-to-week until the next cycle (see [below](#prestige-tier-weekly-pool-design-lock)) |
+| **Carryover** | **50%** of **unspent** points at week end roll forward; other 50% expires ([carryover](#carryover)) |
+| **Default spend** | Points spent on an action **stay spent** for that week unless the action is **[refunded](#refunded-actions-week-reservation)** |
+| **Refunded actions** | Cost counts only in the **week you pay**; at **week advance**, if the action is still active (offer out, visit scheduled, etc.), those points **return** to your next week’s spendable balance |
 
-| Action | Recruiting points | Outcome |
-|--------|-------------------|---------|
-| **Scout** | Yes | Improves **letter grades** and **archetype fit** visibility on the recruit sheet (hidden 0–99 stay hidden until commit); required to trust evaluation before heavy pursuit |
-| **Call** | Yes | **Interest** gain (persistent across weeks); baseline relationship spend |
-| **Scholarship offer** | Yes | Puts a **scholarship** on the table; unlocks serious interest growth and path to **soft commit** when interest + thresholds met |
-| **Coach promise** (at offer / commit) | No extra points | **Binding** minutes/role/stay pledge — [`player-loyalty-promises.md`](player-loyalty-promises.md); affects **loyalty**, **transfers**, **draft declare** |
-| **Priority bump** | Yes | Concentrates staff attention on one target — stronger interest swing vs other schools recruiting the same player |
-| **Playing-time pitch** | Yes (optional) | One-off **interest** bump for recruits who weight minutes / role ([interest model](#interest--offers)) |
+**Example:** Scholarship offer **150** in **Week 1**. You spend your entire pool that week. The **150** is **refunded** when Week 1 closes while the offer remains → you can spend that **150** again in Week 2 (and every later week the offer stays open, unless you revoke the offer).
 
-**Not purchased with recruiting points:** **NIL allocations** (annual **$** pool), adding a player to **Board / Targets** (free), or **Recommended** list browsing (free). **Commits** are outcomes when **interest + offer + NIL** (if needed) align — not a separate point spend.
+### Action costs (design lock)
 
-Per-action **costs** and **interest deltas** tune in `balance-2026.json` → `recruiting.actions` (when loaders ship).
+Authoritative costs: [`balance-2026.json`](../assets/balance/balance-2026.json) → `recruiting.actions`. **NIL** is separate ([annual pool](#nil-annual)).
+
+| Action | Cost (pts) | Refunded? | Limits |
+|--------|------------|-----------|--------|
+| **Scholarship offer** | **150** | **Yes** — week reservation while offer stands | Revoke offer → reservation ends |
+| **DM** | **50** | No | Repeatable |
+| **Phone call** | **100** | No | Repeatable |
+| **Send the house** | **500** | No | Big attention swing; use sparingly |
+| **Scout their game** | **50** | **Yes** — same week-reservation rule | **Once per recruit per season**; **regular season only** — sharpens letter grades / fit on sheet |
+| **Official visit** | **50 / 100 / 150** by [visit distance](#official-visit-distance) | **Yes** — week reservation while visit pending/completed that week | **Once per recruit per season**; window **RS start → end of R4** (through offseason **week 5**) |
+| **Bonus points** | **Spend remainder** (any amount ≤ unspent balance) | No | Dump leftover weekly points into **attention** on one target — primary edge for **blue bloods** once headline actions are exhausted |
+
+**Coach promise** (at offer / commit): **0** recruiting points — [`player-loyalty-promises.md`](player-loyalty-promises.md).
+
+**Not purchased with recruiting points:** **NIL $**, **Board / Targets** (free), **Recommended** browsing (free). **Soft/hard commits** are outcomes when interest + offer + NIL align.
+
+#### Refunded actions (week reservation)
+
+1. On spend, subtract cost from **this week’s** spendable pool immediately.
+2. If the player **ends the week at 0** spendable but still has an active refunded action, the engine still treats the reservation as spent **for that week only**.
+3. On **week advance**, for each active refunded reservation, **credit the cost back** before applying the next week’s tier grant (+ carryover).
+
+#### Official visit distance
+
+| Band | Cost | Examples (tunable) |
+|------|------|---------------------|
+| **Local** | **50** | In-state or adjacent pipeline state |
+| **Regional** | **100** | Same broad region, not local |
+| **Remote** | **150** | Cross-country / low geography fit |
+
+#### Bonus points
+
+- User allocates **all or part** of remaining **weekly** points to one recruit after other actions.
+- Drives **marginal interest** and simulates volume recruiting; high-prestige programs with large pools lean on this after DM/call/house.
+- Interest delta per point tunes in balance JSON (`recruiting.actions.bonusPoints`).
+
+### Signing Day (offseason week 6)
+
+**After R4** (offseason **week 5**) — dedicated **Signing Day** phase inside the dynasty shell ([`offseason.md`](offseason.md#week-6--signing-day)).
+
+| Rule | Detail |
+|------|--------|
+| **Hard sign** | All **soft commits** finalize; unsigned targets leave the class (AI signs elsewhere) |
+| **Recruiting points** | **No** new weekly tier grant for new chasing — administrate the class |
+| **Required dashboard tasks** | **View Recruiting Rankings** (full Top 60 / class context) · **Change positions** on incoming class ([quick roster editor](#signing-day-position-editor)) |
+| **After advance** | Cycle closed for that class; walk-on window may open ([walk-ons](#walk-ons)) |
+
+#### Signing Day position editor
+
+Loads the **customized roster engine** for incoming commits (and portal signees already on the class list): quick **position** changes (PG–C / flex) before roster lock — same validation as [`positions-and-lineup.md`](positions-and-lineup.md), streamlined UI for bulk edits.
 
 ### Prestige tier weekly pool (design lock)
 
@@ -328,7 +376,7 @@ Per-action **costs** and **interest deltas** tune in `balance-2026.json` → `re
 | **NIL offered** vs recruit **valuation** | Underfunding stalls interest |
 | **Coach recruiting** + staff | Charisma / point efficiency |
 | **Home state / region** | In-state & nearby-state pipeline vs program `homeState` |
-| **Playing time pitch** | Optional **point** action ([What recruiting points buy](#what-recruiting-points-buy-design-lock)) |
+| **Send the house / bonus points** | Large or remainder **point** actions ([Action costs](#action-costs-design-lock)) |
 | **Recent success** | Tourney run, NET / Media rank |
 
 **NIL** committed at offer time writes toward signing number on [`player-cards.md`](player-cards.md) Overview when hard commit lands.
@@ -408,13 +456,12 @@ Transfer **portal** sub-tab uses the **same** default tab pattern: **Recommended
 
 | Action | Spends | See |
 |--------|--------|-----|
-| Scout | Recruiting points | [What points buy](#what-recruiting-points-buy-design-lock) |
-| Call | Recruiting points | |
-| Scholarship offer (+ optional **promise**) | Recruiting points | [`player-loyalty-promises.md`](player-loyalty-promises.md) |
-| Priority bump | Recruiting points | |
-| Playing-time pitch | Recruiting points | |
+| DM / Phone call / Send the house | Recruiting points | [Action costs](#action-costs-design-lock) |
+| Scholarship offer (+ optional **promise**) | Recruiting points (refunded) | [`player-loyalty-promises.md`](player-loyalty-promises.md) |
+| Scout their game / Official visit | Recruiting points (refunded) | [Limits](#action-costs-design-lock) |
+| Bonus points | Remaining weekly points | |
 | NIL allocation | **NIL $** only | Not points |
-| Drop target | — | |
+| Drop target / revoke offer | — | Ends refunded reservation |
 
 Tap recruit → **recruit sheet** (preview): stars, letters, NIL ask, interest, actions — **not** full player card until commit.
 
@@ -454,7 +501,7 @@ Each program each week:
 
 1. Build **Recommended** ordering for HS/JUCO (and portal sub-tab when open) from that school’s prestige, pipeline, roster holes, and `nilAsk` vs pool.
 2. Respect **realistic capacity** from prestige tier ([weekly pool table](#prestige-tier-weekly-pool-design-lock)) — e.g. Low-Major focuses on **2–3** core targets, Blue Blood runs a **full national** board.
-3. Spend **weekly points** on **scout → call → offer** down the list; allocate **NIL $** when interest stalls on high asks.
+3. Spend **weekly points** on **offer → DM / call → house → bonus** down the list; **scout game / visit** when windows allow; allocate **NIL $** when interest stalls on high asks.
 
 ### When it runs
 
@@ -473,7 +520,7 @@ Each program each week:
 | **News** | Headlines for blue-chip and upset commits league-wide |
 | **Portal** | Entrants get a **fresh Recommended** pool for portal signers only |
 
-**Not in v1 doc:** per-action point costs ([Open / TBD](#open--tbd)) — AI uses the same costs once balance JSON defines them.
+AI uses the same [action costs](#action-costs-design-lock) and refund rules as the user.
 
 ---
 
@@ -483,7 +530,7 @@ Each program each week:
 |------|------|
 | **Soft commit** | Reserves interest; can decommit (prestige hit) |
 | **Hard commit** | Locks scholarship; NIL snapshot stored |
-| **Signing** | End of **recruiting week 4** — binding for HS/JUCO |
+| **Signing** | **Signing Day** — offseason **week 6** after **R4** — binding for HS/JUCO |
 | **Portal** | Commit when offer accepted; roster attach per portal ruleset |
 
 After signing, recruits appear on **Committed** and (when appropriate) next season roster preview; uncommitted HS/JUCO remain in sim as open or walk-on fodder for AI.
@@ -496,7 +543,7 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 
 | Element | Behavior |
 |---------|----------|
-| **Entry** | Offseason notification after **recruiting week 4** |
+| **Entry** | Offseason notification after **Signing Day** (week 6) |
 | **Board** | Small list (5–15) of **local** prospects; letter grades like HS pool |
 | **Actions** | Offer walk-on spot (no scholarship); requires open roster slot |
 | **Limit** | Max **2** new walk-ons per season |
@@ -513,6 +560,7 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | Coach recruiting | [`coach-card.md`](coach-card.md) ratings |
 | Archetype | [`player-archetypes.md`](player-archetypes.md) hidden tag |
 | Offseason weeks 2–5 | Signing crunch (R1–R4); 1.5× tier weekly pool |
+| Signing Day week 6 | Hard sign + rankings + position editor |
 
 ---
 
@@ -522,11 +570,12 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 |-------|----------|
 | **3★ / 2★** | **20–50%** = 3★, **50–100%** = 2★ (with 5★ / 4★ bands above) |
 | **Recruiting point carryover** | **50%** of unused points to next week; rest expires |
-| **Visits** | **None** — points-only actions |
+| **Official visits** | **50 / 100 / 150** by distance; refunded; once per recruit; RS → R4 |
+| **Action costs** | DM 50, call 100, house 500, offer 150, scout game 50 — see [table](#action-costs-design-lock) |
 | **Top 60 (recruits)** | **Fixed** after class seed; UI shows **#1–#60**, not top-25 crop |
 | **AI recruiting visibility** | **Off-screen** — user sees **own** hub only |
 | **HS class size** | **Uniform random 2,000–4,000** per season |
-| **Year-long cycle** | Spend preseason → signing (OS week 5); **optional** in-season dashboard tasks |
+| **Year-long cycle** | Spend preseason → **Signing Day** (OS week 6); **optional** in-season dashboard tasks |
 | **Sim week** | Advance may auto-sim games + AI user recruiting after confirmation — [`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week) |
 | **Weekly recruiting pool** | **Fixed** per cycle from prestige tier table; recap sets **next** cycle |
 | **Signing crunch** | **1.5×** tier weekly pool offseason weeks 2–5 |
@@ -538,6 +587,7 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 |-------|--------|
 | Tier interpolation edge cases | `balance-2026.json` → `recruiting.prestigeTiers` |
 | `signLikelihood` bands & prestige–star curve | Tune in balance bundle `recruiting.recommended` |
+| Interest deltas per action | `recruiting.actions.*` in balance JSON |
 | ~~Offseason frame UI~~ | **Resolved** — tasks in [`offseason.md`](offseason.md) + shell in [`game-frame.md`](game-frame.md) |
 
 ---
@@ -556,3 +606,4 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | 2026-11-09 | Optional in-season recruiting dashboard tasks; sim-week advance confirmation |
 | 2026-11-09 | Recommended tab default; signLikelihood for low-prestige fit |
 | 2026-11-09 | Prestige tier weekly recruiting pool; fixed per cycle; recap sets next year |
+| 2026-11-09 | Action cost table, refunded reservations, official visits, bonus points, Signing Day week 6 |

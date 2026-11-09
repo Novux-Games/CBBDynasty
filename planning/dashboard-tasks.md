@@ -55,13 +55,14 @@
 |------|----------------------|----------------------|
 | **1 — Players Leaving** | Resolve **mandatory** declare/grad flows as engine queues them; **Pro days** for draft-bound when sheet open | — |
 | **1 — layout** | **Roster / Transfer** screen — **not** duplicated as optional cards | Encourage transfer / convince stay on dedicated tabs only |
-| **2–5 — Recruiting & Portal** | **Signing close** obligations at **Week 5** if any hard **required** copy ships that week (class lock) | **Portal optional tasks** — full table: [Portal optional tasks](transfer-portal.md#ux--dashboard-optional-tasks-portal-only) |
-| **2–5 — HS/JUCO** | None (year-long spend; never blocks advance) | **Recruiting optional tasks** — [triggers](recruiting-engine.md#in-season-dashboard-tasks) (drip, watchlist, rivals, …) |
-| **6 — Summer Workouts** | None | **Review workout report** (sheet) |
-| **7 — Cuts & Roster Lock** | **Roster ≤ 15** scholarships before advance | Walk-on tryouts if surfaced |
-| **8 — Fundraising** | None unless upgrade purchase is framed as required (tune in UI) | Fundraising events, facility upgrades, naming |
-| **9 — Conference Offers** | **Season 2+:** respond to **realignment offer cards** | — |
-| **Season 1** | Week 9 **skipped** | — |
+| **2–5 — Recruiting & Portal** | None | **Portal optional tasks** — [table](transfer-portal.md#ux--dashboard-optional-tasks-portal-only) |
+| **2–5 — HS/JUCO** | None (year-long spend; never blocks advance) | **Recruiting optional tasks** — [triggers](recruiting-engine.md#in-season-dashboard-tasks) |
+| **6 — Signing Day** | **View Recruiting Rankings** · **Change positions** on incoming class | — |
+| **7 — Summer Workouts** | None | **Review workout report** (sheet) |
+| **8 — Cuts & Roster Lock** | **Roster ≤ 15** scholarships before advance | Walk-on tryouts if surfaced |
+| **9 — Fundraising** | None unless upgrade purchase is framed as required (tune in UI) | Fundraising events, facility upgrades, naming |
+| **10 — Conference Offers** | **Season 2+:** respond to **realignment offer cards** | — |
+| **Season 1** | Week 10 **skipped** | — |
 
 ---
 

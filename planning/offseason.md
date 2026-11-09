@@ -16,10 +16,11 @@
 4. [Coaching Carousel](#coaching-carousel)
 5. [Week 1 — Players Leaving](#week-1--players-leaving)
 6. [Weeks 2–5 — Recruiting & Transfer Portal](#weeks-25--recruiting--transfer-portal)
-7. [Week 6 — Summer Workouts](#week-6--summer-workouts)
-8. [Week 7 — Cuts & Roster Lock](#week-7--cuts--roster-lock)
-9. [Week 8 — Fundraising & Upgrades](#week-8--fundraising--upgrades)
-10. [Week 9 — Conference Offers](#week-9--conference-offers)
+7. [Week 6 — Signing Day](#week-6--signing-day)
+8. [Week 7 — Summer Workouts](#week-7--summer-workouts)
+9. [Week 8 — Cuts & Roster Lock](#week-8--cuts--roster-lock)
+10. [Week 9 — Fundraising & Upgrades](#week-9--fundraising--upgrades)
+11. [Week 10 — Conference Offers](#week-10--conference-offers)
 11. [Advance & save](#advance--save)
 12. [Cross-links](#cross-links)
 
@@ -50,21 +51,22 @@ Display order each **offseason** (after the last season’s postseason):
 │  Week 2   Recruiting / Portal  +  Pro draft results        │
 │  Week 3   Recruiting / Portal                              │
 │  Week 4   Recruiting / Portal                              │
-│  Week 5   Recruiting / Portal                              │
-│  Week 6   Summer Workouts (auto)                             │
-│  Week 7   Cuts & Roster Lock                               │
-│  Week 8   Fundraising & Upgrades                           │
-│  Week 9   Conference Offers (skip Season 1)                │
+│  Week 5   Recruiting / Portal (R4)                         │
+│  Week 6   Signing Day (hard sign, rankings, positions)     │
+│  Week 7   Summer Workouts (auto)                           │
+│  Week 8   Cuts & Roster Lock                               │
+│  Week 9   Fundraising & Upgrades                           │
+│  Week 10  Conference Offers (skip Season 1)                │
 └─────────────────────────────────────────────────────────────┘
                           →  PRESEASON  (next doc)
 ```
 
-**Save field:** `offseasonWeek` **1–9** during numbered weeks; `phaseId: "coaching_carousel"` when in carousel (no “Week 0” in UI).
+**Save field:** `offseasonWeek` **1–10** during numbered weeks; `phaseId: "coaching_carousel"` when in carousel (no “Week 0” in UI).
 
 | UI label | Internal | Season 1 |
 |----------|----------|----------|
 | **Coaching Carousel** | `coaching_carousel` | **Skipped** |
-| **Offseason Week 1** … **9** | `1` … `9` | Weeks **1–8** run; **Week 9 skipped** |
+| **Offseason Week 1** … **10** | `1` … `10` | Weeks **1–9** run; **Week 10 skipped** |
 
 ---
 
@@ -74,9 +76,9 @@ Display order each **offseason** (after the last season’s postseason):
 |-------|---------------------|-----------|
 | **Coaching Carousel** | **No** — user just hired at school | **Yes** — full league carousel |
 | **Week 1** | Generated/handoff roster; seniors may graduate; **≥1** transfer intent on user roster | Post-season roster rollover |
-| **Week 9 Conference Offers** | **Skipped** | Realignment offer cards |
+| **Week 10 Conference Offers** | **Skipped** | Realignment offer cards |
 
-**Preseason** follows the same way after Week 8 (Season 1) or Week 9 (later).
+**Preseason** follows after Week 9 (Season 1) or Week 10 (later).
 
 ---
 
@@ -170,24 +172,39 @@ Week 1 does **not** post final draft order — results publish in **Week 2**.
 
 **Labels:** **Offseason Week 2** … **Week 5** · shared shell **Recruiting & Transfer Portal**
 
-Authoritative recruiting rules: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock). **Spend** is **year-long** (preseason through week 5); these four weeks are **signing crunch** (1.5× drip, portal peak).
+Authoritative recruiting rules: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock). **Spend** is **year-long** through **R4** (week 5); **Signing Day** week 6; weeks 2–5 are **signing crunch** (1.5× drip, portal peak).
 
 | Week | Highlights |
 |------|------------|
 | **2** | **R1** — **NBA draft results**; scholarships open; portal **sub-tab** peak; signing crunch begins |
 | **3** | **R2** — Peak offers; NIL pushes |
 | **4** | **R3** — Commit wave |
-| **5** | **R4** — **Signing close**; hard commits lock |
+| **5** | **R4** — Last recruiting crunch week; **official visits** close |
 
-**Portal:** Incoming class from league-wide entries (including your Week 1 losses). **HS/JUCO:** Pool seeded **last preseason**; user may have been spending all season — crunch weeks close the class.
+**Portal:** Incoming class from league-wide entries (including your Week 1 losses). **HS/JUCO:** Pool seeded **last preseason**; user may have been spending all season — crunch weeks feed **Signing Day**.
 
 **Recruiting week index:** R1 = offseason week 2, … R4 = offseason week 5.
 
 ---
 
-## Week 6 — Summer Workouts
+## Week 6 — Signing Day
 
-**Label:** **Offseason Week 6** · **Summer Workouts**
+**Label:** **Offseason Week 6** · **Signing Day**
+
+Authoritative: [`recruiting-engine.md`](recruiting-engine.md#signing-day-offseason-week-6).
+
+| Task / rule | Detail |
+|-------------|--------|
+| **Hard sign** | Soft commits finalize; NIL snapshot; recruiting cycle **closes** for this class |
+| **View Recruiting Rankings** | **Required** dashboard task — Top 60 / national recruit context |
+| **Change positions** | **Required** — quick position editor on incoming class (PG–C) before roster flows continue |
+| **Recruiting spend** | No new pursuit drip — administration only |
+
+---
+
+## Week 7 — Summer Workouts
+
+**Label:** **Offseason Week 7** · **Summer Workouts**
 
 | Behavior | Detail |
 |----------|--------|
@@ -200,9 +217,9 @@ User: **Advance week** or review **workout report** (optional sheet).
 
 ---
 
-## Week 7 — Cuts & Roster Lock
+## Week 8 — Cuts & Roster Lock
 
-**Label:** **Offseason Week 7** · **Cuts & Roster Lock**
+**Label:** **Offseason Week 8** · **Cuts & Roster Lock**
 
 | Rule | Detail |
 |------|--------|
@@ -211,13 +228,13 @@ User: **Advance week** or review **workout report** (optional sheet).
 | **Walk-on tryouts** | Optional **≤2** walk-ons per season ([`recruiting-engine.md`](recruiting-engine.md#walk-ons)) after main signing |
 | **Lock** | End of week → **roster locked** for preseason exhibitions |
 
-Must be ≤ **15** before leaving Week 7.
+Must be ≤ **15** before leaving Week 8.
 
 ---
 
-## Week 8 — Fundraising & Upgrades
+## Week 9 — Fundraising & Upgrades
 
-**Label:** **Offseason Week 8** · **Fundraising & Upgrades**
+**Label:** **Offseason Week 9** · **Fundraising & Upgrades**
 
 | Activity | Detail |
 |----------|--------|
@@ -229,13 +246,13 @@ Upgrades apply per facility rules (some bonuses **next recruiting cycle**).
 
 ---
 
-## Week 9 — Conference Offers
+## Week 10 — Conference Offers
 
-**Label:** **Offseason Week 9** · **Conference Offers**
+**Label:** **Offseason Week 10** · **Conference Offers**
 
 | Rule | Detail |
 |------|--------|
-| **Season 1** | **Phase skipped** — calendar jumps from Week 8 → **Preseason** |
+| **Season 1** | **Phase skipped** — calendar jumps from Week 9 → **Preseason** |
 | **Season 2+** | Realignment / conference invite **offer cards**; accept/decline ([`game-design.md`](game-design.md#conference-realignment)) |
 
 ---
@@ -267,3 +284,4 @@ Dynasty metadata: `offseasonWeek`, `phaseId`, `seasonIndex`, `skipConferenceOffe
 | Date | Change |
 |------|--------|
 | 2025-11-09 | Initial calendar: carousel, weeks 1–9, Season 1 exceptions |
+| 2026-11-09 | Week 6 Signing Day; weeks 7–10 renumbered; Season 1 skips week 10 |

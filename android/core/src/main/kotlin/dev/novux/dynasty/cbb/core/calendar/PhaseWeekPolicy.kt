@@ -8,7 +8,7 @@ import dev.novux.dynasty.cbb.core.GameConstants
 object PhaseWeekPolicy {
     fun weeksInPhase(phase: CalendarPhase): Int =
         when (phase) {
-            CalendarPhase.Offseason -> 9
+            CalendarPhase.Offseason -> 10
             CalendarPhase.Preseason -> 1
             CalendarPhase.Exhibition -> 3
             CalendarPhase.RegularSeason -> GameConstants.MAX_REGULAR_SEASON_GAMES
