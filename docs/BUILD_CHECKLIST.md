@@ -23,6 +23,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | [`league-branding.md`](../planning/league-branding.md) + [`2026-NCAA-Directory.md`](../planning/2026-NCAA-Directory.md) | 3.1–3.2, 9.3 |
 | [`ncba-branding.md`](../planning/ncba-branding.md) | 7.3, 9.5, 11.5, 13.2 |
 | [`news-hub.md`](../planning/news-hub.md) | 9.8–9.9, 14.2; injury stories → **9.8** |
+| [`notifications.md`](../planning/notifications.md) *(draft)* | **16.1**, **9.1** feed, cross **9.6** task dedupe |
 | [`offseason.md`](../planning/offseason.md) | 4.6, 6.1–6.10, 14.4 |
 | [`player-archetypes.md`](../planning/player-archetypes.md) | 8.2 |
 | [`player-cards.md`](../planning/player-cards.md) | 8.1, 8.6; injury strip → **8.1** + **8.7** |

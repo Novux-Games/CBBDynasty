@@ -578,7 +578,7 @@ Gameplay is **sim-only**; see **[`simulation-engine.md`](simulation-engine.md)**
 | **Injuries** | Severity tiers; weeks out (calendar); medical staff reduces duration |
 | **Suspensions** | Administrative; X games |
 | **Academic eligibility** | Rolling grades; bench ineligible |
-| **Portal (in-season)** | Ruleset-driven window; user can lose players midseason |
+| **Portal** | **Offseason only** — Week 1 entries, Weeks 2–5 sign in Recruiting hub; **no** in-season transfers ([`transfer-portal.md`](transfer-portal.md)) |
 | **Chemistry** | Roster stability + coaching; affects clutch sim |
 | **Fatigue** | Back-to-back games, travel, and press schemes apply **standard** stamina penalties in sim |
 

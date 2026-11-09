@@ -27,7 +27,7 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | AI recruiting | **Done** — Recommended parity; **hidden** from UI | [`recruiting-engine.md`](recruiting-engine.md#ai-recruiting) |
 | Recruit rankings UI | **Top 60 full list** — not T25-style | [`recruiting-engine.md`](recruiting-engine.md#national-rankings-top-60) |
 | GOAT / History depth | **Specced** (computed GOAT list) | [`game-frame.md`](game-frame.md#history-hub) |
-| Notifications | Use game-design mobile UX list | [`game-design.md`](game-design.md) |
+| Notifications | **Draft** — answer open questions in doc | [`notifications.md`](notifications.md) |
 | App updates vs saves | **Rule:** ship migrations; old slots keep working | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility), [`ADR-002`](../docs/ADR-002-balance-ruleset-bundle.md) |
 | Build checklist sync | **Rule:** every **Done** spec → step(s) + [full index](../docs/BUILD_CHECKLIST.md#locked-specs--build-steps-index) | [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
 | Recruiting point actions | **Done** | [`recruiting-engine.md`](recruiting-engine.md#action-costs-design-lock) → **6.17–6.20**, **15.6** UI |
@@ -91,3 +91,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | 2026-11-09 | App-update save compatibility rule | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility) |
 | 2026-11-09 | Unified shell + week advance + dashboard task gate | [`game-frame.md`](game-frame.md) |
 | 2026-11-09 | BUILD_CHECKLIST sync for locked recruiting, portal, news, loyalty, dashboard | [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
+| 2026-11-09 | No in-season portal (game-design align); `notifications.md` draft | [`notifications.md`](notifications.md) |

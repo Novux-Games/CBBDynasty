@@ -435,7 +435,7 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History | March Ma
 | [`selection-engine.md`](selection-engine.md) | Poll + Seed Index |
 | [`transfer-portal.md`](transfer-portal.md) | Portal calendar, pool, Week 1 Roster tab, economy |
 
-Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`game-design.md`](game-design.md#notifications-android).
+Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`notifications.md`](notifications.md).
 
 ---
 
