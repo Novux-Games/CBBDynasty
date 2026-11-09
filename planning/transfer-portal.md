@@ -147,17 +147,17 @@ User sees **outcomes** only (who entered), not internal reason.
 
 ## AI spend
 
-[`recruiting-engine.md` → AI recruiting`](recruiting-engine.md#ai-recruiting) — Recommended ordering, hidden boards. League outcomes surface via [News-heavy](#ux--news-design-lock).
+[`recruiting-engine.md` → AI recruiting`](recruiting-engine.md#ai-recruiting) — Recommended ordering, hidden boards. League outcomes primarily via **Recruiting hub**; [`news-hub.md`](news-hub.md) for optional league read-only context.
 
 ---
 
-## UX — News (design lock)
+## UX — Hub-first (design lock)
 
 | Rule | Detail |
 |------|--------|
-| **News-heavy** | League-wide portal activity surfaces in **News** — commits, major entrants, flips, school-name headlines (national **ticker** feel) |
-| **Hub** | **Recruiting → Transfer Portal** stays authoritative for **your** spend; News drives awareness and drill-in |
-| **Deep dive** | [`news-hub.md`](news-hub.md) — Portal tab, Stories taxonomy, drill-ins |
+| **Primary** | **Recruiting → Transfer Portal** — spend, Recommended, board, commits |
+| **News hub** | **Supplementary** — Portal tab + Stories during Weeks 1–5 for league context; **not** a national ticker-first product ([`news-hub.md`](news-hub.md)) |
+| **Dashboard News** | Normal headline mix — portal lines appear, **no** portal-weighted priority bump |
 
 ## UX — Dashboard (follow-up)
 
@@ -183,4 +183,4 @@ User sees **outcomes** only (who entered), not internal reason.
 | 2026-11-09 | Initial spec |
 | 2026-11-09 | Roster/Transfer tabs; considering vs entrant pool; 2026 eligibility; Top 40 @ Week 2 |
 | 2026-11-09 | Roster tab excludes portal entrants; mutual exclusion between tabs |
-| 2026-11-09 | News-heavy portal UX; dashboard/news deep dives deferred |
+| 2026-11-09 | Hub-first portal UX; news-hub supplementary |

@@ -1,6 +1,6 @@
 # News hub — product spec
 
-**Context:** League narrative layer — **News-heavy** portal ([`transfer-portal.md`](transfer-portal.md#ux--news-design-lock)), HS commits, polls, bracketology, injuries. **Recruiting hub** stays the **action** surface; News is **awareness + drill-in**.  
+**Context:** League narrative + reference — **not** portal-primary. **Recruiting hub** owns portal **action** ([`transfer-portal.md`](transfer-portal.md#ux--hub-first-design-lock)). News hub adds Stories, optional **Portal** read-only tab in window, plus Recruits/Draft.  
 **Shell:** [`game-frame.md`](game-frame.md) — dashboard **News** tab (shallow) + hamburger **News** hub (full).  
 **Last updated:** 2026-11-09
 
@@ -25,7 +25,7 @@
 
 | Surface | Depth | Role |
 |---------|-------|------|
-| **Dashboard → News** (bottom nav) | **Shallow** — top **N** headlines (tunable, e.g. 8–12) | Ticker glance; portal + recruiting pins during window |
+| **Dashboard → News** (bottom nav) | **Shallow** — top **N** headlines (tunable, e.g. 8–12) | Mixed feed — **no** portal priority weighting |
 | **Hamburger → News hub** | **Full** — tabs below | Read, filter, trackers |
 
 **Phase visibility**
@@ -42,7 +42,7 @@
 
 **Default tab** in News hub. Reverse-chronological **headlines** + date chip; tap → [story detail](#story-detail--articles).
 
-### Headline types (portal — News-heavy)
+### Headline types (portal)
 
 | Type | When | Example line |
 |------|------|----------------|
@@ -146,7 +146,7 @@ Reuse **mini-article** pattern ([`preseason.md`](preseason.md#preseason-report--
 | **User portal sign** | **Commit** story (your school) |
 | **Sim-week** user portal AI | Same generators as league |
 
-**Priority:** During Weeks **2–5**, portal headlines **float above** generic poll noise on dashboard shallow feed (weighted sort, not separate app).
+**Priority:** Portal stories use **same** recency sort as other headlines — **no** artificial boost on dashboard or Stories tab.
 
 ---
 
