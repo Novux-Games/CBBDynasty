@@ -6,6 +6,7 @@ import dev.novux.dynasty.cbb.core.save.DynastyBootstrap
 import dev.novux.dynasty.cbb.core.save.DynastyLoadFailure
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.core.save.DynastySaveValidator
+import dev.novux.dynasty.cbb.core.roster.SeasonOneRosterGenerator
 import dev.novux.dynasty.cbb.core.save.NewGameDraft
 import dev.novux.dynasty.cbb.core.save.NewGameSignValidator
 import dev.novux.dynasty.cbb.core.save.DynastySchema
@@ -17,6 +18,7 @@ import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import dev.novux.dynasty.cbb.database.dynasty.toCoachEntity
+import dev.novux.dynasty.cbb.database.roster.toEntities
 import dev.novux.dynasty.cbb.database.dynasty.toEntity
 import dev.novux.dynasty.cbb.database.dynasty.toDomain
 import dev.novux.dynasty.cbb.database.save.SaveSlotEntity
@@ -34,6 +36,7 @@ class SaveSlotRepository(
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
     private val coachDao = database.dynastyCoachDao()
+    private val rosterDao = database.dynastyRosterDao()
     private val calendarDao = database.dynastyCalendarDao()
     private val mutex = Any()
 
@@ -171,6 +174,7 @@ class SaveSlotRepository(
             if (!dynastyId.isNullOrBlank()) {
                 metadataDao.deleteById(dynastyId)
                 coachDao.deleteByDynastyId(dynastyId)
+                rosterDao.deleteForDynasty(dynastyId)
                 weekCheckpointRepository.deleteForDynasty(dynastyId)
             }
             slotDao.clearSlot(slotIndex)
@@ -266,6 +270,8 @@ class SaveSlotRepository(
         database.withTransaction {
             metadataDao.upsert(metadata.toEntity())
             coachDao.upsert(draft.toCoachEntity(dynastyId))
+            val roster = SeasonOneRosterGenerator.generate(dynastyId)
+            rosterDao.upsertAll(roster.toEntities())
             weekCheckpointRepository.insertBootstrapCalendar(metadata)
             slotDao.upsert(
                 SaveSlotEntity(

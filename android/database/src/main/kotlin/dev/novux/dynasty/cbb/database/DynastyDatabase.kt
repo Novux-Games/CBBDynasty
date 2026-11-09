@@ -12,6 +12,8 @@ import dev.novux.dynasty.cbb.database.dynasty.DynastyCoachDao
 import dev.novux.dynasty.cbb.database.dynasty.DynastyCoachEntity
 import dev.novux.dynasty.cbb.database.dynasty.DynastyMetadataDao
 import dev.novux.dynasty.cbb.database.dynasty.DynastyMetadataEntity
+import dev.novux.dynasty.cbb.database.roster.DynastyRosterDao
+import dev.novux.dynasty.cbb.database.roster.DynastyRosterPlayerEntity
 import dev.novux.dynasty.cbb.database.save.SaveSlotDao
 import dev.novux.dynasty.cbb.database.save.SaveSlotEntity
 
@@ -22,8 +24,9 @@ import dev.novux.dynasty.cbb.database.save.SaveSlotEntity
         DynastyCalendarEntity::class,
         ProvisionalGameEntity::class,
         DynastyCoachEntity::class,
+        DynastyRosterPlayerEntity::class,
     ],
-    version = 5,
+    version = 6,
     exportSchema = false,
 )
 @androidx.room.TypeConverters(Converters::class)
@@ -34,6 +37,8 @@ abstract class DynastyDatabase : RoomDatabase() {
 
     abstract fun dynastyCoachDao(): DynastyCoachDao
 
+    abstract fun dynastyRosterDao(): DynastyRosterDao
+
     abstract fun dynastyCalendarDao(): DynastyCalendarDao
 
     abstract fun provisionalGameDao(): ProvisionalGameDao
@@ -43,7 +48,13 @@ abstract class DynastyDatabase : RoomDatabase() {
 
         fun build(context: Context): DynastyDatabase =
             Room.databaseBuilder(context, DynastyDatabase::class.java, DB_NAME)
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                .addMigrations(
+                    MIGRATION_1_2,
+                    MIGRATION_2_3,
+                    MIGRATION_3_4,
+                    MIGRATION_4_5,
+                    MIGRATION_5_6,
+                )
                 .build()
     }
 }
