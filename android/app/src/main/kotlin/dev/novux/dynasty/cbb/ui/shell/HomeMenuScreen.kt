@@ -17,11 +17,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.GameConstants
+import dev.novux.dynasty.cbb.core.save.SaveSlotSummary
 
 /** Pre-dynasty home — [planning/game-start.md#home-screen]. */
 @Composable
 fun HomeMenuScreen(
-    hasSave: Boolean,
+    continueSlot: SaveSlotSummary?,
     onContinue: () -> Unit,
     onNew: () -> Unit,
     onLoad: () -> Unit,
@@ -41,7 +42,15 @@ fun HomeMenuScreen(
             fontWeight = FontWeight.Bold,
         )
 
-        if (hasSave) {
+        if (continueSlot != null && !continueSlot.isEmpty) {
+            Text(
+                text = stringResource(
+                    R.string.home_continue_hint,
+                    continueSlot.schoolDisplayName.orEmpty(),
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
             Button(
                 onClick = onContinue,
                 modifier = Modifier.fillMaxWidth(),

@@ -2,7 +2,7 @@
 
 **Design lock:** Dynasties **start in offseason**, not preseason. Most coaching movement happens here — matching real hiring cycles. **Preseason** begins after offseason ([`preseason.md`](preseason.md)). **Entry:** after **[End of Season week](season-review.md)** (post postseason).
 
-**Companion UI (planned):** [`offseason-frame.md`](offseason-frame.md). **Recruiting depth:** [`recruiting-engine.md`](recruiting-engine.md). **Carousel / contracts:** [`game-design.md`](game-design.md#coaching-carousel--contracts). **New dynasty entry:** [`game-start.md`](game-start.md) → **Offseason Week 1**.
+**Shell:** Same dynasty chrome as in-season — [`game-frame.md`](game-frame.md). **Recruiting depth:** [`recruiting-engine.md`](recruiting-engine.md). **Carousel / contracts:** [`game-design.md`](game-design.md#coaching-carousel--contracts). **New dynasty entry:** [`game-start.md`](game-start.md) → **Offseason Week 1**.
 
 **Last updated:** 2025-11-09
 
@@ -34,7 +34,7 @@
 | **Carousel realism** | Labeled **Coaching Carousel** (not “Week 0”); runs **before** Week 1 on **season 2+** |
 | **User agency** | AI carousel resolves in background; **your** offers, extensions, assistant hires need approval |
 
-User advances **week** (default) or **day** inside dense phases (portal/recruiting) — same pattern as [`game-design.md`](game-design.md) offseason UX.
+User advances **week** only; dashboard tasks gate **Advance week** ([`game-frame.md`](game-frame.md#dashboard-task-gate)).
 
 ---
 
@@ -120,12 +120,17 @@ Notifications queue **offer cards**; carousel **pauses** for mandatory decisions
 
 ### Rosters processing
 
-| Bucket | UI | Interaction |
+**Layout tabs:** **Roster** · **Transfer** · draft declare — authoritative: [`transfer-portal.md`](transfer-portal.md#week-1--roster-vs-transfer-tabs).
+
+| Bucket | Tab | Interaction |
 |--------|-----|-------------|
-| **Graduating seniors** | List + draft projection | **No** stay — they **graduate** (roster exit) |
-| **Draft-eligible seniors** | Pro day + declare/leave | Pro days (below); leave for draft or graduate |
-| **Potential transfers** | Portal-intent list | **Convince to stay** (NIL, role, minutes pitch) |
-| **Early draft declarations (underclass)** | Declare list | **Convince to stay** (return) or allow leave |
+| **On roster, not in portal** | **Roster** only | **Encourage transfer** → **Roster tab drops them** → **Transfer tab only** |
+| **In portal** | **Transfer** only | **Not listed on Roster tab**; **convince to stay** → **Transfer tab drops them** → **Roster tab only** |
+| **Graduating seniors** | **Roster** | Graduate — not portal |
+| **Draft-eligible** | **Roster** + pro days | Pro days; draft or graduate |
+| **Early draft (underclass)** | Declare flow | Convince to stay / leave for draft |
+
+**Design lock:** **≥1** user player reaches **portal entry** league-wide intent unless user convinces all back from **Transfer** tab.
 
 **Design lock:** **At least one** player on the **user** roster will enter the **transfer portal intent** pool (AI schools also generate movement league-wide).
 
@@ -133,12 +138,17 @@ Notifications queue **offer cards**; carousel **pauses** for mandatory decisions
 
 ### Retention (transfer / early draft)
 
+Authoritative: [`player-loyalty-promises.md`](player-loyalty-promises.md) — **loyalty**, **promise kept/broken**, **no auto-declare** for elites.
+
 | Tool | Notes |
 |------|--------|
 | **NIL bump** | Collective allocation |
-| **Role promise** | Minutes / usage narrative modifier |
+| **Loyalty** | **0–99** — high loyalty eases stay; low + broken promise hardens leave |
+| **Promise status** | **Kept** stay pledge / minutes pledge strongly helps; **Broken** pushes portal or declare |
 | **Coach ratings** | Recruiting / portal retention skills |
 | **Staff grade** | [`game-design.md`](game-design.md) assistant modifiers |
+
+**Early draft:** Underclass **declare intent** is **rolled** (mock rank + loyalty + promises) — not automatic for Top 60. User **convince to stay** before withdrawal deadline.
 
 Failed retention → player enters **portal** for **weeks 2–5** recruiting (or exits draft pool per declare rules).
 
@@ -160,18 +170,18 @@ Week 1 does **not** post final draft order — results publish in **Week 2**.
 
 **Labels:** **Offseason Week 2** … **Week 5** · shared shell **Recruiting & Transfer Portal**
 
-Authoritative recruiting rules: [`recruiting-engine.md`](recruiting-engine.md). **Anchor change:** HS/JUCO + portal **spend** is **offseason weeks 2–5** (not legacy weeks 6–9).
+Authoritative recruiting rules: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock). **Spend** is **year-long** (preseason through week 5); these four weeks are **signing crunch** (1.5× drip, portal peak).
 
 | Week | Highlights |
 |------|------------|
-| **2** | Board open; **NBA draft results** posted (graduates / early entrants leave); scholarships open; portal **sub-tab** active |
-| **3** | Peak offers; weekly recruiting points + NIL spend |
-| **4** | Commits; NIL pushes |
-| **5** | Signing close; hard commits lock |
+| **2** | **R1** — **NBA draft results**; scholarships open; portal **sub-tab** peak; signing crunch begins |
+| **3** | **R2** — Peak offers; NIL pushes |
+| **4** | **R3** — Commit wave |
+| **5** | **R4** — **Signing close**; hard commits lock |
 
-**Portal:** Incoming class from league-wide entries (including your Week 1 losses). **HS/JUCO:** Pool seeded **last preseason** ([`recruiting-engine.md`](recruiting-engine.md)); spends only in these weeks.
+**Portal:** Incoming class from league-wide entries (including your Week 1 losses). **HS/JUCO:** Pool seeded **last preseason**; user may have been spending all season — crunch weeks close the class.
 
-**Recruiting week index** (doc convention): R1 = offseason week 2, … R4 = offseason week 5.
+**Recruiting week index:** R1 = offseason week 2, … R4 = offseason week 5.
 
 ---
 
@@ -234,8 +244,7 @@ Upgrades apply per facility rules (some bonuses **next recruiting cycle**).
 
 | Action | Effect |
 |--------|--------|
-| **Advance week** | Commit phase outcomes; local save checkpoint |
-| **Advance day** | Optional inside Weeks 1–5 sub-phases |
+| **Advance week** | Commit phase outcomes; local save checkpoint (after dashboard tasks for that week) |
 | **Enter season** | After final offseason week → **preseason** module |
 
 Dynasty metadata: `offseasonWeek`, `phaseId`, `seasonIndex`, `skipConferenceOffers` (Season 1).

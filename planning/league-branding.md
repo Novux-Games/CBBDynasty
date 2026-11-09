@@ -708,6 +708,7 @@ Authoritative universe names: [`ncba-branding.md`](ncba-branding.md).
 | **Realignment** | Metro (ex-MAAC), UAC (ex-WAC), Pac-12 remnant, MW + UC Davis, Big West + Utah Valley, etc. reflected in this snapshot |
 | **Source of truth (reference)** | [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) — certification tier copy |
 | **Regeneration** | `python3 planning/tools/generate_league_branding.py` after membership edits |
+| **Pack JSON** | `python3 planning/tools/generate_default_pack.py` → [`assets/pack/embedded-default.json`](../assets/pack/embedded-default.json) |
 
 **Pack count:** 365 teams · 32 conferences · 361 postseason-eligible · 4 reclass (no postseason until transition complete).
 

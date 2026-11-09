@@ -25,8 +25,9 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 |------|--------|-----------|------|------|
 | 0.1 | `[x]` Gradle multi-module `:app` + `:core` | `:core:test` green | [ARCHITECTURE](../docs/ARCHITECTURE.md) | `android/` |
 | 0.2 | `[x]` Studio → Splash → Home Compose nav | Manual cold start flow | [app-shell](../planning/app-shell.md) | `ui.shell`, `DynastyApp` |
-| 0.3 | `[ ]` CI workflow (`:core:test` on every PR) | GitHub Action passes | — | `.github/workflows/` |
-| 0.4 | `[ ]` Android assemble on tag/manual | `:app:assembleDebug` artifact | — | CI optional job |
+| 0.3 | `[x]` CI workflow (`:core:test` on every PR) | GitHub Action passes | — | `.github/workflows/core-test.yml` |
+| 0.4 | `[x]` Android assemble on tag/manual | `:app:assembleDebug` artifact | — | `.github/workflows/android-assemble-debug.yml` |
+| 0.5 | `[x]` Save migration on Room bump (ruleset columns v3→4) | `MIGRATION_3_4` + mapper round-trip | [ADR-001](ADR-001-dynasty-save-backend.md#app-updates--save-compatibility), [ADR-002](ADR-002-balance-ruleset-bundle.md) | `dynasty_metadata`, `:database` test |
 
 ---
 
@@ -34,11 +35,11 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 1.1 | `[ ]` Wire `Public-Assets/app-logo.svg` on splash | Logo renders sharp on `#181a25` | [branding](../planning/branding.md) | `SplashScreen`, drawable |
-| 1.2 | `[ ]` Novux studio lockup from `Novux_Logos/` | Studio screen ≠ game splash | [app-shell](../planning/app-shell.md) | `StudioScreen` |
-| 1.3 | `[ ]` Settings: skip studio intro, audio stubs | Flags persist | [game-start](../planning/game-start.md) | `data/settings` |
-| 1.4 | `[ ]` Credits + unofficial disclaimer screen | Legal copy from branding | [branding](../planning/branding.md) | `ui.shell` |
-| 1.5 | `[ ]` Adaptive icon matches `Public-Assets/adaptive-icon/` | Launcher icon on device | [branding](../planning/branding.md) | `res/mipmap` |
+| 1.1 | `[x]` Wire `Public-Assets/app-logo.svg` on splash | Logo renders sharp on `#181a25` | [branding](../planning/branding.md) | `SplashScreen`, `drawable-nodpi/app_logo.png` |
+| 1.2 | `[x]` Novux studio lockup from `Novux_Logos/` | Studio screen ≠ game splash | [app-shell](../planning/app-shell.md) | `StudioScreen`, `novux_studio_lockup.png` |
+| 1.3 | `[x]` Settings: skip studio intro, audio stubs | Flags persist | [game-start](../planning/game-start.md) | `data/settings/AppSettingsRepository` |
+| 1.4 | `[x]` Credits + unofficial disclaimer screen | Legal copy from branding | [branding](../planning/branding.md) | `CreditsScreen` |
+| 1.5 | `[x]` Adaptive icon matches `Public-Assets/adaptive-icon/` | Launcher icon on device | [branding](../planning/branding.md) | `ic_launcher*.xml`, `drawable-nodpi/ic_launcher_foreground.png` |
 
 ---
 
@@ -46,11 +47,11 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 2.1 | `[ ]` **Choose & document** save backend (SQLite vs JSON files) | ADR in `docs/` | [game-design](../planning/game-design.md#identity-packs--save-model) | — |
-| 2.2 | `[ ]` Save slots API (list, load, delete, last played) | Home **Continue** / **Load** real | [game-start](../planning/game-start.md) | `:core` + `data/save` |
-| 2.3 | `[ ]` Dynasty metadata schema (`seasonIndex`, `phase`, `packId`) | Round-trip one empty dynasty | [game-design](../planning/game-design.md) | `:core` models |
-| 2.4 | `[ ]` **Week advance** checkpoint semantics | Replay before advance; lock after | [game-design](../planning/game-design.md) | `domain/calendar` |
-| 2.5 | `[ ]` Corrupt-save handling on Load | Error UI per game-start | [game-start](../planning/game-start.md) | `app` |
+| 2.1 | `[x]` **Choose & document** save backend (SQLite vs JSON files) | ADR in `docs/` | [game-design](../planning/game-design.md#identity-packs--save-model) | [`ADR-001`](ADR-001-dynasty-save-backend.md) |
+| 2.2 | `[x]` Save slots API (list, load, delete, last played) | Home **Continue** / **Load** real | [game-start](../planning/game-start.md) | `:database`, `data/save`, `LoadGameScreen` |
+| 2.3 | `[x]` Dynasty metadata schema (`seasonIndex`, `phase`, `packId`) | Round-trip one empty dynasty | [game-design](../planning/game-design.md) | `:core`, Room `dynasty_metadata`, **New** bootstrap |
+| 2.4 | `[x]` **Week advance** checkpoint semantics | Replay before advance; lock after | [game-design](../planning/game-design.md) | `:core/calendar/checkpoint`, Room `dynasty_calendar` + `provisional_games` |
+| 2.5 | `[x]` Unreadable-save handling on Load | Validate + repair calendar; fallback delete UI | [game-start](../planning/game-start.md) | `DynastySaveValidator`, `SaveLoadUnavailableDialog` |
 
 ---
 
@@ -58,10 +59,10 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 3.1 | `[ ]` Pack schema v1 (`teamId`, `confId`, templates) | Validator rejects bad JSON | [game-design](../planning/game-design.md#identity-packs--save-model) | `:core/pack` |
-| 3.2 | `[ ]` Ship **default pack** asset from league branding | 365 teams, 32 conferences | [league-branding](../planning/league-branding.md) | `assets/pack/` |
-| 3.3 | `[ ]` Display overlay (names, colors) without corrupting history | Swap pack; IDs stable | [game-design](../planning/game-design.md) | `PackRepository` |
-| 3.4 | `[ ]` Import URL/TXT path (deferred UI OK after 3.2) | Attestation + parse | [game-start](../planning/game-start.md), [game-design](../planning/game-design.md) | Preseason/new-game later |
+| 3.1 | `[x]` Pack schema (`packVersion` 1 — `teamId`, `confId`, templates) | Validator rejects bad JSON | [game-design](../planning/game-design.md#identity-packs--save-model) | `:core/pack` |
+| 3.2 | `[x]` Ship **default pack** asset from league branding | 365 teams, 32 conferences | [league-branding](../planning/league-branding.md) | `assets/pack/embedded-default.json` |
+| 3.3 | `[x]` Display overlay (names, colors) without corrupting history | Swap pack; IDs stable | [game-design](../planning/game-design.md) | `PackRepository`, `IdentityPackIndex` |
+| 3.4 | `[x]` Import URL/TXT path (player UI deferred to **Phase 4** step 4) | Attestation + parse pipeline | [game-start](../planning/game-start.md), [game-design](../planning/game-design.md) | `IdentityPackImportPipeline`, `PackRepository` |
 
 ---
 
@@ -115,7 +116,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 |------|--------|-----------|------|------|
 | 7.1 | `[ ]` Preseason task checklist UI (8 tasks) | All required before Start Season | [preseason](../planning/preseason.md) | `ui.preseason` |
 | 7.2 | `[ ]` Incoming class seed + Top 60 News | HS/JUCO pools | [recruiting-engine](../planning/recruiting-engine.md), [preseason](../planning/preseason.md) | `:core` |
-| 7.3 | `[ ]` Tournament invites **before** schedule | 28-cap when 4-game event | [preseason](../planning/preseason.md), [ncba-branding](../planning/ncba-branding.md) | — |
+| 7.3 | `[ ]` Tournament invites **before** schedule | **32** RS cap; **28** builder slots only if 4-game event | [preseason](../planning/preseason.md), [ncba-branding](../planning/ncba-branding.md) | — |
 | 7.4 | `[ ]` Exhibitions 0–3 + RS schedule solver | Conf visible, double-headers allowed | [preseason](../planning/preseason.md), [game-design](../planning/game-design.md) | `:core/schedule` |
 | 7.5 | `[ ]` Preseason report article component | Reuse for pre/post game later | [preseason](../planning/preseason.md) | `ui.reports` |
 | 7.6 | `[ ]` Start season → first exhib or RS game | [game-frame](../planning/game-frame.md) entry | [preseason](../planning/preseason.md) | Navigation |
@@ -284,4 +285,4 @@ When planning docs change, update the **Spec** column links and acceptance crite
 
 | Date | Change |
 |------|--------|
-| 2025-11-09 | Initial comprehensive build order (post Android scaffold merge) |
+| 2025-11-09 | Initial comprehensive build order |

@@ -1,0 +1,128 @@
+{
+  "balanceRulesetId": "balance-2026",
+  "schemaVersion": 1,
+  "labelMembershipYear": "2026-27",
+  "selection": {
+    "netWeights": {
+      "nem": 0.32,
+      "sos": 0.25,
+      "qrs": 0.22,
+      "form": 0.12,
+      "rq": 0.09
+    },
+    "quadCutoffs": {
+      "q1Max": 50,
+      "q2Max": 150,
+      "q3Max": 280
+    },
+    "quadPoints": {
+      "q1Win": 4.0,
+      "q2Win": 2.5,
+      "q3Win": 1.0,
+      "q4Win": 0.3,
+      "q1Loss": -1.0,
+      "q2Loss": -0.5,
+      "q3Loss": 0.0,
+      "q4Loss": 0.0
+    },
+    "sosVenueWeights": {
+      "home": 1.0,
+      "neutral": 1.05,
+      "road": 1.1
+    },
+    "mediaPollWeights": {
+      "netAnchor": 0.72,
+      "prestige": 0.10,
+      "inertia": 0.08,
+      "form": 0.06,
+      "narrative": 0.04
+    },
+    "coachesPollWeights": {
+      "netAnchor": 0.78,
+      "prestige": 0.06,
+      "inertia": 0.10,
+      "form": 0.04,
+      "narrative": 0.02
+    },
+    "pollInertiaCap": 3.0,
+    "pollInertiaK": 1.0
+  },
+  "coach": {
+    "jobSecurityWeights": {}
+  },
+  "calendar": {
+    "scholarshipLimit": 15,
+    "rosterCap": 15
+  },
+  "recruiting": {
+    "weeklyCarryoverFraction": 0.5,
+    "signingCrunchMultiplier": 1.5,
+    "signingCrunchOffseasonWeeks": [2, 3, 4, 5],
+    "prestigeTiers": [
+      {
+        "id": "low_major",
+        "label": "Low-Major",
+        "prestigeMin": 0,
+        "prestigeMax": 25,
+        "weeklyPointsMin": 1000,
+        "weeklyPointsMax": 1250,
+        "realisticCapacity": "2-3 core targets"
+      },
+      {
+        "id": "mid_major",
+        "label": "Mid-Major",
+        "prestigeMin": 26,
+        "prestigeMax": 50,
+        "weeklyPointsMin": 1500,
+        "weeklyPointsMax": 2000,
+        "realisticCapacity": "3-5 core targets"
+      },
+      {
+        "id": "high_major",
+        "label": "High-Major",
+        "prestigeMin": 51,
+        "prestigeMax": 74,
+        "weeklyPointsMin": 2500,
+        "weeklyPointsMax": 3250,
+        "realisticCapacity": "5-7 core targets"
+      },
+      {
+        "id": "national_contender",
+        "label": "National Contender",
+        "prestigeMin": 75,
+        "prestigeMax": 89,
+        "weeklyPointsMin": 3500,
+        "weeklyPointsMax": 4250,
+        "realisticCapacity": "7-9 national targets"
+      },
+      {
+        "id": "blue_blood",
+        "label": "Blue Blood",
+        "prestigeMin": 90,
+        "prestigeMax": 99,
+        "weeklyPointsMin": 4500,
+        "weeklyPointsMax": 5000,
+        "realisticCapacity": "full national board"
+      }
+    ],
+    "weeklyPointsInterpolation": "linear_within_tier"
+  },
+  "nil": {
+    "currency": "usd_annual",
+    "secFlagshipPrestigeTop": {
+      "prestigeMin": 90,
+      "annualPoolMinUsd": 9700000,
+      "annualPoolMaxUsd": 13200000
+    },
+    "annualPoolByConferenceTier": []
+  },
+  "player": {
+    "loyalty": {
+      "declareWeightLoyalty": 0.0,
+      "promiseKeptBonus": 0.0,
+      "promiseBrokenPenalty": 0.0,
+      "minutesToleranceMpg": 3,
+      "stayPledgeDefaultTopN": 14
+    }
+  }
+}

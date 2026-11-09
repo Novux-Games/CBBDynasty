@@ -197,7 +197,7 @@ Same `simulateGame` run for all modes — only **UI pacing** changes. Final scor
 
 **Halftime:** only affects **watched** runs — caller pauses after half, merges updated prep, resumes second half.
 
-League **batch sim** (advance day) always uses **sim to end** internally.
+League **batch sim** on **week advance** always uses **sim to end** internally for non-user games.
 
 ---
 
@@ -219,7 +219,7 @@ Possessions are simulated **discretely** (one trip → one outcome chain), so it
 
 ## Tuning data
 
-Balance lives in data files (pace tables, foul rates, shot distributions), not hard-coded. Game sim reads:
+Balance lives in data files (pace tables, foul rates, shot distributions), not hard-coded. **Canonical file:** [`assets/sim/sim-tuning.json`](../assets/sim/sim-tuning.json) — [ADR-003](../docs/ADR-003-sim-tuning-bundle.md). Game sim reads:
 
 - Game-clock shave distributions
 - Shot-clock rules

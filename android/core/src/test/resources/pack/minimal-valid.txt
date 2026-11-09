@@ -1,0 +1,31 @@
+# Dynasty identity pack import v1 (full example)
+packVersion=1
+membershipYear=2026-27
+rulesetYear=2026
+packId=txt-minimal
+disclaimerAcceptedRequired=true
+
+[conference conf-sec]
+displayName=Southeast Conference
+leagueGameCount=20
+standingsTiebreakers=h2h,h2h-point-diff
+tournamentTemplateId=tpl-sec-16
+ncaaAutoBidSlot=1
+
+[team team-001]
+conferenceId=conf-sec
+displayName=State University
+shortName=ST
+homeCity=Springfield
+homeState=ST
+postseasonEligible=true
+colors.primary=#003366
+colors.secondary=#CCCCCC
+arenaBaseName=Arena
+
+[tournament tpl-sec-16]
+bracketSize=16
+seeds=16
+sitePolicy=neutral-primary
+qualificationPolicy=top-14
+round=R1:8,QF:4,SF:2,F:1

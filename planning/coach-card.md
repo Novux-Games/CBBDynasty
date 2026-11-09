@@ -188,7 +188,7 @@ Headline coach ratings (**0–99** integers in UI). Feeds sim modifiers, recruit
 
 ### Inputs (systems)
 
-Recomputed after **week advance** and at key events (postseason exit, scandal flags). Weights in `ruleset.jobSecurityWeights`.
+Recomputed after **week advance** and at key events (postseason exit, scandal flags). Weights in balance bundle `coach.jobSecurityWeights` — [ADR-002](../docs/ADR-002-balance-ruleset-bundle.md).
 
 | Factor | Effect |
 |--------|--------|

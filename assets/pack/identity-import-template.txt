@@ -1,0 +1,40 @@
+# Dynasty: College Basketball — identity pack import template (v1)
+# Full pack: set mode=full and include every conference/team (or start from default JSON).
+# Overlay: mode=overlay — patch display fields on stable ids from the embedded 365 pack.
+
+mode=full
+packVersion=1
+membershipYear=2026-27
+rulesetYear=2026
+packId=custom-pack
+disclaimerAcceptedRequired=true
+
+# --- Conferences ---
+[conference conf-sec]
+displayName=Southeast Conference
+leagueGameCount=20
+standingsTiebreakers=h2h,h2h-point-diff,record-vs-top-teams
+tournamentTemplateId=tpl-sec-16
+ncaaAutoBidSlot=1
+
+# --- Teams (repeat per program) ---
+[team team-001]
+conferenceId=conf-sec
+displayName=State University
+shortName=ST
+homeCity=Springfield
+homeState=ST
+postseasonEligible=true
+colors.primary=#003366
+colors.secondary=#CCCCCC
+arenaBaseName=Arena
+
+# --- Tournament templates ---
+[tournament tpl-sec-16]
+bracketSize=16
+seeds=16
+sitePolicy=neutral-primary
+qualificationPolicy=top-14
+round=R1:8,QF:4,SF:2,F:1
+
+# Branding strings (NCBA, NCI, Heritage) ship in JSON packs first; TXT branding blocks — Phase 4 UI.

@@ -28,7 +28,7 @@ App process start
 ┌─────────────────┐
 │  Studio screen  │  Novux Games (publisher identity)
 └────────┬────────┘
-         │ auto (≈2s) or tap to skip
+         │ auto (~3.5s) or tap to skip
          ▼
 ┌─────────────────┐
 │ Splash / load   │  Game logo + title + Tap to Play
@@ -53,7 +53,7 @@ App process start
 | **Background** | **`#181a25`** full bleed ([`branding.md`](branding.md#color)) |
 | **Mark** | **`Public-Assets/Novux_Logos/`** or **`Novux_Icons/`** — primary studio lockup (vector preferred) |
 | **Motion** | Subtle fade-in / optional short logo sting (ship TBD) |
-| **Text** | **Novux Games** wordmark if not in logo asset; optional [novux.dev](https://novux.dev) on long-press / credits only |
+| **Text** | **novux.dev** below lockup; tap hint at bottom |
 | **Input** | **Tap anywhere** to skip after min display time |
 
 **Design lock:** Do **not** use the **Dynasty: College Basketball** app logo as the hero on this screen — studio identity only.
@@ -63,7 +63,7 @@ App process start
 | Every **cold start** (before splash), unless user enables **Skip studio intro** in Settings |
 | **Credits** → **Visit Novux Games** may replay this screen (optional) |
 
-**Duration:** Default **~2.0s** auto-advance to splash; tap skips after **0.5s** minimum (avoid accidental skip on load).
+**Duration:** Default **3.5s** auto-advance to splash (`GameConstants.STUDIO_AUTO_ADVANCE_MS`); **tap anywhere** to skip after **0.5s** minimum (avoid accidental skip on load).
 
 ---
 
@@ -76,7 +76,7 @@ App process start
 | **Background** | **`#181a25`** |
 | **Logo** | [`Public-Assets/app-logo.svg`](../Public-Assets/app-logo.svg) (or raster derived) — centered, clear space per branding |
 | **Title** | **Dynasty: College Basketball** (full official title) |
-| **CTA** | **Tap to Play** — primary prompt when ready |
+| **CTA** | **Tap to Play** — primary prompt when ready (pulsing CTA; see [Interaction](#interaction)) |
 | **Loading** | Optional progress indicator while default pack / save index loads **before** CTA enables |
 
 ### Interaction
@@ -84,8 +84,21 @@ App process start
 | State | UI |
 |-------|-----|
 | **Loading** | Logo + title visible; **Tap to Play** hidden or disabled; spinner / slim progress bar |
-| **Ready** | **Tap to Play** appears (pulse or underline); single tap → **Home menu** ([`game-start.md`](game-start.md)) |
+| **Ready** | **Tap to Play** visible with **pulsing CTA** animation; single tap → **Home menu** ([`game-start.md`](game-start.md)) |
 | **First launch** | Same flow; no save → **Continue** hidden on home |
+
+#### Tap to Play — pulsing CTA (implemented)
+
+When splash is **ready**, **Tap to Play** loops a subtle **in/out** motion so it reads as the primary action (not static label text):
+
+| Property | Spec |
+|----------|------|
+| **Scale** | ~0.94 ↔ ~1.06 |
+| **Opacity** | ~0.78 ↔ 1.0 |
+| **Timing** | ~900ms per half-cycle, `FastOutSlowIn`, repeat reverse |
+| **Input** | Tappable for full pulse range; navigation on tap |
+
+Animation runs only while the CTA is shown (ready state); hidden during loading spinner.
 
 **Design lock:** Splash is **not** the studio screen — no Novux Games hero logo here (small **© Novux Games** footer line is OK).
 
@@ -103,7 +116,8 @@ App process start
 │                         │
 │     Tap to Play         │  ← when ready
 │                         │
-│   © Novux Games         │  ← optional footer
+│   © {year} Novux Games  │
+│   Game Director line    │  ← Austin Buhl
 └─────────────────────────┘
 ```
 
@@ -136,3 +150,4 @@ Boot work on splash: mount default identity pack, enumerate local saves, apply S
 | Date | Change |
 |------|--------|
 | 2025-11-09 | Studio screen + splash Tap to Play flow |
+| 2025-11-09 | Studio 3.5s hold; splash Tap to Play pulsing CTA |

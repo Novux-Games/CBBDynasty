@@ -1,6 +1,6 @@
 # Time system — weeks, byes, postseason calendar
 
-**Kernel:** Dynasty time advances by **day** (optional) or **week**. **Week advance** = save checkpoint ([`game-design.md`](game-design.md#when-games-run-vs-when-the-save-commits)). This doc defines **week labels** and **bye** rules for exhibitions, regular season, conference tournaments, and national postseason.
+**Kernel:** Dynasty time advances by **week** only in the UI ([`game-frame.md`](game-frame.md#time-week-advance-only)). **Week advance** = save checkpoint ([`game-design.md`](game-design.md#when-games-run-vs-when-the-save-commits)). This doc defines **week labels** and **bye** rules for exhibitions, regular season, conference tournaments, and national postseason.
 
 **Companions:** [`preseason.md`](preseason.md), [`postseason.md`](postseason.md), [`ncba-branding.md`](ncba-branding.md), [`game-frame.md`](game-frame.md) (Calendar tab).
 
@@ -63,7 +63,7 @@ After postseason week **7**, before offseason — **[`season-review.md`](season-
 - **Early-season event** games count as RS games and occupy **specific weeks** in this range (see below).
 - On **week advance**, all games dated that week finalize; standings, NET, injuries, saves lock.
 
-**Not** calendar-month accurate for UX v1 — **week index** is the source of truth (months in copy optional).
+**Not** calendar-month accurate in UI — **week index** is the source of truth (months in copy optional).
 
 ---
 

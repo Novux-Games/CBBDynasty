@@ -1,6 +1,6 @@
 # Branding — Dynasty: College Basketball
 
-**Last updated:** 2025-11-08
+**Last updated:** 2025-11-09
 
 ---
 
@@ -22,7 +22,9 @@ Use **Dynasty: College Basketball** on store listings, splash, and in-app title 
 | Asset | Path | Use |
 |-------|------|-----|
 | **Primary app logo** | [`Public-Assets/app-logo.svg`](../Public-Assets/app-logo.svg) | In-app header, marketing, **game splash** |
-| **Novux logos** | `Public-Assets/Novux_Logos/` | **Studio screen** lockups |
+| **Splash screen reference** | [`Public-Assets/screen-previews/splash-screen.png`](../Public-Assets/screen-previews/splash-screen.png) | Marketing / QA mock (1080×2400) |
+| **Novux logos** | `Public-Assets/Novux_Logos/` | **Studio screen** lockups (`2.svg` = light on `#181a25`) |
+| **Studio screen reference** | [`Public-Assets/screen-previews/studio-screen.png`](../Public-Assets/screen-previews/studio-screen.png) | Marketing / QA mock (1080×2400) |
 | **Novux icons** | `Public-Assets/Novux_Icons/` | Studio mark variants |
 
 **Implementation notes**
@@ -57,11 +59,14 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 | `adaptive-icon-foreground.png` | Foreground layer — transparent logo (432×432) |
 | `adaptive-icon-canvas.png` | `#181A25` + `adaptive-icon-foreground.png` composited (logo on brand background only) |
 
+**Android:** `adaptive-icon-foreground.png` → `android/app/.../drawable-nodpi/ic_launcher_foreground.png`; background `@color/brand_background` (`#181A25`).
+
 ---
 
 ## Legal / attribution
 
-- Splash or settings: **“© Novux Games”** + link to [novux.dev](https://novux.dev) (exact copy TBD with counsel).
+- Repository: **open code / closed art** — [`docs/LICENSING.md`](../docs/LICENSING.md), [`Public-Assets/LICENSE`](../Public-Assets/LICENSE).
+- Splash footer + Home **Credits**: **© Novux Games**, [novux.dev](https://novux.dev) (`CreditsScreen`).
 - Game is **unofficial** college basketball sim (see [`game-design.md`](game-design.md) identity packs).
 
 ---
@@ -79,6 +84,22 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 
 ---
 
+## UI copy (in-game)
+
+**Product voice:** coach / fan facing — never engineering, checklist, or repo jargon.
+
+| Rule | Detail |
+|------|--------|
+| **Single source** | All on-screen text in `android/app/src/main/res/values/strings.xml` (no hard-coded `Text("…")` in Compose). |
+| **Internal IDs** | Never show `packId`, file paths, slot indices in error prose, schema versions, or feature-phase names. |
+| **League identity** | [`PackDisplayNames`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/PackDisplayNames.kt) for league labels (e.g. **2026–27 League**), not “default pack”. |
+| **Banned tone** | bootstrap, scaffold, stub, fallback, MVP, placeholder, unavailable, unnamed, transaction, “ships later”, “app shell”, TBD in player strings. |
+| **CI** | `python3 scripts/lint_player_strings.py` on every core-test workflow run. |
+
+Planning docs and code comments may use technical terms; **the APK may not**.
+
+---
+
 ## Document history
 
 | Date | Change |
@@ -87,3 +108,4 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 | 2025-11-08 | Official title: **Dynasty: College Basketball** |
 | 2025-11-08 | Link `ncba-branding.md` |
 | 2025-11-09 | Novux Games; `app-shell.md` studio vs splash |
+| 2025-11-09 | UI copy rules + `lint_player_strings.py` |

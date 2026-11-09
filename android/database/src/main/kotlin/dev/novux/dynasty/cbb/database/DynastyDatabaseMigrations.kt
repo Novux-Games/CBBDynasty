@@ -1,0 +1,83 @@
+package dev.novux.dynasty.cbb.database
+
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import dev.novux.dynasty.cbb.core.save.DynastySchema
+
+val MIGRATION_3_4 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            ALTER TABLE dynasty_metadata ADD COLUMN balanceRulesetId TEXT NOT NULL
+            DEFAULT '${DynastySchema.DEFAULT_BALANCE_RULESET_ID}'
+            """.trimIndent(),
+        )
+        db.execSQL(
+            """
+            ALTER TABLE dynasty_metadata ADD COLUMN balanceSchemaVersion INTEGER NOT NULL
+            DEFAULT ${DynastySchema.DEFAULT_BALANCE_SCHEMA_VERSION}
+            """.trimIndent(),
+        )
+        db.execSQL(
+            """
+            ALTER TABLE dynasty_metadata ADD COLUMN simTuningId TEXT NOT NULL
+            DEFAULT '${DynastySchema.DEFAULT_SIM_TUNING_ID}'
+            """.trimIndent(),
+        )
+        db.execSQL(
+            """
+            ALTER TABLE dynasty_metadata ADD COLUMN simSchemaVersion INTEGER NOT NULL
+            DEFAULT ${DynastySchema.DEFAULT_SIM_SCHEMA_VERSION}
+            """.trimIndent(),
+        )
+    }
+}
+
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS dynasty_calendar (
+                dynastyId TEXT NOT NULL PRIMARY KEY,
+                seasonIndex INTEGER NOT NULL,
+                phase TEXT NOT NULL,
+                activeWeekIndex INTEGER NOT NULL,
+                committedSeasonIndex INTEGER,
+                committedPhase TEXT,
+                committedWeekIndex INTEGER
+            )
+            """.trimIndent(),
+        )
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS provisional_games (
+                dynastyId TEXT NOT NULL,
+                gameId TEXT NOT NULL,
+                homeScore INTEGER NOT NULL,
+                awayScore INTEGER NOT NULL,
+                simGeneration INTEGER NOT NULL,
+                PRIMARY KEY(dynastyId, gameId)
+            )
+            """.trimIndent(),
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS index_provisional_games_dynastyId ON provisional_games(dynastyId)",
+        )
+    }
+}
+
+val MIGRATION_1_2 = object : Migration(1, 2) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS dynasty_metadata (
+                dynastyId TEXT NOT NULL PRIMARY KEY,
+                seasonIndex INTEGER NOT NULL,
+                phase TEXT NOT NULL,
+                packId TEXT NOT NULL,
+                dynastySchemaVersion INTEGER NOT NULL
+            )
+            """.trimIndent(),
+        )
+    }
+}

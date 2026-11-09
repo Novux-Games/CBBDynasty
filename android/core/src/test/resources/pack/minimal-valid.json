@@ -1,0 +1,48 @@
+{
+  "packVersion": 1,
+  "membershipYear": "2026-27",
+  "disclaimerAcceptedRequired": true,
+  "rulesetYear": 2026,
+  "conferences": [
+    {
+      "id": "conf-sec",
+      "displayName": "Southeast Conference",
+      "leagueGameCount": 20,
+      "standingsTiebreakers": ["h2h", "h2h-point-diff"],
+      "tournamentTemplateId": "tpl-sec-16",
+      "ncaaAutoBidSlot": 1
+    }
+  ],
+  "teams": [
+    {
+      "id": "team-001",
+      "conferenceId": "conf-sec",
+      "displayName": "State University",
+      "shortName": "ST",
+      "homeCity": "Springfield",
+      "homeState": "ST",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": { "primary": "#003366", "secondary": "#CCCCCC" },
+      "arenaBaseName": "Arena",
+      "logoUri": null
+    }
+  ],
+  "tournamentTemplates": [
+    {
+      "id": "tpl-sec-16",
+      "bracketSize": 16,
+      "seeds": 16,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "top-14",
+      "rounds": [
+        { "name": "R1", "games": 8 },
+        { "name": "QF", "games": 4 },
+        { "name": "SF", "games": 2 },
+        { "name": "F", "games": 1 }
+      ]
+    }
+  ]
+}

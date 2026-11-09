@@ -1,5 +1,45 @@
 package dev.novux.dynasty.cbb
 
 import android.app.Application
+import android.content.Context
+import dev.novux.dynasty.cbb.data.pack.PackRepository
+import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
+import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
+import dev.novux.dynasty.cbb.data.settings.AppSettingsRepository
+import dev.novux.dynasty.cbb.database.DynastyDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
-class DynastyApplication : Application()
+class DynastyApplication : Application() {
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    lateinit var appSettingsRepository: AppSettingsRepository
+        private set
+
+    lateinit var saveSlotRepository: SaveSlotRepository
+        private set
+
+    lateinit var weekCheckpointRepository: WeekCheckpointRepository
+        private set
+
+    lateinit var packRepository: PackRepository
+        private set
+
+    override fun onCreate() {
+        super.onCreate()
+        appSettingsRepository = AppSettingsRepository(applicationContext)
+        packRepository = PackRepository(applicationContext)
+        val database = DynastyDatabase.build(applicationContext)
+        weekCheckpointRepository = WeekCheckpointRepository(database)
+        saveSlotRepository = SaveSlotRepository(database, weekCheckpointRepository, packRepository)
+        applicationScope.launch {
+            saveSlotRepository.ensureInitialized()
+            packRepository.ensureEmbeddedLoaded()
+        }
+    }
+}
+
+fun Context.requireDynastyApplication(): DynastyApplication =
+    applicationContext as DynastyApplication

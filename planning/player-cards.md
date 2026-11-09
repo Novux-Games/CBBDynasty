@@ -171,6 +171,16 @@ Display: row per attribute; shooting expands or nests three subs.
 | **Potential (overall)** | Growth ceiling |
 | **Pro potential** | NBA outcome weight / draft stock analog |
 
+### Loyalty & promise (roster players)
+
+Authoritative rules: [`player-loyalty-promises.md`](player-loyalty-promises.md).
+
+| Field | Placement |
+|-------|-----------|
+| **Loyalty** | **0–99** on **Ratings** tab; optional compact on **Overview** |
+| **Active promise** | **Overview** — type, band, status **Kept / At risk / Broken** |
+| **Promise history** | **History** tab — **one** locked promise at commit + per-season **Kept/Broken** evaluations |
+
 ---
 
 ## Stats

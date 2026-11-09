@@ -64,7 +64,7 @@ The **same saved fields** drive School hub **Info** and this engine ([`game-fram
 **Recipe (weekly refresh after games finalize):**
 
 1. For **each completed game** on **your** schedule, take that **opponent’s team strength** at tip (use opponent’s season `NEM` to date; frozen at game time in save for audit).
-2. Optionally multiply by **venue weight** (`ruleset.sosVenueWeights`: e.g. road 1.1, neutral 1.05, home 1.0) so the same opponent counts slightly harder away from home.
+2. Optionally multiply by **venue weight** (`selection.sosVenueWeights` in balance bundle — e.g. road 1.1, neutral 1.05, home 1.0) so the same opponent counts slightly harder away from home.
 3. **Schedule strength (raw)** = weighted mean of those opponent strengths across **all** your D-I games (non-D-I exhibitions excluded unless pack says otherwise).
 4. Map raw league distribution to **0–99** (percentile or min–max in pack) → store as **`sosRating`** → show on School hub **Info**.
 
@@ -99,7 +99,7 @@ Classify each D-I game at tip using opponent **NET rank at game time** (not Medi
 | **Q3** | #151–#280 |
 | **Q4** | #281–#365 |
 
-**`QRS` weights** (tunable `ruleset.quadWeights`):
+**`QRS` weights** (balance bundle `selection.quadPoints` / cutoffs in [`balance-2026.json`](../assets/balance/balance-2026.json)):
 
 | Event | Points |
 |-------|--------|
@@ -138,7 +138,7 @@ netScore =
 
 **NET rank** = position in that sort (**#1** = best). Shown as **NCBA NET #NN** in UI.
 
-Weights: pack `ruleset.netWeights` (defaults above).
+Weights: balance bundle `selection.netWeights` (defaults in JSON; must match formulas above).
 
 ---
 
@@ -172,7 +172,7 @@ coachesPollScore =
 
 **Sort** each poll separately → **mediaRank** `#1–#365`, **coachesRank** `#1–#365`.
 
-Weights: `ruleset.mediaPollWeights`, `ruleset.coachesPollWeights`.
+Weights: `selection.mediaPollWeights`, `selection.coachesPollWeights` in balance bundle.
 
 **Examples of divergence:** Mid-major on NET **#34** but Media **#19** after a ranked win; blue blood NET **#18** but Coaches **#8** on reputation.
 
@@ -261,7 +261,7 @@ NCI / Heritage use separate bracket templates (no shared seed list with NCBA).
 
 | Artifact | Location |
 |----------|----------|
-| Default weights | `ruleset.netWeights`, `ruleset.mediaPollWeights`, `ruleset.coachesPollWeights`, `ruleset.seedWeights`, `ruleset.quadWeights` |
+| Default weights | [`assets/balance/balance-2026.json`](../assets/balance/balance-2026.json) — [ADR-002](../docs/ADR-002-balance-ruleset-bundle.md) (`selection.*`, `coach.jobSecurityWeights`) |
 | Weekly snapshots | `netRankByTeamId`, `netScore`, `mediaRankByTeamId`, `coachesRankByTeamId`, `sosRating`, week id |
 | Selection Sunday snapshot | `selectionSundayYear`, NCBA/NCI/Heritage lists, `nationalPostseason{tournamentId, seed, regionId?}` per team, frozen indices |
 

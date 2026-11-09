@@ -9,11 +9,11 @@
 **App shell:** **[`app-shell.md`](app-shell.md)** — studio screen, splash, Tap to Play  
 **Game start:** **[`game-start.md`](game-start.md)** — home, new dynasty, coach create, school pick  
 **In-season UI:** **[`game-frame.md`](game-frame.md)** — dashboard, tabs, hubs  
-**Player UI:** **[`player-cards.md`](player-cards.md)** — preview, card tabs, ratings; **[`player-archetypes.md`](player-archetypes.md)** — archetypes, draft rank  
+**Player UI:** **[`player-cards.md`](player-cards.md)** — preview, card tabs, ratings; **[`player-archetypes.md`](player-archetypes.md)** — archetypes, draft rank; **[`player-loyalty-promises.md`](player-loyalty-promises.md)** — loyalty, coach promises, draft/portal  
 **Lineup:** **[`positions-and-lineup.md`](positions-and-lineup.md)** — PG/SG/SF/PF/C, interchange, default starters  
 **Strategy:** **[`strategy-schemes.md`](strategy-schemes.md)** — O/D presets, halftime, preview/watch  
 **Coach UI:** **[`coach-card.md`](coach-card.md)** — coach preview, card tabs, School staff  
-**Recruiting:** **[`recruiting-engine.md`](recruiting-engine.md)** — pools, 4-week window, NIL + points  
+**Recruiting:** **[`recruiting-engine.md`](recruiting-engine.md)** — year-long cycle, signing crunch, NIL + points  
 **League identity:** **[`league-branding.md`](league-branding.md)** — conference/team real ↔ universe mapping  
 **NCBA universe:** **[`ncba-branding.md`](ncba-branding.md)** — national body, March Mayhem, early events  
 **Offseason:** **[`offseason.md`](offseason.md)** — carousel, weeks 1–9, Season 1 rules  
@@ -150,6 +150,8 @@ Full navigation and screens: **[`game-frame.md`](game-frame.md)**.
 
 Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 
+**Code:** [`IdentityPackCodec`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/IdentityPackCodec.kt) + [`IdentityPackValidator`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/IdentityPackValidator.kt) (`packVersion` **1**). **Overlay:** [`PackRepository`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/data/pack/PackRepository.kt) + [`IdentityPackIndex`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/IdentityPackIndex.kt). **Import (JSON/TXT/URL):** [`IdentityPackImportPipeline`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/import/IdentityPackImportPipeline.kt) + [`assets/pack/identity-import-template.txt`](../assets/pack/identity-import-template.txt).
+
 ```json
 {
   "packVersion": 1,
@@ -223,8 +225,10 @@ Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 | Action | Effect |
 |--------|--------|
 | **Sim user game** | Possession sim runs; result held in **current week** session state |
-| **Advance day** | Roll calendar; batch-sim other **scheduled** games that date (same week state) |
-| **Advance week** | **Write save**; week’s results, standings, stats, and league outcomes become **final** |
+| **Advance week** | **Write save**; week’s results, standings, stats, and league outcomes become **final**; batch-sim other schools’ games in that **week index** (no player-facing **Advance day**) |
+| **Advance without playing** | Allowed — confirmation warns unplayed user games will **fast-sim** and lock ([`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week)); same step can apply **AI user-school recruiting** for unfinished optional recruiting tasks |
+
+**UI:** **Required** tasks on **Dashboard** block **Advance week**; **optional** tasks (games, recruiting, etc.) surface work but may be skipped via sim-week confirm — [`game-frame.md`](game-frame.md#dashboard-task-gate).
 
 Until **week advance**, nothing from that week is treated as permanent on disk.
 
@@ -237,8 +241,8 @@ In-week variety is normal (different sim runs, different scores). **Locked** onl
 
 ### Ruleset evolution
 
-- `rulesetYear` in pack ties to **portal windows**, **calendar dates**, **scholarship limits**.
-- When dynasty year advances, engine loads **rulesetYear + (dynastyYear - startYear)** patches from data (e.g. portal deadline shifts).
+- `rulesetYear` in pack is the **era label** for the league snapshot (pairs with `membershipYear`). **Balance and sim** load from embedded [`balance-2026.json`](../assets/balance/balance-2026.json) / [`sim-tuning.json`](../assets/sim/sim-tuning.json); revisions are **pinned on the dynasty at create**, not swapped each season — [ADR-002](../docs/ADR-002-balance-ruleset-bundle.md).
+- Portal windows, scholarship limits, and redshirt thresholds live in the **balance bundle** `calendar` section (constants), not in the identity pack.
 
 ### Offseason sim
 
@@ -269,24 +273,30 @@ In-week variety is normal (different sim runs, different scores). **Locked** onl
 
 Walk-ons use the same **player card** / roster pipeline as scholarship players ([`recruiting-engine.md`](recruiting-engine.md#walk-ons)).
 
-### Class & eligibility
+### Class & eligibility (2026 ruleset)
 
-- **Eligibility years** tracked per player (games played, redshirt flags).
-- **Academic standing** per player: eligible / at-risk / ineligible for next game.
-- **Incompletes** at term boundary can bench player for postseason (configurable strictness by difficulty).
+| Rule | Detail |
+|------|--------|
+| **Five-year window** | Continuous eligibility period from **initial full-time enrollment** / age-based start — portal and stay transfers use **immediate eligibility** when time remains in window ([`transfer-portal.md`](transfer-portal.md#eligibility--roster-law-2026)) |
+| **Player record** | `eligibilityClockStart`, seasons/games consumed, **eligible next season** flag |
+| **Academic standing** | Eligible / at-risk / ineligible per game |
+| **Incompletes** | Term boundary can bench for postseason (difficulty setting) |
 
-### Redshirt
+### Redshirt (development)
+
+Dynasty still supports a **0-game redshirt season** for development (exhibitions do not count as RS games). Under **2026 NCAA-style** rules in balance bundle, the **eligibility clock does not pause** for that choice — document on card as **development year**, not extra eligibility time.
 
 | Type | Trigger |
 |------|---------|
-| **Standard redshirt** | User (preseason) elects; player plays **0** games (exhibitions exempt or count per ruleset — **exhibitions do not count** toward redshirt games played). |
-| **Medical redshirt** | In-season injury; games played ≤ ruleset threshold; medical staff grade affects approval odds in edge cases. |
+| **Standard redshirt** | Preseason elect; **0** RS games |
+| **Medical redshirt** | In-season injury + games-played threshold; staff grade affects edge approvals |
 
 ### Procedural roster events
 
 - **Graduation** — fixed class year.
-- **Early draft entry** — pro days + declare; withdrawal deadline before draft results week (see offseason).
-- **Portal in/out** — separate from high school recruiting board.
+- **Early draft entry** — **declare intent roll** at Offseason Week 1 (loyalty + promises + mock rank — **not** automatic for high prospects); pro days + withdrawal deadline before draft results week — [`player-loyalty-promises.md`](player-loyalty-promises.md).
+- **Coach promises** — **one** career-long promise per player at offer; **broken** → transfer risk; **kept** → loyalty + stay vs declare.
+- **Portal in/out** — authoritative [`transfer-portal.md`](transfer-portal.md); broken promises feed portal intent.
 - **Cuts** — offseason window; must land ≤15 by roster lock before exhibitions.
 
 ---
@@ -314,22 +324,46 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 
 ## Recruiting engine
 
-**Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — 4-week period, 2–4K HS + 1.5K JUCO, portal sub-tab, recruiting points + NIL, letter grades, prestige 0–99.
+**Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — year-long cycle, prestige-tier **weekly points**, 2–4K HS + 1.5K JUCO, portal sub-tab, NIL, letter grades, prestige 0–99.
 
-**Brief:** HS/JUCO class **seeded in preseason** (**Top 60** in News all regular season); **no in-season recruiting actions**; **4-week** spend **offseason weeks 2–5**; portal board active weeks **2–5**; draft results **offseason week 2**; star bands **per pool** (top 2% = 5★); combined HS/JUCO board; **A–F** scout view; **no campus visits**; **50%** point carryover week-to-week.
+**Brief:** HS/JUCO **seeded in preseason**; **year-long cycle**; **weekly points** (1k–5k/wk by prestige) buy **scout / call / offer / pitch** — **NIL $** is separate; **Recommended** default; **50%** carryover; signing crunch **1.5×** OS weeks 2–5. Arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
 
 ---
 
 ## NIL & program economy
 
+**Authoritative for recruit/retention $** — separate from **recruiting points** ([`recruiting-engine.md`](recruiting-engine.md#resources-recruiting-points--nil)).
+
+### Annual collective pool (design lock)
+
+| Rule | Detail |
+|------|--------|
+| **Currency** | Abstract **USD / season** on UI (no real persons) — same number on [`game-start.md`](game-start.md) contract preview and player Overview |
+| **Fixed per cycle** | **Annual NIL pool** set when the recruiting cycle opens (preseason); unchanged week-to-week like weekly points |
+| **Drivers** | **Conference tier** × **`programPrestige` (0–99)** — interpolate inside band |
+| **Next year** | Recomputed after **[End of Season](season-review.md)** prestige/conference moves (preview on review) |
+| **Spend** | Allocate to recruits at offer/commit and **retention** bumps ([`offseason.md`](offseason.md)); unspent rules in balance JSON |
+
+**Anchor (your numbers — tune in pack/balance, not invented per save):**
+
+| Band (example) | Annual pool (prestige at top of band) |
+|----------------|----------------------------------------|
+| **SEC flagship** (e.g. Kentucky, Duke-tier in power leagues) | **~$9.7M – $13.2M** |
+| Power conferences below flagship | Scale down on prestige curve within conference table |
+| Mid-major | Order of magnitude below power bands |
+| Low-major | Minimal collective — recruiting points + promises matter more |
+
+Exact conference rows live in **`balance-2026.json` → `nil.annualPoolByConferenceTier`** (and prestige lerp). [`game-start.md`](game-start.md) **contract sheet** shows preview for the chosen school.
+
 ### Abstract NIL (no real persons)
 
 | Concept | Behavior |
 |---------|----------|
-| **Collective strength** | Program-level 0–100; upgraded by fundraising and success |
-| **Player deal points** | Per-player allocation from collective budget |
-| **Recruit demand** | Each recruit has `nilAsk`; failing ask lowers interest |
-| **Retention** | Upperclassmen request raises after breakout seasons |
+| **Collective budget** | Single **annual $ pool** per program (table above) |
+| **Per-player allocation** | Slice of pool committed on recruit sheet / retention UI → Overview **NIL valuation** on card |
+| **Recruit demand** | Each recruit has **`nilAsk`**; underfunding lowers **interest** ([`recruiting-engine.md`](recruiting-engine.md#interest--offers)) |
+| **Retention** | Upperclassmen request raises after breakout seasons — spend from same annual pool (offseason Week 1) |
+| **Fundraising** | Week 8 can add **one-time** pool bump or next-year seed — [`offseason.md`](offseason.md) |
 
 ### Boosters & fundraising
 
@@ -337,7 +371,7 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 - Success → **cash** + **collective boost** + **facility seed money**.
 - **Arena naming rights:** one-time cash infusion; slight prestige hit if name is silly; reversible in fiction only via rebrand cost.
 
-### Academic grades → recruiting budget
+### Academic grades (program)
 
 **Program academics grade (0–100)** computed each spring from:
 
@@ -348,16 +382,9 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 | Eligibility incidents | −20% penalty stack |
 | Academic facility grade | +10% cap bonus |
 
-**Recruiting budget formula**
+**Weekly recruiting points:** fixed **per recruiting cycle** from **prestige tier** table — authoritative spec [`recruiting-engine.md`](recruiting-engine.md#prestige-tier-weekly-pool-design-lock). **End of Season** recap prestige/grade moves set the **next** cycle’s pool; coach/facility upgrades affect **efficiency**, not the tier band.
 
-```
-baseBudget = prestigeTierTable[prestige]
-gradeMultiplier = 0.6 + (academicsGrade / 100) * 0.8   // 0.6x – 1.4x
-facilityBonus = 1 + 0.05 * (recruitingFacilityGrade - 3)  // grade 1–10
-recruitingBudget = floor(baseBudget * gradeMultiplier * facilityBonus)
-```
-
-**Upgrades in offseason week 8** apply per [`offseason.md`](offseason.md) (some bonuses next recruiting cycle).
+**Upgrades in offseason week 8** apply per [`offseason.md`](offseason.md) (grades → prestige path for future cycles).
 
 ### Cash sinks
 
@@ -493,13 +520,15 @@ Exhibitions: morale, light poll momentum, injuries possible.
 
 ### Caps
 
+**Design lock:** Every team plays up to **32 regular-season games** (exhibitions **not** included). **28** is **not** the default season length — it is only the **remaining conf + non-conf builder slots** after you accept a **4-game** early event (typically Weeks **1–4** on the RS calendar).
+
 | Constraint | Value |
 |------------|-------|
-| Total regular season games | **32** max |
+| **RS total** | **32** max (record counts) |
+| **No early event** | Up to **32** from conference template + non-conf picker ([`preseason.md`](preseason.md#8--schedule-regular-season-games)) |
+| **Early-season event accepted** | **4** event games + **28** other RS (conf + non-conf) = **32** |
 | Conference games | Per **conference template** (`leagueGameCount`, repeat opponents allowed — see below) |
-| Early-season event | **Up to 4** games (counts toward 32); invite flow in [`preseason.md`](preseason.md#6--tournament-invites) |
-
-**With tournament accepted:** **28** remaining RS games for conference + non-conference (4 event + 28 = 32).
+| Early-season event | **Up to 4** games toward the **32** cap; invite flow in [`preseason.md`](preseason.md#6--tournament-invites) |
 
 ### Scheduling UX
 
@@ -507,7 +536,7 @@ Exhibitions: morale, light poll momentum, injuries possible.
 - **Conference:** Template lists opponents and **meetings per rival** (single or **double** — two games vs same conference team when pack says so). Conference block **visible** in preseason schedule UI; not hand-picked opponent-by-opponent unless template uses open slots.
 - **Non-conference:** **Slot count varies by team and conference** — derived as `32 − conferenceGames − tournamentGames` (and pack min/max non-conf rules per league).
 - **User picks:** non-conf opponents in allowed windows (Nov–Dec; limited Jan slots for small conferences).
-- **Validation:** solver enforces cap, per-team non-conf budget, no double-booked dates, one event per season.
+- **Validation:** Preseason **schedule builder** enforces **32** cap, per-team non-conf budget, no double-booked dates, one event per season (not a separate “solver product” — task **8** UX + rules).
 
 ### In-season calendar
 
@@ -627,7 +656,7 @@ Universe round labels: [`ncba-branding.md`](ncba-branding.md).
 
 - **Rankings:** weekly **NCBA NET** (365) + **Media** & **Coaches** polls (365; T25 callouts).
 - **Bracketology:** updates weekly in February in news feed.
-- **User stories:** win streaks, upset alerts, portal steals.
+- **User stories:** win streaks, upset alerts, portal steals — portal product [`news-hub.md`](news-hub.md).
 
 ---
 
@@ -639,7 +668,7 @@ Universe round labels: [`ncba-branding.md`](ncba-branding.md).
 |--------|----------------|
 | Coach skills | Auto-spend with priority tree |
 | Summer/preseason workouts | Always auto |
-| Recruiting | Auto-maintain board (caps) |
+| Recruiting | Auto-maintain from **Recommended** list (caps) — [`recruiting-engine.md`](recruiting-engine.md#recommended-tab-default) |
 | Non-user games | Always batch sim |
 
 ### Manual must-feel-good
@@ -681,11 +710,12 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | **March** | Conference templates, NCBA, **NCI**, **Heritage** — [`postseason.md`](postseason.md) |
 | **Ship** | Full 2D UI, automation toggles, notifications, **JSON/URL identity import** |
 
-**Code:** `android/` — Compose shell scaffold; see [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md). **Build order:** [`docs/BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md).
+**Code:** `android/` — `:app`, `:core`, `:database`; see [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md). **Build order:** [`docs/BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md).
 
 ### Remaining product decisions (short list)
 
-- Local save format (SQLite vs files).
+- ~~Local save format (SQLite vs files).~~ **SQLite/Room** — [`docs/ADR-001-dynasty-save-backend.md`](../docs/ADR-001-dynasty-save-backend.md).
+- ~~Balance vs sim tuning storage.~~ **Split embedded bundles**, frozen at dynasty create — [`docs/ADR-002-balance-ruleset-bundle.md`](../docs/ADR-002-balance-ruleset-bundle.md), [`docs/ADR-003-sim-tuning-bundle.md`](../docs/ADR-003-sim-tuning-bundle.md).
 - URL pack **signing** for optional one-time import while offline play remains default.
 
 ---

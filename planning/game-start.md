@@ -34,7 +34,7 @@ Cold start lands on the **title / home** screen (no bottom nav — pre-dynasty).
 |--------|------------|--------|
 | **Continue** | **Hidden** if no save exists; else visible | Load **most recent** dynasty save → resume calendar position |
 | **New** | Always | Start [new game wizard](#new-game-wizard-overview) |
-| **Load** | Always | Save picker (slot list + metadata: school, season, record) |
+| **Load** | Always | Save picker — **10 slots** (empty or occupied), metadata: school, season, record |
 | **Settings** | Always | [App settings](#home-settings--credits) (not dynasty rules) |
 | **Credits** | Always | Novux Games, OSS, disclaimer |
 
@@ -58,9 +58,47 @@ Cold start lands on the **title / home** screen (no bottom nav — pre-dynasty).
 | Action | Behavior |
 |--------|----------|
 | **Continue** | Same as Load on **latest `lastPlayedAt`** save |
-| **Load** | List local files; show school display name, coach name, season year, W–L; tap → validate pack id → **`game-frame`** or offseason UI |
+| **Load** | **10 slots**; show school display name, coach name, season year, W–L; tap → validate pack id → **`game-frame`** or offseason UI. **Export/import** dynasty archives per [ADR-001](../docs/ADR-001-dynasty-save-backend.md). |
 
-Corrupt save → error sheet; offer delete slot.
+Saves are written in **one transaction** per create/advance; unreadable slots should be rare. If load validation fails → **Unable to load save** sheet; offer delete slot (fallback only).
+
+### Save slots (implemented)
+
+| Piece | Location |
+|-------|----------|
+| **10 slots**, Room `save_slots` | [`android/database`](../android/database/) |
+| **List / load / delete / last played** | [`SaveSlotRepository`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/data/save/SaveSlotRepository.kt) |
+| **Continue** | Latest `lastPlayedAtEpochMillis` among occupied slots |
+| **Load UI** | [`LoadGameScreen`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/shell/LoadGameScreen.kt) |
+| **Models** | [`SaveSlotSummary`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/save/SaveSlotSummary.kt), [`SaveSlots.COUNT`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/save/SaveSlots.kt) |
+
+### Dynasty metadata (implemented)
+
+| Field | Storage | Initial value |
+|-------|---------|----------------|
+| `seasonIndex` | `dynasty_metadata` | **1** (Season 1) |
+| `phase` | `dynasty_metadata` | **Offseason** (`CalendarPhase`) |
+| `packId` | `dynasty_metadata` + slot summary | **`embedded-default`** until pack import |
+| `dynastySchemaVersion` | `dynasty_metadata` | **1** |
+
+**New** (bootstrap until wizard ships): first empty slot → placeholder school/coach labels + metadata row; wizard will replace display names and attach `teamId`.
+
+### Save load integrity (implemented)
+
+| Piece | Role |
+|-------|------|
+| **Validate** on load | [`DynastySaveValidator`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/save/DynastySaveValidator.kt) — metadata + calendar |
+| **Repair** | Missing `dynasty_calendar` row restored from metadata when header is otherwise valid |
+| **Fallback UI** | [`SaveLoadUnavailableDialog`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/shell/SaveLoadUnavailableDialog.kt) — delete slot; not expected in normal play |
+
+### Week checkpoint (implemented)
+
+| Rule | Code |
+|------|------|
+| Sim results **provisional** until **Advance week** | [`WeekCheckpointState`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/calendar/checkpoint/WeekCheckpointState.kt) |
+| **Replay** same game while provisional | `stageSim` bumps `simGeneration` |
+| **After advance** | Provisional bucket cleared; games locked ([GDD](../planning/game-design.md#when-games-run-vs-when-the-save-commits)) |
+| Persistence | [`WeekCheckpointRepository`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/data/calendar/WeekCheckpointRepository.kt) |
 
 ---
 
@@ -202,7 +240,7 @@ Tap school → bottom sheet / full screen **before** sign:
 | **Location** | **City, State** ([`league-branding.md`](league-branding.md)) |
 | **Pipeline states** | **Home state** + pack **`pipelineStates`** (in-state / regional recruiting footprint) |
 | **Contract** | **Years offered** (typical **4–6** at create), **salary** ($) |
-| **Recruiting points** | Starting **weekly cap** from school grades + prestige tier |
+| **Recruiting points** | Starting **weekly pool** from **prestige tier** ([`recruiting-engine.md`](recruiting-engine.md#prestige-tier-weekly-pool-design-lock)) |
 | **NIL budget** | Annual pool **$** — conference + prestige scaled (e.g. SEC flagship band **~$9.7M–$13.2M** at high prestige; mid/low majors downscale on prestige curve) |
 | **School demeanor** | **Patient** · **Neutral** · **Reactionary** — AD trust / extension temperament ([`coach-card.md`](coach-card.md#staff-school-hub)) |
 
@@ -228,9 +266,13 @@ Primary CTA: **Sign contract** (disabled until user reviews sheet once — optio
 
 Audio, notifications default, save backup location (local), text size, legal links — **do not** duplicate Auto-upgrade / Unlimited age (dynasty-only).
 
+**Implemented:** DataStore [`AppSettings`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/settings/AppSettings.kt) — skip studio intro; SFX / music toggles and master volume (persisted; audio engine ships with in-game audio).
+
 ### Credits
 
 Novux Games, third-party licenses, unofficial / no NCAA endorsement ([`branding.md`](branding.md)).
+
+**Implemented:** Home → **Credits** — publisher, novux.dev, game director, copyright year (`CreditsScreen`).
 
 ---
 
