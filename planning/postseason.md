@@ -119,7 +119,7 @@ Among postseason-eligible teams that are **not** conference tournament champions
 
 **Who:** same **52** teams that skip Opening Round (**32** autos + **20** direct at-large) — see [`selection-engine.md`](selection-engine.md#seeds-152-ncba-main-bracket).
 
-**How:** **not** poll rank. Sort all **52** by **Seed Index** (net efficiency, quads, SOS, form, record quality). Best → **seed 1**, worst in pool → **seed 52**. A strong at-large can be **seed 4**; a weak conference champion can be **seed 52** while still holding an auto-bid.
+**How:** **not** poll rank. Sort all **52** by **Seed Index** (net efficiency, quads, School hub **strength of schedule** `sosRating` **0–99**, form, record quality). Best → **seed 1**, worst in pool → **seed 52**. A strong at-large can be **seed 4**; a weak conference champion can be **seed 52** while still holding an auto-bid. See [`selection-engine.md`](selection-engine.md).
 
 ### Step 4 — NCBA field (**76** teams)
 

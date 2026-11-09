@@ -36,14 +36,27 @@ A team can be **poll #8** (at-large) and **NCBA seed 4**, while a conference cha
 
 Recomputed when the weekly poll runs (and frozen as **final indices** at Selection Sunday). Built from **week-finalized** games ([`simulation-engine.md`](simulation-engine.md) box scores).
 
+### School hub parity
+
+The **same saved fields** drive School hub **Info** and this engine ([`game-frame.md`](game-frame.md#school-hub)):
+
+| School hub label | Save field | Range |
+|------------------|------------|-------|
+| **Strength of schedule** | `sosRating` | **0–99** (integer UI) |
+| **Prestige** | `programPrestige` | **0–99** (integer UI) |
+
+**`sosRating`** is a first-class input to **poll** and **Seed Index** — not a hidden duplicate scale. Players who read **SOS 82** on a school card are seeing the number that selection math uses.
+
+### Derived & display indices
+
 | Index | Symbol | Range | Definition |
 |-------|--------|-------|------------|
+| **Strength of schedule** | `sosRating` | **0–99** | Opponents’ strength (opponent `NEM` network, 2-pass); clamped **0–99** for display |
 | **Net efficiency margin** | `NEM` | approx −30..+30 | Points per 100 possessions (off eff − def eff), season to date |
-| **Adjusted strength of schedule** | `SOS` | 0–100 | Opponents’ strength (from opponent `NEM` network, iterative or 2-pass) |
 | **Quad record score** | `QRS` | unbounded | Weighted quad wins minus weighted quad losses (see below) |
 | **Form** | `FORM` | 0–100 | Last **10** games `NEM` blended with season `NEM` (60% L10 / 40% season) |
-| **Record quality** | `RQ` | 0–100 | Win% adjusted for opponent strength (`win% * 0.6 + SOS_norm * 0.4`) |
-| **Program prestige bias** | `PRE` | 0–99 | Pack `programPrestige` — small poll voter bias only |
+| **Record quality** | `RQ` | 0–100 | Win% adjusted for schedule (`win% * 0.6 + (sosRating/99) * 0.4`) |
+| **Program prestige** | `programPrestige` | **0–99** | Pack baseline + dynasty drift — **poll voter bias only** (not seeding) |
 
 ### Quad buckets (per game)
 
@@ -76,19 +89,24 @@ Classify each D-I game at tip using opponent **poll rank at game time** (or froz
 
 ### Poll score (per team)
 
-Normalize `NEM`, `SOS`, `QRS`, `FORM`, `RQ` to **0–100** league percentiles each week.
+Normalize `NEM`, `QRS`, `FORM`, `RQ` to **0–100** league percentiles each week. Use **raw 0–99** hub values for schedule and prestige:
 
 ```
+sosTerm   = sosRating / 99
+prestigeTerm = programPrestige / 99   // very slight voter bias — not merit
+
 pollScore =
-    0.32 * NEM_norm
-  + 0.22 * SOS_norm
+    0.30 * NEM_norm
+  + 0.24 * sosTerm
   + 0.20 * QRS_norm
-  + 0.14 * FORM_norm
-  + 0.07 * RQ_norm
-  + 0.05 * PRE
+  + 0.13 * FORM_norm
+  + 0.10 * RQ_norm
+  + 0.03 * prestigeTerm
 ```
 
-**Sort** all **365** teams by `pollScore` **descending**; ties break `NEM` → `SOS` → `teamId`.
+**`sosRating`** at **24%** is intentionally heavy — it matches the School hub SOS players already track. **`prestigeTerm`** at **3%** models real poll inertia (names, history) without overriding results; blue bloods nudge up, low-prestige overachievers nudge down, slightly.
+
+**Sort** all **365** teams by `pollScore` **descending**; ties break `NEM` → `sosRating` → `teamId`.
 
 **Poll rank** = position in that sort (**#1** = best). **T25** = ranks **#1–#25**.
 
@@ -135,14 +153,14 @@ Exactly **52** teams that **skip Opening Round**:
 
 ```
 seedIndex =
-    0.38 * NEM_norm
+    0.34 * NEM_norm
   + 0.24 * QRS_norm
-  + 0.20 * SOS_norm
+  + 0.22 * (sosRating / 99)
   + 0.12 * FORM_norm
-  + 0.06 * RQ_norm
+  + 0.08 * RQ_norm
 ```
 
-(No `PRE` — seeding is merit-only.)
+(No `programPrestige` — seeding is merit-only. **`sosRating`** same field as School hub.)
 
 Sort the **52** teams by **`seedIndex` descending**. Assign **NCBA seeds 1–52** in that order (**1** = best team in pool).
 
@@ -171,8 +189,8 @@ NCI / Heritage use separate bracket templates (no shared seed list with NCBA).
 | Artifact | Location |
 |----------|----------|
 | Default weights | Pack `ruleset.pollWeights`, `ruleset.seedWeights`, `ruleset.quadWeights` |
-| Weekly poll snapshot | Dynasty save: `pollRankByTeamId`, `pollScore`, week id |
-| Selection Sunday snapshot | `selectionSundayYear`, NCBA/NCI/Heritage lists, `seedByTeamId`, frozen `NEM`/`QRS`/… |
+| Weekly poll snapshot | Dynasty save: `pollRankByTeamId`, `pollScore`, `sosRating`, week id |
+| Selection Sunday snapshot | `selectionSundayYear`, NCBA/NCI/Heritage lists, `seedByTeamId`, frozen `NEM`/`QRS`/`sosRating`/… |
 
 ---
 
@@ -191,3 +209,4 @@ NCI / Heritage use separate bracket templates (no shared seed list with NCBA).
 | Date | Change |
 |------|--------|
 | 2025-11-09 | Initial engine: pollScore, seedIndex, poll vs seed split, seeds 1–52 sort |
+| 2025-11-09 | School hub `sosRating` 0–99 + 3% `programPrestige` poll bias |

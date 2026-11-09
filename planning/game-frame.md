@@ -183,7 +183,7 @@ Bottom tabs remain available; hubs stack or replace main content per navigation 
 | Block | Content |
 |-------|---------|
 | **Staff (teaser)** | Head coach name + record; **View staff** → Staff tab |
-| **Info** | Conference, prestige, overall record, conference record, top-25 record, strength of schedule, **power index**, etc. |
+| **Info** | Conference, **prestige (0–99)**, overall record, conference record, top-25 record, **strength of schedule (0–99)** — same `sosRating` / `programPrestige` fields as poll & seeding ([`selection-engine.md`](selection-engine.md)), **power index**, etc. |
 | **Rankings** | National + conference placement snapshot |
 | **Ratings** | Team offensive/defensive ratings (display layer) |
 | **Record** | Current season W–L breakdown |

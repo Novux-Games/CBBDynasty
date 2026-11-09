@@ -578,7 +578,7 @@ Gameplay is **sim-only**; see **[`simulation-engine.md`](simulation-engine.md)**
 
 **Formulas, weights, poll vs seed:** [`selection-engine.md`](selection-engine.md).
 
-**Summary:** Weekly **poll** ranks **all 365** (`pollScore` from efficiency, SOS, quads, form, record, small prestige bias). **Selection Sunday** uses **final poll rank** for **who** makes NCBA/NCI/Heritage; **Seed Index** sorts the **52** auto + direct at-large teams for **NCBA seeds 1–52** (merit — weak champs can be seed 52). **T25** = poll **#1–#25** ([`game-frame.md`](game-frame.md)).
+**Summary:** Weekly **poll** ranks **all 365** (`pollScore` from efficiency, School hub **`sosRating` 0–99**, quads, form, record, **~3%** `programPrestige` voter bias). **Selection Sunday** uses **final poll rank** for **who** makes NCBA/NCI/Heritage; **Seed Index** sorts the **52** auto + direct at-large teams for **NCBA seeds 1–52** (merit — weak champs can be seed 52; no prestige in seeds). **T25** = poll **#1–#25** ([`game-frame.md`](game-frame.md)).
 
 ### Weekly rhythm
 
