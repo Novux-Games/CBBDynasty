@@ -19,7 +19,8 @@ Planning remains authoritative in [`planning/`](../planning/). This doc describe
 | `ui.navigation` | Pre-dynasty + future dynasty routes |
 | `ui.theme` | `#181a25` brand ([`branding.md`](../planning/branding.md)) |
 | `data/settings` | DataStore app prefs (skip studio, audio stubs) |
-| `data` | Local saves, identity packs (TBD) |
+| `data/save` | Room dynasty persistence (see [ADR-001](ADR-001-dynasty-save-backend.md)) |
+| `data` | Identity pack import (JSON) |
 | `domain` | Week advance, offseason/preseason state machines (TBD) |
 
 ## Build

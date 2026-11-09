@@ -685,7 +685,7 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 
 ### Remaining product decisions (short list)
 
-- Local save format (SQLite vs files).
+- ~~Local save format (SQLite vs files).~~ **SQLite/Room** — [`docs/ADR-001-dynasty-save-backend.md`](../docs/ADR-001-dynasty-save-backend.md).
 - URL pack **signing** for optional one-time import while offline play remains default.
 
 ---
