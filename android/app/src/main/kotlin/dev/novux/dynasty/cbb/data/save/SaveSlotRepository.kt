@@ -12,6 +12,8 @@ import dev.novux.dynasty.cbb.core.save.SaveSlotSummary
 import dev.novux.dynasty.cbb.core.save.SaveSlots
 import dev.novux.dynasty.cbb.database.calendar.DynastyCalendarEntity
 import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
+import dev.novux.dynasty.cbb.data.balance.BalanceParseException
+import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import dev.novux.dynasty.cbb.database.dynasty.toEntity
@@ -27,6 +29,7 @@ class SaveSlotRepository(
     private val database: DynastyDatabase,
     private val weekCheckpointRepository: WeekCheckpointRepository,
     private val packRepository: PackRepository,
+    private val balanceRulesetRepository: BalanceRulesetRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -111,6 +114,18 @@ class SaveSlotRepository(
 
             packRepository.restorePack(meta.packId)
 
+            val balanceRuleset = try {
+                balanceRulesetRepository.restorePinned(
+                    meta.balanceRulesetId,
+                    meta.balanceSchemaVersion,
+                )
+            } catch (e: BalanceParseException) {
+                return DynastyLoadResult.Unreadable(
+                    slotIndex,
+                    DynastyLoadFailure.InvalidBalanceRuleset(e.message ?: "balance load failed"),
+                )
+            }
+
             val calendarRow = calendarDao.getByDynastyId(meta.dynastyId)
             calendarRow?.toCalendarSnapshot()?.let { snap ->
                 DynastySaveValidator.validateCalendar(snap)?.let { failure ->
@@ -140,6 +155,7 @@ class SaveSlotRepository(
                     summary = updatedSummary,
                     metadata = meta,
                     weekCheckpoint = weekCheckpoint,
+                    balanceRuleset = balanceRuleset,
                 ),
             )
         } catch (e: Exception) {
@@ -188,7 +204,13 @@ class SaveSlotRepository(
         val existing = slotDao.getByIndex(slotIndex)?.toSummary()
         if (existing != null && !existing.isEmpty) return null
 
-        val metadata = DynastyBootstrap.newDynasty(dynastyId = dynastyId, packId = packId)
+        val shippedBalance = balanceRulesetRepository.ensureShippedDefaultLoaded()
+        val metadata = DynastyBootstrap.newDynasty(
+            dynastyId = dynastyId,
+            packId = packId,
+            balanceRulesetId = shippedBalance.balanceRulesetId,
+            balanceSchemaVersion = shippedBalance.schemaVersion,
+        )
         val seasonLabel = SeasonMembershipYear.label(metadata.seasonIndex)
         val now = System.currentTimeMillis()
 
@@ -229,6 +251,7 @@ class SaveSlotRepository(
             summary = summary,
             metadata = metadata,
             weekCheckpoint = weekCheckpoint,
+            balanceRuleset = shippedBalance,
         )
     }
 

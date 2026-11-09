@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.save
 
+import dev.novux.dynasty.cbb.core.balance.BalanceRuleset
 import dev.novux.dynasty.cbb.core.calendar.checkpoint.WeekCheckpointState
 
 /**
@@ -24,4 +25,5 @@ data class LoadedDynasty(
     val summary: SaveSlotSummary,
     val metadata: DynastyMetadata,
     val weekCheckpoint: WeekCheckpointState,
+    val balanceRuleset: BalanceRuleset,
 )

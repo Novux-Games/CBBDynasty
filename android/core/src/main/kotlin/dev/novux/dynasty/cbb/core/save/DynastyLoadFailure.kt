@@ -19,6 +19,8 @@ sealed class DynastyLoadFailure {
 
     data class InvalidCalendar(val detail: String) : DynastyLoadFailure()
 
+    data class InvalidBalanceRuleset(val detail: String) : DynastyLoadFailure()
+
     data class DatabaseRead(val detail: String) : DynastyLoadFailure()
 }
 

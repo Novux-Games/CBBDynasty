@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb
 
 import android.app.Application
 import android.content.Context
+import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
@@ -27,16 +28,26 @@ class DynastyApplication : Application() {
     lateinit var packRepository: PackRepository
         private set
 
+    lateinit var balanceRulesetRepository: BalanceRulesetRepository
+        private set
+
     override fun onCreate() {
         super.onCreate()
         appSettingsRepository = AppSettingsRepository(applicationContext)
         packRepository = PackRepository(applicationContext)
+        balanceRulesetRepository = BalanceRulesetRepository(applicationContext)
         val database = DynastyDatabase.build(applicationContext)
         weekCheckpointRepository = WeekCheckpointRepository(database)
-        saveSlotRepository = SaveSlotRepository(database, weekCheckpointRepository, packRepository)
+        saveSlotRepository = SaveSlotRepository(
+            database,
+            weekCheckpointRepository,
+            packRepository,
+            balanceRulesetRepository,
+        )
         applicationScope.launch {
             saveSlotRepository.ensureInitialized()
             packRepository.ensureEmbeddedLoaded()
+            balanceRulesetRepository.ensureShippedDefaultLoaded()
         }
     }
 }
