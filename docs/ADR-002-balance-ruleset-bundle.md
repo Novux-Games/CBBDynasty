@@ -113,6 +113,12 @@ Swapping identity pack **does not** change `balanceRulesetId` / `balanceSchemaVe
 - **Mods:** identity pack import only — not balance JSON.
 - **Developers:** edit `assets/balance/balance-2026.json`, bump `schemaVersion`, ship new APK.
 
+## Recruiting interest (proposed keys)
+
+Interest factor weights are **balance** data, not possession-sim tuning ([ADR-003](ADR-003-sim-tuning-bundle.md)). Behavior and the proposed numbers live in [`recruiting-engine.md`](../planning/recruiting-engine.md#base-weights): `recruiting.interest.baseWeights`, `priorityMultiplier`, `starTierShifts`, `proximityScores`, `factorCurves`, and action `interestDelta`s.
+
+**Not in `balance-2026.json` yet.** Shipped NIL keys stay as they are: `nil.interestNilRatioExponent`, `nil.askByStarBand`, `nil.maxOfferMultiplierOfAsk` (**3×**). The interest spec does not change ask bands, the cap, or the annual pool — weights only change how sensitive the meter is. When `recruiting.interest.*` lands in this bundle, bump `schemaVersion`. Planning keeps the behavior; if the doc and JSON diverge, **JSON wins**.
+
 ## Consequences
 
 - ~~Implement `balanceRulesetId` + `balanceSchemaVersion` on `DynastyMetadata`~~ — Room `dynasty_metadata` v4 (`MIGRATION_3_4`); pinned in `DynastyBootstrap.newDynasty`.

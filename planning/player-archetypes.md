@@ -86,6 +86,8 @@ Rough priority when creating/rostering a player:
 
 Archetype nudges **shot selection and matchup behavior** in [`simulation-engine.md`](simulation-engine.md) via tuning weights; OVR/OFF/DEF remain primary.
 
+Archetype vs scheme is a **`playingTimeFit`** input on the recruit interest model ([`recruiting-engine.md`](recruiting-engine.md#factor-catalog)).
+
 ### UI
 
 - Overview **Information** row: `Archetype: 3-and-D wing` (title case).
@@ -98,3 +100,4 @@ Archetype nudges **shot selection and matchup behavior** in [`simulation-engine.
 | Date | Change |
 |------|--------|
 | 2025-11-08 | Generated archetype catalog; Top 60 draft rank + optional labels |
+| 2026-11-09 | Archetype vs scheme feeds recruit `playingTimeFit` |

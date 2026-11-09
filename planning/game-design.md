@@ -25,7 +25,7 @@
 **Postseason UI:** **[`postseason-frame.md`](postseason-frame.md)** — March Mayhem hub, NCBA/NCI/HC seed labels  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start (**Season 1**)  
-**Last updated:** 2025-11-08
+**Last updated:** 2026-11-09
 
 ---
 
@@ -326,7 +326,7 @@ Dynasty still supports a **0-game redshirt season** for development (exhibitions
 
 **Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — year-long cycle, prestige-tier **weekly points**, 2–4K HS + 1.5K JUCO, portal sub-tab, NIL, letter grades, prestige 0–99.
 
-**Brief:** HS/JUCO **seeded in preseason**; **year-long cycle**; **weekly points** (1k–5k/wk by prestige, **fixed grant** each week) buy **DM / call / house / offer / visits / bonus** — **NIL $** separate; **refunded** offer & visit reservations; **Signing Day** OS week 6; **Recommended** default; **50%** unspent carryover; crunch **1.5×** OS weeks 2–5. Arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
+**Brief:** HS/JUCO **seeded in preseason**; **year-long cycle**; **weekly points** (1k–5k/wk by prestige, **fixed grant** each week) buy **DM / call / house / offer / visits / bonus** — **NIL $** separate; **refunded** offer & visit reservations; **Signing Day** OS week 6; **Recommended** default; **50%** unspent carryover; crunch **1.5×** OS weeks 2–5. Interest weights: [`recruiting-engine.md`](recruiting-engine.md#interest--offers). Arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
 
 ---
 
@@ -406,9 +406,11 @@ Fundraising / offseason bumps may increase **`nilPoolAnnualUsd`** once per rules
 
 | Offer vs ask | Interest |
 |--------------|----------|
-| `nilOfferUsd ≥ nilAskUsd` | Full NIL credit toward interest ([`recruiting-engine.md`](recruiting-engine.md#interest--offers)) |
-| `0 < nilOfferUsd < nilAskUsd` | Scales down (e.g. ratio `nilOfferUsd / nilAskUsd`) |
+| `nilOfferUsd ≥ nilAskUsd` | Full NIL credit toward interest ([`recruiting-engine.md`](recruiting-engine.md#scoring)) |
+| `0 < nilOfferUsd < nilAskUsd` | Scales down (e.g. ratio `nilOfferUsd / nilAskUsd`, exponent `nil.interestNilRatioExponent`) |
 | No offer | NIL factor neutral / penalized for high asks |
+
+How much **`nil`** weighs against minutes, prestige, and home is the recruit interest model ([base weights](recruiting-engine.md#base-weights)). Those weights are **proposals** and change **sensitivity** only. **`nil.askByStarBand`**, the **3×** cap (`nil.maxOfferMultiplierOfAsk`), and the annual pool are unchanged ([conflicts](recruiting-engine.md#conflicts--non-overrides)).
 
 **Hard sign / portal join:** freeze **`nilOfferUsd`** on the player → Overview **NIL valuation** ([`player-cards.md`](player-cards.md)); move $ from **reserved** to **committed**. [`transfer-portal.md`](transfer-portal.md) — departures return committed deal to **remaining**.
 
@@ -811,3 +813,4 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-09 | Postseason census 124 national / 241 done (see `postseason.md`) |
 | 2025-11-09 | Poll=#1–365; pass-over runner-up; parallel NCI/HC |
 | 2025-11-08 | Linked `player-cards.md` |
+| 2026-11-09 | NIL interest points at recruit interest weights; ask bands, 3× cap, and annual pool unchanged |

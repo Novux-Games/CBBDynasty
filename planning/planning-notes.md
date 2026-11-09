@@ -32,6 +32,7 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | App updates vs saves | **Rule:** ship migrations; old slots keep working | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility), [`ADR-002`](../docs/ADR-002-balance-ruleset-bundle.md) |
 | Build checklist sync | **Rule:** every **Done** spec → step(s) + [full index](../docs/BUILD_CHECKLIST.md#locked-specs--build-steps-index) | [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
 | Recruiting point actions | **Done** | [`recruiting-engine.md`](recruiting-engine.md#action-costs-design-lock) → **6.17–6.20**, **15.6** UI |
+| Recruit interest model | **Done** — proposed factor weights; `signLikelihood` stays zero-spend | [`recruiting-engine.md`](recruiting-engine.md#interest--offers) → **6.21** |
 | Injuries & medical redshirt | **Done** | [`injuries.md`](injuries.md) |
 | Discipline (conduct + academic) | **Done** | [`in-season-systems.md`](in-season-systems.md) |
 | Chemistry & fatigue | **Done** | [`in-season-systems.md`](in-season-systems.md) |
@@ -101,3 +102,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | 2026-11-09 | Unified shell + week advance + dashboard task gate | [`game-frame.md`](game-frame.md) |
 | 2026-11-09 | BUILD_CHECKLIST sync for locked recruiting, portal, news, loyalty, dashboard | [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
 | 2026-11-09 | No in-season portal; `notifications.md` **Done** | [`notifications.md`](notifications.md) |
+| 2026-11-09 | Recruit interest model merged; weights stay proposals | [`recruiting-engine.md`](recruiting-engine.md#interest--offers) |
