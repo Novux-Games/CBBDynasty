@@ -116,7 +116,7 @@ Early-season **holiday events** ([`ncba-branding.md`](ncba-branding.md#early-sea
 
 | Choice | Effect |
 |--------|--------|
-| **Accept** | Bracket reserved (**up to 4** games); counts toward **32** RS cap; **only 28** other RS games allowed (conf + non-conf in that pool) |
+| **Accept** | Bracket reserved per event footprint ([`time-system.md`](time-system.md)); **4**-spot events cap other RS at **28**; shorter events use `32 − N` |
 | **Decline all** / none offered | Full **32** RS slots remain for conference + non-conference |
 
 **Gate:** Tasks **7** and **8** stay locked until task **6** is complete.

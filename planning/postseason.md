@@ -1,5 +1,7 @@
 # Postseason — conference through national brackets
 
+**Calendar weeks:** National postseason uses **7** week slots (Opening Round through National Championship) — [`time-system.md`](time-system.md#national-postseason-weeks).
+
 **Authoritative** Selection Sunday logic, Opening Round, **NCBA**, **NCI**, and **National Heritage Classic**. Universe display names: [`ncba-branding.md`](ncba-branding.md). Conference templates: [`game-design.md`](game-design.md#conference-tournaments). UI shell (planned): [`game-frame.md`](game-frame.md) → `postseason-frame.md`.
 
 **Last updated:** 2025-11-09

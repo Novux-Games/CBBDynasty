@@ -135,6 +135,8 @@ Opened from **Next game** (and parallel entry from Calendar before tip).
 
 ## Calendar tab
 
+Week labels follow [`time-system.md`](time-system.md): **Exhibition Week 1–3**, **Week 1–32** (RS), then conf-tourney / postseason week indices. **Bye** weeks show empty with optional “Bye” chip.
+
 - **Your** games only (not full D-I slate).
 - Lists **non-conference** and **conference** games in chronological order.
 - Row: date, opponent, location, result if played (in-week tentative) or “upcoming.”

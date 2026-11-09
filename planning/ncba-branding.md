@@ -89,14 +89,14 @@ Postseason **seeds** always show **tournament + number** (never ambiguous “#1 
 **Purpose:** Quad 1/2 résumé wins; neutral/island sites.  
 **Design lock:** Each program enters **at most one** early-season event tournament per **regular season**. This does **not** limit conference tournaments or national postseason brackets.
 
-Each event counts toward the **32-game** regular-season cap (**up to 4 games** in that event). A team cannot join two catalog events in the same season.
+Each event counts toward the **32-game** regular-season cap. A team cannot join two catalog events in the same season. **Calendar footprint** (weeks on RS calendar + game spots): [`time-system.md`](time-system.md#early-season-event-tournaments--byes).
 
-| Real (reference) | Universe (default pack) | Pack template id (example) |
-|------------------|---------------------------|----------------------------|
-| Maui Invitational | **The Island Classic** | `evt-island-classic` |
-| Battle 4 Atlantis | **The Caribbean Showdown** | `evt-caribbean-showdown` |
-| Champions Classic–style marquee opener (high-major doubleheader / round-robin — **not** tied to specific real schools) | **The Blue Blood Tip-Off** | `evt-blue-blood-tipoff` |
-| Feast Week–style multi-team bracket | **The Desert Shootout** | `evt-desert-shootout` |
+| Real (reference) | Universe (default pack) | Pack template id | Teams | RS weeks | RS games |
+|------------------|---------------------------|------------------|-------|----------|----------|
+| Maui Invitational | **The Island Classic** | `evt-island-classic` | **16** | **4** | **4** |
+| Battle 4 Atlantis | **The Caribbean Showdown** | `evt-caribbean-showdown` | 8 | 3 | 3 |
+| Champions Classic–style marquee opener | **The Blue Blood Tip-Off** | `evt-blue-blood-tipoff` | **4** | **2** | **2** |
+| Feast Week–style multi-team bracket | **The Desert Shootout** | `evt-desert-shootout` | **16** | **4** | **4** |
 
 **Scheduling:** **Preseason → Tournament Invites** task ([`preseason.md`](preseason.md#6--tournament-invites)) — prestige gates invites; accept **one** before regular-season scheduling. Accepting reserves **4** RS games and caps other RS at **28**. AI resolves same rules in preseason sim.
 

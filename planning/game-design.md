@@ -17,6 +17,7 @@
 **NCBA universe:** **[`ncba-branding.md`](ncba-branding.md)** — national body, March Mayhem, early events  
 **Offseason:** **[`offseason.md`](offseason.md)** — carousel, weeks 1–9, Season 1 rules  
 **Preseason:** **[`preseason.md`](preseason.md)** — single-week tasks, reports, schedule  
+**Time / weeks:** **[`time-system.md`](time-system.md)** — exhibition, RS 1–32, byes, postseason weeks  
 **Postseason:** **[`postseason.md`](postseason.md)** — Selection Sunday, NCBA / NCI / Heritage  
 **Selection engine:** **[`selection-engine.md`](selection-engine.md)** — poll formula, seed index, cuts  
 **Postseason UI:** **[`postseason-frame.md`](postseason-frame.md)** — March Mayhem hub, NCBA/NCI/HC seed labels  
@@ -506,17 +507,11 @@ Exhibitions: morale, light poll momentum, injuries possible.
 - **User picks:** non-conf opponents in allowed windows (Nov–Dec; limited Jan slots for small conferences).
 - **Validation:** solver enforces cap, per-team non-conf budget, no double-booked dates, one event per season.
 
-### In-season calendar (typical 2026–27 shape)
+### In-season calendar
 
-| Month | Focus |
-|-------|-------|
-| Oct | ≤3 exhibitions |
-| Nov–Dec | Non-conference |
-| Jan | Conference (large) or mix (small) |
-| Feb | Conference |
-| Early Mar | Conference tournaments |
-| Mid Mar | Selection Sunday |
-| Mid Mar–early Apr | **NCBA Men's BB Tournament** (March Mayhem) |
+**Authoritative week model:** [`time-system.md`](time-system.md) — **Exhibition Weeks 1–3**, **Regular Season Weeks 1–32**, conference tournament weeks (= max rounds), **7** national postseason weeks (Opening Round → National Championship).
+
+Narrative months (Nov–Mar) are display-only; **week advance** uses week indices above.
 
 ### Conference standings & tiebreakers
 
