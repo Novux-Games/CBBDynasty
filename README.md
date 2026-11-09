@@ -15,3 +15,5 @@ cd android && ./gradlew :core:test
 ```
 
 Open `android/` in Android Studio for emulator builds (`:app:assembleDebug`).
+
+**Implementation order:** [`docs/BUILD_CHECKLIST.md`](docs/BUILD_CHECKLIST.md)

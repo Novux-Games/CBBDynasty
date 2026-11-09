@@ -54,3 +54,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | Time system (weeks/byes) | **Done** | [`time-system.md`](time-system.md) |
 | End of Season week | **Done** | [`season-review.md`](season-review.md) |
 | App shell (studio / splash) | **Done** | [`app-shell.md`](app-shell.md) |
+| Implementation build order | **Done** | [`docs/BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |

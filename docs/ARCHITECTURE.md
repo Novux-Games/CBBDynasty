@@ -31,4 +31,6 @@ cd android
 
 ## Next engineering tracks
 
-See [`game-design.md`](../planning/game-design.md#engineering-milestones): calendar/saves → possession sim → dynasty systems → full league → March.
+**Step-by-step checklist:** [`BUILD_CHECKLIST.md`](BUILD_CHECKLIST.md) (phases 0–16).
+
+High level: calendar/saves → possession sim → dynasty systems → full league → March — [`game-design.md`](../planning/game-design.md#engineering-milestones).
