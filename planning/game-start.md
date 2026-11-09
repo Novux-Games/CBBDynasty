@@ -81,7 +81,7 @@ Saves are written in **one transaction** per create/advance; unreadable slots sh
 | `packId` | `dynasty_metadata` + slot summary | **`embedded-default`** until pack import |
 | `dynastySchemaVersion` | `dynasty_metadata` | **1** |
 
-**New** (bootstrap until wizard ships): first empty slot → placeholder school/coach labels + metadata row; wizard will replace display names and attach `teamId`.
+**New:** multi-step wizard (**4.1** nav); dynasty row creation moves to **Sign contract** (**4.6**). Until then, no save is written from **New**.
 
 ### Save load integrity (implemented)
 
@@ -118,6 +118,14 @@ New
 ```
 
 **Defaults:** **Season 1** era **2026–27**; default identity pack unless import overrides ([`league-branding.md`](league-branding.md)).
+
+### Wizard navigation (implemented)
+
+| Piece | Location |
+|-------|----------|
+| **Home → New** | [`DynastyApp`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/DynastyApp.kt) → `AppRoute.NewGame` |
+| **Steps 1–6 shell** | [`ui/newgame`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/newgame/) — progress, **Back** / **Next**; step bodies ship in **4.2–4.7** |
+| **Empty-slot gate** | Same snackbar as legacy bootstrap when all ten saves are full |
 
 ---
 

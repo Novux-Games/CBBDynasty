@@ -111,7 +111,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 4.1 | `[ ]` Nav: Home → multi-step **New** | Back stack works | [game-start](../planning/game-start.md) | `ui.newgame` |
+| 4.1 | `[x]` Nav: Home → multi-step **New** | Back stack works | [game-start](../planning/game-start.md) | `ui.newgame` |
 | 4.2 | `[ ]` Coach info + avatar presets | Saved on coach entity | [game-start](../planning/game-start.md), [coach-card](../planning/coach-card.md) | `:core` + UI |
 | 4.3 | `[ ]` Archetype + default O/D schemes | Matches strategy presets | [game-start](../planning/game-start.md), [strategy-schemes](../planning/strategy-schemes.md) | `:core` |
 | 4.4 | `[ ]` Dynasty toggles (auto-upgrade, unlimited age) | On save metadata | [game-start](../planning/game-start.md) | — |

@@ -31,6 +31,7 @@ import dev.novux.dynasty.cbb.ui.shell.CreditsScreen
 import dev.novux.dynasty.cbb.ui.shell.HomeMenuScreen
 import dev.novux.dynasty.cbb.ui.shell.LoadGameScreen
 import dev.novux.dynasty.cbb.ui.shell.SettingsScreen
+import dev.novux.dynasty.cbb.ui.newgame.NewGameWizardScreen
 import dev.novux.dynasty.cbb.ui.shell.SplashScreen
 import dev.novux.dynasty.cbb.ui.shell.StudioScreen
 import dev.novux.dynasty.cbb.ui.theme.DynastyTheme
@@ -112,21 +113,7 @@ fun DynastyApp(
                                 }
                             }
                         },
-                        onNew = {
-                            scope.launch {
-                                val loaded = saveSlotRepository.createEmptyDynastyInFirstOpenSlot(
-                                    schoolDisplayName = context.getString(R.string.new_draft_school),
-                                    coachDisplayName = context.getString(R.string.new_draft_coach),
-                                )
-                                if (loaded != null) {
-                                    ActiveDynastySession.set(loaded)
-                                } else {
-                                    snackbarHostState.showSnackbar(
-                                        context.getString(R.string.new_no_empty_slot),
-                                    )
-                                }
-                            }
-                        },
+                        onNew = { navController.navigate(AppRoute.NewGame.route) },
                         onLoad = { navController.navigate(AppRoute.Load.route) },
                         onSettings = { navController.navigate(AppRoute.Settings.route) },
                         onCredits = { navController.navigate(AppRoute.Credits.route) },
@@ -137,6 +124,19 @@ fun DynastyApp(
                         saveSlotRepository = saveSlotRepository,
                         onBack = { navController.popBackStack() },
                         onDynastyLoaded = { navController.popBackStack() },
+                    )
+                }
+                composable(AppRoute.NewGame.route) {
+                    NewGameWizardScreen(
+                        saveSlotRepository = saveSlotRepository,
+                        onExitWizard = { navController.popBackStack() },
+                        onNoEmptySlot = {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(
+                                    context.getString(R.string.new_no_empty_slot),
+                                )
+                            }
+                        },
                     )
                 }
                 composable(AppRoute.Credits.route) {
