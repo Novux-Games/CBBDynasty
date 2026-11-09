@@ -1,0 +1,7093 @@
+{
+  "packVersion": 1,
+  "packId": "embedded-default",
+  "membershipYear": "2026-27",
+  "disclaimerAcceptedRequired": true,
+  "rulesetYear": 2026,
+  "conferences": [
+    {
+      "id": "conf-nac",
+      "displayName": "Northern Atlantic Collegiate Conference",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-nac",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-aucc",
+      "displayName": "American Unified Collegiate Conference",
+      "leagueGameCount": 18,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-aucc",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-cat10",
+      "displayName": "Colonial Atlantic Ten",
+      "leagueGameCount": 18,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-cat10",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-acrown",
+      "displayName": "Atlantic Crown Conference",
+      "leagueGameCount": 20,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-acrown",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-ascu",
+      "displayName": "Atlantic Sun Collegiate Union",
+      "leagueGameCount": 14,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-ascu",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-c12",
+      "displayName": "Central Twelve Conference",
+      "leagueGameCount": 18,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-c12",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-epc",
+      "displayName": "Eastern Premier Conference",
+      "leagueGameCount": 20,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-epc",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-nsc",
+      "displayName": "Northern Sky Conference",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-nsc",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-psc",
+      "displayName": "Piedmont South Conference",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-psc",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-g10",
+      "displayName": "Great Ten Conference",
+      "leagueGameCount": 20,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-g10",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-gwc",
+      "displayName": "Golden West Conference",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-gwc",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-cca",
+      "displayName": "Coastal Colonial Association",
+      "leagueGameCount": 14,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-cca",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-ucc",
+      "displayName": "United Continental Conference",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-ucc",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-lhl",
+      "displayName": "Lakefront Horizon League",
+      "leagueGameCount": 18,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-lhl",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-fel",
+      "displayName": "Founding Eight League",
+      "leagueGameCount": 14,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-fel",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-metro",
+      "displayName": "Metro Collegiate Conference",
+      "leagueGameCount": 18,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-metro",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-mac",
+      "displayName": "Midland American Circuit",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-mac",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-meac",
+      "displayName": "Mid-Eastern Alliance Conference",
+      "leagueGameCount": 14,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-meac",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-pvc",
+      "displayName": "Prairie Valley Conference",
+      "leagueGameCount": 18,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-pvc",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-rmwc",
+      "displayName": "Rocky Mountain West Conference",
+      "leagueGameCount": 18,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-rmwc",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-nec",
+      "displayName": "Northeastern Exchange Conference",
+      "leagueGameCount": 14,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-nec",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-ova",
+      "displayName": "Ohio Valley Alliance",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-ova",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-pr12",
+      "displayName": "Pacific Rim Twelve",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-pr12",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-psl",
+      "displayName": "Patriot Scholar League",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-psl",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-sedc",
+      "displayName": "Southeastern Dominion Conference",
+      "leagueGameCount": 18,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-sedc",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-scf",
+      "displayName": "Southern Collegiate Federation",
+      "leagueGameCount": 20,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-scf",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-gcc",
+      "displayName": "Gulf Coastland Conference",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-gcc",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-scal",
+      "displayName": "Southwest Collegiate Athletic League",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-scal",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-summit",
+      "displayName": "Prairie Summit League",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-summit",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-sbc",
+      "displayName": "Solar Belt Conference",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-sbc",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-uac",
+      "displayName": "United Athletic Collegiate",
+      "leagueGameCount": 16,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-uac",
+      "ncaaAutoBidSlot": 1
+    },
+    {
+      "id": "conf-wcc",
+      "displayName": "Western Coast Collegiate",
+      "leagueGameCount": 18,
+      "standingsTiebreakers": [
+        "h2h",
+        "h2h-point-diff",
+        "record-vs-top-teams"
+      ],
+      "tournamentTemplateId": "tpl-conf-wcc",
+      "ncaaAutoBidSlot": 1
+    }
+  ],
+  "teams": [
+    {
+      "id": "team-conf-nac-001",
+      "conferenceId": "conf-nac",
+      "displayName": "Albany Great Danes",
+      "shortName": "AGD",
+      "homeCity": "Albany",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#097d5c",
+        "secondary": "#2bc9b2"
+      },
+      "arenaBaseName": "Albany Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nac-002",
+      "conferenceId": "conf-nac",
+      "displayName": "Binghamton Bearcats",
+      "shortName": "BB",
+      "homeCity": "Binghamton",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#4adbbc",
+        "secondary": "#bf665b"
+      },
+      "arenaBaseName": "Binghamton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nac-003",
+      "conferenceId": "conf-nac",
+      "displayName": "Bryant Mastiffs",
+      "shortName": "BM",
+      "homeCity": "Smithfield",
+      "homeState": "RI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#638377",
+        "secondary": "#6a869e"
+      },
+      "arenaBaseName": "Smithfield Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nac-004",
+      "conferenceId": "conf-nac",
+      "displayName": "Maine Black Bears",
+      "shortName": "MBB",
+      "homeCity": "Orono",
+      "homeState": "ME",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#a2aa91",
+        "secondary": "#c17ea7"
+      },
+      "arenaBaseName": "Orono Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nac-005",
+      "conferenceId": "conf-nac",
+      "displayName": "New Hampshire Lynx",
+      "shortName": "NHL",
+      "homeCity": "Durham",
+      "homeState": "NH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e0df99",
+        "secondary": "#2fbefd"
+      },
+      "arenaBaseName": "Durham Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nac-006",
+      "conferenceId": "conf-nac",
+      "displayName": "Newark Tech Highlanders",
+      "shortName": "NTH",
+      "homeCity": "Newark",
+      "homeState": "NJ",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#9f7155",
+        "secondary": "#b20d91"
+      },
+      "arenaBaseName": "Newark Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nac-007",
+      "conferenceId": "conf-nac",
+      "displayName": "UMBC Retrievers",
+      "shortName": "UR",
+      "homeCity": "Baltimore",
+      "homeState": "MD",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#54c822",
+        "secondary": "#609d4e"
+      },
+      "arenaBaseName": "Baltimore Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nac-008",
+      "conferenceId": "conf-nac",
+      "displayName": "Bay State Lowell River Hawks",
+      "shortName": "BSL",
+      "homeCity": "Lowell",
+      "homeState": "MA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#a874b5",
+        "secondary": "#d40487"
+      },
+      "arenaBaseName": "Lowell Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nac-009",
+      "conferenceId": "conf-nac",
+      "displayName": "Vermont Catamounts",
+      "shortName": "VC",
+      "homeCity": "Burlington",
+      "homeState": "VT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#bbf789",
+        "secondary": "#b370dc"
+      },
+      "arenaBaseName": "Burlington Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-aucc-001",
+      "conferenceId": "conf-aucc",
+      "displayName": "Charlotte 49ers",
+      "shortName": "C4",
+      "homeCity": "Charlotte",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#dae853",
+        "secondary": "#673d8e"
+      },
+      "arenaBaseName": "Charlotte Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-aucc-002",
+      "conferenceId": "conf-aucc",
+      "displayName": "East Carolina Pirates",
+      "shortName": "ECP",
+      "homeCity": "Greenville",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#2bd5d8",
+        "secondary": "#4927c0"
+      },
+      "arenaBaseName": "Greenville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-aucc-003",
+      "conferenceId": "conf-aucc",
+      "displayName": "Florida Atlantic Owls",
+      "shortName": "FAO",
+      "homeCity": "Boca Raton",
+      "homeState": "FL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e5f51d",
+        "secondary": "#70dfab"
+      },
+      "arenaBaseName": "Boca Raton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-aucc-004",
+      "conferenceId": "conf-aucc",
+      "displayName": "Memphis Cougars",
+      "shortName": "MC",
+      "homeCity": "Memphis",
+      "homeState": "TN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#2c55e7",
+        "secondary": "#03bd5a"
+      },
+      "arenaBaseName": "Memphis Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-aucc-005",
+      "conferenceId": "conf-aucc",
+      "displayName": "North Texas Mean Green",
+      "shortName": "NTM",
+      "homeCity": "Denton",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#f51077",
+        "secondary": "#f5237f"
+      },
+      "arenaBaseName": "Denton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-aucc-006",
+      "conferenceId": "conf-aucc",
+      "displayName": "Rice Owls",
+      "shortName": "RO",
+      "homeCity": "Houston",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e5f997",
+        "secondary": "#844715"
+      },
+      "arenaBaseName": "Houston Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-aucc-007",
+      "conferenceId": "conf-aucc",
+      "displayName": "South Florida Stampede",
+      "shortName": "SFS",
+      "homeCity": "Tampa",
+      "homeState": "FL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d8dbec",
+        "secondary": "#37fa9e"
+      },
+      "arenaBaseName": "Tampa Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-aucc-008",
+      "conferenceId": "conf-aucc",
+      "displayName": "Temple Owls",
+      "shortName": "TO",
+      "homeCity": "Philadelphia",
+      "homeState": "PA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#1fe91a",
+        "secondary": "#ae0826"
+      },
+      "arenaBaseName": "Philadelphia Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-aucc-009",
+      "conferenceId": "conf-aucc",
+      "displayName": "Tulane Green Wave",
+      "shortName": "TGW",
+      "homeCity": "New Orleans",
+      "homeState": "LA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#bf84b2",
+        "secondary": "#662f26"
+      },
+      "arenaBaseName": "New Orleans Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-aucc-010",
+      "conferenceId": "conf-aucc",
+      "displayName": "Tulsa Golden Hurricane",
+      "shortName": "TGH",
+      "homeCity": "Tulsa",
+      "homeState": "OK",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#a0f03a",
+        "secondary": "#76a01a"
+      },
+      "arenaBaseName": "Tulsa Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-aucc-011",
+      "conferenceId": "conf-aucc",
+      "displayName": "Birmingham Metro Blazers",
+      "shortName": "BMB",
+      "homeCity": "Birmingham",
+      "homeState": "AL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#fbda0d",
+        "secondary": "#4f5062"
+      },
+      "arenaBaseName": "Birmingham Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-aucc-012",
+      "conferenceId": "conf-aucc",
+      "displayName": "South Alamo Roadrunners",
+      "shortName": "SAR",
+      "homeCity": "San Antonio",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e90be2",
+        "secondary": "#0e09ba"
+      },
+      "arenaBaseName": "San Antonio Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-aucc-013",
+      "conferenceId": "conf-aucc",
+      "displayName": "Wichita State Shockers",
+      "shortName": "WSS",
+      "homeCity": "Wichita",
+      "homeState": "KS",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#5eb6b4",
+        "secondary": "#9d13b3"
+      },
+      "arenaBaseName": "Wichita Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-001",
+      "conferenceId": "conf-cat10",
+      "displayName": "Davidson Lynx",
+      "shortName": "DL",
+      "homeCity": "Davidson",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7133d5",
+        "secondary": "#e30400"
+      },
+      "arenaBaseName": "Davidson Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-002",
+      "conferenceId": "conf-cat10",
+      "displayName": "Dayton Flyers",
+      "shortName": "DF",
+      "homeCity": "Dayton",
+      "homeState": "OH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#6ff327",
+        "secondary": "#d6d8d0"
+      },
+      "arenaBaseName": "Dayton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-003",
+      "conferenceId": "conf-cat10",
+      "displayName": "Duquesne Dukes",
+      "shortName": "DD",
+      "homeCity": "Pittsburgh",
+      "homeState": "PA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#a09d8f",
+        "secondary": "#c927e8"
+      },
+      "arenaBaseName": "Pittsburgh Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-004",
+      "conferenceId": "conf-cat10",
+      "displayName": "Fordham Rams",
+      "shortName": "FR",
+      "homeCity": "Bronx",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#9786fd",
+        "secondary": "#d3595b"
+      },
+      "arenaBaseName": "Bronx Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-005",
+      "conferenceId": "conf-cat10",
+      "displayName": "George Mason Patriots",
+      "shortName": "GMP",
+      "homeCity": "Fairfax",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#bea626",
+        "secondary": "#fa596a"
+      },
+      "arenaBaseName": "Fairfax Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-006",
+      "conferenceId": "conf-cat10",
+      "displayName": "George Washington Revolutionaries",
+      "shortName": "GWR",
+      "homeCity": "Washington",
+      "homeState": "DC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#94ea25",
+        "secondary": "#dbb58d"
+      },
+      "arenaBaseName": "Washington Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-007",
+      "conferenceId": "conf-cat10",
+      "displayName": "La Salle Explorers",
+      "shortName": "LSE",
+      "homeCity": "Philadelphia",
+      "homeState": "PA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#507943",
+        "secondary": "#f05e00"
+      },
+      "arenaBaseName": "Philadelphia Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-008",
+      "conferenceId": "conf-cat10",
+      "displayName": "Loyola Chicago Ramblers",
+      "shortName": "LCR",
+      "homeCity": "Chicago",
+      "homeState": "IL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e45608",
+        "secondary": "#9e2ecb"
+      },
+      "arenaBaseName": "Chicago Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-009",
+      "conferenceId": "conf-cat10",
+      "displayName": "Rhode Island Rams",
+      "shortName": "RIR",
+      "homeCity": "Kingston",
+      "homeState": "RI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#f56a55",
+        "secondary": "#22cbd2"
+      },
+      "arenaBaseName": "Kingston Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-010",
+      "conferenceId": "conf-cat10",
+      "displayName": "Richmond Spiders",
+      "shortName": "RS",
+      "homeCity": "Richmond",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b2cd07",
+        "secondary": "#094455"
+      },
+      "arenaBaseName": "Richmond Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-011",
+      "conferenceId": "conf-cat10",
+      "displayName": "Saint Joseph's Falcons",
+      "shortName": "SJF",
+      "homeCity": "Philadelphia",
+      "homeState": "PA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#abc9ae",
+        "secondary": "#9061dd"
+      },
+      "arenaBaseName": "Philadelphia Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-012",
+      "conferenceId": "conf-cat10",
+      "displayName": "Saint Louis Billikens",
+      "shortName": "SLB",
+      "homeCity": "St. Louis",
+      "homeState": "MO",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7c52eb",
+        "secondary": "#aa169c"
+      },
+      "arenaBaseName": "St. Louis Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-013",
+      "conferenceId": "conf-cat10",
+      "displayName": "Saint Bonaventure Bonnies",
+      "shortName": "SBB",
+      "homeCity": "St. Bonaventure",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7efbb4",
+        "secondary": "#ad1a42"
+      },
+      "arenaBaseName": "St. Bonaventure Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cat10-014",
+      "conferenceId": "conf-cat10",
+      "displayName": "VCU Rams",
+      "shortName": "VR",
+      "homeCity": "Richmond",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#32eb5a",
+        "secondary": "#bd4ae5"
+      },
+      "arenaBaseName": "Richmond Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-001",
+      "conferenceId": "conf-acrown",
+      "displayName": "Boston College Hawks",
+      "shortName": "BCH",
+      "homeCity": "Chestnut Hill",
+      "homeState": "MA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b0f033",
+        "secondary": "#db086f"
+      },
+      "arenaBaseName": "Chestnut Hill Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-002",
+      "conferenceId": "conf-acrown",
+      "displayName": "Bay Golden Bruins",
+      "shortName": "BGB",
+      "homeCity": "Berkeley",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#14390b",
+        "secondary": "#627beb"
+      },
+      "arenaBaseName": "Berkeley Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-003",
+      "conferenceId": "conf-acrown",
+      "displayName": "Clemson Cougars",
+      "shortName": "CC",
+      "homeCity": "Clemson",
+      "homeState": "SC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#29f285",
+        "secondary": "#915cb3"
+      },
+      "arenaBaseName": "Clemson Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-004",
+      "conferenceId": "conf-acrown",
+      "displayName": "Crown University Sovereigns",
+      "shortName": "CUS",
+      "homeCity": "Durham",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b366d3",
+        "secondary": "#4e7590"
+      },
+      "arenaBaseName": "Durham Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-005",
+      "conferenceId": "conf-acrown",
+      "displayName": "Florida State Seminoles",
+      "shortName": "FSS",
+      "homeCity": "Tallahassee",
+      "homeState": "FL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#4e6f3e",
+        "secondary": "#306ee3"
+      },
+      "arenaBaseName": "Tallahassee Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-006",
+      "conferenceId": "conf-acrown",
+      "displayName": "Georgia Tech Yellow Jackets",
+      "shortName": "GTY",
+      "homeCity": "Atlanta",
+      "homeState": "GA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#749864",
+        "secondary": "#a2b159"
+      },
+      "arenaBaseName": "Atlanta Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-007",
+      "conferenceId": "conf-acrown",
+      "displayName": "Louisville Scarlets",
+      "shortName": "LS",
+      "homeCity": "Louisville",
+      "homeState": "KY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#1c4d24",
+        "secondary": "#da525a"
+      },
+      "arenaBaseName": "Louisville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-008",
+      "conferenceId": "conf-acrown",
+      "displayName": "Miami Hurricanes",
+      "shortName": "MH",
+      "homeCity": "Coral Gables",
+      "homeState": "FL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#c5590e",
+        "secondary": "#8c2cf1"
+      },
+      "arenaBaseName": "Coral Gables Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-009",
+      "conferenceId": "conf-acrown",
+      "displayName": "NC State Wolfpack",
+      "shortName": "NSW",
+      "homeCity": "Raleigh",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#14535b",
+        "secondary": "#c97015"
+      },
+      "arenaBaseName": "Raleigh Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-010",
+      "conferenceId": "conf-acrown",
+      "displayName": "Tar River Commonwealth",
+      "shortName": "TRC",
+      "homeCity": "Chapel Hill",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#01c299",
+        "secondary": "#95f219"
+      },
+      "arenaBaseName": "Chapel Hill Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-011",
+      "conferenceId": "conf-acrown",
+      "displayName": "Notre Dame Fighting Irish",
+      "shortName": "NDF",
+      "homeCity": "Notre Dame",
+      "homeState": "IN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#8e854a",
+        "secondary": "#c3f0a0"
+      },
+      "arenaBaseName": "Notre Dame Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-012",
+      "conferenceId": "conf-acrown",
+      "displayName": "Pittsburgh Pumas",
+      "shortName": "PP",
+      "homeCity": "Pittsburgh",
+      "homeState": "PA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#553892",
+        "secondary": "#96de8a"
+      },
+      "arenaBaseName": "Pittsburgh Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-013",
+      "conferenceId": "conf-acrown",
+      "displayName": "Dallas Metro Mustangs",
+      "shortName": "DMM",
+      "homeCity": "Dallas",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#230a78",
+        "secondary": "#1037e0"
+      },
+      "arenaBaseName": "Dallas Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-014",
+      "conferenceId": "conf-acrown",
+      "displayName": "Stanford Cardinal",
+      "shortName": "SC",
+      "homeCity": "Stanford",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#96a247",
+        "secondary": "#b8f23c"
+      },
+      "arenaBaseName": "Stanford Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-015",
+      "conferenceId": "conf-acrown",
+      "displayName": "Syracuse Orange",
+      "shortName": "SO",
+      "homeCity": "Syracuse",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#976fd9",
+        "secondary": "#f2b896"
+      },
+      "arenaBaseName": "Syracuse Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-016",
+      "conferenceId": "conf-acrown",
+      "displayName": "Virginia Cavaliers",
+      "shortName": "VC",
+      "homeCity": "Charlottesville",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#429dfd",
+        "secondary": "#8f6835"
+      },
+      "arenaBaseName": "Charlottesville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-017",
+      "conferenceId": "conf-acrown",
+      "displayName": "Virginia Tech Hokies",
+      "shortName": "VTH",
+      "homeCity": "Blacksburg",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#c9771a",
+        "secondary": "#d61fbc"
+      },
+      "arenaBaseName": "Blacksburg Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-acrown-018",
+      "conferenceId": "conf-acrown",
+      "displayName": "Wake Forest Demon Deacons",
+      "shortName": "WFD",
+      "homeCity": "Winston-Salem",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#eeb1a2",
+        "secondary": "#b8ad08"
+      },
+      "arenaBaseName": "Winston-Salem Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ascu-001",
+      "conferenceId": "conf-ascu",
+      "displayName": "Bellarmine Knights",
+      "shortName": "BK",
+      "homeCity": "Louisville",
+      "homeState": "KY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#a5a487",
+        "secondary": "#d0b685"
+      },
+      "arenaBaseName": "Louisville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ascu-002",
+      "conferenceId": "conf-ascu",
+      "displayName": "Florida Gulf Coast Hawks",
+      "shortName": "FGC",
+      "homeCity": "Fort Myers",
+      "homeState": "FL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e5fa4a",
+        "secondary": "#f5a675"
+      },
+      "arenaBaseName": "Fort Myers Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ascu-003",
+      "conferenceId": "conf-ascu",
+      "displayName": "Jacksonville Dolphins",
+      "shortName": "JD",
+      "homeCity": "Jacksonville",
+      "homeState": "FL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#f8ecbd",
+        "secondary": "#4e6311"
+      },
+      "arenaBaseName": "Jacksonville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ascu-004",
+      "conferenceId": "conf-ascu",
+      "displayName": "Lipscomb Bisons",
+      "shortName": "LB",
+      "homeCity": "Nashville",
+      "homeState": "TN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#030097",
+        "secondary": "#b2dab6"
+      },
+      "arenaBaseName": "Nashville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ascu-005",
+      "conferenceId": "conf-ascu",
+      "displayName": "North Florida Ospreys",
+      "shortName": "NFO",
+      "homeCity": "Jacksonville",
+      "homeState": "FL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7bc34c",
+        "secondary": "#a7d0f1"
+      },
+      "arenaBaseName": "Jacksonville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ascu-006",
+      "conferenceId": "conf-ascu",
+      "displayName": "Queens Royals",
+      "shortName": "QR",
+      "homeCity": "Charlotte",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#88239a",
+        "secondary": "#84d1ef"
+      },
+      "arenaBaseName": "Charlotte Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ascu-007",
+      "conferenceId": "conf-ascu",
+      "displayName": "Stetson Hatters",
+      "shortName": "SH",
+      "homeCity": "DeLand",
+      "homeState": "FL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#931b1f",
+        "secondary": "#48db64"
+      },
+      "arenaBaseName": "DeLand Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ascu-008",
+      "conferenceId": "conf-ascu",
+      "displayName": "West Florida Argonauts",
+      "shortName": "WFA",
+      "homeCity": "Pensacola",
+      "homeState": "FL",
+      "postseasonEligible": false,
+      "reclassTransitionYear": 1,
+      "colors": {
+        "primary": "#5d8416",
+        "secondary": "#dfc479"
+      },
+      "arenaBaseName": "Pensacola Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-001",
+      "conferenceId": "conf-c12",
+      "displayName": "Arizona Lynx",
+      "shortName": "AL",
+      "homeCity": "Tucson",
+      "homeState": "AZ",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#350a43",
+        "secondary": "#676685"
+      },
+      "arenaBaseName": "Tucson Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-002",
+      "conferenceId": "conf-c12",
+      "displayName": "Arizona State Sun Devils",
+      "shortName": "ASS",
+      "homeCity": "Tempe",
+      "homeState": "AZ",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#10dee7",
+        "secondary": "#ac255b"
+      },
+      "arenaBaseName": "Tempe Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-003",
+      "conferenceId": "conf-c12",
+      "displayName": "Baylor Bruins",
+      "shortName": "BB",
+      "homeCity": "Waco",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#695feb",
+        "secondary": "#e8a7bd"
+      },
+      "arenaBaseName": "Waco Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-004",
+      "conferenceId": "conf-c12",
+      "displayName": "Provo Metro Cougars",
+      "shortName": "PMC",
+      "homeCity": "Provo",
+      "homeState": "UT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#aec073",
+        "secondary": "#8fab75"
+      },
+      "arenaBaseName": "Provo Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-005",
+      "conferenceId": "conf-c12",
+      "displayName": "Cincinnati Bearcats",
+      "shortName": "CB",
+      "homeCity": "Cincinnati",
+      "homeState": "OH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#69a6a6",
+        "secondary": "#3acb78"
+      },
+      "arenaBaseName": "Cincinnati Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-006",
+      "conferenceId": "conf-c12",
+      "displayName": "Colorado Buffaloes",
+      "shortName": "CB",
+      "homeCity": "Boulder",
+      "homeState": "CO",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#4b757c",
+        "secondary": "#096a36"
+      },
+      "arenaBaseName": "Boulder Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-007",
+      "conferenceId": "conf-c12",
+      "displayName": "Houston Cougars",
+      "shortName": "HC",
+      "homeCity": "Houston",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#70a2d9",
+        "secondary": "#469185"
+      },
+      "arenaBaseName": "Houston Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-008",
+      "conferenceId": "conf-c12",
+      "displayName": "Iowa State Cyclones",
+      "shortName": "ISC",
+      "homeCity": "Ames",
+      "homeState": "IA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#a37896",
+        "secondary": "#39c88e"
+      },
+      "arenaBaseName": "Ames Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-009",
+      "conferenceId": "conf-c12",
+      "displayName": "Jaydale Commonwealth",
+      "shortName": "JC",
+      "homeCity": "Lawrence",
+      "homeState": "KS",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#39baa5",
+        "secondary": "#abf183"
+      },
+      "arenaBaseName": "Lawrence Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-010",
+      "conferenceId": "conf-c12",
+      "displayName": "Kansas State Lynx",
+      "shortName": "KSL",
+      "homeCity": "Manhattan",
+      "homeState": "KS",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#97e8d9",
+        "secondary": "#a36c92"
+      },
+      "arenaBaseName": "Manhattan Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-011",
+      "conferenceId": "conf-c12",
+      "displayName": "Oklahoma State Cowboys",
+      "shortName": "OSC",
+      "homeCity": "Stillwater",
+      "homeState": "OK",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#ccbad4",
+        "secondary": "#f96a9c"
+      },
+      "arenaBaseName": "Stillwater Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-012",
+      "conferenceId": "conf-c12",
+      "displayName": "TCU Horned Frogs",
+      "shortName": "THF",
+      "homeCity": "Fort Worth",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#18bece",
+        "secondary": "#fca19f"
+      },
+      "arenaBaseName": "Fort Worth Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-013",
+      "conferenceId": "conf-c12",
+      "displayName": "Texas Tech Red Raiders",
+      "shortName": "TTR",
+      "homeCity": "Lubbock",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#efa378",
+        "secondary": "#5a6aa0"
+      },
+      "arenaBaseName": "Lubbock Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-014",
+      "conferenceId": "conf-c12",
+      "displayName": "Central Florida Metro Knights",
+      "shortName": "CFM",
+      "homeCity": "Orlando",
+      "homeState": "FL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#629f75",
+        "secondary": "#af3fdf"
+      },
+      "arenaBaseName": "Orlando Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-015",
+      "conferenceId": "conf-c12",
+      "displayName": "Utah Utes",
+      "shortName": "UU",
+      "homeCity": "Salt Lake City",
+      "homeState": "UT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#90102a",
+        "secondary": "#321c9d"
+      },
+      "arenaBaseName": "Salt Lake City Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-c12-016",
+      "conferenceId": "conf-c12",
+      "displayName": "West Virginia Highlanders",
+      "shortName": "WVH",
+      "homeCity": "Morgantown",
+      "homeState": "WV",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d8e044",
+        "secondary": "#3f130d"
+      },
+      "arenaBaseName": "Morgantown Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-epc-001",
+      "conferenceId": "conf-epc",
+      "displayName": "Butler Mastiffs",
+      "shortName": "BM",
+      "homeCity": "Indianapolis",
+      "homeState": "IN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#1630c4",
+        "secondary": "#7583d5"
+      },
+      "arenaBaseName": "Indianapolis Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-epc-002",
+      "conferenceId": "conf-epc",
+      "displayName": "Creighton Bluejays",
+      "shortName": "CB",
+      "homeCity": "Omaha",
+      "homeState": "NE",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b1dc73",
+        "secondary": "#ba9d80"
+      },
+      "arenaBaseName": "Omaha Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-epc-003",
+      "conferenceId": "conf-epc",
+      "displayName": "DePaul Blue Demons",
+      "shortName": "DBD",
+      "homeCity": "Chicago",
+      "homeState": "IL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#fc5e64",
+        "secondary": "#30d74b"
+      },
+      "arenaBaseName": "Chicago Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-epc-004",
+      "conferenceId": "conf-epc",
+      "displayName": "Georgetown Hoyas",
+      "shortName": "GH",
+      "homeCity": "Washington",
+      "homeState": "DC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#962a4d",
+        "secondary": "#6537b9"
+      },
+      "arenaBaseName": "Washington Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-epc-005",
+      "conferenceId": "conf-epc",
+      "displayName": "Marquette Golden Eagles",
+      "shortName": "MGE",
+      "homeCity": "Milwaukee",
+      "homeState": "WI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d45212",
+        "secondary": "#aca264"
+      },
+      "arenaBaseName": "Milwaukee Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-epc-006",
+      "conferenceId": "conf-epc",
+      "displayName": "Providence Friars",
+      "shortName": "PF",
+      "homeCity": "Providence",
+      "homeState": "RI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#3fa387",
+        "secondary": "#3ea7f4"
+      },
+      "arenaBaseName": "Providence Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-epc-007",
+      "conferenceId": "conf-epc",
+      "displayName": "Seton Hall Pirates",
+      "shortName": "SHP",
+      "homeCity": "South Orange",
+      "homeState": "NJ",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#204370",
+        "secondary": "#525078"
+      },
+      "arenaBaseName": "South Orange Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-epc-008",
+      "conferenceId": "conf-epc",
+      "displayName": "Saint John's Red Storm",
+      "shortName": "SJR",
+      "homeCity": "Queens",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e4dff2",
+        "secondary": "#afc588"
+      },
+      "arenaBaseName": "Queens Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-epc-009",
+      "conferenceId": "conf-epc",
+      "displayName": "Storrs Sled Dogs",
+      "shortName": "SSD",
+      "homeCity": "Storrs",
+      "homeState": "CT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#9fba9a",
+        "secondary": "#609c2c"
+      },
+      "arenaBaseName": "Storrs Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-epc-010",
+      "conferenceId": "conf-epc",
+      "displayName": "Main Line Lynx",
+      "shortName": "MLL",
+      "homeCity": "Villanova",
+      "homeState": "PA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#c546a7",
+        "secondary": "#ecac67"
+      },
+      "arenaBaseName": "Villanova Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-epc-011",
+      "conferenceId": "conf-epc",
+      "displayName": "Xavier Musketeers",
+      "shortName": "XM",
+      "homeCity": "Cincinnati",
+      "homeState": "OH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#207ae0",
+        "secondary": "#d9da68"
+      },
+      "arenaBaseName": "Cincinnati Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nsc-001",
+      "conferenceId": "conf-nsc",
+      "displayName": "Eastern Washington Hawks",
+      "shortName": "EWH",
+      "homeCity": "Cheney",
+      "homeState": "WA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7edc63",
+        "secondary": "#b110a9"
+      },
+      "arenaBaseName": "Cheney Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nsc-002",
+      "conferenceId": "conf-nsc",
+      "displayName": "Idaho Vandals",
+      "shortName": "IV",
+      "homeCity": "Moscow",
+      "homeState": "ID",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7e50cc",
+        "secondary": "#c0d1c6"
+      },
+      "arenaBaseName": "Moscow Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nsc-003",
+      "conferenceId": "conf-nsc",
+      "displayName": "Idaho State Bengals",
+      "shortName": "ISB",
+      "homeCity": "Pocatello",
+      "homeState": "ID",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#c1a743",
+        "secondary": "#ad7be2"
+      },
+      "arenaBaseName": "Pocatello Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nsc-004",
+      "conferenceId": "conf-nsc",
+      "displayName": "Montana Grizzlies",
+      "shortName": "MG",
+      "homeCity": "Missoula",
+      "homeState": "MT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e1c9e1",
+        "secondary": "#f0354b"
+      },
+      "arenaBaseName": "Missoula Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nsc-005",
+      "conferenceId": "conf-nsc",
+      "displayName": "Montana State Bobcats",
+      "shortName": "MSB",
+      "homeCity": "Bozeman",
+      "homeState": "MT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#afa6c8",
+        "secondary": "#80ebd9"
+      },
+      "arenaBaseName": "Bozeman Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nsc-006",
+      "conferenceId": "conf-nsc",
+      "displayName": "Northern Arizona Lumberjacks",
+      "shortName": "NAL",
+      "homeCity": "Flagstaff",
+      "homeState": "AZ",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#990062",
+        "secondary": "#a3d789"
+      },
+      "arenaBaseName": "Flagstaff Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nsc-007",
+      "conferenceId": "conf-nsc",
+      "displayName": "Northern Colorado Bruins",
+      "shortName": "NCB",
+      "homeCity": "Greeley",
+      "homeState": "CO",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#8cd504",
+        "secondary": "#baa745"
+      },
+      "arenaBaseName": "Greeley Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nsc-008",
+      "conferenceId": "conf-nsc",
+      "displayName": "Portland State Vikings",
+      "shortName": "PSV",
+      "homeCity": "Portland",
+      "homeState": "OR",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#9a75b8",
+        "secondary": "#da0657"
+      },
+      "arenaBaseName": "Portland Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nsc-009",
+      "conferenceId": "conf-nsc",
+      "displayName": "Southern Utah Thunderbirds",
+      "shortName": "SUT",
+      "homeCity": "Cedar City",
+      "homeState": "UT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#bc9ae2",
+        "secondary": "#851cbc"
+      },
+      "arenaBaseName": "Cedar City Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nsc-010",
+      "conferenceId": "conf-nsc",
+      "displayName": "Utah Tech Trailblazers",
+      "shortName": "UTT",
+      "homeCity": "St. George",
+      "homeState": "UT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#c4bbab",
+        "secondary": "#04d42c"
+      },
+      "arenaBaseName": "St. George Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nsc-011",
+      "conferenceId": "conf-nsc",
+      "displayName": "Weber State Lynx",
+      "shortName": "WSL",
+      "homeCity": "Ogden",
+      "homeState": "UT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#797a80",
+        "secondary": "#18d15f"
+      },
+      "arenaBaseName": "Ogden Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psc-001",
+      "conferenceId": "conf-psc",
+      "displayName": "Charleston Southern Privateers",
+      "shortName": "CSP",
+      "homeCity": "Charleston",
+      "homeState": "SC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#65d942",
+        "secondary": "#13a4b2"
+      },
+      "arenaBaseName": "Charleston Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psc-002",
+      "conferenceId": "conf-psc",
+      "displayName": "Gardner-Webb Runnin' Bulldogs",
+      "shortName": "GRB",
+      "homeCity": "Boiling Springs",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#4f5195",
+        "secondary": "#6f35ef"
+      },
+      "arenaBaseName": "Boiling Springs Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psc-003",
+      "conferenceId": "conf-psc",
+      "displayName": "High Point Pumas",
+      "shortName": "HPP",
+      "homeCity": "High Point",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#620eed",
+        "secondary": "#6b0566"
+      },
+      "arenaBaseName": "High Point Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psc-004",
+      "conferenceId": "conf-psc",
+      "displayName": "Longwood Lancers",
+      "shortName": "LL",
+      "homeCity": "Farmville",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#8fe67a",
+        "secondary": "#4cb596"
+      },
+      "arenaBaseName": "Farmville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psc-005",
+      "conferenceId": "conf-psc",
+      "displayName": "Presbyterian Blue Hose",
+      "shortName": "PBH",
+      "homeCity": "Clinton",
+      "homeState": "SC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#8e60fc",
+        "secondary": "#9a82b6"
+      },
+      "arenaBaseName": "Clinton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psc-006",
+      "conferenceId": "conf-psc",
+      "displayName": "Radford Highlanders",
+      "shortName": "RH",
+      "homeCity": "Radford",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d462a2",
+        "secondary": "#0c97c1"
+      },
+      "arenaBaseName": "Radford Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psc-007",
+      "conferenceId": "conf-psc",
+      "displayName": "North Cape Asheville Mastiffs",
+      "shortName": "NCA",
+      "homeCity": "Asheville",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#20b69b",
+        "secondary": "#913f11"
+      },
+      "arenaBaseName": "Asheville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psc-008",
+      "conferenceId": "conf-psc",
+      "displayName": "Southern California Metro Upstate Hoplites",
+      "shortName": "SCM",
+      "homeCity": "Spartanburg",
+      "homeState": "SC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#3b7f17",
+        "secondary": "#5be395"
+      },
+      "arenaBaseName": "Spartanburg Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psc-009",
+      "conferenceId": "conf-psc",
+      "displayName": "Winthrop Hawks",
+      "shortName": "WH",
+      "homeCity": "Rock Hill",
+      "homeState": "SC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#53d000",
+        "secondary": "#25f070"
+      },
+      "arenaBaseName": "Rock Hill Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-001",
+      "conferenceId": "conf-g10",
+      "displayName": "Illinois Fighting Illini",
+      "shortName": "IFI",
+      "homeCity": "Champaign",
+      "homeState": "IL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#5dadd5",
+        "secondary": "#025dc3"
+      },
+      "arenaBaseName": "Champaign Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-002",
+      "conferenceId": "conf-g10",
+      "displayName": "Indiana Hoosiers",
+      "shortName": "IH",
+      "homeCity": "Bloomington",
+      "homeState": "IN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b2a14f",
+        "secondary": "#70b5e0"
+      },
+      "arenaBaseName": "Bloomington Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-003",
+      "conferenceId": "conf-g10",
+      "displayName": "Iowa Hawkeyes",
+      "shortName": "IH",
+      "homeCity": "Iowa City",
+      "homeState": "IA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#125984",
+        "secondary": "#ad0afc"
+      },
+      "arenaBaseName": "Iowa City Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-004",
+      "conferenceId": "conf-g10",
+      "displayName": "Maryland Terrapins",
+      "shortName": "MT",
+      "homeCity": "College Park",
+      "homeState": "MD",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#76daed",
+        "secondary": "#1279bf"
+      },
+      "arenaBaseName": "College Park Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-005",
+      "conferenceId": "conf-g10",
+      "displayName": "Michigan Wolverines",
+      "shortName": "MW",
+      "homeCity": "Ann Arbor",
+      "homeState": "MI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#525737",
+        "secondary": "#d96bff"
+      },
+      "arenaBaseName": "Ann Arbor Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-006",
+      "conferenceId": "conf-g10",
+      "displayName": "Michigan State Hoplites",
+      "shortName": "MSH",
+      "homeCity": "East Lansing",
+      "homeState": "MI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#08cfdb",
+        "secondary": "#3919df"
+      },
+      "arenaBaseName": "East Lansing Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-007",
+      "conferenceId": "conf-g10",
+      "displayName": "Minnesota Golden Gophers",
+      "shortName": "MGG",
+      "homeCity": "Minneapolis",
+      "homeState": "MN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#bf7316",
+        "secondary": "#1b9a72"
+      },
+      "arenaBaseName": "Minneapolis Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-008",
+      "conferenceId": "conf-g10",
+      "displayName": "Nebraska Cornhuskers",
+      "shortName": "NC",
+      "homeCity": "Lincoln",
+      "homeState": "NE",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#fed4c4",
+        "secondary": "#65c434"
+      },
+      "arenaBaseName": "Lincoln Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-009",
+      "conferenceId": "conf-g10",
+      "displayName": "Northwestern Lynx",
+      "shortName": "NL",
+      "homeCity": "Evanston",
+      "homeState": "IL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#c346d4",
+        "secondary": "#1b863f"
+      },
+      "arenaBaseName": "Evanston Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-010",
+      "conferenceId": "conf-g10",
+      "displayName": "Ohio State Buckeyes",
+      "shortName": "OSB",
+      "homeCity": "Columbus",
+      "homeState": "OH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#712eec",
+        "secondary": "#009f1b"
+      },
+      "arenaBaseName": "Columbus Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-011",
+      "conferenceId": "conf-g10",
+      "displayName": "Oregon Ducks",
+      "shortName": "OD",
+      "homeCity": "Eugene",
+      "homeState": "OR",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#511c98",
+        "secondary": "#51cebc"
+      },
+      "arenaBaseName": "Eugene Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-012",
+      "conferenceId": "conf-g10",
+      "displayName": "Penn State Nittany Lions",
+      "shortName": "PSN",
+      "homeCity": "University Park",
+      "homeState": "PA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#138100",
+        "secondary": "#dd74b2"
+      },
+      "arenaBaseName": "University Park Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-013",
+      "conferenceId": "conf-g10",
+      "displayName": "Purdue Boilermakers",
+      "shortName": "PB",
+      "homeCity": "West Lafayette",
+      "homeState": "IN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d5a1ef",
+        "secondary": "#e21520"
+      },
+      "arenaBaseName": "West Lafayette Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-014",
+      "conferenceId": "conf-g10",
+      "displayName": "Rutgers Scarlet Knights",
+      "shortName": "RSK",
+      "homeCity": "Piscataway",
+      "homeState": "NJ",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#52b876",
+        "secondary": "#fd2c52"
+      },
+      "arenaBaseName": "Piscataway Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-015",
+      "conferenceId": "conf-g10",
+      "displayName": "Westwood Harbor Guardians",
+      "shortName": "WHG",
+      "homeCity": "Los Angeles",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#799c35",
+        "secondary": "#ee78a9"
+      },
+      "arenaBaseName": "Los Angeles Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-016",
+      "conferenceId": "conf-g10",
+      "displayName": "South Bay Argonauts",
+      "shortName": "SBA",
+      "homeCity": "Los Angeles",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#07fdd1",
+        "secondary": "#904574"
+      },
+      "arenaBaseName": "Los Angeles Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-017",
+      "conferenceId": "conf-g10",
+      "displayName": "Washington Huskies",
+      "shortName": "WH",
+      "homeCity": "Seattle",
+      "homeState": "WA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#844f6f",
+        "secondary": "#c12fbf"
+      },
+      "arenaBaseName": "Seattle Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-g10-018",
+      "conferenceId": "conf-g10",
+      "displayName": "Wisconsin Badgers",
+      "shortName": "WB",
+      "homeCity": "Madison",
+      "homeState": "WI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#97fc26",
+        "secondary": "#e39151"
+      },
+      "arenaBaseName": "Madison Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gwc-001",
+      "conferenceId": "conf-gwc",
+      "displayName": "Cal Baptist Lancers",
+      "shortName": "CBL",
+      "homeCity": "Riverside",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#756b1d",
+        "secondary": "#71ae38"
+      },
+      "arenaBaseName": "Riverside Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gwc-002",
+      "conferenceId": "conf-gwc",
+      "displayName": "Cal Poly Mustangs",
+      "shortName": "CPM",
+      "homeCity": "San Luis Obispo",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#22d5fc",
+        "secondary": "#f936f3"
+      },
+      "arenaBaseName": "San Luis Obispo Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gwc-003",
+      "conferenceId": "conf-gwc",
+      "displayName": "Cal State Bakersfield Roadrunners",
+      "shortName": "CSB",
+      "homeCity": "Bakersfield",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#a0ce86",
+        "secondary": "#fe53a1"
+      },
+      "arenaBaseName": "Bakersfield Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gwc-004",
+      "conferenceId": "conf-gwc",
+      "displayName": "Cal State Fullerton Titans",
+      "shortName": "CSF",
+      "homeCity": "Fullerton",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#f09c0e",
+        "secondary": "#e4e253"
+      },
+      "arenaBaseName": "Fullerton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gwc-005",
+      "conferenceId": "conf-gwc",
+      "displayName": "Cal State Northridge Matadors",
+      "shortName": "CSN",
+      "homeCity": "Northridge",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#9492e9",
+        "secondary": "#3f99b3"
+      },
+      "arenaBaseName": "Northridge Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gwc-006",
+      "conferenceId": "conf-gwc",
+      "displayName": "Long Beach State Beach",
+      "shortName": "LBS",
+      "homeCity": "Long Beach",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#9f66be",
+        "secondary": "#b781fa"
+      },
+      "arenaBaseName": "Long Beach Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gwc-007",
+      "conferenceId": "conf-gwc",
+      "displayName": "Sacramento State Hornets",
+      "shortName": "SSH",
+      "homeCity": "Sacramento",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#eb89eb",
+        "secondary": "#15c8b2"
+      },
+      "arenaBaseName": "Sacramento Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gwc-008",
+      "conferenceId": "conf-gwc",
+      "displayName": "UC Irvine Anteaters",
+      "shortName": "UIA",
+      "homeCity": "Irvine",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#f12c2a",
+        "secondary": "#400d4a"
+      },
+      "arenaBaseName": "Irvine Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gwc-009",
+      "conferenceId": "conf-gwc",
+      "displayName": "UC Riverside Highlanders",
+      "shortName": "URH",
+      "homeCity": "Riverside",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b338e0",
+        "secondary": "#545b01"
+      },
+      "arenaBaseName": "Riverside Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gwc-010",
+      "conferenceId": "conf-gwc",
+      "displayName": "UC San Diego Tritons",
+      "shortName": "USD",
+      "homeCity": "La Jolla",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#599bc7",
+        "secondary": "#6b535f"
+      },
+      "arenaBaseName": "La Jolla Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gwc-011",
+      "conferenceId": "conf-gwc",
+      "displayName": "UC Santa Barbara Gauchos",
+      "shortName": "USB",
+      "homeCity": "Santa Barbara",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#62a256",
+        "secondary": "#883091"
+      },
+      "arenaBaseName": "Santa Barbara Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gwc-012",
+      "conferenceId": "conf-gwc",
+      "displayName": "Utah Valley Wolverines",
+      "shortName": "UVW",
+      "homeCity": "Orem",
+      "homeState": "UT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#90809c",
+        "secondary": "#68d2aa"
+      },
+      "arenaBaseName": "Orem Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cca-001",
+      "conferenceId": "conf-cca",
+      "displayName": "Campbell Fighting Camels",
+      "shortName": "CFC",
+      "homeCity": "Buies Creek",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e83e42",
+        "secondary": "#7fbb1b"
+      },
+      "arenaBaseName": "Buies Creek Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cca-002",
+      "conferenceId": "conf-cca",
+      "displayName": "College of Charleston Cougars",
+      "shortName": "COC",
+      "homeCity": "Charleston",
+      "homeState": "SC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#528845",
+        "secondary": "#1f9b0d"
+      },
+      "arenaBaseName": "Charleston Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cca-003",
+      "conferenceId": "conf-cca",
+      "displayName": "Drexel Dragons",
+      "shortName": "DD",
+      "homeCity": "Philadelphia",
+      "homeState": "PA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#a0ea87",
+        "secondary": "#bd5007"
+      },
+      "arenaBaseName": "Philadelphia Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cca-004",
+      "conferenceId": "conf-cca",
+      "displayName": "Elon Phoenix",
+      "shortName": "EP",
+      "homeCity": "Elon",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#9a0703",
+        "secondary": "#3b4338"
+      },
+      "arenaBaseName": "Elon Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cca-005",
+      "conferenceId": "conf-cca",
+      "displayName": "Hampton Pirates",
+      "shortName": "HP",
+      "homeCity": "Hampton",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#a24882",
+        "secondary": "#240447"
+      },
+      "arenaBaseName": "Hampton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cca-006",
+      "conferenceId": "conf-cca",
+      "displayName": "Hofstra Pride",
+      "shortName": "HP",
+      "homeCity": "Hempstead",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7bffc2",
+        "secondary": "#18b88f"
+      },
+      "arenaBaseName": "Hempstead Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cca-007",
+      "conferenceId": "conf-cca",
+      "displayName": "Monmouth Falcons",
+      "shortName": "MF",
+      "homeCity": "West Long Branch",
+      "homeState": "NJ",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#442454",
+        "secondary": "#3f6d60"
+      },
+      "arenaBaseName": "West Long Branch Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cca-008",
+      "conferenceId": "conf-cca",
+      "displayName": "North Carolina A&T Aggies",
+      "shortName": "NCA",
+      "homeCity": "Greensboro",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b08613",
+        "secondary": "#b57df9"
+      },
+      "arenaBaseName": "Greensboro Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cca-009",
+      "conferenceId": "conf-cca",
+      "displayName": "Northeastern Huskies",
+      "shortName": "NH",
+      "homeCity": "Boston",
+      "homeState": "MA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#1ec315",
+        "secondary": "#21af0e"
+      },
+      "arenaBaseName": "Boston Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cca-010",
+      "conferenceId": "conf-cca",
+      "displayName": "Stony Brook Seawolves",
+      "shortName": "SBS",
+      "homeCity": "Stony Brook",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#842586",
+        "secondary": "#a0688a"
+      },
+      "arenaBaseName": "Stony Brook Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cca-011",
+      "conferenceId": "conf-cca",
+      "displayName": "Towson Cougars",
+      "shortName": "TC",
+      "homeCity": "Towson",
+      "homeState": "MD",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#34084b",
+        "secondary": "#cc009d"
+      },
+      "arenaBaseName": "Towson Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cca-012",
+      "conferenceId": "conf-cca",
+      "displayName": "North Cape Wilmington Seahawks",
+      "shortName": "NCW",
+      "homeCity": "Wilmington",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#ab8998",
+        "secondary": "#67ce01"
+      },
+      "arenaBaseName": "Wilmington Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-cca-013",
+      "conferenceId": "conf-cca",
+      "displayName": "William & Mary Tribe",
+      "shortName": "W&M",
+      "homeCity": "Williamsburg",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#12b1d3",
+        "secondary": "#9e70fe"
+      },
+      "arenaBaseName": "Williamsburg Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ucc-001",
+      "conferenceId": "conf-ucc",
+      "displayName": "Delaware Fightin' Blue Hens",
+      "shortName": "DFB",
+      "homeCity": "Newark",
+      "homeState": "DE",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#80e38f",
+        "secondary": "#515a78"
+      },
+      "arenaBaseName": "Newark Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ucc-002",
+      "conferenceId": "conf-ucc",
+      "displayName": "Miami-Dade Metro Pumas",
+      "shortName": "MMP",
+      "homeCity": "Miami",
+      "homeState": "FL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#545807",
+        "secondary": "#21af3f"
+      },
+      "arenaBaseName": "Miami Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ucc-003",
+      "conferenceId": "conf-ucc",
+      "displayName": "Jacksonville State Gamecocks",
+      "shortName": "JSG",
+      "homeCity": "Jacksonville",
+      "homeState": "AL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#757741",
+        "secondary": "#3d1181"
+      },
+      "arenaBaseName": "Jacksonville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ucc-004",
+      "conferenceId": "conf-ucc",
+      "displayName": "Kennesaw State Owls",
+      "shortName": "KSO",
+      "homeCity": "Kennesaw",
+      "homeState": "GA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#f49e93",
+        "secondary": "#497ecc"
+      },
+      "arenaBaseName": "Kennesaw Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ucc-005",
+      "conferenceId": "conf-ucc",
+      "displayName": "Liberty Flames",
+      "shortName": "LF",
+      "homeCity": "Lynchburg",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7e0bf6",
+        "secondary": "#e0bc63"
+      },
+      "arenaBaseName": "Lynchburg Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ucc-006",
+      "conferenceId": "conf-ucc",
+      "displayName": "Middle Tennessee Blue Raiders",
+      "shortName": "MTB",
+      "homeCity": "Murfreesboro",
+      "homeState": "TN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#072b99",
+        "secondary": "#83ead0"
+      },
+      "arenaBaseName": "Murfreesboro Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ucc-007",
+      "conferenceId": "conf-ucc",
+      "displayName": "Missouri State Bruins",
+      "shortName": "MSB",
+      "homeCity": "Springfield",
+      "homeState": "MO",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d04028",
+        "secondary": "#a474df"
+      },
+      "arenaBaseName": "Springfield Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ucc-008",
+      "conferenceId": "conf-ucc",
+      "displayName": "New Mexico State Aggies",
+      "shortName": "NMS",
+      "homeCity": "Las Cruces",
+      "homeState": "NM",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#921d12",
+        "secondary": "#8aae25"
+      },
+      "arenaBaseName": "Las Cruces Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ucc-009",
+      "conferenceId": "conf-ucc",
+      "displayName": "Sam Houston Bearkats",
+      "shortName": "SHB",
+      "homeCity": "Huntsville",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#dc3777",
+        "secondary": "#6d8d5a"
+      },
+      "arenaBaseName": "Huntsville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ucc-010",
+      "conferenceId": "conf-ucc",
+      "displayName": "Western Kentucky Hilltoppers",
+      "shortName": "WKH",
+      "homeCity": "Bowling Green",
+      "homeState": "KY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#76311d",
+        "secondary": "#5cc61b"
+      },
+      "arenaBaseName": "Bowling Green Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-lhl-001",
+      "conferenceId": "conf-lhl",
+      "displayName": "Cleveland State Vikings",
+      "shortName": "CSV",
+      "homeCity": "Cleveland",
+      "homeState": "OH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#07e611",
+        "secondary": "#47326a"
+      },
+      "arenaBaseName": "Cleveland Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-lhl-002",
+      "conferenceId": "conf-lhl",
+      "displayName": "Detroit Mercy Titans",
+      "shortName": "DMT",
+      "homeCity": "Detroit",
+      "homeState": "MI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#22e35a",
+        "secondary": "#d65bcc"
+      },
+      "arenaBaseName": "Detroit Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-lhl-003",
+      "conferenceId": "conf-lhl",
+      "displayName": "Green Bay Phoenix",
+      "shortName": "GBP",
+      "homeCity": "Green Bay",
+      "homeState": "WI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#2a88bb",
+        "secondary": "#b4155a"
+      },
+      "arenaBaseName": "Green Bay Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-lhl-004",
+      "conferenceId": "conf-lhl",
+      "displayName": "IU Indy Jaguars",
+      "shortName": "IIJ",
+      "homeCity": "Indianapolis",
+      "homeState": "IN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d0544c",
+        "secondary": "#ff1b45"
+      },
+      "arenaBaseName": "Indianapolis Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-lhl-005",
+      "conferenceId": "conf-lhl",
+      "displayName": "Milwaukee Pumas",
+      "shortName": "MP",
+      "homeCity": "Milwaukee",
+      "homeState": "WI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#273091",
+        "secondary": "#8af14b"
+      },
+      "arenaBaseName": "Milwaukee Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-lhl-006",
+      "conferenceId": "conf-lhl",
+      "displayName": "Northern Illinois Huskies",
+      "shortName": "NIH",
+      "homeCity": "DeKalb",
+      "homeState": "IL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d442f9",
+        "secondary": "#2d4833"
+      },
+      "arenaBaseName": "DeKalb Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-lhl-007",
+      "conferenceId": "conf-lhl",
+      "displayName": "Northern Kentucky Norse",
+      "shortName": "NKN",
+      "homeCity": "Highland Heights",
+      "homeState": "KY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#53fce2",
+        "secondary": "#55284a"
+      },
+      "arenaBaseName": "Highland Heights Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-lhl-008",
+      "conferenceId": "conf-lhl",
+      "displayName": "Oakland Golden Grizzlies",
+      "shortName": "OGG",
+      "homeCity": "Rochester",
+      "homeState": "MI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b34204",
+        "secondary": "#4961c7"
+      },
+      "arenaBaseName": "Rochester Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-lhl-009",
+      "conferenceId": "conf-lhl",
+      "displayName": "Purdue Fort Wayne Mastodons",
+      "shortName": "PFW",
+      "homeCity": "Fort Wayne",
+      "homeState": "IN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#49b0b0",
+        "secondary": "#147d75"
+      },
+      "arenaBaseName": "Fort Wayne Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-lhl-010",
+      "conferenceId": "conf-lhl",
+      "displayName": "Robert Morris Colonials",
+      "shortName": "RMC",
+      "homeCity": "Moon Township",
+      "homeState": "PA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#82c621",
+        "secondary": "#db0840"
+      },
+      "arenaBaseName": "Moon Township Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-lhl-011",
+      "conferenceId": "conf-lhl",
+      "displayName": "Wright State Rangers",
+      "shortName": "WSR",
+      "homeCity": "Dayton",
+      "homeState": "OH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#10d9b9",
+        "secondary": "#b31eb0"
+      },
+      "arenaBaseName": "Dayton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-lhl-012",
+      "conferenceId": "conf-lhl",
+      "displayName": "Youngstown State Penguins",
+      "shortName": "YSP",
+      "homeCity": "Youngstown",
+      "homeState": "OH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#cb7660",
+        "secondary": "#3cf944"
+      },
+      "arenaBaseName": "Youngstown Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-fel-001",
+      "conferenceId": "conf-fel",
+      "displayName": "Brown Bruins",
+      "shortName": "BB",
+      "homeCity": "Providence",
+      "homeState": "RI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#22ed12",
+        "secondary": "#51f907"
+      },
+      "arenaBaseName": "Providence Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-fel-002",
+      "conferenceId": "conf-fel",
+      "displayName": "Columbia Monarchs",
+      "shortName": "CM",
+      "homeCity": "New York",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#0ff93e",
+        "secondary": "#cf61b7"
+      },
+      "arenaBaseName": "New York Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-fel-003",
+      "conferenceId": "conf-fel",
+      "displayName": "Cornell Big Red",
+      "shortName": "CBR",
+      "homeCity": "Ithaca",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b00f55",
+        "secondary": "#d56dfc"
+      },
+      "arenaBaseName": "Ithaca Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-fel-004",
+      "conferenceId": "conf-fel",
+      "displayName": "Dartmouth Big Green",
+      "shortName": "DBG",
+      "homeCity": "Hanover",
+      "homeState": "NH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#603055",
+        "secondary": "#496c6a"
+      },
+      "arenaBaseName": "Hanover Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-fel-005",
+      "conferenceId": "conf-fel",
+      "displayName": "Harvard Crimson",
+      "shortName": "HC",
+      "homeCity": "Cambridge",
+      "homeState": "MA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#94d7db",
+        "secondary": "#051db3"
+      },
+      "arenaBaseName": "Cambridge Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-fel-006",
+      "conferenceId": "conf-fel",
+      "displayName": "Penn Quakers",
+      "shortName": "PQ",
+      "homeCity": "Philadelphia",
+      "homeState": "PA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#4227bb",
+        "secondary": "#1e2731"
+      },
+      "arenaBaseName": "Philadelphia Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-fel-007",
+      "conferenceId": "conf-fel",
+      "displayName": "Princeton Cougars",
+      "shortName": "PC",
+      "homeCity": "Princeton",
+      "homeState": "NJ",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d6ce39",
+        "secondary": "#9e1333"
+      },
+      "arenaBaseName": "Princeton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-fel-008",
+      "conferenceId": "conf-fel",
+      "displayName": "Yale Mastiffs",
+      "shortName": "YM",
+      "homeCity": "New Haven",
+      "homeState": "CT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#99a261",
+        "secondary": "#40be7e"
+      },
+      "arenaBaseName": "New Haven Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-metro-001",
+      "conferenceId": "conf-metro",
+      "displayName": "Canisius Golden Griffins",
+      "shortName": "CGG",
+      "homeCity": "Buffalo",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#34dc48",
+        "secondary": "#864bec"
+      },
+      "arenaBaseName": "Buffalo Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-metro-002",
+      "conferenceId": "conf-metro",
+      "displayName": "Fairfield Stags",
+      "shortName": "FS",
+      "homeCity": "Fairfield",
+      "homeState": "CT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#2ace30",
+        "secondary": "#e514ca"
+      },
+      "arenaBaseName": "Fairfield Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-metro-003",
+      "conferenceId": "conf-metro",
+      "displayName": "Iona Gaels",
+      "shortName": "IG",
+      "homeCity": "New Rochelle",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#85f199",
+        "secondary": "#5c926c"
+      },
+      "arenaBaseName": "New Rochelle Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-metro-004",
+      "conferenceId": "conf-metro",
+      "displayName": "Manhattan Jaspers",
+      "shortName": "MJ",
+      "homeCity": "Riverdale",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#764cc2",
+        "secondary": "#7d6672"
+      },
+      "arenaBaseName": "Riverdale Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-metro-005",
+      "conferenceId": "conf-metro",
+      "displayName": "Marist Red Foxes",
+      "shortName": "MRF",
+      "homeCity": "Poughkeepsie",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#37099f",
+        "secondary": "#928113"
+      },
+      "arenaBaseName": "Poughkeepsie Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-metro-006",
+      "conferenceId": "conf-metro",
+      "displayName": "Merrimack Sentinels",
+      "shortName": "MS",
+      "homeCity": "North Andover",
+      "homeState": "MA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#4a704c",
+        "secondary": "#79aba6"
+      },
+      "arenaBaseName": "North Andover Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-metro-007",
+      "conferenceId": "conf-metro",
+      "displayName": "Mount Saint Mary's Highlanders",
+      "shortName": "MSM",
+      "homeCity": "Emmitsburg",
+      "homeState": "MD",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#038008",
+        "secondary": "#c81274"
+      },
+      "arenaBaseName": "Emmitsburg Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-metro-008",
+      "conferenceId": "conf-metro",
+      "displayName": "Niagara Purple Eagles",
+      "shortName": "NPE",
+      "homeCity": "Niagara University",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#56c837",
+        "secondary": "#0ccbaf"
+      },
+      "arenaBaseName": "Niagara University Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-metro-009",
+      "conferenceId": "conf-metro",
+      "displayName": "Quinnipiac Bobcats",
+      "shortName": "QB",
+      "homeCity": "Hamden",
+      "homeState": "CT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d0b68b",
+        "secondary": "#54889f"
+      },
+      "arenaBaseName": "Hamden Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-metro-010",
+      "conferenceId": "conf-metro",
+      "displayName": "Rider Broncs",
+      "shortName": "RB",
+      "homeCity": "Lawrenceville",
+      "homeState": "NJ",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#efd889",
+        "secondary": "#170b17"
+      },
+      "arenaBaseName": "Lawrenceville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-metro-011",
+      "conferenceId": "conf-metro",
+      "displayName": "Sacred Heart Pioneers",
+      "shortName": "SHP",
+      "homeCity": "Fairfield",
+      "homeState": "CT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#640eee",
+        "secondary": "#02a4aa"
+      },
+      "arenaBaseName": "Fairfield Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-metro-012",
+      "conferenceId": "conf-metro",
+      "displayName": "Saint Peter's Peacocks",
+      "shortName": "SPP",
+      "homeCity": "Jersey City",
+      "homeState": "NJ",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#c59098",
+        "secondary": "#47d19d"
+      },
+      "arenaBaseName": "Jersey City Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-metro-013",
+      "conferenceId": "conf-metro",
+      "displayName": "Siena Saints",
+      "shortName": "SS",
+      "homeCity": "Loudonville",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#dae0a9",
+        "secondary": "#334488"
+      },
+      "arenaBaseName": "Loudonville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-mac-001",
+      "conferenceId": "conf-mac",
+      "displayName": "Akron Zips",
+      "shortName": "AZ",
+      "homeCity": "Akron",
+      "homeState": "OH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#59861c",
+        "secondary": "#f8a14f"
+      },
+      "arenaBaseName": "Akron Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-mac-002",
+      "conferenceId": "conf-mac",
+      "displayName": "Ball State Scarlets",
+      "shortName": "BSS",
+      "homeCity": "Muncie",
+      "homeState": "IN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#ee90f5",
+        "secondary": "#8d2cfc"
+      },
+      "arenaBaseName": "Muncie Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-mac-003",
+      "conferenceId": "conf-mac",
+      "displayName": "Bowling Green Falcons",
+      "shortName": "BGF",
+      "homeCity": "Bowling Green",
+      "homeState": "OH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7f5442",
+        "secondary": "#05058f"
+      },
+      "arenaBaseName": "Bowling Green Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-mac-004",
+      "conferenceId": "conf-mac",
+      "displayName": "Buffalo Stampede",
+      "shortName": "BS",
+      "homeCity": "Buffalo",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#2c5148",
+        "secondary": "#9c971c"
+      },
+      "arenaBaseName": "Buffalo Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-mac-005",
+      "conferenceId": "conf-mac",
+      "displayName": "Central Michigan Chippewas",
+      "shortName": "CMC",
+      "homeCity": "Mount Pleasant",
+      "homeState": "MI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#8dd66c",
+        "secondary": "#8933a2"
+      },
+      "arenaBaseName": "Mount Pleasant Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-mac-006",
+      "conferenceId": "conf-mac",
+      "displayName": "Eastern Michigan Hawks",
+      "shortName": "EMH",
+      "homeCity": "Ypsilanti",
+      "homeState": "MI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e19c9a",
+        "secondary": "#c5465e"
+      },
+      "arenaBaseName": "Ypsilanti Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-mac-007",
+      "conferenceId": "conf-mac",
+      "displayName": "Kent State Golden Flashes",
+      "shortName": "KSG",
+      "homeCity": "Kent",
+      "homeState": "OH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b71525",
+        "secondary": "#e598cb"
+      },
+      "arenaBaseName": "Kent Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-mac-008",
+      "conferenceId": "conf-mac",
+      "displayName": "Miami RedHawks",
+      "shortName": "MR",
+      "homeCity": "Oxford",
+      "homeState": "OH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#79c754",
+        "secondary": "#5f3a73"
+      },
+      "arenaBaseName": "Oxford Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-mac-009",
+      "conferenceId": "conf-mac",
+      "displayName": "Ohio Bobcats",
+      "shortName": "OB",
+      "homeCity": "Athens",
+      "homeState": "OH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#f312bf",
+        "secondary": "#bbe54f"
+      },
+      "arenaBaseName": "Athens Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-mac-010",
+      "conferenceId": "conf-mac",
+      "displayName": "Toledo Rockets",
+      "shortName": "TR",
+      "homeCity": "Toledo",
+      "homeState": "OH",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b7d984",
+        "secondary": "#d6d396"
+      },
+      "arenaBaseName": "Toledo Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-mac-011",
+      "conferenceId": "conf-mac",
+      "displayName": "Bay State Minutemen",
+      "shortName": "BSM",
+      "homeCity": "Amherst",
+      "homeState": "MA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#6a1866",
+        "secondary": "#88f92f"
+      },
+      "arenaBaseName": "Amherst Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-mac-012",
+      "conferenceId": "conf-mac",
+      "displayName": "Western Michigan Broncos",
+      "shortName": "WMB",
+      "homeCity": "Kalamazoo",
+      "homeState": "MI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#cdd166",
+        "secondary": "#cf4374"
+      },
+      "arenaBaseName": "Kalamazoo Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-meac-001",
+      "conferenceId": "conf-meac",
+      "displayName": "Coppin State Hawks",
+      "shortName": "CSH",
+      "homeCity": "Baltimore",
+      "homeState": "MD",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#ac8971",
+        "secondary": "#92b95a"
+      },
+      "arenaBaseName": "Baltimore Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-meac-002",
+      "conferenceId": "conf-meac",
+      "displayName": "Delaware State Hornets",
+      "shortName": "DSH",
+      "homeCity": "Dover",
+      "homeState": "DE",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#f9ce18",
+        "secondary": "#fd6d5c"
+      },
+      "arenaBaseName": "Dover Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-meac-003",
+      "conferenceId": "conf-meac",
+      "displayName": "Howard Bison",
+      "shortName": "HB",
+      "homeCity": "Washington",
+      "homeState": "DC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#a8caec",
+        "secondary": "#534d23"
+      },
+      "arenaBaseName": "Washington Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-meac-004",
+      "conferenceId": "conf-meac",
+      "displayName": "Maryland Eastern Shore Falcons",
+      "shortName": "MES",
+      "homeCity": "Princess Anne",
+      "homeState": "MD",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#2ef211",
+        "secondary": "#beb068"
+      },
+      "arenaBaseName": "Princess Anne Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-meac-005",
+      "conferenceId": "conf-meac",
+      "displayName": "Morgan State Bruins",
+      "shortName": "MSB",
+      "homeCity": "Baltimore",
+      "homeState": "MD",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#0f11dd",
+        "secondary": "#aec945"
+      },
+      "arenaBaseName": "Baltimore Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-meac-006",
+      "conferenceId": "conf-meac",
+      "displayName": "Norfolk State Hoplites",
+      "shortName": "NSH",
+      "homeCity": "Norfolk",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#397c9b",
+        "secondary": "#ead79c"
+      },
+      "arenaBaseName": "Norfolk Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-meac-007",
+      "conferenceId": "conf-meac",
+      "displayName": "North Carolina Central Hawks",
+      "shortName": "NCC",
+      "homeCity": "Durham",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e9f34e",
+        "secondary": "#66c581"
+      },
+      "arenaBaseName": "Durham Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-meac-008",
+      "conferenceId": "conf-meac",
+      "displayName": "South Carolina State Mastiffs",
+      "shortName": "SCS",
+      "homeCity": "Orangeburg",
+      "homeState": "SC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#f02d66",
+        "secondary": "#64bf9b"
+      },
+      "arenaBaseName": "Orangeburg Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pvc-001",
+      "conferenceId": "conf-pvc",
+      "displayName": "Belmont Bruins",
+      "shortName": "BB",
+      "homeCity": "Nashville",
+      "homeState": "TN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#ffef5c",
+        "secondary": "#809ba5"
+      },
+      "arenaBaseName": "Nashville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pvc-002",
+      "conferenceId": "conf-pvc",
+      "displayName": "Bradley Braves",
+      "shortName": "BB",
+      "homeCity": "Peoria",
+      "homeState": "IL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#c5d9f2",
+        "secondary": "#c0b2bf"
+      },
+      "arenaBaseName": "Peoria Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pvc-003",
+      "conferenceId": "conf-pvc",
+      "displayName": "Drake Mastiffs",
+      "shortName": "DM",
+      "homeCity": "Des Moines",
+      "homeState": "IA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#ee84e3",
+        "secondary": "#72ed57"
+      },
+      "arenaBaseName": "Des Moines Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pvc-004",
+      "conferenceId": "conf-pvc",
+      "displayName": "Evansville Purple Aces",
+      "shortName": "EPA",
+      "homeCity": "Evansville",
+      "homeState": "IN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#33adda",
+        "secondary": "#adca17"
+      },
+      "arenaBaseName": "Evansville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pvc-005",
+      "conferenceId": "conf-pvc",
+      "displayName": "Illinois State Redbirds",
+      "shortName": "ISR",
+      "homeCity": "Normal",
+      "homeState": "IL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d4658b",
+        "secondary": "#259aab"
+      },
+      "arenaBaseName": "Normal Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pvc-006",
+      "conferenceId": "conf-pvc",
+      "displayName": "Indiana State Sycamores",
+      "shortName": "ISS",
+      "homeCity": "Terre Haute",
+      "homeState": "IN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#40263f",
+        "secondary": "#659a76"
+      },
+      "arenaBaseName": "Terre Haute Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pvc-007",
+      "conferenceId": "conf-pvc",
+      "displayName": "Murray State Racers",
+      "shortName": "MSR",
+      "homeCity": "Murray",
+      "homeState": "KY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d2896e",
+        "secondary": "#796bb7"
+      },
+      "arenaBaseName": "Murray Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pvc-008",
+      "conferenceId": "conf-pvc",
+      "displayName": "Northern Iowa Pumas",
+      "shortName": "NIP",
+      "homeCity": "Cedar Falls",
+      "homeState": "IA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#48df1d",
+        "secondary": "#67b49d"
+      },
+      "arenaBaseName": "Cedar Falls Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pvc-009",
+      "conferenceId": "conf-pvc",
+      "displayName": "Southern Illinois Salukis",
+      "shortName": "SIS",
+      "homeCity": "Carbondale",
+      "homeState": "IL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#0623b1",
+        "secondary": "#ad2435"
+      },
+      "arenaBaseName": "Carbondale Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pvc-010",
+      "conferenceId": "conf-pvc",
+      "displayName": "UIC Flames",
+      "shortName": "UF",
+      "homeCity": "Chicago",
+      "homeState": "IL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#eb3230",
+        "secondary": "#d10086"
+      },
+      "arenaBaseName": "Chicago Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pvc-011",
+      "conferenceId": "conf-pvc",
+      "displayName": "Valparaiso Beacons",
+      "shortName": "VB",
+      "homeCity": "Valparaiso",
+      "homeState": "IN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#252fe3",
+        "secondary": "#08add9"
+      },
+      "arenaBaseName": "Valparaiso Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-rmwc-001",
+      "conferenceId": "conf-rmwc",
+      "displayName": "Air Force Falcons",
+      "shortName": "AFF",
+      "homeCity": "Colorado Springs",
+      "homeState": "CO",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#3ac183",
+        "secondary": "#5e863a"
+      },
+      "arenaBaseName": "Colorado Springs Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-rmwc-002",
+      "conferenceId": "conf-rmwc",
+      "displayName": "Grand Canyon Antelopes",
+      "shortName": "GCA",
+      "homeCity": "Phoenix",
+      "homeState": "AZ",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#1e9988",
+        "secondary": "#c53997"
+      },
+      "arenaBaseName": "Phoenix Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-rmwc-003",
+      "conferenceId": "conf-rmwc",
+      "displayName": "Honolulu Rainbow Guard",
+      "shortName": "HRG",
+      "homeCity": "Honolulu",
+      "homeState": "HI",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#cc1fae",
+        "secondary": "#f71fee"
+      },
+      "arenaBaseName": "Honolulu Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-rmwc-004",
+      "conferenceId": "conf-rmwc",
+      "displayName": "Nevada Wolf Pack",
+      "shortName": "NWP",
+      "homeCity": "Reno",
+      "homeState": "NV",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#6107c6",
+        "secondary": "#b06207"
+      },
+      "arenaBaseName": "Reno Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-rmwc-005",
+      "conferenceId": "conf-rmwc",
+      "displayName": "New Mexico Lobos",
+      "shortName": "NML",
+      "homeCity": "Albuquerque",
+      "homeState": "NM",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#4a41e0",
+        "secondary": "#9bd560"
+      },
+      "arenaBaseName": "Albuquerque Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-rmwc-006",
+      "conferenceId": "conf-rmwc",
+      "displayName": "San Jos\u00e9 State Hoplites",
+      "shortName": "SJS",
+      "homeCity": "San Jose",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7551f5",
+        "secondary": "#e281ef"
+      },
+      "arenaBaseName": "San Jose Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-rmwc-007",
+      "conferenceId": "conf-rmwc",
+      "displayName": "UC Davis Aggies",
+      "shortName": "UDA",
+      "homeCity": "Davis",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#dbff2c",
+        "secondary": "#f819c0"
+      },
+      "arenaBaseName": "Davis Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-rmwc-008",
+      "conferenceId": "conf-rmwc",
+      "displayName": "Las Vegas Metro Runnin' Rebels",
+      "shortName": "LVM",
+      "homeCity": "Las Vegas",
+      "homeState": "NV",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e0f5cb",
+        "secondary": "#d52642"
+      },
+      "arenaBaseName": "Las Vegas Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-rmwc-009",
+      "conferenceId": "conf-rmwc",
+      "displayName": "El Paso Metro Miners",
+      "shortName": "EPM",
+      "homeCity": "El Paso",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#bb6369",
+        "secondary": "#287bbf"
+      },
+      "arenaBaseName": "El Paso Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-rmwc-010",
+      "conferenceId": "conf-rmwc",
+      "displayName": "Wyoming Cowboys",
+      "shortName": "WC",
+      "homeCity": "Laramie",
+      "homeState": "WY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#9539dc",
+        "secondary": "#3a21aa"
+      },
+      "arenaBaseName": "Laramie Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nec-001",
+      "conferenceId": "conf-nec",
+      "displayName": "Central Connecticut Blue Devils",
+      "shortName": "CCB",
+      "homeCity": "New Britain",
+      "homeState": "CT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#22198a",
+        "secondary": "#e9bb8b"
+      },
+      "arenaBaseName": "New Britain Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nec-002",
+      "conferenceId": "conf-nec",
+      "displayName": "Chicago State Cougars",
+      "shortName": "CSC",
+      "homeCity": "Chicago",
+      "homeState": "IL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d8be1b",
+        "secondary": "#b5a825"
+      },
+      "arenaBaseName": "Chicago Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nec-003",
+      "conferenceId": "conf-nec",
+      "displayName": "Fairleigh Dickinson Knights",
+      "shortName": "FDK",
+      "homeCity": "Teaneck",
+      "homeState": "NJ",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#fc8916",
+        "secondary": "#e9d987"
+      },
+      "arenaBaseName": "Teaneck Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nec-004",
+      "conferenceId": "conf-nec",
+      "displayName": "Le Moyne Dolphins",
+      "shortName": "LMD",
+      "homeCity": "Syracuse",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#ec7f44",
+        "secondary": "#d1dcb3"
+      },
+      "arenaBaseName": "Syracuse Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nec-005",
+      "conferenceId": "conf-nec",
+      "displayName": "LIU Sharks",
+      "shortName": "LS",
+      "homeCity": "Brooklyn",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#0e9e82",
+        "secondary": "#1561b1"
+      },
+      "arenaBaseName": "Brooklyn Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nec-006",
+      "conferenceId": "conf-nec",
+      "displayName": "Mercyhurst Lakers",
+      "shortName": "ML",
+      "homeCity": "Erie",
+      "homeState": "PA",
+      "postseasonEligible": false,
+      "reclassTransitionYear": 3,
+      "colors": {
+        "primary": "#da0daf",
+        "secondary": "#d1f45f"
+      },
+      "arenaBaseName": "Erie Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nec-007",
+      "conferenceId": "conf-nec",
+      "displayName": "New Haven Chargers",
+      "shortName": "NHC",
+      "homeCity": "West Haven",
+      "homeState": "CT",
+      "postseasonEligible": false,
+      "reclassTransitionYear": 2,
+      "colors": {
+        "primary": "#450b7f",
+        "secondary": "#1dee08"
+      },
+      "arenaBaseName": "West Haven Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nec-008",
+      "conferenceId": "conf-nec",
+      "displayName": "Stonehill Skyhawks",
+      "shortName": "SS",
+      "homeCity": "Easton",
+      "homeState": "MA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#1f31f7",
+        "secondary": "#1165ca"
+      },
+      "arenaBaseName": "Easton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-nec-009",
+      "conferenceId": "conf-nec",
+      "displayName": "Wagner Seahawks",
+      "shortName": "WS",
+      "homeCity": "Staten Island",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#dfb153",
+        "secondary": "#f179d5"
+      },
+      "arenaBaseName": "Staten Island Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ova-001",
+      "conferenceId": "conf-ova",
+      "displayName": "Eastern Illinois Pumas",
+      "shortName": "EIP",
+      "homeCity": "Charleston",
+      "homeState": "IL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#33a4dd",
+        "secondary": "#a67624"
+      },
+      "arenaBaseName": "Charleston Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ova-002",
+      "conferenceId": "conf-ova",
+      "displayName": "Lindenwood Monarchs",
+      "shortName": "LM",
+      "homeCity": "St. Charles",
+      "homeState": "MO",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#409326",
+        "secondary": "#616a68"
+      },
+      "arenaBaseName": "St. Charles Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ova-003",
+      "conferenceId": "conf-ova",
+      "displayName": "Morehead State Hawks",
+      "shortName": "MSH",
+      "homeCity": "Morehead",
+      "homeState": "KY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#6d8aec",
+        "secondary": "#c3d71c"
+      },
+      "arenaBaseName": "Morehead Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ova-004",
+      "conferenceId": "conf-ova",
+      "displayName": "SIU Edwardsville Cougars",
+      "shortName": "SEC",
+      "homeCity": "Edwardsville",
+      "homeState": "IL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#ef6ba7",
+        "secondary": "#6e7a5d"
+      },
+      "arenaBaseName": "Edwardsville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ova-005",
+      "conferenceId": "conf-ova",
+      "displayName": "Southeast Missouri State Redhawks",
+      "shortName": "SMS",
+      "homeCity": "Cape Girardeau",
+      "homeState": "MO",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#3f3842",
+        "secondary": "#9f3a07"
+      },
+      "arenaBaseName": "Cape Girardeau Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ova-006",
+      "conferenceId": "conf-ova",
+      "displayName": "Southern Indiana Screaming Hawks",
+      "shortName": "SIS",
+      "homeCity": "Evansville",
+      "homeState": "IN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#837e98",
+        "secondary": "#4e9847"
+      },
+      "arenaBaseName": "Evansville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ova-007",
+      "conferenceId": "conf-ova",
+      "displayName": "Tennessee State Cougars",
+      "shortName": "TSC",
+      "homeCity": "Nashville",
+      "homeState": "TN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#fd34c6",
+        "secondary": "#ba57e8"
+      },
+      "arenaBaseName": "Nashville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ova-008",
+      "conferenceId": "conf-ova",
+      "displayName": "UT Martin Skyhawks",
+      "shortName": "UMS",
+      "homeCity": "Martin",
+      "homeState": "TN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7bf3b1",
+        "secondary": "#9cab95"
+      },
+      "arenaBaseName": "Martin Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-ova-009",
+      "conferenceId": "conf-ova",
+      "displayName": "Western Illinois Leathernecks",
+      "shortName": "WIL",
+      "homeCity": "Macomb",
+      "homeState": "IL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#2bb97a",
+        "secondary": "#7ef339"
+      },
+      "arenaBaseName": "Macomb Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pr12-001",
+      "conferenceId": "conf-pr12",
+      "displayName": "Boise State Broncos",
+      "shortName": "BSB",
+      "homeCity": "Boise",
+      "homeState": "ID",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#29f348",
+        "secondary": "#ce5de9"
+      },
+      "arenaBaseName": "Boise Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pr12-002",
+      "conferenceId": "conf-pr12",
+      "displayName": "Colorado State Rams",
+      "shortName": "CSR",
+      "homeCity": "Fort Collins",
+      "homeState": "CO",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#63e06f",
+        "secondary": "#2a100e"
+      },
+      "arenaBaseName": "Fort Collins Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pr12-003",
+      "conferenceId": "conf-pr12",
+      "displayName": "Fresno State Mastiffs",
+      "shortName": "FSM",
+      "homeCity": "Fresno",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#9f6b53",
+        "secondary": "#a223f9"
+      },
+      "arenaBaseName": "Fresno Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pr12-004",
+      "conferenceId": "conf-pr12",
+      "displayName": "Spokane River Mastiffs",
+      "shortName": "SRM",
+      "homeCity": "Spokane",
+      "homeState": "WA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#56faa1",
+        "secondary": "#eb6fff"
+      },
+      "arenaBaseName": "Spokane Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pr12-005",
+      "conferenceId": "conf-pr12",
+      "displayName": "Oregon State Beavers",
+      "shortName": "OSB",
+      "homeCity": "Corvallis",
+      "homeState": "OR",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#eb1539",
+        "secondary": "#3b66a6"
+      },
+      "arenaBaseName": "Corvallis Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pr12-006",
+      "conferenceId": "conf-pr12",
+      "displayName": "San Diego State Aztecs",
+      "shortName": "SDS",
+      "homeCity": "San Diego",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#315004",
+        "secondary": "#bacc56"
+      },
+      "arenaBaseName": "San Diego Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pr12-007",
+      "conferenceId": "conf-pr12",
+      "displayName": "Texas State Bobcats",
+      "shortName": "TSB",
+      "homeCity": "San Marcos",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#3691ce",
+        "secondary": "#36c13a"
+      },
+      "arenaBaseName": "San Marcos Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pr12-008",
+      "conferenceId": "conf-pr12",
+      "displayName": "Utah State Aggies",
+      "shortName": "USA",
+      "homeCity": "Logan",
+      "homeState": "UT",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#44bf21",
+        "secondary": "#9edb4f"
+      },
+      "arenaBaseName": "Logan Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-pr12-009",
+      "conferenceId": "conf-pr12",
+      "displayName": "Washington State Cougars",
+      "shortName": "WSC",
+      "homeCity": "Pullman",
+      "homeState": "WA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#68b4ce",
+        "secondary": "#b66b9f"
+      },
+      "arenaBaseName": "Pullman Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psl-001",
+      "conferenceId": "conf-psl",
+      "displayName": "American Hawks",
+      "shortName": "AH",
+      "homeCity": "Washington",
+      "homeState": "DC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#30105e",
+        "secondary": "#f4044c"
+      },
+      "arenaBaseName": "Washington Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psl-002",
+      "conferenceId": "conf-psl",
+      "displayName": "Army Black Knights",
+      "shortName": "ABK",
+      "homeCity": "West Point",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#5f870d",
+        "secondary": "#552860"
+      },
+      "arenaBaseName": "West Point Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psl-003",
+      "conferenceId": "conf-psl",
+      "displayName": "Boston University Terriers",
+      "shortName": "BUT",
+      "homeCity": "Boston",
+      "homeState": "MA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#217543",
+        "secondary": "#861d54"
+      },
+      "arenaBaseName": "Boston Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psl-004",
+      "conferenceId": "conf-psl",
+      "displayName": "Bucknell Bison",
+      "shortName": "BB",
+      "homeCity": "Lewisburg",
+      "homeState": "PA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b6f43f",
+        "secondary": "#bbab64"
+      },
+      "arenaBaseName": "Lewisburg Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psl-005",
+      "conferenceId": "conf-psl",
+      "displayName": "Colgate Rangers",
+      "shortName": "CR",
+      "homeCity": "Hamilton",
+      "homeState": "NY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#97b784",
+        "secondary": "#62e222"
+      },
+      "arenaBaseName": "Hamilton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psl-006",
+      "conferenceId": "conf-psl",
+      "displayName": "Holy Cross Crusaders",
+      "shortName": "HCC",
+      "homeCity": "Worcester",
+      "homeState": "MA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e2b406",
+        "secondary": "#5780b9"
+      },
+      "arenaBaseName": "Worcester Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psl-007",
+      "conferenceId": "conf-psl",
+      "displayName": "Lafayette Leopards",
+      "shortName": "LL",
+      "homeCity": "Easton",
+      "homeState": "PA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#fbe085",
+        "secondary": "#1132a2"
+      },
+      "arenaBaseName": "Easton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psl-008",
+      "conferenceId": "conf-psl",
+      "displayName": "Lehigh Mountain Hawks",
+      "shortName": "LMH",
+      "homeCity": "Bethlehem",
+      "homeState": "PA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7510e2",
+        "secondary": "#5052aa"
+      },
+      "arenaBaseName": "Bethlehem Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psl-009",
+      "conferenceId": "conf-psl",
+      "displayName": "Loyola Maryland Greyhounds",
+      "shortName": "LMG",
+      "homeCity": "Baltimore",
+      "homeState": "MD",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#3b74da",
+        "secondary": "#c26c91"
+      },
+      "arenaBaseName": "Baltimore Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-psl-010",
+      "conferenceId": "conf-psl",
+      "displayName": "Navy Midshipmen",
+      "shortName": "NM",
+      "homeCity": "Annapolis",
+      "homeState": "MD",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#89af64",
+        "secondary": "#814a0b"
+      },
+      "arenaBaseName": "Annapolis Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-001",
+      "conferenceId": "conf-sedc",
+      "displayName": "Alabama Crimson Tide",
+      "shortName": "ACT",
+      "homeCity": "Tuscaloosa",
+      "homeState": "AL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#1d174b",
+        "secondary": "#4d2c4d"
+      },
+      "arenaBaseName": "Tuscaloosa Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-002",
+      "conferenceId": "conf-sedc",
+      "displayName": "Arkansas Razorbacks",
+      "shortName": "AR",
+      "homeCity": "Fayetteville",
+      "homeState": "AR",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#efd4cf",
+        "secondary": "#71032f"
+      },
+      "arenaBaseName": "Fayetteville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-003",
+      "conferenceId": "conf-sedc",
+      "displayName": "Auburn Cougars",
+      "shortName": "AC",
+      "homeCity": "Auburn",
+      "homeState": "AL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#c59b9a",
+        "secondary": "#b36ae3"
+      },
+      "arenaBaseName": "Auburn Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-004",
+      "conferenceId": "conf-sedc",
+      "displayName": "Florida Gators",
+      "shortName": "FG",
+      "homeCity": "Gainesville",
+      "homeState": "FL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#3e9014",
+        "secondary": "#d8044d"
+      },
+      "arenaBaseName": "Gainesville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-005",
+      "conferenceId": "conf-sedc",
+      "displayName": "Georgia Mastiffs",
+      "shortName": "GM",
+      "homeCity": "Athens",
+      "homeState": "GA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#fec581",
+        "secondary": "#4b17f8"
+      },
+      "arenaBaseName": "Athens Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-006",
+      "conferenceId": "conf-sedc",
+      "displayName": "Bluegrass Commonwealth Lynx",
+      "shortName": "BCL",
+      "homeCity": "Lexington",
+      "homeState": "KY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7ccfa2",
+        "secondary": "#d21364"
+      },
+      "arenaBaseName": "Lexington Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-007",
+      "conferenceId": "conf-sedc",
+      "displayName": "LSU Cougars",
+      "shortName": "LC",
+      "homeCity": "Baton Rouge",
+      "homeState": "LA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#bc45fa",
+        "secondary": "#d7fb50"
+      },
+      "arenaBaseName": "Baton Rouge Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-008",
+      "conferenceId": "conf-sedc",
+      "displayName": "Mississippi State Mastiffs",
+      "shortName": "MSM",
+      "homeCity": "Starkville",
+      "homeState": "MS",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#34bfa9",
+        "secondary": "#df59be"
+      },
+      "arenaBaseName": "Starkville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-009",
+      "conferenceId": "conf-sedc",
+      "displayName": "Missouri Cougars",
+      "shortName": "MC",
+      "homeCity": "Columbia",
+      "homeState": "MO",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#2af600",
+        "secondary": "#84441d"
+      },
+      "arenaBaseName": "Columbia Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-010",
+      "conferenceId": "conf-sedc",
+      "displayName": "Oklahoma Sooners",
+      "shortName": "OS",
+      "homeCity": "Norman",
+      "homeState": "OK",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#5fddf1",
+        "secondary": "#1aba40"
+      },
+      "arenaBaseName": "Norman Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-011",
+      "conferenceId": "conf-sedc",
+      "displayName": "Ole Miss Rebels",
+      "shortName": "OMR",
+      "homeCity": "Oxford",
+      "homeState": "MS",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#dfa745",
+        "secondary": "#1a757d"
+      },
+      "arenaBaseName": "Oxford Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-012",
+      "conferenceId": "conf-sedc",
+      "displayName": "South Carolina Gamecocks",
+      "shortName": "SCG",
+      "homeCity": "Columbia",
+      "homeState": "SC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#90ac46",
+        "secondary": "#9b781b"
+      },
+      "arenaBaseName": "Columbia Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-013",
+      "conferenceId": "conf-sedc",
+      "displayName": "Tennessee Volunteers",
+      "shortName": "TV",
+      "homeCity": "Knoxville",
+      "homeState": "TN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#ae3198",
+        "secondary": "#48fbad"
+      },
+      "arenaBaseName": "Knoxville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-014",
+      "conferenceId": "conf-sedc",
+      "displayName": "Texas Longhorns",
+      "shortName": "TL",
+      "homeCity": "Austin",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#1ac814",
+        "secondary": "#77c35d"
+      },
+      "arenaBaseName": "Austin Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-015",
+      "conferenceId": "conf-sedc",
+      "displayName": "Texas A&M Aggies",
+      "shortName": "TAA",
+      "homeCity": "College Station",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7d6cc4",
+        "secondary": "#4bc479"
+      },
+      "arenaBaseName": "College Station Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sedc-016",
+      "conferenceId": "conf-sedc",
+      "displayName": "Vanderbilt Commodores",
+      "shortName": "VC",
+      "homeCity": "Nashville",
+      "homeState": "TN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#ab6d3f",
+        "secondary": "#350bb2"
+      },
+      "arenaBaseName": "Nashville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scf-001",
+      "conferenceId": "conf-scf",
+      "displayName": "Chattanooga Mocs",
+      "shortName": "CM",
+      "homeCity": "Chattanooga",
+      "homeState": "TN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#2ccb25",
+        "secondary": "#f1ce9c"
+      },
+      "arenaBaseName": "Chattanooga Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scf-002",
+      "conferenceId": "conf-scf",
+      "displayName": "East Tennessee State Privateers",
+      "shortName": "ETS",
+      "homeCity": "Johnson City",
+      "homeState": "TN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#91e101",
+        "secondary": "#9ab8a4"
+      },
+      "arenaBaseName": "Johnson City Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scf-003",
+      "conferenceId": "conf-scf",
+      "displayName": "Furman Paladins",
+      "shortName": "FP",
+      "homeCity": "Greenville",
+      "homeState": "SC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#9b276c",
+        "secondary": "#ee3dd5"
+      },
+      "arenaBaseName": "Greenville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scf-004",
+      "conferenceId": "conf-scf",
+      "displayName": "Mercer Bruins",
+      "shortName": "MB",
+      "homeCity": "Macon",
+      "homeState": "GA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#61d7ed",
+        "secondary": "#79b365"
+      },
+      "arenaBaseName": "Macon Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scf-005",
+      "conferenceId": "conf-scf",
+      "displayName": "Samford Mastiffs",
+      "shortName": "SM",
+      "homeCity": "Birmingham",
+      "homeState": "AL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#c1f5aa",
+        "secondary": "#21c879"
+      },
+      "arenaBaseName": "Birmingham Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scf-006",
+      "conferenceId": "conf-scf",
+      "displayName": "Tennessee Tech Golden Eagles",
+      "shortName": "TTG",
+      "homeCity": "Cookeville",
+      "homeState": "TN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#3ee63a",
+        "secondary": "#f47fd5"
+      },
+      "arenaBaseName": "Cookeville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scf-007",
+      "conferenceId": "conf-scf",
+      "displayName": "The Citadel Mastiffs",
+      "shortName": "TCM",
+      "homeCity": "Charleston",
+      "homeState": "SC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#ecb5df",
+        "secondary": "#a0b000"
+      },
+      "arenaBaseName": "Charleston Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scf-008",
+      "conferenceId": "conf-scf",
+      "displayName": "North Cape Greensboro Hoplites",
+      "shortName": "NCG",
+      "homeCity": "Greensboro",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#68f7a2",
+        "secondary": "#22be25"
+      },
+      "arenaBaseName": "Greensboro Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scf-009",
+      "conferenceId": "conf-scf",
+      "displayName": "VMI Keydets",
+      "shortName": "VK",
+      "homeCity": "Lexington",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#4222e7",
+        "secondary": "#69e42e"
+      },
+      "arenaBaseName": "Lexington Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scf-010",
+      "conferenceId": "conf-scf",
+      "displayName": "Western Carolina Catamounts",
+      "shortName": "WCC",
+      "homeCity": "Cullowhee",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#a113df",
+        "secondary": "#161d59"
+      },
+      "arenaBaseName": "Cullowhee Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scf-011",
+      "conferenceId": "conf-scf",
+      "displayName": "Wofford Terriers",
+      "shortName": "WT",
+      "homeCity": "Spartanburg",
+      "homeState": "SC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#3984f3",
+        "secondary": "#c7b53a"
+      },
+      "arenaBaseName": "Spartanburg Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gcc-001",
+      "conferenceId": "conf-gcc",
+      "displayName": "East Texas A&M Monarchs",
+      "shortName": "ETA",
+      "homeCity": "Commerce",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#5b1286",
+        "secondary": "#14f9b2"
+      },
+      "arenaBaseName": "Commerce Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gcc-002",
+      "conferenceId": "conf-gcc",
+      "displayName": "Houston Christian Huskies",
+      "shortName": "HCH",
+      "homeCity": "Houston",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b8925f",
+        "secondary": "#0e326c"
+      },
+      "arenaBaseName": "Houston Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gcc-003",
+      "conferenceId": "conf-gcc",
+      "displayName": "Incarnate Word Scarlets",
+      "shortName": "IWS",
+      "homeCity": "San Antonio",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#01fcaa",
+        "secondary": "#6e3850"
+      },
+      "arenaBaseName": "San Antonio Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gcc-004",
+      "conferenceId": "conf-gcc",
+      "displayName": "Lamar Scarlets",
+      "shortName": "LS",
+      "homeCity": "Beaumont",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#953bd3",
+        "secondary": "#ca8fe1"
+      },
+      "arenaBaseName": "Beaumont Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gcc-005",
+      "conferenceId": "conf-gcc",
+      "displayName": "McNeese Cowboys",
+      "shortName": "MC",
+      "homeCity": "Lake Charles",
+      "homeState": "LA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#365a34",
+        "secondary": "#a63312"
+      },
+      "arenaBaseName": "Lake Charles Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gcc-006",
+      "conferenceId": "conf-gcc",
+      "displayName": "New Orleans Privateers",
+      "shortName": "NOP",
+      "homeCity": "New Orleans",
+      "homeState": "LA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7c5fd3",
+        "secondary": "#bfc8e4"
+      },
+      "arenaBaseName": "New Orleans Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gcc-007",
+      "conferenceId": "conf-gcc",
+      "displayName": "Nicholls Colonels",
+      "shortName": "NC",
+      "homeCity": "Thibodaux",
+      "homeState": "LA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b61ad5",
+        "secondary": "#514529"
+      },
+      "arenaBaseName": "Thibodaux Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gcc-008",
+      "conferenceId": "conf-gcc",
+      "displayName": "Northwestern State Demons",
+      "shortName": "NSD",
+      "homeCity": "Natchitoches",
+      "homeState": "LA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#5f23cf",
+        "secondary": "#a195a8"
+      },
+      "arenaBaseName": "Natchitoches Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gcc-009",
+      "conferenceId": "conf-gcc",
+      "displayName": "Southeastern Louisiana Monarchs",
+      "shortName": "SLM",
+      "homeCity": "Hammond",
+      "homeState": "LA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#8fd51a",
+        "secondary": "#7ba7c7"
+      },
+      "arenaBaseName": "Hammond Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gcc-010",
+      "conferenceId": "conf-gcc",
+      "displayName": "Stephen F. Austin Lumberjacks",
+      "shortName": "SFA",
+      "homeCity": "Nacogdoches",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#eb5a72",
+        "secondary": "#e896f4"
+      },
+      "arenaBaseName": "Nacogdoches Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gcc-011",
+      "conferenceId": "conf-gcc",
+      "displayName": "Texas A&M-Corpus Christi Islanders",
+      "shortName": "TAC",
+      "homeCity": "Corpus Christi",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b355d1",
+        "secondary": "#fa2bfd"
+      },
+      "arenaBaseName": "Corpus Christi Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-gcc-012",
+      "conferenceId": "conf-gcc",
+      "displayName": "UT Rio Grande Valley Vaqueros",
+      "shortName": "URG",
+      "homeCity": "Edinburg",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#8e3eea",
+        "secondary": "#ea90f5"
+      },
+      "arenaBaseName": "Edinburg Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scal-001",
+      "conferenceId": "conf-scal",
+      "displayName": "Alabama A&M Mastiffs",
+      "shortName": "AAM",
+      "homeCity": "Normal",
+      "homeState": "AL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#0c5cc4",
+        "secondary": "#861cf6"
+      },
+      "arenaBaseName": "Normal Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scal-002",
+      "conferenceId": "conf-scal",
+      "displayName": "Alabama State Hornets",
+      "shortName": "ASH",
+      "homeCity": "Montgomery",
+      "homeState": "AL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#96c497",
+        "secondary": "#27f72e"
+      },
+      "arenaBaseName": "Montgomery Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scal-003",
+      "conferenceId": "conf-scal",
+      "displayName": "Alcorn State Braves",
+      "shortName": "ASB",
+      "homeCity": "Lorman",
+      "homeState": "MS",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b1b004",
+        "secondary": "#4ca54b"
+      },
+      "arenaBaseName": "Lorman Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scal-004",
+      "conferenceId": "conf-scal",
+      "displayName": "Arkansas-Pine Bluff Golden Lions",
+      "shortName": "ABG",
+      "homeCity": "Pine Bluff",
+      "homeState": "AR",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#bce2e2",
+        "secondary": "#75e6fa"
+      },
+      "arenaBaseName": "Pine Bluff Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scal-005",
+      "conferenceId": "conf-scal",
+      "displayName": "Bethune-Cookman Lynx",
+      "shortName": "BL",
+      "homeCity": "Daytona Beach",
+      "homeState": "FL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#6e7d63",
+        "secondary": "#b26ec6"
+      },
+      "arenaBaseName": "Daytona Beach Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scal-006",
+      "conferenceId": "conf-scal",
+      "displayName": "Florida A&M Rattlers",
+      "shortName": "FAR",
+      "homeCity": "Tallahassee",
+      "homeState": "FL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#fdfbbe",
+        "secondary": "#e80bc5"
+      },
+      "arenaBaseName": "Tallahassee Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scal-007",
+      "conferenceId": "conf-scal",
+      "displayName": "Grambling State Cougars",
+      "shortName": "GSC",
+      "homeCity": "Grambling",
+      "homeState": "LA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#9b3216",
+        "secondary": "#60f998"
+      },
+      "arenaBaseName": "Grambling Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scal-008",
+      "conferenceId": "conf-scal",
+      "displayName": "Jackson State Cougars",
+      "shortName": "JSC",
+      "homeCity": "Jackson",
+      "homeState": "MS",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d4b707",
+        "secondary": "#a61fdc"
+      },
+      "arenaBaseName": "Jackson Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scal-009",
+      "conferenceId": "conf-scal",
+      "displayName": "Mississippi Valley State Delta Devils",
+      "shortName": "MVS",
+      "homeCity": "Itta Bena",
+      "homeState": "MS",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#554e20",
+        "secondary": "#15dd45"
+      },
+      "arenaBaseName": "Itta Bena Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scal-010",
+      "conferenceId": "conf-scal",
+      "displayName": "Prairie View A&M Pumas",
+      "shortName": "PVA",
+      "homeCity": "Prairie View",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#5030ea",
+        "secondary": "#6c0950"
+      },
+      "arenaBaseName": "Prairie View Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scal-011",
+      "conferenceId": "conf-scal",
+      "displayName": "Southern Jaguars",
+      "shortName": "SJ",
+      "homeCity": "Baton Rouge",
+      "homeState": "LA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#76e6fc",
+        "secondary": "#c1682c"
+      },
+      "arenaBaseName": "Baton Rouge Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-scal-012",
+      "conferenceId": "conf-scal",
+      "displayName": "Texas Southern Cougars",
+      "shortName": "TSC",
+      "homeCity": "Houston",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#c79943",
+        "secondary": "#7bbfb5"
+      },
+      "arenaBaseName": "Houston Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-summit-001",
+      "conferenceId": "conf-summit",
+      "displayName": "Kansas City Roos",
+      "shortName": "KCR",
+      "homeCity": "Kansas City",
+      "homeState": "MO",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#857fbf",
+        "secondary": "#9cbe69"
+      },
+      "arenaBaseName": "Kansas City Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-summit-002",
+      "conferenceId": "conf-summit",
+      "displayName": "North Dakota Fighting Hawks",
+      "shortName": "NDF",
+      "homeCity": "Grand Forks",
+      "homeState": "ND",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#5f256c",
+        "secondary": "#277919"
+      },
+      "arenaBaseName": "Grand Forks Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-summit-003",
+      "conferenceId": "conf-summit",
+      "displayName": "North Dakota State Bison",
+      "shortName": "NDS",
+      "homeCity": "Fargo",
+      "homeState": "ND",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#63c471",
+        "secondary": "#ecd877"
+      },
+      "arenaBaseName": "Fargo Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-summit-004",
+      "conferenceId": "conf-summit",
+      "displayName": "Omaha Mavericks",
+      "shortName": "OM",
+      "homeCity": "Omaha",
+      "homeState": "NE",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#f45241",
+        "secondary": "#fbcbb0"
+      },
+      "arenaBaseName": "Omaha Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-summit-005",
+      "conferenceId": "conf-summit",
+      "displayName": "Oral Roberts Golden Eagles",
+      "shortName": "ORG",
+      "homeCity": "Tulsa",
+      "homeState": "OK",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#27d36c",
+        "secondary": "#268500"
+      },
+      "arenaBaseName": "Tulsa Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-summit-006",
+      "conferenceId": "conf-summit",
+      "displayName": "South Dakota Coyotes",
+      "shortName": "SDC",
+      "homeCity": "Vermillion",
+      "homeState": "SD",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#48f65e",
+        "secondary": "#ffe78f"
+      },
+      "arenaBaseName": "Vermillion Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-summit-007",
+      "conferenceId": "conf-summit",
+      "displayName": "South Dakota State Jackrabbits",
+      "shortName": "SDS",
+      "homeCity": "Brookings",
+      "homeState": "SD",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#5d1938",
+        "secondary": "#573fad"
+      },
+      "arenaBaseName": "Brookings Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-summit-008",
+      "conferenceId": "conf-summit",
+      "displayName": "Saint Thomas Tommies",
+      "shortName": "STT",
+      "homeCity": "St. Paul",
+      "homeState": "MN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#fce212",
+        "secondary": "#90010a"
+      },
+      "arenaBaseName": "St. Paul Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-001",
+      "conferenceId": "conf-sbc",
+      "displayName": "Appalachian State Highlanders",
+      "shortName": "ASH",
+      "homeCity": "Boone",
+      "homeState": "NC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#62a5a3",
+        "secondary": "#a0647d"
+      },
+      "arenaBaseName": "Boone Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-002",
+      "conferenceId": "conf-sbc",
+      "displayName": "Arkansas State Red Wolves",
+      "shortName": "ASR",
+      "homeCity": "Jonesboro",
+      "homeState": "AR",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#138cdf",
+        "secondary": "#1416a8"
+      },
+      "arenaBaseName": "Jonesboro Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-003",
+      "conferenceId": "conf-sbc",
+      "displayName": "Coastal Carolina Chanticleers",
+      "shortName": "CCC",
+      "homeCity": "Conway",
+      "homeState": "SC",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#4348f3",
+        "secondary": "#dd8ad2"
+      },
+      "arenaBaseName": "Conway Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-004",
+      "conferenceId": "conf-sbc",
+      "displayName": "Georgia Southern Hawks",
+      "shortName": "GSH",
+      "homeCity": "Statesboro",
+      "homeState": "GA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#483c4a",
+        "secondary": "#9c3d07"
+      },
+      "arenaBaseName": "Statesboro Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-005",
+      "conferenceId": "conf-sbc",
+      "displayName": "Georgia State Pumas",
+      "shortName": "GSP",
+      "homeCity": "Atlanta",
+      "homeState": "GA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b71b22",
+        "secondary": "#938d56"
+      },
+      "arenaBaseName": "Atlanta Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-006",
+      "conferenceId": "conf-sbc",
+      "displayName": "James Madison Dukes",
+      "shortName": "JMD",
+      "homeCity": "Harrisonburg",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#72f633",
+        "secondary": "#623ccd"
+      },
+      "arenaBaseName": "Harrisonburg Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-007",
+      "conferenceId": "conf-sbc",
+      "displayName": "Louisiana Ragin' Cajuns",
+      "shortName": "LRC",
+      "homeCity": "Lafayette",
+      "homeState": "LA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#48dc5c",
+        "secondary": "#fbe7e4"
+      },
+      "arenaBaseName": "Lafayette Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-008",
+      "conferenceId": "conf-sbc",
+      "displayName": "Louisiana-Monroe Warhawks",
+      "shortName": "LW",
+      "homeCity": "Monroe",
+      "homeState": "LA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#b2b607",
+        "secondary": "#b9c1e5"
+      },
+      "arenaBaseName": "Monroe Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-009",
+      "conferenceId": "conf-sbc",
+      "displayName": "Louisiana Tech Mastiffs",
+      "shortName": "LTM",
+      "homeCity": "Ruston",
+      "homeState": "LA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e22be8",
+        "secondary": "#4ba6e0"
+      },
+      "arenaBaseName": "Ruston Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-010",
+      "conferenceId": "conf-sbc",
+      "displayName": "Marshall Thundering Herd",
+      "shortName": "MTH",
+      "homeCity": "Huntington",
+      "homeState": "WV",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#2eed07",
+        "secondary": "#1b4614"
+      },
+      "arenaBaseName": "Huntington Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-011",
+      "conferenceId": "conf-sbc",
+      "displayName": "Old Dominion Monarchs",
+      "shortName": "ODM",
+      "homeCity": "Norfolk",
+      "homeState": "VA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#f07a90",
+        "secondary": "#b44213"
+      },
+      "arenaBaseName": "Norfolk Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-012",
+      "conferenceId": "conf-sbc",
+      "displayName": "South Alabama Jaguars",
+      "shortName": "SAJ",
+      "homeCity": "Mobile",
+      "homeState": "AL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#8b97da",
+        "secondary": "#e33ff5"
+      },
+      "arenaBaseName": "Mobile Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-013",
+      "conferenceId": "conf-sbc",
+      "displayName": "Southern Miss Golden Eagles",
+      "shortName": "SMG",
+      "homeCity": "Hattiesburg",
+      "homeState": "MS",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#0b7a37",
+        "secondary": "#98edcb"
+      },
+      "arenaBaseName": "Hattiesburg Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-sbc-014",
+      "conferenceId": "conf-sbc",
+      "displayName": "Troy Trojans",
+      "shortName": "TT",
+      "homeCity": "Troy",
+      "homeState": "AL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#042251",
+        "secondary": "#dd3e4c"
+      },
+      "arenaBaseName": "Troy Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-uac-001",
+      "conferenceId": "conf-uac",
+      "displayName": "Abilene Christian Lynx",
+      "shortName": "ACL",
+      "homeCity": "Abilene",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d5b38f",
+        "secondary": "#afcd96"
+      },
+      "arenaBaseName": "Abilene Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-uac-002",
+      "conferenceId": "conf-uac",
+      "displayName": "Austin Peay Governors",
+      "shortName": "APG",
+      "homeCity": "Clarksville",
+      "homeState": "TN",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#98659a",
+        "secondary": "#41af55"
+      },
+      "arenaBaseName": "Clarksville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-uac-003",
+      "conferenceId": "conf-uac",
+      "displayName": "Central Arkansas Bruins",
+      "shortName": "CAB",
+      "homeCity": "Conway",
+      "homeState": "AR",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#d13e60",
+        "secondary": "#0fd423"
+      },
+      "arenaBaseName": "Conway Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-uac-004",
+      "conferenceId": "conf-uac",
+      "displayName": "Eastern Kentucky Colonels",
+      "shortName": "EKC",
+      "homeCity": "Richmond",
+      "homeState": "KY",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#e92e52",
+        "secondary": "#da20ce"
+      },
+      "arenaBaseName": "Richmond Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-uac-005",
+      "conferenceId": "conf-uac",
+      "displayName": "Little Rock Trojans",
+      "shortName": "LRT",
+      "homeCity": "Little Rock",
+      "homeState": "AR",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#4ab09d",
+        "secondary": "#468c14"
+      },
+      "arenaBaseName": "Little Rock Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-uac-006",
+      "conferenceId": "conf-uac",
+      "displayName": "North Alabama Monarchs",
+      "shortName": "NAM",
+      "homeCity": "Florence",
+      "homeState": "AL",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#2ce9f8",
+        "secondary": "#5503d3"
+      },
+      "arenaBaseName": "Florence Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-uac-007",
+      "conferenceId": "conf-uac",
+      "displayName": "Tarleton State Texans",
+      "shortName": "TST",
+      "homeCity": "Stephenville",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#8db93a",
+        "secondary": "#0d46be"
+      },
+      "arenaBaseName": "Stephenville Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-uac-008",
+      "conferenceId": "conf-uac",
+      "displayName": "UT Arlington Mavericks",
+      "shortName": "UAM",
+      "homeCity": "Arlington",
+      "homeState": "TX",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7da881",
+        "secondary": "#551e89"
+      },
+      "arenaBaseName": "Arlington Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-uac-009",
+      "conferenceId": "conf-uac",
+      "displayName": "West Georgia Wolves",
+      "shortName": "WGW",
+      "homeCity": "Carrollton",
+      "homeState": "GA",
+      "postseasonEligible": false,
+      "reclassTransitionYear": 3,
+      "colors": {
+        "primary": "#1088ec",
+        "secondary": "#f646e7"
+      },
+      "arenaBaseName": "Carrollton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-wcc-001",
+      "conferenceId": "conf-wcc",
+      "displayName": "Denver Pioneers",
+      "shortName": "DP",
+      "homeCity": "Denver",
+      "homeState": "CO",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#2acdb5",
+        "secondary": "#2d77c8"
+      },
+      "arenaBaseName": "Denver Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-wcc-002",
+      "conferenceId": "conf-wcc",
+      "displayName": "Loyola Marymount Monarchs",
+      "shortName": "LMM",
+      "homeCity": "Los Angeles",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#5015a6",
+        "secondary": "#26678d"
+      },
+      "arenaBaseName": "Los Angeles Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-wcc-003",
+      "conferenceId": "conf-wcc",
+      "displayName": "Pacific Cougars",
+      "shortName": "PC",
+      "homeCity": "Stockton",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#655fe1",
+        "secondary": "#c05660"
+      },
+      "arenaBaseName": "Stockton Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-wcc-004",
+      "conferenceId": "conf-wcc",
+      "displayName": "Pepperdine Waves",
+      "shortName": "PW",
+      "homeCity": "Malibu",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#2b0dea",
+        "secondary": "#fb478f"
+      },
+      "arenaBaseName": "Malibu Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-wcc-005",
+      "conferenceId": "conf-wcc",
+      "displayName": "Portland Pilots",
+      "shortName": "PP",
+      "homeCity": "Portland",
+      "homeState": "OR",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#581d47",
+        "secondary": "#ddef10"
+      },
+      "arenaBaseName": "Portland Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-wcc-006",
+      "conferenceId": "conf-wcc",
+      "displayName": "Saint Mary's Gaels",
+      "shortName": "SMG",
+      "homeCity": "Moraga",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#8a5922",
+        "secondary": "#fcbea0"
+      },
+      "arenaBaseName": "Moraga Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-wcc-007",
+      "conferenceId": "conf-wcc",
+      "displayName": "San Diego Toreros",
+      "shortName": "SDT",
+      "homeCity": "San Diego",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#7e41d3",
+        "secondary": "#28946c"
+      },
+      "arenaBaseName": "San Diego Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-wcc-008",
+      "conferenceId": "conf-wcc",
+      "displayName": "San Francisco Dons",
+      "shortName": "SFD",
+      "homeCity": "San Francisco",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#cd8350",
+        "secondary": "#08de97"
+      },
+      "arenaBaseName": "San Francisco Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-wcc-009",
+      "conferenceId": "conf-wcc",
+      "displayName": "Santa Clara Broncos",
+      "shortName": "SCB",
+      "homeCity": "Santa Clara",
+      "homeState": "CA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#79fafe",
+        "secondary": "#8087ef"
+      },
+      "arenaBaseName": "Santa Clara Arena",
+      "logoUri": null
+    },
+    {
+      "id": "team-conf-wcc-010",
+      "conferenceId": "conf-wcc",
+      "displayName": "Seattle U Redhawks",
+      "shortName": "SUR",
+      "homeCity": "Seattle",
+      "homeState": "WA",
+      "postseasonEligible": true,
+      "reclassTransitionYear": null,
+      "colors": {
+        "primary": "#01fdf8",
+        "secondary": "#28431a"
+      },
+      "arenaBaseName": "Seattle Arena",
+      "logoUri": null
+    }
+  ],
+  "tournamentTemplates": [
+    {
+      "id": "tpl-conf-nac",
+      "bracketSize": 16,
+      "seeds": 9,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-aucc",
+      "bracketSize": 16,
+      "seeds": 13,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-cat10",
+      "bracketSize": 16,
+      "seeds": 14,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-acrown",
+      "bracketSize": 32,
+      "seeds": 18,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 16
+        },
+        {
+          "name": "QF",
+          "games": 8
+        },
+        {
+          "name": "SF",
+          "games": 4
+        },
+        {
+          "name": "F",
+          "games": 2
+        },
+        {
+          "name": "F2",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-ascu",
+      "bracketSize": 8,
+      "seeds": 8,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 4
+        },
+        {
+          "name": "QF",
+          "games": 2
+        },
+        {
+          "name": "SF",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-c12",
+      "bracketSize": 16,
+      "seeds": 16,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-epc",
+      "bracketSize": 16,
+      "seeds": 11,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-nsc",
+      "bracketSize": 16,
+      "seeds": 11,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-psc",
+      "bracketSize": 16,
+      "seeds": 9,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-g10",
+      "bracketSize": 32,
+      "seeds": 18,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 16
+        },
+        {
+          "name": "QF",
+          "games": 8
+        },
+        {
+          "name": "SF",
+          "games": 4
+        },
+        {
+          "name": "F",
+          "games": 2
+        },
+        {
+          "name": "F2",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-gwc",
+      "bracketSize": 16,
+      "seeds": 12,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-cca",
+      "bracketSize": 16,
+      "seeds": 13,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-ucc",
+      "bracketSize": 16,
+      "seeds": 10,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-lhl",
+      "bracketSize": 16,
+      "seeds": 12,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-fel",
+      "bracketSize": 8,
+      "seeds": 8,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 4
+        },
+        {
+          "name": "QF",
+          "games": 2
+        },
+        {
+          "name": "SF",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-metro",
+      "bracketSize": 16,
+      "seeds": 13,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-mac",
+      "bracketSize": 16,
+      "seeds": 12,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-meac",
+      "bracketSize": 8,
+      "seeds": 8,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 4
+        },
+        {
+          "name": "QF",
+          "games": 2
+        },
+        {
+          "name": "SF",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-pvc",
+      "bracketSize": 16,
+      "seeds": 11,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-rmwc",
+      "bracketSize": 16,
+      "seeds": 10,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-nec",
+      "bracketSize": 16,
+      "seeds": 9,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-ova",
+      "bracketSize": 16,
+      "seeds": 9,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-pr12",
+      "bracketSize": 16,
+      "seeds": 9,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-psl",
+      "bracketSize": 16,
+      "seeds": 10,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-sedc",
+      "bracketSize": 16,
+      "seeds": 16,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-scf",
+      "bracketSize": 16,
+      "seeds": 11,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-gcc",
+      "bracketSize": 16,
+      "seeds": 12,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-scal",
+      "bracketSize": 16,
+      "seeds": 12,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-summit",
+      "bracketSize": 8,
+      "seeds": 8,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 4
+        },
+        {
+          "name": "QF",
+          "games": 2
+        },
+        {
+          "name": "SF",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-sbc",
+      "bracketSize": 16,
+      "seeds": 14,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-uac",
+      "bracketSize": 16,
+      "seeds": 9,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    },
+    {
+      "id": "tpl-conf-wcc",
+      "bracketSize": 16,
+      "seeds": 10,
+      "byes": [],
+      "reseedingAfterRound": false,
+      "sitePolicy": "neutral-primary",
+      "qualificationPolicy": "all-members",
+      "rounds": [
+        {
+          "name": "R1",
+          "games": 8
+        },
+        {
+          "name": "QF",
+          "games": 4
+        },
+        {
+          "name": "SF",
+          "games": 2
+        },
+        {
+          "name": "F",
+          "games": 1
+        }
+      ]
+    }
+  ]
+}

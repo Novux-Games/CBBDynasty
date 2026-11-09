@@ -58,5 +58,6 @@ Tracks: calendar/saves → **pack** → possession sim → dynasty systems → f
 | Package | Role |
 |---------|------|
 | `core.pack` | `IdentityPack` models, `IdentityPackCodec`, `IdentityPackValidator` |
+| *(repo)* | `assets/pack/embedded-default.json` — **365** teams; regen via `planning/tools/generate_default_pack.py` |
 | `core.save` | Slots, metadata, load integrity |
 | `core.calendar` | Phases, week checkpoints |
