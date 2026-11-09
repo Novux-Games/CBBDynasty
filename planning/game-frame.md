@@ -11,20 +11,21 @@
 1. [Entry & shell](#entry--shell)
 2. [Time: week advance only](#time-week-advance-only)
 3. [Dashboard task gate](#dashboard-task-gate)
-4. [Bottom navigation](#bottom-navigation)
-5. [Dashboard (home)](#dashboard-home)
-6. [Calendar tab](#calendar-tab)
-7. [Roster tab](#roster-tab)
-8. [News tab (dashboard)](#news-tab-dashboard)
-9. [Top menu (hamburger) & hubs](#top-menu-hamburger--hubs)
-10. [School hub](#school-hub)
-11. [Coach](#coach)
-12. [Strategy hub](#strategy-hub)
-13. [Statistics hub](#statistics-hub)
-14. [Rankings hub](#rankings-hub)
-15. [News hub (full)](#news-hub-full)
-16. [History hub](#history-hub)
-17. [Cross-cutting behavior](#cross-cutting-behavior)
+4. [Advance week confirmation (sim week)](#advance-week-confirmation-sim-week)
+5. [Bottom navigation](#bottom-navigation)
+6. [Dashboard (home)](#dashboard-home)
+7. [Calendar tab](#calendar-tab)
+8. [Roster tab](#roster-tab)
+9. [News tab (dashboard)](#news-tab-dashboard)
+10. [Top menu (hamburger) & hubs](#top-menu-hamburger--hubs)
+11. [School hub](#school-hub)
+12. [Coach](#coach)
+13. [Strategy hub](#strategy-hub)
+14. [Statistics hub](#statistics-hub)
+15. [Rankings hub](#rankings-hub)
+16. [News hub (full)](#news-hub-full)
+17. [History hub](#history-hub)
+18. [Cross-cutting behavior](#cross-cutting-behavior)
 
 ---
 
@@ -58,17 +59,46 @@
 
 ## Dashboard task gate
 
-**Design lock:** **Advance week** stays **disabled** until **required tasks for the current phase/week** are complete. Tasks surface on the **Dashboard** (cards, checklist, or notifications) — same pattern everywhere.
+**Design lock:** Everything the user **can or should** do this week surfaces on the **Dashboard** as a **task** (checklist cards, same pattern all phases). Tasks are tagged **Required** or **Optional**.
 
-| Phase | Required before advance (authoritative lists) |
-|-------|-----------------------------------------------|
-| **Offseason** | Weekly obligations — retention, portal, recruiting spend, cuts, etc. ([`offseason.md`](offseason.md)) |
-| **Preseason** | Full **8-task** checklist ([`preseason.md`](preseason.md#task-checklist)) |
-| **Exhibition / RS / conf tourney / postseason** | **Games only** — prep + sim/play when you have a scheduled game; byes need no action. **Recruiting does not gate advance** (year-long cycle in hub — [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock)) |
-| **Conf / national postseason** | Play or sim **your** game when scheduled; byes do not block advance |
-| **End of Season** | Season review acknowledged → advance to offseason ([`season-review.md`](season-review.md)) |
+| Kind | Advance week |
+|------|----------------|
+| **Required** | **Disabled** until complete |
+| **Optional** | Listed for visibility; **does not** disable advance — unresolved optional work is handled on advance via [sim-week confirmation](#advance-week-confirmation-sim-week) (AI sim + user-school recruiting) |
 
-Optional tasks never block advance unless a phase doc marks them **Required**. Completing a task updates dashboard state immediately; **week save** still commits only on **Advance week**.
+| Phase | Required before advance | Optional dashboard tasks (examples) |
+|-------|-------------------------|-------------------------------------|
+| **Offseason** | Weekly obligations per [`offseason.md`](offseason.md) | Extra portal scouting, facilities, etc. when surfaced |
+| **Preseason** | Full **8-task** checklist ([`preseason.md`](preseason.md#task-checklist)) | — |
+| **Exhibition / RS / conf tourney / postseason** | **None** when on a **bye**; otherwise see note below | **Game** — prep + play/sim when scheduled; **Recruiting** — when cycle is open and week has actionable items ([`recruiting-engine.md`](recruiting-engine.md#in-season-dashboard-tasks)); coach points, injuries, strategy edits as rules surface them |
+| **End of Season** | Season review acknowledged → advance to offseason ([`season-review.md`](season-review.md)) | — |
+
+**In-season games:** A scheduled user game always appears as an **optional** task (“Play vs …” / “Sim vs …”). The user may **Advance week** without completing it; advance triggers [sim-week confirmation](#advance-week-confirmation-sim-week) instead of hard-blocking.
+
+Completing a task updates dashboard state immediately; **week save** still commits only on **Advance week** ([`game-design.md`](game-design.md#when-games-run-vs-when-the-save-commits)).
+
+---
+
+## Advance week confirmation (sim week)
+
+**Design lock:** Tapping **Advance week** while **required** tasks are done always runs a **confirmation** step when the week would **auto-resolve** player content the user has not finished manually.
+
+| Condition | Confirmation copy (intent) |
+|-----------|----------------------------|
+| **Unplayed / unsimmed user game** this week | Warn that advancing will **simulate** the game with the current lineup & gameplan, results become **final**, and the user **cannot return** to replay that game this week |
+| **Unresolved optional tasks** (e.g. recruiting drip unspent, watchlist nudge) | Summarize what **AI coach logic** will apply (recruiting auto-maintain / default spend — [`recruiting-engine.md`](recruiting-engine.md#ai-recruiting)) |
+| **No open optional work** | Short “Advance to {next week label}?” — still commits save |
+
+**On confirm:**
+
+1. **User games** not yet simmed → run **fast sim** (same engine as manual sim; no live play-by-play).
+2. **User-school recruiting** for the week → AI spends weekly drip / NIL per automation settings; if none, sane default board maintenance.
+3. **League** — batch-sim all other schools’ games in the week index ([`time-system.md`](time-system.md#advance-rules)) and AI recruiting for non-user programs.
+4. **Write save** — week locked; no in-week replay ([`game-design.md`](game-design.md#replays)).
+
+**On cancel:** Stay on current week; optional tasks remain editable.
+
+**Manual path:** User completes optional tasks (play game, recruiting hub) first → confirmation is lighter (no game auto-sim line; recruiting line only if drip still unspent and auto will run).
 
 ---
 
@@ -423,4 +453,5 @@ Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`g
 | 2025-11-09 | T25 highlight for #1–25; all 365 ranked every week |
 | 2025-11-08 | School Staff tab; AD trust; staff detail sheets |
 | 2026-11-09 | Dynasty shell all phases; dashboard task gate; week advance only |
+| 2026-11-09 | Required vs optional tasks; sim-week advance confirmation; in-season recruiting tasks |
 | 2025-11-08 | Assistants = coach cards; support list-only |

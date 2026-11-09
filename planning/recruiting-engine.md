@@ -1,6 +1,6 @@
 # Recruiting engine
 
-**Context:** HS/JUCO pools **seeded in preseason** (Top 60 all season); **year-long recruiting cycle** (spend preseason → signing at offseason week 5); **in-season week advance = games only**.  
+**Context:** HS/JUCO pools **seeded in preseason** (Top 60 all season); **year-long recruiting cycle**; **optional** in-season recruiting **dashboard tasks**; **sim-week** advance when user skips games/recruiting ([`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week)).  
 **Companion:** Offseason calendar [`offseason.md`](offseason.md), NIL [`game-design.md`](game-design.md#nil--program-economy), player display [`player-cards.md`](player-cards.md), archetypes [`player-archetypes.md`](player-archetypes.md).  
 **Last updated:** 2026-11-09
 
@@ -52,10 +52,11 @@ Seeding in **preseason** — not offseason — so **Top 60 recruits** live in **
 
 | Rule | Detail |
 |------|--------|
-| **In-season advance gate** | **Scheduled games only** — not recruiting |
-| **Recruiting is optional each week** | Skip the hub for weeks; still advance after games |
-| **AI on week advance** | Non-user schools spend their weekly drip and move interest/commits when you advance |
-| **Automation** | Optional **auto-maintain board** (game-design) burns drip on watchlist — user sets caps |
+| **Dashboard tasks** | Any in-season recruiting action the user **can/should** take appears as an **optional** dashboard task ([below](#in-season-dashboard-tasks)) |
+| **Advance gate** | Recruiting **never** a **required** task — user may advance without opening the hub |
+| **Sim week on advance** | Unfinished optional work (unplayed games, unspent drip) → [`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week); **AI** runs user-school recruiting + game sim if user confirms |
+| **League AI on advance** | Non-user schools spend drip and move interest/commits when any school advances the week |
+| **Automation** | **Auto-maintain board** (game-design) used for user school when advancing without manual recruiting |
 
 ### Cycle arc (one enrolling class)
 
@@ -105,7 +106,23 @@ User who touches recruiting **3–5 min every other week** keeps pace; user who 
 | **Hard commit / sign** | **Signing close** at end of offseason **week 5** (binding; NIL snapshot) |
 | **Decommit** | Allowed before hard sign; prestige hit per existing rules |
 
-Headlines in **News** for blue-chip commits league-wide; your targets surface as dashboard **notifications**, not **advance blockers**.
+Headlines in **News** for blue-chip commits league-wide; your targets also spawn **optional dashboard recruiting tasks** when action is recommended (see [In-season dashboard tasks](#in-season-dashboard-tasks)).
+
+### In-season dashboard tasks
+
+While the [year-long cycle](#year-long-recruiting-cycle-design-lock) is open, the dashboard **must** list **optional** recruiting tasks when any trigger fires (same card pattern as games):
+
+| Trigger (examples) | Task copy (examples) |
+|--------------------|-------------------------|
+| **Weekly drip** granted, points still unspent | “Spend recruiting points ({N} available)” → Recruiting hub |
+| **Watchlist** recruit crossed interest threshold | “Offer {name}” / “Re-engage {name}” |
+| **New Top 60 movement** on your board | “Review {name} — #{rank}” |
+| **Rival commit** on a shared target | “Respond — {name} trending to {school}” |
+| **Portal** (in window) | Portal sub-tab equivalents when entrants match filters |
+
+**Complete** when user performs the suggested action or opens hub and spends/applies changes for that nudge; **dismiss** only where product allows without blocking advance (e.g. “Skip this week” hides nudge until next drip — tune in UI pass).
+
+**Offseason / preseason:** Same task pattern; phase docs may mark specific recruiting obligations **Required** (e.g. retention week 1, signing close).
 
 ### What does *not* change
 
@@ -132,7 +149,7 @@ Portal star bands use the **portal pool only** (see [Star distribution](#star-di
 | **R3** | Offseason **week 4** | Commit wave; head-to-head resolution |
 | **R4** | Offseason **week 5** | **Signing close**; hard commits lock |
 
-Week 1 offseason = **retention** on your roster ([`offseason.md`](offseason.md#week-1--players-leaving)). During **in-season**, recruiting **never** gates **Advance week** ([`game-frame.md`](game-frame.md#dashboard-task-gate)).
+Week 1 offseason = **retention** on your roster ([`offseason.md`](offseason.md#week-1--players-leaving)). In-season recruiting uses **optional** dashboard tasks only ([`game-frame.md`](game-frame.md#dashboard-task-gate)).
 
 ---
 
@@ -301,7 +318,7 @@ Coach upgrades may increase **base drip** or annual pool at cycle open.
 
 ### Entry
 
-**Hamburger → Recruiting** (same dynasty shell — [`game-frame.md`](game-frame.md)). Optional **dashboard notification** when a watchlist recruit commits; **never** an advance blocker in-season.
+**Hamburger → Recruiting** (always when cycle open) plus **optional dashboard tasks** ([In-season dashboard tasks](#in-season-dashboard-tasks)). Notifications duplicate headlines; tasks carry the **action** entry.
 
 ### Tabs
 
@@ -405,7 +422,8 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | **Visits** | **None** — points-only actions |
 | **Top 60 (recruits)** | **Fixed** after class seed |
 | **HS class size** | **Uniform random 2,000–4,000** per season |
-| **Year-long cycle** | Spend preseason → signing (OS week 5); **games-only** advance gate in-season |
+| **Year-long cycle** | Spend preseason → signing (OS week 5); **optional** in-season dashboard tasks |
+| **Sim week** | Advance may auto-sim games + AI user recruiting after confirmation — [`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week) |
 | **Signing crunch** | **1.5×** weekly drip offseason weeks 2–5 (tunable in balance bundle) |
 
 ## Open / TBD
@@ -427,4 +445,5 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | 2025-11-08 | Walk-ons + Portal Top 40 full product specs |
 | 2025-11-08 | HS/JUCO seed in preseason; Top 60 during regular season |
 | 2025-11-08 | Recruiting pipeline uses homeState; schools also store homeCity |
-| 2026-11-09 | Year-long recruiting cycle; in-season games-only advance gate; signing crunch weeks |
+| 2026-11-09 | Year-long recruiting cycle; signing crunch weeks |
+| 2026-11-09 | Optional in-season recruiting dashboard tasks; sim-week advance confirmation |

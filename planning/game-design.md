@@ -13,7 +13,7 @@
 **Lineup:** **[`positions-and-lineup.md`](positions-and-lineup.md)** — PG/SG/SF/PF/C, interchange, default starters  
 **Strategy:** **[`strategy-schemes.md`](strategy-schemes.md)** — O/D presets, halftime, preview/watch  
 **Coach UI:** **[`coach-card.md`](coach-card.md)** — coach preview, card tabs, School staff  
-**Recruiting:** **[`recruiting-engine.md`](recruiting-engine.md)** — pools, 4-week window, NIL + points  
+**Recruiting:** **[`recruiting-engine.md`](recruiting-engine.md)** — year-long cycle, signing crunch, NIL + points  
 **League identity:** **[`league-branding.md`](league-branding.md)** — conference/team real ↔ universe mapping  
 **NCBA universe:** **[`ncba-branding.md`](ncba-branding.md)** — national body, March Mayhem, early events  
 **Offseason:** **[`offseason.md`](offseason.md)** — carousel, weeks 1–9, Season 1 rules  
@@ -226,8 +226,9 @@ Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 |--------|--------|
 | **Sim user game** | Possession sim runs; result held in **current week** session state |
 | **Advance week** | **Write save**; week’s results, standings, stats, and league outcomes become **final**; batch-sim other schools’ games in that **week index** (no player-facing **Advance day**) |
+| **Advance without playing** | Allowed — confirmation warns unplayed user games will **fast-sim** and lock ([`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week)); same step can apply **AI user-school recruiting** for unfinished optional recruiting tasks |
 
-**UI:** Required tasks on **Dashboard** before **Advance week** is enabled — [`game-frame.md`](game-frame.md#dashboard-task-gate).
+**UI:** **Required** tasks on **Dashboard** block **Advance week**; **optional** tasks (games, recruiting, etc.) surface work but may be skipped via sim-week confirm — [`game-frame.md`](game-frame.md#dashboard-task-gate).
 
 Until **week advance**, nothing from that week is treated as permanent on disk.
 
@@ -317,9 +318,9 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 
 ## Recruiting engine
 
-**Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — 4-week period, 2–4K HS + 1.5K JUCO, portal sub-tab, recruiting points + NIL, letter grades, prestige 0–99.
+**Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — year-long cycle, 2–4K HS + 1.5K JUCO, portal sub-tab, weekly drip + NIL, letter grades, prestige 0–99.
 
-**Brief:** HS/JUCO class **seeded in preseason** (**Top 60** in News); **year-long recruiting cycle** — spend from preseason through **signing (offseason week 5)** with **weekly point drip**; **in-season week advance gated by games only**; **signing crunch** bonus in offseason weeks **2–5**; portal board active when portal window opens; draft results **offseason week 2**; star bands **per pool**; **A–F** scout; **no visits**; **50%** point carryover. Full arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
+**Brief:** HS/JUCO class **seeded in preseason** (**Top 60** in News); **year-long recruiting cycle** with **weekly drip**; **optional in-season recruiting dashboard tasks**; advance may **sim week** (auto game + AI recruiting after confirm); **signing crunch** offseason weeks **2–5**; portal sub-tab when window open; **A–F** scout; **no visits**; **50%** carryover. Arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
 
 ---
 
