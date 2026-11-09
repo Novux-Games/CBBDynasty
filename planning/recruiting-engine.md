@@ -222,7 +222,7 @@ Coach upgrades purchased during offseason may increase **week 1** totals or per-
 | **Coach recruiting** + staff | Charisma / point efficiency |
 | **Home state / region** | In-state & nearby-state pipeline vs program `homeState` |
 | **Playing time pitch** | Optional action |
-| **Recent success** | Tourney run, poll rank |
+| **Recent success** | Tourney run, NET / Media rank |
 
 **Recruiting points** spent on: scout deeper (sharpen letters), call, scholarship offer, priority bump. **No campus visits** (no official/unofficial visit slots or visit actions).
 
