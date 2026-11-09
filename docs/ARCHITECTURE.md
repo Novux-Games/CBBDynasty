@@ -9,7 +9,7 @@ Planning remains authoritative in [`planning/`](../planning/). This doc describe
 | Module | Role |
 |--------|------|
 | **`android/app`** | Jetpack Compose UI, navigation, Android shell ([`app-shell.md`](../planning/app-shell.md), [`game-start.md`](../planning/game-start.md)) |
-| **`android/core`** | JVM Kotlin — calendar phases, **week checkpoint** semantics, save models, simulation/dynasty logic (JUnit, no device) |
+| **`android/core`** | JVM Kotlin — **identity pack** schema/validator, calendar, save models, simulation/dynasty logic (JUnit, no device) |
 | **`android/database`** | Room / SQLite — save slots table ([ADR-001](ADR-001-dynasty-save-backend.md)) |
 
 ## Package map (`app`)
@@ -51,4 +51,12 @@ cd android
 
 **Checklist:** [`BUILD_CHECKLIST.md`](BUILD_CHECKLIST.md) (phases 0–16).
 
-Tracks: calendar/saves → possession sim → dynasty systems → full league → March — [`game-design.md`](../planning/game-design.md#engineering-milestones).
+Tracks: calendar/saves → **pack** → possession sim → dynasty systems → full league → March — [`game-design.md`](../planning/game-design.md#engineering-milestones).
+
+### Package map (`core`)
+
+| Package | Role |
+|---------|------|
+| `core.pack` | `IdentityPack` models, `IdentityPackCodec`, `IdentityPackValidator` |
+| `core.save` | Slots, metadata, load integrity |
+| `core.calendar` | Phases, week checkpoints |

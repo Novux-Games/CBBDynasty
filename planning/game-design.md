@@ -150,6 +150,8 @@ Full navigation and screens: **[`game-frame.md`](game-frame.md)**.
 
 Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 
+**Code:** [`IdentityPackCodec`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/IdentityPackCodec.kt) + [`IdentityPackValidator`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/IdentityPackValidator.kt) (`packVersion` **1**).
+
 ```json
 {
   "packVersion": 1,
