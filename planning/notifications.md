@@ -86,6 +86,12 @@
 | Fundraising / facility complete | Yes | School / offseason |
 | Large NET / poll move (**user team**) | Yes | Rankings |
 
+### Major national records (league)
+
+| Event | Feed row | Tap → |
+|-------|----------|-------|
+| **Major national record** | Yes — criteria in [`history-hub.md`](history-hub.md#major-record-feed-eligible) | Player card / History |
+
 ### News only (no feed row)
 
 | Event | Where |
@@ -93,6 +99,7 @@
 | League injuries, upsets, portal steals elsewhere | **News → Stories** |
 | Top 60 / portal board updates | **News hub** |
 | Bracketology chatter | **News** |
+| Routine national record (marginal #1) | **News** only |
 
 ---
 
@@ -151,6 +158,7 @@ Tap feed row → navigate with Dashboard under back stack:
 |----------|------|
 | **Commits** | **Every** sign to the user program (**HS, JUCO, portal**) → feed row |
 | **Fired / eliminated** | **Option B:** **blocking modal** on first Dashboard open after the event; persists until dismissed; feed row also logged for history |
+| **Major national record** | Feed row + News — [`history-hub.md`](history-hub.md) |
 
 Modal copy is short; primary CTA routes to the same destination as the parallel **required** task (carousel / career / postseason) when one exists.
 
@@ -179,3 +187,4 @@ Modal copy is short; primary CTA routes to the same destination as the parallel 
 | 2026-11-09 | **In-app only**; no push; Stories separate; defaults on |
 | 2026-11-09 | All user-school commits (HS/JUCO/portal) → feed row |
 | 2026-11-09 | Fired / postseason eliminated → blocking modal + feed row |
+| 2026-11-09 | Major national records → feed + News |

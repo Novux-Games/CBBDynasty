@@ -240,11 +240,24 @@ Coach national coach of the year appears on **coach card History**, not GOAT.
 
 | Event | Surface |
 |-------|---------|
-| **National record** broken | **News → Stories** headline; optional History year tag at EoS |
+| **National record** broken | **News → Stories** headline; History year tag at EoS |
+| **Major national record** | Also **Dashboard notification feed** row (design lock) — [`notifications.md`](notifications.md#event-catalog) |
 | **National HOF** class announced | **News** + History hub year card |
 | **GOAT #1 change** | **News** soft headline at EoS only (not weekly) |
 
-**No** duplicate **notification feed** row for routine records — [`notifications.md`](notifications.md). Major national record (e.g. single-game 50+ PTS) may use feed at product discretion in balance.
+**Routine** record tweaks (e.g. new #1 by 1 point on a season total) → **News only**, no feed.
+
+### Major record (feed eligible)
+
+**Any** of:
+
+| Trigger |
+|---------|
+| New **single-game** national record in **PTS, REB, AST, STL, BLK, or 3PM** |
+| New **season** national record in **total PTS** or **PPG** (min **20** GP) |
+| Single-game **PTS ≥ 50** (even if not #1 — milestone headline + feed) |
+
+Feed copy: *“Record: {Name} — {value} {stat}”* → tap → player card or Records drill-down.
 
 ---
 
@@ -283,3 +296,4 @@ Coach national coach of the year appears on **coach card History**, not GOAT.
 | Date | Change |
 |------|--------|
 | 2026-11-09 | Initial spec — records, triple HOF, GOAT formula, cadence |
+| 2026-11-09 | Product lock: history defaults; major records → feed + News |

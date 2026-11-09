@@ -281,7 +281,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 16.1 | `[ ]` **In-app notification feed** + default on | Dashboard rows, deep links, no OS push; all commits; **fired/eliminated modal**; News not duplicated | [notifications](../planning/notifications.md) | `ui.dashboard` |
+| 16.1 | `[ ]` **In-app notification feed** + default on | Dashboard rows, deep links, no OS push; all commits; **fired/eliminated modal**; major records; News not duplicated | [notifications](../planning/notifications.md), [history-hub](../planning/history-hub.md) | `ui.dashboard` |
 | 16.2 | `[ ]` Automation toggles (sim week, staff) | Settings + dynasty | [game-design](../planning/game-design.md) | — |
 | 16.3 | `[ ]` Identity import hardening (URL allowlist, size cap) | [game-design](../planning/game-design.md) | — |
 | 16.4 | `[ ]` Performance: 365-team week batch under target | Profiling doc | [game-design](../planning/game-design.md) | — |
