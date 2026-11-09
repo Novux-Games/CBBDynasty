@@ -242,9 +242,22 @@ Hamburger opens **hub picker** (overlay or slide drawer):
 | **Rankings** | National **`#1`–`#365`** + **T25** hub + conference standings |
 | **News** | Full news product (stories, draft, recruits) |
 | **History** | Dynasty & national archive cards |
+| **Awards** | **Yearly awards** + **Weekly awards** — NCBA vs Conference tabs ([`awards.md`](awards.md#awards-hub-ui-design-lock)) |
 | **March Mayhem** | National postseason — **NCBA · NCI · HC** brackets & games ([`postseason-frame.md`](postseason-frame.md)); **hamburger only after Selection Sunday** |
 
 Bottom tabs remain available; hubs stack or replace main content per navigation pattern (implementation choice).
+
+### Awards hub
+
+**Authoritative UI:** [`awards.md`](awards.md#awards-hub-ui-design-lock).
+
+| Screen | Access |
+|--------|--------|
+| **Landing** | **Yearly awards** · **Weekly awards** (two buttons) |
+| **Yearly** | **NCBA** / **Conference** tabs; conference picker (default **your** conference); sub-tabs per award type; **current season locked in-season** until End of Season |
+| **Weekly** | RS week list; POTW winners only; **live** during season |
+
+Not on bottom nav — hamburger only.
 
 ---
 
@@ -415,7 +428,7 @@ Hamburger **History** — league archive (year cards, GOAT, national records/HOF
 
 ```
 Bottom:  Roster | Calendar | Dashboard | News
-Hamburger: School | Strategy | Statistics | Rankings | News | History | March Mayhem (post–Selection Sunday)
+Hamburger: School | Strategy | Statistics | Rankings | News | Awards | History | March Mayhem (post–Selection Sunday)
            └─ School: Overview | Staff | Roster | Schedule | Stats | History | Records | HOF | Drafted
 ```
 

@@ -632,7 +632,10 @@
       "peakOvrScale": 2.0,
       "statRankNationalMax": 3.0
     },
-    "allConferenceTeams": 2
+    "allConferenceTeams": 2,
+    "ncbaMvpRunnerUpCount": 4,
+    "ncbaPositionPoyRunnerUpCount": 1,
+    "coachOfYearRunnerUpCount": 1
   },
   "history": {
     "winContribution": {
