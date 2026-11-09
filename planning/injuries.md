@@ -196,7 +196,7 @@ See [`player-cards.md`](player-cards.md) — injury strip under identity when ac
 
 | Tier | Trigger |
 |------|---------|
-| **User school** | Any user player injury → notification + optional dashboard task |
+| **User school** | Any user player injury → **in-app feed** row + optional dashboard task (no OS push) |
 | **League headline** | **Major** bank injury on player above **overall** threshold, or **Top N** scorer on team; **moderate** for high prestige programs only (balance) |
 | **Stories feed** | One-line with team, player, injury label, weeks out — [`news-hub.md`](news-hub.md) |
 

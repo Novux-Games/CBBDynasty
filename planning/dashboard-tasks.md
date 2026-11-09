@@ -30,7 +30,7 @@
 |---------|--------|
 | **Task card** | Checklist row on **Dashboard**; deep link to hub/screen |
 | **Not dashboard** | Full-screen phase flows (e.g. Offseason **Week 1** **Roster / Transfer** tabs) — [`transfer-portal.md`](transfer-portal.md#week-1--roster-vs-transfer-tabs) |
-| **Notifications** | Headlines / alerts; **tasks** carry the **action** entry |
+| **Notification feed** | In-app Dashboard alerts — [`notifications.md`](notifications.md); **tasks** carry the **action** entry (separate UI) |
 | **Complete** | User finishes the wired action or explicit dismiss where allowed |
 | **AI on advance** | Unplayed games fast-sim; user-school recruiting/portal per automation — [`recruiting-engine.md`](recruiting-engine.md#ai-recruiting) |
 

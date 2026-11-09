@@ -677,17 +677,17 @@ Universe round labels: [`ncba-branding.md`](ncba-branding.md).
 - Conference accept/decline
 - Schedule non-conference rivals
 
-### Notifications (Android)
+### In-app notifications (Dashboard feed)
 
-| Event | Priority |
-|-------|----------|
-| Recruiting commit / decommit | High |
-| Portal offer accepted | High |
-| Job offer / fired | High |
-| Selection Sunday | High |
-| Sunday coach points | Medium |
-| Game day tip-off | Medium (user opt-in) |
-| Fundraising complete | Low |
+**No OS push in v1** — authoritative catalog: [`notifications.md`](notifications.md).
+
+| Tier | Examples |
+|------|----------|
+| High | User injury, commit/decommit, portal sign, carousel must-act, Selection Sunday (you) |
+| Medium | Sunday coach points, game this week, medical RS, Signing Day |
+| Low | Facilities, user NET/poll spike |
+
+League stories → **News** only, not the notification feed.
 
 ### Accessibility
 
@@ -707,7 +707,7 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | **Dynasty systems** | Offseason, recruiting, portal, facilities |
 | **Full league** | 365-team scheduling, daily batch sim, derived résumé |
 | **March** | Conference templates, NCBA, **NCI**, **Heritage** — [`postseason.md`](postseason.md) |
-| **Ship** | Full 2D UI, automation toggles, notifications, **JSON/URL identity import** |
+| **Ship** | Full 2D UI, automation toggles, in-app notification feed, **JSON/URL identity import** |
 
 **Code:** `android/` — `:app`, `:core`, `:database`; see [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md). **Build order:** [`docs/BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md).
 

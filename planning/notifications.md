@@ -1,150 +1,154 @@
-# Notifications & alerts
+# In-app notifications (Dashboard feed)
 
-**Context:** Android push + in-app **notification feed** on the Dashboard. **Tasks** (required/optional cards) are the **action** entry; notifications **surface** events and deep-link — [`dashboard-tasks.md`](dashboard-tasks.md). **News** is editorial/headline product — [`news-hub.md`](news-hub.md).
+**Context:** **No OS / push notifications** in v1. Players run a **text-first dynasty in-session**; alerts are **in-app rows** on the **Dashboard notification feed** ([`game-frame.md`](game-frame.md#notifications)). Tap → deep link.
 
-**Portal calendar (lock):** Transfers **only** in offseason — Week 1 entry, Weeks 2–5 portal recruiting — [`transfer-portal.md`](transfer-portal.md). **No** in-season portal notifications.
+**Not the same as:**
 
-**Last updated:** 2026-11-09 · **Status:** Draft — product decisions below.
+| Surface | Role |
+|---------|------|
+| **Dashboard tasks** | Required / optional **checklist cards** with explicit actions — [`dashboard-tasks.md`](dashboard-tasks.md) |
+| **This feed** | Informational **alerts** about what changed (injury, commit, carousel card, etc.) |
+| **News → Stories** | League **editorial** headlines — [`news-hub.md`](news-hub.md). **Never** duplicated as notification feed rows |
+
+**Portal (lock):** Offseason only — no in-season transfer alerts — [`transfer-portal.md`](transfer-portal.md).
+
+**Last updated:** 2026-11-09 · **Status:** Design lock (in-app only).
 
 ---
 
 ## Contents
 
-1. [Two surfaces](#two-surfaces)
-2. [Design locks (already settled)](#design-locks-already-settled)
-3. [Event catalog (draft)](#event-catalog-draft)
-4. [Deep links](#deep-links)
-5. [Automation interaction](#automation-interaction)
-6. [Open decisions — need from you](#open-decisions--need-from-you)
-7. [Cross-links](#cross-links)
+1. [Design locks](#design-locks)
+2. [Defaults & settings](#defaults--settings)
+3. [Event catalog](#event-catalog)
+4. [Tasks vs feed (no triple spam)](#tasks-vs-feed-no-triple-spam)
+5. [Week advance & sim-week](#week-advance--sim-week)
+6. [Deep links](#deep-links)
+7. [Out of scope](#out-of-scope)
+8. [Open decisions](#open-decisions)
+9. [Cross-links](#cross-links)
 
 ---
 
-## Two surfaces
+## Design locks
 
-| Surface | Role |
-|---------|------|
-| **In-app feed** | Scrollable list on **Dashboard** ([`game-frame.md`](game-frame.md#notifications)); persists until dismissed or superseded |
-| **Android system notification** | OS tray + lock screen; tap opens app at deep link |
-
-**Principle:** High-signal events get **both** (configurable). Low-signal may be **feed-only**. **Dashboard optional tasks** duplicate some events with explicit CTAs — user may complete via task **or** feed tap (same destination).
-
----
-
-## Design locks (already settled)
-
-| Rule | Source |
+| Rule | Detail |
 |------|--------|
-| Tasks carry **actions**; notifications **inform** + link | [`dashboard-tasks.md`](dashboard-tasks.md) |
-| Recruiting commits / headlines also in News | [`news-hub.md`](news-hub.md) |
-| User player injury → notify + optional **Review injury** task | [`injuries.md`](injuries.md#news--league) |
-| **Sunday** coach skill points → notification (medium) | [`game-design.md`](game-design.md#notifications-android) |
-| Coaching carousel / contract / firing → notify; **pause** until resolved | [`offseason.md`](offseason.md), [`coach-card.md`](coach-card.md) |
-| Signing Day week 6 → offseason notification after | [`recruiting-engine.md`](recruiting-engine.md) |
-| Selection Sunday → high priority | [`game-design.md`](game-design.md) |
-| **No** in-season portal / transfer alerts | [`transfer-portal.md`](transfer-portal.md) |
+| **In-app only** | **No** Android tray, lock screen, or background push in v1 |
+| **Default on** | New dynasty: notification **feed visible** on Dashboard (user may mute categories in Settings later — optional v1) |
+| **Stories ≠ notifications** | Commits, upsets, league injuries, bracketology → **News** only |
+| **User-school focus** | Feed emphasizes **your program**; not a dump of 365-team league churn |
+| **Portal** | Offseason Weeks 1–5 events only |
+| **Tasks** | Separate UI; see [duplication rules](#tasks-vs-feed-no-triple-spam) |
 
 ---
 
-## Event catalog (draft)
+## Defaults & settings
 
-Priority tiers from [`game-design.md`](game-design.md#notifications-android) unless overridden below.
+| Setting | Default |
+|---------|---------|
+| Show notification feed on Dashboard | **On** |
+| OS push | **Off** / not implemented |
 
-### High
+---
 
-| Event | Feed | Push (default TBD) | Task parallel? | Deep link |
-|-------|------|--------------------|----------------|-----------|
-| HS/JUCO **commit** to user school | Yes | TBD | Optional spend nudge | Recruiting hub → recruit |
-| HS/JUCO **decommit** from user school | Yes | TBD | — | Recruiting hub |
-| **Portal** transfer **signed** (user school) | Yes | TBD | OS W2–5 optional tasks | Recruiting → Portal |
-| **Job offer** / **fired** / extension critical | Yes | TBD | Required carousel cards | Coach card → Contract |
-| **Selection Sunday** field revealed | Yes | TBD | — | News / March Mayhem |
-| User player **injury** (any severity) | Yes | TBD | Optional **Review injury** | Strategy / player card |
+## Event catalog
+
+**Priority** = sort weight in feed (newest first within tier). All rows are **in-app** only.
+
+### High (top of feed)
+
+| Event | Feed row | Task also? | Tap → |
+|-------|----------|------------|-------|
+| User player **injury** | Yes | Optional **Review injury** | Strategy / player |
+| **Commit** to user school | Yes | Optional recruiting nudge | Recruiting → recruit |
+| **Decommit** from user school | Yes | — | Recruiting |
+| Portal **signing** (user school) | Yes | Optional OS W2–5 tasks | Recruiting → Portal |
+| Carousel: **offer / fired / must-sign extension** | Yes | **Required** task when gated | Coach → Contract |
+| **Selection Sunday** (user in field) | Yes | — | March Mayhem / preview |
 
 ### Medium
 
-| Event | Feed | Push (default TBD) | Task parallel? | Deep link |
-|-------|------|--------------------|----------------|-----------|
-| **Sunday coach skill points** available | Yes | TBD | Optional dashboard nudge | Coach card |
-| **Game day** tip (user has game this week) | Yes | Opt-in | Optional **Play / Sim** | Game preview |
-| Rival **portal flip** (user was recruiting) | Yes | TBD | — | Recruiting / News |
-| **Medical redshirt** eligibility | Yes | TBD | Optional **Medical RS?** | Postgame / player card |
-| **Signing Day** (week 6) recap | Yes | TBD | Required if unsigned | Signing Day UI |
+| Event | Feed row | Task also? | Tap → |
+|-------|----------|------------|-------|
+| **Sunday coach skill points** | Yes | Optional dashboard nudge | Coach card |
+| **Game this week** | Yes | Optional **Play / Sim** | Game preview |
+| **Medical redshirt** eligible | Yes | Optional **Medical RS?** | Player / postgame |
+| **Signing Day** (unsigned class) | Yes | Required if hard gate | Signing Day |
+| **Signing Day** complete recap | Yes | — | Roster / recruiting |
+
+**Game this week:** Plain copy e.g. *“Week 14 — at Kentucky”* when the user has a scheduled game that week (not a phone alert).
 
 ### Low
 
-| Event | Feed | Push (default TBD) | Deep link |
-|-------|------|--------------------|-----------|
-| Fundraising / facility upgrade complete | Yes | Feed-only | School / offseason week 9 |
-| Poll / NET big mover (user team) | Yes | Feed-only | Rankings |
-| League injury headline (not user player) | Yes | Feed-only | News → Stories |
+| Event | Feed row | Tap → |
+|-------|----------|-------|
+| Fundraising / facility complete | Yes | School / offseason |
+| Large NET / poll move (**user team**) | Yes | Rankings |
 
-### Explicitly out of scope (v1)
+### News only (no feed row)
 
-| Event | Why |
-|-------|-----|
-| In-season **portal entry** or midyear transfer | No in-season portal — design lock |
-| Per-possession sim events | Watch mode is live UI |
+| Event | Where |
+|-------|--------|
+| League injuries, upsets, portal steals elsewhere | **News → Stories** |
+| Top 60 / portal board updates | **News hub** |
+| Bracketology chatter | **News** |
+
+---
+
+## Tasks vs feed (no triple spam)
+
+| Case | Rule |
+|------|------|
+| Optional **task** + same event | **Both** allowed — task = action chip; feed = one-line **alert** (different copy) |
+| **Required** task | Feed row **optional**; required card is enough — prefer **feed skip** if redundant |
+| Injury | Feed always for user player; task optional |
+
+---
+
+## Week advance & sim-week
+
+After **Advance week** (or sim-week confirm), append feed rows for **user-relevant** outcomes that happened during resolution:
+
+| Behavior | Lock |
+|----------|------|
+| **One row per event** | e.g. separate lines for injury + commit — **not** one merged paragraph |
+| **League sim noise** | **No** feed rows — goes to News batch if headline-worthy |
+| **AI-only carousel** | **No** feed unless user HC affected |
+| Sim-week summary dialog | Confirm dialog lists sim results; feed persists same facts after dismiss |
 
 ---
 
 ## Deep links
 
-| Destination | From |
-|-------------|------|
-| Game preview | Game day, last game recap |
-| Strategy hub | Injury review, lineup incomplete |
-| Recruiting hub (Recommended) | Commit, visit refund, portal |
-| Coach card (Contract / skills) | Carousel, Sunday points |
-| News tab / News hub | League headlines, Selection Sunday |
-| Postseason / March Mayhem | Bracket round, upset |
+Tap feed row → navigate with Dashboard under back stack:
 
-**Cold start:** Tap push → load dynasty → navigate with back stack to Dashboard under target screen.
-
----
-
-## Automation interaction
-
-When **sim-week** or **auto-maintain recruiting** runs ([`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week)):
-
-| Question | Draft behavior (confirm) |
-|----------|-------------------------|
-| Commits during auto-sim | Batch into **one** feed summary per advance vs one line per commit? |
-| Suppress push if user confirmed advance? | TBD |
-| Injury on user player in auto-sim | Always feed + optional push; task still optional |
+| Destination | Examples |
+|-------------|----------|
+| Game preview | Game this week, recap |
+| Strategy | Injury, lineup |
+| Recruiting hub | Commit, portal |
+| Coach card | Points, contract |
+| Signing Day | Unsigned class |
+| March Mayhem | Selection Sunday |
 
 ---
 
-## Open decisions — need from you
+## Out of scope
 
-Answer these to move this doc to **Done** and update [`planning-notes.md`](planning-notes.md) + [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md).
+| Item | Notes |
+|------|--------|
+| **OS push** | Not v1; game is played with app open |
+| In-season portal | Design lock |
+| Stories in notification feed | Design lock |
+| Per-possession watch events | Live sim UI |
 
-### A. Push vs feed defaults
+---
 
-1. **Global default:** Are **push notifications on** for new dynasties, or **opt-in** until the user enables in Settings?
-2. **Per-category toggles:** Match [`game-design.md`](game-design.md) table exactly, or add **Injuries**, **Recruiting**, **Carousel**, **Game day** channel groups?
-3. **Game day:** Confirm **opt-in only** (as game-design says) — default off?
+## Open decisions
 
-### B. Duplication with tasks & news
-
-4. When an **optional dashboard task** exists (e.g. injury review), do we still **push**, or **feed-only** to avoid triple alert (task + feed + push)?
-5. Do **News headlines** also create feed rows, or News tab only (no Dashboard feed duplicate)?
-
-### C. Timing & batching
-
-6. **Week advance:** Single digest notification (“Week 12 sim complete — 2 injuries, 1 commit”) vs separate lines?
-7. **Quiet hours / DND:** Respect Android system only, or in-app “no pushes 11pm–8am” default?
-
-### D. Priority events
-
-8. **Injuries:** Push for **all** user injuries, or **moderate/major only** (minors feed-only)?
-9. **Portal:** Notify on **every** user signing during Weeks 2–5, or only **5★ / Top 40** targets?
-10. **Carousel:** Push on **every** AI league coaching change, or **user-involved only**?
-
-### E. Copy & identity
-
-11. Notification title pattern: **“{School nick}”** vs **“Dynasty”** generic prefix?
-12. Should catastrophic events (fired, eliminated from NCBA) use **full-screen takeover** on next open, or feed-only?
+1. **Portal signing feed:** Row for **every** user portal sign in Weeks 2–5, or only **tracked** targets (board / Top 40)?
+2. **Fired / eliminated:** Add **blocking modal** on next Dashboard open, or feed row only?
 
 ---
 
@@ -152,14 +156,14 @@ Answer these to move this doc to **Done** and update [`planning-notes.md`](plann
 
 | Doc | Hook |
 |-----|------|
-| [`game-design.md`](game-design.md#mobile-ux-automation--notifications) | Legacy priority table (superseded by this doc when Done) |
-| [`game-frame.md`](game-frame.md) | Dashboard feed placement |
-| [`dashboard-tasks.md`](dashboard-tasks.md) | Task vs notify boundary |
-| [`injuries.md`](injuries.md) | Injury + medical RS |
+| [`game-frame.md`](game-frame.md#notifications) | Feed placement |
+| [`dashboard-tasks.md`](dashboard-tasks.md) | Task cards |
+| [`news-hub.md`](news-hub.md) | Stories |
+| [`injuries.md`](injuries.md) | Injury alert + task |
 | [`recruiting-engine.md`](recruiting-engine.md) | Commits, Signing Day |
-| [`transfer-portal.md`](transfer-portal.md) | Offseason-only portal |
-| [`coach-card.md`](coach-card.md) | Contract / Sunday points |
-| [`offseason.md`](offseason.md) | Carousel pause |
+| [`transfer-portal.md`](transfer-portal.md) | Offseason portal |
+| [`coach-card.md`](coach-card.md) | Contract, Sunday points |
+| [`game-design.md`](game-design.md#mobile-ux-automation--notifications) | Automation toggles (unchanged) |
 
 ---
 
@@ -167,4 +171,5 @@ Answer these to move this doc to **Done** and update [`planning-notes.md`](plann
 
 | Date | Change |
 |------|--------|
-| 2026-11-09 | Initial draft; portal in-season removed; event catalog + open questions |
+| 2026-11-09 | Initial draft (incorrectly included OS push) |
+| 2026-11-09 | **In-app only**; no push; Stories separate; defaults on |

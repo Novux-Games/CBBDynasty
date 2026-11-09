@@ -23,7 +23,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | [`league-branding.md`](../planning/league-branding.md) + [`2026-NCAA-Directory.md`](../planning/2026-NCAA-Directory.md) | 3.1–3.2, 9.3 |
 | [`ncba-branding.md`](../planning/ncba-branding.md) | 7.3, 9.5, 11.5, 13.2 |
 | [`news-hub.md`](../planning/news-hub.md) | 9.8–9.9, 14.2; injury stories → **9.8** |
-| [`notifications.md`](../planning/notifications.md) *(draft)* | **16.1**, **9.1** feed, cross **9.6** task dedupe |
+| [`notifications.md`](../planning/notifications.md) | **9.1** Dashboard feed, **16.1** settings stub |
 | [`offseason.md`](../planning/offseason.md) | 4.6, 6.1–6.10, 14.4 |
 | [`player-archetypes.md`](../planning/player-archetypes.md) | 8.2 |
 | [`player-cards.md`](../planning/player-cards.md) | 8.1, 8.6; injury strip → **8.1** + **8.7** |
@@ -280,7 +280,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 16.1 | `[ ]` Notifications (game day, Sunday points, portal) | Android channels | [game-design](../planning/game-design.md) | — |
+| 16.1 | `[ ]` **In-app notification feed** + default on | Dashboard rows, deep links, no OS push; News not duplicated | [notifications](../planning/notifications.md) | `ui.dashboard` |
 | 16.2 | `[ ]` Automation toggles (sim week, staff) | Settings + dynasty | [game-design](../planning/game-design.md) | — |
 | 16.3 | `[ ]` Identity import hardening (URL allowlist, size cap) | [game-design](../planning/game-design.md) | — |
 | 16.4 | `[ ]` Performance: 365-team week batch under target | Profiling doc | [game-design](../planning/game-design.md) | — |
@@ -355,3 +355,4 @@ Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.20**), **dashboard
 | 2026-11-09 | Injuries sim output, persistence, lineup block, news — per injuries.md |
 | 2026-11-09 | Injury bank v2 (40), auto lineup + return restore; **weeksRemaining** + bye-week tick (8.7, 9.7, 10.8, 2.6) |
 | 2026-11-09 | **Full** locked-spec index (all Done planning docs); **8.8** injury UX; injury wired through 9.4/9.6/9.8/10.2 |
+| 2026-11-09 | In-app `notifications.md` (no push); **16.1** |

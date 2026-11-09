@@ -165,8 +165,7 @@ When the user’s team has a national invite: show **`{NCBA|NCI|HC} #{seed}`** (
 
 ### Notifications
 
-- Actionable and informational feed (injuries, portal, coach points Sunday, game day, etc.).
-- Tap → relevant screen (roster, game preview, strategy).
+In-app **feed** on Dashboard only ([`notifications.md`](notifications.md)) — injuries, commits, carousel, game this week, etc. Tap → deep link. **Not** OS push. **Not** News Stories.
 
 ### Last game
 
