@@ -62,7 +62,7 @@ Portal star bands use the **portal pool only** (see [Star distribution](#star-di
 
 **No in-season HS/JUCO recruiting actions** — offers/commits only in offseason **weeks 2–5**. Week 1 = **retention** on your roster only ([`offseason.md`](offseason.md#week-1--players-leaving)). (Portal in-season remains ruleset-toggled in game-design.)
 
-User advances **week** or **day** inside recruiting like other offseason phases.
+User advances **week** only; recruiting obligations gate **Advance week** on the dashboard ([`game-frame.md`](game-frame.md#dashboard-task-gate)).
 
 ---
 
@@ -343,7 +343,7 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 
 | Topic | Notes |
 |-------|--------|
-| **Offseason frame UI** | Full shell doc (companion to `game-frame.md`) |
+| ~~Offseason frame UI~~ | **Resolved** — tasks in [`offseason.md`](offseason.md) + shell in [`game-frame.md`](game-frame.md) |
 
 ---
 

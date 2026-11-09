@@ -1,43 +1,74 @@
-# Game frame — in-season (coach loaded)
+# Game frame — dynasty shell (all phases)
 
-**When this applies:** Coach and dynasty exist; player is in **in-season** play (regular season, conference tournament, postseason — not full offseason UI). **Before this shell:** [`game-start.md`](game-start.md). **March national postseason UI:** [`postseason-frame.md`](postseason-frame.md).  
-**Companion:** [`game-design.md`](game-design.md) (systems), [`simulation-engine.md`](simulation-engine.md) (game sim), [`player-cards.md`](player-cards.md), [`coach-card.md`](coach-card.md).  
-**Last updated:** 2025-11-08
+**When this applies:** After the dynasty is created — **offseason**, **preseason**, **exhibition / regular season**, **conference & national postseason**, and **End of Season** review. **One chrome** for the whole career (no separate “offseason app”). **Before this shell:** [`game-start.md`](game-start.md). **March bracket labels & hub content:** [`postseason-frame.md`](postseason-frame.md) (same shell).  
+**Companion:** [`game-design.md`](game-design.md) (systems), [`simulation-engine.md`](simulation-engine.md) (game sim), [`player-cards.md`](player-cards.md), [`coach-card.md`](coach-card.md). **Task lists by phase:** [`offseason.md`](offseason.md), [`preseason.md`](preseason.md), [`season-review.md`](season-review.md).  
+**Last updated:** 2026-11-09
 
 ---
 
 ## Contents
 
 1. [Entry & shell](#entry--shell)
-2. [Bottom navigation](#bottom-navigation)
-3. [Dashboard (home)](#dashboard-home)
-4. [Calendar tab](#calendar-tab)
-5. [Roster tab](#roster-tab)
-6. [News tab (dashboard)](#news-tab-dashboard)
-7. [Top menu (hamburger) & hubs](#top-menu-hamburger--hubs)
-8. [School hub](#school-hub)
-9. [Coach](#coach)
-10. [Strategy hub](#strategy-hub)
-11. [Statistics hub](#statistics-hub)
-12. [Rankings hub](#rankings-hub)
-13. [News hub (full)](#news-hub-full)
-14. [History hub](#history-hub)
-15. [Cross-cutting behavior](#cross-cutting-behavior)
+2. [Time: week advance only](#time-week-advance-only)
+3. [Dashboard task gate](#dashboard-task-gate)
+4. [Bottom navigation](#bottom-navigation)
+5. [Dashboard (home)](#dashboard-home)
+6. [Calendar tab](#calendar-tab)
+7. [Roster tab](#roster-tab)
+8. [News tab (dashboard)](#news-tab-dashboard)
+9. [Top menu (hamburger) & hubs](#top-menu-hamburger--hubs)
+10. [School hub](#school-hub)
+11. [Coach](#coach)
+12. [Strategy hub](#strategy-hub)
+13. [Statistics hub](#statistics-hub)
+14. [Rankings hub](#rankings-hub)
+15. [News hub (full)](#news-hub-full)
+16. [History hub](#history-hub)
+17. [Cross-cutting behavior](#cross-cutting-behavior)
 
 ---
 
 ## Entry & shell
 
 ```
-[New dynasty complete] → Coach created → In-season shell loads
+[Sign contract] → Offseason Week 1 … → preseason → exhibitions / RS → postseason → End of Season → (loop)
                               │
                               ▼
-                    Game frame (this document)
+              Same dynasty shell (this document) — phase label in header only
 ```
 
-- **Persistent chrome:** top bar (hamburger, dynasty context) + **bottom nav** (four tabs).
+- **Persistent chrome:** top bar (hamburger, dynasty context, **phase + week** label) + **bottom nav** (four tabs) — **unchanged** across offseason, preseason, and season play.
 - **Default tab:** **Dashboard** (center).
 - **School context:** Player’s school is default; other schools use **same hub layout** when drilled from rankings, opponents, or game preview (read-only where appropriate).
+- **No** separate `offseason-frame` / `preseason-frame` UI specs — phase docs describe **tasks and rules** only; layout lives here.
+
+---
+
+## Time: week advance only
+
+**Design lock:** The player advances time by **week** only. There is no **Advance day** control in the UI.
+
+| Rule | Detail |
+|------|--------|
+| **Checkpoint** | **Advance week** commits the week to the save ([`game-design.md`](game-design.md#when-games-run-vs-when-the-save-commits)) |
+| **Within a week** | User completes dashboard tasks, sims games, edits strategy; calendar may still list games by **date** for display — that is not a second advance axis |
+| **League sim** | On week advance, batch-sim all other schools’ games scheduled in that **week index** ([`time-system.md`](time-system.md#advance-rules)) |
+
+---
+
+## Dashboard task gate
+
+**Design lock:** **Advance week** stays **disabled** until **required tasks for the current phase/week** are complete. Tasks surface on the **Dashboard** (cards, checklist, or notifications) — same pattern everywhere.
+
+| Phase | Required before advance (authoritative lists) |
+|-------|-----------------------------------------------|
+| **Offseason** | Weekly obligations — retention, portal, recruiting spend, cuts, etc. ([`offseason.md`](offseason.md)) |
+| **Preseason** | Full **8-task** checklist ([`preseason.md`](preseason.md#task-checklist)) |
+| **Exhibition / RS** | User **game day** obligations when scheduled (prep, sim or play) + any other dashboard flags (e.g. Sunday coach points acknowledged) |
+| **Conf / national postseason** | Play or sim **your** game when scheduled; byes do not block advance |
+| **End of Season** | Season review acknowledged → advance to offseason ([`season-review.md`](season-review.md)) |
+
+Optional tasks never block advance unless a phase doc marks them **Required**. Completing a task updates dashboard state immediately; **week save** still commits only on **Advance week**.
 
 ---
 
@@ -360,15 +391,16 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History | March Ma
            └─ School: Overview | Staff | Roster | Schedule | Stats | History | Records | HOF | Drafted
 ```
 
-### Companion docs (planned, same depth as this file)
+### Phase companions (tasks & rules — not separate layouts)
 
 | Doc | Covers |
 |-----|--------|
-| **`offseason-frame.md`** | Portal, carousel, recruiting shell — [`offseason.md`](offseason.md) |
-| **`preseason-frame.md`** | Preseason task checklist — [`preseason.md`](preseason.md) |
-| **`postseason-frame.md`** | Tournament seed labels, March Mayhem hub — [`postseason.md`](postseason.md) |
-| **`transfer-portal-engine.md`** | Portal cycles, retention, in-season window |
-| **`selection-engine.md`** | Poll + Seed Index, Selection Sunday cuts |
+| [`offseason.md`](offseason.md) | Offseason weeks, carousel, portal/recruiting |
+| [`preseason.md`](preseason.md) | Preseason task checklist |
+| [`postseason-frame.md`](postseason-frame.md) | Tournament seed labels, March Mayhem **hub content** (same shell) |
+| [`postseason.md`](postseason.md) | Selection Sunday, brackets |
+| [`selection-engine.md`](selection-engine.md) | Poll + Seed Index |
+| [`transfer-portal-engine.md`](transfer-portal-engine.md) | *Planned* — portal cycles, or fold into [`recruiting-engine.md`](recruiting-engine.md) |
 
 Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`game-design.md`](game-design.md#notifications-android).
 
@@ -390,4 +422,5 @@ Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`g
 | 2025-11-09 | Removed tier color chips from UI spec |
 | 2025-11-09 | T25 highlight for #1–25; all 365 ranked every week |
 | 2025-11-08 | School Staff tab; AD trust; staff detail sheets |
+| 2026-11-09 | Dynasty shell all phases; dashboard task gate; week advance only |
 | 2025-11-08 | Assistants = coach cards; support list-only |

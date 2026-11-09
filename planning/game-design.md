@@ -225,8 +225,9 @@ Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 | Action | Effect |
 |--------|--------|
 | **Sim user game** | Possession sim runs; result held in **current week** session state |
-| **Advance day** | Roll calendar; batch-sim other **scheduled** games that date (same week state) |
-| **Advance week** | **Write save**; week’s results, standings, stats, and league outcomes become **final** |
+| **Advance week** | **Write save**; week’s results, standings, stats, and league outcomes become **final**; batch-sim other schools’ games in that **week index** (no player-facing **Advance day**) |
+
+**UI:** Required tasks on **Dashboard** before **Advance week** is enabled — [`game-frame.md`](game-frame.md#dashboard-task-gate).
 
 Until **week advance**, nothing from that week is treated as permanent on disk.
 

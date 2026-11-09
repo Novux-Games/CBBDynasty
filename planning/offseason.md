@@ -2,7 +2,7 @@
 
 **Design lock:** Dynasties **start in offseason**, not preseason. Most coaching movement happens here — matching real hiring cycles. **Preseason** begins after offseason ([`preseason.md`](preseason.md)). **Entry:** after **[End of Season week](season-review.md)** (post postseason).
 
-**Companion UI (planned):** [`offseason-frame.md`](offseason-frame.md). **Recruiting depth:** [`recruiting-engine.md`](recruiting-engine.md). **Carousel / contracts:** [`game-design.md`](game-design.md#coaching-carousel--contracts). **New dynasty entry:** [`game-start.md`](game-start.md) → **Offseason Week 1**.
+**Shell:** Same dynasty chrome as in-season — [`game-frame.md`](game-frame.md). **Recruiting depth:** [`recruiting-engine.md`](recruiting-engine.md). **Carousel / contracts:** [`game-design.md`](game-design.md#coaching-carousel--contracts). **New dynasty entry:** [`game-start.md`](game-start.md) → **Offseason Week 1**.
 
 **Last updated:** 2025-11-09
 
@@ -34,7 +34,7 @@
 | **Carousel realism** | Labeled **Coaching Carousel** (not “Week 0”); runs **before** Week 1 on **season 2+** |
 | **User agency** | AI carousel resolves in background; **your** offers, extensions, assistant hires need approval |
 
-User advances **week** (default) or **day** inside dense phases (portal/recruiting) — same pattern as [`game-design.md`](game-design.md) offseason UX.
+User advances **week** only; dashboard tasks gate **Advance week** ([`game-frame.md`](game-frame.md#dashboard-task-gate)).
 
 ---
 
@@ -234,8 +234,7 @@ Upgrades apply per facility rules (some bonuses **next recruiting cycle**).
 
 | Action | Effect |
 |--------|--------|
-| **Advance week** | Commit phase outcomes; local save checkpoint |
-| **Advance day** | Optional inside Weeks 1–5 sub-phases |
+| **Advance week** | Commit phase outcomes; local save checkpoint (after dashboard tasks for that week) |
 | **Enter season** | After final offseason week → **preseason** module |
 
 Dynasty metadata: `offseasonWeek`, `phaseId`, `seasonIndex`, `skipConferenceOffers` (Season 1).

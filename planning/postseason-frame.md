@@ -1,6 +1,6 @@
 # Postseason frame — conference play & March Mayhem
 
-**When this applies:** **Conference tournaments** through **national postseason** (not regular-season shell defaults). Rules: [`postseason.md`](postseason.md). Branding: [`ncba-branding.md`](ncba-branding.md). In-season chrome: [`game-frame.md`](game-frame.md).
+**When this applies:** **Conference tournaments** through **national postseason** — **same dynasty shell** as RS/offseason ([`game-frame.md`](game-frame.md)); this doc is **labels, March Mayhem hub content, and bracket UX** only. Rules: [`postseason.md`](postseason.md). Branding: [`ncba-branding.md`](ncba-branding.md).
 
 **Last updated:** 2025-11-09
 

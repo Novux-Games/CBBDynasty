@@ -197,7 +197,7 @@ Same `simulateGame` run for all modes — only **UI pacing** changes. Final scor
 
 **Halftime:** only affects **watched** runs — caller pauses after half, merges updated prep, resumes second half.
 
-League **batch sim** (advance day) always uses **sim to end** internally.
+League **batch sim** on **week advance** always uses **sim to end** internally for non-user games.
 
 ---
 

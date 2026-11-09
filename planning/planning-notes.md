@@ -13,7 +13,7 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | News | Headlines; Top 60 recruit board; dynamic draft | [`game-frame.md`](game-frame.md), [`recruiting-engine.md`](recruiting-engine.md) |
 | Coach card + School Staff | **Done** | [`coach-card.md`](coach-card.md) |
 | Recruiting engine | **Done** | [`recruiting-engine.md`](recruiting-engine.md) |
-| Offseason frame | **Planned** companion doc | See [`game-frame.md`](game-frame.md#companion-docs-planned-same-depth-as-this-file) |
+| Dynasty shell (all phases) | **Done** — one chrome, dashboard task gate, week advance only | [`game-frame.md`](game-frame.md) |
 | League branding / membership | **365** programs; 4 reclass no postseason until year 4 | [`league-branding.md`](league-branding.md), [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) |
 | NIL on player card | **Overview valuation** (recruiting commit) | [`player-cards.md`](player-cards.md) |
 | GOAT / History depth | **Specced** (computed GOAT list) | [`game-frame.md`](game-frame.md#history-hub) |
@@ -51,7 +51,7 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 
 ## “Still on the list” — what that meant
 
-**Offseason frame** and **recruiting doc** are **new planning files you said you’d do later** (same idea as `game-frame.md`, but for portal/recruiting/offseason screens). They are **not** missing requirements for the player card or in-season frame — only write them when you want that pass.
+**Shell:** No separate offseason/preseason **layout** docs — [`game-frame.md`](game-frame.md) is the single UI shell; [`offseason.md`](offseason.md) / [`preseason.md`](preseason.md) define **tasks** that gate **Advance week** on the Dashboard.
 
 ---
 
@@ -76,3 +76,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | App shell (studio / splash) | **Done** | [`app-shell.md`](app-shell.md) |
 | Implementation build order | **Done** | [`docs/BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
 | 2026-11-09 | App-update save compatibility rule | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility) |
+| 2026-11-09 | Unified shell + week advance + dashboard task gate | [`game-frame.md`](game-frame.md) |

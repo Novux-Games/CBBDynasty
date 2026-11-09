@@ -2,7 +2,7 @@
 
 **When:** After [`offseason.md`](offseason.md) completes (Week 8 on Season 1, Week 9 on later seasons). **One week** of setup tasks — then **regular season** (exhibitions first if scheduled).
 
-**UI companion (planned):** [`preseason-frame.md`](preseason-frame.md). **Recruiting seed:** [`recruiting-engine.md`](recruiting-engine.md). **Rankings:** [`selection-engine.md`](selection-engine.md). **In-season shell:** [`game-frame.md`](game-frame.md).
+**Shell:** [`game-frame.md`](game-frame.md) (same chrome; **Preseason** phase label + dashboard checklist). **Recruiting seed:** [`recruiting-engine.md`](recruiting-engine.md). **Rankings:** [`selection-engine.md`](selection-engine.md).
 
 **Last updated:** 2025-11-09
 
@@ -30,7 +30,7 @@
 | **Season 1** | Same checklist after first offseason (Weeks 1–8) |
 | **Redshirt** | Elect **0-game redshirts** during **Preseason Workouts** or roster review (exhibitions do not count — [`game-design.md`](game-design.md)) |
 
-**Shell:** Offseason chrome → **Preseason** header with task list + week-less progress ring.
+**Shell:** Same as rest of dynasty — header shows **Preseason**; dashboard hosts the **task checklist** ([`game-frame.md`](game-frame.md#dashboard-task-gate)).
 
 ---
 

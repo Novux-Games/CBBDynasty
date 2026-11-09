@@ -47,7 +47,7 @@ Everyone uses this week whether they played **0** or **7** postseason games ([`t
 
 ## Review surfaces
 
-Single scroll or tabbed **Season Review** shell (offseason-style chrome, not in-season bottom nav).
+Single scroll or tabbed **Season Review** content on the same dynasty shell ([`game-frame.md`](game-frame.md)) — **End of Season** phase label; bottom nav unchanged.
 
 | Block | Content |
 |-------|---------|
