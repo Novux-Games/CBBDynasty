@@ -16,6 +16,7 @@
 **League identity:** **[`league-branding.md`](league-branding.md)** — conference/team real ↔ universe mapping  
 **NCBA universe:** **[`ncba-branding.md`](ncba-branding.md)** — national body, March Mayhem, early events  
 **Offseason:** **[`offseason.md`](offseason.md)** — carousel, weeks 1–9, Season 1 rules  
+**Preseason:** **[`preseason.md`](preseason.md)** — single-week tasks, reports, schedule  
 **Postseason:** **[`postseason.md`](postseason.md)** — Selection Sunday, NCBA / NCI / Heritage  
 **Selection engine:** **[`selection-engine.md`](selection-engine.md)** — poll formula, seed index, cuts  
 **Postseason UI:** **[`postseason-frame.md`](postseason-frame.md)** — March Mayhem hub, NCBA/NCI/HC seed labels  
@@ -302,7 +303,7 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 | **Week 7** | Cuts & roster lock (≤15); walk-on tryouts |
 | **Week 8** | Fundraising & upgrades |
 | **Week 9** | Conference offers (**skip Season 1**) |
-| → | **Preseason** (`preseason.md` planned) |
+| → | **Preseason** ([`preseason.md`](preseason.md)) — single week, 7 tasks |
 
 **Pro days:** Week 1 for seniors + draft-declared undergrads; **draft results** Week 2. Early entrants who stay through retention remain eligible; drafted / undrafted exit per draft model at results posting.
 
@@ -468,30 +469,20 @@ inviteScore = 0.35 * onCourtSuccess
 
 ## Preseason
 
-### Flow (after offseason week 8/9 — or **Season 1** entering first preseason)
+**Authoritative spec:** [`preseason.md`](preseason.md).
 
-1. **Incoming class seed** — generate **HS + JUCO** pools; **Top 60** publish to News ([`recruiting-engine.md`](recruiting-engine.md#class-seeding-hs--juco)).
-2. **Roster finalization** — confirm redshirts.
-3. **Regular season schedule** — non-conference + conference auto + optional tournament.
-4. **Coach upgrades** — manual or auto.
-5. **Preseason workouts** — automated deltas.
-6. **NET + Media & Coaches polls** — NET résumé + human poll sim; sets expectation meter ([`selection-engine.md`](selection-engine.md)).
-7. **Exhibition scheduling** — up to **3** in **October** (UX: calendar picker, opponent search, travel).
+**Summary:** One **setup week** after offseason. **Seven tasks** must finish before **Start season**: incoming class seed, preseason workouts, coach upgrades, NET + Media & Coaches poll review, **preseason report** (mini article + **projected W–L**), exhibition schedule (0–3 or skip), regular-season schedule. Enter [`game-frame.md`](game-frame.md) at **first exhibition** or **first regular-season** game.
 
-### Exhibitions vs scrimmages
+**Reports:** Preseason / **pregame** / **postgame** share the same mini-article pattern ([`preseason.md`](preseason.md#preseason-report--game-reports)).
 
-| Type | Counts toward record | Counts toward redshirt games |
-|------|----------------------|------------------------------|
+### Exhibitions (brief)
+
+| Type | Record | Redshirt games |
+|------|--------|----------------|
 | **Exhibition** | No | No |
-| **Closed scrimmage** | No | No (narrative event only) |
+| **Closed scrimmage** | No | No (narrative only) |
 
-Exhibitions affect **morale** and **poll momentum** slightly; injuries can occur.
-
-### Media & preview rankings
-
-- **Preseason Top 25** (Media + Coaches) + conference poll; **NET** publishes when games exist.
-- **User storyline:** "overrated/underrated" tag if disparity vs roster OVR.
-- Updates partially after exhibitions (small bump).
+Exhibitions: morale, light poll momentum, injuries possible.
 
 ---
 
@@ -732,6 +723,7 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-08 | NCBA/NCI/March Mayhem; early events; round labels — `ncba-branding.md` |
 | 2025-11-08 | `postseason.md` — Selection Sunday, Heritage, reclass conf tourney |
 | 2025-11-09 | Offseason calendar → `offseason.md`; start Week 1; carousel label |
+| 2025-11-09 | Preseason → `preseason.md`; 7 tasks; report pattern |
 | 2025-11-09 | Postseason census 124 national / 241 done (see `postseason.md`) |
 | 2025-11-09 | Poll=#1–365; pass-over runner-up; parallel NCI/HC |
 | 2025-11-08 | Linked `player-cards.md` |

@@ -127,6 +127,7 @@ Opened from **Next game** (and parallel entry from Calendar before tip).
 | **Predicted score** | Same model output (e.g. 78–71) |
 | **Team preview** | Side-by-side comparison (PPG, RPG, efficiency, pace, key ranks) |
 | **Matchup** | **Head-to-head history** vs this opponent (all-time or dynasty-era; W–L, last meetings, scores) |
+| **Pregame report** | Mini article + win % / predicted score ([`preseason.md`](preseason.md#preseason-report--game-reports)) |
 
 **Primary CTA from preview:** set **lineup / gameplan** (Strategy hub) → **Sim** when game day (sim rules in game-design / simulation-engine).
 
@@ -362,6 +363,7 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History | March Ma
 | Doc | Covers |
 |-----|--------|
 | **`offseason-frame.md`** | Portal, carousel, recruiting shell — [`offseason.md`](offseason.md) |
+| **`preseason-frame.md`** | Preseason task checklist — [`preseason.md`](preseason.md) |
 | **`postseason-frame.md`** | Tournament seed labels, March Mayhem hub — [`postseason.md`](postseason.md) |
 | **`transfer-portal-engine.md`** | Portal cycles, retention, in-season window |
 | **`selection-engine.md`** | Poll + Seed Index, Selection Sunday cuts |

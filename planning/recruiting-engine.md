@@ -31,7 +31,7 @@
 
 | When | What |
 |------|------|
-| **Preseason** (start of each calendar year — [`game-design.md`](game-design.md#preseason)) | Generate **HS** and **JUCO** pools for the **next enrolling class**; roll hidden ratings; assign **stars**; compute **Top 60** national order |
+| **Preseason** (task **Incoming Class Seed** — [`preseason.md`](preseason.md)) | Generate **HS** and **JUCO** pools for the **next enrolling class**; roll hidden ratings; assign **stars**; compute **Top 60** national order |
 
 Seeding in **preseason** — not offseason — so **Top 60 recruits** live in **News** for the entire **regular season** (November–March). The class is already ranked while you coach; **recruiting spend** (points, NIL, offers) opens in **offseason weeks 2–5** only ([`offseason.md`](offseason.md)).
 

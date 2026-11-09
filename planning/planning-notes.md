@@ -50,3 +50,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | Postseason UI (March Mayhem) | **Done** | [`postseason-frame.md`](postseason-frame.md) |
 | Game start / new dynasty | **Done** | [`game-start.md`](game-start.md) |
 | Offseason calendar | **Done** | [`offseason.md`](offseason.md) |
+| Preseason setup | **Done** | [`preseason.md`](preseason.md) |
