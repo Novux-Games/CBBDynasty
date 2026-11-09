@@ -395,7 +395,7 @@ Hamburger **History** — league archive (year cards, GOAT, national records/HOF
 
 | UI | Spec |
 |----|------|
-| **Year cards** | Champion, POTY, records, HOF class, GOAT snapshot link — newest first |
+| **Year cards** | Champion, **NCBA MVP**, records, HOF class, GOAT snapshot link — newest first |
 | **GOAT** | Top **25** overall + top **5** per position; recomputed **End of Season week** |
 | **School tabs** | Program season list, record book, program HOF, drafted — same doc |
 

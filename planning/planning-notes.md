@@ -93,7 +93,7 @@ Every **Done** topic below must map to step(s) in [`BUILD_CHECKLIST.md#locked-sp
 | NCBA / NCI / early events | **Done** | [`ncba-branding.md`](ncba-branding.md) |
 | GOAT / History depth | **Done** | [`history-hub.md`](history-hub.md) |
 | Season win contribution (GOAT input) | **Done** — hidden; sums to team wins | [`simulation-engine.md#season-win-contribution-design-lock`](simulation-engine.md#season-win-contribution-design-lock) |
-| Player awards (POTY, All-*, team MVP) | **Done** — win contribution primary | [`awards.md`](awards.md) |
+| Player awards (**Team MVP**, **NCBA MVP**, All-*) | **Done** — simple UI labels; win contribution hidden | [`awards.md`](awards.md) |
 | League branding / membership | **365** programs; reclass postseason rule | [`league-branding.md`](league-branding.md), [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) |
 
 ### Engineering meta

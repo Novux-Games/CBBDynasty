@@ -698,7 +698,7 @@ Universe round labels: [`ncba-branding.md`](ncba-branding.md).
 
 ## Awards & media
 
-**Authoritative player awards (POTY, All-Conference, All-America, team MVP):** [`awards.md`](awards.md) — **season win contribution** is the main “helped the team win” input ([`simulation-engine.md`](simulation-engine.md#season-win-contribution-design-lock)).
+**Authoritative player awards:** [`awards.md`](awards.md) — UI **Team MVP** & **NCBA MVP**; win contribution is sim-only ([`simulation-engine.md`](simulation-engine.md#season-win-contribution-design-lock)).
 
 ### Cadence
 
@@ -706,7 +706,7 @@ Universe round labels: [`ncba-branding.md`](ncba-branding.md).
 |-------|------|
 | **Weekly honors** | **Weekly** during conference play (player + conference POTW) |
 | **All-conference** | After conference championships |
-| **National awards** | After national postseason (POTY, All-America) |
+| **National awards** | After national postseason (**NCBA MVP**, All-America) |
 | **Team MVP** | End of Season (top win contribution on roster) |
 | **Hall of fame (dynasty)** | Career archive milestones — [`history-hub.md`](history-hub.md) |
 

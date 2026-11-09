@@ -27,7 +27,7 @@
 
 | Surface | Audience | Content |
 |---------|----------|---------|
-| **History hub** (hamburger) | League-wide archive | Year cards: champion, POTY, records, HOF class, **GOAT** snapshot |
+| **History hub** (hamburger) | League-wide archive | Year cards: champion, **NCBA MVP**, records, HOF class, **GOAT** snapshot |
 | **School hub → History** | One program | Season-by-season W–L, postseason, coach, awards |
 | **School hub → Records** | One program | Program single-game / season / career record book |
 | **School hub → Hall of Fame** | One program | Program HOF inductees |
@@ -73,7 +73,7 @@ Collapsed card per completed **`seasonIndex`**:
 | Strip | Content |
 |-------|---------|
 | **Champion** | **NCBA** winner (runner-up, score) |
-| **POTY** | National player of the year (name, school) |
+| **NCBA MVP** | National player of the year (name, school) |
 | **Records** | National records **set that year** (if any) |
 | **HOF** | New **national** inductees that year |
 | **GOAT** | Link to **GOAT list** as of that offseason (see below) |
@@ -227,7 +227,7 @@ Awards are **computed** at End of Season ([`awards.md`](awards.md)); **season wi
 
 | Award | History use |
 |-------|-------------|
-| National POTY | GOAT + national HOF |
+| **NCBA MVP** (save: `nationalPoty`) | GOAT + national HOF |
 | All-America 1st/2nd/3rd | `allAmericaPoints` |
 | Conference POTY / All-Conference 1st | Conference HOF + GOAT `confPoty` |
 | Weekly POTW | News only |

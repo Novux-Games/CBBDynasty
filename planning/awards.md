@@ -7,6 +7,19 @@
 
 **Last updated:** 2026-11-09 · **Status:** Design lock.
 
+### Player-facing names (design lock)
+
+Keep award UI **short**. **Never** show win contribution, formulas, or “shares” to the player.
+
+| UI label | Meaning |
+|----------|---------|
+| **Team MVP** | Best player on **that program** this season (one per team). |
+| **NCBA MVP** | National player of the year (one per season, universe-wide). |
+| **Conference POY** | Conference player of the year (one per conference). |
+| **All-Conference** / **All-America** | Team selections (chips or lists — no stat breakdown). |
+
+Save/archival fields may use internal ids (e.g. `nationalPoty`); **copy always** uses **NCBA MVP** where the national player award appears ([`ncba-branding.md`](ncba-branding.md)).
+
 ---
 
 ## Contents
@@ -41,7 +54,7 @@
 | **All-Conference** | **≥ 50%** of team games played (RS + conf + national postseason), **≥ 8 MPG** season average |
 | **Conference POTY** | Same + team **top 4** conference finish **or** conference tournament champion |
 | **All-America** | **≥ 60%** GP, **≥ 12 MPG**; team **Selection Sunday** bid **or** **Top 60** draft rank band |
-| **National POTY** | All-America eligible + **top 15** national in composite award score (below) |
+| **NCBA MVP** | All-America eligible + **top 15** national in composite award score (below) |
 
 Tune floors in `balance-2026.json` → `awards.eligibility`.
 
@@ -53,10 +66,10 @@ Per program, computed at **End of Season** (same pass as win contribution).
 
 | Honor | Rule |
 |-------|------|
-| **Team MVP** (internal label; UI: “Team MVP” or “Most valuable”) | Player with **highest** `winSharesSeason` on that roster. Tie → higher MPG, then PTS. |
-| **Display** | School **History** season row + **Season review** chip for **user school**; player card **History** tab |
+| **Team MVP** | Player with **highest** win contribution on that roster (computed — not shown). Tie → MPG, then PTS. |
+| **Display** | Chip: **Team MVP** only — School **History**, **Season review** (user school), player **History** tab |
 
-No league-wide News for every school’s team MVP — **user school** gets a feed row optional (medium tier): *“{Name} named team MVP.”*
+No league-wide News for every school’s team MVP — **user school** optional feed row: *“{Name} — Team MVP.”*
 
 ---
 
@@ -102,13 +115,14 @@ nationalAwardScore =
 
 Coefficients in `balance-2026.json` → `awards.nationalWeights`.
 
-### National player of the year
+### NCBA MVP
 
 | Rule | Detail |
 |-------|--------|
+| **UI** | **NCBA MVP** (never “National player of the year” or win-contribution copy in UI) |
 | **Winner** | Highest `nationalAwardScore` among eligible players |
 | **Runner-up** | #2–#5 stored for News / History copy |
-| **Bias** | **Win contribution** beats empty scoring on losing teams — a 22 PPG guard on a 12-win team cannot beat a 18 PPG star on a **#3 seed** with **6+** win shares without exceptional stat rank |
+| **Bias** | Win contribution in sim only — high volume on a non-bid team rarely beats a star on a deep postseason run |
 
 ### All-America teams
 
@@ -148,11 +162,11 @@ Coach awards on **coach card History** ([`coach-card.md`](coach-card.md)); not G
 
 | Surface | Content |
 |---------|---------|
-| **Season review** (user) | Team MVP, your conference/national honors |
-| **School hub → History** | Season chips: conf POTY, All-Conf, All-America, national POTY |
-| **History hub** year card | National POTY, All-America first team list, link to [`history-hub`](history-hub.md) |
-| **News** | Conference/national POTY, All-America 1st team, weekly POTW |
-| **Notifications** | User player **national POTY** or **first-team All-America** → medium feed row (optional design) |
+| **Season review** (user) | **Team MVP** chip if yours; **NCBA MVP** / **Conference POY** / All-America lines if applicable — name + label only |
+| **School hub → History** | Chips: **Team MVP**, **Conference POY**, All-Conference, All-America, **NCBA MVP** |
+| **History hub** year card | **NCBA MVP**, All-America first team (names) |
+| **News** | Headlines use same short labels (`NCBA MVP`, `Conference POY`); weekly POTW only in season |
+| **Notifications** | User wins **NCBA MVP** or **first-team All-America** → medium feed row (optional) |
 
 ---
 
@@ -173,3 +187,4 @@ Coach awards on **coach card History** ([`coach-card.md`](coach-card.md)); not G
 | Date | Change |
 |------|--------|
 | 2026-11-09 | Initial design lock; win contribution drives player awards |
+| 2026-11-09 | UI names: **Team MVP**, **NCBA MVP**; no win-share copy in UI |
