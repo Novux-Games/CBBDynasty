@@ -96,6 +96,16 @@ fun NewGameWizardScreen(
                             onProfileChange = { draft = draft.copy(coach = it) },
                             showValidationErrors = coachShowErrors,
                         )
+                        NewGameStep.Archetype -> ArchetypeStepContent(
+                            selected = draft.archetype,
+                            onSelected = { draft = draft.copy(archetype = it) },
+                        )
+                        NewGameStep.Schemes -> SchemesStepContent(
+                            offensive = draft.offensiveScheme,
+                            defensive = draft.defensiveScheme,
+                            onOffensiveChange = { draft = draft.copy(offensiveScheme = it) },
+                            onDefensiveChange = { draft = draft.copy(defensiveScheme = it) },
+                        )
                         NewGameStep.SignContract -> {
                             Text(
                                 text = stringResource(R.string.new_step_sign_stub),
