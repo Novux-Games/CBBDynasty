@@ -128,13 +128,13 @@ Each **Conf Tournament Week 1…N** advance sims **all** conference games schedu
 
 **When:** After conference tournaments; **Selection Sunday** transitions to bracket play.
 
-### NCBA Men's BB Tournament (user path length)
+### League-wide **7 weeks** (design lock)
 
-**Design lock:** **7** national postseason **weeks** cover the longest possible user path:
+**Every** dynasty runs **Postseason Week 1–7** — whether the user’s team is in **NCBA**, **NCI**, **Heritage**, or **out** entirely.
 
-| Week | Round (universe label) |
-|------|-------------------------|
-| **1** | **Opening Round** (if in the 24-team pool; otherwise **bye** this week) |
+| Week | NCBA round (universe label) |
+|------|------------------------------|
+| **1** | **Opening Round** |
 | **2** | **Round 1** (round of 64) |
 | **3** | **Round 2** (round of 32) |
 | **4** | **Super 16** |
@@ -142,9 +142,15 @@ Each **Conf Tournament Week 1…N** advance sims **all** conference games schedu
 | **6** | **Championship 4** |
 | **7** | **National Championship** |
 
-Teams that **skip** Opening Round still use **weeks 2–7** for R1 → title. Eliminated teams **bye** on later weeks until their season ends (no further games).
+| Participant state | That week |
+|-------------------|-----------|
+| **In round** | Play (or watch sim) |
+| **Eliminated** | **Bye** — no game |
+| **Not in national event** | **Bye** — still **advance week**; **March Mayhem** hub shows live bracket updates ([`postseason-frame.md`](postseason-frame.md)) |
 
-**Parallel events:** **NCI** and **Heritage Classic** run on the **same calendar** ([`postseason.md`](postseason.md)); a program in only NCI uses **≤5** weeks (32-team bracket). Pack maps NCI/Heritage rounds onto postseason week indices without extending past NCBA’s **7**-week window (sim batch all brackets active that week).
+NCI / Heritage rounds **map onto** the same **1–7** indices (parallel sim); calendar does **not** extend past **7**.
+
+Top **52** skip Opening Round: **bye** week **1**, enter week **2** at Round 1.
 
 ---
 
