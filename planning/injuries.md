@@ -71,17 +71,28 @@ Per completed game (each team):
 
 ## Injury bank
 
-**Authoritative catalog:** [`balance-2026.json`](../assets/balance/balance-2026.json) → `injuries.bank[]`.
+**Authoritative catalog:** [`balance-2026.json`](../assets/balance/balance-2026.json) → `injuries.bank[]` (**25** entries, v1).
 
 | Field | Meaning |
 |-------|---------|
 | `id` | Stable key |
-| `label` | UI copy (e.g. “Ankle sprain”) |
+| `label` | UI copy |
+| `bodyPart` | `ankle` / `knee` / `leg` / `foot` / `hand` / `arm` / `head` / `torso` / `illness` — UI + history |
 | `severity` | `minor` / `moderate` / `major` — news tier + medical RS eligibility |
 | `durationGamesMin` / `durationGamesMax` | **Games missed** (inclusive roll) |
-| `weight` | Relative pick weight among rows |
+| `weight` | Relative pick weight |
 
-**Re-injury:** New injury while still **OUT** → replace active instance (new `injuryId`, re-roll duration) unless balance `stackPolicy` = `extend` (default **replace**).
+**Mix (tunable):** ~**50%** minor, ~**35%** moderate, ~**15%** major by weight sum.
+
+**Re-injury:** New injury while **OUT** → **replace** instance (`stackPolicy`: `replace`).
+
+### Categories (reference)
+
+| Severity | Examples in bank |
+|----------|------------------|
+| **Minor** | Ankle sprain/tweak, jammed finger, calf tightness, back spasm, hip pointer, illness |
+| **Moderate** | Knee/hamstring sprain, concussion protocol, shoulder strain, groin, hand fracture, high ankle, meniscus irritation, hyperextended knee, wrist sprain |
+| **Major** | ACL/ligament, Achilles, Jones fracture, shoulder labrum, stress fracture, torn meniscus surgery path, season-ending leg |
 
 ---
 
@@ -106,12 +117,39 @@ Per completed game (each team):
 
 ## Lineup & rotation
 
+### Auto-adjust on injury (design lock)
+
+When an injury is **saved** to dynasty state (postgame or batch sim), the **lineup engine** runs immediately for that program — **no** user step required.
+
+```
+for each injured player in this event:
+  if player in startingFive[slot]:
+    remove from slot → move to **Reserves** list (roster depth)
+    clear rotation minutes target → **0**
+
+for each empty starter slot (PG…C):
+  promote best healthy player using [default starter algorithm](positions-and-lineup.md#default-starters-algorithm)
+    (eligible + healthy only; same listed-position rules)
+
+rebalance rotation bands: injured pinned to Reserves; promoted starters inherit vacated minute bands when possible
+```
+
+| Rule | Detail |
+|------|--------|
+| **Reserves** | Injured players **always** appear under **Reserves**, not starters — even if they were in the five when hurt mid-game |
+| **Promotion** | Same rules as **Reset to default** but **skip** injured and **never** auto cross-list (PG→SG) unless user already did |
+| **User override** | Next Strategy visit shows updated five; user may change before following game |
+| **Return** | When healthy, player returns to **Reserves** only — **not** auto-restored to starters (user or **Reset to default** promotes them) |
+| **Multi-injury** | One pass per event; if multiple starters out, fill slots top-down PG→C in same pass |
+
+### Other lineup rules
+
 | Surface | Behavior |
 |---------|----------|
-| **Strategy / game prep** | Injured players **greyed**; cannot assign to lineup or rotation slots |
-| **Auto-sim** | Engine substitutes next man in rotation; may violate minutes targets |
+| **Strategy / game prep** | Injured **greyed**; cannot drag into lineup or rotation |
+| **Auto-sim** | Engine substitutes healthy reserves per rotation; injured not eligible |
 | **Foul trouble** | Normal foul rules; injured players not eligible to re-enter |
-| **Dashboard** | Optional task: **“{Name} out {N} games”** → adjust rotation or open Strategy |
+| **Dashboard** | Optional task: **“{Name} out {N} games”** → Strategy (lineup already adjusted) |
 
 ---
 
@@ -193,8 +231,10 @@ Separate from **preseason 0-game redshirt** ([`game-design.md`](game-design.md#r
 **GameSimResult** append:
 
 ```text
-injuries: [{ playerId, injuryId, gamesRemaining, severity, occurredInGameMinute? }]
+injuries: [{ playerId, injuryId, bodyPart?, gamesRemaining, severity, occurredInGameMinute? }]
 ```
+
+**Caller after persist:** `applyInjuryLineupAdjust(teamId, injuredPlayerIds)` — mutates `startingFive` + rotation per [Auto-adjust](#auto-adjust-on-injury-design-lock).
 
 ---
 
@@ -216,3 +256,4 @@ injuries: [{ playerId, injuryId, gamesRemaining, severity, occurredInGameMinute?
 |------|--------|
 | 2026-11-09 | Initial spec — random bank, duration ranges, medical RS gates |
 | 2026-11-09 | Sim hook, lineup, UI, news, data model, phase rules |
+| 2026-11-09 | Auto lineup on injury; bank v1 (25 rows + bodyPart) |

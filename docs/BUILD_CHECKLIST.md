@@ -161,7 +161,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 8.4 | `[ ]` School hub data (prestige, SOS, NET on card) | Read-only opponent schools | [game-frame](../planning/game-frame.md) | `ui.school` |
 | 8.5 | `[ ]` Job security + AD trust | Coach card + Staff tab | [coach-card](../planning/coach-card.md) | — |
 | 8.6 | `[ ]` **Loyalty** (0–99) + **one promise** per tenure | Kept/broken → portal / declare rolls; card chips | [player-loyalty-promises](../planning/player-loyalty-promises.md), [player-cards](../planning/player-cards.md) | `:core/player` |
-| 8.7 | `[ ]` **Injury** state + medical redshirt eligibility | Bank roll; ≤15 GP; game ≤20; block RS week 21+ | [injuries](../planning/injuries.md) | `:core/injuries` |
+| 8.7 | `[ ]` **Injury** state + medical redshirt + **auto lineup** | Bank roll; demote to reserves; promote starters; medical RS gates | [injuries](../planning/injuries.md) | `:core/injuries` |
 
 ---
 
