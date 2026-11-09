@@ -16,9 +16,10 @@ You may use, modify, and distribute the licensed **code and documentation**
 under the terms of the [Apache License, Version 2.0](../LICENSE), subject to
 attribution and NOTICE requirements.
 
-[`LICENSE`](../LICENSE) is the standard Apache 2.0 **terms only** (no
-instructional appendix or bracket placeholders). **Copyright and attribution:**
-Copyright © 2026 Novux Games — see [`NOTICE`](../NOTICE).
+[`LICENSE`](../LICENSE) is the full [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
+(including appendix). The appendix shows the **file-header boilerplate** with
+**Copyright 2026 Novux Games** filled in (not bracket placeholders). Distribution
+attribution: [`NOTICE`](../NOTICE).
 
 Third-party dependencies in `android/` retain their own licenses (see Gradle
 lockfiles and dependency POMs).
