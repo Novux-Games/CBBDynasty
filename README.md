@@ -6,9 +6,9 @@ Text-based college basketball dynasty sim for Android. Planning docs live in [`p
 
 **Logo:** `Public-Assets/app-logo.svg` · **Brand background:** `#181a25`
 
-## Android app (scaffold)
+## Android app
 
-Kotlin · Jetpack Compose · multi-module under [`android/`](android/). See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+Kotlin · Jetpack Compose · `:app` + `:core` + `:database`. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ```bash
 cd android && ./gradlew :core:test

@@ -23,4 +23,13 @@
     <string name="settings_back">Back</string>
     <string name="credits_publisher">Published by %1$s</string>
     <string name="credits_website">https://novux.dev</string>
+    <string name="load_slots_subtitle">10 save slots — tap a save to load, or delete to free the slot.</string>
+    <string name="load_slot_empty">Slot %1$d — Empty</string>
+    <string name="load_slot_occupied">Slot %1$d — %2$s · %3$s · %4$d–%5$d</string>
+    <string name="load_delete_short">Delete</string>
+    <string name="load_delete_title">Delete save?</string>
+    <string name="load_delete_message">Remove the dynasty in slot %1$d. This cannot be undone.</string>
+    <string name="load_delete_confirm">Delete</string>
+    <string name="load_delete_cancel">Cancel</string>
+    <string name="home_continue_hint">Latest: %1$s</string>
 </resources>

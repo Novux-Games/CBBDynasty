@@ -63,7 +63,7 @@ After postseason week **7**, before offseason — **[`season-review.md`](season-
 - **Early-season event** games count as RS games and occupy **specific weeks** in this range (see below).
 - On **week advance**, all games dated that week finalize; standings, NET, injuries, saves lock.
 
-**Not** calendar-month accurate for UX v1 — **week index** is the source of truth (months in copy optional).
+**Not** calendar-month accurate in UI — **week index** is the source of truth (months in copy optional).
 
 ---
 

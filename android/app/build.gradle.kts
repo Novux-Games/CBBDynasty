@@ -13,7 +13,7 @@ android {
         minSdk = 26
         targetSdk = 35
         versionCode = 1
-        versionName = "0.1.0-scaffold"
+        versionName = "0.1.0"
     }
 
     buildTypes {
@@ -42,6 +42,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":database"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

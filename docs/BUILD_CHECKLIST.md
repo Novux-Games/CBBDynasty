@@ -47,7 +47,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
 | 2.1 | `[x]` **Choose & document** save backend (SQLite vs JSON files) | ADR in `docs/` | [game-design](../planning/game-design.md#identity-packs--save-model) | [`ADR-001`](ADR-001-dynasty-save-backend.md) |
-| 2.2 | `[ ]` Save slots API (list, load, delete, last played) | Home **Continue** / **Load** real | [game-start](../planning/game-start.md) | `:core` + `data/save` |
+| 2.2 | `[x]` Save slots API (list, load, delete, last played) | Home **Continue** / **Load** real | [game-start](../planning/game-start.md) | `:database`, `data/save`, `LoadGameScreen` |
 | 2.3 | `[ ]` Dynasty metadata schema (`seasonIndex`, `phase`, `packId`) | Round-trip one empty dynasty | [game-design](../planning/game-design.md) | `:core` models |
 | 2.4 | `[ ]` **Week advance** checkpoint semantics | Replay before advance; lock after | [game-design](../planning/game-design.md) | `domain/calendar` |
 | 2.5 | `[ ]` Corrupt-save handling on Load | Error UI per game-start | [game-start](../planning/game-start.md) | `app` |
@@ -58,7 +58,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 3.1 | `[ ]` Pack schema v1 (`teamId`, `confId`, templates) | Validator rejects bad JSON | [game-design](../planning/game-design.md#identity-packs--save-model) | `:core/pack` |
+| 3.1 | `[ ]` Pack schema (`packVersion` 1 — `teamId`, `confId`, templates) | Validator rejects bad JSON | [game-design](../planning/game-design.md#identity-packs--save-model) | `:core/pack` |
 | 3.2 | `[ ]` Ship **default pack** asset from league branding | 365 teams, 32 conferences | [league-branding](../planning/league-branding.md) | `assets/pack/` |
 | 3.3 | `[ ]` Display overlay (names, colors) without corrupting history | Swap pack; IDs stable | [game-design](../planning/game-design.md) | `PackRepository` |
 | 3.4 | `[ ]` Import URL/TXT path (deferred UI OK after 3.2) | Attestation + parse | [game-start](../planning/game-start.md), [game-design](../planning/game-design.md) | Preseason/new-game later |
@@ -284,4 +284,4 @@ When planning docs change, update the **Spec** column links and acceptance crite
 
 | Date | Change |
 |------|--------|
-| 2025-11-09 | Initial comprehensive build order (post Android scaffold merge) |
+| 2025-11-09 | Initial comprehensive build order |

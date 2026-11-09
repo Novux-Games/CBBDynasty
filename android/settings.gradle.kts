@@ -18,3 +18,4 @@ rootProject.name = "DynastyCollegeBasketball"
 
 include(":app")
 include(":core")
+include(":database")

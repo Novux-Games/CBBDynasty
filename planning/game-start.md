@@ -62,6 +62,18 @@ Cold start lands on the **title / home** screen (no bottom nav — pre-dynasty).
 
 Corrupt save → error sheet; offer delete slot.
 
+### Save slots (implemented)
+
+| Piece | Location |
+|-------|----------|
+| **10 slots**, Room `save_slots` | [`android/database`](../android/database/) |
+| **List / load / delete / last played** | [`SaveSlotRepository`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/data/save/SaveSlotRepository.kt) |
+| **Continue** | Latest `lastPlayedAtEpochMillis` among occupied slots |
+| **Load UI** | [`LoadGameScreen`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/shell/LoadGameScreen.kt) |
+| **Models** | [`SaveSlotSummary`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/save/SaveSlotSummary.kt), [`SaveSlots.COUNT`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/save/SaveSlots.kt) |
+
+New Game still creates dynasties in a later checklist step; occupied slots appear after dynasty creation or import.
+
 ---
 
 ## New game wizard (overview)
@@ -228,13 +240,13 @@ Primary CTA: **Sign contract** (disabled until user reviews sheet once — optio
 
 Audio, notifications default, save backup location (local), text size, legal links — **do not** duplicate Auto-upgrade / Unlimited age (dynasty-only).
 
-**Implemented (scaffold):** DataStore-backed [`AppSettings`](../../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/settings/AppSettings.kt) — **Skip studio intro** (cold start skips [`app-shell.md`](app-shell.md) studio beat); **SFX / music toggles** and **master volume** (persisted stubs; no audio engine yet).
+**Implemented:** DataStore [`AppSettings`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/settings/AppSettings.kt) — skip studio intro; SFX / music toggles and master volume (persisted; audio engine ships with in-game audio).
 
 ### Credits
 
 Novux Games, third-party licenses, unofficial / no NCAA endorsement ([`branding.md`](branding.md)).
 
-**Implemented (scaffold):** Home → **Credits** — publisher, novux.dev, game director, copyright year (`CreditsScreen`).
+**Implemented:** Home → **Credits** — publisher, novux.dev, game director, copyright year (`CreditsScreen`).
 
 ---
 

@@ -65,7 +65,7 @@ JSON stays appropriate for **identity pack import** and for **dynasty export fil
 
 ## Consequences
 
-- Add `:database` module (Room, KSP) when implementing 2.2+.
+- **`:database`** module (Room, KSP) — save slots table shipped in Phase 2.2.
 - `:core` keeps pure models and slot/dynasty APIs; Android module owns DAOs.
 - CI continues to run `:core:test` without instrumented DB until android tests exist.
 
