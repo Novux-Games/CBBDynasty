@@ -68,7 +68,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 2.3 | `[x]` Dynasty metadata schema (`seasonIndex`, `phase`, `packId`) | Round-trip one empty dynasty | [game-design](../planning/game-design.md) | `:core`, Room `dynasty_metadata`, **New** bootstrap |
 | 2.4 | `[x]` **Week advance** checkpoint semantics | Replay before advance; lock after | [game-design](../planning/game-design.md) | `:core/calendar/checkpoint`, Room `dynasty_calendar` + `provisional_games` |
 | 2.5 | `[x]` Unreadable-save handling on Load | Validate + repair calendar; fallback delete UI | [game-start](../planning/game-start.md) | `DynastySaveValidator`, `SaveLoadUnavailableDialog` |
-| 2.6 | `[ ]` **Balance ruleset** loader + pin on dynasty | `balanceSchemaVersion`; scholarship **15**, prestige tiers, `recruiting.actions` costs, loyalty constants | [ADR-002](ADR-002-balance-ruleset-bundle.md), [`balance-2026.json`](../assets/balance/balance-2026.json) | `:core/balance` |
+| 2.6 | `[ ]` **Balance ruleset** loader + pin on dynasty | `balanceSchemaVersion`; scholarship **15**, prestige tiers, `recruiting.actions` costs, loyalty constants, `injuries.bank` (40, `bodyPart`, `durationWeeks*`) | [ADR-002](ADR-002-balance-ruleset-bundle.md), [`balance-2026.json`](../assets/balance/balance-2026.json), [injuries](../planning/injuries.md) | `:core/balance` |
 | 2.7 | `[ ]` **Sim tuning** loader + pin on dynasty | `simSchemaVersion`; possession tables load in sim module | [ADR-003](ADR-003-sim-tuning-bundle.md) | `:core/sim/tuning` |
 
 ---
@@ -104,7 +104,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 |------|--------|-----------|------|------|
 | 5.1 | `[ ]` `CalendarPhase` state machine | All phases in [time-system](../planning/time-system.md) | [time-system](../planning/time-system.md) | `:core/calendar` |
 | 5.2 | `[ ]` Exhibition weeks 1–3 labels | Advancing empty exhib week OK | [time-system](../planning/time-system.md) | — |
-| 5.3 | `[ ]` RS weeks 1–32 + bye weeks (events, conf, postseason) | Unit tests for bye logic | [time-system](../planning/time-system.md) | `:core` tests |
+| 5.3 | `[ ]` RS weeks 1–32 + bye weeks (events, conf, postseason) | Unit tests for bye logic; bye **advance** ticks injury `weeksRemaining` | [time-system](../planning/time-system.md), [injuries](../planning/injuries.md) | `:core` tests |
 | 5.4 | `[ ]` Conf-tourney week count = **pack max rounds** | Short conf byes while others play | [time-system](../planning/time-system.md) | — |
 | 5.5 | `[ ]` Postseason **7** league weeks always | Non-participant can advance + view brackets | [time-system](../planning/time-system.md), [postseason](../planning/postseason.md) | — |
 | 5.6 | `[ ]` **End of Season** week → offseason entry | [season-review](../planning/season-review.md) gate | [season-review](../planning/season-review.md) | `ui.seasonreview` |
@@ -161,7 +161,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 8.4 | `[ ]` School hub data (prestige, SOS, NET on card) | Read-only opponent schools | [game-frame](../planning/game-frame.md) | `ui.school` |
 | 8.5 | `[ ]` Job security + AD trust | Coach card + Staff tab | [coach-card](../planning/coach-card.md) | — |
 | 8.6 | `[ ]` **Loyalty** (0–99) + **one promise** per tenure | Kept/broken → portal / declare rolls; card chips | [player-loyalty-promises](../planning/player-loyalty-promises.md), [player-cards](../planning/player-cards.md) | `:core/player` |
-| 8.7 | `[ ]` **Injury** state + medical redshirt + **auto lineup** | Bank v2 (40); demote/promote; **return restores** slot/top reserve; medical RS gates | [injuries](../planning/injuries.md) | `:core/injuries` |
+| 8.7 | `[ ]` **Injury** state + medical redshirt + **auto lineup** | `weeksRemaining` (calendar); demote/promote on injury; **return restores** slot/top reserve on clear; medical RS gates; UI `{N}w` | [injuries](../planning/injuries.md) | `:core/injuries` |
 
 ---
 
@@ -175,7 +175,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 9.4 | `[ ]` Batch sim non-user games on week advance | Standings update | [game-design](../planning/game-design.md) | — |
 | 9.5 | `[ ]` Early event brackets (Island/Desert 4wk, etc.) | Elimination byes | [ncba-branding](../planning/ncba-branding.md), [time-system](../planning/time-system.md) | — |
 | 9.6 | `[ ]` **Dashboard task gate** (Required / Optional cards) | Preseason 8 required; in-season games optional; links to hubs | [dashboard-tasks](../planning/dashboard-tasks.md), [game-frame](../planning/game-frame.md#dashboard-task-gate) | `ui.dashboard` |
-| 9.7 | `[ ]` **Advance week** + sim-week **confirmation** | Game auto-sim + recruiting summary when user confirms | [game-frame](../planning/game-frame.md#advance-week-confirmation-sim-week) | `ui.dashboard` |
+| 9.7 | `[ ]` **Advance week** + sim-week **confirmation** | Game auto-sim + recruiting summary; decrement injury `weeksRemaining` (byes included); return lineup at **0** | [game-frame](../planning/game-frame.md#advance-week-confirmation-sim-week), [injuries](../planning/injuries.md) | `ui.dashboard` |
 | 9.8 | `[ ]` **News** tab (shallow headlines) | Top **N** league stories; not full hub | [game-frame](../planning/game-frame.md#news-tab-dashboard), [news-hub](../planning/news-hub.md#surfaces) | `ui.news` |
 | 9.9 | `[ ]` **News hub** (hamburger): Stories / Portal / Recruits / Draft | Top 60 recruits full list; Portal Top 40 @ OS W2 | [news-hub](../planning/news-hub.md) | `ui.newshub` |
 | 9.10 | `[ ]` Hamburger hubs (School, Strategy, Stats, Rankings, History, Recruiting) | Recruiting opens **Recommended**; March Mayhem when eligible | [game-frame](../planning/game-frame.md) | `ui.hubs` |
@@ -194,7 +194,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 10.5 | `[ ]` Live text / 2s watch mode | Halftime edit | [strategy-schemes](../planning/strategy-schemes.md), [game-frame](../planning/game-frame.md) | — |
 | 10.6 | `[ ]` Game preview (win %, predicted score, H2H) | 0 games played OK | [game-frame](../planning/game-frame.md) | — |
 | 10.7 | `[ ]` Pregame + postgame report articles | Shared template | [preseason](../planning/preseason.md) | `ui.reports` |
-| 10.8 | `[ ]` In-game **injury** rolls | Sample from `injuries.bank`; **weeks** duration; tick on week advance | [injuries](../planning/injuries.md), [simulation-engine](../planning/simulation-engine.md) | `:core/sim` |
+| 10.8 | `[ ]` In-game **injury** rolls | Sample from `injuries.bank`; roll `durationWeeks*` → `weeksRemaining`; persist + `applyInjuryLineupAdjust` | [injuries](../planning/injuries.md), [simulation-engine](../planning/simulation-engine.md) | `:core/sim` |
 
 ---
 
@@ -334,3 +334,4 @@ Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.20** point actions
 | 2026-11-09 | Recruiting action costs, refunds, visits, Signing Day week 6; offseason → 10 weeks |
 | 2026-11-09 | Fix Phase 6 steps 6.17–6.20; move Signing Day out of Phase 15; correct OS week labels 7–10 |
 | 2026-11-09 | Injuries sim output, persistence, lineup block, news — per injuries.md |
+| 2026-11-09 | Injury bank v2 (40), auto lineup + return restore; **weeksRemaining** + bye-week tick (8.7, 9.7, 10.8, 2.6) |
