@@ -126,7 +126,7 @@ While the [year-long cycle](#year-long-recruiting-cycle-design-lock) is open, th
 | **Offseason Week 1** | National **entries**; retention / cuts resolve who is in the pool |
 | **Offseason Weeks 2–5** | **Transfer Portal** sub-tab — recruit/sign (not mixed into HS/JUCO) |
 
-Portal star bands use the **portal pool only** (see [Star distribution](#star-distribution)); **Portal Top 40** static for the cycle.
+Portal star bands on **final entrants** only; **Portal Top 40** locked at **start of Offseason Week 2** ([`transfer-portal.md`](transfer-portal.md)).
 
 ### Signing period (R1–R4)
 

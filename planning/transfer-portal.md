@@ -1,7 +1,7 @@
 # Transfer portal
 
-**Context:** **One** national cycle per year — **Offseason Week 1** entries → **Weeks 2–5** recruit/sign in the same **Recruiting** hub as HS/JUCO ([`recruiting-engine.md`](recruiting-engine.md)). **No in-season** portal entries.  
-**Companion:** [`offseason.md`](offseason.md#week-1--players-leaving), [`player-loyalty-promises.md`](player-loyalty-promises.md), [`game-design.md`](game-design.md#roster-eligibility--redshirt).  
+**Context:** **One** national cycle per year — **Offseason Week 1** entries → **Weeks 2–5** recruit/sign in the **Recruiting** hub ([`recruiting-engine.md`](recruiting-engine.md)). **No in-season** entries.  
+**Companion:** [`offseason.md`](offseason.md#week-1--players-leaving), [`player-loyalty-promises.md`](player-loyalty-promises.md), [`game-design.md`](game-design.md#class--eligibility).  
 **Last updated:** 2026-11-09
 
 ---
@@ -9,15 +9,16 @@
 ## Contents
 
 1. [Calendar](#calendar)
-2. [Who enters the portal](#who-enters-the-portal)
-3. [Pool scale](#pool-scale)
-4. [Eligibility & roster law](#eligibility--roster-law)
-5. [Player presentation](#player-presentation)
-6. [Economy (shared with HS/JUCO)](#economy-shared-with-hsjuco)
-7. [Retention vs portal tab](#retention-vs-portal-tab)
-8. [UI — Week 1 departures](#ui--week-1-departures)
-9. [AI](#ai)
-10. [Open — UX (discussion)](#open--ux-discussion)
+2. [Week 1 — Roster vs Transfer tabs](#week-1--roster-vs-transfer-tabs)
+3. [Who enters the portal](#who-enters-the-portal)
+4. [Pool scale](#pool-scale)
+5. [Eligibility & roster law (2026)](#eligibility--roster-law-2026)
+6. [Player presentation](#player-presentation)
+7. [Economy (shared with HS/JUCO)](#economy-shared-with-hsjuco)
+8. [National recruiting (Weeks 2–5)](#national-recruiting-weeks-25)
+9. [AI entry drivers](#ai-entry-drivers)
+10. [AI spend](#ai-spend)
+11. [Open — UX (discussion)](#open--ux-discussion)
 
 ---
 
@@ -26,48 +27,69 @@
 | Rule | Detail |
 |------|--------|
 | **Cycles per year** | **One** |
-| **In-season** | **No** portal entries or portal sub-tab |
-| **Week 1** | **Entries** — national pool forms after retention / departures resolve ([`offseason.md`](offseason.md)) |
-| **Weeks 2–5** | **Recruit & sign** — **Transfer Portal** sub-tab live in Recruiting hub (signing crunch **R1–R4**) |
-| **After Week 5** | Portal window closed; signed transfers attach to next season roster path |
+| **In-season** | **No** portal entries or portal recruiting |
+| **Week 1** | Entries, **Roster** / **Transfer** tabs ([below](#week-1--roster-vs-transfer-tabs)) |
+| **Weeks 2–5** | National **Transfer Portal** sub-tab in Recruiting hub |
+| **After Week 5** | Window closed; signed transfers attach for next season |
+
+---
+
+## Week 1 — Roster vs Transfer tabs
+
+**Shell:** Offseason Week 1 **Players Leaving** ([`offseason.md`](offseason.md)).
+
+| Tab | Who appears | Player actions |
+|-----|-------------|----------------|
+| **Roster** | **Everyone on your roster** (scholarship + walk-ons in roster cap) | Review; **encourage transfer** on eligible players — player is **not** in the portal yet |
+| **Transfer** | Only players who have **entered the portal** (yours + you learn of national via sim later) | **Convince to stay** on **your** entrants — success → **removed from portal**, **returns to roster** |
+
+**Encourage transfer (Roster tab):** Confirm → player **leaves your roster** immediately and **enters the portal** → appears on **Transfer** tab, **not** on Roster.
+
+**Convince to stay (Transfer tab):** Success → player **withdraws from portal**, **back on Roster**. Failure → remains in portal for Weeks 2–5 (if still unsigned).
+
+Graduates, draft exits, and completed eligibility are handled on **Roster** / declare flows — they **do not** use the portal ([grad rule](#who-enters-the-portal)).
 
 ---
 
 ## Who enters the portal
 
-Players who **enter the national portal** this cycle (not visible in the portal tab until they have **entered**):
+| Path | Detail |
+|------|--------|
+| **Coach encourage (Roster tab)** | Week 1 only — not on roster once entered |
+| **Failed convince to stay** | Was on Transfer tab; remains in portal |
+| **Broken promise / retention fail** | Enters portal (off roster when entered) |
+| **League sim** | See [AI entry drivers](#ai-entry-drivers) |
 
-| Driver | Detail |
-|--------|--------|
-| **Failed retention** | Week 1 **convince to stay** failed → **enters** portal |
-| **Broken promise** | [`player-loyalty-promises.md`](player-loyalty-promises.md) evaluation → portal intent |
-| **User cut / encourage out** | During **Week 1 transfer window** only — coach initiates departure → portal entry ([UI](#ui--week-1-departures)) |
-| **AI / league sim** | Minutes, role, coaching change, broken trust, etc. — **not shown to player as “reason”** on portal card |
-
-**Grad “transfers”:** **Not a feature** — players who **graduate** exit the roster; they do not use the portal.
+**Grad transfers:** **Not modeled** — graduates exit; no separate grad-portal path.
 
 ---
 
 ## Pool scale
 
-| Rule | Detail |
-|------|--------|
-| **National entrants** | **Uniform random integer 1,000 – 1,400** per season |
-| **Per-team feel** | ~**3–4** entrants per program on average (league-wide sim; user school included) |
-| **Stars** | Percentile bands **inside the portal pool only** ([`recruiting-engine.md`](recruiting-engine.md#star-distribution)) — independent of HS/JUCO counts |
+| Stage | Rule |
+|-------|------|
+| **Considering pool** | **Uniform random integer 1,000 – 1,400** per season nationwide — players **evaluating** portal entry (intent), not all will enter |
+| **Final entrants** | **Simulation outcome** — typical **~3–4 entrants per team** average; no fixed national total |
+| **Stars** | Assigned on **final entrant pool** only ([`recruiting-engine.md`](recruiting-engine.md#star-distribution)) |
 
 ---
 
-## Eligibility & roster law
+## Eligibility & roster law (2026)
 
-**Ruleset era:** **2026** ([`game-design.md`](game-design.md)).
+**Ruleset label:** **2026** — align with NCAA Division I direction in [`game-design.md`](game-design.md) (`calendar` in balance bundle).
 
-| Rule | Detail |
-|------|--------|
-| **Immediate eligibility** | Portal signees are **eligible next season** — no sit-out year |
-| **Fifth year** | **Fifth year of eligibility** supported where player record allows (redshirt / prior years used) — track on player card ([`game-design.md`](game-design.md#class--eligibility)) |
-| **Scholarships** | **15** max per team ([`game-design.md`](game-design.md#hard-limits)) — departures in Week 1 **open slots** for Weeks 2–5 signings |
-| **Roster cap** | **15** players including walk-ons |
+| Rule | Real-world basis (simplified for sim) |
+|------|--------------------------------------|
+| **Transfer eligibility** | **Immediate eligibility** at the new school after portal entry and sign (no mandatory sit-out year in this era) |
+| **Five-year period** | Eligibility tied to a **continuous five-year window** from initial full-time enrollment / age-based clock start — not legacy “seasons of competition” counting ([NCAA eligibility-center age-based rules](https://www.ncaa.org/eligibility-center/division-i-and-division-ii-age-based-eligibility-rules/)) |
+| **Player record** | Store **`eligibilityClockStart`** and **games/seasons used**; portal sign blocked if **no time left** in window |
+| **Redshirt (game)** | **Zero-game season** still a **development** choice in dynasty UI; under 2026 rules the **eligibility clock does not pause** for a traditional “athletic redshirt” — tune copy in balance if we soften for fun |
+| **Court carve-outs** | Real-world **2022-class litigation** / extra portal windows — **out of scope** for default sim |
+
+| Roster law | Value |
+|------------|--------|
+| **Scholarships** | **15** max ([`game-design.md`](game-design.md#hard-limits)) |
+| **Roster cap** | **15** including walk-ons |
 
 ---
 
@@ -75,64 +97,63 @@ Players who **enter the national portal** this cycle (not visible in the portal 
 
 | Element | Rule |
 |---------|------|
-| **Ratings** | **Recruit-style letter grades** until scouted deeper — same pipeline as HS/JUCO ([`recruiting-engine.md`](recruiting-engine.md#hidden-ratings--letter-grades)) |
-| **Identity** | Show **prior school** + **class** (Fr/So/Jr/Sr/RS) |
-| **Reason** | **Do not show** why they entered (no “minutes” / “promise” chip on portal list) |
-| **Portal Top 40** | National order **inside portal sub-tab** — **static** once published for the cycle (same spirit as HS **Top 60** fixed at seed) |
-| **Recommended tab** | Default sort for **user** portal recruiting — [`recruiting-engine.md`](recruiting-engine.md#recommended-tab-default) |
+| **Ratings** | **Letter grades** until scouted ([`recruiting-engine.md`](recruiting-engine.md#hidden-ratings--letter-grades)) |
+| **Identity** | **Prior school** + **class** |
+| **Reason** | **Hidden** — no UI reason chip |
+| **Portal Top 40** | National rank list in portal sub-tab — **locked at start of Offseason Week 2** among **final entrants** |
+| **Recommended** | Default sort in hub ([`recruiting-engine.md`](recruiting-engine.md#recommended-tab-default)) |
 
 ---
 
 ## Economy (shared with HS/JUCO)
 
-**Design lock:** **One budget** for the user — **weekly recruiting points** + **annual NIL $** fund **both** HS/JUCO and portal spend in Weeks **2–5** (and year-long HS/JUCO cycle elsewhere per [`recruiting-engine.md`](recruiting-engine.md)).
+**One budget:** same **weekly recruiting points** tier + **annual NIL $** for HS/JUCO and portal (Weeks 2–5 portal + year-long HS/JUCO per recruiting doc).
 
-| Event | Effect |
-|-------|--------|
-| **Week 1 departure finalized** | Scholarship **slot** opens; that player’s **committed NIL** returns to **unallocated** collective pool for remaining offseason spend |
-| **Week 1 departure** | **Recruiting points** — weekly **tier pool** unchanged; freed **slots + NIL** are what expand signing capacity (see balance tune for optional departure grants) |
-| **Portal sign** | Same actions: scout, call, offer, **one career promise** at this school, NIL allocation |
-
----
-
-## Retention vs portal tab
-
-| Outcome | Portal tab |
-|---------|------------|
-| **Convince to stay** succeeds | Player **never entered** portal — **does not** appear on Transfer Portal sub-tab |
-| **Convince fails** or **cut / AI entry** | Player **in** national pool → visible on sub-tab Weeks **2–5** |
+| Week 1 departure (portal entry or grad/draft clear) | Effect |
+|-----------------------------------------------------|--------|
+| **Scholarship** | **Slot opens** toward **15** cap |
+| **NIL** | Player’s committed deal **returns to unallocated** collective pool |
+| **Recruiting points** | **No** extra weekly drip or per-departure point grant |
 
 ---
 
-## UI — Week 1 departures
+## National recruiting (Weeks 2–5)
 
-**Shell:** Offseason Week 1 **Players Leaving** flow ([`offseason.md`](offseason.md)).
+**Transfer Portal** sub-tab: only players who **entered** the portal (not the full 1k–1.4k considering pool).
 
-**Design lock — `Roster` tab** on the graduation/transfers layout:
-
-| Tab (examples) | Role |
-|----------------|------|
-| **Retention** | Convince **portal-intent** / unhappy players to **stay** |
-| **Roster** (new) | Everyone **departing** this week (grads, draft, **cuts**, portal-bound) — actions to **encourage transfer** / confirm cut to portal where allowed |
-
-Graduates and draft exits listed for clarity; only **portal-eligible** rows get **cut / encourage out** during the window.
+Same spend/promise rules as HS/JUCO; **Portal Top 40** visible **Week 2+**.
 
 ---
 
-## AI
+## AI entry drivers
 
-Same as [`recruiting-engine.md` → AI recruiting`](recruiting-engine.md#ai-recruiting): each school spends off-screen via **Recommended**; **no rival portal boards** visible. User learns via **commits** (see [Open — UX](#open--ux-discussion) for News scope).
+League sim promotes players from **considering** → **entrant** using weights (tunable in balance):
+
+| Driver | Notes |
+|--------|--------|
+| **Broken promise** | From loyalty doc |
+| **Low minutes vs role** | Roster analytics |
+| **Coaching carousel** | New HC at school |
+| **Losing season** | NET / record band |
+| **Prestige mismatch** | High-rated player, low-tier minutes |
+| **Random volatility** | Small noise so pool isn’t deterministic |
+
+User sees **outcomes** only (who entered), not internal reason.
+
+---
+
+## AI spend
+
+[`recruiting-engine.md` → AI recruiting`](recruiting-engine.md#ai-recruiting) — Recommended ordering, hidden boards.
 
 ---
 
 ## Open — UX (discussion)
 
-**Not locked** — product discussion with Austin:
-
-| Topic | Question |
-|-------|----------|
-| **News** | National **headline tracker** for portal (league-wide commits) vs **hub-only** + shallow dashboard News? |
-| **Dashboard** | **Optional tasks** for portal during Weeks 2–5 (same pattern as in-season recruiting) or offseason-only surfacing? |
+| Topic | Status |
+|-------|--------|
+| **News** — league portal headline tracker vs hub-only | TBD with Austin |
+| **Dashboard** — optional portal tasks Weeks 2–5 vs offseason-only | TBD with Austin |
 
 ---
 
@@ -140,9 +161,8 @@ Same as [`recruiting-engine.md` → AI recruiting`](recruiting-engine.md#ai-recr
 
 | Doc | Hook |
 |-----|------|
-| [`game-frame.md`](game-frame.md) | Recruiting hub, user-only boards |
-| [`recruiting-engine.md`](recruiting-engine.md) | Sub-tab, spend actions, Top 40 |
-| [`offseason.md`](offseason.md) | Week 1–5 calendar |
+| [`offseason.md`](offseason.md) | Week 1 layout |
+| [`recruiting-engine.md`](recruiting-engine.md) | Sub-tab, actions |
 
 ---
 
@@ -150,5 +170,5 @@ Same as [`recruiting-engine.md` → AI recruiting`](recruiting-engine.md#ai-recr
 
 | Date | Change |
 |------|--------|
-| 2026-11-09 | Initial spec from Austin answers (calendar, scale, eligibility, economy, UI tab) |
-| 2026-11-09 | UX News/dashboard left open for discussion |
+| 2026-11-09 | Initial spec |
+| 2026-11-09 | Roster/Transfer tabs; considering vs entrant pool; 2026 eligibility; Top 40 @ Week 2 |

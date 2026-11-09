@@ -273,19 +273,23 @@ In-week variety is normal (different sim runs, different scores). **Locked** onl
 
 Walk-ons use the same **player card** / roster pipeline as scholarship players ([`recruiting-engine.md`](recruiting-engine.md#walk-ons)).
 
-### Class & eligibility
+### Class & eligibility (2026 ruleset)
 
-- **Eligibility years** tracked per player (games played, redshirt flags).
-- **Fifth year (2026 ruleset):** players may use a **fifth season** of eligibility when years-used + redshirt flags allow — portal signees count toward same rules ([`transfer-portal.md`](transfer-portal.md)).
-- **Academic standing** per player: eligible / at-risk / ineligible for next game.
-- **Incompletes** at term boundary can bench player for postseason (configurable strictness by difficulty).
+| Rule | Detail |
+|------|--------|
+| **Five-year window** | Continuous eligibility period from **initial full-time enrollment** / age-based start — portal and stay transfers use **immediate eligibility** when time remains in window ([`transfer-portal.md`](transfer-portal.md#eligibility--roster-law-2026)) |
+| **Player record** | `eligibilityClockStart`, seasons/games consumed, **eligible next season** flag |
+| **Academic standing** | Eligible / at-risk / ineligible per game |
+| **Incompletes** | Term boundary can bench for postseason (difficulty setting) |
 
-### Redshirt
+### Redshirt (development)
+
+Dynasty still supports a **0-game redshirt season** for development (exhibitions do not count as RS games). Under **2026 NCAA-style** rules in balance bundle, the **eligibility clock does not pause** for that choice — document on card as **development year**, not extra eligibility time.
 
 | Type | Trigger |
 |------|---------|
-| **Standard redshirt** | User (preseason) elects; player plays **0** games (exhibitions exempt or count per ruleset — **exhibitions do not count** toward redshirt games played). |
-| **Medical redshirt** | In-season injury; games played ≤ ruleset threshold; medical staff grade affects approval odds in edge cases. |
+| **Standard redshirt** | Preseason elect; **0** RS games |
+| **Medical redshirt** | In-season injury + games-played threshold; staff grade affects edge approvals |
 
 ### Procedural roster events
 

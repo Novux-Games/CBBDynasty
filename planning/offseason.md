@@ -120,15 +120,17 @@ Notifications queue **offer cards**; carousel **pauses** for mandatory decisions
 
 ### Rosters processing
 
-**Layout tabs:** **Retention** · **Roster** (departures) · draft declare lists — portal rules: [`transfer-portal.md`](transfer-portal.md).
+**Layout tabs:** **Roster** · **Transfer** · draft declare — authoritative: [`transfer-portal.md`](transfer-portal.md#week-1--roster-vs-transfer-tabs).
 
-| Bucket | UI | Interaction |
+| Bucket | Tab | Interaction |
 |--------|-----|-------------|
-| **Graduating seniors** | **Roster** tab | **No** stay — they **graduate** (roster exit) |
-| **Draft-eligible seniors** | **Roster** + pro days | Pro days (below); leave for draft or graduate |
-| **Potential transfers** | **Retention** tab | **Convince to stay** — success → **never** in portal ([`transfer-portal.md`](transfer-portal.md#retention-vs-portal-tab)) |
-| **Early draft declarations (underclass)** | Declare list | **Convince to stay** (return) or allow leave |
-| **Coach-initiated departures** | **Roster** tab | **Encourage transfer** / cut during **Week 1 window only** |
+| **Full roster** | **Roster** | **Encourage transfer** (player **not** in portal yet) → enters portal, **off roster**, on **Transfer** tab |
+| **In portal (yours)** | **Transfer** | **Convince to stay** → success **back on Roster**, removed from portal |
+| **Graduating seniors** | **Roster** | Graduate — not portal |
+| **Draft-eligible** | **Roster** + pro days | Pro days; draft or graduate |
+| **Early draft (underclass)** | Declare flow | Convince to stay / leave for draft |
+
+**Design lock:** **≥1** user player reaches **portal entry** league-wide intent unless user convinces all back from **Transfer** tab.
 
 **Design lock:** **At least one** player on the **user** roster will enter the **transfer portal intent** pool (AI schools also generate movement league-wide).
 

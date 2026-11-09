@@ -67,7 +67,7 @@ android/app/src/main/assets/balance/      # APK mirror (same as pack pipeline)
     "jobSecurityWeights": { }
   },
   "calendar": {
-    "scholarshipLimit": 13,
+    "scholarshipLimit": 15,
     "rosterCap": 15,
     "portalNotes": "constants only — behavior in game-design / offseason"
   }
