@@ -160,20 +160,20 @@ private fun SaveSlotRow(
     onOpen: () -> Unit,
     onDelete: () -> Unit,
 ) {
-    val label = if (slot.isEmpty) {
-        stringResource(R.string.load_slot_empty, slot.slotIndex + 1)
-    } else if (!likelyLoadable) {
-        stringResource(R.string.load_slot_maybe_unavailable, slot.slotIndex + 1)
-    } else {
-        stringResource(
+    val slotNumber = slot.slotIndex + 1
+    val header = stringResource(R.string.load_slot_header, slotNumber)
+    val detail = when {
+        slot.isEmpty -> stringResource(R.string.load_slot_empty)
+        !likelyLoadable -> stringResource(R.string.load_slot_cant_open)
+        else -> stringResource(
             R.string.load_slot_occupied,
-            slot.slotIndex + 1,
             slot.schoolDisplayName.orEmpty(),
             slot.seasonLabel.orEmpty(),
             slot.wins,
             slot.losses,
         )
     }
+    val label = "$header — $detail"
 
     Row(
         modifier = Modifier

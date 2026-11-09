@@ -16,20 +16,20 @@ fun SaveLoadUnavailableDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.load_unavailable_title)) },
+        title = { Text(stringResource(R.string.load_error_title)) },
         text = {
             Text(
-                stringResource(R.string.load_unavailable_message, slotDisplayNumber),
+                stringResource(R.string.load_error_message, slotDisplayNumber),
             )
         },
         confirmButton = {
             TextButton(onClick = onDelete) {
-                Text(stringResource(R.string.load_unavailable_delete))
+                Text(stringResource(R.string.load_error_delete))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.load_unavailable_dismiss))
+                Text(stringResource(R.string.load_error_dismiss))
             }
         },
     )

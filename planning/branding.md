@@ -86,10 +86,17 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 
 ## UI copy (in-game)
 
+**Product voice:** coach / fan facing — never engineering, checklist, or repo jargon.
+
 | Rule | Detail |
 |------|--------|
-| **Pack IDs** | Internal only (`embedded-default`, etc.). UI uses [`PackDisplayNames`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/PackDisplayNames.kt) — e.g. **2026–27 League**. |
-| **No dev labels** | Never show “default pack”, “bootstrap”, asset paths, or engineering checklist language in `strings.xml` or on-screen copy. |
+| **Single source** | All on-screen text in `android/app/src/main/res/values/strings.xml` (no hard-coded `Text("…")` in Compose). |
+| **Internal IDs** | Never show `packId`, file paths, slot indices in error prose, schema versions, or feature-phase names. |
+| **League identity** | [`PackDisplayNames`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/PackDisplayNames.kt) for league labels (e.g. **2026–27 League**), not “default pack”. |
+| **Banned tone** | bootstrap, scaffold, stub, fallback, MVP, placeholder, unavailable, unnamed, transaction, “ships later”, “app shell”, TBD in player strings. |
+| **CI** | `python3 scripts/lint_player_strings.py` on every core-test workflow run. |
+
+Planning docs and code comments may use technical terms; **the APK may not**.
 
 ---
 
@@ -101,3 +108,4 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 | 2025-11-08 | Official title: **Dynasty: College Basketball** |
 | 2025-11-08 | Link `ncba-branding.md` |
 | 2025-11-09 | Novux Games; `app-shell.md` studio vs splash |
+| 2025-11-09 | UI copy rules + `lint_player_strings.py` |

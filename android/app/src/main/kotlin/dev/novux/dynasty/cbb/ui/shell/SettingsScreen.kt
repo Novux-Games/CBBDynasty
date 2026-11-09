@@ -55,7 +55,7 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = stringResource(R.string.settings_section_shell),
+            text = stringResource(R.string.settings_section_startup),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,
         )
@@ -78,7 +78,7 @@ fun SettingsScreen(
             color = MaterialTheme.colorScheme.primary,
         )
         Text(
-            text = stringResource(R.string.settings_audio_stub_note),
+            text = stringResource(R.string.settings_audio_hint),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 12.dp),
