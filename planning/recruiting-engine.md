@@ -119,12 +119,14 @@ While the [year-long cycle](#year-long-recruiting-cycle-design-lock) is open, th
 
 ### Transfer portal
 
+**Authoritative:** [`transfer-portal.md`](transfer-portal.md) — one offseason cycle, **no in-season** entries, shared points/NIL budget, Week 1 **Roster** departures tab.
+
 | When | What |
 |------|------|
-| **Offseason transfer window** (established window per ruleset — aligns with portal **cycle 1** in game-design week 1) | Players enter portal; stipends/scholarships clear on departure |
-| **Recruiting week 1** | Portal entrants become **recruitable** on the **Transfer Portal** sub-tab (not mixed into HS/JUCO list) |
+| **Offseason Week 1** | National **entries**; retention / cuts resolve who is in the pool |
+| **Offseason Weeks 2–5** | **Transfer Portal** sub-tab — recruit/sign (not mixed into HS/JUCO) |
 
-Portal star bands use the **portal pool only** (see [Star distribution](#star-distribution)); portal 5★ count is **not** reduced because HS had forty 5★s.
+Portal star bands use the **portal pool only** (see [Star distribution](#star-distribution)); **Portal Top 40** static for the cycle.
 
 ### Signing period (R1–R4)
 

@@ -276,6 +276,7 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 ### Class & eligibility
 
 - **Eligibility years** tracked per player (games played, redshirt flags).
+- **Fifth year (2026 ruleset):** players may use a **fifth season** of eligibility when years-used + redshirt flags allow — portal signees count toward same rules ([`transfer-portal.md`](transfer-portal.md)).
 - **Academic standing** per player: eligible / at-risk / ineligible for next game.
 - **Incompletes** at term boundary can bench player for postseason (configurable strictness by difficulty).
 
@@ -291,7 +292,7 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 - **Graduation** — fixed class year.
 - **Early draft entry** — **declare intent roll** at Offseason Week 1 (loyalty + promises + mock rank — **not** automatic for high prospects); pro days + withdrawal deadline before draft results week — [`player-loyalty-promises.md`](player-loyalty-promises.md).
 - **Coach promises** — **one** career-long promise per player at offer; **broken** → transfer risk; **kept** → loyalty + stay vs declare.
-- **Portal in/out** — separate from high school recruiting board; broken promises feed portal intent.
+- **Portal in/out** — authoritative [`transfer-portal.md`](transfer-portal.md); broken promises feed portal intent.
 - **Cuts** — offseason window; must land ≤15 by roster lock before exhibitions.
 
 ---

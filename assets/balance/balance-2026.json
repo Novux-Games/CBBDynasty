@@ -51,7 +51,7 @@
     "jobSecurityWeights": {}
   },
   "calendar": {
-    "scholarshipLimit": 13,
+    "scholarshipLimit": 15,
     "rosterCap": 15
   },
   "recruiting": {

@@ -431,7 +431,7 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History | March Ma
 | [`postseason-frame.md`](postseason-frame.md) | Tournament seed labels, March Mayhem **hub content** (same shell) |
 | [`postseason.md`](postseason.md) | Selection Sunday, brackets |
 | [`selection-engine.md`](selection-engine.md) | Poll + Seed Index |
-| [`transfer-portal-engine.md`](transfer-portal-engine.md) | *Planned* — portal cycles, or fold into [`recruiting-engine.md`](recruiting-engine.md) |
+| [`transfer-portal.md`](transfer-portal.md) | Portal calendar, pool, Week 1 Roster tab, economy |
 
 Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`game-design.md`](game-design.md#notifications-android).
 
