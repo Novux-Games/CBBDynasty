@@ -30,6 +30,7 @@ class IdentityPackIndex private constructor(
             secondaryColorHex = team.colors.secondary,
             logoUri = team.logoUri,
             postseasonEligible = team.postseasonEligible,
+            programPrestige = WizardProgramPrestige.effective(team),
         )
     }
 
@@ -48,6 +49,11 @@ class IdentityPackIndex private constructor(
     fun allTeamDisplays(): List<TeamDisplayOverlay> =
         teamsById.values
             .mapNotNull { team(it.id) }
+            .sortedBy { it.displayName.lowercase() }
+
+    fun allConferenceDisplays(): List<ConferenceDisplayOverlay> =
+        conferencesById.keys
+            .mapNotNull { conference(it) }
             .sortedBy { it.displayName.lowercase() }
 
     companion object {

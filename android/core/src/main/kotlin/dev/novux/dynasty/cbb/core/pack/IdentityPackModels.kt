@@ -38,6 +38,8 @@ data class TeamPack(
     val colors: TeamColorsPack,
     val arenaBaseName: String,
     val logoUri: String? = null,
+    /** 0–99 when present; wizard uses [WizardProgramPrestige] when null. */
+    val programPrestige: Int? = null,
 )
 
 @Serializable

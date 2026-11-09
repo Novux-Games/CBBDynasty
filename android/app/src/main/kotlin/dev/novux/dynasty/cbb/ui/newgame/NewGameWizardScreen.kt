@@ -1,6 +1,9 @@
 package dev.novux.dynasty.cbb.ui.newgame
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.unit.dp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.coach.CoachCreateValidator
+import dev.novux.dynasty.cbb.core.pack.ConferenceDisplayOverlay
 import dev.novux.dynasty.cbb.core.pack.TeamDisplayOverlay
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
@@ -32,7 +36,9 @@ fun NewGameWizardScreen(
     var slotGatePassed by remember { mutableStateOf(false) }
     var draft by remember { mutableStateOf(NewGameDraft()) }
     var coachShowErrors by remember { mutableStateOf(false) }
+    var schoolShowErrors by remember { mutableStateOf(false) }
     var schools by remember { mutableStateOf<List<TeamDisplayOverlay>>(emptyList()) }
+    var conferences by remember { mutableStateOf<List<ConferenceDisplayOverlay>>(emptyList()) }
 
     LaunchedEffect(Unit) {
         saveSlotRepository.ensureInitialized()
@@ -49,6 +55,7 @@ fun NewGameWizardScreen(
         if (!slotGatePassed) return@LaunchedEffect
         val session = packRepository.ensureEmbeddedLoaded()
         schools = session.index.allTeamDisplays()
+        conferences = session.index.allConferenceDisplays()
     }
 
     if (!slotGatePassed) {
@@ -64,6 +71,7 @@ fun NewGameWizardScreen(
             composable(NewGameStep.routeFor(step)) {
                 val isLast = step == NewGameStep.SignContract
                 val isCoach = step == NewGameStep.Coach
+                val isSchool = step == NewGameStep.School
                 NewGameStepScaffold(
                     step = step,
                     onBack = {
@@ -76,12 +84,18 @@ fun NewGameWizardScreen(
                         null
                     } else {
                         {
-                            if (isCoach && CoachCreateValidator.validate(draft.coach) != null) {
-                                coachShowErrors = true
-                            } else {
-                                step.next?.let { next ->
-                                    navController.navigate(NewGameStep.routeFor(next))
-                                }
+                            when {
+                                isCoach && CoachCreateValidator.validate(draft.coach) != null ->
+                                    coachShowErrors = true
+                                isSchool && (
+                                    draft.selectedTeamId == null ||
+                                        !draft.schoolSummaryAcknowledged
+                                    ) ->
+                                    schoolShowErrors = true
+                                else ->
+                                    step.next?.let { next ->
+                                        navController.navigate(NewGameStep.routeFor(next))
+                                    }
                             }
                         }
                     },
@@ -110,6 +124,33 @@ fun NewGameWizardScreen(
                             settings = draft.dynastySettings,
                             onChange = { draft = draft.copy(dynastySettings = it) },
                         )
+                        NewGameStep.School -> {
+                            Column {
+                                if (schoolShowErrors) {
+                                    Text(
+                                        text = stringResource(R.string.new_school_err_pick),
+                                        color = MaterialTheme.colorScheme.error,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        modifier = Modifier.padding(bottom = 8.dp),
+                                    )
+                                }
+                                SchoolStepContent(
+                                    schools = schools,
+                                    conferences = conferences,
+                                    unlockAll = draft.unlockAllSchools,
+                                    onUnlockAllChange = {
+                                        draft = draft.copy(unlockAllSchools = it)
+                                    },
+                                    selectedTeamId = draft.selectedTeamId,
+                                    onSelectTeam = { draft = draft.copy(selectedTeamId = it) },
+                                    summaryAcknowledged = draft.schoolSummaryAcknowledged,
+                                    onSummaryAcknowledged = {
+                                        draft = draft.copy(schoolSummaryAcknowledged = true)
+                                    },
+                                    modifier = Modifier.fillMaxSize(),
+                                )
+                            }
+                        }
                         NewGameStep.SignContract -> {
                             Text(
                                 text = stringResource(R.string.new_step_sign_stub),
@@ -117,7 +158,6 @@ fun NewGameWizardScreen(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
-                        else -> NewGameStepPlaceholderBody(step = step)
                     }
                 }
             }

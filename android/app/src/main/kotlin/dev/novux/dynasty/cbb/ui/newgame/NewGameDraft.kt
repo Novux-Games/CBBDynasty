@@ -17,4 +17,7 @@ data class NewGameDraft(
     val offensiveScheme: OffensiveSchemePreset = OffensiveSchemePreset.Balanced,
     val defensiveScheme: DefensiveSchemePreset = DefensiveSchemePreset.ManToMan,
     val dynastySettings: NewGameDynastySettings = NewGameDynastySettings(),
+    val unlockAllSchools: Boolean = false,
+    val selectedTeamId: String? = null,
+    val schoolSummaryAcknowledged: Boolean = false,
 )

@@ -12,6 +12,7 @@ data class TeamDisplayOverlay(
     val secondaryColorHex: String,
     val logoUri: String?,
     val postseasonEligible: Boolean,
+    val programPrestige: Int,
 )
 
 data class ConferenceDisplayOverlay(
