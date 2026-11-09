@@ -21,6 +21,8 @@ sealed class DynastyLoadFailure {
 
     data class InvalidBalanceRuleset(val detail: String) : DynastyLoadFailure()
 
+    data class InvalidSimTuning(val detail: String) : DynastyLoadFailure()
+
     data class DatabaseRead(val detail: String) : DynastyLoadFailure()
 }
 

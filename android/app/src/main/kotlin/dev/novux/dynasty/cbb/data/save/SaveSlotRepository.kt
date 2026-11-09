@@ -15,6 +15,8 @@ import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
 import dev.novux.dynasty.cbb.data.balance.BalanceParseException
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
+import dev.novux.dynasty.cbb.data.sim.SimTuningParseException
+import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import dev.novux.dynasty.cbb.database.dynasty.toEntity
 import dev.novux.dynasty.cbb.database.dynasty.toDomain
@@ -30,6 +32,7 @@ class SaveSlotRepository(
     private val weekCheckpointRepository: WeekCheckpointRepository,
     private val packRepository: PackRepository,
     private val balanceRulesetRepository: BalanceRulesetRepository,
+    private val simTuningRepository: SimTuningRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -126,6 +129,15 @@ class SaveSlotRepository(
                 )
             }
 
+            val simTuning = try {
+                simTuningRepository.restorePinned(meta.simTuningId, meta.simSchemaVersion)
+            } catch (e: SimTuningParseException) {
+                return DynastyLoadResult.Unreadable(
+                    slotIndex,
+                    DynastyLoadFailure.InvalidSimTuning(e.message ?: "sim tuning load failed"),
+                )
+            }
+
             val calendarRow = calendarDao.getByDynastyId(meta.dynastyId)
             calendarRow?.toCalendarSnapshot()?.let { snap ->
                 DynastySaveValidator.validateCalendar(snap)?.let { failure ->
@@ -156,6 +168,7 @@ class SaveSlotRepository(
                     metadata = meta,
                     weekCheckpoint = weekCheckpoint,
                     balanceRuleset = balanceRuleset,
+                    simTuning = simTuning,
                 ),
             )
         } catch (e: Exception) {
@@ -205,11 +218,14 @@ class SaveSlotRepository(
         if (existing != null && !existing.isEmpty) return null
 
         val shippedBalance = balanceRulesetRepository.ensureShippedDefaultLoaded()
+        val shippedSim = simTuningRepository.ensureShippedDefaultLoaded()
         val metadata = DynastyBootstrap.newDynasty(
             dynastyId = dynastyId,
             packId = packId,
             balanceRulesetId = shippedBalance.balanceRulesetId,
             balanceSchemaVersion = shippedBalance.schemaVersion,
+            simTuningId = shippedSim.simTuningId,
+            simSchemaVersion = shippedSim.schemaVersion,
         )
         val seasonLabel = SeasonMembershipYear.label(metadata.seasonIndex)
         val now = System.currentTimeMillis()
@@ -252,6 +268,7 @@ class SaveSlotRepository(
             metadata = metadata,
             weekCheckpoint = weekCheckpoint,
             balanceRuleset = shippedBalance,
+            simTuning = shippedSim,
         )
     }
 

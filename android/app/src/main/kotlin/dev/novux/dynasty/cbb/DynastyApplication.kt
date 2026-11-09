@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
+import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
 import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.data.settings.AppSettingsRepository
@@ -31,11 +32,15 @@ class DynastyApplication : Application() {
     lateinit var balanceRulesetRepository: BalanceRulesetRepository
         private set
 
+    lateinit var simTuningRepository: SimTuningRepository
+        private set
+
     override fun onCreate() {
         super.onCreate()
         appSettingsRepository = AppSettingsRepository(applicationContext)
         packRepository = PackRepository(applicationContext)
         balanceRulesetRepository = BalanceRulesetRepository(applicationContext)
+        simTuningRepository = SimTuningRepository(applicationContext)
         val database = DynastyDatabase.build(applicationContext)
         weekCheckpointRepository = WeekCheckpointRepository(database)
         saveSlotRepository = SaveSlotRepository(
@@ -43,11 +48,13 @@ class DynastyApplication : Application() {
             weekCheckpointRepository,
             packRepository,
             balanceRulesetRepository,
+            simTuningRepository,
         )
         applicationScope.launch {
             saveSlotRepository.ensureInitialized()
             packRepository.ensureEmbeddedLoaded()
             balanceRulesetRepository.ensureShippedDefaultLoaded()
+            simTuningRepository.ensureShippedDefaultLoaded()
         }
     }
 }
