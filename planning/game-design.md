@@ -1,5 +1,6 @@
 # Dynasty: College Basketball — Game Design Document
 
+> **Planning index:** [`README.md`](README.md) (all specs by category) · **Tracker:** [`planning-notes.md`](planning-notes.md)  
 > **Branding:** [**Dynasty: College Basketball**](branding.md) · Novux Games · bg `#181a25` · logo [`Public-Assets/app-logo.svg`](../Public-Assets/app-logo.svg)
 
 **Platform:** Android (mobile)  

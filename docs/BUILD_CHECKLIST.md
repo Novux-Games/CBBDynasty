@@ -1,7 +1,7 @@
 # Build checklist — implementation order
 
 **Product:** Dynasty: College Basketball · **Studio:** Novux Games  
-**Planning:** [`planning/`](../planning/) is authoritative for behavior; this doc is **execution order**.  
+**Planning:** [`planning/`](../planning/) is authoritative for behavior — map of all specs: [`planning/README.md`](../planning/README.md). This doc is **execution order**.  
 **Code:** [`docs/ARCHITECTURE.md`](ARCHITECTURE.md) · Android project: [`android/`](../android/)
 
 Use phases **in order**. Do not skip persistence or calendar kernel before dynasty UI. Mark items `[x]` in your tracker as you ship.

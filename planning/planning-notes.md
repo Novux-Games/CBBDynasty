@@ -1,53 +1,20 @@
-# Planning follow-ups (tracker)
+# Planning tracker
 
-Quick pointers so we don't re-ask settled items. **Details live in linked docs.**
-
-| Topic | Status | Doc |
-|-------|--------|-----|
-| O/D schemes + halftime | **Done** | [`strategy-schemes.md`](strategy-schemes.md) |
-| Positions / default lineup | **Done** | [`positions-and-lineup.md`](positions-and-lineup.md) |
-| Archetypes + draft #1–60 | **Done** | [`player-archetypes.md`](player-archetypes.md) |
-| Game preview | **Ratings + RPI**, no GP required | [`game-frame.md`](game-frame.md) |
-| Watch sim | **2s** possession delay; 3–30 game clock | [`strategy-schemes.md`](strategy-schemes.md) |
-| Conference tournaments | **Real formats** | [`game-design.md`](game-design.md) |
-| News | Headlines; Top 60 recruit board; dynamic draft | [`game-frame.md`](game-frame.md), [`recruiting-engine.md`](recruiting-engine.md) |
-| Coach card + School Staff | **Done** | [`coach-card.md`](coach-card.md) |
-| Recruiting engine | **Done** | [`recruiting-engine.md`](recruiting-engine.md) |
-| Loyalty & promises | **Done** | [`player-loyalty-promises.md`](player-loyalty-promises.md) |
-| Dynasty shell (all phases) | **Done** — one chrome, dashboard task gate, week advance only | [`game-frame.md`](game-frame.md) |
-| League branding / membership | **365** programs; 4 reclass no postseason until year 4 | [`league-branding.md`](league-branding.md), [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) |
-| NIL on player card | **Overview valuation** (recruiting commit) | [`player-cards.md`](player-cards.md) |
-| NIL annual pool | **Done** — conference tier × prestige; blue blood **90–99** **~$9.7M–$13.2M** (power tier only) | [`game-design.md`](game-design.md#annual-collective-pool-design-lock), `nil` in balance JSON |
-| NIL Budget / deal depth | **Done** — assign **$/yr**; **3× ask** cap; remaining pool ledger | [`game-design.md`](game-design.md#nil-budget-workflow-design-lock) |
-| RS schedule cap | **32** games; **28** builder slots only with 4-game event | [`game-design.md`](game-design.md#scheduling--regular-season), [`preseason.md`](preseason.md#8--schedule-regular-season-games) |
-| Transfer portal | **Done** | [`transfer-portal.md`](transfer-portal.md) |
-| News hub (portal) | **Done** | [`news-hub.md`](news-hub.md) |
-| Dashboard tasks (master index) | **Done** | [`dashboard-tasks.md`](dashboard-tasks.md) |
-| Portal dashboard tasks | **Done** | [`transfer-portal.md`](transfer-portal.md#ux--dashboard-optional-tasks-portal-only) → index |
-| Recruiting dashboard tasks | **Done** (triggers) | [`recruiting-engine.md`](recruiting-engine.md#in-season-dashboard-tasks) → index |
-| AI recruiting | **Done** — Recommended parity; **hidden** from UI | [`recruiting-engine.md`](recruiting-engine.md#ai-recruiting) |
-| Recruit rankings UI | **Top 60 full list** — not T25-style | [`recruiting-engine.md`](recruiting-engine.md#national-rankings-top-60) |
-| GOAT / History depth | **Done** | [`history-hub.md`](history-hub.md) |
-| Notifications | **Done** | [`notifications.md`](notifications.md) |
-| App updates vs saves | **Rule:** ship migrations; old slots keep working | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility), [`ADR-002`](../docs/ADR-002-balance-ruleset-bundle.md) |
-| Build checklist sync | **Rule:** every **Done** spec → step(s) + [full index](../docs/BUILD_CHECKLIST.md#locked-specs--build-steps-index) | [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
-| Recruiting point actions | **Done** | [`recruiting-engine.md`](recruiting-engine.md#action-costs-design-lock) → **6.17–6.20**, **15.6** UI |
-| Recruit interest model | **Done** — proposed factor weights; `signLikelihood` stays zero-spend | [`recruiting-engine.md`](recruiting-engine.md#interest--offers) → **6.21** |
-| Injuries & medical redshirt | **Done** | [`injuries.md`](injuries.md) |
-| Discipline (conduct + academic) | **Done** | [`in-season-systems.md`](in-season-systems.md) |
-| Chemistry & fatigue | **Done** | [`in-season-systems.md`](in-season-systems.md) |
+Quick “is this decided?” pointers. **Full specs:** [`README.md`](README.md) · **GDD spine:** [`game-design.md`](game-design.md) · **Build order:** [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md)
 
 ---
 
-## Documentation rule — full product, not “v1”
+## Documentation rules
+
+### Full product, not “v1”
 
 Planning and player-facing copy describe **the game we are building**, not a staged MVP. Do **not** write “v1”, “not in v1”, “v2 feature”, or “ships later” for product scope. Say **design lock**, **excluded**, or name the behavior. Technical version fields (`balanceSchemaVersion`, `packVersion`, import format revision) stay as-is.
 
----
+### Build checklist sync
 
-## Engineering rule — app updates must not break saves
+Every **Done** topic below must map to step(s) in [`BUILD_CHECKLIST.md#locked-specs--build-steps-index`](../docs/BUILD_CHECKLIST.md#locked-specs--build-steps-index). Update checklist in the **same commit** as the planning change.
 
-**Policy:** Every store / APK update is **backward compatible** with existing dynasty slots on device. Players who update **keep** their careers; we **migrate** data when the DB shape changes — never “wipe and resync” as the default.
+### App updates must not break saves
 
 | Requirement | Meaning |
 |-------------|---------|
@@ -58,23 +25,97 @@ Planning and player-facing copy describe **the game we are building**, not a sta
 | **Forward-only features** | New columns default safely; new systems attach without rewriting history |
 | **No player copy** | Migrations are silent — no “save version upgraded” UI unless we add optional release notes |
 
-**Not promised:** hand-edited exports, slots already broken before update, or infinite support for ancient `dynastySchemaVersion` without export — see ADR-001 for export fallback.
+**Not promised:** hand-edited exports, slots already broken before update, or infinite support for ancient `dynastySchemaVersion` without export — see [ADR-001](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility).
 
 **CI (target):** migration tests + load fixture save across version bump before release.
 
 ---
 
-## Gameplan — nothing else needed from you (for now)
+## Settled topics (by area)
 
-Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** schemes on coach card Overview; per-game prep unchanged in Strategy hub.
+### Core, shell & time
 
-**Strategy / rotation timing (locked):** edit before sim + halftime; replay with new prep before week advance; after week advance, that week’s results final, prep for next games.
+| Topic | Status | Doc |
+|-------|--------|-----|
+| Dynasty shell (all phases) | **Done** — one chrome, dashboard task gate, week advance only | [`game-frame.md`](game-frame.md) |
+| App shell (studio / splash) | **Done** | [`app-shell.md`](app-shell.md) |
+| Game start / new dynasty | **Done** | [`game-start.md`](game-start.md) |
+| Time system (weeks/byes) | **Done** | [`time-system.md`](time-system.md) |
+| Offseason calendar | **Done** | [`offseason.md`](offseason.md) |
+| Preseason setup | **Done** | [`preseason.md`](preseason.md) |
+| End of Season week | **Done** | [`season-review.md`](season-review.md) |
+| Dashboard tasks (master index) | **Done** | [`dashboard-tasks.md`](dashboard-tasks.md) |
+| Notifications | **Done** | [`notifications.md`](notifications.md) |
+| News hub (portal) | **Done** | [`news-hub.md`](news-hub.md) |
+| Conference tournaments | **Real formats** | [`game-design.md`](game-design.md) |
+| News | Headlines; Top 60 recruit board; dynamic draft | [`game-frame.md`](game-frame.md), [`recruiting-engine.md`](recruiting-engine.md) |
+
+### Coach, strategy, players
+
+| Topic | Status | Doc |
+|-------|--------|-----|
+| O/D schemes + halftime | **Done** | [`strategy-schemes.md`](strategy-schemes.md) |
+| Watch sim | **2s** possession delay; 3–30 game clock | [`strategy-schemes.md`](strategy-schemes.md) |
+| Game preview | **Ratings + RPI**, no GP required | [`game-frame.md`](game-frame.md) |
+| Positions / default lineup | **Done** | [`positions-and-lineup.md`](positions-and-lineup.md) |
+| Coach card + School Staff | **Done** | [`coach-card.md`](coach-card.md) |
+| Archetypes + draft #1–60 | **Done** | [`player-archetypes.md`](player-archetypes.md) |
+| NIL on player card | **Overview valuation** (recruiting commit) | [`player-cards.md`](player-cards.md) |
+| Loyalty & promises | **Done** | [`player-loyalty-promises.md`](player-loyalty-promises.md) |
+| Injuries & medical redshirt | **Done** | [`injuries.md`](injuries.md) |
+| Discipline (conduct + academic) | **Done** | [`in-season-systems.md`](in-season-systems.md) |
+| Chemistry & fatigue | **Done** | [`in-season-systems.md`](in-season-systems.md) |
+
+### Recruiting & economy
+
+| Topic | Status | Doc |
+|-------|--------|-----|
+| Recruiting engine | **Done** | [`recruiting-engine.md`](recruiting-engine.md) |
+| Recruit interest model | **Done** — weights proposed in JSON | [`recruiting-engine.md#interest--offers`](recruiting-engine.md#interest--offers) → **6.21** |
+| Recruiting interest open questions | **Resolved** | [`recruiting-engine.md#resolved-decisions-was-open-questions`](recruiting-engine.md#resolved-decisions-was-open-questions) |
+| Recruiting point actions | **Done** | [`recruiting-engine.md#action-costs-design-lock`](recruiting-engine.md#action-costs-design-lock) → **6.17–6.20** |
+| Recruiting dashboard tasks | **Done** (triggers) | [`recruiting-engine.md#in-season-dashboard-tasks`](recruiting-engine.md#in-season-dashboard-tasks) |
+| AI recruiting | **Done** — Recommended parity; **hidden** from UI | [`recruiting-engine.md#ai-recruiting`](recruiting-engine.md#ai-recruiting) |
+| Recruit rankings UI | **Top 60 full list** — not T25-style | [`recruiting-engine.md#national-rankings-top-60`](recruiting-engine.md#national-rankings-top-60) |
+| Transfer portal | **Done** | [`transfer-portal.md`](transfer-portal.md) |
+| Portal dashboard tasks | **Done** | [`transfer-portal.md`](transfer-portal.md#ux--dashboard-optional-tasks-portal-only) |
+| NIL annual pool | **Done** | [`game-design.md#annual-collective-pool-design-lock`](game-design.md#annual-collective-pool-design-lock) |
+| NIL Budget / deal depth | **Done** — **3× ask** cap | [`game-design.md#nil-budget-workflow-design-lock`](game-design.md#nil-budget-workflow-design-lock) |
+| RS schedule cap | **32** games; **28** builder + 4-game event | [`game-design.md#scheduling--regular-season`](game-design.md#scheduling--regular-season), [`preseason.md`](preseason.md) |
+
+### Postseason, history & world
+
+| Topic | Status | Doc |
+|-------|--------|-----|
+| Postseason selection | **Done** | [`postseason.md`](postseason.md) |
+| Selection engine (poll + seed) | **Done** | [`selection-engine.md`](selection-engine.md) |
+| Postseason UI (March Mayhem) | **Done** | [`postseason-frame.md`](postseason-frame.md) |
+| NCBA / NCI / early events | **Done** | [`ncba-branding.md`](ncba-branding.md) |
+| GOAT / History depth | **Done** | [`history-hub.md`](history-hub.md) |
+| League branding / membership | **365** programs; reclass postseason rule | [`league-branding.md`](league-branding.md), [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) |
+
+### Engineering meta
+
+| Topic | Status | Doc |
+|-------|--------|-----|
+| Implementation build order | **Done** | [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
+| App updates vs saves | **Rule** | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility) |
 
 ---
 
-## “Still on the list” — what that meant
+## Gameplan (locked)
 
-**Shell:** No separate offseason/preseason **layout** docs — [`game-frame.md`](game-frame.md) is the single UI shell; [`offseason.md`](offseason.md) / [`preseason.md`](preseason.md) define **tasks** that gate **Advance week** on the Dashboard.
+Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** schemes on coach card Overview; per-game prep unchanged in Strategy hub.
+
+**Strategy / rotation timing:** edit before sim + halftime; replay with new prep before week advance; after week advance, that week’s results final, prep for next games.
+
+**Shell note:** No separate offseason/preseason **layout** docs — [`game-frame.md`](game-frame.md) is the single UI shell; [`offseason.md`](offseason.md) / [`preseason.md`](preseason.md) define **tasks** that gate **Advance week** on the Dashboard.
+
+---
+
+## Still tuning (numbers / small gaps)
+
+Listed in [`README.md#still-tuning-not-missing-specs`](README.md#still-tuning-not-missing-specs). Includes recruit interest JSON weights, Recommended bands, `winSharesSeason`, URL pack signing.
 
 ---
 
@@ -83,24 +124,7 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | Date | Change |
 |------|--------|
 | 2025-11-08 | Tracker from user follow-up batch |
-| 2025-11-08 | NIL on Overview; clarify future docs vs backlog |
-| 2025-11-08 | Coach card + School Staff |
-| 2025-11-08 | recruiting-engine.md |
-| 2025-11-08 | Full-product restore pass (staff, walk-ons, gameplan, secondary postseason) |
-| NCBA / NCI / early events | **Done** | [`ncba-branding.md`](ncba-branding.md) |
-| Postseason selection | **Done** | [`postseason.md`](postseason.md) |
-| Selection engine (poll + seed) | **Done** | [`selection-engine.md`](selection-engine.md) |
-| Postseason UI (March Mayhem) | **Done** | [`postseason-frame.md`](postseason-frame.md) |
-| Game start / new dynasty | **Done** | [`game-start.md`](game-start.md) |
-| Offseason calendar | **Done** | [`offseason.md`](offseason.md) |
-| Preseason setup | **Done** | [`preseason.md`](preseason.md) |
-| Time system (weeks/byes) | **Done** | [`time-system.md`](time-system.md) |
-| End of Season week | **Done** | [`season-review.md`](season-review.md) |
-| App shell (studio / splash) | **Done** | [`app-shell.md`](app-shell.md) |
-| Implementation build order | **Done** | [`docs/BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
-| 2026-11-09 | App-update save compatibility rule | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility) |
-| 2026-11-09 | Unified shell + week advance + dashboard task gate | [`game-frame.md`](game-frame.md) |
-| 2026-11-09 | BUILD_CHECKLIST sync for locked recruiting, portal, news, loyalty, dashboard | [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
-| 2026-11-09 | No in-season portal; `notifications.md` **Done** | [`notifications.md`](notifications.md) |
-| 2026-11-09 | Recruit interest model merged; weights stay proposals | [`recruiting-engine.md`](recruiting-engine.md#interest--offers) |
-| 2026-11-09 | Recruiting interest **open questions resolved** (priorities, Influence board, NIL overpay) | [`recruiting-engine.md`](recruiting-engine.md#resolved-decisions-was-open-questions) |
+| 2025-11-08 | NIL on Overview; coach card; recruiting-engine; full-product restore pass |
+| 2026-11-09 | Unified shell; BUILD_CHECKLIST sync; notifications Done; no in-season portal |
+| 2026-11-09 | Interest model + resolved open questions; in-season systems; NIL Budget |
+| 2026-11-09 | **Planning index** — [`README.md`](README.md); tracker regrouped |
