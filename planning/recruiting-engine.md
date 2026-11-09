@@ -1,14 +1,14 @@
 # Recruiting engine
 
-**Context:** HS/JUCO pools **seeded in preseason** (Top 60 visible all season); **4-week** recruiting period in **offseason** for offers/commits.  
+**Context:** HS/JUCO pools **seeded in preseason** (Top 60 all season); **year-long recruiting cycle** (spend preseason → signing at offseason week 5); **in-season week advance = games only**.  
 **Companion:** Offseason calendar [`offseason.md`](offseason.md), NIL [`game-design.md`](game-design.md#nil--program-economy), player display [`player-cards.md`](player-cards.md), archetypes [`player-archetypes.md`](player-archetypes.md).  
-**Last updated:** 2025-11-08
+**Last updated:** 2026-11-09
 
 ---
 
 ## Contents
 
-1. [Timeline & seeding](#timeline--seeding)
+1. [Timeline & seeding](#timeline--seeding) — includes [year-long cycle](#year-long-recruiting-cycle-design-lock)
 2. [Pools & scale](#pools--scale)
 3. [Star distribution](#star-distribution)
 4. [Hidden ratings & letter grades](#hidden-ratings--letter-grades)
@@ -33,14 +33,84 @@
 |------|------|
 | **Preseason** (task **Incoming Class Seed** — [`preseason.md`](preseason.md)) | Generate **HS** and **JUCO** pools for the **next enrolling class**; roll hidden ratings; assign **stars**; compute **Top 60** national order |
 
-Seeding in **preseason** — not offseason — so **Top 60 recruits** live in **News** for the entire **regular season** (November–March). The class is already ranked while you coach; **recruiting spend** (points, NIL, offers) opens in **offseason weeks 2–5** only ([`offseason.md`](offseason.md)).
+Seeding in **preseason** — not offseason — so **Top 60 recruits** live in **News** for the entire **regular season**. **Recruiting spend** is a **year-long cycle** ([below](#year-long-recruiting-cycle-design-lock)), not a single offseason burst.
 
 | Phase | HS/JUCO access |
 |-------|----------------|
-| **Regular season** | **Top 60** + read-only class browse (letters/stars); **no** offers or commits |
-| **Offseason weeks 6–9** | Full **Recruiting** board — scout, spend, sign ([Four-week recruiting period](#four-week-recruiting-period)) |
+| **Preseason → Signing (offseason week 5)** | Full **Recruiting** hub — scout, spend points/NIL, soft commits in-season; **hard sign** at cycle close |
+| **After signing close** | Board read-only for enrolled class; next class seeds next **preseason** |
 
 **New dynasty:** **Season 1** runs the same **preseason seed** before the first exhibitions so **Top 60** is available from tipoff of year one.
+
+---
+
+## Year-long recruiting cycle (design lock)
+
+**Goal:** Recruiting feels like a **full-year job** (class revealed in preseason, relationships built during the season, signing after the year) **without** slowing week-to-week play.
+
+### Speed contract (with [`game-frame.md`](game-frame.md))
+
+| Rule | Detail |
+|------|--------|
+| **In-season advance gate** | **Scheduled games only** — not recruiting |
+| **Recruiting is optional each week** | Skip the hub for weeks; still advance after games |
+| **AI on week advance** | Non-user schools spend their weekly drip and move interest/commits when you advance |
+| **Automation** | Optional **auto-maintain board** (game-design) burns drip on watchlist — user sets caps |
+
+### Cycle arc (one enrolling class)
+
+```
+Preseason (class seed)
+    → Exhibitions + RS weeks 1–32 + conf/postseason
+    → End of Season
+    → Offseason W1 (retention; portal entries)
+    → Offseason W2–W5  ← Signing crunch (× point multiplier still applies)
+    → Offseason W5 close = SIGNING DAY (hard commits lock)
+    → … later weeks roster/facilities …
+    → Next preseason = next class seed
+```
+
+| Anchor | Calendar |
+|--------|----------|
+| **Cycle opens** | Preseason **Incoming Class Seed** completes — pools + Top 60 published |
+| **Cycle closes** | Offseason **week 5** (**Recruiting week 4** — signing) |
+| **Portal sub-cycle** | Entrants from offseason **week 1**; portal sub-tab spend when window is open ([`offseason.md`](offseason.md)) — same hub, not a second app |
+
+### Weekly economy (replaces “4 weeks only” allowance)
+
+- **Annual recruiting-point budget** set at cycle open (prestige, grades, last year’s results — same drivers as [Budget setup](#budget-setup-annual)).
+- **Every week advance** while the cycle is open (preseason week through offseason week 5):
+  - Grant **weekly recruiting-point drip** (total over the year ≈ former 4-week sprint totals).
+  - **50% carryover** of unspent points to the next week (unchanged).
+  - **NIL** remains **annual pool**; allocate anytime before hard sign.
+- **Signing crunch:** Offseason weeks **2–5** apply a **multiplier** on the weekly drip (e.g. **1.5×**) so the natural “closing period” still matters without being the only time you can act.
+
+**Tunable default (starting point for balance JSON):**
+
+| Segment | Weeks (approx.) | Drip weight |
+|---------|-----------------|-------------|
+| Preseason | 1 | 1.0× |
+| Exhibition + RS + byes | ~35 | 1.0× |
+| Postseason + End of Season | ~8+1 | 1.0× (no games ≠ no drip) |
+| Offseason W1 | 1 | 0.5× (retention focus; portal opens) |
+| Offseason W2–W5 | 4 | 1.5× crunch |
+
+User who touches recruiting **3–5 min every other week** keeps pace; user who ignores it until crunch can still close in offseason W2–W5 with crunch multiplier + banked carryover (if any).
+
+### Commits
+
+| Type | When |
+|------|------|
+| **Soft commit** | Anytime interest + offer thresholds met (including **in-season**) |
+| **Hard commit / sign** | **Signing close** at end of offseason **week 5** (binding; NIL snapshot) |
+| **Decommit** | Allowed before hard sign; prestige hit per existing rules |
+
+Headlines in **News** for blue-chip commits league-wide; your targets surface as dashboard **notifications**, not **advance blockers**.
+
+### What does *not* change
+
+- Star bands, pool sizes, no visits, Top 60 fixed at seed, combined HS/JUCO board, portal sub-tab, walk-ons after main window.
+- **Four recruiting week indices (R1–R4)** still map to **offseason weeks 2–5** for copy, NIL peaks, and crunch multiplier — they are **not** the only weeks you can spend.
 
 ### Transfer portal
 
@@ -51,18 +121,18 @@ Seeding in **preseason** — not offseason — so **Top 60 recruits** live in **
 
 Portal star bands use the **portal pool only** (see [Star distribution](#star-distribution)); portal 5★ count is **not** reduced because HS had forty 5★s.
 
-### Four-week recruiting period
+### Signing period (R1–R4)
+
+**Naming:** R1–R4 = offseason weeks **2–5** — **signing crunch** (1.5× drip), not the only weeks you can spend ([year-long cycle](#year-long-recruiting-cycle-design-lock)).
 
 | Recruiting week | Offseason anchor | Highlights |
 |-----------------|----------------------|------------|
-| **1** | Offseason **week 2** | Portal **opens**; **NBA draft results**; scholarships open; HS/JUCO spend opens (pool seeded last preseason) |
-| **2** | Offseason **week 3** | Full spend of weekly recruiting points / NIL |
-| **3** | Offseason **week 4** | Peak commits & NIL pushes |
-| **4** | Offseason **week 5** | Signing close; hard commits lock |
+| **R1** | Offseason **week 2** | Portal **sub-tab** peak; **NBA draft results**; scholarships open after draft |
+| **R2** | Offseason **week 3** | Peak offers; NIL pushes |
+| **R3** | Offseason **week 4** | Commit wave; head-to-head resolution |
+| **R4** | Offseason **week 5** | **Signing close**; hard commits lock |
 
-**No in-season HS/JUCO recruiting actions** — offers/commits only in offseason **weeks 2–5**. Week 1 = **retention** on your roster only ([`offseason.md`](offseason.md#week-1--players-leaving)). (Portal in-season remains ruleset-toggled in game-design.)
-
-User advances **week** only; recruiting obligations gate **Advance week** on the dashboard ([`game-frame.md`](game-frame.md#dashboard-task-gate)).
+Week 1 offseason = **retention** on your roster ([`offseason.md`](offseason.md#week-1--players-leaving)). During **in-season**, recruiting **never** gates **Advance week** ([`game-frame.md`](game-frame.md#dashboard-task-gate)).
 
 ---
 
@@ -179,7 +249,7 @@ Mapping A–F → points is data-driven JSON; **better letter → higher prestig
 
 ## Resources: recruiting points & NIL
 
-Two spend tracks each **recruiting week**:
+Two spend tracks while the **recruiting cycle** is open:
 
 | Resource | Use |
 |----------|-----|
@@ -199,14 +269,11 @@ Annual pools set at **recruiting phase start** (and previewable when class seeds
 
 ### Weekly allowance
 
-Each of **4 recruiting weeks**, user receives:
-
-- **Recruiting points** weekly allowance (see carryover below)
-- Ability to assign / adjust **NIL dollars** toward targets (subject to annual NIL cap)
+See [Year-long recruiting cycle](#year-long-recruiting-cycle-design-lock): drip **each week advance** while the cycle is open, with **signing crunch** multiplier in offseason weeks 2–5.
 
 **Carryover (design lock):** at week end, **50%** of **unspent recruiting points** roll into the next week’s pool (rounded down). The other 50% expires. NIL unspent does **not** roll week-to-week unless tied to an annual pool remainder rule in NIL doc (annual pool cap only).
 
-Coach upgrades purchased during offseason may increase **week 1** totals or per-week drip.
+Coach upgrades may increase **base drip** or annual pool at cycle open.
 
 ---
 
@@ -234,7 +301,7 @@ Coach upgrades purchased during offseason may increase **week 1** totals or per-
 
 ### Entry
 
-Offseason shell (dedicated frame TBD) or hub from dashboard notification — **Recruiting** opens 4-week board.
+**Hamburger → Recruiting** (same dynasty shell — [`game-frame.md`](game-frame.md)). Optional **dashboard notification** when a watchlist recruit commits; **never** an advance blocker in-season.
 
 ### Tabs
 
@@ -325,7 +392,7 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | Prestige | School hub grades, fundraising |
 | Coach recruiting | [`coach-card.md`](coach-card.md) ratings |
 | Archetype | [`player-archetypes.md`](player-archetypes.md) hidden tag |
-| Offseason weeks 2–5 | This 4-week window |
+| Offseason weeks 2–5 | Signing crunch (R1–R4); 1.5× weekly drip |
 
 ---
 
@@ -338,11 +405,14 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | **Visits** | **None** — points-only actions |
 | **Top 60 (recruits)** | **Fixed** after class seed |
 | **HS class size** | **Uniform random 2,000–4,000** per season |
+| **Year-long cycle** | Spend preseason → signing (OS week 5); **games-only** advance gate in-season |
+| **Signing crunch** | **1.5×** weekly drip offseason weeks 2–5 (tunable in balance bundle) |
 
 ## Open / TBD
 
 | Topic | Notes |
 |-------|--------|
+| Drip weights & annual point totals | Tune in `balance-2026.json` when loaders ship |
 | ~~Offseason frame UI~~ | **Resolved** — tasks in [`offseason.md`](offseason.md) + shell in [`game-frame.md`](game-frame.md) |
 
 ---
@@ -357,3 +427,4 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | 2025-11-08 | Walk-ons + Portal Top 40 full product specs |
 | 2025-11-08 | HS/JUCO seed in preseason; Top 60 during regular season |
 | 2025-11-08 | Recruiting pipeline uses homeState; schools also store homeCity |
+| 2026-11-09 | Year-long recruiting cycle; in-season games-only advance gate; signing crunch weeks |

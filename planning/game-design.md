@@ -319,7 +319,7 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 
 **Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — 4-week period, 2–4K HS + 1.5K JUCO, portal sub-tab, recruiting points + NIL, letter grades, prestige 0–99.
 
-**Brief:** HS/JUCO class **seeded in preseason** (**Top 60** in News all regular season); **no in-season recruiting actions**; **4-week** spend **offseason weeks 2–5**; portal board active weeks **2–5**; draft results **offseason week 2**; star bands **per pool** (top 2% = 5★); combined HS/JUCO board; **A–F** scout view; **no campus visits**; **50%** point carryover week-to-week.
+**Brief:** HS/JUCO class **seeded in preseason** (**Top 60** in News); **year-long recruiting cycle** — spend from preseason through **signing (offseason week 5)** with **weekly point drip**; **in-season week advance gated by games only**; **signing crunch** bonus in offseason weeks **2–5**; portal board active when portal window opens; draft results **offseason week 2**; star bands **per pool**; **A–F** scout; **no visits**; **50%** point carryover. Full arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
 
 ---
 

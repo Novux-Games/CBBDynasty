@@ -64,7 +64,7 @@
 |-------|-----------------------------------------------|
 | **Offseason** | Weekly obligations — retention, portal, recruiting spend, cuts, etc. ([`offseason.md`](offseason.md)) |
 | **Preseason** | Full **8-task** checklist ([`preseason.md`](preseason.md#task-checklist)) |
-| **Exhibition / RS** | User **game day** obligations when scheduled (prep, sim or play) + any other dashboard flags (e.g. Sunday coach points acknowledged) |
+| **Exhibition / RS / conf tourney / postseason** | **Games only** — prep + sim/play when you have a scheduled game; byes need no action. **Recruiting does not gate advance** (year-long cycle in hub — [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock)) |
 | **Conf / national postseason** | Play or sim **your** game when scheduled; byes do not block advance |
 | **End of Season** | Season review acknowledged → advance to offseason ([`season-review.md`](season-review.md)) |
 

@@ -160,18 +160,18 @@ Week 1 does **not** post final draft order — results publish in **Week 2**.
 
 **Labels:** **Offseason Week 2** … **Week 5** · shared shell **Recruiting & Transfer Portal**
 
-Authoritative recruiting rules: [`recruiting-engine.md`](recruiting-engine.md). **Anchor change:** HS/JUCO + portal **spend** is **offseason weeks 2–5** (not legacy weeks 6–9).
+Authoritative recruiting rules: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock). **Spend** is **year-long** (preseason through week 5); these four weeks are **signing crunch** (1.5× drip, portal peak).
 
 | Week | Highlights |
 |------|------------|
-| **2** | Board open; **NBA draft results** posted (graduates / early entrants leave); scholarships open; portal **sub-tab** active |
-| **3** | Peak offers; weekly recruiting points + NIL spend |
-| **4** | Commits; NIL pushes |
-| **5** | Signing close; hard commits lock |
+| **2** | **R1** — **NBA draft results**; scholarships open; portal **sub-tab** peak; signing crunch begins |
+| **3** | **R2** — Peak offers; NIL pushes |
+| **4** | **R3** — Commit wave |
+| **5** | **R4** — **Signing close**; hard commits lock |
 
-**Portal:** Incoming class from league-wide entries (including your Week 1 losses). **HS/JUCO:** Pool seeded **last preseason** ([`recruiting-engine.md`](recruiting-engine.md)); spends only in these weeks.
+**Portal:** Incoming class from league-wide entries (including your Week 1 losses). **HS/JUCO:** Pool seeded **last preseason**; user may have been spending all season — crunch weeks close the class.
 
-**Recruiting week index** (doc convention): R1 = offseason week 2, … R4 = offseason week 5.
+**Recruiting week index:** R1 = offseason week 2, … R4 = offseason week 5.
 
 ---
 
