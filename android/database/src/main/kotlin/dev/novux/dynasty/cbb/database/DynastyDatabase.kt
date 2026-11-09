@@ -20,7 +20,7 @@ import dev.novux.dynasty.cbb.database.save.SaveSlotEntity
         DynastyCalendarEntity::class,
         ProvisionalGameEntity::class,
     ],
-    version = 3,
+    version = 4,
     exportSchema = false,
 )
 @androidx.room.TypeConverters(Converters::class)
@@ -38,7 +38,7 @@ abstract class DynastyDatabase : RoomDatabase() {
 
         fun build(context: Context): DynastyDatabase =
             Room.databaseBuilder(context, DynastyDatabase::class.java, DB_NAME)
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                 .build()
     }
 }

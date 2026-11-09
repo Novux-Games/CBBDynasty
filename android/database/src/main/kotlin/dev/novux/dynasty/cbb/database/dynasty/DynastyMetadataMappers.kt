@@ -9,6 +9,10 @@ fun DynastyMetadataEntity.toDomain(): DynastyMetadata =
         phase = phase,
         packId = packId,
         dynastySchemaVersion = dynastySchemaVersion,
+        balanceRulesetId = balanceRulesetId,
+        balanceSchemaVersion = balanceSchemaVersion,
+        simTuningId = simTuningId,
+        simSchemaVersion = simSchemaVersion,
     )
 
 fun DynastyMetadata.toEntity(): DynastyMetadataEntity =
@@ -18,4 +22,8 @@ fun DynastyMetadata.toEntity(): DynastyMetadataEntity =
         phase = phase,
         packId = packId,
         dynastySchemaVersion = dynastySchemaVersion,
+        balanceRulesetId = balanceRulesetId,
+        balanceSchemaVersion = balanceSchemaVersion,
+        simTuningId = simTuningId,
+        simSchemaVersion = simSchemaVersion,
     )

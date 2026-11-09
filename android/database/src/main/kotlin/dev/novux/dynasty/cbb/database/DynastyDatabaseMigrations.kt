@@ -2,6 +2,36 @@ package dev.novux.dynasty.cbb.database
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import dev.novux.dynasty.cbb.core.save.DynastySchema
+
+val MIGRATION_3_4 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            ALTER TABLE dynasty_metadata ADD COLUMN balanceRulesetId TEXT NOT NULL
+            DEFAULT '${DynastySchema.DEFAULT_BALANCE_RULESET_ID}'
+            """.trimIndent(),
+        )
+        db.execSQL(
+            """
+            ALTER TABLE dynasty_metadata ADD COLUMN balanceSchemaVersion INTEGER NOT NULL
+            DEFAULT ${DynastySchema.DEFAULT_BALANCE_SCHEMA_VERSION}
+            """.trimIndent(),
+        )
+        db.execSQL(
+            """
+            ALTER TABLE dynasty_metadata ADD COLUMN simTuningId TEXT NOT NULL
+            DEFAULT '${DynastySchema.DEFAULT_SIM_TUNING_ID}'
+            """.trimIndent(),
+        )
+        db.execSQL(
+            """
+            ALTER TABLE dynasty_metadata ADD COLUMN simSchemaVersion INTEGER NOT NULL
+            DEFAULT ${DynastySchema.DEFAULT_SIM_SCHEMA_VERSION}
+            """.trimIndent(),
+        )
+    }
+}
 
 val MIGRATION_2_3 = object : Migration(2, 3) {
     override fun migrate(db: SupportSQLiteDatabase) {

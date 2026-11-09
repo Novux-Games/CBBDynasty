@@ -115,7 +115,8 @@ Swapping identity pack **does not** change `balanceRulesetId` / `balanceSchemaVe
 
 ## Consequences
 
-- Implement `balanceRulesetId` + `balanceSchemaVersion` on `DynastyMetadata` + Room migration when bootstrap work lands (Phase 4.6).
+- ~~Implement `balanceRulesetId` + `balanceSchemaVersion` on `DynastyMetadata`~~ — Room `dynasty_metadata` v4 (`MIGRATION_3_4`); pinned in `DynastyBootstrap.newDynasty`.
+- Implement `simTuningId` + `simSchemaVersion` on same row (ADR-003).
 - Implement `BalanceRulesetRepository` (mirror `PackRepository` pattern): load pinned revision for active dynasty.
 - Update [`selection-engine.md`](../planning/selection-engine.md) §Tuning to reference this ADR and file path (not `pack ruleset.*`).
 - CI (future): `:core:test` validates `balance-2026.json` on every PR.

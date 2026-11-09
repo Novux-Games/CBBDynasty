@@ -11,4 +11,8 @@ data class DynastyMetadataEntity(
     val phase: CalendarPhase,
     val packId: String,
     val dynastySchemaVersion: Int,
+    val balanceRulesetId: String,
+    val balanceSchemaVersion: Int,
+    val simTuningId: String,
+    val simSchemaVersion: Int,
 )

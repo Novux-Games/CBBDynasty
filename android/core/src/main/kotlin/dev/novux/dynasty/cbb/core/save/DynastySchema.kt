@@ -9,4 +9,14 @@ object DynastySchema {
 
     /** Asset path inside the APK (mirror of repo `assets/pack/`). */
     const val EMBEDDED_PACK_ASSET = "pack/embedded-default.json"
+
+    /** Shipped balance bundle — [docs/ADR-002-balance-ruleset-bundle.md]. */
+    const val DEFAULT_BALANCE_RULESET_ID = "balance-2026"
+    const val DEFAULT_BALANCE_SCHEMA_VERSION = 1
+    const val EMBEDDED_BALANCE_ASSET = "balance/balance-2026.json"
+
+    /** Shipped sim tuning bundle — [docs/ADR-003-sim-tuning-bundle.md]. */
+    const val DEFAULT_SIM_TUNING_ID = "sim-tuning"
+    const val DEFAULT_SIM_SCHEMA_VERSION = 1
+    const val EMBEDDED_SIM_TUNING_ASSET = "sim/sim-tuning.json"
 }
