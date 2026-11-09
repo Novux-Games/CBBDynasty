@@ -16,6 +16,7 @@ import dev.novux.dynasty.cbb.core.settings.AppSettings
 import dev.novux.dynasty.cbb.data.settings.AppSettingsRepository
 import dev.novux.dynasty.cbb.requireDynastyApplication
 import dev.novux.dynasty.cbb.ui.navigation.AppRoute
+import dev.novux.dynasty.cbb.ui.shell.CreditsScreen
 import dev.novux.dynasty.cbb.ui.shell.HomeMenuScreen
 import dev.novux.dynasty.cbb.ui.shell.SettingsScreen
 import dev.novux.dynasty.cbb.ui.shell.SplashScreen
@@ -78,8 +79,11 @@ fun DynastyApp(
                         onNew = { },
                         onLoad = { },
                         onSettings = { navController.navigate(AppRoute.Settings.route) },
-                        onCredits = { },
+                        onCredits = { navController.navigate(AppRoute.Credits.route) },
                     )
+                }
+                composable(AppRoute.Credits.route) {
+                    CreditsScreen(onBack = { navController.popBackStack() })
                 }
                 composable(AppRoute.Settings.route) {
                     SettingsScreen(

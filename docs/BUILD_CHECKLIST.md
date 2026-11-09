@@ -37,7 +37,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 1.1 | `[x]` Wire `Public-Assets/app-logo.svg` on splash | Logo renders sharp on `#181a25` | [branding](../planning/branding.md) | `SplashScreen`, `drawable-nodpi/app_logo.png` |
 | 1.2 | `[x]` Novux studio lockup from `Novux_Logos/` | Studio screen ≠ game splash | [app-shell](../planning/app-shell.md) | `StudioScreen`, `novux_studio_lockup.png` |
 | 1.3 | `[x]` Settings: skip studio intro, audio stubs | Flags persist | [game-start](../planning/game-start.md) | `data/settings/AppSettingsRepository` |
-| 1.4 | `[ ]` Credits + unofficial disclaimer screen | Legal copy from branding | [branding](../planning/branding.md) | `ui.shell` |
+| 1.4 | `[x]` Credits + unofficial disclaimer screen | Legal copy from branding | [branding](../planning/branding.md) | `CreditsScreen` |
 | 1.5 | `[ ]` Adaptive icon matches `Public-Assets/adaptive-icon/` | Launcher icon on device | [branding](../planning/branding.md) | `res/mipmap` |
 
 ---

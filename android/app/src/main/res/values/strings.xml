@@ -21,4 +21,10 @@
     <string name="settings_master_volume">Master volume</string>
     <string name="settings_master_volume_value">%1$d%%</string>
     <string name="settings_back">Back</string>
+    <string name="credits_publisher">Published by %1$s</string>
+    <string name="credits_website">https://novux.dev</string>
+    <string name="credits_section_disclaimer">Unofficial simulation</string>
+    <string name="credits_unofficial_disclaimer">Dynasty: College Basketball is an unofficial college basketball simulation. It is not affiliated with, endorsed by, or sponsored by the NCAA, its conferences, or any member institutions. Team and conference identities in the default game use a fictional universe; real school names and marks are not used in the base release.</string>
+    <string name="credits_section_oss">Open source</string>
+    <string name="credits_oss_notice">Game source code is available under the Apache License 2.0. Game logos and brand assets remain © Novux Games. Third-party libraries retain their respective licenses.</string>
 </resources>

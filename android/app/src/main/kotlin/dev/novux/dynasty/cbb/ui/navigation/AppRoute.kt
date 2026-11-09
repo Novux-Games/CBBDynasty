@@ -12,5 +12,7 @@ sealed class AppRoute(val route: String) {
 
     data object Settings : AppRoute("settings")
 
+    data object Credits : AppRoute("credits")
+
     data object NewGame : AppRoute("new_game")
 }
