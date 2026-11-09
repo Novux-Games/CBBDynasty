@@ -27,6 +27,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 0.2 | `[x]` Studio → Splash → Home Compose nav | Manual cold start flow | [app-shell](../planning/app-shell.md) | `ui.shell`, `DynastyApp` |
 | 0.3 | `[x]` CI workflow (`:core:test` on every PR) | GitHub Action passes | — | `.github/workflows/core-test.yml` |
 | 0.4 | `[x]` Android assemble on tag/manual | `:app:assembleDebug` artifact | — | `.github/workflows/android-assemble-debug.yml` |
+| 0.5 | `[ ]` Save migration test on Room bump | Prior-version fixture loads after migrate | [ADR-001](ADR-001-dynasty-save-backend.md#app-updates--save-compatibility), [planning-notes](../planning/planning-notes.md) | `:database` test |
 
 ---
 

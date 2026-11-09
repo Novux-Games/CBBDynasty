@@ -18,6 +18,26 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | NIL on player card | **Overview valuation** (recruiting commit) | [`player-cards.md`](player-cards.md) |
 | GOAT / History depth | **Specced** (computed GOAT list) | [`game-frame.md`](game-frame.md#history-hub) |
 | Notifications | Use game-design mobile UX list | [`game-design.md`](game-design.md) |
+| App updates vs saves | **Rule:** ship migrations; old slots keep working | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility), [`ADR-002`](../docs/ADR-002-balance-ruleset-bundle.md) |
+
+---
+
+## Engineering rule — app updates must not break saves
+
+**Policy:** Every store / APK update is **backward compatible** with existing dynasty slots on device. Players who update **keep** their careers; we **migrate** data when the DB shape changes — never “wipe and resync” as the default.
+
+| Requirement | Meaning |
+|-------------|---------|
+| **Load after update** | Occupied slots open; calendar + metadata remain coherent (repair only when already corrupt — checklist 2.5) |
+| **Room changes** | Every schema bump ships a **Migration** (or tested destructive path only for empty slots — never for occupied rows without migration) |
+| **Tuning / balance** | Existing dynasties keep **pinned** balance + sim revisions from create ([ADR-002](../docs/ADR-002-balance-ruleset-bundle.md)); app updates do **not** silently re-roll NET or sim math mid-career |
+| **Shipped asset retention** | While any save references `balanceSchemaVersion` / `simSchemaVersion` **N**, the APK keeps the JSON (or loader mapping) needed to load **N** |
+| **Forward-only features** | New columns default safely; new systems attach without rewriting history |
+| **No player copy** | Migrations are silent — no “save version upgraded” UI unless we add optional release notes |
+
+**Not promised:** hand-edited exports, slots already broken before update, or infinite support for ancient `dynastySchemaVersion` without export — see ADR-001 for export fallback.
+
+**CI (target):** migration tests + load fixture save across version bump before release.
 
 ---
 
@@ -55,3 +75,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | End of Season week | **Done** | [`season-review.md`](season-review.md) |
 | App shell (studio / splash) | **Done** | [`app-shell.md`](app-shell.md) |
 | Implementation build order | **Done** | [`docs/BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
+| 2026-11-09 | App-update save compatibility rule | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility) |

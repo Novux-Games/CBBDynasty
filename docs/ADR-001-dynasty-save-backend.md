@@ -59,6 +59,23 @@ JSON stays appropriate for **identity pack import** and for **dynasty export fil
 - Room `version` + **migrations** for every schema change.
 - `dynastySchemaVersion` on each dynasty row for one-off data migrations if needed.
 
+## App updates & save compatibility
+
+**Product rule** ([`planning/planning-notes.md`](../planning/planning-notes.md)): shipping a new build **must not invalidate** existing on-device dynasty slots. Updates **load old saves** and **migrate** when structure changes.
+
+| Layer | On update |
+|-------|-----------|
+| **SQLite / Room** | `Migration` for every `version` bump; occupied slots never rely on uninstall or clear-data |
+| **Dynasty data** | `dynastySchemaVersion` triggers one-off Kotlin migrations (fill defaults, backfill ids) |
+| **Balance / sim tuning** | Saves keep **pinned** `balanceRulesetId` + `simTuningId` / schema versions ([ADR-002](ADR-002-balance-ruleset-bundle.md), [ADR-003](ADR-003-sim-tuning-bundle.md)); APK retains bundled JSON for revisions still referenced |
+| **Identity pack** | `packId` on save; embedded or restored overlay — pack swap does not rewrite simulation rows |
+
+**Possible?** Yes, with discipline: explicit migrations, frozen tuning per dynasty, and keeping old tuning assets (or explicit data migration) while saves reference them.
+
+**Out of scope for “must work”:** saves already failing validation, manually corrupted exports, or unsupported ancient app versions after a documented floor (offer **export** before deprecation).
+
+**Release gate (target):** open a fixture dynasty from prior DB version after migration in instrumented or integration test before tagging.
+
 ## Integrity & recovery
 
 - **Primary:** transactional writes (slot + metadata + calendar) so normal play does not leave half saves.
