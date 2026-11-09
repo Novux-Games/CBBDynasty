@@ -1,0 +1,14 @@
+package dev.novux.dynasty.cbb.ui.navigation
+
+/**
+ * Pre-dynasty shell — [planning/app-shell.md], [planning/game-start.md].
+ */
+sealed class AppRoute(val route: String) {
+    data object Studio : AppRoute("studio")
+
+    data object Splash : AppRoute("splash")
+
+    data object Home : AppRoute("home")
+
+    data object NewGame : AppRoute("new_game")
+}

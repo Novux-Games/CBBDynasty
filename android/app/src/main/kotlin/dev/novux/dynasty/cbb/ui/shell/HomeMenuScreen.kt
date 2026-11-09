@@ -1,0 +1,81 @@
+package dev.novux.dynasty.cbb.ui.shell
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.GameConstants
+
+/** Pre-dynasty home — [planning/game-start.md#home-screen]. */
+@Composable
+fun HomeMenuScreen(
+    hasSave: Boolean,
+    onContinue: () -> Unit,
+    onNew: () -> Unit,
+    onLoad: () -> Unit,
+    onSettings: () -> Unit,
+    onCredits: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 32.dp, vertical = 48.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+    ) {
+        Text(
+            text = GameConstants.GAME_TITLE,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+        )
+
+        if (hasSave) {
+            Button(
+                onClick = onContinue,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(R.string.menu_continue))
+            }
+        }
+
+        Button(
+            onClick = onNew,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(stringResource(R.string.menu_new))
+        }
+
+        OutlinedButton(
+            onClick = onLoad,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(stringResource(R.string.menu_load))
+        }
+
+        OutlinedButton(
+            onClick = onSettings,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(stringResource(R.string.menu_settings))
+        }
+
+        OutlinedButton(
+            onClick = onCredits,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(stringResource(R.string.menu_credits))
+        }
+    }
+}
