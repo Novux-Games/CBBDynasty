@@ -4,10 +4,13 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.MaterialTheme
@@ -71,23 +74,27 @@ fun StudioScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .clickable(enabled = skipEnabled, onClick = advance),
-        contentAlignment = Alignment.Center,
+            .clickable(enabled = skipEnabled, onClick = advance)
+            .alpha(logoAlpha),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .padding(horizontal = 32.dp)
-                .alpha(logoAlpha),
+                .align(Alignment.Center)
+                .padding(horizontal = 40.dp)
+                .padding(bottom = 72.dp),
         ) {
             Image(
                 painter = painterResource(R.drawable.novux_studio_lockup),
                 contentDescription = GameConstants.STUDIO_NAME,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .fillMaxWidth(0.88f)
-                    .sizeIn(maxHeight = 200.dp),
+                    .fillMaxWidth(0.82f)
+                    .sizeIn(maxHeight = 168.dp),
             )
+
+            Spacer(modifier = Modifier.height(40.dp))
 
             Text(
                 text = stringResource(
@@ -98,23 +105,25 @@ fun StudioScreen(
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 20.dp),
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = stringResource(R.string.studio_website),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 4.dp),
-            )
-
-            Text(
-                text = "Tap to continue",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = 40.dp),
             )
         }
+
+        Text(
+            text = "Tap to continue",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 56.dp),
+        )
     }
 }

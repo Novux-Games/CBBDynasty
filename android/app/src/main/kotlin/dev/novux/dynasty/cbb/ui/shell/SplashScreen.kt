@@ -2,11 +2,12 @@ package dev.novux.dynasty.cbb.ui.shell
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.CircularProgressIndicator
@@ -42,75 +43,69 @@ fun SplashScreen(onTapToPlay: () -> Unit) {
         ready = true
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.padding(horizontal = 32.dp),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(horizontal = 32.dp)
+                .padding(bottom = 48.dp),
         ) {
             Image(
                 painter = painterResource(R.drawable.app_logo),
-                contentDescription = GameConstants.GAME_TITLE,
+                contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .fillMaxWidth(0.72f)
-                    .sizeIn(maxHeight = 260.dp)
-                    .padding(bottom = 8.dp),
+                    .fillMaxWidth(0.68f)
+                    .sizeIn(maxHeight = 240.dp),
             )
+
+            Spacer(modifier = Modifier.height(48.dp))
 
             Text(
                 text = GameConstants.GAME_TITLE,
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 28.dp),
             )
 
             if (!ready) {
-                CircularProgressIndicator(modifier = Modifier.padding(top = 12.dp))
+                CircularProgressIndicator(modifier = Modifier.padding(top = 28.dp))
             } else {
                 Text(
                     text = stringResource(R.string.tap_to_play),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
-                        .padding(top = 24.dp)
+                        .padding(top = 28.dp)
                         .clickable(onClick = onTapToPlay),
                 )
             }
+        }
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = 40.dp),
-            ) {
-                Text(
-                    text = stringResource(
-                        R.string.splash_copyright,
-                        copyrightYear,
-                        GameConstants.STUDIO_NAME,
-                    ),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                )
-                Text(
-                    text = stringResource(R.string.game_director_line),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(top = 6.dp),
-                )
-                Text(
-                    text = stringResource(R.string.game_director_website),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
-            }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 48.dp),
+        ) {
+            Text(
+                text = stringResource(
+                    R.string.splash_copyright,
+                    copyrightYear,
+                    GameConstants.STUDIO_NAME,
+                ),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+            )
+            Text(
+                text = stringResource(R.string.game_director_line),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 8.dp),
+            )
         }
     }
 }

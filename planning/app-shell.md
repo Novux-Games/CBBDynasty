@@ -104,7 +104,7 @@ App process start
 │     Tap to Play         │  ← when ready
 │                         │
 │   © {year} Novux Games  │
-│   Game Director line    │  ← Austin Buhl / austinbuhltech.com
+│   Game Director line    │  ← Austin Buhl
 └─────────────────────────┘
 ```
 
