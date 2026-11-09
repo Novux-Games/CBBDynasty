@@ -26,7 +26,7 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | Recruiting dashboard tasks | **Done** (triggers) | [`recruiting-engine.md`](recruiting-engine.md#in-season-dashboard-tasks) → index |
 | AI recruiting | **Done** — Recommended parity; **hidden** from UI | [`recruiting-engine.md`](recruiting-engine.md#ai-recruiting) |
 | Recruit rankings UI | **Top 60 full list** — not T25-style | [`recruiting-engine.md`](recruiting-engine.md#national-rankings-top-60) |
-| GOAT / History depth | **Specced** (computed GOAT list) | [`game-frame.md`](game-frame.md#history-hub) |
+| GOAT / History depth | **Done** | [`history-hub.md`](history-hub.md) |
 | Notifications | **Done** | [`notifications.md`](notifications.md) |
 | App updates vs saves | **Rule:** ship migrations; old slots keep working | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility), [`ADR-002`](../docs/ADR-002-balance-ruleset-bundle.md) |
 | Build checklist sync | **Rule:** every **Done** spec → step(s) + [full index](../docs/BUILD_CHECKLIST.md#locked-specs--build-steps-index) | [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |

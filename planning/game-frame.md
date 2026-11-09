@@ -391,17 +391,13 @@ Superset of dashboard News tab. **Authoritative product spec:** [`news-hub.md`](
 
 ## History hub
 
-**Year-by-year cards** (scrollable archive). Each year card expands or drills into detail.
+Hamburger **History** — league archive (year cards, GOAT, national records/HOF). **Authoritative rules:** [`history-hub.md`](history-hub.md).
 
-| Card type | Examples |
-|-----------|----------|
-| **Champions** | National champion by season |
-| **POTY** | Player of the year |
-| **National records** | New record events |
-| **National hall of fame** | League-wide HOF entries |
-| **GOAT list** | **Computed** dynasty archive ranking — composite of win shares, national titles as key contributor, POTY, All-America teams, peak OVR seasons; **top 25** overall + **top 5** per position; refreshes each offseason |
-
-Cards **accumulate** as dynasty seasons complete; national content includes teams beyond user school.
+| UI | Spec |
+|----|------|
+| **Year cards** | Champion, POTY, records, HOF class, GOAT snapshot link — newest first |
+| **GOAT** | Top **25** overall + top **5** per position; recomputed **End of Season week** |
+| **School tabs** | Program season list, record book, program HOF, drafted — same doc |
 
 ---
 

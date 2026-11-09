@@ -18,6 +18,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | [`dashboard-tasks.md`](../planning/dashboard-tasks.md) | 6.14, 6.16, 9.6, 9.7, 9.11; injury optional tasks → **9.6** |
 | [`game-design.md`](../planning/game-design.md) | 2.3, 4.7, 9.3–9.4, 12.1, 14.2, 15.1–15.5, 16.1–16.4; RS cap → **7.3–7.4** |
 | [`game-frame.md`](../planning/game-frame.md) | 6.16, 7.6, 9.1–9.2, 9.6–9.10, 10.5–10.6, 14.3 |
+| [`history-hub.md`](../planning/history-hub.md) | **10.1** `winSharesSeason`, **14.1–14.3**, **9.10**, School hub records/HOF |
 | [`game-start.md`](../planning/game-start.md) | 1.3, 2.2, 2.5, 4.1–4.6 |
 | [`injuries.md`](../planning/injuries.md) | **2.6**, **5.3**, **8.7–8.8**, **9.4**, **9.6–9.8**, **10.2**, **10.8** |
 | [`league-branding.md`](../planning/league-branding.md) + [`2026-NCAA-Directory.md`](../planning/2026-NCAA-Directory.md) | 3.1–3.2, 9.3 |
@@ -257,7 +258,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 |------|--------|-----------|------|------|
 | 14.1 | `[ ]` Season review UI | Grades, prestige, final ranks; **next cycle weekly recruiting pool** preview | [season-review](../planning/season-review.md), [recruiting-engine](../planning/recruiting-engine.md) | `ui.seasonreview` |
 | 14.2 | `[ ]` Awards & news wrap | POTY, coach honors | [game-design](../planning/game-design.md) | — |
-| 14.3 | `[ ]` History hub + GOAT list | [game-frame](../planning/game-frame.md) | `ui.history` |
+| 14.3 | `[ ]` History hub + GOAT + record/HOF passes | Year cards, GOAT top 25/5, triple HOF, record books at EoS | [history-hub](../planning/history-hub.md), [game-frame](../planning/game-frame.md) | `ui.history` |
 | 14.4 | `[ ]` Advance year → offseason carousel | Season 2+ path | [offseason](../planning/offseason.md) | — |
 
 ---
