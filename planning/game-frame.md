@@ -236,6 +236,7 @@ Hamburger opens **hub picker** (overlay or slide drawer):
 | Hub | Purpose |
 |-----|---------|
 | **School** | Your program (see [School hub](#school-hub)); others when scouting |
+| **Recruiting** | Year-long class / portal — opens **Recommended** tab by default ([`recruiting-engine.md`](recruiting-engine.md#recommended-tab-default)); visible when cycle open |
 | **Strategy** | Scheme, rotation, usage |
 | **Statistics** | Leaders (national / conference) |
 | **Rankings** | National **`#1`–`#365`** + **T25** hub + conference standings |

@@ -114,7 +114,7 @@ While the [year-long cycle](#year-long-recruiting-cycle-design-lock) is open, th
 
 | Trigger (examples) | Task copy (examples) |
 |--------------------|-------------------------|
-| **Weekly drip** granted, points still unspent | “Spend recruiting points ({N} available)” → Recruiting hub |
+| **Weekly drip** granted, points still unspent | “Spend recruiting points ({N} available)” → Recruiting hub **Recommended** tab |
 | **Watchlist** recruit crossed interest threshold | “Offer {name}” / “Re-engage {name}” |
 | **New Top 60 movement** on your board | “Review {name} — #{rank}” |
 | **Rival commit** on a shared target | “Respond — {name} trending to {school}” |
@@ -320,17 +320,64 @@ Coach upgrades may increase **base drip** or annual pool at cycle open.
 
 **Hamburger → Recruiting** (always when cycle open) plus **optional dashboard tasks** ([In-season dashboard tasks](#in-season-dashboard-tasks)). Notifications duplicate headlines; tasks carry the **action** entry.
 
+**Default landing:** **Recommended** tab ([below](#recommended-tab-default)) — not All / national lists.
+
 ### Tabs
 
-| Tab | Content |
-|-----|---------|
-| **All (HS + JUCO)** | Combined pool, filters |
-| **High school** | HS filter only |
-| **Junior college** | JUCO filter only |
-| **Transfer portal** | Portal-only sub-tab |
-| **Board / Targets** | User watchlist |
-| **Committed** | Your class |
-| **Lost** | Decommits / chose elsewhere |
+| Tab | Default? | Content |
+|-----|----------|---------|
+| **Recommended** | **Yes** — hub opens here | Prospects **most likely to sign** with your program ([Recommended tab](#recommended-tab-default)) |
+| **All (HS + JUCO)** | | Full combined pool, filters |
+| **High school** | | HS filter only |
+| **Junior college** | | JUCO filter only |
+| **Transfer portal** | Opens on **Recommended** (portal) | Portal pool; portal has its own recommended sort |
+| **Board / Targets** | | User watchlist |
+| **Committed** | | Your class |
+| **Lost** | | Decommits / chose elsewhere |
+
+### Recommended tab (default)
+
+**Design lock:** Help every program — especially **low prestige** — find **winnable** targets instead of scrolling **5★** / **Top 60** prospects they will almost never land.
+
+| UI | Detail |
+|----|--------|
+| **Placement** | First tab left; **selected** whenever user opens Recruiting from hamburger, dashboard task, or deep link |
+| **List size** | **~50** rows (tunable); paginate or “Show more reaches” for browse mode |
+| **Row** | Name, stars, position, home state, letter grades (as scouted), **`signLikelihood` badge**, optional “In state” / “Position need” chips |
+| **Badges** | **Likely** (high), **Possible**, **Reach**, **Long shot** — from `signLikelihood` bands in balance JSON |
+| **Top 60 filter** | National **#1–#5** (and similar elite band) appear on **Recommended** only when `signLikelihood` clears a minimum **or** recruit is **in-state / adjoining pipeline** with strong geography lift — otherwise **hidden** on Recommended (still findable under **All** as explicit **reach**) |
+
+#### `signLikelihood` (per recruit × your school)
+
+Computed when class seeds and **refreshed** on week advance (and when user changes offers / NIL / board). **Not** shown as 0–99 — only the **badge** + sort order.
+
+**Inputs** (same family as [Interest & offers](#interest--offers), evaluated at **zero user spend** unless noted):
+
+| Driver | Effect |
+|--------|--------|
+| **`programPrestige` (0–99) vs recruit tier** | Star band + national percentile / Top 60 rank set a **prestige floor**; gap penalizes likelihood (e.g. **prestige &lt; 40** → top national recruits are **long shots** unless geography saves them) |
+| **Home state / region** | In-state & pipeline states boost; OOT low-prestige matchups penalize |
+| **School grade letters** on recruit priority dims | Facilities-first recruit × weak Facilities → lower |
+| **Roster need** | Open scholarship + position hole → bump |
+| **NIL ask vs your annual pool** | High ask without means → penalize |
+| **Coach + staff recruiting** | Shifts efficiency, not star ceiling |
+| **Competition proxy** | How many higher-prestige schools share state/region on same archetype (lightweight estimate — no full sim) |
+
+**Sort:** `signLikelihood` **desc**, then **position need**, then **in-state**, then stars.
+
+**Low-prestige UX copy (examples):** empty-state never shames — e.g. “**12 likely targets** in your pipeline · **3** in-state **4★**” with links to filters.
+
+#### Portal Recommended
+
+Transfer **portal** sub-tab uses the **same** default tab pattern: **Recommended** (entrants you can realistically land), separate sort pool from HS/JUCO.
+
+#### Product ties
+
+| System | Use |
+|--------|-----|
+| **Dashboard tasks** | Deep link → **Recommended** (not raw All) |
+| **Auto-maintain board** | Prefer top of **Recommended** within user caps ([`game-design.md`](game-design.md)) |
+| **AI user school** on sim-week | Spend drip on **Recommended** order unless user set a watchlist |
 
 ### Filters & actions
 
@@ -425,12 +472,14 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | **Year-long cycle** | Spend preseason → signing (OS week 5); **optional** in-season dashboard tasks |
 | **Sim week** | Advance may auto-sim games + AI user recruiting after confirmation — [`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week) |
 | **Signing crunch** | **1.5×** weekly drip offseason weeks 2–5 (tunable in balance bundle) |
+| **Recommended tab** | **Default** hub tab; `signLikelihood` sort; elite reaches hidden unless realistic |
 
 ## Open / TBD
 
 | Topic | Notes |
 |-------|--------|
 | Drip weights & annual point totals | Tune in `balance-2026.json` when loaders ship |
+| `signLikelihood` bands & prestige–star curve | Tune in balance bundle `recruiting.recommended` |
 | ~~Offseason frame UI~~ | **Resolved** — tasks in [`offseason.md`](offseason.md) + shell in [`game-frame.md`](game-frame.md) |
 
 ---
@@ -447,3 +496,4 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | 2025-11-08 | Recruiting pipeline uses homeState; schools also store homeCity |
 | 2026-11-09 | Year-long recruiting cycle; signing crunch weeks |
 | 2026-11-09 | Optional in-season recruiting dashboard tasks; sim-week advance confirmation |
+| 2026-11-09 | Recommended tab default; signLikelihood for low-prestige fit |

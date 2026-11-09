@@ -320,7 +320,7 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 
 **Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — year-long cycle, 2–4K HS + 1.5K JUCO, portal sub-tab, weekly drip + NIL, letter grades, prestige 0–99.
 
-**Brief:** HS/JUCO class **seeded in preseason** (**Top 60** in News); **year-long recruiting cycle** with **weekly drip**; **optional in-season recruiting dashboard tasks**; advance may **sim week** (auto game + AI recruiting after confirm); **signing crunch** offseason weeks **2–5**; portal sub-tab when window open; **A–F** scout; **no visits**; **50%** carryover. Arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
+**Brief:** HS/JUCO class **seeded in preseason** (**Top 60** in News); **year-long recruiting cycle** with **weekly drip**; **Recommended** tab default (`signLikelihood` for your school); **optional in-season recruiting dashboard tasks**; **sim week** advance when skipped; **signing crunch** offseason weeks **2–5**; **A–F** scout; **no visits**; **50%** carryover. Arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
 
 ---
 
@@ -643,7 +643,7 @@ Universe round labels: [`ncba-branding.md`](ncba-branding.md).
 |--------|----------------|
 | Coach skills | Auto-spend with priority tree |
 | Summer/preseason workouts | Always auto |
-| Recruiting | Auto-maintain board (caps) |
+| Recruiting | Auto-maintain from **Recommended** list (caps) — [`recruiting-engine.md`](recruiting-engine.md#recommended-tab-default) |
 | Non-user games | Always batch sim |
 
 ### Manual must-feel-good
