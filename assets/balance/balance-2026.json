@@ -54,6 +54,80 @@
     "scholarshipLimit": 15,
     "rosterCap": 15
   },
+  "injuries": {
+    "medicalRedshirt": {
+      "maxGamesPlayed": 15,
+      "maxScheduleRsGameIndex": 20,
+      "blockedFromRegularSeasonWeek": 21,
+      "qualifyingSeverities": ["moderate", "major"]
+    },
+    "bank": [
+      {
+        "id": "ankle_sprain",
+        "label": "Ankle sprain",
+        "severity": "minor",
+        "durationGamesMin": 1,
+        "durationGamesMax": 3,
+        "weight": 1.0
+      },
+      {
+        "id": "knee_sprain",
+        "label": "Knee sprain",
+        "severity": "moderate",
+        "durationGamesMin": 2,
+        "durationGamesMax": 6,
+        "weight": 0.7
+      },
+      {
+        "id": "hamstring",
+        "label": "Hamstring strain",
+        "severity": "moderate",
+        "durationGamesMin": 2,
+        "durationGamesMax": 5,
+        "weight": 0.8
+      },
+      {
+        "id": "concussion",
+        "label": "Concussion protocol",
+        "severity": "moderate",
+        "durationGamesMin": 1,
+        "durationGamesMax": 4,
+        "weight": 0.5
+      },
+      {
+        "id": "shoulder",
+        "label": "Shoulder injury",
+        "severity": "moderate",
+        "durationGamesMin": 3,
+        "durationGamesMax": 8,
+        "weight": 0.45
+      },
+      {
+        "id": "foot",
+        "label": "Foot injury",
+        "severity": "major",
+        "durationGamesMin": 4,
+        "durationGamesMax": 12,
+        "weight": 0.35
+      },
+      {
+        "id": "acl",
+        "label": "Knee ligament",
+        "severity": "major",
+        "durationGamesMin": 8,
+        "durationGamesMax": 32,
+        "weight": 0.15
+      },
+      {
+        "id": "illness",
+        "label": "Illness",
+        "severity": "minor",
+        "durationGamesMin": 1,
+        "durationGamesMax": 2,
+        "weight": 0.6
+      }
+    ]
+  },
   "recruiting": {
     "weeklyCarryoverFraction": 0.5,
     "signingCrunchMultiplier": 1.5,

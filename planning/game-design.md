@@ -289,7 +289,7 @@ Dynasty still supports a **0-game redshirt season** for development (exhibitions
 | Type | Trigger |
 |------|---------|
 | **Standard redshirt** | Preseason elect; **0** RS games |
-| **Medical redshirt** | In-season injury + games-played threshold; staff grade affects edge approvals |
+| **Medical redshirt** | In-season injury; **≤ 15** RS games played; schedule game **≤ 20** when &lt; 15 played; **none** from RS **Week 21+** — [`injuries.md`](injuries.md) |
 
 ### Procedural roster events
 

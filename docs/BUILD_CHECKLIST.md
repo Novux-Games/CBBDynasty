@@ -20,6 +20,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | [`player-loyalty-promises.md`](../planning/player-loyalty-promises.md) | 8.6, 6.3, 14.x declare |
 | [`season-review.md`](../planning/season-review.md) | 14.1 (+ next-cycle weekly pool preview) |
 | [`player-cards.md`](../planning/player-cards.md) | 8.1–8.2, 8.6 chips |
+| [`injuries.md`](../planning/injuries.md) | 8.7, 10.8, 2.6 `injuries.bank` |
 
 ---
 
@@ -160,6 +161,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 8.4 | `[ ]` School hub data (prestige, SOS, NET on card) | Read-only opponent schools | [game-frame](../planning/game-frame.md) | `ui.school` |
 | 8.5 | `[ ]` Job security + AD trust | Coach card + Staff tab | [coach-card](../planning/coach-card.md) | — |
 | 8.6 | `[ ]` **Loyalty** (0–99) + **one promise** per tenure | Kept/broken → portal / declare rolls; card chips | [player-loyalty-promises](../planning/player-loyalty-promises.md), [player-cards](../planning/player-cards.md) | `:core/player` |
+| 8.7 | `[ ]` **Injury** state + medical redshirt eligibility | Bank roll; ≤15 GP; game ≤20; block RS week 21+ | [injuries](../planning/injuries.md) | `:core/injuries` |
 
 ---
 
@@ -192,6 +194,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 10.5 | `[ ]` Live text / 2s watch mode | Halftime edit | [strategy-schemes](../planning/strategy-schemes.md), [game-frame](../planning/game-frame.md) | — |
 | 10.6 | `[ ]` Game preview (win %, predicted score, H2H) | 0 games played OK | [game-frame](../planning/game-frame.md) | — |
 | 10.7 | `[ ]` Pregame + postgame report articles | Shared template | [preseason](../planning/preseason.md) | `ui.reports` |
+| 10.8 | `[ ]` In-game **injury** rolls | Sample from `injuries.bank`; duration range | [injuries](../planning/injuries.md), [simulation-engine](../planning/simulation-engine.md) | `:core/sim` |
 
 ---
 
