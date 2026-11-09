@@ -18,6 +18,7 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | League branding / membership | **365** programs; 4 reclass no postseason until year 4 | [`league-branding.md`](league-branding.md), [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) |
 | NIL on player card | **Overview valuation** (recruiting commit) | [`player-cards.md`](player-cards.md) |
 | NIL annual pool | **Done** — conference tier × prestige; blue blood **90–99** **~$9.7M–$13.2M** (power tier only) | [`game-design.md`](game-design.md#annual-collective-pool-design-lock), `nil` in balance JSON |
+| NIL Budget / deal depth | **Done** — assign **$/yr**; **3× ask** cap; remaining pool ledger | [`game-design.md`](game-design.md#nil-budget-workflow-design-lock) |
 | RS schedule cap | **32** games; **28** builder slots only with 4-game event | [`game-design.md`](game-design.md#scheduling--regular-season), [`preseason.md`](preseason.md#8--schedule-regular-season-games) |
 | Transfer portal | **Done** | [`transfer-portal.md`](transfer-portal.md) |
 | News hub (portal) | **Done** | [`news-hub.md`](news-hub.md) |

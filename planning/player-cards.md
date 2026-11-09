@@ -116,9 +116,9 @@ Single **Overview** line — no extra tab.
 
 | Rule | Detail |
 |------|--------|
-| **What it shows** | **Program NIL valuation** for this player: what you **committed at signing** (recruiting or portal), in abstract **dollars** or **deal points** (one format for the whole game). |
+| **What it shows** | **Program NIL valuation** for this player: annual **USD/yr** you **committed at signing** (recruiting, portal, or retention bump) via the **NIL Budget** workflow. |
 | **Source** | Written when recruit hard-commits / portal player joins; stored on player record. |
-| **Display** | e.g. `NIL: $142,000/yr` or `NIL deal: 78 pts` — pick one style in UI theme. |
+| **Display** | e.g. `NIL: $142,000/yr` |
 | **Retention bumps** | If offseason renegotiation raises the deal, update this number; optional small `↑` chip the season it changed. |
 | **Visitors** | Scouting opponent: show **valuation** if known (committed deal); uncommitted HS in recruiting stay off roster cards until signed. |
 | **Ratings tab** | Unchanged — NIL does not add attribute rows. |

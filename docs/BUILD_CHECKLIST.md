@@ -270,7 +270,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 15.1 | `[ ]` NIL collective + player deals | Retention, recruits | [game-design](../planning/game-design.md), [recruiting-engine](../planning/recruiting-engine.md) | — |
+| 15.1 | `[ ]` **NIL Budget** ledger + per-target offers | `nilRemainingUsd`; **Assign NIL** on recruit/portal/retention; **3× ask** cap; interest ratio; signing snapshot | [game-design](../planning/game-design.md#nil-budget-workflow-design-lock), [recruiting-engine](../planning/recruiting-engine.md#nil-budget-strip-recruiting-hub) | `ui.recruiting`, `:core/nil` |
 | 15.2 | `[ ]` Facility grades + upgrades | Offseason **week 9** integration | [game-design](../planning/game-design.md) | — |
 | 15.3 | `[ ]` Academics → recruiting budget multiplier | Grades on school | [game-design](../planning/game-design.md) | — |
 | 15.4 | `[ ]` Coach skill tree + Sunday points | Auto-spend option | [game-design](../planning/game-design.md), [coach-card](../planning/coach-card.md) | — |

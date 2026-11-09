@@ -210,7 +210,7 @@ Scout report shows category letters, not integers:
 | Offense / Defense | Letter |
 | Shooting / Handling / Athleticism | Letter |
 | Potential | Letter (may stay fuzzy longer) |
-| **NIL valuation** | Recruit’s **ask** in abstract dollars or deal points (visible — drives offer UX) |
+| **NIL ask** | Recruit’s **`nilAskUsd`** /yr (visible — drives **Assign NIL** on recruit sheet) |
 
 Archetype fit may show as text + letter **fit** grade once scouted.
 
@@ -262,7 +262,7 @@ Two spend tracks while the **recruiting cycle** is open:
 | Resource | Use |
 |----------|-----|
 | **Recruiting points** | **Relationship & evaluation labor** — scout, contact, offer, pitch (below) |
-| **NIL dollars** (or **deal points** — one global format) | **Money on the table** toward a recruit’s **valuation** / ask — **not** paid from the weekly points pool |
+| **NIL dollars** (`usd_annual`) | **Money on the table** toward a recruit’s **`nilAskUsd`** — **not** paid from the weekly points pool — authoritative UX: [`game-design.md`](game-design.md#nil-budget-workflow-design-lock) |
 
 ### Weekly points accounting (design lock)
 
@@ -357,7 +357,7 @@ Loads the **customized roster engine** for incoming commits (and portal signees 
 
 | Driver | Behavior |
 |--------|----------|
-| **Retention split** | Optional % of NIL reserved for returning players before recruit offers (game-design soft cap) |
+| **Ledger** | `nilPoolAnnualUsd`, committed (signed deals), reserved (open offers), **remaining** — one **NIL Budget** strip in Recruiting hub |
 
 ### Carryover
 
@@ -460,10 +460,20 @@ Transfer **portal** sub-tab uses the **same** default tab pattern: **Recommended
 | Scholarship offer (+ optional **promise**) | Recruiting points (refunded) | [`player-loyalty-promises.md`](player-loyalty-promises.md) |
 | Scout their game / Official visit | Recruiting points (refunded) | [Limits](#action-costs-design-lock) |
 | Bonus points | Remaining weekly points | |
-| NIL allocation | **NIL $** only | Not points |
+| **Assign NIL** | **NIL $** only; max **3× ask**, capped by **remaining** budget | Not points — [`game-design.md`](game-design.md#nil-budget-workflow-design-lock) |
 | Drop target / revoke offer | — | Ends refunded reservation |
 
-Tap recruit → **recruit sheet** (preview): stars, letters, NIL ask, interest, actions — **not** full player card until commit.
+Tap recruit → **recruit sheet** (preview): stars, letters, **NIL ask**, interest, actions — **not** full player card until commit.
+
+### NIL Budget strip (recruiting hub)
+
+| UI | Detail |
+|----|--------|
+| **Placement** | Top of Recruiting hub (all tabs); mirrors **game-start** **NIL budget** preview |
+| **Copy** | `NIL Budget: $X remaining of $Y` |
+| **Drill-down** | Optional sheet: committed / reserved breakdown by player |
+
+Per recruit **Assign NIL** lives on the recruit sheet (not a separate economy screen).
 
 ---
 
@@ -543,7 +553,7 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 
 | Element | Behavior |
 |---------|----------|
-| **Entry** | Offseason notification after **Signing Day** (week 6) |
+| **Entry** | In-app feed row after **Signing Day** (week 6) |
 | **Board** | Small list (5–15) of **local** prospects; letter grades like HS pool |
 | **Actions** | Offer walk-on spot (no scholarship); requires open roster slot |
 | **Limit** | Max **2** new walk-ons per season |

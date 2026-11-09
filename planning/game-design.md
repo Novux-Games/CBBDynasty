@@ -360,9 +360,63 @@ Dynasty still supports a **0-game redshirt season** for development (exhibitions
 |---------|----------|
 | **Collective budget** | Single **annual $ pool** per program (table above) |
 | **Per-player allocation** | Slice of pool committed on recruit sheet / retention UI → Overview **NIL valuation** on card |
-| **Recruit demand** | Each recruit has **`nilAsk`**; underfunding lowers **interest** ([`recruiting-engine.md`](recruiting-engine.md#interest--offers)) |
-| **Retention** | Upperclassmen request raises after breakout seasons — spend from same annual pool (offseason Week 1) |
+| **Recruit demand** | Each recruit has **`nilAskUsd`**; underfunding lowers **interest** ([`recruiting-engine.md`](recruiting-engine.md#interest--offers)) |
+| **Retention** | Upperclassmen request raises after breakout seasons — same **NIL Budget** sheet (offseason Week 1) |
 | **Fundraising** | Week 8 can add **one-time** pool bump or next-year seed — [`offseason.md`](offseason.md) |
+
+### NIL Budget workflow (design lock)
+
+Single **collective ledger** for the active recruiting cycle — previewed on [`game-start.md`](game-start.md) **NIL budget** line and surfaced in **Recruiting**, **portal**, and **retention** UIs under the label **NIL Budget**.
+
+**No separate finance minigame:** assign **$/yr** per target; the only global constraint is **unspent pool**.
+
+#### Ledger (per program, per cycle)
+
+| Field | Meaning |
+|-------|---------|
+| `nilPoolAnnualUsd` | Total annual collective $ for this cycle ([annual pool](#annual-collective-pool-design-lock)) |
+| `nilCommittedUsd` | Sum of **signed roster deals** for this cycle year (returning players at cycle open + hard commits) |
+| `nilReservedUsd` | Sum of **pending offers** (target has an open scholarship offer with a NIL $ on the table, not yet hard signed) |
+| `nilRemainingUsd` | `nilPoolAnnualUsd − nilCommittedUsd − nilReservedUsd` (clamp ≥ 0) |
+
+Fundraising / offseason bumps may increase **`nilPoolAnnualUsd`** once per rules in [`offseason.md`](offseason.md); rebalance **remaining** after bump.
+
+#### Per-target offer (recruits & portal)
+
+| Field | Meaning |
+|-------|---------|
+| **`nilAskUsd`** | Player’s **desired** annual deal (shown on recruit sheet — seeded from stars / rank; balance `nil.askByStarBand`) |
+| **`nilOfferUsd`** | User’s current **proposed** annual deal (0 = none) |
+| **Per-target cap** | `nilOfferUsd ≤ nilAskUsd × maxOfferMultiplierOfAsk` (default **3×**) **and** `nilOfferUsd ≤ nilRemainingUsd + thisTargetPriorReservation` |
+
+**Example (illustrative):** pool **$10M**, **$0** committed. A **5★** wants **`nilAskUsd` = $2M** → slider max **$6M** (3×). Offer **$6M** → **$4M** left for other targets. Offer **$2M** (meets ask) → **$8M** left.
+
+#### UX (same pattern everywhere)
+
+| Surface | Header strip |
+|---------|----------------|
+| **Recruiting hub** | **NIL Budget:** `{remaining}` **remaining** of `{pool}` |
+| **Recruit / portal sheet** | Ask line + **Assign NIL** control (stepper or slider); show **Max this player: min(3× ask, remaining)** |
+| **Retention (OS Week 1)** | Current deal + **raise ask**; assign bump from same remaining ledger |
+| **School hub** (optional) | Read-only cycle summary |
+
+**Assign NIL** does **not** spend recruiting points. Changing offer updates **`nilReservedUsd`** immediately while the scholarship offer stands. **Revoke offer** or **drop target** frees that reservation ([`recruiting-engine.md`](recruiting-engine.md#recruiting-ui)).
+
+#### Interest & signing
+
+| Offer vs ask | Interest |
+|--------------|----------|
+| `nilOfferUsd ≥ nilAskUsd` | Full NIL credit toward interest ([`recruiting-engine.md`](recruiting-engine.md#interest--offers)) |
+| `0 < nilOfferUsd < nilAskUsd` | Scales down (e.g. ratio `nilOfferUsd / nilAskUsd`) |
+| No offer | NIL factor neutral / penalized for high asks |
+
+**Hard sign / portal join:** freeze **`nilOfferUsd`** on the player → Overview **NIL valuation** ([`player-cards.md`](player-cards.md)); move $ from **reserved** to **committed**. [`transfer-portal.md`](transfer-portal.md) — departures return committed deal to **remaining**.
+
+**In-season retention top-ups:** rare, small; only from **uncommitted** remainder; no new annual pool mid-RS except balance-tuned exceptions.
+
+#### AI programs
+
+Same ledger, cap, and 3× rule; automation spends **`nilRemainingUsd`** down **Recommended** list ([`recruiting-engine.md`](recruiting-engine.md#ai-recruiting)).
 
 ### Boosters & fundraising
 

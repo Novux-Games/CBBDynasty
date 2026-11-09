@@ -603,7 +603,21 @@
       "prestigeBelow90": "lerp tier annualPoolMinUsd..annualPoolMaxUsd by programPrestige/99",
       "prestige90PlusBlueBloodEligible": "lerp blueBloodPoolBand by (prestige-blueBloodPoolBand.prestigeMin)/(prestigeMax-min)",
       "prestige90PlusNotEligible": "cap at tier annualPoolMaxUsd"
-    }
+    },
+    "maxOfferMultiplierOfAsk": 3,
+    "interestNilRatioExponent": 1.0,
+    "askByStarBand": [
+      { "stars": 5, "askMinUsd": 400000, "askMaxUsd": 2500000, "nationalTop60Multiplier": 1.35 },
+      { "stars": 4, "askMinUsd": 120000, "askMaxUsd": 650000 },
+      { "stars": 3, "askMinUsd": 25000, "askMaxUsd": 180000 },
+      { "stars": 2, "askMinUsd": 0, "askMaxUsd": 45000 },
+      { "stars": 1, "askMinUsd": 0, "askMaxUsd": 15000 }
+    ],
+    "portalAskMultiplierVsHs": 0.85,
+    "retentionRaiseAskBands": [
+      { "tier": "breakout", "additionalAskMinUsd": 50000, "additionalAskMaxUsd": 400000 },
+      { "tier": "steady", "additionalAskMinUsd": 0, "additionalAskMaxUsd": 75000 }
+    ]
   },
   "player": {
     "loyalty": {
