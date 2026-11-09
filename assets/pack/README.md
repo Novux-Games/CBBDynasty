@@ -14,3 +14,5 @@ Output copies to:
 - `android/app/src/main/assets/pack/embedded-default.json` (shipped in APK)
 
 Validated by [`IdentityPackCodec`](../../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/IdentityPackCodec.kt) at build/CI time.
+
+TXT / URL import grammar and template: [`identity-import-template.txt`](identity-import-template.txt). Runtime pipeline: [`IdentityPackImportPipeline`](../../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/import/IdentityPackImportPipeline.kt).

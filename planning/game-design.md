@@ -150,7 +150,7 @@ Full navigation and screens: **[`game-frame.md`](game-frame.md)**.
 
 Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 
-**Code:** [`IdentityPackCodec`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/IdentityPackCodec.kt) + [`IdentityPackValidator`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/IdentityPackValidator.kt) (`packVersion` **1**). **Overlay:** [`PackRepository`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/data/pack/PackRepository.kt) + [`IdentityPackIndex`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/IdentityPackIndex.kt).
+**Code:** [`IdentityPackCodec`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/IdentityPackCodec.kt) + [`IdentityPackValidator`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/IdentityPackValidator.kt) (`packVersion` **1**). **Overlay:** [`PackRepository`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/data/pack/PackRepository.kt) + [`IdentityPackIndex`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/IdentityPackIndex.kt). **Import (JSON/TXT/URL):** [`IdentityPackImportPipeline`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/import/IdentityPackImportPipeline.kt) + [`assets/pack/identity-import-template.txt`](../assets/pack/identity-import-template.txt).
 
 ```json
 {
