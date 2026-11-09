@@ -85,18 +85,7 @@ At-a-glance card(s) for **your program**:
 
 **Design lock:** **Poll rank** and **AP-style national ranking** are **one list** — sim voters order **all 365** programs **`#1`–`#365`** each week. **Top 25** is the public poll (rows 1–25 of that list). Selection Sunday at-large/auto ordering uses this same order ([`postseason.md`](postseason.md)).
 
-**Not seeds:** In-season rank is **not** a tournament seed. **Seeds** appear only on **postseason** brackets after Selection Sunday (no tier colors there).
-
-**Tier color** = **assumed** national destination from **poll rank vs projected cut lines** (NCBA / NCI / Heritage). **Heuristic only** — not binding and **not** seeds.
-
-| Color | Assumption |
-|-------|------------|
-| **Green** | Likely NCBA (76) on poll position alone |
-| **Yellow** | Likely NCI |
-| **Amber** | Likely Heritage |
-| **Red** | Likely outside the 124 national slots |
-
-**Does not model conference tournaments:** in-season, the UI **cannot** know if a **red** program will win its league tournament. Colors **ignore** auto-bid paths; a **red** chip can still become an NCBA **seed** in March after a conf title. Selection Sunday assigns real bids/seeds; colors disappear on bracket screens.
+**Not seeds:** In-season rank is **not** a tournament seed. **Seeds** appear only on **postseason** brackets after Selection Sunday.
 
 Tap **Current ranking** → Rankings hub (full **#1–#365** list).
 
@@ -294,10 +283,10 @@ Tap player → player preview / card; tap team → School hub (view).
 | View | Content |
 |------|---------|
 | **Top 25** | Official poll — **`#1`–`#25`** on the national list |
-| **Full national ranking** | **`#1`–`#365`** — same order as dashboard **Current ranking**; optional likely-tier filter |
+| **Full national ranking** | **`#1`–`#365`** — same order as dashboard **Current ranking** |
 | **Conference rankings** | Standings per conference (W–L, conf record, tiebreaker note on drill-down) |
 
-One poll ordering drives Top 25 and the full table. Rows show **green / yellow / amber / red** likelihood (in-season only).
+One poll ordering drives Top 25 and the full table.
 
 Tap team → School hub.
 
@@ -373,8 +362,8 @@ Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`g
 | 2025-11-08 | School Staff section; coach card doc |
 | 2025-11-08 | GOAT list formula; companion doc index (offseason/postseason/portal) |
 | 2025-11-08 | Recruit Top 60: preseason seed, in-season News |
-| 2025-11-08 | Dashboard: Current ranking + NCBA/NCI tier colors; full resume list in Rankings |
-| 2025-11-09 | Poll = full #1–365 rank; colors = likely tier; seeds postseason-only |
-| 2025-11-09 | Tier colors poll-only; no conf-tourney champ projection |
+| 2025-11-08 | Dashboard: Current ranking; full national list in Rankings |
+| 2025-11-09 | Poll = full #1–365 rank; seeds postseason-only |
+| 2025-11-09 | Removed tier color chips from UI spec |
 | 2025-11-08 | School Staff tab; AD trust; staff detail sheets |
 | 2025-11-08 | Assistants = coach cards; support list-only |

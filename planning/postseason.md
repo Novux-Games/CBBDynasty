@@ -16,7 +16,7 @@
 6. [NCBA Men's BB Tournament](#ncba-mens-bb-tournament)
 7. [NCI](#nci--national-college-invitational)
 8. [National Heritage Classic](#national-heritage-classic)
-9. [Resume & UI tiers](#resume--ui-tiers)
+9. [Poll rank vs seeds](#poll-rank-vs-seeds-in-season-vs-march)
 10. [Cross-links](#cross-links)
 
 ---
@@ -220,23 +220,10 @@ Coach **Achievements** track W–L and titles per bracket ([`coach-card.md`](coa
 
 | Phase | What the user sees |
 |-------|---------------------|
-| **Regular season / conf tourneys** | **Poll rank** `#NN` (1–365); **Top 25** callout; **tier colors** = **assumed** destination from poll vs cut lines — **not** seeds |
-| **Selection Sunday onward** | **Bracket seeds** (1–64 NCBA, etc.); **no** tier colors on postseason screens |
+| **Regular season / conf tourneys** | **Poll rank** `#NN` (1–365); **Top 25** callout — **not** seeds |
+| **Selection Sunday onward** | **Bracket seeds** (1–64 NCBA, etc.) |
 
-**Colors vs reality:** A program may still win its **conference tournament** and earn an NCBA auto-bid/seed even when showing **red** in-season; the chip does not forecast conf bracket results.
-
-## Projected tier colors (in-season only)
-
-Assumption chips on dashboard **Current ranking** ([`game-frame.md`](game-frame.md)) — weekly from poll rank vs fixed national cutoffs; **not** binding:
-
-| Color | Assumption (poll-only) |
-|-------|------------------------|
-| **Green** | NCBA (76) |
-| **Yellow** | NCI |
-| **Amber** | Heritage only |
-| **Red** | Outside 124 national slots |
-
-**Excludes conference tournament math:** projections do **not** treat “possible conf champion” as NCBA — the sim does not know who will win league brackets before they play. Auto-bids apply only at **Selection Sunday** after conf finals.
+No in-season UI coloring for projected NCBA / NCI / Heritage. Poll rank is informational; **auto-bids and national invites** are assigned only after conference tournaments and Selection Sunday ([`game-frame.md`](game-frame.md)).
 
 ---
 
@@ -259,4 +246,4 @@ Assumption chips on dashboard **Current ranking** ([`game-frame.md`](game-frame.
 | 2025-11-09 | Terminology: non–conf-tourney champion = at-large (not champ Opening) |
 | 2025-11-09 | Census: 124 national (76+32+16) vs 241 season-end; conf qual policy |
 | 2025-11-09 | Auto pass → runner-up; poll=rank; parallel NCI/HC; Opening 1v24…12v13 |
-| 2025-11-09 | Tier colors exclude conf-tourney auto-bid forecasting |
+| 2025-11-09 | Removed tier color chips from UI spec |
