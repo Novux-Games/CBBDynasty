@@ -1,6 +1,6 @@
 # Branding — Dynasty: College Basketball
 
-**Last updated:** 2025-11-08
+**Last updated:** 2025-11-09
 
 ---
 
@@ -81,6 +81,15 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 | NCBA / March Mayhem / early events | [`ncba-branding.md`](ncba-branding.md) |
 | Postseason brackets & Selection Sunday | [`postseason.md`](postseason.md) |
 | Studio & splash | [`app-shell.md`](app-shell.md) |
+
+---
+
+## UI copy (in-game)
+
+| Rule | Detail |
+|------|--------|
+| **Pack IDs** | Internal only (`embedded-default`, etc.). UI uses [`PackDisplayNames`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/pack/PackDisplayNames.kt) — e.g. **2026–27 League**. |
+| **No dev labels** | Never show “default pack”, “bootstrap”, asset paths, or engineering checklist language in `strings.xml` or on-screen copy. |
 
 ---
 

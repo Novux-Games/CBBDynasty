@@ -115,8 +115,8 @@ fun DynastyApp(
                         onNew = {
                             scope.launch {
                                 val loaded = saveSlotRepository.createEmptyDynastyInFirstOpenSlot(
-                                    schoolDisplayName = context.getString(R.string.new_bootstrap_school),
-                                    coachDisplayName = context.getString(R.string.new_bootstrap_coach),
+                                    schoolDisplayName = context.getString(R.string.new_placeholder_school),
+                                    coachDisplayName = context.getString(R.string.new_placeholder_coach),
                                 )
                                 if (loaded != null) {
                                     ActiveDynastySession.set(loaded)
