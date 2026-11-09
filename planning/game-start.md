@@ -35,7 +35,7 @@ Cold start lands on the **title / home** screen (no bottom nav — pre-dynasty).
 | **New** | Always | Start [new game wizard](#new-game-wizard-overview) |
 | **Load** | Always | Save picker (slot list + metadata: school, season, record) |
 | **Settings** | Always | [App settings](#home-settings--credits) (not dynasty rules) |
-| **Credits** | Always | Novux Studios, OSS, disclaimer |
+| **Credits** | Always | Novux Games, OSS, disclaimer |
 
 ```
 ┌─────────────────────────┐
@@ -229,7 +229,7 @@ Audio, notifications default, save backup location (local), text size, legal lin
 
 ### Credits
 
-Novux Studios, third-party licenses, unofficial / no NCAA endorsement ([`branding.md`](branding.md)).
+Novux Games, third-party licenses, unofficial / no NCAA endorsement ([`branding.md`](branding.md)).
 
 ---
 

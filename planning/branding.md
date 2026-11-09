@@ -10,7 +10,7 @@
 |-------|--------|
 | **Game title** | **Dynasty: College Basketball** |
 | **Repo / code name** | `CBBDynasty` (workspace) |
-| **Studio** | **Novux Studios** |
+| **Studio** | **Novux Games** |
 | **Studio URL** | [https://novux.dev](https://novux.dev) |
 
 Use **Dynasty: College Basketball** on store listings, splash, and in-app title bar unless a shorter label is required (e.g. “Dynasty CBB” for icon-safe text — TBD).
@@ -61,7 +61,7 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 
 ## Legal / attribution
 
-- Splash or settings: **“© Novux Studios”** + link to [novux.dev](https://novux.dev) (exact copy TBD with counsel).
+- Splash or settings: **“© Novux Games”** + link to [novux.dev](https://novux.dev) (exact copy TBD with counsel).
 - Game is **unofficial** college basketball sim (see [`game-design.md`](game-design.md) identity packs).
 
 ---
