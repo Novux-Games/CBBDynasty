@@ -234,7 +234,7 @@ Audio, notifications default, save backup location (local), text size, legal lin
 
 Novux Games, third-party licenses, unofficial / no NCAA endorsement ([`branding.md`](branding.md)).
 
-**Implemented (scaffold):** Home → **Credits** — publisher, novux.dev, game director, copyright year, unofficial disclaimer, Apache 2.0 / third-party notice (`CreditsScreen`).
+**Implemented (scaffold):** Home → **Credits** — publisher, novux.dev, game director, copyright year (`CreditsScreen`).
 
 ---
 

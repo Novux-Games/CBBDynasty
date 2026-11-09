@@ -64,7 +64,7 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 ## Legal / attribution
 
 - Repository: **open code / closed art** — [`docs/LICENSING.md`](../docs/LICENSING.md), [`Public-Assets/LICENSE`](../Public-Assets/LICENSE).
-- Splash footer + Home **Credits**: **© Novux Games**, [novux.dev](https://novux.dev), unofficial / NCAA disclaimer (see in-app `CreditsScreen` strings).
+- Splash footer + Home **Credits**: **© Novux Games**, [novux.dev](https://novux.dev) (`CreditsScreen`).
 - Game is **unofficial** college basketball sim (see [`game-design.md`](game-design.md) identity packs).
 
 ---
