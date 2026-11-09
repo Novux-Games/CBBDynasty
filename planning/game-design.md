@@ -681,6 +681,8 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | **March** | Conference templates, NCBA, **NCI**, **Heritage** — [`postseason.md`](postseason.md) |
 | **Ship** | Full 2D UI, automation toggles, notifications, **JSON/URL identity import** |
 
+**Code:** `android/` — Compose shell scaffold; see [`docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md).
+
 ### Remaining product decisions (short list)
 
 - Local save format (SQLite vs files).
