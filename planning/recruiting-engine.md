@@ -460,7 +460,7 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | Prestige | School hub grades, fundraising |
 | Coach recruiting | [`coach-card.md`](coach-card.md) ratings |
 | Archetype | [`player-archetypes.md`](player-archetypes.md) hidden tag |
-| Offseason weeks 2–5 | Signing crunch (R1–R4); 1.5× weekly drip |
+| Offseason weeks 2–5 | Signing crunch (R1–R4); 1.5× tier weekly pool |
 
 ---
 

@@ -92,7 +92,7 @@ Completing a task updates dashboard state immediately; **week save** still commi
 **On confirm:**
 
 1. **User games** not yet simmed → run **fast sim** (same engine as manual sim; no live play-by-play).
-2. **User-school recruiting** for the week → AI spends weekly drip / NIL per automation settings; if none, sane default board maintenance.
+2. **User-school recruiting** for the week → AI spends weekly pool / NIL per automation settings; if none, sane default board maintenance.
 3. **League** — batch-sim all other schools’ games in the week index ([`time-system.md`](time-system.md#advance-rules)) and AI recruiting for non-user programs.
 4. **Write save** — week locked; no in-week replay ([`game-design.md`](game-design.md#replays)).
 
