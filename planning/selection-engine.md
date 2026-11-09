@@ -47,11 +47,33 @@ The **same saved fields** drive School hub **Info** and this engine ([`game-fram
 
 **`sosRating`** is a first-class input to **poll** and **Seed Index** — not a hidden duplicate scale. Players who read **SOS 82** on a school card are seeing the number that selection math uses.
 
+**There is only one SOS per school:** **your** schedule strength. Poll and seeding read **`team.sosRating`** — they do **not** look up some other team’s hub SOS when evaluating you.
+
+### How `sosRating` is computed (your schedule)
+
+**Plain language:** Strength of schedule is **how hard your slate was** — the average quality of **every opponent you actually played**, with a little extra weight for road games and big spots.
+
+**Recipe (weekly refresh after games finalize):**
+
+1. For **each completed game** on **your** schedule, take that **opponent’s team strength** at tip (use opponent’s season `NEM` to date; frozen at game time in save for audit).
+2. Optionally multiply by **venue weight** (`ruleset.sosVenueWeights`: e.g. road 1.1, neutral 1.05, home 1.0) so the same opponent counts slightly harder away from home.
+3. **Schedule strength (raw)** = weighted mean of those opponent strengths across **all** your D-I games (non-D-I exhibitions excluded unless pack says otherwise).
+4. Map raw league distribution to **0–99** (percentile or min–max in pack) → store as **`sosRating`** → show on School hub **Info**.
+
+**What we are *not* doing:**
+
+| Wrong idea | Why |
+|------------|-----|
+| “Use the opponent’s **SOS** rating” | That’s **their** schedule, not yours — unrelated to how hard **your** year was. |
+| A second hidden SOS for selection only | **One** field: hub display = poll = seeds. |
+
+Iterative “network” tweaks (opponent strength depends on who *they* played) can nudge opponent `NEM` in step 1 — that still rolls up into **your** single `sosRating`, not a separate voter-facing stat.
+
 ### Derived & display indices
 
 | Index | Symbol | Range | Definition |
 |-------|--------|-------|------------|
-| **Strength of schedule** | `sosRating` | **0–99** | Opponents’ strength (opponent `NEM` network, 2-pass); clamped **0–99** for display |
+| **Strength of schedule** | `sosRating` | **0–99** | **Your** schedule difficulty — mean opponent strength on **your** results ([above](#how-sosrating-is-computed-your-schedule)) |
 | **Net efficiency margin** | `NEM` | approx −30..+30 | Points per 100 possessions (off eff − def eff), season to date |
 | **Quad record score** | `QRS` | unbounded | Weighted quad wins minus weighted quad losses (see below) |
 | **Form** | `FORM` | 0–100 | Last **10** games `NEM` blended with season `NEM` (60% L10 / 40% season) |
@@ -210,3 +232,4 @@ NCI / Heritage use separate bracket templates (no shared seed list with NCBA).
 |------|--------|
 | 2025-11-09 | Initial engine: pollScore, seedIndex, poll vs seed split, seeds 1–52 sort |
 | 2025-11-09 | School hub `sosRating` 0–99 + 3% `programPrestige` poll bias |
+| 2025-11-09 | Clarify SOS = your schedule average, not opponent’s hub SOS |
