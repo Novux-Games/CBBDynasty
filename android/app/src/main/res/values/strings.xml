@@ -77,7 +77,10 @@
     <string name="new_step_school_subtitle">Pick a program and review the contract preview.</string>
     <string name="new_step_sign_title">Sign contract</string>
     <string name="new_step_sign_subtitle">Confirm and launch Season 1.</string>
-    <string name="new_step_sign_stub">Signing your contract and opening Season 1 will appear here soon.</string>
+    <string name="new_sign_school_label">Program: %1$s</string>
+    <string name="new_sign_coach_label">Head coach: %1$s</string>
+    <string name="new_sign_cta">Sign contract</string>
+    <string name="new_sign_err_incomplete">Finish the earlier steps before signing.</string>
     <string name="new_school_search">Search schools</string>
     <string name="new_school_filter_starter">Showing programs with prestige 40 or lower.</string>
     <string name="new_school_filter_all">All programs unlocked for this session.</string>

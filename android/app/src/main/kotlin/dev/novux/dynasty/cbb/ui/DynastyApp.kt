@@ -131,6 +131,7 @@ fun DynastyApp(
                         saveSlotRepository = saveSlotRepository,
                         packRepository = LocalContext.current.requireDynastyApplication().packRepository,
                         onExitWizard = { navController.popBackStack() },
+                        onDynastyCreated = { navController.popBackStack() },
                         onNoEmptySlot = {
                             scope.launch {
                                 snackbarHostState.showSnackbar(

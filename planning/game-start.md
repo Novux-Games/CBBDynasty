@@ -81,7 +81,7 @@ Saves are written in **one transaction** per create/advance; unreadable slots sh
 | `packId` | `dynasty_metadata` + slot summary | **`embedded-default`** until pack import |
 | `dynastySchemaVersion` | `dynasty_metadata` | **1** |
 
-**New:** multi-step wizard (**4.1** nav); dynasty row creation moves to **Sign contract** (**4.6**). Until then, no save is written from **New**.
+**New:** multi-step wizard through **Sign contract** — `signNewGameFromWizard` writes slot, metadata, `dynasty_coach`, and Offseason week 1 calendar.
 
 ### Save load integrity (implemented)
 

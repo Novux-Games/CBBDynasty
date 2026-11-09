@@ -11,7 +11,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import dev.novux.dynasty.cbb.core.save.NewGameDraft
+import dev.novux.dynasty.cbb.core.save.NewGameSignValidator
+import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
@@ -31,14 +36,19 @@ fun NewGameWizardScreen(
     packRepository: PackRepository,
     onExitWizard: () -> Unit,
     onNoEmptySlot: () -> Unit,
+    onDynastyCreated: () -> Unit,
 ) {
     val navController = rememberNavController()
+    val scope = rememberCoroutineScope()
     var slotGatePassed by remember { mutableStateOf(false) }
     var draft by remember { mutableStateOf(NewGameDraft()) }
     var coachShowErrors by remember { mutableStateOf(false) }
     var schoolShowErrors by remember { mutableStateOf(false) }
     var schools by remember { mutableStateOf<List<TeamDisplayOverlay>>(emptyList()) }
     var conferences by remember { mutableStateOf<List<ConferenceDisplayOverlay>>(emptyList()) }
+    var packId by remember { mutableStateOf(dev.novux.dynasty.cbb.core.save.DynastySchema.DEFAULT_PACK_ID) }
+    var signError by remember { mutableStateOf<SignContractError?>(null) }
+    var signing by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         saveSlotRepository.ensureInitialized()
@@ -56,6 +66,7 @@ fun NewGameWizardScreen(
         val session = packRepository.ensureEmbeddedLoaded()
         schools = session.index.allTeamDisplays()
         conferences = session.index.allConferenceDisplays()
+        packId = session.packId
     }
 
     if (!slotGatePassed) {
@@ -152,10 +163,37 @@ fun NewGameWizardScreen(
                             }
                         }
                         NewGameStep.SignContract -> {
-                            Text(
-                                text = stringResource(R.string.new_step_sign_stub),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            val schoolName = schools.firstOrNull {
+                                it.teamId == draft.selectedTeamId
+                            }?.displayName.orEmpty()
+                            SignContractStepContent(
+                                draft = draft,
+                                schoolDisplayName = schoolName,
+                                signError = signError,
+                                signingInProgress = signing,
+                                onSign = {
+                                    scope.launch {
+                                        signing = true
+                                        signError = null
+                                        if (NewGameSignValidator.validate(draft) != null) {
+                                            signError = SignContractError.IncompleteWizard
+                                            signing = false
+                                            return@launch
+                                        }
+                                        val loaded = saveSlotRepository.signNewGameFromWizard(
+                                            draft = draft,
+                                            schoolDisplayName = schoolName,
+                                            packId = packId,
+                                        )
+                                        signing = false
+                                        if (loaded == null) {
+                                            signError = SignContractError.SlotUnavailable
+                                        } else {
+                                            ActiveDynastySession.set(loaded)
+                                            onDynastyCreated()
+                                        }
+                                    }
+                                },
                             )
                         }
                     }

@@ -6,6 +6,8 @@ import dev.novux.dynasty.cbb.core.save.DynastyBootstrap
 import dev.novux.dynasty.cbb.core.save.DynastyLoadFailure
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.core.save.DynastySaveValidator
+import dev.novux.dynasty.cbb.core.save.NewGameDraft
+import dev.novux.dynasty.cbb.core.save.NewGameSignValidator
 import dev.novux.dynasty.cbb.core.save.DynastySchema
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.save.SaveSlotSummary
@@ -14,6 +16,7 @@ import dev.novux.dynasty.cbb.database.calendar.DynastyCalendarEntity
 import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
+import dev.novux.dynasty.cbb.database.dynasty.toCoachEntity
 import dev.novux.dynasty.cbb.database.dynasty.toEntity
 import dev.novux.dynasty.cbb.database.dynasty.toDomain
 import dev.novux.dynasty.cbb.database.save.SaveSlotEntity
@@ -30,6 +33,7 @@ class SaveSlotRepository(
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
+    private val coachDao = database.dynastyCoachDao()
     private val calendarDao = database.dynastyCalendarDao()
     private val mutex = Any()
 
@@ -166,6 +170,7 @@ class SaveSlotRepository(
         database.withTransaction {
             if (!dynastyId.isNullOrBlank()) {
                 metadataDao.deleteById(dynastyId)
+                coachDao.deleteByDynastyId(dynastyId)
                 weekCheckpointRepository.deleteForDynasty(dynastyId)
             }
             slotDao.clearSlot(slotIndex)
@@ -241,6 +246,63 @@ class SaveSlotRepository(
             committedPhase = committedPhase,
             committedWeekIndex = committedWeekIndex,
         )
+
+    /**
+     * Signs the wizard contract: creates metadata, coach row, calendar at Offseason week 1.
+     */
+    suspend fun signNewGameFromWizard(
+        draft: NewGameDraft,
+        schoolDisplayName: String,
+        packId: String = DynastySchema.DEFAULT_PACK_ID,
+    ): LoadedDynasty? {
+        if (NewGameSignValidator.validate(draft) != null) return null
+        val slotIndex = firstEmptySlotIndex() ?: return null
+        val dynastyId = UUID.randomUUID().toString()
+        val coachName = draft.coach.displayName()
+        val metadata = DynastyBootstrap.newDynasty(dynastyId = dynastyId, packId = packId)
+        val seasonLabel = SeasonMembershipYear.label(metadata.seasonIndex)
+        val now = System.currentTimeMillis()
+
+        database.withTransaction {
+            metadataDao.upsert(metadata.toEntity())
+            coachDao.upsert(draft.toCoachEntity(dynastyId))
+            weekCheckpointRepository.insertBootstrapCalendar(metadata)
+            slotDao.upsert(
+                SaveSlotEntity(
+                    slotIndex = slotIndex,
+                    dynastyId = dynastyId,
+                    lastPlayedAtEpochMillis = now,
+                    schoolDisplayName = schoolDisplayName,
+                    coachDisplayName = coachName,
+                    seasonLabel = seasonLabel,
+                    wins = 0,
+                    losses = 0,
+                    packId = packId,
+                ),
+            )
+        }
+
+        val weekCheckpoint = weekCheckpointRepository.loadOrBootstrap(metadata)
+        val summary = SaveSlotSummary(
+            slotIndex = slotIndex,
+            isEmpty = false,
+            dynastyId = dynastyId,
+            schoolDisplayName = schoolDisplayName,
+            coachDisplayName = coachName,
+            seasonLabel = seasonLabel,
+            wins = 0,
+            losses = 0,
+            lastPlayedAtEpochMillis = now,
+            packId = packId,
+        )
+        return LoadedDynasty(
+            slotIndex = slotIndex,
+            dynastyId = dynastyId,
+            summary = summary,
+            metadata = metadata,
+            weekCheckpoint = weekCheckpoint,
+        )
+    }
 
     suspend fun createEmptyDynastyInFirstOpenSlot(
         schoolDisplayName: String,

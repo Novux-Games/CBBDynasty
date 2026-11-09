@@ -4,6 +4,34 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.novux.dynasty.cbb.core.save.DynastySchema
 
+val MIGRATION_4_5 = object : Migration(4, 5) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS dynasty_coach (
+                dynastyId TEXT NOT NULL PRIMARY KEY,
+                userTeamId TEXT NOT NULL,
+                firstName TEXT NOT NULL,
+                lastName TEXT NOT NULL,
+                nameSuffixWire TEXT,
+                age INTEGER NOT NULL,
+                almaMaterTeamId TEXT,
+                skinToneId TEXT NOT NULL,
+                hairColorId TEXT NOT NULL,
+                hairStyleId TEXT NOT NULL,
+                beardStyleId TEXT NOT NULL,
+                avatarPresetId TEXT NOT NULL,
+                archetypeWire TEXT NOT NULL,
+                offensiveSchemeWire TEXT NOT NULL,
+                defensiveSchemeWire TEXT NOT NULL,
+                autoUpgrade INTEGER NOT NULL,
+                unlimitedCoachAge INTEGER NOT NULL
+            )
+            """.trimIndent(),
+        )
+    }
+}
+
 val MIGRATION_3_4 = object : Migration(3, 4) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
