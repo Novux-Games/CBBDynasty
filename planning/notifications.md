@@ -24,8 +24,8 @@
 4. [Tasks vs feed (no triple spam)](#tasks-vs-feed-no-triple-spam)
 5. [Week advance & sim-week](#week-advance--sim-week)
 6. [Deep links](#deep-links)
-7. [Out of scope](#out-of-scope)
-8. [Open decisions](#open-decisions)
+7. [Excluded](#excluded)
+8. [Design locks (product decisions)](#design-locks-product-decisions)
 9. [Cross-links](#cross-links)
 
 ---

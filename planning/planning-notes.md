@@ -97,4 +97,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | 2026-11-09 | App-update save compatibility rule | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility) |
 | 2026-11-09 | Unified shell + week advance + dashboard task gate | [`game-frame.md`](game-frame.md) |
 | 2026-11-09 | BUILD_CHECKLIST sync for locked recruiting, portal, news, loyalty, dashboard | [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
-| 2026-11-09 | No in-season portal (game-design align); `notifications.md` draft | [`notifications.md`](notifications.md) |
+| 2026-11-09 | No in-season portal; `notifications.md` **Done** | [`notifications.md`](notifications.md) |
