@@ -124,8 +124,8 @@ Notifications queue **offer cards**; carousel **pauses** for mandatory decisions
 
 | Bucket | Tab | Interaction |
 |--------|-----|-------------|
-| **Full roster** | **Roster** | **Encourage transfer** (player **not** in portal yet) → enters portal, **off roster**, on **Transfer** tab |
-| **In portal (yours)** | **Transfer** | **Convince to stay** → success **back on Roster**, removed from portal |
+| **On roster, not in portal** | **Roster** only | **Encourage transfer** → **Roster tab drops them** → **Transfer tab only** |
+| **In portal** | **Transfer** only | **Not listed on Roster tab**; **convince to stay** → **Transfer tab drops them** → **Roster tab only** |
 | **Graduating seniors** | **Roster** | Graduate — not portal |
 | **Draft-eligible** | **Roster** + pro days | Pro days; draft or graduate |
 | **Early draft (underclass)** | Declare flow | Convince to stay / leave for draft |

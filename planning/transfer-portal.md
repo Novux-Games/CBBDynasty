@@ -40,12 +40,14 @@
 
 | Tab | Who appears | Player actions |
 |-----|-------------|----------------|
-| **Roster** | **Everyone on your roster** (scholarship + walk-ons in roster cap) | Review; **encourage transfer** on eligible players — player is **not** in the portal yet |
-| **Transfer** | Only players who have **entered the portal** (yours + you learn of national via sim later) | **Convince to stay** on **your** entrants — success → **removed from portal**, **returns to roster** |
+| **Roster** | Your roster **minus anyone in the portal** — only players **not** currently portal entrants (scholarship + walk-ons within cap) | Review; **encourage transfer** — target must **not** already be on Transfer tab |
+| **Transfer** | Only players who have **entered the portal** (your entrants in Week 1; national pool Weeks 2–5 in Recruiting hub) | **Convince to stay** on **your** entrants — success → off Transfer tab, **back on Roster** |
 
-**Encourage transfer (Roster tab):** Confirm → player **leaves your roster** immediately and **enters the portal** → appears on **Transfer** tab, **not** on Roster.
+**Mutual exclusion:** A player appears on **exactly one** of these tabs in Week 1 — **never both**. Portal entry → **removed from Roster tab**; convince-to-stay → **removed from Transfer tab**, **restored to Roster tab**.
 
-**Convince to stay (Transfer tab):** Success → player **withdraws from portal**, **back on Roster**. Failure → remains in portal for Weeks 2–5 (if still unsigned).
+**Encourage transfer (Roster tab):** Confirm → **enters portal** → **only** on Transfer tab.
+
+**Convince to stay (Transfer tab):** Success → **only** on Roster tab. Failure → stays on Transfer tab through Weeks 2–5 if unsigned.
 
 Graduates, draft exits, and completed eligibility are handled on **Roster** / declare flows — they **do not** use the portal ([grad rule](#who-enters-the-portal)).
 
@@ -172,3 +174,4 @@ User sees **outcomes** only (who entered), not internal reason.
 |------|--------|
 | 2026-11-09 | Initial spec |
 | 2026-11-09 | Roster/Transfer tabs; considering vs entrant pool; 2026 eligibility; Top 40 @ Week 2 |
+| 2026-11-09 | Roster tab excludes portal entrants; mutual exclusion between tabs |
