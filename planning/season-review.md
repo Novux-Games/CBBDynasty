@@ -57,7 +57,7 @@ Single scroll or tabbed **Season Review** content on the same dynasty shell ([`g
 | **Program prestige** | Start → end **0–99** with short reason chips (wins, tourney, scandals if any) |
 | **Next season recruiting** | **Weekly points pool** preview for the **upcoming** cycle from post-recap prestige tier ([`recruiting-engine.md`](recruiting-engine.md#prestige-tier-weekly-pool-design-lock)) — vs this season’s locked pool if still in the same signing cycle |
 | **Coach** | Prestige snapshot, job security tier, contract years left ([`coach-card.md`](coach-card.md)) |
-| **Awards** | National & conference player/coach honors (link to News / History) |
+| **Awards** | **Team MVP**, conference/national POTY, All-Conference / All-America ([`awards.md`](awards.md)); link to News / History |
 | **History hooks** | New **national HOF** inductees, **GOAT** list refresh, national records this year ([`history-hub.md`](history-hub.md)) |
 | **League digest** | Mini articles: champion, biggest riser/faller in NET, headline upset |
 | **Roster snapshot** | Departures preview (grads already known); optional link forward to offseason Week 1 |
