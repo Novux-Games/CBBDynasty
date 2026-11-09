@@ -1,6 +1,6 @@
 # Game frame — in-season (coach loaded)
 
-**When this applies:** Coach and dynasty exist; player is in **in-season** play (regular season, conference tournament, postseason — not full offseason UI).  
+**When this applies:** Coach and dynasty exist; player is in **in-season** play (regular season, conference tournament, postseason — not full offseason UI). **March national postseason UI:** [`postseason-frame.md`](postseason-frame.md).  
 **Companion:** [`game-design.md`](game-design.md) (systems), [`simulation-engine.md`](simulation-engine.md) (game sim), [`player-cards.md`](player-cards.md), [`coach-card.md`](coach-card.md).  
 **Last updated:** 2025-11-08
 
@@ -85,9 +85,13 @@ At-a-glance card(s) for **your program**:
 
 **Design lock:** **Poll rank** and **AP-style national ranking** are **one list** — sim voters rank **every** program **`#1`–`#365`** each week (no team is unranked). **`#1`–`#25`** get the **T25** highlight (badge / row styling) in Rankings, news, and school rows where poll rank is shown; **`#26`–`#365`** still show **`#NN`** with no T25 treatment. Selection Sunday uses this same order ([`postseason.md`](postseason.md)).
 
-**Not seeds:** In-season rank is **not** a tournament seed. **Seeds** appear only on **postseason** brackets after Selection Sunday.
+**Not seeds:** In-season rank is **not** a tournament seed. After Selection Sunday, **tournament seeds** use event labels (**NCBA #**, **NCI #**, **HC #**) — see [`postseason-frame.md`](postseason-frame.md#tournament-seed-labels). Poll **`#NN`** stays on Rankings through March.
 
 Tap **Current ranking** → Rankings hub (full **#1–#365** list).
+
+### Postseason row (dashboard)
+
+When the user’s team has a national invite: show **`{NCBA|NCI|HC} #{seed}`** (+ NCBA region when set). Replaces any “projected” copy — assigned only on Selection Sunday.
 
 ### Notifications
 
@@ -164,6 +168,7 @@ Hamburger opens **hub picker** (overlay or slide drawer):
 | **Rankings** | National **`#1`–`#365`** + **T25** hub + conference standings |
 | **News** | Full news product (stories, draft, recruits) |
 | **History** | Dynasty & national archive cards |
+| **March Mayhem** | National postseason — **NCBA · NCI · HC** brackets & games ([`postseason-frame.md`](postseason-frame.md)); **hamburger only after Selection Sunday** |
 
 Bottom tabs remain available; hubs stack or replace main content per navigation pattern (implementation choice).
 
@@ -336,7 +341,7 @@ Cards **accumulate** as dynasty seasons complete; national content includes team
 
 ```
 Bottom:  Roster | Calendar | Dashboard | News
-Hamburger: School | Strategy | Statistics | Rankings | News | History
+Hamburger: School | Strategy | Statistics | Rankings | News | History | March Mayhem (post–Selection Sunday)
            └─ School: Overview | Staff | Roster | Schedule | Stats | History | Records | HOF | Drafted
 ```
 
@@ -345,7 +350,7 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History
 | Doc | Covers |
 |-----|--------|
 | **`offseason-frame.md`** | Portal, carousel, recruiting shell, week/day advance |
-| **`postseason-frame.md`** | Conference brackets, Selection Sunday — [`postseason.md`](postseason.md) |
+| **`postseason-frame.md`** | Tournament seed labels, March Mayhem hub — [`postseason.md`](postseason.md) |
 | **`transfer-portal-engine.md`** | Portal cycles, retention, in-season window |
 | **`selection-engine.md`** | Poll + Seed Index, Selection Sunday cuts |
 

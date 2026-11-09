@@ -216,9 +216,21 @@ Coach **Achievements** track W–L and titles per bracket ([`coach-card.md`](coa
 | Phase | What the user sees |
 |-------|---------------------|
 | **Regular season / conf tourneys** | Poll rank **`#1`–`#365`** for every team; **T25** styling for top 25 — **not** seeds |
-| **Selection Sunday onward** | **Bracket seeds** (1–64 NCBA, etc.) |
+| **Selection Sunday onward** | **Tournament-labeled seeds** — never a bare “#1 seed” |
 
-No in-season UI coloring for projected NCBA / NCI / Heritage. Poll rank is informational; **auto-bids and national invites** are assigned only after conference tournaments and Selection Sunday ([`game-frame.md`](game-frame.md)).
+**Seed display (design lock):** Each national event has its **own** seed ladder. UI always prefixes the tournament short label ([`postseason-frame.md`](postseason-frame.md#tournament-seed-labels)):
+
+| Event | Label | Seeds |
+|-------|-------|-------|
+| NCBA Men's BB Tournament | **NCBA** | **#1–#64** |
+| National College Invitational | **NCI** | **#1–#32** |
+| National Heritage Classic | **HC** | **#1–#16** |
+
+**NCI #1** and **HC #1** are independent of **NCBA #1** — three different #1 seeds can exist the same night. NCI/HC lines use **Seed Index** among that event’s invitees only ([`selection-engine.md`](selection-engine.md)).
+
+**March UI:** **[March Mayhem](postseason-frame.md#march-mayhem-hub)** hub (hamburger) monitors **NCBA · NCI · HC** brackets and games after Selection Sunday.
+
+No in-season UI for projected NCBA / NCI / Heritage. Poll rank is informational; **auto-bids and national invites** are assigned only after conference tournaments and Selection Sunday ([`game-frame.md`](game-frame.md)).
 
 ---
 

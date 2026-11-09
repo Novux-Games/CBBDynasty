@@ -16,6 +16,7 @@
 **NCBA universe:** **[`ncba-branding.md`](ncba-branding.md)** — national body, March Mayhem, early events  
 **Postseason:** **[`postseason.md`](postseason.md)** — Selection Sunday, NCBA / NCI / Heritage  
 **Selection engine:** **[`selection-engine.md`](selection-engine.md)** — poll formula, seed index, cuts  
+**Postseason UI:** **[`postseason-frame.md`](postseason-frame.md)** — March Mayhem hub, NCBA/NCI/HC seed labels  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start (**Season 1**)  
 **Last updated:** 2025-11-08

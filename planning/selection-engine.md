@@ -202,6 +202,17 @@ After seeds **1–64** are set:
 2. **Conference conflict:** swap within seed lines when possible so same conference avoids meeting before **Super 16** ([`ncba-branding.md`](ncba-branding.md)).
 3. Persist `regionId`, `seed`, `bracketSlot` on each NCBA entrant.
 
+### NCI & Heritage seeds
+
+Same **`seedIndex`** formula as NCBA, scoped to each invite list only:
+
+| Event | Label | Sort pool | Seeds |
+|-------|-------|-----------|-------|
+| NCI | **NCI** | 32 NCI invitees | **NCI #1** (best index) … **NCI #32** |
+| Heritage | **HC** | 16 HC invitees | **HC #1** … **HC #16** |
+
+No cross-tournament seed rank (NCBA #8 is unrelated to NCI #8). UI rules: [`postseason-frame.md`](postseason-frame.md#tournament-seed-labels).
+
 NCI / Heritage use separate bracket templates (no shared seed list with NCBA).
 
 ---
@@ -212,7 +223,7 @@ NCI / Heritage use separate bracket templates (no shared seed list with NCBA).
 |----------|----------|
 | Default weights | Pack `ruleset.pollWeights`, `ruleset.seedWeights`, `ruleset.quadWeights` |
 | Weekly poll snapshot | Dynasty save: `pollRankByTeamId`, `pollScore`, `sosRating`, week id |
-| Selection Sunday snapshot | `selectionSundayYear`, NCBA/NCI/Heritage lists, `seedByTeamId`, frozen `NEM`/`QRS`/`sosRating`/… |
+| Selection Sunday snapshot | `selectionSundayYear`, NCBA/NCI/Heritage lists, `nationalPostseason{tournamentId, seed, regionId?}` per team, frozen indices |
 
 ---
 

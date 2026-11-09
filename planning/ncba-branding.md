@@ -67,6 +67,18 @@
 
 Pack keys (example): `round.opening`, `round.1` … `round.nationalChampionship`, `nci.*`, `heritage.*`.
 
+### Tournament seed UI labels
+
+Postseason **seeds** always show **tournament + number** (never ambiguous “#1 seed”):
+
+| Event | Short label | Example |
+|-------|-------------|---------|
+| NCBA Men's BB Tournament | **NCBA** | `NCBA #4` |
+| National College Invitational | **NCI** | `NCI #1` |
+| National Heritage Classic | **HC** | `HC #12` |
+
+**March Mayhem** hub title for the national postseason monitor ([`postseason-frame.md`](postseason-frame.md)).
+
 ---
 
 ## Early-season holiday events (regular season)
