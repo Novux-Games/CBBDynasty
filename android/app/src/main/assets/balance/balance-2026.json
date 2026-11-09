@@ -55,6 +55,16 @@
     "rosterCap": 15
   },
   "injuries": {
+    "occurrence": {
+      "baseChancePerPlayerGame": 0.018,
+      "maxInjuriesPerTeamPerGame": 2,
+      "exhibitionMultiplier": 0.45,
+      "minutesWeightExponent": 1.15,
+      "fatigueWeightExponent": 1.1,
+      "medicalStaffGradeBaseline": 70,
+      "stackPolicy": "replace",
+      "headlineOverallMin": 78
+    },
     "medicalRedshirt": {
       "maxGamesPlayed": 15,
       "maxScheduleRsGameIndex": 20,

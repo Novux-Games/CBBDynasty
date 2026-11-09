@@ -94,7 +94,8 @@ No recruiting, games, or schedule edits this week.
 | **Optional** | **Spend recruiting points** ({N} available) | Year-long cycle open + drip unspent |
 | **Optional** | Watchlist / Top 60 / rival-commit nudges | Triggers in [`recruiting-engine.md`](recruiting-engine.md#in-season-dashboard-tasks) |
 | **Optional** | **Coach skill points** (Sunday) | Sunday in RS when points granted ([`game-design.md`](game-design.md)) |
-| **Optional** | **Injury** follow-up (lineup, medical redshirt edge) | When injury alert surfaces |
+| **Optional** | **Review injury — {Name}** ({N} games) | After user player hurt → Strategy / rotation |
+| **Optional** | **Medical redshirt — {Name}?** | Eligible moderate/major injury, RS week ≤ 20, GP ≤ 15 — [`injuries.md`](injuries.md#medical-redshirt) |
 | **Optional** | **Strategy / rotation** edits | Before sim when prep incomplete (product may nudge) |
 | **Required** | — | **Bye week:** none. **User game week:** games are **optional**, not required ([`game-frame.md`](game-frame.md#dashboard-task-gate)) |
 

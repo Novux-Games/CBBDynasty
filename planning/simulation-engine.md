@@ -100,6 +100,10 @@ Each event emits **one text line** for live log (see [Output](#output)).
 
 No user substitution UI **during** sim — only auto per prep.
 
+### Injuries (output only)
+
+After the game, roll **random injuries** per [`injuries.md`](injuries.md#sim-hook) for players with minutes. Append to `GameSimResult.injuries[]` — **caller** persists to dynasty state and blocks injured players in the **next** game’s prep. Injured players in **this** run stop playing once an mid-game injury event fires.
+
 ---
 
 ## Prep inputs

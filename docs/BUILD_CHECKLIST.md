@@ -333,3 +333,4 @@ Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.20** point actions
 | 2026-11-09 | Planning sync index; balance/sim bundles 2.6–2.7; recruiting year-long, portal, dashboard, news hub, loyalty steps |
 | 2026-11-09 | Recruiting action costs, refunds, visits, Signing Day week 6; offseason → 10 weeks |
 | 2026-11-09 | Fix Phase 6 steps 6.17–6.20; move Signing Day out of Phase 15; correct OS week labels 7–10 |
+| 2026-11-09 | Injuries sim output, persistence, lineup block, news — per injuries.md |
