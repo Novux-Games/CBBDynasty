@@ -1,6 +1,6 @@
 # Game frame — in-season (coach loaded)
 
-**When this applies:** Coach and dynasty exist; player is in **in-season** play (regular season, conference tournament, postseason — not full offseason UI). **March national postseason UI:** [`postseason-frame.md`](postseason-frame.md).  
+**When this applies:** Coach and dynasty exist; player is in **in-season** play (regular season, conference tournament, postseason — not full offseason UI). **Before this shell:** [`game-start.md`](game-start.md). **March national postseason UI:** [`postseason-frame.md`](postseason-frame.md).  
 **Companion:** [`game-design.md`](game-design.md) (systems), [`simulation-engine.md`](simulation-engine.md) (game sim), [`player-cards.md`](player-cards.md), [`coach-card.md`](coach-card.md).  
 **Last updated:** 2025-11-08
 

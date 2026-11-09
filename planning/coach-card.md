@@ -1,7 +1,7 @@
 # Coach card
 
 **Context:** In-season and offseason for **head coaches** and **assistant coaches** (coach card). **Support staff** (trainers, etc.) have **no** card UI — see [Staff (School hub)](#staff-school-hub).  
-**Applies when:** School hub staff, carousel/poach, league leaderboards — [`game-frame.md`](game-frame.md).  
+**Applies when:** School hub staff, carousel/poach, league leaderboards — [`game-frame.md`](game-frame.md). **Created at:** [`game-start.md`](game-start.md) wizard.  
 **Systems source:** Coaching carousel, contracts, skills — [`game-design.md`](game-design.md#coaching-carousel--contracts).  
 **Default schemes:** Preset tables in [`strategy-schemes.md`](strategy-schemes.md) (coach card = **default** selection; Strategy hub = **per-game** prep).  
 **Last updated:** 2025-11-08
@@ -101,7 +101,8 @@ Tab bar sits under identity strip; content scrolls per tab.
 
 | Field | Notes |
 |-------|--------|
-| **Age** | Coach age (birth year derived) |
+| **Age** | Set at create ([`game-start.md`](game-start.md)); ages each season |
+| **Alma mater** | From wizard; display school name from pack |
 | **Career experience** | Seasons as head coach (all schools, dynasty) |
 | **School experience** | Seasons at **current** program |
 | **Contract overview** | See [subfields](#contract-overview-on-overview) below |

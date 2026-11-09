@@ -48,3 +48,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | Postseason selection | **Done** | [`postseason.md`](postseason.md) |
 | Selection engine (poll + seed) | **Done** | [`selection-engine.md`](selection-engine.md) |
 | Postseason UI (March Mayhem) | **Done** | [`postseason-frame.md`](postseason-frame.md) |
+| Game start / new dynasty | **Done** | [`game-start.md`](game-start.md) |
