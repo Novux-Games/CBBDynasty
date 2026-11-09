@@ -31,7 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.GameConstants
-import java.time.Year
 import kotlinx.coroutines.delay
 
 /** Novux Games publisher beat — [planning/app-shell.md#studio-screen-novux-games]. */
@@ -43,7 +42,6 @@ fun StudioScreen(
 ) {
     var skipEnabled by remember { mutableStateOf(false) }
     var fadeIn by remember { mutableStateOf(false) }
-    val copyrightYear = Year.now().value
 
     LaunchedEffect(Unit) {
         fadeIn = true
@@ -94,20 +92,7 @@ fun StudioScreen(
                     .sizeIn(maxHeight = 168.dp),
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
-
-            Text(
-                text = stringResource(
-                    R.string.studio_copyright,
-                    copyrightYear,
-                    GameConstants.STUDIO_NAME,
-                ),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             Text(
                 text = stringResource(R.string.studio_website),

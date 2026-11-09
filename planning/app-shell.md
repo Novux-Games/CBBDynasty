@@ -53,7 +53,7 @@ App process start
 | **Background** | **`#181a25`** full bleed ([`branding.md`](branding.md#color)) |
 | **Mark** | **`Public-Assets/Novux_Logos/`** or **`Novux_Icons/`** — primary studio lockup (vector preferred) |
 | **Motion** | Subtle fade-in / optional short logo sting (ship TBD) |
-| **Text** | **© {current year} Novux Games** + **novux.dev** below lockup; tap hint below that |
+| **Text** | **novux.dev** below lockup; tap hint at bottom |
 | **Input** | **Tap anywhere** to skip after min display time |
 
 **Design lock:** Do **not** use the **Dynasty: College Basketball** app logo as the hero on this screen — studio identity only.

@@ -60,25 +60,14 @@ def render_studio(year: int) -> None:
         Image.Resampling.LANCZOS,
     )
 
-    block_h = (
-        lockup.height
-        + 48
-        + 40
-        + 16
-        + 36
-    )
+    block_h = lockup.height + 40 + 36
     y = (H - block_h) // 2 - 80
     y = paste_centered(canvas, lockup, y)
-    y += 48
+    y += 40
 
-    font_copy = load_font(size=34)
     font_url = load_font(size=32)
     font_hint = load_font(size=36)
 
-    y = draw_centered_text(
-        draw, y, f"© {year} Novux Games", font_copy, MUTED
-    )
-    y += 16
     draw_centered_text(draw, y, "novux.dev", font_url, ACCENT)
 
     hint_y = H - 160
