@@ -105,7 +105,29 @@
         "realisticCapacity": "full national board"
       }
     ],
-    "weeklyPointsInterpolation": "linear_within_tier"
+    "weeklyPointsInterpolation": "linear_within_tier",
+    "signingDayOffseasonWeek": 6,
+    "actions": {
+      "scholarshipOffer": { "cost": 150, "refunded": true, "refundPolicy": "week_boundary_while_active" },
+      "dm": { "cost": 50, "refunded": false },
+      "phoneCall": { "cost": 100, "refunded": false },
+      "sendTheHouse": { "cost": 500, "refunded": false },
+      "scoutTheirGame": {
+        "cost": 50,
+        "refunded": true,
+        "refundPolicy": "week_boundary_while_active",
+        "oncePerRecruitPerSeason": true,
+        "allowedPhases": ["regular_season"]
+      },
+      "officialVisit": {
+        "costByDistanceBand": { "local": 50, "regional": 100, "remote": 150 },
+        "refunded": true,
+        "refundPolicy": "week_boundary_while_active",
+        "oncePerRecruitPerSeason": true,
+        "allowedThrough": { "phase": "offseason", "weekIndexMax": 5, "includesRegularSeason": true }
+      },
+      "bonusPoints": { "refunded": false, "spendUnspentWeeklyBalance": true }
+    }
   },
   "nil": {
     "currency": "usd_annual",

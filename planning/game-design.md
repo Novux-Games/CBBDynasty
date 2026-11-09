@@ -16,7 +16,7 @@
 **Recruiting:** **[`recruiting-engine.md`](recruiting-engine.md)** — year-long cycle, signing crunch, NIL + points  
 **League identity:** **[`league-branding.md`](league-branding.md)** — conference/team real ↔ universe mapping  
 **NCBA universe:** **[`ncba-branding.md`](ncba-branding.md)** — national body, March Mayhem, early events  
-**Offseason:** **[`offseason.md`](offseason.md)** — carousel, weeks 1–9, Season 1 rules  
+**Offseason:** **[`offseason.md`](offseason.md)** — carousel, weeks 1–10, Signing Day week 6, Season 1 rules  
 **Preseason:** **[`preseason.md`](preseason.md)** — single-week tasks, reports, schedule  
 **Time / weeks:** **[`time-system.md`](time-system.md)** — exhibition, RS 1–32, byes, postseason weeks  
 **Season review:** **[`season-review.md`](season-review.md)** — end of year before offseason  
@@ -326,7 +326,7 @@ Dynasty still supports a **0-game redshirt season** for development (exhibitions
 
 **Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — year-long cycle, prestige-tier **weekly points**, 2–4K HS + 1.5K JUCO, portal sub-tab, NIL, letter grades, prestige 0–99.
 
-**Brief:** HS/JUCO **seeded in preseason**; **year-long cycle**; **weekly points** (1k–5k/wk by prestige) buy **scout / call / offer / pitch** — **NIL $** is separate; **Recommended** default; **50%** carryover; signing crunch **1.5×** OS weeks 2–5. Arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
+**Brief:** HS/JUCO **seeded in preseason**; **year-long cycle**; **weekly points** (1k–5k/wk by prestige, **fixed grant** each week) buy **DM / call / house / offer / visits / bonus** — **NIL $** separate; **refunded** offer & visit reservations; **Signing Day** OS week 6; **Recommended** default; **50%** unspent carryover; crunch **1.5×** OS weeks 2–5. Arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
 
 ---
 
