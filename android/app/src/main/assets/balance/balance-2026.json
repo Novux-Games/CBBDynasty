@@ -296,6 +296,141 @@
         "durationGamesMin": 16,
         "durationGamesMax": 32,
         "weight": 0.1
+      },
+      {
+        "id": "bruised_rib",
+        "label": "Bruised rib",
+        "bodyPart": "torso",
+        "severity": "minor",
+        "durationGamesMin": 1,
+        "durationGamesMax": 2,
+        "weight": 0.65
+      },
+      {
+        "id": "congestion",
+        "label": "Congestion",
+        "bodyPart": "illness",
+        "severity": "minor",
+        "durationGamesMin": 1,
+        "durationGamesMax": 2,
+        "weight": 0.55
+      },
+      {
+        "id": "quad_tweak",
+        "label": "Quad tweak",
+        "bodyPart": "leg",
+        "severity": "minor",
+        "durationGamesMin": 1,
+        "durationGamesMax": 2,
+        "weight": 0.8
+      },
+      {
+        "id": "toe_sprain",
+        "label": "Toe sprain",
+        "bodyPart": "foot",
+        "severity": "minor",
+        "durationGamesMin": 1,
+        "durationGamesMax": 2,
+        "weight": 0.5
+      },
+      {
+        "id": "shin_splints",
+        "label": "Shin splints",
+        "bodyPart": "leg",
+        "severity": "minor",
+        "durationGamesMin": 2,
+        "durationGamesMax": 4,
+        "weight": 0.55
+      },
+      {
+        "id": "rib_fracture",
+        "label": "Rib fracture",
+        "bodyPart": "torso",
+        "severity": "moderate",
+        "durationGamesMin": 4,
+        "durationGamesMax": 8,
+        "weight": 0.35
+      },
+      {
+        "id": "mcl_sprain",
+        "label": "MCL sprain",
+        "bodyPart": "knee",
+        "severity": "moderate",
+        "durationGamesMin": 3,
+        "durationGamesMax": 7,
+        "weight": 0.55
+      },
+      {
+        "id": "elbow_sprain",
+        "label": "Elbow sprain",
+        "bodyPart": "arm",
+        "severity": "moderate",
+        "durationGamesMin": 2,
+        "durationGamesMax": 5,
+        "weight": 0.4
+      },
+      {
+        "id": "plantar_fasciitis",
+        "label": "Plantar fasciitis",
+        "bodyPart": "foot",
+        "severity": "moderate",
+        "durationGamesMin": 2,
+        "durationGamesMax": 6,
+        "weight": 0.45
+      },
+      {
+        "id": "oblique",
+        "label": "Oblique strain",
+        "bodyPart": "torso",
+        "severity": "moderate",
+        "durationGamesMin": 3,
+        "durationGamesMax": 6,
+        "weight": 0.45
+      },
+      {
+        "id": "facial_fracture",
+        "label": "Facial fracture",
+        "bodyPart": "head",
+        "severity": "moderate",
+        "durationGamesMin": 2,
+        "durationGamesMax": 5,
+        "weight": 0.35
+      },
+      {
+        "id": "mcl_tear",
+        "label": "MCL tear",
+        "bodyPart": "knee",
+        "severity": "major",
+        "durationGamesMin": 6,
+        "durationGamesMax": 16,
+        "weight": 0.22
+      },
+      {
+        "id": "broken_hand",
+        "label": "Broken hand",
+        "bodyPart": "hand",
+        "severity": "major",
+        "durationGamesMin": 8,
+        "durationGamesMax": 18,
+        "weight": 0.28
+      },
+      {
+        "id": "patellar_tendon",
+        "label": "Patellar tendon tear",
+        "bodyPart": "knee",
+        "severity": "major",
+        "durationGamesMin": 10,
+        "durationGamesMax": 24,
+        "weight": 0.16
+      },
+      {
+        "id": "dislocated_shoulder",
+        "label": "Dislocated shoulder",
+        "bodyPart": "arm",
+        "severity": "major",
+        "durationGamesMin": 8,
+        "durationGamesMax": 20,
+        "weight": 0.2
       }
     ]
   },

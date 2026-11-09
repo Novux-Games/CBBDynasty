@@ -71,7 +71,7 @@ Per completed game (each team):
 
 ## Injury bank
 
-**Authoritative catalog:** [`balance-2026.json`](../assets/balance/balance-2026.json) → `injuries.bank[]` (**25** entries, v1).
+**Authoritative catalog:** [`balance-2026.json`](../assets/balance/balance-2026.json) → `injuries.bank[]` (**40** entries, v2).
 
 | Field | Meaning |
 |-------|---------|
@@ -90,9 +90,9 @@ Per completed game (each team):
 
 | Severity | Examples in bank |
 |----------|------------------|
-| **Minor** | Ankle sprain/tweak, jammed finger, calf tightness, back spasm, hip pointer, illness |
-| **Moderate** | Knee/hamstring sprain, concussion protocol, shoulder strain, groin, hand fracture, high ankle, meniscus irritation, hyperextended knee, wrist sprain |
-| **Major** | ACL/ligament, Achilles, Jones fracture, shoulder labrum, stress fracture, torn meniscus surgery path, season-ending leg |
+| **Minor** | Ankle/foot tweaks, finger, calf/quad/shin, back/neck, hip pointer, bruised rib, illness/flu/congestion |
+| **Moderate** | Sprains (knee/MCL, hamstring, groin, elbow, wrist, high ankle), concussion, shoulder, ribs/oblique, plantar fasciitis, hand fracture, meniscus irritation |
+| **Major** | ACL/MCL tear, Achilles, Jones fracture, labrum/dislocation, stress fracture, torn meniscus, broken hand, patellar tendon, season-ending leg |
 
 ---
 
@@ -103,7 +103,7 @@ Per completed game (each team):
 | **OUT** | Player **cannot** be in starting five or rotation for games while `gamesRemaining > 0` |
 | **Tick** | Each **missed** scheduled game for that team decrements `gamesRemaining` on week advance (or immediately after that game’s sim completes) |
 | **Byes** | Injury clock **does not** tick on bye weeks with no game |
-| **Return** | At `gamesRemaining == 0`, status → **healthy** before next game prep unless user holds out manually (optional “limited minutes” not v1) |
+| **Return** | At `gamesRemaining == 0`, status → **healthy**; **auto-restore lineup** (see below) before next prep unless medical redshirt ended season |
 | **Staff** | High **medical** staff grade: **−1** game on **minor** injuries only (min 1 game if rolled 1) |
 
 ### Games played (medical RS counters)
@@ -123,6 +123,7 @@ When an injury is **saved** to dynasty state (postgame or batch sim), the **line
 
 ```
 for each injured player in this event:
+  snapshot injuryWasStarterSlot + injuryPriorRotationBand (minutes band / reserve rank)
   if player in startingFive[slot]:
     remove from slot → move to **Reserves** list (roster depth)
     clear rotation minutes target → **0**
@@ -139,8 +140,31 @@ rebalance rotation bands: injured pinned to Reserves; promoted starters inherit 
 | **Reserves** | Injured players **always** appear under **Reserves**, not starters — even if they were in the five when hurt mid-game |
 | **Promotion** | Same rules as **Reset to default** but **skip** injured and **never** auto cross-list (PG→SG) unless user already did |
 | **User override** | Next Strategy visit shows updated five; user may change before following game |
-| **Return** | When healthy, player returns to **Reserves** only — **not** auto-restored to starters (user or **Reset to default** promotes them) |
 | **Multi-injury** | One pass per event; if multiple starters out, fill slots top-down PG→C in same pass |
+
+### Auto-restore on return (design lock)
+
+When `gamesRemaining` becomes **0** (injury tick after a missed game or same-moment clear for 1-game injuries), run **`applyInjuryReturnLineupAdjust`** for that player — **before** next game prep.
+
+```
+if injuryWasStarterSlot is set:
+  displaced = current starter in that slot
+  startingFive[slot] = returning player
+  demote displaced → Reserves (rotation band = typical bench for slot)
+  restore returning player's rotation band from injuryPriorRotationBand
+
+else (was reserve / rotation only):
+  restore injuryPriorRotationBand
+  bump to **top** reserve rotation rank (highest minutes band among non-starters)
+```
+
+| Rule | Detail |
+|------|--------|
+| **Starters** | Returning starter **reclaims** saved slot; interim starter drops to reserves — user is **not** required to swap back manually |
+| **Reserves** | Returns to **top of rotation** (prior band, highest among bench) |
+| **Conflict** | Multiple returns same week: process **PG → C**; second reclaim may demote first returnee only if still in that slot as interim |
+| **Medical RS** | No return adjust — player remains OUT for season |
+| **User override** | User may edit Strategy after restore; restore runs again only on **next** clearance |
 
 ### Other lineup rules
 
@@ -227,6 +251,8 @@ Separate from **preseason 0-game redshirt** ([`game-design.md`](game-design.md#r
 | `injuryOccurredAtRsGameIndex` | int | 1–32 |
 | `rsGamesPlayedAtInjury` | int | Snapshot for medical RS audit |
 | `medicalRedshirtSeason` | bool | |
+| `injuryWasStarterSlot` | enum? | `PG`…`C` if starter when hurt; else null |
+| `injuryPriorRotationBand` | int? | Minutes-band rank at injury; drives return-to-top |
 
 **GameSimResult** append:
 
@@ -234,7 +260,9 @@ Separate from **preseason 0-game redshirt** ([`game-design.md`](game-design.md#r
 injuries: [{ playerId, injuryId, bodyPart?, gamesRemaining, severity, occurredInGameMinute? }]
 ```
 
-**Caller after persist:** `applyInjuryLineupAdjust(teamId, injuredPlayerIds)` — mutates `startingFive` + rotation per [Auto-adjust](#auto-adjust-on-injury-design-lock).
+**Caller after persist:** `applyInjuryLineupAdjust(teamId, injuredPlayerIds)` — [Auto-adjust on injury](#auto-adjust-on-injury-design-lock).
+
+**Caller on injury clear:** `applyInjuryReturnLineupAdjust(teamId, playerId)` — [Auto-restore on return](#auto-restore-on-return-design-lock).
 
 ---
 
@@ -257,3 +285,4 @@ injuries: [{ playerId, injuryId, bodyPart?, gamesRemaining, severity, occurredIn
 | 2026-11-09 | Initial spec — random bank, duration ranges, medical RS gates |
 | 2026-11-09 | Sim hook, lineup, UI, news, data model, phase rules |
 | 2026-11-09 | Auto lineup on injury; bank v1 (25 rows + bodyPart) |
+| 2026-11-09 | Bank v2 (40 rows); auto-restore starters + top reserve on return |

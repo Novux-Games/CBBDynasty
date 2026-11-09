@@ -94,7 +94,7 @@ Overrides apply to **next sim**; week replay rules unchanged ([`game-design.md`]
 
 - **Starters** on roster tab = current default or user five for next game.
 - **Reserves / bench:** everyone else; sub logic in sim uses minutes bands from Strategy ([`game-frame.md`](game-frame.md)).
-- **Injury:** On new injury, engine **demotes** hurt players to **Reserves** and **auto-fills** empty starter slots from healthy players ([`injuries.md`](injuries.md#lineup--rotation)). Healthy return does **not** auto-rejoin starters.
+- **Injury:** Demote to **Reserves**, auto-fill starters on injury; on return, **reclaim starter slot** or **top reserve** band ([`injuries.md`](injuries.md#lineup--rotation)).
 
 ---
 
