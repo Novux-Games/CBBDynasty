@@ -65,6 +65,7 @@
 | **Decommit** from user school | Yes | — | Recruiting |
 | Carousel: **offer / fired / must-sign extension** | Yes | **Required** task when gated | Coach → Contract |
 | **Selection Sunday** (user in field) | Yes | — | March Mayhem / preview |
+| **Fired** or **national postseason eliminated** | Feed row + **blocking modal** on next Dashboard open — acknowledge before other UI | Required carousel / career tasks as applicable | Coach / career flow |
 
 ### Medium
 
@@ -144,10 +145,14 @@ Tap feed row → navigate with Dashboard under back stack:
 
 ---
 
-## Open decisions
+## Design locks (product decisions)
 
-1. ~~Portal / commit feed breadth~~ → **Locked:** **every** commit to the user program (**HS, JUCO, portal**) gets a feed row.
-2. **Fired / eliminated:** Add **blocking modal** on next Dashboard open, or feed row only?
+| Decision | Lock |
+|----------|------|
+| **Commits** | **Every** sign to the user program (**HS, JUCO, portal**) → feed row |
+| **Fired / eliminated** | **Option B:** **blocking modal** on first Dashboard open after the event; persists until dismissed; feed row also logged for history |
+
+Modal copy is short; primary CTA routes to the same destination as the parallel **required** task (carousel / career / postseason) when one exists.
 
 ---
 
@@ -173,3 +178,4 @@ Tap feed row → navigate with Dashboard under back stack:
 | 2026-11-09 | Initial draft (incorrectly included OS push) |
 | 2026-11-09 | **In-app only**; no push; Stories separate; defaults on |
 | 2026-11-09 | All user-school commits (HS/JUCO/portal) → feed row |
+| 2026-11-09 | Fired / postseason eliminated → blocking modal + feed row |

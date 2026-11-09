@@ -280,7 +280,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 16.1 | `[ ]` **In-app notification feed** + default on | Dashboard rows, deep links, no OS push; News not duplicated | [notifications](../planning/notifications.md) | `ui.dashboard` |
+| 16.1 | `[ ]` **In-app notification feed** + default on | Dashboard rows, deep links, no OS push; all commits; **fired/eliminated modal**; News not duplicated | [notifications](../planning/notifications.md) | `ui.dashboard` |
 | 16.2 | `[ ]` Automation toggles (sim week, staff) | Settings + dynasty | [game-design](../planning/game-design.md) | — |
 | 16.3 | `[ ]` Identity import hardening (URL allowlist, size cap) | [game-design](../planning/game-design.md) | — |
 | 16.4 | `[ ]` Performance: 365-team week batch under target | Profiling doc | [game-design](../planning/game-design.md) | — |
@@ -357,3 +357,4 @@ Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.20**), **dashboard
 | 2026-11-09 | Injury bank (40 rows), auto lineup + return restore; **weeksRemaining** + bye-week tick (8.7, 9.7, 10.8, 2.6) |
 | 2026-11-09 | **Full** locked-spec index (all Done planning docs); **8.8** injury UX; injury wired through 9.4/9.6/9.8/10.2 |
 | 2026-11-09 | In-app `notifications.md` (no push); **16.1** |
+| 2026-11-09 | Notifications **Done** — commits + fired/eliminated modal |
