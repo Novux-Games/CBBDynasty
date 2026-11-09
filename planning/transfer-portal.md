@@ -18,7 +18,8 @@
 8. [National recruiting (Weeks 2–5)](#national-recruiting-weeks-25)
 9. [AI entry drivers](#ai-entry-drivers)
 10. [AI spend](#ai-spend)
-11. [Open — UX (discussion)](#open--ux-discussion)
+11. [UX — News (design lock)](#ux--news-design-lock)
+12. [UX — Dashboard (follow-up)](#ux--dashboard-follow-up)
 
 ---
 
@@ -146,7 +147,7 @@ User sees **outcomes** only (who entered), not internal reason.
 
 ## AI spend
 
-[`recruiting-engine.md` → AI recruiting`](recruiting-engine.md#ai-recruiting) — Recommended ordering, hidden boards.
+[`recruiting-engine.md` → AI recruiting`](recruiting-engine.md#ai-recruiting) — Recommended ordering, hidden boards. League outcomes surface via [News-heavy](#ux--news-design-lock).
 
 ---
 
