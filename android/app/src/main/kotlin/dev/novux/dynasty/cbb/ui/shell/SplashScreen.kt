@@ -1,5 +1,11 @@
 package dev.novux.dynasty.cbb.ui.shell
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -21,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,6 +49,26 @@ fun SplashScreen(onTapToPlay: () -> Unit) {
         delay(600)
         ready = true
     }
+
+    val ctaTransition = rememberInfiniteTransition(label = "tapToPlayPulse")
+    val ctaScale by ctaTransition.animateFloat(
+        initialValue = 0.94f,
+        targetValue = 1.06f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 900, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse,
+        ),
+        label = "tapToPlayScale",
+    )
+    val ctaAlpha by ctaTransition.animateFloat(
+        initialValue = 0.78f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 900, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse,
+        ),
+        label = "tapToPlayAlpha",
+    )
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -76,8 +103,14 @@ fun SplashScreen(onTapToPlay: () -> Unit) {
                     text = stringResource(R.string.tap_to_play),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(top = 28.dp)
+                        .graphicsLayer {
+                            scaleX = ctaScale
+                            scaleY = ctaScale
+                            alpha = ctaAlpha
+                        }
                         .clickable(onClick = onTapToPlay),
                 )
             }

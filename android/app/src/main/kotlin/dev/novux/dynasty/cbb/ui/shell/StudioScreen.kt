@@ -37,8 +37,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun StudioScreen(
     onFinished: () -> Unit,
-    autoAdvanceMs: Long = 2_000L,
-    minDisplayBeforeSkipMs: Long = 500L,
+    autoAdvanceMs: Long = GameConstants.STUDIO_AUTO_ADVANCE_MS,
+    minDisplayBeforeSkipMs: Long = GameConstants.STUDIO_MIN_SKIP_MS,
 ) {
     var skipEnabled by remember { mutableStateOf(false) }
     var fadeIn by remember { mutableStateOf(false) }
