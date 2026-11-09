@@ -114,7 +114,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 4.1 | `[x]` Nav: Home → multi-step **New** | Back stack works | [game-start](../planning/game-start.md) | `ui.newgame` |
 | 4.2 | `[x]` Coach info + avatar presets | Saved on coach entity | [game-start](../planning/game-start.md), [coach-card](../planning/coach-card.md) | `:core` + UI |
 | 4.3 | `[x]` Archetype + default O/D schemes | Matches strategy presets | [game-start](../planning/game-start.md), [strategy-schemes](../planning/strategy-schemes.md) | `:core` |
-| 4.4 | `[ ]` Dynasty toggles (auto-upgrade, unlimited age) | On save metadata | [game-start](../planning/game-start.md) | — |
+| 4.4 | `[x]` Dynasty toggles (auto-upgrade, unlimited age) | On save metadata | [game-start](../planning/game-start.md) | — |
 | 4.5 | `[ ]` School picker (prestige ≤40, unlock all) | Summary sheet + contract preview | [game-start](../planning/game-start.md) | UI + pack |
 | 4.6 | `[ ]` Sign contract → bootstrap **Offseason Week 1** | Season 1, no carousel | [offseason](../planning/offseason.md), [game-start](../planning/game-start.md) | `domain/bootstrap` |
 | 4.7 | `[ ]` Generate Season 1 roster (starters, class years) | 15-man cap path started | [game-design](../planning/game-design.md) | `:core` |

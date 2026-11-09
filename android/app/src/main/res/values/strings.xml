@@ -60,6 +60,11 @@
     <string name="new_coach_err_avatar">Choose a valid appearance preset.</string>
     <string name="new_schemes_offense">Offensive scheme</string>
     <string name="new_schemes_defense">Defensive scheme</string>
+    <string name="new_settings_auto_upgrade">Auto-upgrade attributes</string>
+    <string name="new_settings_auto_upgrade_summary">Apply player progression as soon as XP is earned.</string>
+    <string name="new_settings_unlimited_age">Unlimited coach age</string>
+    <string name="new_settings_unlimited_age_summary">When off, head coach retires at 75.</string>
+    <string name="new_settings_import_stub">Identity pack import stays on the home pack tools until a later step wires URL/TXT here.</string>
     <string name="new_step_coach_title">Coach</string>
     <string name="new_step_coach_subtitle">Name, age, and appearance presets.</string>
     <string name="new_step_archetype_title">Archetype</string>

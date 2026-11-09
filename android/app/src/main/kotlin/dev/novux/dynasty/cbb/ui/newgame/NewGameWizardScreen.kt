@@ -106,6 +106,10 @@ fun NewGameWizardScreen(
                             onOffensiveChange = { draft = draft.copy(offensiveScheme = it) },
                             onDefensiveChange = { draft = draft.copy(defensiveScheme = it) },
                         )
+                        NewGameStep.Settings -> SettingsStepContent(
+                            settings = draft.dynastySettings,
+                            onChange = { draft = draft.copy(dynastySettings = it) },
+                        )
                         NewGameStep.SignContract -> {
                             Text(
                                 text = stringResource(R.string.new_step_sign_stub),
