@@ -28,12 +28,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.GameConstants
+import java.time.Year
 import kotlinx.coroutines.delay
 
 /** Game splash — [planning/app-shell.md#splash-loading-screen]. */
 @Composable
 fun SplashScreen(onTapToPlay: () -> Unit) {
     var ready by remember { mutableStateOf(false) }
+    val copyrightYear = Year.now().value
 
     LaunchedEffect(Unit) {
         delay(600)
@@ -55,7 +57,8 @@ fun SplashScreen(onTapToPlay: () -> Unit) {
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .fillMaxWidth(0.72f)
-                    .sizeIn(maxHeight = 280.dp),
+                    .sizeIn(maxHeight = 260.dp)
+                    .padding(bottom = 8.dp),
             )
 
             Text(
@@ -63,6 +66,7 @@ fun SplashScreen(onTapToPlay: () -> Unit) {
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 28.dp),
             )
 
             if (!ready) {
@@ -78,12 +82,35 @@ fun SplashScreen(onTapToPlay: () -> Unit) {
                 )
             }
 
-            Text(
-                text = "© ${GameConstants.STUDIO_NAME}",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = 48.dp),
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(top = 40.dp),
+            ) {
+                Text(
+                    text = stringResource(
+                        R.string.splash_copyright,
+                        copyrightYear,
+                        GameConstants.STUDIO_NAME,
+                    ),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                )
+                Text(
+                    text = stringResource(R.string.game_director_line),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 6.dp),
+                )
+                Text(
+                    text = stringResource(R.string.game_director_website),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 4.dp),
+                )
+            }
         }
     }
 }

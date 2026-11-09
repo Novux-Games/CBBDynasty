@@ -21,12 +21,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.GameConstants
+import java.time.Year
 import kotlinx.coroutines.delay
 
 /** Novux Games publisher beat — [planning/app-shell.md#studio-screen-novux-games]. */
@@ -38,6 +40,7 @@ fun StudioScreen(
 ) {
     var skipEnabled by remember { mutableStateOf(false) }
     var fadeIn by remember { mutableStateOf(false) }
+    val copyrightYear = Year.now().value
 
     LaunchedEffect(Unit) {
         fadeIn = true
@@ -73,7 +76,9 @@ fun StudioScreen(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(horizontal = 32.dp),
+            modifier = Modifier
+                .padding(horizontal = 32.dp)
+                .alpha(logoAlpha),
         ) {
             Image(
                 painter = painterResource(R.drawable.novux_studio_lockup),
@@ -81,17 +86,34 @@ fun StudioScreen(
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .fillMaxWidth(0.88f)
-                    .sizeIn(maxHeight = 200.dp)
-                    .graphicsLayer { alpha = logoAlpha },
+                    .sizeIn(maxHeight = 200.dp),
+            )
+
+            Text(
+                text = stringResource(
+                    R.string.studio_copyright,
+                    copyrightYear,
+                    GameConstants.STUDIO_NAME,
+                ),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 20.dp),
+            )
+
+            Text(
+                text = stringResource(R.string.studio_website),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 4.dp),
             )
 
             Text(
                 text = "Tap to continue",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier
-                    .padding(top = 24.dp)
-                    .alpha(logoAlpha),
+                modifier = Modifier.padding(top = 40.dp),
             )
         }
     }

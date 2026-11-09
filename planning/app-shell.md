@@ -53,7 +53,7 @@ App process start
 | **Background** | **`#181a25`** full bleed ([`branding.md`](branding.md#color)) |
 | **Mark** | **`Public-Assets/Novux_Logos/`** or **`Novux_Icons/`** — primary studio lockup (vector preferred) |
 | **Motion** | Subtle fade-in / optional short logo sting (ship TBD) |
-| **Text** | **Novux Games** wordmark if not in logo asset; optional [novux.dev](https://novux.dev) on long-press / credits only |
+| **Text** | **© {current year} Novux Games** + **novux.dev** below lockup; tap hint below that |
 | **Input** | **Tap anywhere** to skip after min display time |
 
 **Design lock:** Do **not** use the **Dynasty: College Basketball** app logo as the hero on this screen — studio identity only.
@@ -103,7 +103,8 @@ App process start
 │                         │
 │     Tap to Play         │  ← when ready
 │                         │
-│   © Novux Games         │  ← optional footer
+│   © {year} Novux Games  │
+│   Game Director line    │  ← Austin Buhl / austinbuhltech.com
 └─────────────────────────┘
 ```
 
