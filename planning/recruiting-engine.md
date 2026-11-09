@@ -270,6 +270,7 @@ Two spend tracks while the **recruiting cycle** is open:
 | **Scout** | Yes | Improves **letter grades** and **archetype fit** visibility on the recruit sheet (hidden 0–99 stay hidden until commit); required to trust evaluation before heavy pursuit |
 | **Call** | Yes | **Interest** gain (persistent across weeks); baseline relationship spend |
 | **Scholarship offer** | Yes | Puts a **scholarship** on the table; unlocks serious interest growth and path to **soft commit** when interest + thresholds met |
+| **Coach promise** (at offer / commit) | No extra points | **Binding** minutes/role/stay pledge — [`player-loyalty-promises.md`](player-loyalty-promises.md); affects **loyalty**, **transfers**, **draft declare** |
 | **Priority bump** | Yes | Concentrates staff attention on one target — stronger interest swing vs other schools recruiting the same player |
 | **Playing-time pitch** | Yes (optional) | One-off **interest** bump for recruits who weight minutes / role ([interest model](#interest--offers)) |
 
@@ -407,7 +408,7 @@ Transfer **portal** sub-tab uses the **same** default tab pattern: **Recommended
 |--------|--------|-----|
 | Scout | Recruiting points | [What points buy](#what-recruiting-points-buy-design-lock) |
 | Call | Recruiting points | |
-| Scholarship offer | Recruiting points | |
+| Scholarship offer (+ optional **promise**) | Recruiting points | [`player-loyalty-promises.md`](player-loyalty-promises.md) |
 | Priority bump | Recruiting points | |
 | Playing-time pitch | Recruiting points | |
 | NIL allocation | **NIL $** only | Not points |

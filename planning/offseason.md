@@ -133,12 +133,18 @@ Notifications queue **offer cards**; carousel **pauses** for mandatory decisions
 
 ### Retention (transfer / early draft)
 
+Authoritative: [`player-loyalty-promises.md`](player-loyalty-promises.md) — **loyalty**, **promise kept/broken**, **no auto-declare** for elites.
+
 | Tool | Notes |
 |------|--------|
 | **NIL bump** | Collective allocation |
-| **Role promise** | Minutes / usage narrative modifier |
+| **Loyalty** | **0–99** — high loyalty eases stay; low + broken promise hardens leave |
+| **Promise status** | **Kept** stay pledge / minutes pledge strongly helps; **Broken** pushes portal or declare |
+| **New promise** (retention) | Optional re-pitch at Week 1 — binding for following season |
 | **Coach ratings** | Recruiting / portal retention skills |
 | **Staff grade** | [`game-design.md`](game-design.md) assistant modifiers |
+
+**Early draft:** Underclass **declare intent** is **rolled** (mock rank + loyalty + promises) — not automatic for Top 60. User **convince to stay** before withdrawal deadline.
 
 Failed retention → player enters **portal** for **weeks 2–5** recruiting (or exits draft pool per declare rules).
 

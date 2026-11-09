@@ -106,5 +106,14 @@
       }
     ],
     "weeklyPointsInterpolation": "linear_within_tier"
+  },
+  "player": {
+    "loyalty": {
+      "declareWeightLoyalty": 0.0,
+      "promiseKeptBonus": 0.0,
+      "promiseBrokenPenalty": 0.0,
+      "minutesToleranceMpg": 3,
+      "stayPledgeDefaultTopN": 14
+    }
   }
 }

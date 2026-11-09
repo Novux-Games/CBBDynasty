@@ -9,7 +9,7 @@
 **App shell:** **[`app-shell.md`](app-shell.md)** — studio screen, splash, Tap to Play  
 **Game start:** **[`game-start.md`](game-start.md)** — home, new dynasty, coach create, school pick  
 **In-season UI:** **[`game-frame.md`](game-frame.md)** — dashboard, tabs, hubs  
-**Player UI:** **[`player-cards.md`](player-cards.md)** — preview, card tabs, ratings; **[`player-archetypes.md`](player-archetypes.md)** — archetypes, draft rank  
+**Player UI:** **[`player-cards.md`](player-cards.md)** — preview, card tabs, ratings; **[`player-archetypes.md`](player-archetypes.md)** — archetypes, draft rank; **[`player-loyalty-promises.md`](player-loyalty-promises.md)** — loyalty, coach promises, draft/portal  
 **Lineup:** **[`positions-and-lineup.md`](positions-and-lineup.md)** — PG/SG/SF/PF/C, interchange, default starters  
 **Strategy:** **[`strategy-schemes.md`](strategy-schemes.md)** — O/D presets, halftime, preview/watch  
 **Coach UI:** **[`coach-card.md`](coach-card.md)** — coach preview, card tabs, School staff  
@@ -289,8 +289,9 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 ### Procedural roster events
 
 - **Graduation** — fixed class year.
-- **Early draft entry** — pro days + declare; withdrawal deadline before draft results week (see offseason).
-- **Portal in/out** — separate from high school recruiting board.
+- **Early draft entry** — **declare intent roll** at Offseason Week 1 (loyalty + promises + mock rank — **not** automatic for high prospects); pro days + withdrawal deadline before draft results week — [`player-loyalty-promises.md`](player-loyalty-promises.md).
+- **Coach promises** — minutes / role / stay pledge at offer; **broken** → transfer risk; **kept** → loyalty + stay vs declare.
+- **Portal in/out** — separate from high school recruiting board; broken promises feed portal intent.
 - **Cuts** — offseason window; must land ≤15 by roster lock before exhibitions.
 
 ---

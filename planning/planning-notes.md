@@ -13,6 +13,7 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | News | Headlines; Top 60 recruit board; dynamic draft | [`game-frame.md`](game-frame.md), [`recruiting-engine.md`](recruiting-engine.md) |
 | Coach card + School Staff | **Done** | [`coach-card.md`](coach-card.md) |
 | Recruiting engine | **Done** | [`recruiting-engine.md`](recruiting-engine.md) |
+| Loyalty & promises | **Done** | [`player-loyalty-promises.md`](player-loyalty-promises.md) |
 | Dynasty shell (all phases) | **Done** — one chrome, dashboard task gate, week advance only | [`game-frame.md`](game-frame.md) |
 | League branding / membership | **365** programs; 4 reclass no postseason until year 4 | [`league-branding.md`](league-branding.md), [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) |
 | NIL on player card | **Overview valuation** (recruiting commit) | [`player-cards.md`](player-cards.md) |
