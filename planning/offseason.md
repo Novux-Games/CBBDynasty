@@ -140,7 +140,6 @@ Authoritative: [`player-loyalty-promises.md`](player-loyalty-promises.md) — **
 | **NIL bump** | Collective allocation |
 | **Loyalty** | **0–99** — high loyalty eases stay; low + broken promise hardens leave |
 | **Promise status** | **Kept** stay pledge / minutes pledge strongly helps; **Broken** pushes portal or declare |
-| **New promise** (retention) | Optional re-pitch at Week 1 — binding for following season |
 | **Coach ratings** | Recruiting / portal retention skills |
 | **Staff grade** | [`game-design.md`](game-design.md) assistant modifiers |
 

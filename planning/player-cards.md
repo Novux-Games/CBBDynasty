@@ -179,7 +179,7 @@ Authoritative rules: [`player-loyalty-promises.md`](player-loyalty-promises.md).
 |-------|-----------|
 | **Loyalty** | **0–99** on **Ratings** tab; optional compact on **Overview** |
 | **Active promise** | **Overview** — type, band, status **Kept / At risk / Broken** |
-| **Promise history** | **History** tab — commit snapshot + season evaluations |
+| **Promise history** | **History** tab — **one** locked promise at commit + per-season **Kept/Broken** evaluations |
 
 ---
 

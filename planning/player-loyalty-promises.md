@@ -42,16 +42,24 @@
 
 ## Coach promises
 
-**Design lock:** Promises are **binding commitments** the user (or AI coach) makes at **scholarship offer** or **hard commit** / portal sign. They are stored on the player and shown on the card.
+**Design lock:**
 
-### Promise types (v1)
+| Rule | Detail |
+|------|--------|
+| **One per player** | Exactly **one** promise per player per **program tenure** — pick **one** type at first binding offer; **no** stacking minutes + stay pledge + role |
+| **Career-long** | Same promise **follows the player** every season at that school until **transfer out**, **draft exit**, **cut**, or **graduation** — re-checked each evaluation window, not renegotiated each year |
+| **When set** | Chosen at **scholarship offer** (or portal equivalent); **locks** on **hard commit** / sign |
+| **After transfer** | New school may set **one new** promise at portal sign — prior school’s promise is **archived** on History |
+
+Promises are **binding commitments** the user (or AI coach) makes at offer/sign. They are stored on the player and shown on the card.
+
+### Promise types (v1 — pick exactly one)
 
 | Type | User sets (examples) | Tracked against |
 |------|----------------------|-----------------|
 | **Minutes** | Band: **Starter** (e.g. ≥26 mpg target), **Rotation** (14–25), **Develop** (&lt;14) | Season **minutes per game** (week-finalized games) |
 | **Role** | Starter / sixth man / redshirt year | Lineup usage + games played (redshirt = **0** RS games per ruleset) |
-| **Stay pledge** | “Return unless **lottery**” / “unless **top-N** mock” (N tunable, e.g. 14) | Offseason **declare intent** vs mock rank at Week 1 |
-| **Portal sign** | Same types when offering a **transfer** | Same |
+| **Stay pledge** | “Return unless **lottery**” / “unless **top-N** mock” (N tunable, e.g. 14) | Offseason **declare intent** vs mock rank at Week 1 **each eligible year** |
 
 **NIL** is **not** a promise type — it is the signed **deal** on the Overview. Underfunding NIL can still break **trust** (loyalty hit) via separate rule in game-design.
 
@@ -59,15 +67,16 @@
 
 | Step | UX |
 |------|-----|
-| **Scholarship offer** | Optional **promise picker** (one primary promise required for **high** loyalty targets; optional for others — tune AI) |
-| **Hard commit** | Promises **lock** on the player record; snapshot in **History** tab |
+| **Scholarship offer** | **Promise picker** — user selects **exactly one** type (minutes / role / stay pledge); required for **high**-loyalty-tendency targets, optional for others — tune AI |
+| **Hard commit** | That **single** promise **locks** for the career at this school; immutable type — only **status** (Kept / Broken) updates |
+| **Amend** | **No** mid-career promise swap or Week 1 “new promise” — retention uses NIL / pitches only ([`offseason.md`](offseason.md)) |
 | **Cost** | No extra recruiting **points** for the promise itself — the **binding** is the cost ([`recruiting-engine.md`](recruiting-engine.md#what-recruiting-points-buy-design-lock)) |
 
 ---
 
 ## Keeping vs breaking
 
-**Evaluation cadence:** End of **regular season** (before postseason) and again at **Offseason Week 1** before retention UI.
+**Evaluation cadence:** End of **regular season** (before postseason) and again at **Offseason Week 1** before retention UI — always against the **same** locked promise text, every year on roster.
 
 | Status | Condition |
 |--------|-----------|
@@ -127,7 +136,7 @@ P(declare) = clamp(baseDeclare + modifier)
 | **Ratings tab** | **Loyalty** row (0–99) |
 | **Recruit sheet** | Promise selector at offer; tendency band if unscouted |
 | **Offseason Week 1** | Declare list shows **loyalty** + promise status in convince UI |
-| **Save schema** | `loyalty`, `promises[]` `{ type, params, status, seasonLocked }` — implementation phase |
+| **Save schema** | `loyalty`, `promise` `{ type, params, status, lockedAtSeason }` — **singular**; `promiseHistory[]` optional audit log per season — implementation phase |
 
 Tuning: `balance-2026.json` → `player.loyalty` (declare weights, break thresholds) when loaders ship.
 
@@ -150,3 +159,4 @@ Tuning: `balance-2026.json` → `player.loyalty` (declare weights, break thresho
 | Date | Change |
 |------|--------|
 | 2026-11-09 | Initial loyalty attribute + promises; anti auto-declare for elites |
+| 2026-11-09 | One promise per tenure; career-long lock; no retention re-pitch |
