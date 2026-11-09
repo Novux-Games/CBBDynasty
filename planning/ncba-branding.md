@@ -35,7 +35,7 @@
 | **Total in event** | **76** teams |
 | **Round 1 (round of 64)** | **64** teams (52 + 12) |
 
-**Seeds 1–52:** all **32** autos + **20** highest at-large. **Opening Round:** **24** bubble at-large, **12** games, winners take **seeds 53–64**.
+**Seeds 1–52:** all **32** conference tournament champions + **20** highest-ranked **non–conference-tournament champions**. **Opening Round:** next **24** non-champions, **12** games → **seeds 53–64** ([`postseason.md`](postseason.md)).
 
 ### NCI field
 
