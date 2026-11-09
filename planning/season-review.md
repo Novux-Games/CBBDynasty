@@ -2,7 +2,7 @@
 
 **When:** After **national postseason week 7** calendar completes ([`time-system.md`](time-system.md#national-postseason-weeks)). **Before** [`offseason.md`](offseason.md) (Coaching Carousel on Season 2+ or Offseason Week 1).
 
-**UI label (default pack):** **End of Season** (season wrap-up — includes postseason results and **final** rankings; not regular-season-only).
+**UI label (design lock):** **End of Season** — full-year wrap-up (postseason results + **final** rankings).
 
 **Last updated:** 2025-11-09
 
