@@ -23,6 +23,7 @@ Planning remains authoritative in [`planning/`](../planning/). This doc describe
 | `data/save` | `SaveSlotRepository`, active session holder |
 | `data` | Identity pack import (JSON) — in progress |
 | `data/calendar` | `WeekCheckpointRepository` — persist provisional sims, week advance |
+| `data/pack` | `PackRepository` — active overlay; swap rebuilds display, not save IDs |
 
 ## Package map (`database`)
 

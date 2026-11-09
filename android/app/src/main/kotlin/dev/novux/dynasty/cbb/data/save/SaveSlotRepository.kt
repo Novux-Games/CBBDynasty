@@ -12,6 +12,7 @@ import dev.novux.dynasty.cbb.core.save.SaveSlotSummary
 import dev.novux.dynasty.cbb.core.save.SaveSlots
 import dev.novux.dynasty.cbb.database.calendar.DynastyCalendarEntity
 import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
+import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import dev.novux.dynasty.cbb.database.dynasty.toEntity
 import dev.novux.dynasty.cbb.database.dynasty.toDomain
@@ -25,6 +26,7 @@ import java.util.UUID
 class SaveSlotRepository(
     private val database: DynastyDatabase,
     private val weekCheckpointRepository: WeekCheckpointRepository,
+    private val packRepository: PackRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -106,6 +108,8 @@ class SaveSlotRepository(
                     slotIndex,
                     DynastyLoadFailure.MissingMetadata(summary.dynastyId!!),
                 )
+
+            packRepository.restorePack(meta.packId)
 
             val calendarRow = calendarDao.getByDynastyId(meta.dynastyId)
             calendarRow?.toCalendarSnapshot()?.let { snap ->

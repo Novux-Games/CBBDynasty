@@ -4,7 +4,7 @@ package dev.novux.dynasty.cbb.core.save
 object DynastySchema {
     const val CURRENT_VERSION = 1
 
-    /** Embedded default identity pack (`assets/pack/embedded-default.json` in repo). */
+    /** Embedded league data (`assets/pack/embedded-default.json` in repo). */
     const val DEFAULT_PACK_ID = "embedded-default"
 
     /** Asset path inside the APK (mirror of repo `assets/pack/`). */
