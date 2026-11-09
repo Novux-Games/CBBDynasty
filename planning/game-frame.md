@@ -75,26 +75,30 @@ At-a-glance card(s) for **your program**:
 | Field (examples) | Notes |
 |------------------|--------|
 | Overall record | W–L |
-| National poll | **Top 25** poll placement when ranked; unranked shows `—` (poll is a **callout**, not the full ordering) |
+| National poll | **Top 25** when `#NN ≤ 25`; else `—` on this row (full order is **Current ranking**) |
 | Conference rank | League standing |
-| **Current ranking** | **Overall resume rank** among all teams (full table on the back end — see [Rankings hub](#rankings-hub)); not a seed line or bracketology chip |
+| **Current ranking** | **National poll rank** `#NN` — **all 365** teams ordered as poll voters would rank them (see below) |
 | Conference affiliation | From identity pack |
 | (extend) | Streak, home/away split, last 10 — optional rows |
 
 ### Current ranking (dashboard)
 
-Shows **`#NN`** = your program’s place in the **national composite resume list** (same ordering that drives Selection Sunday / [`game-design.md`](game-design.md#selection-sunday-committee-sim)). **Every** team has a rank in data; the UI only **surfaces Top 25** in the Rankings hub callout.
+**Design lock:** **Poll rank** and **AP-style national ranking** are **one list** — sim voters order **all 365** programs **`#1`–`#365`** each week. **Top 25** is the public poll (rows 1–25 of that list). Selection Sunday at-large/auto ordering uses this same order ([`postseason.md`](postseason.md)).
 
-**Eligibility color** on the dashboard chip (tier from **projected field**, not rank number alone — **32 auto bids** mean a team outside the raw “top 64” by résumé can still project **NCBA** as a conference champion):
+**Not seeds:** In-season rank is **not** a tournament seed. **Seeds** appear only on **postseason** brackets after Selection Sunday (no tier colors there).
 
-| Color | Meaning |
-|-------|---------|
-| **Green** | Projected **NCBA** field (76) — auto, direct at-large, or Opening invite |
-| **Yellow** | Projected **NCI** (32), not NCBA |
-| **Amber** | Projected **National Heritage Classic** (16) only |
-| **Red** | Outside all national brackets, or reclass (NCBA/NCI blocked; Heritage still possible) |
+**Tier color** = **likely** national destination if the season ended today (projection only):
 
-Tap **Current ranking** → Rankings hub (full list or filtered slice). During **conference tournament week**, colors may lock or update as auto bids are claimed.
+| Color | Likely |
+|-------|--------|
+| **Green** | NCBA (76) |
+| **Yellow** | NCI |
+| **Amber** | Heritage |
+| **Red** | Outside the 124 national slots |
+
+A **red** team can still **win the conference tournament** and receive an NCBA auto-bid and a **seed** in March. Colors are not binding.
+
+Tap **Current ranking** → Rankings hub (full **#1–#365** list).
 
 ### Notifications
 
@@ -289,11 +293,11 @@ Tap player → player preview / card; tap team → School hub (view).
 
 | View | Content |
 |------|---------|
-| **Top 25** | National **poll-style callout** (AP analogue) — marketing-friendly short list |
-| **National resume** | **Full** composite ranking **#1–#365** (eligible teams); same order as dashboard **Current ranking**; optional tier filter (NCBA / NCI / out) |
+| **Top 25** | Official poll — **`#1`–`#25`** on the national list |
+| **Full national ranking** | **`#1`–`#365`** — same order as dashboard **Current ranking**; optional likely-tier filter |
 | **Conference rankings** | Standings per conference (W–L, conf record, tiebreaker note on drill-down) |
 
-**Top 25** and **National resume** are different products: poll ≠ resume order. Resume list rows may show the same **green / yellow / red** tier chips as the dashboard.
+One poll ordering drives Top 25 and the full table. Rows show **green / yellow / amber / red** likelihood (in-season only).
 
 Tap team → School hub.
 
@@ -370,5 +374,6 @@ Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`g
 | 2025-11-08 | GOAT list formula; companion doc index (offseason/postseason/portal) |
 | 2025-11-08 | Recruit Top 60: preseason seed, in-season News |
 | 2025-11-08 | Dashboard: Current ranking + NCBA/NCI tier colors; full resume list in Rankings |
+| 2025-11-09 | Poll = full #1–365 rank; colors = likely tier; seeds postseason-only |
 | 2025-11-08 | School Staff tab; AD trust; staff detail sheets |
 | 2025-11-08 | Assistants = coach cards; support list-only |

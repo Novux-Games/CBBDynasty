@@ -181,7 +181,7 @@ Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 
 - Conference **round-robin or matrix** schedule generators per `leagueGameCount`.
 - **TournamentTemplate** per conference (bracket size, byes, reseeding, venue neutral/home).
-- **NCBA** Opening Round (24 champs, 12 games) + 64-team bracket map — [`postseason.md`](postseason.md).
+- **NCBA** Opening Round (24 at-large, 12 games) + 64-team bracket — [`postseason.md`](postseason.md).
 
 ### Save partitioning
 
@@ -589,6 +589,8 @@ Per team, maintain:
 
 All **inspired by** real metrics; labels in UI are generic ("Resume Index", "Tier wins") unless pack enables fan names.
 
+**Poll output:** Weekly **AP-style poll** (**Top 25** + full **`#1`–`#365`** order on the Rankings hub) is the **single** national ranking players see. Sim voters order all **365** teams from results and quality inputs above. **Selection Sunday** at-large/NCI/Heritage ordering uses that same poll list — not a separate “resume” table ([`postseason.md`](postseason.md), [`game-frame.md`](game-frame.md)).
+
 ### Weekly rhythm
 
 - **Sunday:** coach skill points (notification).
@@ -606,8 +608,8 @@ All **inspired by** real metrics; labels in UI are generic ("Resume Index", "Tie
 | National event | Size | Selection |
 |----------------|------|-----------|
 | **NCBA Men's BB Tournament** | **76** in event · **64** in Round 1 | **32** autos + **20** at-large (seeds 1–52) + **24** at-large Opening (**12** games) |
-| **NCI** | **32** | Highest resume **not** in NCBA |
-| **National Heritage Classic** | **16** | Highest resume **not** in NCBA or NCI |
+| **NCI** | **32** | Highest **poll rank** not in NCBA |
+| **National Heritage Classic** | **16** | Highest **poll rank** not in NCBA or NCI |
 
 **Reclass** (`postseasonEligible: false`): **conference tournaments** and **Heritage** yes; **NCBA** and **NCI** no (conf tourney win does not confer NCBA bid — pass-over per conference template).
 
@@ -752,4 +754,5 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-08 | NCBA/NCI/March Mayhem; early events; round labels — `ncba-branding.md` |
 | 2025-11-08 | `postseason.md` — Selection Sunday, Heritage, reclass conf tourney |
 | 2025-11-09 | Postseason census 124 national / 241 done (see `postseason.md`) |
+| 2025-11-09 | Poll=#1–365; pass-over runner-up; parallel NCI/HC |
 | 2025-11-08 | Linked `player-cards.md` |

@@ -29,8 +29,8 @@
 | **Selection Sunday** | After conference finals | Locks NCBA / NCI / Heritage fields |
 | **NCBA Opening Round** | After Selection Sunday | 24 at-large teams → 12 games → 12 winners |
 | **NCBA main bracket** | March Mayhem | 64 teams → National Championship |
-| **NCI** | Overlaps / follows per template | 32 teams |
-| **National Heritage Classic** | Per template | 16 teams |
+| **NCI** | **Parallel** with NCBA on calendar (same March window) | 32 teams |
+| **National Heritage Classic** | **Parallel** with NCBA / NCI | 16 teams |
 
 League sim batches non-user games; user rounds use same possession engine as regular season.
 
@@ -89,7 +89,7 @@ Certified programs use normal rules below.
 
 ## Selection Sunday
 
-Runs after all **32** conference champions are known. Uses the **national composite resume list** (same order as dashboard **Current ranking** — [`game-frame.md`](game-frame.md)).
+Runs after all **32** conference champions are known. Uses the **national poll order** — all **365** teams ranked **#1–#365** as poll voters would sort them; **Top 25** is the public callout of that same list ([`game-frame.md`](game-frame.md)). **Poll rank is not a seed** until Selection Sunday assigns **seeds** for national brackets.
 
 ### Terminology (read this once)
 
@@ -104,7 +104,7 @@ Opening Round is **only** for at-large teams. **All 32** auto-bids skip Opening 
 
 **All 32** conference tournament champions receive an **auto-bid** to the NCBA Men's BB Tournament (`postseasonEligible: true` only).
 
-Reclass winners: conference **champion** for history, but **NCBA auto-bid passes** per conference template; an eligible replacement receives the auto slot.
+Reclass (or other ineligible) **conference tournament champion:** program keeps the **title**; **NCBA auto-bid passes to the conference tournament runner-up** (eligible team only). If runner-up is also ineligible, fall back to next eligible finisher per conference template (document in pack).
 
 ### Step 2 — At-large into NCBA (44)
 
@@ -124,7 +124,7 @@ Assign **seeds 1–52** to the **52** teams that skip Opening Round:
 | Conference tournament champions (all autos) | 32 |
 | Top **20** at-large (non-champions) | 20 |
 
-Resume / S-curve orders those **52** lines. A weak auto-bid can be **seed 52** (e.g. 15–15 résumé, 19–15 after a small-conference run) while stronger at-large teams seed higher — the auto is a **guaranteed berth**, not a courtesy seed.
+Poll rank + S-curve rules assign **seeds 1–52**. A weak auto-bid can be **seed 52** (e.g. **#180** in the poll but conference champion) while stronger at-large teams seed higher — the auto is a **guaranteed berth**, not a courtesy seed.
 
 ### Step 4 — NCBA field (**76** teams)
 
@@ -141,11 +141,11 @@ Resume / S-curve orders those **52** lines. A weak auto-bid can be **seed 52** (
 
 ### Step 5 — NCI (32)
 
-Among postseason-eligible teams **not** selected for NCBA, invite the **32 highest** resume ranks → **National College Invitational**.
+Among postseason-eligible teams **not** selected for NCBA, invite the **32 highest** poll ranks → **National College Invitational**.
 
 ### Step 6 — National Heritage Classic (16)
 
-Among postseason-eligible teams **not** in NCBA or NCI, invite the **16 highest** resume ranks → **National Heritage Classic** (CBI analog).
+Among postseason-eligible teams **not** in NCBA or NCI, invite the **16 highest** poll ranks → **National Heritage Classic** (CBI analog).
 
 Reclass programs **compete for Heritage** selection but are **never** in the NCBA or NCI pools.
 
@@ -171,7 +171,7 @@ Reclass programs **compete for Heritage** selection but are **never** in the NCB
 | Advance | **12** winners → **seeds 53–64** in NCBA **Round 1** |
 | Skip Opening | All **32** auto-bids + top **20** at-large |
 
-Pairing by resume (`openingRoundPairing` in pack). Winners take **53–64** assigned on Selection Sunday.
+**Pairing (24 teams, 12 games):** Sort the Opening Round invitees by **poll rank** (best = 1 within the group). Pair **1 vs 24**, **2 vs 23**, … **12 vs 13** (1vN high-low). Winners receive **seeds 53–64** assigned on Selection Sunday (`openingRoundPairing` in pack may add neutral sites only).
 
 ### Main bracket (64 → champion)
 
@@ -216,18 +216,27 @@ Coach **Achievements** track W–L and titles per bracket ([`coach-card.md`](coa
 
 ---
 
-## Resume & UI tiers
+## Poll rank vs seeds (in-season vs March)
 
-Projected tiers on dashboard **Current ranking** chip ([`game-frame.md`](game-frame.md)) map to Selection Sunday targets:
+| Phase | What the user sees |
+|-------|---------------------|
+| **Regular season / conf tourneys** | **Poll rank** `#NN` (1–365); **Top 25** callout; **tier colors** = where they are **likely** to land (NCBA / NCI / Heritage) — **not** seeds |
+| **Selection Sunday onward** | **Bracket seeds** (1–64 NCBA, etc.); **no** tier colors on postseason screens |
 
-| Color | Projected tier |
+A **red** team can still win its conference tournament and receive an NCBA **auto-bid** and **seed** regardless of poll color.
+
+## Projected tier colors (in-season only)
+
+Likelihood chips on dashboard **Current ranking** ([`game-frame.md`](game-frame.md)) — updated weekly with poll sim; **not** binding:
+
+| Color | Likely landing |
 |-------|----------------|
-| **Green** | NCBA field (auto, top-20 at-large, or Opening Round invite) |
-| **Yellow** | NCI (not NCBA) |
-| **Amber** (optional) | Heritage only |
-| **Red** | None of the above, or reclass blocked from NCBA/NCI |
+| **Green** | NCBA (76) |
+| **Yellow** | NCI |
+| **Amber** | Heritage only |
+| **Red** | Outside 124 national slots (Heritage still possible for reclass) |
 
-During conference tournament week, **green** may reflect **auto bid path** even when raw resume rank is outside the top 64.
+**Auto-bid path** can flip projection to green even when poll rank is low.
 
 ---
 
@@ -249,3 +258,4 @@ During conference tournament week, **green** may reflect **auto bid path** even 
 | 2025-11-09 | NCBA **76**: 32 auto + 20/24 non-champion at-large; seeds 1–52 |
 | 2025-11-09 | Terminology: non–conf-tourney champion = at-large (not champ Opening) |
 | 2025-11-09 | Census: 124 national (76+32+16) vs 241 season-end; conf qual policy |
+| 2025-11-09 | Auto pass → runner-up; poll=rank; parallel NCI/HC; Opening 1v24…12v13 |
