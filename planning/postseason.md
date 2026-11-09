@@ -117,14 +117,9 @@ Among postseason-eligible teams that are **not** conference tournament champions
 
 ### Step 3 — Seeds 1–52
 
-Assign **seeds 1–52** to the **52** teams that skip Opening Round:
+**Who:** same **52** teams that skip Opening Round (**32** autos + **20** direct at-large) — see [`selection-engine.md`](selection-engine.md#seeds-152-ncba-main-bracket).
 
-| Pool | Count |
-|------|-------|
-| Conference tournament champions (all autos) | 32 |
-| Top **20** at-large (non-champions) | 20 |
-
-Poll rank + S-curve rules assign **seeds 1–52**. A weak auto-bid can be **seed 52** (e.g. **#180** in the poll but conference champion) while stronger at-large teams seed higher — the auto is a **guaranteed berth**, not a courtesy seed.
+**How:** **not** poll rank. Sort all **52** by **Seed Index** (net efficiency, quads, SOS, form, record quality). Best → **seed 1**, worst in pool → **seed 52**. A strong at-large can be **seed 4**; a weak conference champion can be **seed 52** while still holding an auto-bid.
 
 ### Step 4 — NCBA field (**76** teams)
 

@@ -46,3 +46,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | 2025-11-08 | Full-product restore pass (staff, walk-ons, gameplan, secondary postseason) |
 | NCBA / NCI / early events | **Done** | [`ncba-branding.md`](ncba-branding.md) |
 | Postseason selection | **Done** | [`postseason.md`](postseason.md) |
+| Selection engine (poll + seed) | **Done** | [`selection-engine.md`](selection-engine.md) |

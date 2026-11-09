@@ -15,6 +15,7 @@
 **League identity:** **[`league-branding.md`](league-branding.md)** — conference/team real ↔ universe mapping  
 **NCBA universe:** **[`ncba-branding.md`](ncba-branding.md)** — national body, March Mayhem, early events  
 **Postseason:** **[`postseason.md`](postseason.md)** — Selection Sunday, NCBA / NCI / Heritage  
+**Selection engine:** **[`selection-engine.md`](selection-engine.md)** — poll formula, seed index, cuts  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start (**Season 1**)  
 **Last updated:** 2025-11-08
@@ -573,23 +574,11 @@ Gameplay is **sim-only**; see **[`simulation-engine.md`](simulation-engine.md)**
 | **Chemistry** | Roster stability + coaching; affects clutch sim |
 | **Fatigue** | Back-to-back games, travel, and press schemes apply **standard** stamina penalties in sim |
 
-### NET-style résumé (selection)
+### National poll & selection (authoritative)
 
-**Maintained by the dynasty layer** from **week-finalized** box scores ([`simulation-engine.md`](simulation-engine.md) supplies each game’s box score). Game design consumes:
+**Formulas, weights, poll vs seed:** [`selection-engine.md`](selection-engine.md).
 
-Per team, maintain:
-
-| Metric | Use |
-|--------|-----|
-| **Net efficiency** | Quality indicator |
-| **Quad schedule** | Wins/losses buckets 1–4 (home/neutral/road vs NET) |
-| **KenPom-like rating** | Hidden true strength |
-| **SOS / non-conf strength** | Bubble breaker |
-| **Recent form** | Last 10 weight for bubble |
-
-All **inspired by** real metrics; labels in UI are generic ("Resume Index", "Tier wins") unless pack enables fan names.
-
-**Poll output:** Weekly **AP-style poll** ranks **all 365** teams **`#1`–`#365`**. **T25** is the highlighted callout for ranks 1–25 on the Rankings hub and related UI — not a separate list ([`game-frame.md`](game-frame.md)). **Selection Sunday** at-large/NCI/Heritage ordering uses that same poll order ([`postseason.md`](postseason.md)).
+**Summary:** Weekly **poll** ranks **all 365** (`pollScore` from efficiency, SOS, quads, form, record, small prestige bias). **Selection Sunday** uses **final poll rank** for **who** makes NCBA/NCI/Heritage; **Seed Index** sorts the **52** auto + direct at-large teams for **NCBA seeds 1–52** (merit — weak champs can be seed 52). **T25** = poll **#1–#25** ([`game-frame.md`](game-frame.md)).
 
 ### Weekly rhythm
 

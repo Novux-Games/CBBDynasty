@@ -347,7 +347,7 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History
 | **`offseason-frame.md`** | Portal, carousel, recruiting shell, week/day advance |
 | **`postseason-frame.md`** | Conference brackets, Selection Sunday — [`postseason.md`](postseason.md) |
 | **`transfer-portal-engine.md`** | Portal cycles, retention, in-season window |
-| **`selection-engine.md`** | Resume math, seeds, bubble ordering |
+| **`selection-engine.md`** | Poll + Seed Index, Selection Sunday cuts |
 
 Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`game-design.md`](game-design.md#notifications-android).
 
