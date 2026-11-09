@@ -45,12 +45,13 @@ JSON stays appropriate for **identity pack import** and for **dynasty export fil
 
 - Players **can export** a dynasty to a **portable archive** (format defined in Phase 2.2+; likely SQLite slice or versioned blob + manifest with `dynastySchemaVersion`).
 - **Import** restores into an **empty slot** or replaces after confirm — never merge two live dynasties blindly.
-- Export is for **backup, device migration, and sharing** — not for hand-editing saves in a text editor.
+- Export supports **backup, device migration, sharing**, and **restoring** a dynasty on another device. If someone edits an export out of band, **import either succeeds (valid archive) or fails** with error UI (checklist 2.5) — we do not treat hand-edited saves as unsupported in principle.
 
-## Modding boundary
+## Customization & modding
 
-- **Identity packs** (JSON/URL) are the **mod / customization** surface — names, logos, conference display, import disclaimers.
-- **Save files are not a modding target.** No documented schema for third-party save editing; corrupt or hand-edited imports are rejected with error UI (checklist 2.5).
+- **Identity packs** (JSON/URL) are the **primary and intended mod surface** — realigned names/logos, conference display, tournament templates, disclaimers. This is where most “modding” lives; the game does not ship a separate mod pipeline beyond **pack import** (+ default embedded pack).
+- **Dynasty saves** are not a second mod SDK. We do not plan editor tooling or a public save schema doc for cheat/mod authoring unless product needs change later.
+- **In practice:** league/world customization → **packs**; career progress → **SQLite + export**. Nothing else is required outside the pack import engine for customization today.
 
 ## Schema versioning
 
