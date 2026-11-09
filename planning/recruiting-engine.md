@@ -387,7 +387,7 @@ Loads the **customized roster engine** for incoming commits (and portal signees 
 
 ### Entry
 
-**Hamburger → Recruiting** (always when cycle open) plus **optional dashboard tasks** ([In-season dashboard tasks](#in-season-dashboard-tasks)). Notifications duplicate headlines; tasks carry the **action** entry.
+**Hamburger → Recruiting** (always when cycle open) plus **optional dashboard tasks** ([In-season dashboard tasks](#in-season-dashboard-tasks)). User commits → **in-app feed** ([`notifications.md`](notifications.md)); league headlines → **News** only; tasks carry the **action** entry.
 
 **Default landing:** **Recommended** tab ([below](#recommended-tab-default)) — not All / national lists.
 
