@@ -92,6 +92,7 @@ Every **Done** topic below must map to step(s) in [`BUILD_CHECKLIST.md#locked-sp
 | Postseason UI (March Mayhem) | **Done** | [`postseason-frame.md`](postseason-frame.md) |
 | NCBA / NCI / early events | **Done** | [`ncba-branding.md`](ncba-branding.md) |
 | GOAT / History depth | **Done** | [`history-hub.md`](history-hub.md) |
+| Season win contribution (GOAT input) | **Done** — hidden; sums to team wins | [`simulation-engine.md#season-win-contribution-design-lock`](simulation-engine.md#season-win-contribution-design-lock) |
 | League branding / membership | **365** programs; reclass postseason rule | [`league-branding.md`](league-branding.md), [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) |
 
 ### Engineering meta
@@ -115,7 +116,7 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 
 ## Still tuning (numbers / small gaps)
 
-Listed in [`README.md#still-tuning-not-missing-specs`](README.md#still-tuning-not-missing-specs). Includes recruit interest JSON weights, Recommended bands, `winSharesSeason`, URL pack signing.
+Listed in [`README.md#still-tuning-not-missing-specs`](README.md#still-tuning-not-missing-specs). Includes recruit interest JSON weights, Recommended bands, URL pack signing. **Season win contribution (GOAT)** — **Done** in [`simulation-engine.md#season-win-contribution-design-lock`](simulation-engine.md#season-win-contribution-design-lock).
 
 ---
 

@@ -132,7 +132,6 @@ Behavior is locked in prose; **numbers** or small gaps may remain in balance / c
 |------|----------------|
 | Recruit interest **weights** & action deltas | [`recruiting-engine.md#open--tbd`](recruiting-engine.md#open--tbd), `recruiting.interest.*` in JSON (proposed) |
 | `signLikelihood` bands | `recruiting.recommended` in balance |
-| `winSharesSeason` / GOAT inputs | [`history-hub.md`](history-hub.md), [`simulation-engine.md`](simulation-engine.md) |
 | Identity **URL pack** signing | [`game-design.md`](game-design.md) (remaining import decisions) |
 
 ---

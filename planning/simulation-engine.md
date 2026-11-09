@@ -16,10 +16,11 @@
 6. [Participant data (inputs only)](#participant-data-inputs-only)
 7. [Output](#output)
 8. [Statistical coherence](#statistical-coherence)
-9. [Randomness](#randomness)
-10. [Playback: watch, speed, sim to end](#playback-watch-speed-sim-to-end)
-11. [Why track a shot clock?](#why-track-a-shot-clock)
-12. [Tuning data](#tuning-data)
+9. [Season win contribution](#season-win-contribution-design-lock) (GOAT / history — not shown in box score)
+10. [Randomness](#randomness)
+11. [Playback: watch, speed, sim to end](#playback-watch-speed-sim-to-end)
+12. [Why track a shot clock?](#why-track-a-shot-clock)
+13. [Tuning data](#tuning-data)
 
 ---
 
@@ -179,6 +180,82 @@ Fail in dev → error. Release → retry possession rolls capped N times; last r
 
 ---
 
+## Season win contribution (design lock)
+
+### What players see
+
+**Nothing on the box score.** This is a **hidden season summary**: *“How much of this team’s wins should we credit to this player?”*  
+Used for **GOAT lists**, record books, and Hall of Fame style rankings ([`history-hub.md`](history-hub.md)). Stored on the player’s season archive as `winSharesSeason` (internal field name only).
+
+### When it runs
+
+| Trigger | Detail |
+|---------|--------|
+| **Who computes** | **Dynasty layer** after the season is finished — **End of Season week**, not inside `simulateGame` |
+| **Games counted** | Same set as season record / eligibility: **regular season + conference championships + national postseason**; **exhibitions excluded** |
+| **Team wins** | That program’s **W** in those games for that season |
+
+Possession sim only supplies **per-game box scores**; the season job **rolls them up** into season totals.
+
+### Plain rule
+
+1. **Playing time** is the base — you can’t earn much if you rarely play.  
+2. **Production** from the season stat line nudges credit up or down vs teammates (scoring, assists, rebounds, turnovers).  
+3. On each team, credits **add up to that team’s win total** for the year — e.g. a **20-win** team’s roster shares sum to **20.0**, so a 6.0 season is a “big chunk” of a good year.
+
+**Transfers:** If a player appears at **two schools in one season** (unusual in this game’s portal rules), compute **separately per school**; career GOAT **adds** both seasons ([`history-hub.md`](history-hub.md)).  
+**Zero minutes:** `winSharesSeason = 0` (redshirt, DNPs all year).
+
+### Inputs (per player, per school, per season)
+
+From aggregated box score:
+
+| Input | Meaning |
+|-------|---------|
+| `minutesSeason` | Total MIN |
+| `pts`, `ast`, `reb`, `to` | Season sums |
+| `teamWins` | Program W (table above) |
+| `teamMinutes` | Σ `minutesSeason` over roster players with MIN &gt; 0 |
+
+### Formula (design lock)
+
+**Production score** (one number for “how much did they do with the ball”):
+
+```
+production = PTS + 1.5×AST + 1.0×REB − 1.0×TO
+```
+
+**Per player on that team:**
+
+```
+minuteShare   = minutesSeason / teamMinutes
+productionIdx = production / max(1, teamAvgProduction)    // teamAvg = mean production among players with MIN > 0
+rawCredit     = minuteShare × (0.60 + 0.40 × productionIdx)
+```
+
+Clamp `productionIdx` to **0.25–1.75** before the blend so one outlier game plan cannot dominate.
+
+**Allocate wins** (sums to `teamWins`):
+
+```
+winSharesSeason = teamWins × (rawCredit / Σ rawCredit over roster with MIN > 0)
+```
+
+Round to **2** decimals for storage. Optional balance exponents live in `balance-2026.json` → `history.winContribution` ([ADR-002](../docs/ADR-002-balance-ruleset-bundle.md)); **behavior above is the default intent**.
+
+### Worked example (illustrative)
+
+20-win team; star plays 35% of team minutes with high production → ~**5.5–7.0** shares. Bench warm-body at 5% minutes, low production → **~0.2–0.5**.
+
+### Cross-links
+
+| Consumer | Use |
+|----------|-----|
+| [`history-hub.md`](history-hub.md) | `careerWinShares`, GOAT score, tie-breaks |
+| Season review / archive | Optional debug export in dev builds only |
+
+---
+
 ## Randomness
 
 - **Between games:** different matchups and rolls → different scores (not “same game every time”).
@@ -240,3 +317,4 @@ Balance lives in data files (pace tables, foul rates, shot distributions), not h
 | 2025-11-08 | Narrowed to possession game sim only |
 | 2025-11-08 | Re-sim policy → week-advance save (game design) |
 | 2025-11-08 | 30 s shot clock; playback modes; why shot clock in possession sim |
+| 2026-11-09 | Season **win contribution** (`winSharesSeason`) for GOAT — computed at End of Season |

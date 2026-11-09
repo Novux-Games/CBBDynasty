@@ -173,7 +173,7 @@ After each season completes:
 
 | Input | Meaning |
 |-------|---------|
-| `winSharesSeason` | Engine stat: contribution to team wins from minutes + efficiency ([`simulation-engine.md`](simulation-engine.md) exports per player) |
+| Season **win contribution** (`winSharesSeason`) | Hidden “credit for team wins” that season — minutes + box-score production; roster shares sum to team W. **Computed** at End of Season from rolled-up stats ([`simulation-engine.md#season-win-contribution-design-lock`](simulation-engine.md#season-win-contribution-design-lock)) — not shown on box score |
 | `peakOvrSeason` | Max **OVR** during that season |
 | `minutesSeason` | Total minutes |
 

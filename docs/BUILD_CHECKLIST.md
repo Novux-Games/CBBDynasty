@@ -10,6 +10,8 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 ### Locked specs → build steps (index)
 
+**All planning files:** categorized list in [`planning/README.md`](../planning/README.md).
+
 | Planning doc | Build steps |
 |--------------|-------------|
 | [`app-shell.md`](../planning/app-shell.md) | 0.2, 1.2 |
@@ -18,7 +20,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | [`dashboard-tasks.md`](../planning/dashboard-tasks.md) | 6.14, 6.16, 9.6, 9.7, 9.11; injury optional tasks → **9.6** |
 | [`game-design.md`](../planning/game-design.md) | 2.3, 4.7, 9.3–9.4, 12.1, 14.2, 15.1–15.5, 16.1–16.4; RS cap → **7.3–7.4** |
 | [`game-frame.md`](../planning/game-frame.md) | 6.16, 7.6, 9.1–9.2, 9.6–9.10, 10.5–10.6, 14.3 |
-| [`history-hub.md`](../planning/history-hub.md) | **10.1** `winSharesSeason`, **14.1–14.3**, **9.10**, School hub records/HOF |
+| [`history-hub.md`](../planning/history-hub.md) | **14.3** GOAT/HOF, **9.10**, School hub records/HOF; win contribution → **14.3** + [`simulation-engine`](../planning/simulation-engine.md#season-win-contribution-design-lock) |
 | [`game-start.md`](../planning/game-start.md) | 1.3, 2.2, 2.5, 4.1–4.6 |
 | [`injuries.md`](../planning/injuries.md) | **2.6**, **5.3**, **8.7–8.8**, **9.4**, **9.6–9.8**, **10.2**, **10.8** |
 | [`in-season-systems.md`](../planning/in-season-systems.md) | **2.6**, **8.9–8.10**, **9.6–9.7**, **10.1–10.2**, **15.4** (chemistry) |
@@ -37,7 +39,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | [`recruiting-engine.md`](../planning/recruiting-engine.md) | 2.6, 6.5, 6.8, 6.11–6.13, 6.15–6.21, 7.2, 9.9–9.10, 14.1, 15.1, 15.6 |
 | [`season-review.md`](../planning/season-review.md) | 5.6, 14.1 |
 | [`selection-engine.md`](../planning/selection-engine.md) | 11.1–11.5 |
-| [`simulation-engine.md`](../planning/simulation-engine.md) | 10.1, 10.8, 6.16 |
+| [`simulation-engine.md`](../planning/simulation-engine.md) | 10.1, 10.8, 14.3 (win contribution rollup), 6.16 |
 | [`strategy-schemes.md`](../planning/strategy-schemes.md) | 4.3, 10.3–10.5 |
 | [`time-system.md`](../planning/time-system.md) | 5.1–5.6, 9.2, 9.5, 9.7, 12.3, 13.5 |
 | [`transfer-portal.md`](../planning/transfer-portal.md) | 6.3, 6.12, 6.14, 9.9 |
@@ -262,7 +264,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 |------|--------|-----------|------|------|
 | 14.1 | `[ ]` Season review UI | Grades, prestige, final ranks; **next cycle weekly recruiting pool** preview | [season-review](../planning/season-review.md), [recruiting-engine](../planning/recruiting-engine.md) | `ui.seasonreview` |
 | 14.2 | `[ ]` Awards & news wrap | POTY, coach honors | [game-design](../planning/game-design.md) | — |
-| 14.3 | `[ ]` History hub + GOAT + record/HOF passes | Year cards, GOAT top 25/5, triple HOF, record books at EoS | [history-hub](../planning/history-hub.md), [game-frame](../planning/game-frame.md) | `ui.history` |
+| 14.3 | `[ ]` History hub + GOAT + record/HOF passes | Year cards, GOAT top 25/5, triple HOF, record books at EoS; **season win contribution** rollup per [spec](../planning/simulation-engine.md#season-win-contribution-design-lock) | [history-hub](../planning/history-hub.md), [simulation-engine](../planning/simulation-engine.md#season-win-contribution-design-lock), [game-frame](../planning/game-frame.md) | `ui.history`, `:core/history` |
 | 14.4 | `[ ]` Advance year → offseason carousel | Season 2+ path | [offseason](../planning/offseason.md) | — |
 
 ---

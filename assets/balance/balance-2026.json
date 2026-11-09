@@ -619,6 +619,15 @@
       { "tier": "steady", "additionalAskMinUsd": 0, "additionalAskMaxUsd": 75000 }
     ]
   },
+  "history": {
+    "winContribution": {
+      "productionWeights": { "pts": 1.0, "ast": 1.5, "reb": 1.0, "to": -1.0 },
+      "minuteBlend": 0.6,
+      "productionBlend": 0.4,
+      "productionIdxClampMin": 0.25,
+      "productionIdxClampMax": 1.75
+    }
+  },
   "player": {
     "loyalty": {
       "declareWeightLoyalty": 0.0,
