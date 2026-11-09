@@ -54,6 +54,48 @@
     "scholarshipLimit": 15,
     "rosterCap": 15
   },
+  "discipline": {
+    "occurrence": {
+      "baseChancePerTeamWeek": 0.06,
+      "maxPerSeason": 3,
+      "academicWindowWeeks": [18, 19, 20, 21, 22],
+      "academicOffWindowChanceMultiplier": 0.05
+    },
+    "academic": {
+      "gpaRequired": 2.0,
+      "weeklyGpaGain": 0.08,
+      "auditBaseChance": 0.35
+    },
+    "conferenceDraw": {
+      "cleared": 0.25,
+      "shortSuspensionGamesMin": 1,
+      "shortSuspensionGamesMax": 3,
+      "shortSuspensionWeight": 0.45,
+      "longSuspensionGamesMin": 8,
+      "longSuspensionGamesMax": 16,
+      "longSuspensionWeight": 0.2,
+      "dismissedWeight": 0.1
+    },
+    "conductTemplates": [
+      { "id": "arrest", "label": "Arrest", "weight": 0.4 },
+      { "id": "campus_conduct", "label": "Campus conduct", "weight": 0.35 },
+      { "id": "team_rules", "label": "Team rules violation", "weight": 0.25 }
+    ]
+  },
+  "chemistry": {
+    "startValue": 70,
+    "winStreakBonusPerWeek": 2,
+    "lossStreakPenaltyPerWeek": 3,
+    "clutchBonusAbove80": 0.015,
+    "clutchPenaltyBelow50": 0.02
+  },
+  "fatigue": {
+    "baseDrainPerMinute": 0.35,
+    "recoveryByeWeek": 25,
+    "recoveryGameWeek": 15,
+    "starterBlockThreshold": 20,
+    "rotationPullThreshold": 35
+  },
   "injuries": {
     "occurrence": {
       "baseChancePerPlayerGame": 0.018,

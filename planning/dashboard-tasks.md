@@ -97,6 +97,7 @@ No recruiting, games, or schedule edits this week.
 | **Optional** | **Review injury — {Name}** ({N} weeks) | After user player hurt — lineup auto-adjusted; opens Strategy |
 | **Optional** | **Medical redshirt — {Name}?** | Eligible moderate/major injury, RS week ≤ 20, GP ≤ 15 — [`injuries.md`](injuries.md#medical-redshirt) |
 | **Optional** | **Strategy / rotation** edits | Before sim when prep incomplete (product may nudge) |
+| **Required** | **Team discipline — {headline}** | Conduct or academic incident pending — [`in-season-systems.md`](in-season-systems.md) |
 | **Required** | — | **Bye week:** none. **User game week:** games are **optional**, not required ([`game-frame.md`](game-frame.md#dashboard-task-gate)) |
 
 **Portal:** No in-season portal tasks ([`transfer-portal.md`](transfer-portal.md)).
@@ -108,6 +109,7 @@ No recruiting, games, or schedule edits this week.
 | Domain | Required tasks | Optional tasks |
 |--------|----------------|----------------|
 | **Games / sim** | — | [`game-frame.md`](game-frame.md#dashboard-task-gate) |
+| **Discipline** | Conduct / academic sheet | — |
 | **HS/JUCO recruiting** | Preseason seed; OS W5 sign lock (phase) | [`recruiting-engine.md`](recruiting-engine.md#in-season-dashboard-tasks) |
 | **Transfer portal** | Week 1 tabs (screen) | OS W2–5 [`transfer-portal.md`](transfer-portal.md#ux--dashboard-optional-tasks-portal-only) |
 | **Coach** | Carousel staffing cards | Sunday points, upgrades in preseason |

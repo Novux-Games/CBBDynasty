@@ -21,6 +21,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | [`history-hub.md`](../planning/history-hub.md) | **10.1** `winSharesSeason`, **14.1–14.3**, **9.10**, School hub records/HOF |
 | [`game-start.md`](../planning/game-start.md) | 1.3, 2.2, 2.5, 4.1–4.6 |
 | [`injuries.md`](../planning/injuries.md) | **2.6**, **5.3**, **8.7–8.8**, **9.4**, **9.6–9.8**, **10.2**, **10.8** |
+| [`in-season-systems.md`](../planning/in-season-systems.md) | **2.6**, **8.9–8.10**, **9.6–9.7**, **10.1–10.2**, **15.4** (chemistry) |
 | [`league-branding.md`](../planning/league-branding.md) + [`2026-NCAA-Directory.md`](../planning/2026-NCAA-Directory.md) | 3.1–3.2, 9.3 |
 | [`ncba-branding.md`](../planning/ncba-branding.md) | 7.3, 9.5, 11.5, 13.2 |
 | [`news-hub.md`](../planning/news-hub.md) | 9.8–9.9, 14.2; injury stories → **9.8** |
@@ -87,7 +88,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 2.3 | `[x]` Dynasty metadata schema (`seasonIndex`, `phase`, `packId`) | Round-trip one empty dynasty | [game-design](../planning/game-design.md) | `:core`, Room `dynasty_metadata`, **New** bootstrap |
 | 2.4 | `[x]` **Week advance** checkpoint semantics | Replay before advance; lock after | [game-design](../planning/game-design.md) | `:core/calendar/checkpoint`, Room `dynasty_calendar` + `provisional_games` |
 | 2.5 | `[x]` Unreadable-save handling on Load | Validate + repair calendar; fallback delete UI | [game-start](../planning/game-start.md) | `DynastySaveValidator`, `SaveLoadUnavailableDialog` |
-| 2.6 | `[ ]` **Balance ruleset** loader + pin on dynasty | Loads & pins: scholarship **15**, `recruiting.*`, loyalty, `nil.annualPoolByConferenceTier` + blue blood band, `injuries.occurrence`, `injuries.medicalRedshirt`, `injuries.bank` (40 × `bodyPart`, `durationWeeks*`, `weight`) | [ADR-002](ADR-002-balance-ruleset-bundle.md), [`balance-2026.json`](../assets/balance/balance-2026.json), [injuries](../planning/injuries.md), [game-design](../planning/game-design.md#annual-collective-pool-design-lock) | `:core/balance` |
+| 2.6 | `[ ]` **Balance ruleset** loader + pin on dynasty | Loads & pins: scholarship **15**, `recruiting.*`, loyalty, `nil.*`, `injuries.*`, `discipline.*`, `chemistry`, `fatigue` | [ADR-002](ADR-002-balance-ruleset-bundle.md), [`balance-2026.json`](../assets/balance/balance-2026.json) | `:core/balance` |
 | 2.7 | `[ ]` **Sim tuning** loader + pin on dynasty | `simSchemaVersion`; possession tables load in sim module | [ADR-003](ADR-003-sim-tuning-bundle.md) | `:core/sim/tuning` |
 
 ---
@@ -182,6 +183,8 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 8.6 | `[ ]` **Loyalty** (0–99) + **one promise** per tenure | Kept/broken → portal / declare rolls; card chips | [player-loyalty-promises](../planning/player-loyalty-promises.md), [player-cards](../planning/player-cards.md) | `:core/player` |
 | 8.7 | `[ ]` **Injury** state + medical redshirt + **auto lineup** | Save fields per spec; `weeksRemaining` + snapshots; lineup adjust on injury/return; medical RS gates; bank **40** rows | [injuries](../planning/injuries.md) | `:core/injuries` |
 | 8.8 | `[ ]` **Injury UX** (postgame + cards + strategy) | Postgame sheet; roster `OUT` / `{N}w`; greyed in Strategy; optional dashboard deep links | [injuries](../planning/injuries.md#player-ui), [injuries#medical-redshirt](../planning/injuries.md#medical-redshirt), [dashboard-tasks](../planning/dashboard-tasks.md) | `ui.postgame`, `ui.strategy` |
+| 8.9 | `[ ]` **Discipline events** (conduct + academic) | Weekly random roll; required sheet; dismiss / games / conference draw or academic options | [in-season-systems](../planning/in-season-systems.md) | `ui.discipline` |
+| 8.10 | `[ ]` **Chemistry + fatigue** state | `teamChemistry`, per-player `stamina`; weekly tick; sim clutch + injury weight | [in-season-systems](../planning/in-season-systems.md) | `:core/discipline` |
 
 ---
 

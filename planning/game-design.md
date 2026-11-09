@@ -575,12 +575,11 @@ Gameplay is **sim-only**; see **[`simulation-engine.md`](simulation-engine.md)**
 
 | System | Spec summary |
 |--------|----------------|
-| **Injuries** | Severity tiers; weeks out (calendar); medical staff reduces duration |
-| **Suspensions** | Administrative; X games |
-| **Academic eligibility** | Rolling grades; bench ineligible |
-| **Portal** | **Offseason only** — Week 1 entries, Weeks 2–5 sign in Recruiting hub; **no** in-season transfers ([`transfer-portal.md`](transfer-portal.md)) |
-| **Chemistry** | Roster stability + coaching; affects clutch sim |
-| **Fatigue** | Back-to-back games, travel, and press schemes apply **standard** stamina penalties in sim |
+| **Injuries** | Weeks out (calendar) — [`injuries.md`](injuries.md) |
+| **Discipline** | Random weekly conduct + academic sheets; games suspended — [`in-season-systems.md`](in-season-systems.md) |
+| **Portal** | **Offseason only** — [`transfer-portal.md`](transfer-portal.md) |
+| **Chemistry** | Team 0–100; clutch sim — [`in-season-systems.md`](in-season-systems.md#chemistry) |
+| **Fatigue** | Stamina drain / recovery — [`in-season-systems.md`](in-season-systems.md#fatigue) |
 
 ### NCBA NET, human polls & selection (authoritative)
 

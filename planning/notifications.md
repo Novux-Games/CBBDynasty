@@ -61,6 +61,7 @@
 | Event | Feed row | Task also? | Tap → |
 |-------|----------|------------|-------|
 | User player **injury** | Yes | Optional **Review injury** | Strategy / player |
+| **Team discipline** sheet opened | Yes | **Required** parallel task | Discipline UI |
 | **Commit** to user school (**HS, JUCO, or portal**) | Yes — **every** sign | Optional recruiting nudge | Recruiting → recruit / Portal tab |
 | **Decommit** from user school | Yes | — | Recruiting |
 | Carousel: **offer / fired / must-sign extension** | Yes | **Required** task when gated | Coach → Contract |
