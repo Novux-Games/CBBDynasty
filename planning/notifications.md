@@ -61,9 +61,8 @@
 | Event | Feed row | Task also? | Tap → |
 |-------|----------|------------|-------|
 | User player **injury** | Yes | Optional **Review injury** | Strategy / player |
-| **Commit** to user school | Yes | Optional recruiting nudge | Recruiting → recruit |
+| **Commit** to user school (**HS, JUCO, or portal**) | Yes — **every** sign | Optional recruiting nudge | Recruiting → recruit / Portal tab |
 | **Decommit** from user school | Yes | — | Recruiting |
-| Portal **signing** (user school) | Yes | Optional OS W2–5 tasks | Recruiting → Portal |
 | Carousel: **offer / fired / must-sign extension** | Yes | **Required** task when gated | Coach → Contract |
 | **Selection Sunday** (user in field) | Yes | — | March Mayhem / preview |
 
@@ -147,7 +146,7 @@ Tap feed row → navigate with Dashboard under back stack:
 
 ## Open decisions
 
-1. **Portal signing feed:** Row for **every** user portal sign in Weeks 2–5, or only **tracked** targets (board / Top 40)?
+1. ~~Portal / commit feed breadth~~ → **Locked:** **every** commit to the user program (**HS, JUCO, portal**) gets a feed row.
 2. **Fired / eliminated:** Add **blocking modal** on next Dashboard open, or feed row only?
 
 ---
@@ -173,3 +172,4 @@ Tap feed row → navigate with Dashboard under back stack:
 |------|--------|
 | 2026-11-09 | Initial draft (incorrectly included OS push) |
 | 2026-11-09 | **In-app only**; no push; Stories separate; defaults on |
+| 2026-11-09 | All user-school commits (HS/JUCO/portal) → feed row |
