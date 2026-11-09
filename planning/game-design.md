@@ -656,7 +656,7 @@ Universe round labels: [`ncba-branding.md`](ncba-branding.md).
 
 - **Rankings:** weekly **NCBA NET** (365) + **Media** & **Coaches** polls (365; T25 callouts).
 - **Bracketology:** updates weekly in February in news feed.
-- **User stories:** win streaks, upset alerts, portal steals.
+- **User stories:** win streaks, upset alerts, portal steals — portal product [`news-hub.md`](news-hub.md).
 
 ---
 

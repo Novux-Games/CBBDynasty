@@ -157,7 +157,7 @@ User sees **outcomes** only (who entered), not internal reason.
 |------|--------|
 | **News-heavy** | League-wide portal activity surfaces in **News** — commits, major entrants, flips, school-name headlines (national **ticker** feel) |
 | **Hub** | **Recruiting → Transfer Portal** stays authoritative for **your** spend; News drives awareness and drill-in |
-| **Deep dive** | Full **News hub** portal product (filters, trackers, layout) — **follow-up doc** (not spec’d here) |
+| **Deep dive** | [`news-hub.md`](news-hub.md) — Portal tab, Stories taxonomy, drill-ins |
 
 ## UX — Dashboard (follow-up)
 

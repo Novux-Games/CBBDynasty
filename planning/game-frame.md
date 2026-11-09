@@ -376,15 +376,16 @@ Tap team → School hub.
 
 ## News hub (full)
 
-Superset of dashboard News tab.
+Superset of dashboard News tab. **Authoritative product spec:** [`news-hub.md`](news-hub.md).
 
 | Tab / section | Content |
 |---------------|---------|
-| **Stories** | **Headlines only** (with date) — obvious types: upsets, rankings, injuries, commitments, bracket, etc. |
-| **Draft** | **Top 60** draft pool — **dynamic** as season/pro days evolve |
-| **Recruits** | National **Top 60** incoming class — **`#1`–`#60` full list** (not T25-style trim); seeded **preseason**; live all RS — [`recruiting-engine.md`](recruiting-engine.md#national-rankings-top-60) |
+| **Stories** | Chronological **headlines** — upsets, polls, injuries, **HS commits**, **portal** entries/commits/flips ([`news-hub.md`](news-hub.md#stories-feed)) |
+| **Portal** | **Offseason Weeks 1–5 only** — Top 40, recent commits/entrants, filters; **read-only** ([`news-hub.md`](news-hub.md#portal-tab-transfer-window)) |
+| **Recruits** | National **Top 60** HS/JUCO — **`#1`–`#60` full** — [`recruiting-engine.md`](recruiting-engine.md#national-rankings-top-60) |
+| **Draft** | **Top 60** draft pool — **dynamic** through pro days |
 
-**Draft** tab = pro/draft pool; **Recruits** tab = **national recruit rankings** (HS/JUCO Top 60, not portal, not team polls).
+**Action** (offers, portal spend) always via **Recruiting** hub — not News.
 
 ---
 
