@@ -1,0 +1,69 @@
+package dev.novux.dynasty.cbb.data.settings
+
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import dev.novux.dynasty.cbb.core.settings.AppSettings
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+
+private val Context.appSettingsDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = "app_settings",
+)
+
+class AppSettingsRepository(
+    private val context: Context,
+) {
+    val settingsFlow: Flow<AppSettings> =
+        context.appSettingsDataStore.data.map { prefs -> prefs.toAppSettings() }
+
+    suspend fun currentSettings(): AppSettings = settingsFlow.first()
+
+    suspend fun update(transform: (AppSettings) -> AppSettings) {
+        context.appSettingsDataStore.edit { prefs ->
+            val current = prefs.toAppSettings()
+            val updated = transform(current)
+            prefs[Keys.SKIP_STUDIO_INTRO] = updated.skipStudioIntro
+            prefs[Keys.SFX_ENABLED] = updated.sfxEnabled
+            prefs[Keys.MUSIC_ENABLED] = updated.musicEnabled
+            prefs[Keys.MASTER_VOLUME_PERCENT] = updated.masterVolumePercent
+        }
+    }
+
+    suspend fun setSkipStudioIntro(enabled: Boolean) {
+        update { it.copy(skipStudioIntro = enabled) }
+    }
+
+    suspend fun setSfxEnabled(enabled: Boolean) {
+        update { it.copy(sfxEnabled = enabled) }
+    }
+
+    suspend fun setMusicEnabled(enabled: Boolean) {
+        update { it.copy(musicEnabled = enabled) }
+    }
+
+    suspend fun setMasterVolumePercent(percent: Int) {
+        update { it.copy(masterVolumePercent = percent.coerceIn(0, 100)) }
+    }
+
+    private fun Preferences.toAppSettings(): AppSettings =
+        AppSettings(
+            skipStudioIntro = this[Keys.SKIP_STUDIO_INTRO] ?: false,
+            sfxEnabled = this[Keys.SFX_ENABLED] ?: true,
+            musicEnabled = this[Keys.MUSIC_ENABLED] ?: true,
+            masterVolumePercent = this[Keys.MASTER_VOLUME_PERCENT]
+                ?: AppSettings.DEFAULT_MASTER_VOLUME,
+        )
+
+    private object Keys {
+        val SKIP_STUDIO_INTRO = booleanPreferencesKey("skip_studio_intro")
+        val SFX_ENABLED = booleanPreferencesKey("sfx_enabled")
+        val MUSIC_ENABLED = booleanPreferencesKey("music_enabled")
+        val MASTER_VOLUME_PERCENT = intPreferencesKey("master_volume_percent")
+    }
+}

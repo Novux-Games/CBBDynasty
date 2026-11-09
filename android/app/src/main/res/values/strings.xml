@@ -11,4 +11,14 @@
     <string name="menu_load">Load</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_credits">Credits</string>
+    <string name="settings_section_shell">App shell</string>
+    <string name="settings_skip_studio_intro">Skip studio intro</string>
+    <string name="settings_skip_studio_intro_summary">Start on the game splash instead of the Novux studio screen.</string>
+    <string name="settings_section_audio">Audio</string>
+    <string name="settings_audio_stub_note">Saved now; in-game audio ships later.</string>
+    <string name="settings_sfx_enabled">Sound effects</string>
+    <string name="settings_music_enabled">Music</string>
+    <string name="settings_master_volume">Master volume</string>
+    <string name="settings_master_volume_value">%1$d%%</string>
+    <string name="settings_back">Back</string>
 </resources>

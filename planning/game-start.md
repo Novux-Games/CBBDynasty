@@ -228,6 +228,8 @@ Primary CTA: **Sign contract** (disabled until user reviews sheet once — optio
 
 Audio, notifications default, save backup location (local), text size, legal links — **do not** duplicate Auto-upgrade / Unlimited age (dynasty-only).
 
+**Implemented (scaffold):** DataStore-backed [`AppSettings`](../../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/settings/AppSettings.kt) — **Skip studio intro** (cold start skips [`app-shell.md`](app-shell.md) studio beat); **SFX / music toggles** and **master volume** (persisted stubs; no audio engine yet).
+
 ### Credits
 
 Novux Games, third-party licenses, unofficial / no NCAA endorsement ([`branding.md`](branding.md)).

@@ -18,6 +18,7 @@ Planning remains authoritative in [`planning/`](../planning/). This doc describe
 | `ui.shell` | Studio, splash, home menu |
 | `ui.navigation` | Pre-dynasty + future dynasty routes |
 | `ui.theme` | `#181a25` brand ([`branding.md`](../planning/branding.md)) |
+| `data/settings` | DataStore app prefs (skip studio, audio stubs) |
 | `data` | Local saves, identity packs (TBD) |
 | `domain` | Week advance, offseason/preseason state machines (TBD) |
 
