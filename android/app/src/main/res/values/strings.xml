@@ -38,7 +38,7 @@
     <string name="new_no_empty_slot">All ten saves are in use. Delete one from Load to start a new dynasty.</string>
     <string name="new_wizard_progress">Step %1$d of %2$d</string>
     <string name="new_wizard_next">Next</string>
-    <string name="new_step_placeholder">Form fields ship in the next build steps.</string>
+    <string name="new_step_placeholder">More options on the next screens.</string>
     <string name="new_coach_first_name">First name</string>
     <string name="new_coach_last_name">Last name</string>
     <string name="new_coach_suffix">Suffix</string>
@@ -64,7 +64,7 @@
     <string name="new_settings_auto_upgrade_summary">Apply player progression as soon as XP is earned.</string>
     <string name="new_settings_unlimited_age">Unlimited coach age</string>
     <string name="new_settings_unlimited_age_summary">When off, head coach retires at 75.</string>
-    <string name="new_settings_import_stub">Identity pack import stays on the home pack tools until a later step wires URL/TXT here.</string>
+    <string name="new_settings_import_stub">You can import a custom league file from Load after you start your dynasty.</string>
     <string name="new_step_coach_title">Coach</string>
     <string name="new_step_coach_subtitle">Name, age, and appearance presets.</string>
     <string name="new_step_archetype_title">Archetype</string>
@@ -77,7 +77,7 @@
     <string name="new_step_school_subtitle">Pick a program and review the contract preview.</string>
     <string name="new_step_sign_title">Sign contract</string>
     <string name="new_step_sign_subtitle">Confirm and launch Season 1.</string>
-    <string name="new_step_sign_stub">Contract signing and dynasty bootstrap ship in build step 4.6.</string>
+    <string name="new_step_sign_stub">Signing your contract and opening Season 1 will appear here soon.</string>
     <string name="load_error_title">This save can\'t be opened</string>
     <string name="load_error_message">Something is wrong with the save in slot %1$d. Delete it to free the slot, or try Load again after reinstalling the game.</string>
     <string name="load_error_delete">Delete save</string>
