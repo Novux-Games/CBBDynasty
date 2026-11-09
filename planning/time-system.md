@@ -11,6 +11,7 @@
 ## Contents
 
 1. [Layers of the year](#layers-of-the-year)
+1b. [End of Season week](#end-of-season-week)
 2. [Exhibition weeks](#exhibition-weeks)
 3. [Regular season weeks 1–32](#regular-season-weeks-132)
 4. [Early-season event tournaments & byes](#early-season-event-tournaments--byes)
@@ -26,11 +27,15 @@
 ```
 OFFSEASON (weeks / carousel) → PRESEASON (setup) →
   EXHIBITION WEEKS 1–3 → REGULAR SEASON WEEKS 1–32 →
-  CONFERENCE TOURNAMENT (≤ N weeks) → NATIONAL POSTSEASON (≤ 7 weeks) →
-  offseason…
+  CONFERENCE TOURNAMENT (N weeks league-wide) → NATIONAL POSTSEASON (7 weeks league-wide) →
+  END OF SEASON WEEK → offseason…
 ```
 
-**`calendarPhase`** on save: `offseason` | `preseason` | `exhibition` | `regular_season` | `conf_tournament` | `postseason` | …
+**`calendarPhase`** on save: `offseason` | `preseason` | `exhibition` | `regular_season` | `conf_tournament` | `postseason` | `season_review` | …
+
+### End of Season week
+
+After postseason week **7**, before offseason — **[`season-review.md`](season-review.md)** (final rankings, grades, prestige recap). **Not** a game week.
 
 ---
 
@@ -104,14 +109,18 @@ Eliminated teams **do not** get replacement games to fill event weeks — the by
 
 **When:** After **Regular Season Week 32** (standings final).
 
+### League-wide week count (design lock)
+
 | Rule | Detail |
 |------|--------|
-| **Weeks** | **Number of calendar weeks = maximum possible rounds** for that conference’s `TournamentTemplate` |
-| **Rounds** | Single-elim (or pack format); each **round** maps to **one** advance week — e.g. 4-round bracket → **4** conf-tourney weeks max |
-| **Byes** | Teams with first-round byes have **no game** in early conf-tourney weeks (same bye semantics as event losses) |
-| **Membership** | Who qualifies is template-defined ([`postseason.md`](postseason.md)) |
+| **Weeks on calendar** | **N** = **max possible rounds** across **all** conference `TournamentTemplate`s in the pack (the **deepest** bracket sets **N** for every team) |
+| **Per conference** | Each league still plays only **its** rounds (2, 4, 5, …) on the shared week indices |
+| **Shorter brackets** | Programs in conferences with **fewer** rounds sit on **bye** on later conf-tourney weeks while **other** conferences finish (same idea as early-event byes) |
+| **First-round byes** | Within a bracket, teams with byes have **no game** that week |
 
-All conferences sim in parallel each week; user plays when their school has a game.
+**Example:** Pack max **5** conf-tourney weeks. A **4-round** conference ends after conf-tourney **week 4**; its teams **bye** week **5** while a **5-round** conference plays championships.
+
+Each **Conf Tournament Week 1…N** advance sims **all** conference games scheduled that index league-wide; user plays when their school has a game.
 
 ---
 
@@ -145,7 +154,8 @@ Teams that **skip** Opening Round still use **weeks 2–7** for R1 → title. El
 |-------|---------|
 | **Exhibition / RS** | **Advance week** sims all games in that week label for the league; user game(s) first or batch order per settings |
 | **Bye week** | Allowed — no games for user does not block advance |
-| **Conf tourney / postseason** | One **round layer** per week index; all national brackets progress together on advance |
+| **Conf tourney / postseason** | Fixed week index league-wide; sim all brackets active that week; byes OK |
+| **End of Season** | No games — [`season-review.md`](season-review.md) → offseason |
 
 Coach **Sunday skill points** tie to RS week boundary ([`game-design.md`](game-design.md)).
 
@@ -166,3 +176,4 @@ Coach **Sunday skill points** tie to RS week boundary ([`game-design.md`](game-d
 | Date | Change |
 |------|--------|
 | 2025-11-09 | Exhibition 1–3, RS 1–32, event byes, conf/postseason weeks |
+| 2025-11-09 | Unified conf/postseason weeks; End of Season → season-review.md |

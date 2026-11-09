@@ -18,6 +18,7 @@
 **Offseason:** **[`offseason.md`](offseason.md)** — carousel, weeks 1–9, Season 1 rules  
 **Preseason:** **[`preseason.md`](preseason.md)** — single-week tasks, reports, schedule  
 **Time / weeks:** **[`time-system.md`](time-system.md)** — exhibition, RS 1–32, byes, postseason weeks  
+**Season review:** **[`season-review.md`](season-review.md)** — end of year before offseason  
 **Postseason:** **[`postseason.md`](postseason.md)** — Selection Sunday, NCBA / NCI / Heritage  
 **Selection engine:** **[`selection-engine.md`](selection-engine.md)** — poll formula, seed index, cuts  
 **Postseason UI:** **[`postseason-frame.md`](postseason-frame.md)** — March Mayhem hub, NCBA/NCI/HC seed labels  

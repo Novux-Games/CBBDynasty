@@ -1,6 +1,6 @@
 # Offseason — calendar & phases
 
-**Design lock:** Dynasties **start in offseason**, not preseason. Most coaching movement happens here — matching real hiring cycles. **Preseason** begins after offseason ([`preseason.md`](preseason.md)).
+**Design lock:** Dynasties **start in offseason**, not preseason. Most coaching movement happens here — matching real hiring cycles. **Preseason** begins after offseason ([`preseason.md`](preseason.md)). **Entry:** after **[End of Season week](season-review.md)** (post postseason).
 
 **Companion UI (planned):** [`offseason-frame.md`](offseason-frame.md). **Recruiting depth:** [`recruiting-engine.md`](recruiting-engine.md). **Carousel / contracts:** [`game-design.md`](game-design.md#coaching-carousel--contracts). **New dynasty entry:** [`game-start.md`](game-start.md) → **Offseason Week 1**.
 

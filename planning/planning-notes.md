@@ -52,3 +52,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | Offseason calendar | **Done** | [`offseason.md`](offseason.md) |
 | Preseason setup | **Done** | [`preseason.md`](preseason.md) |
 | Time system (weeks/byes) | **Done** | [`time-system.md`](time-system.md) |
+| End of Season week | **Done** | [`season-review.md`](season-review.md) |
