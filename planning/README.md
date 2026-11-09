@@ -87,6 +87,7 @@ Authoritative design for **Dynasty: College Basketball**. Implementation order l
 | [`postseason.md`](postseason.md) | Conference championships, Selection Sunday, NCBA / NCI / Heritage |
 | [`selection-engine.md`](selection-engine.md) | Polls, NET-style index, seeding, bubble |
 | [`postseason-frame.md`](postseason-frame.md) | March Mayhem hub UI |
+| [`awards.md`](awards.md) | POTY, All-Conference, All-America, team MVP — driven by season win contribution |
 
 ---
 

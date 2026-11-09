@@ -252,7 +252,8 @@ Round to **2** decimals for storage. Optional balance exponents live in `balance
 | Consumer | Use |
 |----------|-----|
 | [`history-hub.md`](history-hub.md) | `careerWinShares`, GOAT score, tie-breaks |
-| Season review / archive | Optional debug export in dev builds only |
+| [`awards.md`](awards.md) | Team MVP, conference/national POTY, All-Conference, All-America |
+| Season review / archive | User school team MVP chip |
 
 ---
 

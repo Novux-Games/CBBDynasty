@@ -223,7 +223,7 @@ Recomputed **End of Season week**; snapshot stored per year for History card dri
 
 ## Awards feed
 
-National & conference awards **drive** HOF and GOAT inputs ([`game-design.md`](game-design.md#awards--media)).
+Awards are **computed** at End of Season ([`awards.md`](awards.md)); **season win contribution** drives player POTY and All-Conference/All-America selection. They **feed** HOF and GOAT inputs ([`game-design.md`](game-design.md#awards--media)).
 
 | Award | History use |
 |-------|-------------|
@@ -286,7 +286,8 @@ Feed copy: *“Record: {Name} — {value} {stat}”* → tap → player card or 
 | [`coach-card.md`](coach-card.md#hall-of-fame) | Coach HOF attribution |
 | [`player-cards.md`](player-cards.md) | Stats, History tab |
 | [`news-hub.md`](news-hub.md) | Record / award headlines |
-| [`simulation-engine.md`](simulation-engine.md) | `winSharesSeason` output |
+| [`simulation-engine.md`](simulation-engine.md) | Season win contribution |
+| [`awards.md`](awards.md) | POTY, All-Conference, All-America, team MVP |
 | [`notifications.md`](notifications.md) | No routine record spam |
 
 ---

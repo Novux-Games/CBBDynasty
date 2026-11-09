@@ -619,6 +619,21 @@
       { "tier": "steady", "additionalAskMinUsd": 0, "additionalAskMaxUsd": 75000 }
     ]
   },
+  "awards": {
+    "eligibility": {
+      "allConferenceMinGamesPct": 0.5,
+      "allConferenceMinMpg": 8,
+      "allAmericaMinGamesPct": 0.6,
+      "allAmericaMinMpg": 12
+    },
+    "nationalWeights": {
+      "winShares": 12.0,
+      "postseasonTier": 4.0,
+      "peakOvrScale": 2.0,
+      "statRankNationalMax": 3.0
+    },
+    "allConferenceTeams": 2
+  },
   "history": {
     "winContribution": {
       "productionWeights": { "pts": 1.0, "ast": 1.5, "reb": 1.0, "to": -1.0 },

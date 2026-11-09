@@ -20,6 +20,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | [`dashboard-tasks.md`](../planning/dashboard-tasks.md) | 6.14, 6.16, 9.6, 9.7, 9.11; injury optional tasks → **9.6** |
 | [`game-design.md`](../planning/game-design.md) | 2.3, 4.7, 9.3–9.4, 12.1, 14.2, 15.1–15.5, 16.1–16.4; RS cap → **7.3–7.4** |
 | [`game-frame.md`](../planning/game-frame.md) | 6.16, 7.6, 9.1–9.2, 9.6–9.10, 10.5–10.6, 14.3 |
+| [`awards.md`](../planning/awards.md) | **14.3** (with history); EoS after win contribution |
 | [`history-hub.md`](../planning/history-hub.md) | **14.3** GOAT/HOF, **9.10**, School hub records/HOF; win contribution → **14.3** + [`simulation-engine`](../planning/simulation-engine.md#season-win-contribution-design-lock) |
 | [`game-start.md`](../planning/game-start.md) | 1.3, 2.2, 2.5, 4.1–4.6 |
 | [`injuries.md`](../planning/injuries.md) | **2.6**, **5.3**, **8.7–8.8**, **9.4**, **9.6–9.8**, **10.2**, **10.8** |
@@ -264,7 +265,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 |------|--------|-----------|------|------|
 | 14.1 | `[ ]` Season review UI | Grades, prestige, final ranks; **next cycle weekly recruiting pool** preview | [season-review](../planning/season-review.md), [recruiting-engine](../planning/recruiting-engine.md) | `ui.seasonreview` |
 | 14.2 | `[ ]` Awards & news wrap | POTY, coach honors | [game-design](../planning/game-design.md) | — |
-| 14.3 | `[ ]` History hub + GOAT + record/HOF passes | Year cards, GOAT top 25/5, triple HOF, record books at EoS; **season win contribution** rollup per [spec](../planning/simulation-engine.md#season-win-contribution-design-lock) | [history-hub](../planning/history-hub.md), [simulation-engine](../planning/simulation-engine.md#season-win-contribution-design-lock), [game-frame](../planning/game-frame.md) | `ui.history`, `:core/history` |
+| 14.3 | `[ ]` History hub + GOAT + record/HOF + **awards** | Win contribution rollup; [awards](../planning/awards.md) pass (team MVP, conf/national); year cards, GOAT top 25/5, triple HOF, record books | [history-hub](../planning/history-hub.md), [awards](../planning/awards.md), [simulation-engine](../planning/simulation-engine.md#season-win-contribution-design-lock), [game-frame](../planning/game-frame.md) | `ui.history`, `:core/history`, `:core/awards` |
 | 14.4 | `[ ]` Advance year → offseason carousel | Season 2+ path | [offseason](../planning/offseason.md) | — |
 
 ---
