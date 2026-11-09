@@ -2,6 +2,8 @@
 
 **Default pack display names** for the national body, March postseason, and early-season events. Real NCAA/NIT/Maui names stay **reference-only** in [`league-branding.md`](league-branding.md) and [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md); simulation uses stable IDs + this overlay.
 
+**Selection logic:** [`postseason.md`](postseason.md).
+
 **Last updated:** 2025-11-08
 
 ---
@@ -19,28 +21,33 @@
 | Real (reference) | Universe (default pack) |
 |------------------|-------------------------|
 | March Madness | **March Mayhem** |
-| NCAA tournament (bracket) | **NCBA Men's BB Tournament** — **76 teams** |
-| NIT | **NCI** — **National College Invitational** — **32 teams** |
+| NCAA tournament (bracket) | **NCBA Men's BB Tournament** |
+| NIT | **NCI** — **National College Invitational** |
+| CBI | **National Heritage Classic** |
 
 ### NCBA Men's BB Tournament — field
 
 | Slot | Count |
 |------|-------|
-| Conference champions (auto bids) | 32 |
-| At-large | 44 |
-| **Total** | **76** |
+| Conference tournament champions (auto) | 32 |
+| At-large (resume) | 32 |
+| **Round 1 (round of 64)** | **64** teams |
+
+**Opening Round:** bottom **24** conference champions (by resume among the 32 autos) play **12** games; **12** winners join the top **20** champs + **32** at-large in Round 1.
 
 ### NCI field
 
-**Next 32** programs by **resume order** among postseason-eligible teams **not** in the 76-team NCBA field (ranks **77–108** on the same selection list). No separate “invitational committee” — automatic after Selection Sunday ordering.
+**32** teams — highest resume among postseason-eligible programs **not** selected for NCBA ([`postseason.md`](postseason.md)).
 
-Reclass programs (`postseasonEligible: false`) are excluded from both fields.
+### National Heritage Classic field
+
+**16** teams — highest resume among eligible programs **not** in NCBA or NCI. **Reclass** programs may be selected.
 
 ### NCBA round names (UI + news)
 
 | Structural phase | Universe label |
 |------------------|----------------|
-| First Four–style play-in (76 → 64) | **Opening Round** |
+| Conference champ play-in (24 → 12) | **Opening Round** |
 | Round of 64 | **Round 1** |
 | Round of 32 | **Round 2** |
 | Sweet 16 | **Super 16** |
@@ -48,7 +55,15 @@ Reclass programs (`postseasonEligible: false`) are excluded from both fields.
 | Final Four | **Championship 4** |
 | Title game | **National Championship** |
 
-Pack keys (example): `round.opening`, `round.1` … `round.nationalChampionship`.
+### NCI round names
+
+**Round 1** → **Round 2** → **Quarterfinals** → **Semifinals** → **Finals**
+
+### Heritage Classic round names
+
+**Round 1** → **Quarterfinals** → **Semifinals** → **Finals**
+
+Pack keys (example): `round.opening`, `round.1` … `round.nationalChampionship`, `nci.*`, `heritage.*`.
 
 ---
 
@@ -56,7 +71,7 @@ Pack keys (example): `round.opening`, `round.1` … `round.nationalChampionship`
 
 **When:** Early **November–December** (non-conference window).  
 **Purpose:** Quad 1/2 résumé wins; neutral/island sites.  
-**Design lock:** Each program enters **at most one** early-season event tournament per **regular season**. This does **not** limit conference tournaments or **NCBA / NCI** postseason.
+**Design lock:** Each program enters **at most one** early-season event tournament per **regular season**. This does **not** limit conference tournaments or national postseason brackets.
 
 Each event counts toward the **32-game** regular-season cap (**up to 4 games** in that event). A team cannot join two catalog events in the same season.
 
@@ -75,7 +90,7 @@ Each event counts toward the **32-game** regular-season cap (**up to 4 games** i
 
 | System | Doc |
 |--------|-----|
-| Selection, opening round, 76→64 | [`game-design.md`](game-design.md#postseason--selection) |
+| Selection Sunday & brackets | [`postseason.md`](postseason.md) |
 | Regular-season caps & calendar | [`game-design.md`](game-design.md#scheduling--regular-season) |
 | Coach achievement labels | [`coach-card.md`](coach-card.md#achievements) |
 | App title (Novux) | [`branding.md`](branding.md) |
@@ -87,3 +102,4 @@ Each event counts toward the **32-game** regular-season cap (**up to 4 games** i
 | Date | Change |
 |------|--------|
 | 2025-11-08 | NCBA/NCI/March Mayhem; round names; four early-season events; one event per season |
+| 2025-11-08 | Heritage Classic; NCBA 64 + champ Opening Round; link `postseason.md` |

@@ -14,6 +14,7 @@
 **Recruiting:** **[`recruiting-engine.md`](recruiting-engine.md)** — pools, 4-week window, NIL + points  
 **League identity:** **[`league-branding.md`](league-branding.md)** — conference/team real ↔ universe mapping  
 **NCBA universe:** **[`ncba-branding.md`](ncba-branding.md)** — national body, March Mayhem, early events  
+**Postseason:** **[`postseason.md`](postseason.md)** — Selection Sunday, NCBA / NCI / Heritage  
 **Document type:** Planning GDD (implementation-ready outline)  
 **Default era:** **2026–27** at new dynasty start (**Season 1**)  
 **Last updated:** 2025-11-08
@@ -180,7 +181,7 @@ Packs are validated **atomically**. Invalid pack → reject; no partial apply.
 
 - Conference **round-robin or matrix** schedule generators per `leagueGameCount`.
 - **TournamentTemplate** per conference (bracket size, byes, reseeding, venue neutral/home).
-- **NCBA** Opening Round slot map (76 → 64).
+- **NCBA** Opening Round (24 champs, 12 games) + 64-team bracket map — [`postseason.md`](postseason.md).
 
 ### Save partitioning
 
@@ -598,27 +599,23 @@ All **inspired by** real metrics; labels in UI are generic ("Resume Index", "Tie
 
 ## Postseason & selection
 
-### Reclass transition — postseason ineligibility
+**Authoritative spec:** [`postseason.md`](postseason.md) — conference tournaments → Selection Sunday → **NCBA** (Opening Round + 64-team bracket) → **NCI** (32) → **National Heritage Classic** (16).
 
-Programs in **D-II → D-I reclass** (`postseasonEligible: false`) are on the **365** membership list and play **full regular-season** / conference schedules. They are **excluded** from:
+### Summary
 
-| Postseason stage | Rule |
-|------------------|------|
-| **Conference tournament** | Cannot qualify or participate while `postseasonEligible` is false |
-| **NCBA Men's BB Tournament** | No automatic bid; **not** eligible for at-large selection |
-| **NCI** (National College Invitational) | Excluded while in transition |
+| National event | Size | Selection |
+|----------------|------|-----------|
+| **NCBA Men's BB Tournament** | **64** in Round 1 | **32** conference champions + **32** at-large; bottom **24** champs play **12** Opening Round games |
+| **NCI** | **32** | Highest resume **not** in NCBA |
+| **National Heritage Classic** | **16** | Highest resume **not** in NCBA or NCI |
 
-**Season numbering:** **Season 1** = **2026–27** calendar (first playable year on a new dynasty). Later seasons advance the displayed year (`2027–28`, …) in step with `dynastySeasonIndex`.
+**Reclass** (`postseasonEligible: false`): **conference tournaments** and **Heritage** yes; **NCBA** and **NCI** no (conf tourney win does not confer NCBA bid — pass-over per conference template).
 
-**Transition clock:** `reclassTransitionYear` **1–4** on the team record (NCAA Bylaw 20-style **4-year** window). Pack values are the **Season 1** bootstrap; each **offseason** increments the year for programs still in reclass. When a program **finishes year 4** in offseason, set `postseasonEligible: true` for the **next** season — same certification path as recent members (Stonehill/Lindenwood in [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md)).
-
-**Season 1 bootstrap** (`reclassTransitionYear`): Mercyhurst & West Georgia **3**; New Haven **2**; West Florida **1** — all `postseasonEligible: false`. Eligibility timing: West Florida **Season 5**; New Haven **Season 4**; Mercyhurst & West Georgia **Season 3**. See [`league-branding.md`](league-branding.md#provisional-transition-programs).
-
-Conference tournaments still award **auto bids** only to **eligible** champions; if an ineligible team would have won, implementation uses conference template rules (next eligible finisher / seed policy in data).
+**Transition clock / Season 1 bootstrap:** see [`postseason.md`](postseason.md#postseason-eligibility-reclass) and [`league-branding.md`](league-branding.md#provisional-transition-programs).
 
 ### Conference tournaments
 
-Each conference uses a **TournamentTemplate**:
+Each conference uses a **TournamentTemplate** (real **2026–27** formats in default pack). Example shape:
 
 ```json
 {
@@ -637,68 +634,7 @@ Each conference uses a **TournamentTemplate**:
 }
 ```
 
-**Design lock:** **real** bracket format per conference (size, byes, reseeding, sites) for **2026–27** — one `TournamentTemplate` per conference in the default pack.
-
-### NCBA Men's BB Tournament — 76 teams
-
-Universe names: [`ncba-branding.md`](ncba-branding.md). **March Mayhem** is the event brand in UI/news.
-
-| Slot type | Count |
-|-----------|-------|
-| Auto bids | 32 (conference champions) |
-| At-large | 44 |
-| **Total** | **76** |
-
-### Opening Round (12 games → 64)
-
-**UI label:** **Opening Round** (First Four–style play-in).
-
-- **8 teams** play **4 games** for **4 seeds** into 64-bracket (last four in at-large/high seed play-in).
-- **4 teams** play **2 games** for **2 remaining 16-seeds** (autobid play-in concept).
-- Total **6 opening-round sessions × 2 teams = 12 games** (matches 76 − 64 = 12 teams eliminated).
-
-Winners **inherit** the seed line assigned on Selection Sunday (not reseeded into different region after win).
-
-### Bracket construction & round labels
-
-- **4 regions**, 16 teams each after Opening Round.
-- **S-curve** seeding with **conference conflict rules** (no same-conference until **Super 16** if possible).
-- **User bracket view** + sim; national semifinals at **Championship 4** site.
-
-| Round (structural) | Universe label |
-|--------------------|----------------|
-| Round of 64 | **Round 1** |
-| Round of 32 | **Round 2** |
-| Sweet 16 | **Super 16** |
-| Elite 8 | **Great 8** |
-| Final Four | **Championship 4** |
-| Title game | **National Championship** |
-
-### Selection Sunday (committee sim)
-
-**Auto bid lock** after conference finals.
-
-**At-large ordering:**
-
-1. Lock autobids.
-2. Rank remaining by **composite resume score** (NET + quad wins + bad losses penalty).
-3. Take top 44 at-large + autobids = 76.
-4. Assign **seeds 1–16** per region via S-curve.
-5. Assign **opening-round matchups** to lowest at-large seeds and designated play-in autobids.
-
-**Bubble drama UI:** last four in / last four out screen for user if involved.
-
-### NCI — National College Invitational (32 teams)
-
-| Rule | Value |
-|------|--------|
-| **Field** | **32** teams — **next 32** on the Selection Sunday resume list after the **76** NCBA teams (ranks **77–108**), postseason-eligible only |
-| **Selection** | Automatic from ordering; **no** separate invite committee |
-| **Structure** | Campus-hosted **Round 1** where template allows; later rounds neutral sites |
-| **Universe label** | **NCI** — National College Invitational ([`ncba-branding.md`](ncba-branding.md)) |
-| **Tracking** | Coach **Achievements** tab — NCI W–L, titles ([`coach-card.md`](coach-card.md)) |
-
-Reclass programs with `postseasonEligible: false` are **ineligible**.
+Universe round labels: [`ncba-branding.md`](ncba-branding.md).
 
 ---
 
@@ -768,7 +704,7 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | **Possession sim** | 40-min engine, coherence checks, box scores — [`simulation-engine.md`](simulation-engine.md) |
 | **Dynasty systems** | Offseason, recruiting, portal, facilities |
 | **Full league** | 365-team scheduling, daily batch sim, derived résumé |
-| **March** | Conference templates, NCBA 76-field, Opening Round, **NCI** |
+| **March** | Conference templates, NCBA, **NCI**, **Heritage** — [`postseason.md`](postseason.md) |
 | **Ship** | Full 2D UI, automation toggles, notifications, **JSON/URL identity import** |
 
 ### Remaining product decisions (short list)
@@ -811,4 +747,5 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-08 | Restore full-product specs (staff, walk-ons, secondary postseason, unemployed coach) |
 | 2025-11-08 | HS/JUCO recruit seed moved to preseason (Top 60 in-season) |
 | 2025-11-08 | NCBA/NCI/March Mayhem; early events; round labels — `ncba-branding.md` |
+| 2025-11-08 | `postseason.md` — Selection Sunday, Heritage, reclass conf tourney |
 | 2025-11-08 | Linked `player-cards.md` |

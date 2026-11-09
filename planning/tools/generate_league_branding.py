@@ -400,7 +400,7 @@ def main() -> None:
         "",
         "## Provisional / transition programs",
         "",
-        "All **4** are **in the default pack** and play **regular season** / conference schedules. They are **ineligible for postseason** (conference tournament + national bracket) until they **complete the 4-year** D-II→D-I reclass window — see [`game-design.md`](game-design.md) postseason gates.",
+        "All **4** are **in the default pack** and play **regular season**, **conference tournaments**, and may qualify for **National Heritage Classic**. They are **ineligible for NCBA and NCI** until they **complete the 4-year** D-II→D-I reclass window — see [`postseason.md`](postseason.md).",
         "",
         "**Season clock:** **Season 1** in dynasty = **2026–27** calendar year. Values below are **`reclassTransitionYear` at new-dynasty start** (Season 1); each **offseason** increments for programs still in reclass.",
         "",
@@ -425,8 +425,9 @@ def main() -> None:
         "|-------------------|-------------------------|--------|",
         "| NCAA | **NCBA** — National College Basketball Association | |",
         "| March Madness | **March Mayhem** | |",
-        "| NCAA tournament | **NCBA Men's BB Tournament** (76 teams) | [`game-design.md`](game-design.md#postseason--selection) |",
-        "| NIT | **NCI** — National College Invitational (32 teams) | Next 32 after NCBA field |",
+        "| NCAA tournament | **NCBA Men's BB Tournament** (64 in Round 1) | [`postseason.md`](postseason.md) |",
+        "| NIT | **NCI** (32 teams) | Not selected for NCBA |",
+        "| CBI | **National Heritage Classic** (16 teams) | Not selected for NCBA or NCI; reclass eligible |",
         "| Maui / Atlantis / Champions-style / Feast Week events | Island Classic, Caribbean Showdown, Blue Blood Tip-Off, Desert Shootout | One early event per team per season |",
         "",
         "---",
@@ -457,6 +458,7 @@ def main() -> None:
         "| 2025-11-08 | Include 365 in pack; 4 reclass ineligible for postseason until year 4 done |",
         "| 2025-11-08 | Reclass years labeled Season 1 (2026–27) bootstrap |",
         "| 2025-11-08 | NCBA/NCI/March Mayhem + early events (`ncba-branding.md`) |",
+        "| 2025-11-08 | Postseason doc; Heritage; reclass conf tourney (`postseason.md`) |",
         "",
     ])
 

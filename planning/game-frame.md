@@ -89,9 +89,10 @@ Shows **`#NN`** = your program’s place in the **national composite resume list
 
 | Color | Meaning |
 |-------|---------|
-| **Green** | Projected **NCBA Men's BB Tournament** field (76 teams) — at-large or **conference auto-bid** path |
-| **Yellow** | Not projected NCBA, but in **NCI** band (**next 32** after the 76-team projection among eligible teams) |
-| **Red** | Projected **outside** NCBA and NCI, or **`postseasonEligible: false`** (reclass) |
+| **Green** | Projected **NCBA** field (64) — at-large or **conference auto-bid** path |
+| **Yellow** | Projected **NCI** (32), not NCBA |
+| **Amber** | Projected **National Heritage Classic** (16) only |
+| **Red** | Outside all national brackets, or reclass (NCBA/NCI blocked; Heritage still possible) |
 
 Tap **Current ranking** → Rankings hub (full list or filtered slice). During **conference tournament week**, colors may lock or update as auto bids are claimed.
 
@@ -351,7 +352,7 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History
 | Doc | Covers |
 |-----|--------|
 | **`offseason-frame.md`** | Portal, carousel, recruiting shell, week/day advance |
-| **`postseason-frame.md`** | Conference brackets, Selection Sunday, NCBA 76-field + NCI |
+| **`postseason-frame.md`** | Conference brackets, Selection Sunday — [`postseason.md`](postseason.md) |
 | **`transfer-portal-engine.md`** | Portal cycles, retention, in-season window |
 | **`selection-engine.md`** | Resume math, seeds, bubble ordering |
 

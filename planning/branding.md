@@ -74,6 +74,7 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 | In-season UI | [`game-frame.md`](game-frame.md) |
 | League names (real ↔ universe) | [`league-branding.md`](league-branding.md) · reference [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) |
 | NCBA / March Mayhem / early events | [`ncba-branding.md`](ncba-branding.md) |
+| Postseason brackets & Selection Sunday | [`postseason.md`](postseason.md) |
 
 ---
 

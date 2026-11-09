@@ -128,14 +128,16 @@ Career totals as **head coach** unless a row says “at current school.” Scope
 | **Tournament win %** | NCBA tourney wins ÷ tourney games |
 | **National titles** | **NCBA** National Championships |
 | **Final Fours** | **Championship 4** appearances |
-| **Tournament appearances** | NCBA (76-team field) bids |
+| **Tournament appearances** | NCBA field bids |
 | **Conference regular-season championships** | outright or co-champion per conference tiebreaker rules |
 | **Conference tournament championships** | conference bracket winner (auto-bid path separate from regular-season title) |
 | **Secondary tournament record** | **NCI** (National College Invitational) W–L — [`game-design.md`](game-design.md#nci--national-college-invitational-32-teams) |
 | **Secondary tournament win %** | Wins ÷ NCI games |
 | **Secondary tournament wins** | **NCI championships** |
+| **Heritage Classic record** | **National Heritage Classic** W–L |
+| **Heritage Classic wins** | Heritage **championships** |
 
-Display via [`ncba-branding.md`](ncba-branding.md); stats keys stay `secondaryPostseason*`.
+Display via [`ncba-branding.md`](ncba-branding.md) / [`postseason.md`](postseason.md); stats keys `secondaryPostseason*` (NCI), `heritagePostseason*` (Heritage).
 
 ### Strategy
 
