@@ -420,10 +420,13 @@ Tap recruit → **recruit sheet** (preview): stars, letters, NIL ask, interest, 
 
 ## National rankings (Top 60)
 
+**Not team polls:** **Media / Coaches T25** ranks **programs** ([`game-frame.md`](game-frame.md#rankings-on-dashboard)). **Recruit rankings** are a **national player list** — **not** cropped to 25.
+
 | List | Source | When |
 |------|--------|------|
-| **Top 60 recruits** | Hidden ratings across **seeded HS + JUCO** (portal excluded) | **Fixed at preseason seed** — visible **all regular season** + offseason; order **does not** update during the 4 recruiting weeks |
-| **News hub → Recruits** | Same Top 60 reference | [`game-frame.md`](game-frame.md) — in-season |
+| **Top 60 recruits** | Best **60** in the seeded **HS + JUCO** class by hidden rating (portal excluded) | **Fixed at preseason seed** — show **#1–#60** complete (no “top 25 only” UI) |
+| **News hub → Recruits** | Same **full Top 60** table | All regular season + offseason |
+| **Recruiting hub → All** | **Entire** national pool (thousands) — stars, filters, scout; **Top 60** badge on ranked players | Cycle open |
 
 Distinct from **Top 60 draft** pool (in-season / pro-day dynamic) — recruit Top 60 is **incoming class** oriented.
 
@@ -434,6 +437,14 @@ Distinct from **Top 60 draft** pool (in-season / pro-day dynamic) — recruit To
 ## AI recruiting
 
 **Design lock:** Non-user schools use the **same rules as the user** — prestige-tier **weekly points**, **annual NIL $** ([`game-design.md`](game-design.md#annual-collective-pool-design-lock)), and the same **`signLikelihood` / Recommended** ordering ([Recommended tab](#recommended-tab-default)). There is no separate “AI cheat list.”
+
+### Visibility (player)
+
+| Rule | Detail |
+|------|--------|
+| **Your board only** | **Recruiting hub** (Recommended, All, Board, etc.) is **user program only** — no UI to open another school’s targets, watchlist, or spend |
+| **Other programs** | AI recruiting runs **off-screen** on week advance; you learn outcomes via **News** (commits, decommits, headlines), not rival boards |
+| **School hub (others)** | View opponent programs — roster, schedule, stats — **no** Recruiting tab when scouting another school ([`game-frame.md`](game-frame.md#school-hub)) |
 
 ### Per-school Recommended (AI)
 
@@ -510,7 +521,8 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | **3★ / 2★** | **20–50%** = 3★, **50–100%** = 2★ (with 5★ / 4★ bands above) |
 | **Recruiting point carryover** | **50%** of unused points to next week; rest expires |
 | **Visits** | **None** — points-only actions |
-| **Top 60 (recruits)** | **Fixed** after class seed |
+| **Top 60 (recruits)** | **Fixed** after class seed; UI shows **#1–#60**, not top-25 crop |
+| **AI recruiting visibility** | **Off-screen** — user sees **own** hub only |
 | **HS class size** | **Uniform random 2,000–4,000** per season |
 | **Year-long cycle** | Spend preseason → signing (OS week 5); **optional** in-season dashboard tasks |
 | **Sim week** | Advance may auto-sim games + AI user recruiting after confirmation — [`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week) |

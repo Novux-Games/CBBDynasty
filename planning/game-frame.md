@@ -236,7 +236,7 @@ Hamburger opens **hub picker** (overlay or slide drawer):
 | Hub | Purpose |
 |-----|---------|
 | **School** | Your program (see [School hub](#school-hub)); others when scouting |
-| **Recruiting** | Year-long class / portal — opens **Recommended** tab by default ([`recruiting-engine.md`](recruiting-engine.md#recommended-tab-default)); visible when cycle open |
+| **Recruiting** | **User program only** — year-long class / portal; **Recommended** default ([`recruiting-engine.md`](recruiting-engine.md#recommended-tab-default)); **no** rival recruiting boards |
 | **Strategy** | Scheme, rotation, usage |
 | **Statistics** | Leaders (national / conference) |
 | **Rankings** | National **`#1`–`#365`** + **T25** hub + conference standings |
@@ -252,8 +252,8 @@ Bottom tabs remain available; hubs stack or replace main content per navigation 
 
 **Your school by default.** Same structure when viewing **another school** (from rankings, opponent, game preview “view school”) with read-only/edit rules:
 
-- **Yours:** edit where systems allow (coach link, strategy from hub shortcuts).
-- **Others:** view-only stats, roster, schedule, history.
+- **Yours:** edit where systems allow (coach link, strategy from hub shortcuts); **Recruiting** via hamburger only for **your** school.
+- **Others:** view-only stats, roster, schedule, history — **no Recruiting** (AI boards hidden — [`recruiting-engine.md`](recruiting-engine.md#visibility-player)).
 
 ### Tabs / sections
 
@@ -382,9 +382,9 @@ Superset of dashboard News tab.
 |---------------|---------|
 | **Stories** | **Headlines only** (with date) — obvious types: upsets, rankings, injuries, commitments, bracket, etc. |
 | **Draft** | **Top 60** draft pool — **dynamic** as season/pro days evolve |
-| **Recruits** | **Top 60** incoming class — seeded **preseason**; live **all regular season**; see [`recruiting-engine.md`](recruiting-engine.md) |
+| **Recruits** | National **Top 60** incoming class — **`#1`–`#60` full list** (not T25-style trim); seeded **preseason**; live all RS — [`recruiting-engine.md`](recruiting-engine.md#national-rankings-top-60) |
 
-**Draft** tab = pro/draft pool; **Recruits** tab = high school / JUCO recruit rankings (not portal).
+**Draft** tab = pro/draft pool; **Recruits** tab = **national recruit rankings** (HS/JUCO Top 60, not portal, not team polls).
 
 ---
 
