@@ -1,0 +1,21 @@
+Novux Games — Art & Brand Assets License
+=========================================
+
+Copyright © 2026 Novux Games. All rights reserved.
+
+Files in this directory and subdirectories (including but not limited to
+`app-logo.svg`, `app-logo.png`, `Novux_Logos/`, `Novux_Icons/`,
+`adaptive-icon/`, and `screen-previews/`) are NOT open source.
+
+You may NOT copy, modify, distribute, or create derivative works of these
+assets without prior written permission from Novux Games, except:
+
+- Brief use in official press, previews, or attribution that links to
+  https://novux.dev or the official game listing, with clear © Novux Games
+  credit (case-by-case; does not grant a general license).
+
+Raster copies in `android/app/src/main/res/` (e.g. `drawable-nodpi/`) are
+derivatives of these assets and are governed by this same notice.
+
+For code licensing, see the Apache License 2.0 at the repository root
+(`LICENSE`) and `docs/LICENSING.md`.

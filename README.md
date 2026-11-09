@@ -17,3 +17,9 @@ cd android && ./gradlew :core:test
 Open `android/` in Android Studio for emulator builds (`:app:assembleDebug`).
 
 **Implementation order:** [`docs/BUILD_CHECKLIST.md`](docs/BUILD_CHECKLIST.md)
+
+## License
+
+**Open code, closed art:** Apache 2.0 for source and planning docs; logos and
+`Public-Assets/` remain © Novux Games (all rights reserved). Details:
+[`docs/LICENSING.md`](docs/LICENSING.md).
