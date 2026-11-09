@@ -59,6 +59,8 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 | `adaptive-icon-foreground.png` | Foreground layer — transparent logo (432×432) |
 | `adaptive-icon-canvas.png` | `#181A25` + `adaptive-icon-foreground.png` composited (logo on brand background only) |
 
+**Android:** `adaptive-icon-foreground.png` → `android/app/.../drawable-nodpi/ic_launcher_foreground.png`; background `@color/brand_background` (`#181A25`).
+
 ---
 
 ## Legal / attribution
