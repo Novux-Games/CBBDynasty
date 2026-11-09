@@ -361,7 +361,7 @@ Hamburger: School | Strategy | Statistics | Rankings | News | History | March Ma
 
 | Doc | Covers |
 |-----|--------|
-| **`offseason-frame.md`** | Portal, carousel, recruiting shell, week/day advance |
+| **`offseason-frame.md`** | Portal, carousel, recruiting shell — [`offseason.md`](offseason.md) |
 | **`postseason-frame.md`** | Tournament seed labels, March Mayhem hub — [`postseason.md`](postseason.md) |
 | **`transfer-portal-engine.md`** | Portal cycles, retention, in-season window |
 | **`selection-engine.md`** | Poll + Seed Index, Selection Sunday cuts |

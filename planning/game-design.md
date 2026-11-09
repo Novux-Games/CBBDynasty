@@ -15,6 +15,7 @@
 **Recruiting:** **[`recruiting-engine.md`](recruiting-engine.md)** — pools, 4-week window, NIL + points  
 **League identity:** **[`league-branding.md`](league-branding.md)** — conference/team real ↔ universe mapping  
 **NCBA universe:** **[`ncba-branding.md`](ncba-branding.md)** — national body, March Mayhem, early events  
+**Offseason:** **[`offseason.md`](offseason.md)** — carousel, weeks 1–9, Season 1 rules  
 **Postseason:** **[`postseason.md`](postseason.md)** — Selection Sunday, NCBA / NCI / Heritage  
 **Selection engine:** **[`selection-engine.md`](selection-engine.md)** — poll formula, seed index, cuts  
 **Postseason UI:** **[`postseason-frame.md`](postseason-frame.md)** — March Mayhem hub, NCBA/NCI/HC seed labels  
@@ -256,7 +257,7 @@ In-week variety is normal (different sim runs, different scores). **Locked** onl
 | Rule | Detail |
 |------|--------|
 | **Who** | Any program; especially common at low-prestige schools |
-| **When** | **Offseason week 10** (after main recruiting window): **walk-on tryouts** |
+| **When** | **Offseason week 7** (roster lock): **walk-on tryouts** — [`offseason.md`](offseason.md) |
 | **Pool** | **5–15** local prospects per school, `homeState` weighted to program |
 | **Ratings** | Local band — mostly **2★** with rare **3★**; hidden 0–99 in low-60s band |
 | **Scholarship** | **No** initial aid; may **earn scholarship** next offseason if minutes / dev thresholds met |
@@ -288,38 +289,22 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 
 ## Offseason (authoritative calendar)
 
-Offseason length: **~14 weeks** (tunable); user advances **week** or **day** in portal/recruiting sub-windows.
+**Authoritative spec:** [`offseason.md`](offseason.md). **New dynasties** begin **Offseason Week 1** (not preseason).
 
-| Week | Phase | Player highlights |
-|------|--------|-------------------|
-| **1** | **Transfer portal (cycle 1)** + **pro days** | Portal entries/responses; grad/early-entry pro day participation; stay-go decisions for declarations |
-| **2–3** | **Coaching carousel** (peak) | AI hires/fires; user contract extension; poaching risk |
-| **4** | **Cuts & roster lock prep** | Scholarship allocation; walk-on offers |
-| **5** | **Draft withdrawal deadline** | Last chance to return for withdrawing early entrants (before results) |
-| **6–9** | **Recruiting (4 weeks)** | HS + JUCO + portal — see [`recruiting-engine.md`](recruiting-engine.md) |
-| **6** | **NBA draft results** (recruiting **week 1**) | Published mock/order reveal; early entrants leave; scholarship opens; portal board opens |
-| **10** | **Transfer portal (cycle 2)** | When `ruleset.portalCycle2` is true for the year — late entries for AI + user |
-| **11** | **Summer workouts** (auto) | Development deltas from coach + facilities |
-| **12–13** | **Fundraising & upgrades** | Arena/facility spend; naming rights deal |
-| **14** | **Conference offers** + **schedule prep unlock** | Accept/decline realignment; preseason scheduling opens |
+**Summary**
 
-**Notes**
+| Phase | When |
+|-------|------|
+| **Coaching Carousel** | Before Week 1, **Season 2+** only (not “Week 0” in UI) |
+| **Week 1** | Players Leaving — grads, **≥1** user transfer intent, retention, **pro days** |
+| **Weeks 2–5** | Recruiting + **Transfer Portal**; **Week 2** = **pro draft results** |
+| **Week 6** | Summer workouts (auto) |
+| **Week 7** | Cuts & roster lock (≤15); walk-on tryouts |
+| **Week 8** | Fundraising & upgrades |
+| **Week 9** | Conference offers (**skip Season 1**) |
+| → | **Preseason** (`preseason.md` planned) |
 
-- **Coaching carousel** can spawn events in weeks 2–14 at lower intensity (assistant offers, extension pressure).
-- **Graduation** processed at offseason start (week 0 rollover).
-- **Summer workouts** also apply passive gains to returning players who skipped pro-day declare drama.
-
-### Pro days & draft timeline (edge-case spec)
-
-| Event | Timing |
-|-------|--------|
-| Pro day participation | Offseason **week 1** |
-| Declare / stay | Week 1 decisions; can revisit until withdrawal deadline |
-| **Withdrawal deadline** | Offseason **week 5** |
-| **Draft results posted** | **Recruiting week 1** (offseason week 6) |
-| Who attends pro day | **Graduates** + **undergraduates who declared** |
-
-If player withdraws by week 5 → retains eligibility; if not withdrawn before draft results → either drafted (roster exit) or undrafted free agent exit per user/NBA odds model.
+**Pro days:** Week 1 for seniors + draft-declared undergrads; **draft results** Week 2. Early entrants who stay through retention remain eligible; drafted / undrafted exit per draft model at results posting.
 
 ---
 
@@ -327,7 +312,7 @@ If player withdraws by week 5 → retains eligibility; if not withdrawn before d
 
 **Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — 4-week period, 2–4K HS + 1.5K JUCO, portal sub-tab, recruiting points + NIL, letter grades, prestige 0–99.
 
-**Brief:** HS/JUCO class **seeded in preseason** (**Top 60** in News all regular season); **no in-season recruiting actions**; **4-week** spend window **offseason weeks 6–9**; portal recruits recruitable **recruiting week 1**; star bands **per pool** (top 2% = 5★); combined HS/JUCO board; **A–F** scout view; **no campus visits**; **50%** point carryover week-to-week.
+**Brief:** HS/JUCO class **seeded in preseason** (**Top 60** in News all regular season); **no in-season recruiting actions**; **4-week** spend **offseason weeks 2–5**; portal board active weeks **2–5**; draft results **offseason week 2**; star bands **per pool** (top 2% = 5★); combined HS/JUCO board; **A–F** scout view; **no campus visits**; **50%** point carryover week-to-week.
 
 ---
 
@@ -368,7 +353,7 @@ facilityBonus = 1 + 0.05 * (recruitingFacilityGrade - 3)  // grade 1–10
 recruitingBudget = floor(baseBudget * gradeMultiplier * facilityBonus)
 ```
 
-**Upgrades done in offseason 12–13** apply to **next year's** recruiting cycle (+1 facility tier → next year `facilityBonus`).
+**Upgrades in offseason week 8** apply per [`offseason.md`](offseason.md) (some bonuses next recruiting cycle).
 
 ### Cash sinks
 
@@ -473,7 +458,7 @@ inviteScore = 0.35 * onCourtSuccess
 ```
 
 - Top conferences poach from mids when **inviteScore > threshold** and **conference has slot** (real membership caps from pack).
-- User receives **offer card** offseason week 14 with **pros/cons** (travel, competition, recruiting tier).
+- User receives **offer card** offseason **week 9** (when enabled) with **pros/cons** (travel, competition, recruiting tier).
 
 ### Schedule impact
 
@@ -483,7 +468,7 @@ inviteScore = 0.35 * onCourtSuccess
 
 ## Preseason
 
-### Flow (after offseason week 14 — or **Season 1 start** before any prior offseason)
+### Flow (after offseason week 8/9 — or **Season 1** entering first preseason)
 
 1. **Incoming class seed** — generate **HS + JUCO** pools; **Top 60** publish to News ([`recruiting-engine.md`](recruiting-engine.md#class-seeding-hs--juco)).
 2. **Roster finalization** — confirm redshirts.
@@ -746,6 +731,7 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-08 | HS/JUCO recruit seed moved to preseason (Top 60 in-season) |
 | 2025-11-08 | NCBA/NCI/March Mayhem; early events; round labels — `ncba-branding.md` |
 | 2025-11-08 | `postseason.md` — Selection Sunday, Heritage, reclass conf tourney |
+| 2025-11-09 | Offseason calendar → `offseason.md`; start Week 1; carousel label |
 | 2025-11-09 | Postseason census 124 national / 241 done (see `postseason.md`) |
 | 2025-11-09 | Poll=#1–365; pass-over runner-up; parallel NCI/HC |
 | 2025-11-08 | Linked `player-cards.md` |

@@ -215,7 +215,7 @@ Primary CTA: **Sign contract** (disabled until user reviews sheet once — optio
 
 1. **Signature panel:** Auto-render **script-style** signature from entered **first + last** (+ suffix); user confirms.
 2. **Next** → create save file, bind `coachId` + `teamId`, apply schemes/archetype/settings/pack.
-3. Transition → **preseason** bootstrap ([`game-design.md`](game-design.md#preseason)) then **[`game-frame.md`](game-frame.md)** when regular season ready (or first preseason screen if calendar starts there).
+3. Transition → **Offseason Week 1 — Players Leaving** ([`offseason.md`](offseason.md)); no **Coaching Carousel** on Season 1. After weeks 1–8 → **preseason** → **[`game-frame.md`](game-frame.md)** in-season shell.
 
 **Cannot return** to home without save unless user cancels before step 6 confirm.
 

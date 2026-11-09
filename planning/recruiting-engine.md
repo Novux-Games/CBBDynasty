@@ -1,7 +1,7 @@
 # Recruiting engine
 
 **Context:** HS/JUCO pools **seeded in preseason** (Top 60 visible all season); **4-week** recruiting period in **offseason** for offers/commits.  
-**Companion:** Offseason calendar [`game-design.md`](game-design.md#offseason-authoritative-calendar), NIL [`game-design.md`](game-design.md#nil--program-economy), player display [`player-cards.md`](player-cards.md), archetypes [`player-archetypes.md`](player-archetypes.md).  
+**Companion:** Offseason calendar [`offseason.md`](offseason.md), NIL [`game-design.md`](game-design.md#nil--program-economy), player display [`player-cards.md`](player-cards.md), archetypes [`player-archetypes.md`](player-archetypes.md).  
 **Last updated:** 2025-11-08
 
 ---
@@ -33,7 +33,7 @@
 |------|------|
 | **Preseason** (start of each calendar year — [`game-design.md`](game-design.md#preseason)) | Generate **HS** and **JUCO** pools for the **next enrolling class**; roll hidden ratings; assign **stars**; compute **Top 60** national order |
 
-Seeding in **preseason** — not offseason — so **Top 60 recruits** live in **News** for the entire **regular season** (November–March). The class is already ranked while you coach; **recruiting spend** (points, NIL, offers) opens in **offseason weeks 6–9** only.
+Seeding in **preseason** — not offseason — so **Top 60 recruits** live in **News** for the entire **regular season** (November–March). The class is already ranked while you coach; **recruiting spend** (points, NIL, offers) opens in **offseason weeks 2–5** only ([`offseason.md`](offseason.md)).
 
 | Phase | HS/JUCO access |
 |-------|----------------|
@@ -55,12 +55,12 @@ Portal star bands use the **portal pool only** (see [Star distribution](#star-di
 
 | Recruiting week | Offseason anchor | Highlights |
 |-----------------|----------------------|------------|
-| **1** | Offseason week 6 | Portal class **opens** for offers; **NBA draft results** post (opens scholarships); HS/JUCO **active recruiting** opens (pool seeded last preseason) |
-| **2** | Offseason week 7 | Full spend of weekly recruiting points / NIL |
-| **3** | Offseason week 8 | Peak commits & NIL pushes |
-| **4** | Offseason week 9 | Signing close; hard commits lock |
+| **1** | Offseason **week 2** | Portal **opens**; **NBA draft results**; scholarships open; HS/JUCO spend opens (pool seeded last preseason) |
+| **2** | Offseason **week 3** | Full spend of weekly recruiting points / NIL |
+| **3** | Offseason **week 4** | Peak commits & NIL pushes |
+| **4** | Offseason **week 5** | Signing close; hard commits lock |
 
-**No in-season HS/JUCO recruiting actions** — offers/commits only in offseason weeks 6–9. (Portal in-season remains ruleset-toggled in game-design.)
+**No in-season HS/JUCO recruiting actions** — offers/commits only in offseason **weeks 2–5**. Week 1 = **retention** on your roster only ([`offseason.md`](offseason.md#week-1--players-leaving)). (Portal in-season remains ruleset-toggled in game-design.)
 
 User advances **week** or **day** inside recruiting like other offseason phases.
 
@@ -325,7 +325,7 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | Prestige | School hub grades, fundraising |
 | Coach recruiting | [`coach-card.md`](coach-card.md) ratings |
 | Archetype | [`player-archetypes.md`](player-archetypes.md) hidden tag |
-| Offseason week 6–9 | This 4-week window |
+| Offseason weeks 2–5 | This 4-week window |
 
 ---
 
