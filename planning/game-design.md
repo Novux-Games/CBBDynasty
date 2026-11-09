@@ -6,6 +6,7 @@
 **Presentation:** Text-based **2D** sim (Campus Dynasty–style); **offline** with **local save files**  
 **Mode:** Dynasty / program builder — men's college basketball  
 **Game sim:** **[`simulation-engine.md`](simulation-engine.md)** — possession engine only (clock, box score)  
+**App shell:** **[`app-shell.md`](app-shell.md)** — studio screen, splash, Tap to Play  
 **Game start:** **[`game-start.md`](game-start.md)** — home, new dynasty, coach create, school pick  
 **In-season UI:** **[`game-frame.md`](game-frame.md)** — dashboard, tabs, hubs  
 **Player UI:** **[`player-cards.md`](player-cards.md)** — preview, card tabs, ratings; **[`player-archetypes.md`](player-archetypes.md)** — archetypes, draft rank  

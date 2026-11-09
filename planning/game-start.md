@@ -1,6 +1,7 @@
 # Game start — home screen, new dynasty, coach creation
 
 **Platform:** Android · offline local saves  
+**Before menu:** [`app-shell.md`](app-shell.md) — Novux **Studio screen** → game **Splash** → **Tap to Play** → home below.  
 **After sign contract:** Dynasty bootstrap → preseason / Season 1 ([`game-design.md`](game-design.md)) → in-season shell ([`game-frame.md`](game-frame.md)).  
 **Companion:** Coach profile [`coach-card.md`](coach-card.md), schemes [`strategy-schemes.md`](strategy-schemes.md), identity packs [`game-design.md`](game-design.md#identity-packs--save-model), league data [`league-branding.md`](league-branding.md).
 

@@ -21,8 +21,8 @@ Use **Dynasty: College Basketball** on store listings, splash, and in-app title 
 
 | Asset | Path | Use |
 |-------|------|-----|
-| **Primary app logo** | [`Public-Assets/app-logo.svg`](../Public-Assets/app-logo.svg) | In-app header, marketing, splash source |
-| **Novux logos** | `Public-Assets/Novux_Logos/` | Studio lockups |
+| **Primary app logo** | [`Public-Assets/app-logo.svg`](../Public-Assets/app-logo.svg) | In-app header, marketing, **game splash** |
+| **Novux logos** | `Public-Assets/Novux_Logos/` | **Studio screen** lockups |
 | **Novux icons** | `Public-Assets/Novux_Icons/` | Studio mark variants |
 
 **Implementation notes**
@@ -75,6 +75,7 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 | League names (real ↔ universe) | [`league-branding.md`](league-branding.md) · reference [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) |
 | NCBA / March Mayhem / early events | [`ncba-branding.md`](ncba-branding.md) |
 | Postseason brackets & Selection Sunday | [`postseason.md`](postseason.md) |
+| Studio & splash | [`app-shell.md`](app-shell.md) |
 
 ---
 
@@ -85,3 +86,4 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 | 2025-11-08 | Initial branding: title, logo path, studio, `#181a25` |
 | 2025-11-08 | Official title: **Dynasty: College Basketball** |
 | 2025-11-08 | Link `ncba-branding.md` |
+| 2025-11-09 | Novux Games; `app-shell.md` studio vs splash |
