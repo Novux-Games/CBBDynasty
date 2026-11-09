@@ -249,7 +249,7 @@ Tap **HC or assistant** → coach card preview. **Support** rows are not tappabl
 
 ## Coach
 
-Full spec: [`coach-card.md`](coach-card.md).
+Full spec: [`coach-card.md`](coach-card.md) (includes **Job security** on Overview & Contract for user HC).
 
 **Entry:** School hub **Staff** (head coach row), coach preview from offers/news, or dynasty shortcuts.
 
@@ -382,6 +382,7 @@ Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`g
 | 2025-11-08 | Dashboard: Current ranking; full national list in Rankings |
 | 2025-11-09 | Poll = full #1–365 rank; seeds postseason-only |
 | 2025-11-09 | Split NCBA NET vs Media & Coaches polls |
+| 2025-11-09 | Coach card job security (no separate coach hub) |
 | 2025-11-09 | Removed tier color chips from UI spec |
 | 2025-11-09 | T25 highlight for #1–25; all 365 ranked every week |
 | 2025-11-08 | School Staff tab; AD trust; staff detail sheets |

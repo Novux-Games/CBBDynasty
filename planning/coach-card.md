@@ -14,7 +14,8 @@
 2. [Chrome (persistent header)](#chrome-persistent-header)
 3. [Tabs](#tabs)
 4. [Overview](#overview)
-5. [Contract](#contract)
+5. [Job security (user head coach)](#job-security-user-head-coach)
+6. [Contract](#contract)
 6. [History](#history)
 7. [Hall of Fame](#hall-of-fame)
 8. [Draft](#draft)
@@ -32,7 +33,7 @@ Tap coach personnel (HC or assistant — School staff, poach, carousel, etc.)
         │
         ▼
    Coach preview (modal / sheet)
-   · Quick info (name, role, school, headline ratings)
+   · Quick info (name, role, school, headline ratings; user HC → **job security** tier chip)
    · [View more] ──────────────────┐
         │                           │
    dismiss                          ▼
@@ -79,8 +80,8 @@ Fixed for all tabs (does not scroll away with tab content):
 
 | Tab | Purpose |
 |-----|---------|
-| **Overview** | Bio, contract summary, achievements, default strategy, headline ratings |
-| **Contract** | Deep contract management |
+| **Overview** | Bio, **job security**, contract summary, achievements, default strategy, headline ratings |
+| **Contract** | Deep contract management, job security factors |
 | **History** | Deep season-by-season coaching history |
 | **Hall of Fame** | HOF players coached (national & conference) |
 | **Draft** | Players coached who were drafted |
@@ -116,6 +117,10 @@ Single grouped block — detail editing on **Contract** tab.
 | **Years** | Contract length (e.g. `4-year deal`) |
 | **Years left** | Remaining seasons on current deal |
 | **Prestige** | **Program prestige tier** at signing / current school prestige snapshot (display label from program state; not coach OVR) |
+
+### Job security (on Overview)
+
+**User head coach only** — hidden on opponent / AI coach cards. Full spec: [§ Job security](#job-security-user-head-coach). Summary meter sits here; **Contract** tab has factor breakdown.
 
 ### Achievements
 
@@ -166,6 +171,51 @@ Headline coach ratings (**0–99** integers in UI). Feeds sim modifiers, recruit
 
 ---
 
+## Job security (user head coach)
+
+**UI surfaces:** **Overview** tab (meter + tier + trend); **Contract** tab (inputs + AD context). **Not** on School Staff tab — that surface keeps **AD trust** only ([§ AD trust](#ad-trust-user-school)).
+
+**Distinct from AD trust:** **AD trust** = relationship with the AD. **Job security** = how safe **your HC job** is this season (firing / extension pressure). AD trust is one input; demeanor ([`game-start.md`](game-start.md)) scales how fast security moves.
+
+### Display (Overview)
+
+| Element | Notes |
+|---------|--------|
+| **Meter** | **0–100** (higher = **safer**) |
+| **Tier** | **Secure** (80+) · **Stable** (60–79) · **Watch** (40–59) · **Hot seat** (20–39) · **Critical** (&lt;20) |
+| **Trend** | `↑` / `↓` / `—` vs last week (after **week advance**) |
+| **Tap** | Jump to **Contract** tab → factor list |
+
+### Inputs (systems)
+
+Recomputed after **week advance** and at key events (postseason exit, scandal flags). Weights in `ruleset.jobSecurityWeights`.
+
+| Factor | Effect |
+|--------|--------|
+| **Performance goals** | Win total, conf record, postseason floor vs contract goals |
+| **Current trajectory** | Pace to goals; last 10 W–L |
+| **Postseason result** | NCBA run, missed tournament when expected |
+| **AD trust** | Pulls security toward trust band (Patient AD dampens drops) |
+| **School demeanor** | Patient / Neutral / Reactionary sensitivity |
+| **Portal exodus** | Key departures increase risk |
+| **Years left** | Short leash in final contract year without extension |
+| **Buyout** | High buyout slightly protects (narrative + small modifier) |
+
+### Contract tab detail
+
+| Block | Content |
+|-------|---------|
+| **Job security** | Same meter + tier |
+| **Factors** | Each input: label, contribution chip (helping / hurting), one-line copy |
+| **AD trust** | Read-only summary + link **View on School → Staff** |
+| **Firing / extension** | When tier **Hot seat** or **Critical**, show warning copy; **Secure** + high trust → “extension likely” ([§ Contract](#contract)) |
+
+**Notifications** (firing warning, extension offer) deep-link to coach card **Contract** tab.
+
+**Other coaches:** no job security UI (optional internal value for carousel AI only).
+
+---
+
 ## Contract
 
 Deep contract management for **user head coach**; **read-only** mirror for scouting other HCs you might poach or replace.
@@ -182,6 +232,7 @@ Deep contract management for **user head coach**; **read-only** mirror for scout
 | **Extension offers** | Incoming from AD when trust high |
 | **Renegotiate** | Adjust years/salary when allowed |
 | **Resign / retire** | Exit to carousel |
+| **Job security** | Meter + factors ([§ Job security](#job-security-user-head-coach)) |
 
 ### Flows (tie-in)
 
@@ -278,7 +329,7 @@ Placed on **School hub → Staff** tab (not on coach card preview).
 | **What it affects** | Extension willingness, buyout negotiation, time-to-fire warnings, optional facility / budget narrative hooks |
 | **Inputs (systems)** | Win trajectory vs contract goals, postseason results, scandal/eligibility events, conference expectations |
 
-**Coach card Contract tab** references AD trust (e.g. “AD trust: Strong — extension likely”) but the **canonical meter** sits on Staff tab so it reads as a **program ↔ coach** relationship, not a personal profile stat.
+**Coach card Contract tab** shows **job security** + factors; **AD trust** canonical meter stays on Staff tab — Contract shows **summary + link** only.
 
 ### Hiring sources
 
@@ -400,6 +451,7 @@ Same patterns as HC Contract but scoped to assistant deals; poach CTA when viewi
 |------|--------|
 | 2025-11-08 | Initial coach card spec from user (mirror player card UX) |
 | 2025-11-08 | Staff tab + AD trust; staff detail sheets; split conf titles |
+| 2025-11-09 | Job security on coach card Overview + Contract (user HC) |
 | 2025-11-08 | Staff History tab: season/school/position/result for all staff |
 | 2025-11-08 | Assistants use coach card; support staff list-only; trainers ineligible for HC |
 | 2025-11-08 | Collegiate Invitational achievements; GA promotion; staff log on School history |

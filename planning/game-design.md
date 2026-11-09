@@ -404,6 +404,8 @@ recruitingBudget = floor(baseBudget * gradeMultiplier * facilityBonus)
 | Age / tenure | Regression to mean on firing |
 | Portal exodus | Firing risk |
 
+**User job security** (UI on coach card only — [`coach-card.md`](coach-card.md#job-security-user-head-coach)): weekly **0–100** score from goals pace, postseason, AD trust, demeanor, portal losses, contract year. Drives firing events and extension offers; distinct from **AD trust** meter on School **Staff** tab.
+
 **User interaction**
 
 - Accept extension, renegotiate, resign.
