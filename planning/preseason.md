@@ -36,7 +36,7 @@
 
 ## Task checklist
 
-Complete **every** task (any order; default list order below):
+Complete **every** task. Tasks **1–5** in any order; **Tournament Invites (6)** must finish **before** scheduling tasks **7–8**.
 
 | # | Task | Required | Completes when |
 |---|------|----------|----------------|
@@ -45,10 +45,11 @@ Complete **every** task (any order; default list order below):
 | 3 | **Coach Upgrades** | Yes | Skill points **spent or explicitly banked** (“Save points”) |
 | 4 | **NET + Media & Coaches Poll Review (Preseason)** | Yes | User opens rankings sheet + dismisses / acknowledges |
 | 5 | **View Preseason Report** | Yes | User opens report (scroll or **Mark read**) |
-| 6 | **Schedule Exhibition Games** | Yes* | *Acknowledge* — **0–3** games scheduled **or** confirm **Skip exhibitions** |
-| 7 | **Schedule Regular Season Games** | Yes | Solver valid: **≤32** RS games, conf + non-conf + optional early event ([`ncba-branding.md`](ncba-branding.md)) |
+| 6 | **Tournament Invites** | Yes | Accept **one** invite, **decline all**, or acknowledge **No invites available** |
+| 7 | **Schedule Exhibition Games** | Yes* | *After task 6* — **0–3** games **or** **Skip exhibitions** |
+| 8 | **Schedule Regular Season Games** | Yes | *After task 6* — solver valid ([§ Schedule regular season](#8--schedule-regular-season-games)) |
 
-**“Skip exhibitions”** counts as completing task 6.
+**“Skip exhibitions”** counts as completing task 7.
 
 ---
 
@@ -103,7 +104,24 @@ Distinct from **offseason Week 6** summer workouts — preseason is tune-up befo
 
 See [§ Preseason report & game reports](#preseason-report--game-reports).
 
-### 6 — Schedule Exhibition Games
+### 6 — Tournament Invites
+
+Early-season **holiday events** ([`ncba-branding.md`](ncba-branding.md#early-season-holiday-events-regular-season)) — **not** part of the regular-season picker until this task resolves.
+
+| Prestige / résumé | UX |
+|--------------------|-----|
+| **Low** | **“No invites available.”** — task completes on **Acknowledge** (no bracket) |
+| **Mid** | **0–1** invite cards |
+| **High** | **Multiple** invites — user picks **at most one** (Island Classic, Caribbean Showdown, Blue Blood Tip-Off, Desert Shootout) |
+
+| Choice | Effect |
+|--------|--------|
+| **Accept** | Bracket reserved (**up to 4** games); counts toward **32** RS cap; **only 28** other RS games allowed (conf + non-conf in that pool) |
+| **Decline all** / none offered | Full **32** RS slots remain for conference + non-conference |
+
+**Gate:** Tasks **7** and **8** stay locked until task **6** is complete.
+
+### 7 — Schedule Exhibition Games
 
 | Behavior | Detail |
 |----------|--------|
@@ -112,14 +130,28 @@ See [§ Preseason report & game reports](#preseason-report--game-reports).
 | **Skip** | **No exhibitions** → still completes task |
 | **Effects** | Morale, light poll momentum, injury risk ([`game-design.md`](game-design.md)) |
 
-### 7 — Schedule Regular Season Games
+### 8 — Schedule Regular Season Games
+
+**Prerequisite:** Task **6** (tournament invites) complete.
 
 | Behavior | Detail |
 |----------|--------|
-| **Conference** | Auto matrix from pack |
-| **User** | Fill non-conference slots; **one** early-season event optional (Island / Caribbean / Blue Blood / Desert) |
-| **Validation** | **32-game** cap, no double-books, event rules ([`game-design.md`](game-design.md#scheduling--regular-season)) |
-| **Complete** | Solver green → lock schedule |
+| **Conference games** | **Shown** on calendar builder from pack template (`leagueGameCount`, opponents, **home/away / repeat**). **Double-scheduling allowed** — e.g. play the same conference opponent **twice** when template specifies (mirrors real 2026–27 slates) |
+| **Non-conference games** | **Slot count varies** by **conference + program** — not a flat number for all teams ([`game-design.md`](game-design.md#scheduling--regular-season)) |
+| **User** | Fill **remaining** non-conf opponents within allowed slots (Nov–Dec windows; limited January for some leagues) |
+| **Tournament** | If accepted in task 6, bracket games **pre-injected**; user builds only within **28** non-event RS games + those 4 |
+| **Cap math** | **≤32** total RS games = conference + non-conference + tournament (max 4). Exhibitions **separate** |
+| **Validation** | Solver green — no over-cap, no date conflicts, respects per-team non-conf budget |
+
+```
+if (tournamentAccepted)
+  maxOtherRS = 28   // conf + non-conf share this pool (+ 4 event = 32)
+else
+  maxRS = 32
+nonConfSlots = maxOtherRS_or_maxRS − conferenceGamesLocked
+```
+
+**Complete** → lock schedule.
 
 ---
 
@@ -164,7 +196,7 @@ ELSE
   → first playable = earliest regular-season game
 ```
 
-Early-season **event** bracket games are part of the **regular-season** calendar (November–December), not exhibitions.
+Early-season **event** bracket games (from **Tournament Invites**, task 6) are **regular-season** games (November–December), not exhibitions.
 
 ---
 
@@ -184,3 +216,4 @@ Early-season **event** bracket games are part of the **regular-season** calendar
 | Date | Change |
 |------|--------|
 | 2025-11-09 | Single-week preseason + 7 tasks + report pattern |
+| 2025-11-09 | Tournament Invites task; 28-game cap when in event; conf repeats |

@@ -98,7 +98,7 @@ Each event counts toward the **32-game** regular-season cap (**up to 4 games** i
 | Champions Classic–style marquee opener (high-major doubleheader / round-robin — **not** tied to specific real schools) | **The Blue Blood Tip-Off** | `evt-blue-blood-tipoff` |
 | Feast Week–style multi-team bracket | **The Desert Shootout** | `evt-desert-shootout` |
 
-**Scheduling:** User (and AI) opt in during **preseason scheduling**; bracket injected into calendar. Solver enforces **one event** + cap compliance.
+**Scheduling:** **Preseason → Tournament Invites** task ([`preseason.md`](preseason.md#6--tournament-invites)) — prestige gates invites; accept **one** before regular-season scheduling. Accepting reserves **4** RS games and caps other RS at **28**. AI resolves same rules in preseason sim.
 
 ---
 

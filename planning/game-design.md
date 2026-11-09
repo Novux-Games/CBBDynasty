@@ -471,7 +471,7 @@ inviteScore = 0.35 * onCourtSuccess
 
 **Authoritative spec:** [`preseason.md`](preseason.md).
 
-**Summary:** One **setup week** after offseason. **Seven tasks** must finish before **Start season**: incoming class seed, preseason workouts, coach upgrades, NET + Media & Coaches poll review, **preseason report** (mini article + **projected W–L**), exhibition schedule (0–3 or skip), regular-season schedule. Enter [`game-frame.md`](game-frame.md) at **first exhibition** or **first regular-season** game.
+**Summary:** One **setup week** after offseason. **Eight tasks** — see [`preseason.md`](preseason.md): includes **Tournament Invites** (before scheduling), exhibitions, regular-season builder. Enter [`game-frame.md`](game-frame.md) at **first exhibition** or **first regular-season** game.
 
 **Reports:** Preseason / **pregame** / **postgame** share the same mini-article pattern ([`preseason.md`](preseason.md#preseason-report--game-reports)).
 
@@ -493,15 +493,18 @@ Exhibitions: morale, light poll momentum, injuries possible.
 | Constraint | Value |
 |------------|-------|
 | Total regular season games | **32** max |
-| Conference games | Up to **20** (from conference template) |
-| Early-season event | **Up to 4** games (counts toward 32); see [`ncba-branding.md`](ncba-branding.md) |
+| Conference games | Per **conference template** (`leagueGameCount`, repeat opponents allowed — see below) |
+| Early-season event | **Up to 4** games (counts toward 32); invite flow in [`preseason.md`](preseason.md#6--tournament-invites) |
+
+**With tournament accepted:** **28** remaining RS games for conference + non-conference (4 event + 28 = 32).
 
 ### Scheduling UX
 
-- **Conference:** auto-generated round-robin/matrix from template.
-- **User picks:** non-conference opponents (date windows Nov–Dec, limited Jan slots for small conferences).
-- **Early-season events:** User selects **one** catalog event (or none) during preseason — **Island Classic**, **Caribbean Showdown**, **Blue Blood Tip-Off**, **Desert Shootout** ([`ncba-branding.md`](ncba-branding.md#early-season-holiday-events-regular-season)). Bracket injected; **max 4 games**; **one event per team per regular season** (conference + NCBA/NCI postseason separate).
-- **Validation:** solver prevents over-cap, **double-booked events**, and second event enrollment; highlights conflict days.
+- **Tournament invites (preseason task):** Prestige-driven **0..N** invites; low programs see **No invites available**; accept **one** event or none ([`ncba-branding.md`](ncba-branding.md)).
+- **Conference:** Template lists opponents and **meetings per rival** (single or **double** — two games vs same conference team when pack says so). Conference block **visible** in preseason schedule UI; not hand-picked opponent-by-opponent unless template uses open slots.
+- **Non-conference:** **Slot count varies by team and conference** — derived as `32 − conferenceGames − tournamentGames` (and pack min/max non-conf rules per league).
+- **User picks:** non-conf opponents in allowed windows (Nov–Dec; limited Jan slots for small conferences).
+- **Validation:** solver enforces cap, per-team non-conf budget, no double-booked dates, one event per season.
 
 ### In-season calendar (typical 2026–27 shape)
 
