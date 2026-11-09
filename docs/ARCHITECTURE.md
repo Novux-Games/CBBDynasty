@@ -4,6 +4,8 @@
 
 Planning remains authoritative in [`planning/`](../planning/). This doc describes the **code** layout.
 
+**Tuning (embedded, not imported):** [ADR-002](ADR-002-balance-ruleset-bundle.md) · [ADR-003](ADR-003-sim-tuning-bundle.md) · `assets/balance/` · `assets/sim/`
+
 ## Modules
 
 | Module | Role |
@@ -24,6 +26,7 @@ Planning remains authoritative in [`planning/`](../planning/). This doc describe
 | `data` | Identity pack import (JSON) — in progress |
 | `data/calendar` | `WeekCheckpointRepository` — persist provisional sims, week advance |
 | `data/pack` | `PackRepository` — active overlay; swap rebuilds display, not save IDs |
+| *(planned)* `data/balance`, `data/sim` | Load pinned ruleset revisions per dynasty (ADR-002 / ADR-003) |
 
 ## Package map (`database`)
 

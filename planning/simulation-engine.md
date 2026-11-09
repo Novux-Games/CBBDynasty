@@ -219,7 +219,7 @@ Possessions are simulated **discretely** (one trip → one outcome chain), so it
 
 ## Tuning data
 
-Balance lives in data files (pace tables, foul rates, shot distributions), not hard-coded. Game sim reads:
+Balance lives in data files (pace tables, foul rates, shot distributions), not hard-coded. **Canonical file:** [`assets/sim/sim-tuning.json`](../assets/sim/sim-tuning.json) — [ADR-003](../docs/ADR-003-sim-tuning-bundle.md). Game sim reads:
 
 - Game-clock shave distributions
 - Shot-clock rules

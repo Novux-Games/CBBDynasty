@@ -26,6 +26,7 @@ JSON stays appropriate for **identity pack import** and for **dynasty export fil
 |-------|---------|--------|
 | **App settings** | DataStore | Already implemented (`AppSettingsRepository`) |
 | **Identity pack** | JSON file / asset | Validated at import; `packId` on dynasty |
+| **Balance / sim tuning** | Embedded JSON | [ADR-002](ADR-002-balance-ruleset-bundle.md), [ADR-003](ADR-003-sim-tuning-bundle.md); pinned ids on dynasty at create |
 | **Dynasty save** | Room | Metadata, calendar, programs, people, results, archives |
 | **Display cache** | Room or derived | Rebuilt on pack swap per GDD |
 

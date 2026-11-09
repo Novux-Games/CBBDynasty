@@ -1,0 +1,23 @@
+{
+  "simTuningId": "sim-tuning",
+  "schemaVersion": 1,
+  "possessionsPerGameTarget": {
+    "min": 60,
+    "max": 70
+  },
+  "shotClock": {
+    "full": 30,
+    "offensiveRebound": 20
+  },
+  "timeUsedSeconds": {
+    "quickTurnover": [3, 6],
+    "quickShot": [8, 14],
+    "foulStoppage": [12, 18]
+  },
+  "eventWeights": {},
+  "homeNeutralModifiers": {
+    "home": 1.0,
+    "neutral": 1.0,
+    "road": 1.0
+  }
+}

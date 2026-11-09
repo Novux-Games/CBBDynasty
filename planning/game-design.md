@@ -239,8 +239,8 @@ In-week variety is normal (different sim runs, different scores). **Locked** onl
 
 ### Ruleset evolution
 
-- `rulesetYear` in pack ties to **portal windows**, **calendar dates**, **scholarship limits**.
-- When dynasty year advances, engine loads **rulesetYear + (dynastyYear - startYear)** patches from data (e.g. portal deadline shifts).
+- `rulesetYear` in pack is the **era label** for the league snapshot (pairs with `membershipYear`). **Balance and sim** load from embedded [`balance-2026.json`](../assets/balance/balance-2026.json) / [`sim-tuning.json`](../assets/sim/sim-tuning.json); revisions are **pinned on the dynasty at create**, not swapped each season — [ADR-002](../docs/ADR-002-balance-ruleset-bundle.md).
+- Portal windows, scholarship limits, and redshirt thresholds live in the **balance bundle** `calendar` section (constants), not in the identity pack.
 
 ### Offseason sim
 
@@ -688,6 +688,7 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 ### Remaining product decisions (short list)
 
 - ~~Local save format (SQLite vs files).~~ **SQLite/Room** — [`docs/ADR-001-dynasty-save-backend.md`](../docs/ADR-001-dynasty-save-backend.md).
+- ~~Balance vs sim tuning storage.~~ **Split embedded bundles**, frozen at dynasty create — [`docs/ADR-002-balance-ruleset-bundle.md`](../docs/ADR-002-balance-ruleset-bundle.md), [`docs/ADR-003-sim-tuning-bundle.md`](../docs/ADR-003-sim-tuning-bundle.md).
 - URL pack **signing** for optional one-time import while offline play remains default.
 
 ---
