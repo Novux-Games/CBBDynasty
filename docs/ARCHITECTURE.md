@@ -29,6 +29,7 @@ Planning remains authoritative in [`planning/`](../planning/). This doc describe
 | Package | Role |
 |---------|------|
 | `save` | `SaveSlotEntity`, DAO, mappers |
+| `dynasty` | `DynastyMetadataEntity`, DAO, mappers (schema v1) |
 
 ## Build
 

@@ -32,4 +32,7 @@
     <string name="load_delete_confirm">Delete</string>
     <string name="load_delete_cancel">Cancel</string>
     <string name="home_continue_hint">Latest: %1$s</string>
+    <string name="new_bootstrap_school">New Program</string>
+    <string name="new_bootstrap_coach">Head Coach</string>
+    <string name="new_no_empty_slot">All save slots are full. Delete a save from Load first.</string>
 </resources>

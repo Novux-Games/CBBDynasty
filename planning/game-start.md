@@ -72,7 +72,16 @@ Corrupt save → error sheet; offer delete slot.
 | **Load UI** | [`LoadGameScreen`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/shell/LoadGameScreen.kt) |
 | **Models** | [`SaveSlotSummary`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/save/SaveSlotSummary.kt), [`SaveSlots.COUNT`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/save/SaveSlots.kt) |
 
-New Game still creates dynasties in a later checklist step; occupied slots appear after dynasty creation or import.
+### Dynasty metadata (implemented)
+
+| Field | Storage | Initial value |
+|-------|---------|----------------|
+| `seasonIndex` | `dynasty_metadata` | **1** (Season 1) |
+| `phase` | `dynasty_metadata` | **Offseason** (`CalendarPhase`) |
+| `packId` | `dynasty_metadata` + slot summary | **`embedded-default`** until pack import |
+| `dynastySchemaVersion` | `dynasty_metadata` | **1** |
+
+**New** (bootstrap until wizard ships): first empty slot → placeholder school/coach labels + metadata row; wizard will replace display names and attach `teamId`.
 
 ---
 

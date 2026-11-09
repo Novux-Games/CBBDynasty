@@ -23,7 +23,7 @@ class DynastyApplication : Application() {
         super.onCreate()
         appSettingsRepository = AppSettingsRepository(applicationContext)
         val database = DynastyDatabase.build(applicationContext)
-        saveSlotRepository = SaveSlotRepository(database.saveSlotDao())
+        saveSlotRepository = SaveSlotRepository(database)
         applicationScope.launch {
             saveSlotRepository.ensureInitialized()
         }

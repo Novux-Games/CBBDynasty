@@ -48,7 +48,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 |------|--------|-----------|------|------|
 | 2.1 | `[x]` **Choose & document** save backend (SQLite vs JSON files) | ADR in `docs/` | [game-design](../planning/game-design.md#identity-packs--save-model) | [`ADR-001`](ADR-001-dynasty-save-backend.md) |
 | 2.2 | `[x]` Save slots API (list, load, delete, last played) | Home **Continue** / **Load** real | [game-start](../planning/game-start.md) | `:database`, `data/save`, `LoadGameScreen` |
-| 2.3 | `[ ]` Dynasty metadata schema (`seasonIndex`, `phase`, `packId`) | Round-trip one empty dynasty | [game-design](../planning/game-design.md) | `:core` models |
+| 2.3 | `[x]` Dynasty metadata schema (`seasonIndex`, `phase`, `packId`) | Round-trip one empty dynasty | [game-design](../planning/game-design.md) | `:core`, Room `dynasty_metadata`, **New** bootstrap |
 | 2.4 | `[ ]` **Week advance** checkpoint semantics | Replay before advance; lock after | [game-design](../planning/game-design.md) | `domain/calendar` |
 | 2.5 | `[ ]` Corrupt-save handling on Load | Error UI per game-start | [game-start](../planning/game-start.md) | `app` |
 

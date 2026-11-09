@@ -20,4 +20,5 @@ data class LoadedDynasty(
     val slotIndex: Int,
     val dynastyId: String,
     val summary: SaveSlotSummary,
+    val metadata: DynastyMetadata,
 )

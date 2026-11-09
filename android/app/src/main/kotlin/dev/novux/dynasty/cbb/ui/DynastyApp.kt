@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,6 +15,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Scaffold
+import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.settings.AppSettings
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
@@ -62,10 +67,16 @@ fun DynastyApp(
             val navController = rememberNavController()
             val continueSlot by saveSlotRepository.observeContinueSlot()
                 .collectAsState(initial = null)
+            val context = LocalContext.current
+            val snackbarHostState = remember { SnackbarHostState() }
 
+            Scaffold(
+                snackbarHost = { SnackbarHost(snackbarHostState) },
+            ) { padding ->
             NavHost(
                 navController = navController,
                 startDestination = startRoute,
+                modifier = Modifier.padding(padding),
             ) {
                 composable(AppRoute.Studio.route) {
                     StudioScreen(
@@ -94,7 +105,21 @@ fun DynastyApp(
                                 ActiveDynastySession.set(loaded)
                             }
                         },
-                        onNew = { },
+                        onNew = {
+                            scope.launch {
+                                val loaded = saveSlotRepository.createEmptyDynastyInFirstOpenSlot(
+                                    schoolDisplayName = context.getString(R.string.new_bootstrap_school),
+                                    coachDisplayName = context.getString(R.string.new_bootstrap_coach),
+                                )
+                                if (loaded != null) {
+                                    ActiveDynastySession.set(loaded)
+                                } else {
+                                    snackbarHostState.showSnackbar(
+                                        context.getString(R.string.new_no_empty_slot),
+                                    )
+                                }
+                            }
+                        },
                         onLoad = { navController.navigate(AppRoute.Load.route) },
                         onSettings = { navController.navigate(AppRoute.Settings.route) },
                         onCredits = { navController.navigate(AppRoute.Credits.route) },
@@ -116,6 +141,7 @@ fun DynastyApp(
                         onBack = { navController.popBackStack() },
                     )
                 }
+            }
             }
         }
     }
