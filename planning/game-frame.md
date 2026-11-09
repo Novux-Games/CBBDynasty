@@ -75,7 +75,7 @@ At-a-glance card(s) for **your program**:
 | Field (examples) | Notes |
 |------------------|--------|
 | Overall record | W–L |
-| National poll | **Top 25** when `#NN ≤ 25`; else `—` on this row (full order is **Current ranking**) |
+| **T25** | **T25** badge when poll rank **`#1`–`#25`**; else `—` (rank always on **Current ranking**) |
 | Conference rank | League standing |
 | **Current ranking** | **National poll rank** `#NN` — **all 365** teams ordered as poll voters would rank them (see below) |
 | Conference affiliation | From identity pack |
@@ -83,7 +83,7 @@ At-a-glance card(s) for **your program**:
 
 ### Current ranking (dashboard)
 
-**Design lock:** **Poll rank** and **AP-style national ranking** are **one list** — sim voters order **all 365** programs **`#1`–`#365`** each week. **Top 25** is the public poll (rows 1–25 of that list). Selection Sunday at-large/auto ordering uses this same order ([`postseason.md`](postseason.md)).
+**Design lock:** **Poll rank** and **AP-style national ranking** are **one list** — sim voters rank **every** program **`#1`–`#365`** each week (no team is unranked). **`#1`–`#25`** get the **T25** highlight (badge / row styling) in Rankings, news, and school rows where poll rank is shown; **`#26`–`#365`** still show **`#NN`** with no T25 treatment. Selection Sunday uses this same order ([`postseason.md`](postseason.md)).
 
 **Not seeds:** In-season rank is **not** a tournament seed. **Seeds** appear only on **postseason** brackets after Selection Sunday.
 
@@ -161,7 +161,7 @@ Hamburger opens **hub picker** (overlay or slide drawer):
 | **School** | Your program (see [School hub](#school-hub)); others when scouting |
 | **Strategy** | Scheme, rotation, usage |
 | **Statistics** | Leaders (national / conference) |
-| **Rankings** | Top 25 + conference standings |
+| **Rankings** | National **`#1`–`#365`** + **T25** hub + conference standings |
 | **News** | Full news product (stories, draft, recruits) |
 | **History** | Dynasty & national archive cards |
 
@@ -282,11 +282,11 @@ Tap player → player preview / card; tap team → School hub (view).
 
 | View | Content |
 |------|---------|
-| **Top 25** | Official poll — **`#1`–`#25`** on the national list |
-| **Full national ranking** | **`#1`–`#365`** — same order as dashboard **Current ranking** |
+| **T25** | **`#1`–`#25`** — highlighted poll callout (same list as full ranking) |
+| **National ranking** | **`#1`–`#365`** — complete poll order; non-T25 rows show rank only |
 | **Conference rankings** | Standings per conference (W–L, conf record, tiebreaker note on drill-down) |
 
-One poll ordering drives Top 25 and the full table.
+One poll list: **365** teams ranked; **T25** is a presentation layer on ranks 1–25, not a separate ordering.
 
 Tap team → School hub.
 
@@ -365,5 +365,6 @@ Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`g
 | 2025-11-08 | Dashboard: Current ranking; full national list in Rankings |
 | 2025-11-09 | Poll = full #1–365 rank; seeds postseason-only |
 | 2025-11-09 | Removed tier color chips from UI spec |
+| 2025-11-09 | T25 highlight for #1–25; all 365 ranked every week |
 | 2025-11-08 | School Staff tab; AD trust; staff detail sheets |
 | 2025-11-08 | Assistants = coach cards; support list-only |

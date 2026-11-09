@@ -89,7 +89,7 @@ Certified programs use normal rules below.
 
 ## Selection Sunday
 
-Runs after all **32** conference champions are known. Uses the **national poll order** — all **365** teams ranked **#1–#365** as poll voters would sort them; **Top 25** is the public callout of that same list ([`game-frame.md`](game-frame.md)). **Poll rank is not a seed** until Selection Sunday assigns **seeds** for national brackets.
+Runs after all **32** conference champions are known. Uses the **national poll order** — **all 365** teams ranked **`#1`–`#365`** (same list as in-season; **T25** highlight is display-only for **`#1`–`#25`** — [`game-frame.md`](game-frame.md)). **Poll rank is not a seed** until Selection Sunday assigns **seeds** for national brackets.
 
 ### Terminology (read this once)
 
@@ -220,7 +220,7 @@ Coach **Achievements** track W–L and titles per bracket ([`coach-card.md`](coa
 
 | Phase | What the user sees |
 |-------|---------------------|
-| **Regular season / conf tourneys** | **Poll rank** `#NN` (1–365); **Top 25** callout — **not** seeds |
+| **Regular season / conf tourneys** | Poll rank **`#1`–`#365`** for every team; **T25** styling for top 25 — **not** seeds |
 | **Selection Sunday onward** | **Bracket seeds** (1–64 NCBA, etc.) |
 
 No in-season UI coloring for projected NCBA / NCI / Heritage. Poll rank is informational; **auto-bids and national invites** are assigned only after conference tournaments and Selection Sunday ([`game-frame.md`](game-frame.md)).

@@ -589,7 +589,7 @@ Per team, maintain:
 
 All **inspired by** real metrics; labels in UI are generic ("Resume Index", "Tier wins") unless pack enables fan names.
 
-**Poll output:** Weekly **AP-style poll** (**Top 25** + full **`#1`–`#365`** order on the Rankings hub) is the **single** national ranking players see. Sim voters order all **365** teams from results and quality inputs above. **Selection Sunday** at-large/NCI/Heritage ordering uses that same poll list — not a separate “resume” table ([`postseason.md`](postseason.md), [`game-frame.md`](game-frame.md)).
+**Poll output:** Weekly **AP-style poll** ranks **all 365** teams **`#1`–`#365`**. **T25** is the highlighted callout for ranks 1–25 on the Rankings hub and related UI — not a separate list ([`game-frame.md`](game-frame.md)). **Selection Sunday** at-large/NCI/Heritage ordering uses that same poll order ([`postseason.md`](postseason.md)).
 
 ### Weekly rhythm
 
