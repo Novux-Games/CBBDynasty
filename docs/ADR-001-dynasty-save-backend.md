@@ -18,7 +18,7 @@ Persist **dynasty simulation state** in **SQLite** via **Android Room** in the `
 | **NET / stats / archives** | Queryable without loading entire save into memory |
 | **Pack swap** | Stable `teamId` / `confId` keys; display overlay separate from sim rows |
 
-JSON files stay appropriate for **pack import** and optional **user export/backup** of a dynasty (future checklist item), not for continuous in-game writes.
+JSON stays appropriate for **identity pack import** and for **dynasty export files** (backup/share). **Runtime dynasty state is not edited as JSON** — only exported/imported through validated app flows.
 
 ## Scope of persistence
 
@@ -37,8 +37,20 @@ JSON files stay appropriate for **pack import** and optional **user export/backu
 
 ## Save slots
 
-- Multiple dynasties as separate **dynasty roots** (`dynastyId` UUID) in one DB file, or one DB per slot — **default: one `dynasty.db`**, table `dynasty_slot` with `slotIndex`, `dynastyId`, `lastPlayedAt`, summary fields for Load/Continue UI.
-- Final slot count enforced in app layer (TBD in game-start; typically 3–10).
+- **10 fixed slots** (`slotIndex` **0–9**). UI shows all slots (empty or occupied) on **Load**; **Continue** uses the slot with the latest `lastPlayedAt`.
+- Storage shape: one app-database file (e.g. `dynasty.db`) with `dynasty_slot` rows binding `slotIndex` → `dynastyId` + summary metadata for list UI (school, season, record, last played).
+- Deleting a slot removes that dynasty’s rows (or marks tombstone + vacuum policy — implementation detail in 2.2).
+
+## Export & import (dynasty)
+
+- Players **can export** a dynasty to a **portable archive** (format defined in Phase 2.2+; likely SQLite slice or versioned blob + manifest with `dynastySchemaVersion`).
+- **Import** restores into an **empty slot** or replaces after confirm — never merge two live dynasties blindly.
+- Export is for **backup, device migration, and sharing** — not for hand-editing saves in a text editor.
+
+## Modding boundary
+
+- **Identity packs** (JSON/URL) are the **mod / customization** surface — names, logos, conference display, import disclaimers.
+- **Save files are not a modding target.** No documented schema for third-party save editing; corrupt or hand-edited imports are rejected with error UI (checklist 2.5).
 
 ## Schema versioning
 
@@ -48,7 +60,7 @@ JSON files stay appropriate for **pack import** and optional **user export/backu
 ## Corruption & recovery
 
 - Room integrity + try/catch on load; corrupt slot surfaces error UI ([game-start](../planning/game-start.md), checklist 2.5).
-- Optional **export dynasty to JSON** for backup (not required for ADR acceptance).
+- User can delete slot or re-import from a prior **export** if one exists.
 
 ## Consequences
 

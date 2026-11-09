@@ -34,7 +34,7 @@ Cold start lands on the **title / home** screen (no bottom nav — pre-dynasty).
 |--------|------------|--------|
 | **Continue** | **Hidden** if no save exists; else visible | Load **most recent** dynasty save → resume calendar position |
 | **New** | Always | Start [new game wizard](#new-game-wizard-overview) |
-| **Load** | Always | Save picker (slot list + metadata: school, season, record) |
+| **Load** | Always | Save picker — **10 slots** (empty or occupied), metadata: school, season, record |
 | **Settings** | Always | [App settings](#home-settings--credits) (not dynasty rules) |
 | **Credits** | Always | Novux Games, OSS, disclaimer |
 
@@ -58,7 +58,7 @@ Cold start lands on the **title / home** screen (no bottom nav — pre-dynasty).
 | Action | Behavior |
 |--------|----------|
 | **Continue** | Same as Load on **latest `lastPlayedAt`** save |
-| **Load** | List local files; show school display name, coach name, season year, W–L; tap → validate pack id → **`game-frame`** or offseason UI |
+| **Load** | **10 slots**; show school display name, coach name, season year, W–L; tap → validate pack id → **`game-frame`** or offseason UI. **Export/import** dynasty archives per [ADR-001](../docs/ADR-001-dynasty-save-backend.md). |
 
 Corrupt save → error sheet; offer delete slot.
 
