@@ -14,7 +14,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 |---------------------|---------------------|
 | [`game-frame.md`](../planning/game-frame.md) | 9.1, 9.6–9.7, 9.10 |
 | [`dashboard-tasks.md`](../planning/dashboard-tasks.md) | 9.6–9.7, 6.14, 6.16, 9.11 |
-| [`recruiting-engine.md`](../planning/recruiting-engine.md) | 2.6, 6.5, 6.11–6.13, 6.15–6.16, 7.2, 15.1, 15.6 |
+| [`recruiting-engine.md`](../planning/recruiting-engine.md) | 2.6, 6.5, 6.11–6.13, 6.15–6.19, 7.2, 9.10, 14.1, 15.1, 15.6 |
 | [`transfer-portal.md`](../planning/transfer-portal.md) | 6.3, 6.12, 6.14 |
 | [`news-hub.md`](../planning/news-hub.md) | 9.8–9.9, 11.x headlines |
 | [`player-loyalty-promises.md`](../planning/player-loyalty-promises.md) | 8.6, 6.3, 14.x declare |
@@ -67,7 +67,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 2.3 | `[x]` Dynasty metadata schema (`seasonIndex`, `phase`, `packId`) | Round-trip one empty dynasty | [game-design](../planning/game-design.md) | `:core`, Room `dynasty_metadata`, **New** bootstrap |
 | 2.4 | `[x]` **Week advance** checkpoint semantics | Replay before advance; lock after | [game-design](../planning/game-design.md) | `:core/calendar/checkpoint`, Room `dynasty_calendar` + `provisional_games` |
 | 2.5 | `[x]` Unreadable-save handling on Load | Validate + repair calendar; fallback delete UI | [game-start](../planning/game-start.md) | `DynastySaveValidator`, `SaveLoadUnavailableDialog` |
-| 2.6 | `[ ]` **Balance ruleset** loader + pin on dynasty | `balanceSchemaVersion` on metadata; scholarship **15**, prestige tier pools, loyalty constants from JSON | [ADR-002](ADR-002-balance-ruleset-bundle.md), [`balance-2026.json`](../assets/balance/balance-2026.json) | `:core/balance` |
+| 2.6 | `[ ]` **Balance ruleset** loader + pin on dynasty | `balanceSchemaVersion`; scholarship **15**, prestige tiers, `recruiting.actions` costs, loyalty constants | [ADR-002](ADR-002-balance-ruleset-bundle.md), [`balance-2026.json`](../assets/balance/balance-2026.json) | `:core/balance` |
 | 2.7 | `[ ]` **Sim tuning** loader + pin on dynasty | `simSchemaVersion`; possession tables load in sim module | [ADR-003](ADR-003-sim-tuning-bundle.md) | `:core/sim/tuning` |
 
 ---
@@ -125,11 +125,15 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 6.14 | `[ ]` Optional **dashboard tasks** (recruiting + portal W2–5) | Triggers + deep links per index; never block advance | [dashboard-tasks](../planning/dashboard-tasks.md), [transfer-portal](../planning/transfer-portal.md) | `ui.dashboard` |
 | 6.15 | `[ ]` **AI recruiting** (league + user on sim-week) | Hidden boards; Recommended parity; auto-maintain on advance confirm | [recruiting-engine](../planning/recruiting-engine.md#ai-recruiting) | `:core/recruiting/ai` |
 | 6.16 | `[ ]` **Sim-week** advance resolver hook | Unplayed games fast-sim + user-school recruiting/portal AI lines in confirm dialog | [game-frame](../planning/game-frame.md#advance-week-confirmation-sim-week) | `:core/advance` |
-| 6.6 | `[ ]` Week 2: NBA draft results | Scholarships open | [offseason](../planning/offseason.md) | — |
-| 6.7 | `[ ]` Week 6 summer workouts (auto) | Report screen | [offseason](../planning/offseason.md) | — |
-| 6.8 | `[ ]` Week 7 cuts + roster lock ≤15 + walk-ons | [recruiting-engine](../planning/recruiting-engine.md) | — |
-| 6.9 | `[ ]` Week 8 fundraising & facility upgrades | Cash/NIL hooks | [game-design](../planning/game-design.md) | — |
-| 6.10 | `[ ]` Week 9 conference offers (skip Season 1) | Realignment cards | [game-design](../planning/game-design.md) | — |
+| 6.17 | `[ ]` Recruiting **point actions** (DM, call, house, offer, bonus) | Costs + non-refunded spend per [action table](../planning/recruiting-engine.md#action-costs-design-lock) | [recruiting-engine](../planning/recruiting-engine.md), `recruiting.actions` | `:core/recruiting` |
+| 6.18 | `[ ]` **Refunded** reservations (offer, scout game, official visit) | Week-bound spend; refund on advance if still active | [recruiting-engine](../planning/recruiting-engine.md#refunded-actions-week-reservation) | `:core/recruiting` |
+| 6.19 | `[ ]` **Official visit** + **scout their game** windows | Visit 50/100/150 by distance; once/recruit/season; RS → end **R4** | [recruiting-engine](../planning/recruiting-engine.md#action-costs-design-lock) | `ui.recruiting` |
+| 6.20 | `[ ]` **Signing Day** (offseason **week 6**) | Required rankings + position editor; hard sign | [recruiting-engine](../planning/recruiting-engine.md#signing-day-offseason-week-6), [dashboard-tasks](../planning/dashboard-tasks.md) | `ui.signingday` |
+| 6.6 | `[ ]` Offseason **week 2**: NBA draft results | Scholarships open | [offseason](../planning/offseason.md) | — |
+| 6.7 | `[ ]` Offseason **week 7**: summer workouts (auto) | Report screen | [offseason](../planning/offseason.md) | — |
+| 6.8 | `[ ]` Offseason **week 8**: cuts + roster lock ≤15 + walk-ons | Walk-ons after Signing Day | [recruiting-engine](../planning/recruiting-engine.md), [offseason](../planning/offseason.md) | — |
+| 6.9 | `[ ]` Offseason **week 9**: fundraising & facility upgrades | Cash/NIL hooks | [game-design](../planning/game-design.md) | — |
+| 6.10 | `[ ]` Offseason **week 10**: conference offers (skip Season 1) | Realignment cards | [offseason](../planning/offseason.md), [game-design](../planning/game-design.md) | — |
 
 ---
 
@@ -241,12 +245,11 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
 | 15.1 | `[ ]` NIL collective + player deals | Retention, recruits | [game-design](../planning/game-design.md), [recruiting-engine](../planning/recruiting-engine.md) | — |
-| 15.2 | `[ ]` Facility grades + upgrades | Week 8 integration | [game-design](../planning/game-design.md) | — |
+| 15.2 | `[ ]` Facility grades + upgrades | Offseason **week 9** integration | [game-design](../planning/game-design.md) | — |
 | 15.3 | `[ ]` Academics → recruiting budget multiplier | Grades on school | [game-design](../planning/game-design.md) | — |
 | 15.4 | `[ ]` Coach skill tree + Sunday points | Auto-spend option | [game-design](../planning/game-design.md), [coach-card](../planning/coach-card.md) | — |
 | 15.5 | `[ ]` Unemployed coach mode | Job center | [game-design](../planning/game-design.md) | — |
-| 6.19 | `[ ]` **Signing Day** week (rankings + position editor) | Required tasks; hard sign | [recruiting-engine](../planning/recruiting-engine.md#signing-day-offseason-week-6), [offseason](../planning/offseason.md) | `ui.signingday` |
-| 15.6 | `[ ]` Recruiting **points** actions + **refund** reservations | Costs in `balance-2026.json` → `recruiting.actions`; bonus points | [recruiting-engine](../planning/recruiting-engine.md#action-costs-design-lock) | `:core/recruiting` |
+| 15.6 | `[ ]` Recruiting hub **action UX** (all point spends wired) | Ship only after **6.17–6.19** core rules pass tests | [recruiting-engine](../planning/recruiting-engine.md#recruiting-ui) | `ui.recruiting` |
 | 15.7 | `[ ]` Annual **NIL collective** pool (conference × prestige) | SEC flagship band ~$9.7M–$13.2M; signing snapshot | [game-design](../planning/game-design.md#annual-collective-pool-design-lock) | `:core/nil` |
 
 ---
@@ -306,7 +309,7 @@ Minimum **one playable season** for internal testing:
 5. **Phase 12–13** bracket **stub** (single-user conf + 64 NCBA).  
 6. **Phase 14.1** season review → **Phase 6.1** offseason week 1 stub.
 
-Expand **year-long recruiting** (6.5, 6.11–6.13), **dashboard/sim-week** (9.6–9.7), **portal W1 tabs** (6.3), full 365 sim (9.3), and March Mayhem UI (13.4) after slice is fun.
+Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.20** point actions / visits / Signing Day), **dashboard/sim-week** (9.6–9.7), **portal W1 tabs** (6.3), full 365 sim (9.3), and March Mayhem UI (13.4) after slice is fun.
 
 ---
 
@@ -326,3 +329,4 @@ Expand **year-long recruiting** (6.5, 6.11–6.13), **dashboard/sim-week** (9.6�
 | 2025-11-09 | Initial comprehensive build order |
 | 2026-11-09 | Planning sync index; balance/sim bundles 2.6–2.7; recruiting year-long, portal, dashboard, news hub, loyalty steps |
 | 2026-11-09 | Recruiting action costs, refunds, visits, Signing Day week 6; offseason → 10 weeks |
+| 2026-11-09 | Fix Phase 6 steps 6.17–6.20; move Signing Day out of Phase 15; correct OS week labels 7–10 |
