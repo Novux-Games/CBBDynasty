@@ -105,7 +105,7 @@ def render_splash(year: int) -> None:
     cta_font = load_font(size=50)
     footer_font = load_font(size=28)
 
-    title_gap = 88
+    title_gap = 128
     title_bbox = draw.textbbox((0, 0), "Dynasty: College Basketball", font=title_font)
     title_h = title_bbox[3] - title_bbox[1]
     cta_h = 50

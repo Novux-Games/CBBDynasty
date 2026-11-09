@@ -60,7 +60,7 @@ fun SplashScreen(onTapToPlay: () -> Unit) {
                     .sizeIn(maxHeight = 240.dp),
             )
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(72.dp))
 
             Text(
                 text = GameConstants.GAME_TITLE,
