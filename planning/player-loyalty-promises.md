@@ -24,7 +24,7 @@
 |------|--------|
 | **Scale** | **0–99** integer on the **player record** (same scale family as skill ratings) |
 | **Display** | **Roster player card** — [Ratings tab](player-cards.md#ratings) and compact chip on **Overview** |
-| **Recruits** | Hidden until **scout depth** threshold; rough **letter band** optional on recruit sheet (“Loyalty tendency: High/Med/Low”). Same reveal family as recruit **top-priority** chips ([`recruiting-engine.md`](recruiting-engine.md#top-priorities)) |
+| **Recruits** | Hidden until **scout depth** threshold; rough **letter band** optional on recruit sheet (“Loyalty tendency: High/Med/Low”). **Top-priority chips** stay **visible** from first open ([`recruiting-engine.md`](recruiting-engine.md#top-priorities)) |
 | **Sim** | **Not** a possession-engine attribute — drives **portal intent**, **draft declare** rolls, and narrative only |
 
 ### Seed & drift

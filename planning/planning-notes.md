@@ -103,3 +103,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | 2026-11-09 | BUILD_CHECKLIST sync for locked recruiting, portal, news, loyalty, dashboard | [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
 | 2026-11-09 | No in-season portal; `notifications.md` **Done** | [`notifications.md`](notifications.md) |
 | 2026-11-09 | Recruit interest model merged; weights stay proposals | [`recruiting-engine.md`](recruiting-engine.md#interest--offers) |
+| 2026-11-09 | Recruiting interest **open questions resolved** (priorities, Influence board, NIL overpay) | [`recruiting-engine.md`](recruiting-engine.md#resolved-decisions-was-open-questions) |
