@@ -303,7 +303,7 @@ Per-action **costs** and **interest deltas** tune in `balance-2026.json` → `re
 
 ### NIL (annual)
 
-NIL pool sizing stays in [`game-design.md`](game-design.md#nil--program-economy) — prestige tiered separately from recruiting **points**.
+**Annual collective $** — conference × prestige bands (e.g. SEC flagship **~$9.7M–$13.2M**). Authoritative: [`game-design.md`](game-design.md#annual-collective-pool-design-lock). Separate from recruiting **points**.
 
 | Driver | Behavior |
 |--------|----------|
@@ -433,12 +433,34 @@ Distinct from **Top 60 draft** pool (in-season / pro-day dynamic) — recruit To
 
 ## AI recruiting
 
-- AI programs spend **same** recruiting points + NIL rules from prestige/budget.
-- Prioritize **stars**, **position need**, **archetype**, **NIL** for high asks.
-- User sees **headline commits** in News for blue-chips.
-- Portal AI resolves across weeks 1–4 after entrants list stabilizes.
+**Design lock:** Non-user schools use the **same rules as the user** — prestige-tier **weekly points**, **annual NIL $** ([`game-design.md`](game-design.md#annual-collective-pool-design-lock)), and the same **`signLikelihood` / Recommended** ordering ([Recommended tab](#recommended-tab-default)). There is no separate “AI cheat list.”
 
-Batch sim between user sessions for non-user offers/commits.
+### Per-school Recommended (AI)
+
+Each program each week:
+
+1. Build **Recommended** ordering for HS/JUCO (and portal sub-tab when open) from that school’s prestige, pipeline, roster holes, and `nilAsk` vs pool.
+2. Respect **realistic capacity** from prestige tier ([weekly pool table](#prestige-tier-weekly-pool-design-lock)) — e.g. Low-Major focuses on **2–3** core targets, Blue Blood runs a **full national** board.
+3. Spend **weekly points** on **scout → call → offer** down the list; allocate **NIL $** when interest stalls on high asks.
+
+### When it runs
+
+| Trigger | Behavior |
+|---------|----------|
+| **Week advance** (league) | Every non-user school runs one **Recommended pass** for that week (after user confirm on sim-week) |
+| **Between sessions** | Optional batch catch-up for schools not advanced yet — same logic |
+| **Signing crunch** | Same loop; **1.5×** weekly points pool |
+| **User sim-week** | User school uses **auto-maintain** or this same Recommended pass if player skipped the hub ([`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week)) |
+
+### Outputs
+
+| Output | Rule |
+|--------|------|
+| **Commits** | Soft/hard commit rules identical to user |
+| **News** | Headlines for blue-chip and upset commits league-wide |
+| **Portal** | Entrants get a **fresh Recommended** pool for portal signers only |
+
+**Not in v1 doc:** per-action point costs ([Open / TBD](#open--tbd)) — AI uses the same costs once balance JSON defines them.
 
 ---
 

@@ -17,6 +17,9 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | Dynasty shell (all phases) | **Done** — one chrome, dashboard task gate, week advance only | [`game-frame.md`](game-frame.md) |
 | League branding / membership | **365** programs; 4 reclass no postseason until year 4 | [`league-branding.md`](league-branding.md), [`2026-NCAA-Directory.md`](2026-NCAA-Directory.md) |
 | NIL on player card | **Overview valuation** (recruiting commit) | [`player-cards.md`](player-cards.md) |
+| NIL annual pool | **Done** — conference × prestige; SEC flagship **~$9.7M–$13.2M** | [`game-design.md`](game-design.md#annual-collective-pool-design-lock) |
+| RS schedule cap | **32** games; **28** builder slots only with 4-game event | [`game-design.md`](game-design.md#scheduling--regular-season), [`preseason.md`](preseason.md#8--schedule-regular-season-games) |
+| AI recruiting | **Done** — Recommended parity per school | [`recruiting-engine.md`](recruiting-engine.md#ai-recruiting) |
 | GOAT / History depth | **Specced** (computed GOAT list) | [`game-frame.md`](game-frame.md#history-hub) |
 | Notifications | Use game-design mobile UX list | [`game-design.md`](game-design.md) |
 | App updates vs saves | **Rule:** ship migrations; old slots keep working | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility), [`ADR-002`](../docs/ADR-002-balance-ruleset-bundle.md) |

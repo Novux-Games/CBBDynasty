@@ -134,14 +134,18 @@ Early-season **holiday events** ([`ncba-branding.md`](ncba-branding.md#early-sea
 
 **Prerequisite:** Task **6** (tournament invites) complete.
 
+**Naming:** **Schedule builder** — user-facing calendar picker + validation. Default target = **32 RS games**; **28** conf/non-conf **slots** only when a **4-game** early event is already on the books.
+
 | Behavior | Detail |
 |----------|--------|
+| **RS total** | **32** games count toward record ([`game-design.md`](game-design.md#scheduling--regular-season)) |
 | **Conference games** | **Shown** on calendar builder from pack template (`leagueGameCount`, opponents, **home/away / repeat**). **Double-scheduling allowed** — e.g. play the same conference opponent **twice** when template specifies (mirrors real 2026–27 slates) |
 | **Non-conference games** | **Slot count varies** by **conference + program** — not a flat number for all teams ([`game-design.md`](game-design.md#scheduling--regular-season)) |
 | **User** | Fill **remaining** non-conf opponents within allowed slots (Nov–Dec windows; limited January for some leagues) |
-| **Tournament** | If accepted in task 6, bracket games **pre-injected**; user builds only within **28** non-event RS games + those 4 |
-| **Cap math** | **≤32** total RS games = conference + non-conference + tournament (max 4). Exhibitions **separate** |
-| **Validation** | Solver green — no over-cap, no date conflicts, respects per-team non-conf budget |
+| **Tournament** | If accepted in task 6, **4** event games **pre-injected** (often RS **Weeks 1–4**); user fills **28** other RS slots (conf + non-conf) |
+| **No tournament** | User fills up to **32** RS (conf + non-conf) |
+| **Cap math** | **≤32** total RS = conf + non-conf + event (max 4). Exhibitions **separate** |
+| **Validation** | Builder green — no over-cap, no date conflicts, respects per-team non-conf budget |
 
 ```
 if (tournamentAccepted)

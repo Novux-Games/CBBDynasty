@@ -327,14 +327,38 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 
 ## NIL & program economy
 
+**Authoritative for recruit/retention $** — separate from **recruiting points** ([`recruiting-engine.md`](recruiting-engine.md#resources-recruiting-points--nil)).
+
+### Annual collective pool (design lock)
+
+| Rule | Detail |
+|------|--------|
+| **Currency** | Abstract **USD / season** on UI (no real persons) — same number on [`game-start.md`](game-start.md) contract preview and player Overview |
+| **Fixed per cycle** | **Annual NIL pool** set when the recruiting cycle opens (preseason); unchanged week-to-week like weekly points |
+| **Drivers** | **Conference tier** × **`programPrestige` (0–99)** — interpolate inside band |
+| **Next year** | Recomputed after **[End of Season](season-review.md)** prestige/conference moves (preview on review) |
+| **Spend** | Allocate to recruits at offer/commit and **retention** bumps ([`offseason.md`](offseason.md)); unspent rules in balance JSON |
+
+**Anchor (your numbers — tune in pack/balance, not invented per save):**
+
+| Band (example) | Annual pool (prestige at top of band) |
+|----------------|----------------------------------------|
+| **SEC flagship** (e.g. Kentucky, Duke-tier in power leagues) | **~$9.7M – $13.2M** |
+| Power conferences below flagship | Scale down on prestige curve within conference table |
+| Mid-major | Order of magnitude below power bands |
+| Low-major | Minimal collective — recruiting points + promises matter more |
+
+Exact conference rows live in **`balance-2026.json` → `nil.annualPoolByConferenceTier`** (and prestige lerp). [`game-start.md`](game-start.md) **contract sheet** shows preview for the chosen school.
+
 ### Abstract NIL (no real persons)
 
 | Concept | Behavior |
 |---------|----------|
-| **Collective strength** | Program-level 0–100; upgraded by fundraising and success |
-| **Player deal points** | Per-player allocation from collective budget |
-| **Recruit demand** | Each recruit has `nilAsk`; failing ask lowers interest |
-| **Retention** | Upperclassmen request raises after breakout seasons |
+| **Collective budget** | Single **annual $ pool** per program (table above) |
+| **Per-player allocation** | Slice of pool committed on recruit sheet / retention UI → Overview **NIL valuation** on card |
+| **Recruit demand** | Each recruit has **`nilAsk`**; underfunding lowers **interest** ([`recruiting-engine.md`](recruiting-engine.md#interest--offers)) |
+| **Retention** | Upperclassmen request raises after breakout seasons — spend from same annual pool (offseason Week 1) |
+| **Fundraising** | Week 8 can add **one-time** pool bump or next-year seed — [`offseason.md`](offseason.md) |
 
 ### Boosters & fundraising
 
@@ -342,7 +366,7 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 - Success → **cash** + **collective boost** + **facility seed money**.
 - **Arena naming rights:** one-time cash infusion; slight prestige hit if name is silly; reversible in fiction only via rebrand cost.
 
-### Academic grades → recruiting budget
+### Academic grades (program)
 
 **Program academics grade (0–100)** computed each spring from:
 
@@ -491,13 +515,15 @@ Exhibitions: morale, light poll momentum, injuries possible.
 
 ### Caps
 
+**Design lock:** Every team plays up to **32 regular-season games** (exhibitions **not** included). **28** is **not** the default season length — it is only the **remaining conf + non-conf builder slots** after you accept a **4-game** early event (typically Weeks **1–4** on the RS calendar).
+
 | Constraint | Value |
 |------------|-------|
-| Total regular season games | **32** max |
+| **RS total** | **32** max (record counts) |
+| **No early event** | Up to **32** from conference template + non-conf picker ([`preseason.md`](preseason.md#8--schedule-regular-season-games)) |
+| **Early-season event accepted** | **4** event games + **28** other RS (conf + non-conf) = **32** |
 | Conference games | Per **conference template** (`leagueGameCount`, repeat opponents allowed — see below) |
-| Early-season event | **Up to 4** games (counts toward 32); invite flow in [`preseason.md`](preseason.md#6--tournament-invites) |
-
-**With tournament accepted:** **28** remaining RS games for conference + non-conference (4 event + 28 = 32).
+| Early-season event | **Up to 4** games toward the **32** cap; invite flow in [`preseason.md`](preseason.md#6--tournament-invites) |
 
 ### Scheduling UX
 
@@ -505,7 +531,7 @@ Exhibitions: morale, light poll momentum, injuries possible.
 - **Conference:** Template lists opponents and **meetings per rival** (single or **double** — two games vs same conference team when pack says so). Conference block **visible** in preseason schedule UI; not hand-picked opponent-by-opponent unless template uses open slots.
 - **Non-conference:** **Slot count varies by team and conference** — derived as `32 − conferenceGames − tournamentGames` (and pack min/max non-conf rules per league).
 - **User picks:** non-conf opponents in allowed windows (Nov–Dec; limited Jan slots for small conferences).
-- **Validation:** solver enforces cap, per-team non-conf budget, no double-booked dates, one event per season.
+- **Validation:** Preseason **schedule builder** enforces **32** cap, per-team non-conf budget, no double-booked dates, one event per season (not a separate “solver product” — task **8** UX + rules).
 
 ### In-season calendar
 

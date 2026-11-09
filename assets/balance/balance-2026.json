@@ -107,6 +107,15 @@
     ],
     "weeklyPointsInterpolation": "linear_within_tier"
   },
+  "nil": {
+    "currency": "usd_annual",
+    "secFlagshipPrestigeTop": {
+      "prestigeMin": 90,
+      "annualPoolMinUsd": 9700000,
+      "annualPoolMaxUsd": 13200000
+    },
+    "annualPoolByConferenceTier": []
+  },
   "player": {
     "loyalty": {
       "declareWeightLoyalty": 0.0,
