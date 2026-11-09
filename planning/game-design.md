@@ -723,7 +723,7 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | **Resume score** | Composite for bubble/seeding |
 | **NCBA** | National College Basketball Association (universe NCAA) |
 | **NCI** | National College Invitational — 32 teams after NCBA field |
-| **Opening Round** | 12-game play-in phase (76→64) |
+| **Opening Round** | 12 games — bottom 24 conference champs → 12 NCBA Round 1 slots |
 | **March Mayhem** | Universe brand for March postseason |
 | **Grade multiplier** | Academics → recruiting budget |
 

@@ -85,7 +85,7 @@ At-a-glance card(s) for **your program**:
 
 Shows **`#NN`** = your program’s place in the **national composite resume list** (same ordering that drives Selection Sunday / [`game-design.md`](game-design.md#selection-sunday-committee-sim)). **Every** team has a rank in data; the UI only **surfaces Top 25** in the Rankings hub callout.
 
-**Eligibility color** on the dashboard chip (tier from **projected field**, not rank number alone — **32 auto bids** mean a team outside the raw “top 76” by résumé can still project **NCBA** as a conference champion):
+**Eligibility color** on the dashboard chip (tier from **projected field**, not rank number alone — **32 auto bids** mean a team outside the raw “top 64” by résumé can still project **NCBA** as a conference champion):
 
 | Color | Meaning |
 |-------|---------|
