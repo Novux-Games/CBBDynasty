@@ -258,8 +258,24 @@ Two spend tracks while the **recruiting cycle** is open:
 
 | Resource | Use |
 |----------|-----|
-| **Recruiting points** | Calls, scouting upgrades, persistent interest gains (no campus visit system) |
-| **NIL dollars** (or **deal points** — one global format) | Allocated offers toward a recruit’s **valuation** / ask |
+| **Recruiting points** | **Relationship & evaluation labor** — scout, contact, offer, pitch (below) |
+| **NIL dollars** (or **deal points** — one global format) | **Money on the table** toward a recruit’s **valuation** / ask — **not** paid from the weekly points pool |
+
+### What recruiting points buy (design lock)
+
+**No campus visits** — the points pool is the entire “contact & evaluation” game. **NIL** is a separate spend when you put dollars toward a recruit’s ask.
+
+| Action | Recruiting points | Outcome |
+|--------|-------------------|---------|
+| **Scout** | Yes | Improves **letter grades** and **archetype fit** visibility on the recruit sheet (hidden 0–99 stay hidden until commit); required to trust evaluation before heavy pursuit |
+| **Call** | Yes | **Interest** gain (persistent across weeks); baseline relationship spend |
+| **Scholarship offer** | Yes | Puts a **scholarship** on the table; unlocks serious interest growth and path to **soft commit** when interest + thresholds met |
+| **Priority bump** | Yes | Concentrates staff attention on one target — stronger interest swing vs other schools recruiting the same player |
+| **Playing-time pitch** | Yes (optional) | One-off **interest** bump for recruits who weight minutes / role ([interest model](#interest--offers)) |
+
+**Not purchased with recruiting points:** **NIL allocations** (annual **$** pool), adding a player to **Board / Targets** (free), or **Recommended** list browsing (free). **Commits** are outcomes when **interest + offer + NIL** (if needed) align — not a separate point spend.
+
+Per-action **costs** and **interest deltas** tune in `balance-2026.json` → `recruiting.actions` (when loaders ship).
 
 ### Prestige tier weekly pool (design lock)
 
@@ -309,10 +325,8 @@ NIL pool sizing stays in [`game-design.md`](game-design.md#nil--program-economy)
 | **NIL offered** vs recruit **valuation** | Underfunding stalls interest |
 | **Coach recruiting** + staff | Charisma / point efficiency |
 | **Home state / region** | In-state & nearby-state pipeline vs program `homeState` |
-| **Playing time pitch** | Optional action |
+| **Playing time pitch** | Optional **point** action ([What recruiting points buy](#what-recruiting-points-buy-design-lock)) |
 | **Recent success** | Tourney run, NET / Media rank |
-
-**Recruiting points** spent on: scout deeper (sharpen letters), call, scholarship offer, priority bump. **No campus visits** (no official/unofficial visit slots or visit actions).
 
 **NIL** committed at offer time writes toward signing number on [`player-cards.md`](player-cards.md) Overview when hard commit lands.
 
@@ -389,13 +403,15 @@ Transfer **portal** sub-tab uses the **same** default tab pattern: **Recommended
 |--------|---|
 | Position, stars, **home state**, HS vs JUCO, archetype fit, NIL ask tier | |
 
-| Action | Spends |
-|--------|--------|
-| Scout | Recruiting points |
-| Call | Points |
-| NIL bump | NIL dollars |
-| Scholarship offer | Points |
-| Drop | — |
+| Action | Spends | See |
+|--------|--------|-----|
+| Scout | Recruiting points | [What points buy](#what-recruiting-points-buy-design-lock) |
+| Call | Recruiting points | |
+| Scholarship offer | Recruiting points | |
+| Priority bump | Recruiting points | |
+| Playing-time pitch | Recruiting points | |
+| NIL allocation | **NIL $** only | Not points |
+| Drop target | — | |
 
 Tap recruit → **recruit sheet** (preview): stars, letters, NIL ask, interest, actions — **not** full player card until commit.
 

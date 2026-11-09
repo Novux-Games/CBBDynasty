@@ -320,7 +320,7 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 
 **Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — year-long cycle, prestige-tier **weekly points**, 2–4K HS + 1.5K JUCO, portal sub-tab, NIL, letter grades, prestige 0–99.
 
-**Brief:** HS/JUCO **seeded in preseason**; **year-long cycle**; **weekly recruiting points** fixed per cycle from **prestige tier** (1k–5k/wk); **Recommended** default; optional dashboard tasks; **50%** carryover; signing crunch **1.5×** OS weeks 2–5. Arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
+**Brief:** HS/JUCO **seeded in preseason**; **year-long cycle**; **weekly points** (1k–5k/wk by prestige) buy **scout / call / offer / pitch** — **NIL $** is separate; **Recommended** default; **50%** carryover; signing crunch **1.5×** OS weeks 2–5. Arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
 
 ---
 
