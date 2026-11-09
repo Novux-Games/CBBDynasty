@@ -55,6 +55,7 @@ Single scroll or tabbed **Season Review** content on the same dynasty shell ([`g
 | **Your season line** | W–L, conf record, postseason finish (**NCBA / NCI / HC** label or “Season complete”) |
 | **Team grades** | Facility / academic / program grade **delta** vs start of year (what changed and why) |
 | **Program prestige** | Start → end **0–99** with short reason chips (wins, tourney, scandals if any) |
+| **Next season recruiting** | **Weekly points pool** preview for the **upcoming** cycle from post-recap prestige tier ([`recruiting-engine.md`](recruiting-engine.md#prestige-tier-weekly-pool-design-lock)) — vs this season’s locked pool if still in the same signing cycle |
 | **Coach** | Prestige snapshot, job security tier, contract years left ([`coach-card.md`](coach-card.md)) |
 | **Awards** | National & conference player/coach honors for the year (link to News / History) |
 | **League digest** | Mini articles: champion, biggest riser/faller in NET, headline upset |

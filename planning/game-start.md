@@ -240,7 +240,7 @@ Tap school → bottom sheet / full screen **before** sign:
 | **Location** | **City, State** ([`league-branding.md`](league-branding.md)) |
 | **Pipeline states** | **Home state** + pack **`pipelineStates`** (in-state / regional recruiting footprint) |
 | **Contract** | **Years offered** (typical **4–6** at create), **salary** ($) |
-| **Recruiting points** | Starting **weekly cap** from school grades + prestige tier |
+| **Recruiting points** | Starting **weekly pool** from **prestige tier** ([`recruiting-engine.md`](recruiting-engine.md#prestige-tier-weekly-pool-design-lock)) |
 | **NIL budget** | Annual pool **$** — conference + prestige scaled (e.g. SEC flagship band **~$9.7M–$13.2M** at high prestige; mid/low majors downscale on prestige curve) |
 | **School demeanor** | **Patient** · **Neutral** · **Reactionary** — AD trust / extension temperament ([`coach-card.md`](coach-card.md#staff-school-hub)) |
 

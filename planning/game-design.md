@@ -318,9 +318,9 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 
 ## Recruiting engine
 
-**Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — year-long cycle, 2–4K HS + 1.5K JUCO, portal sub-tab, weekly drip + NIL, letter grades, prestige 0–99.
+**Authoritative spec:** [`recruiting-engine.md`](recruiting-engine.md) — year-long cycle, prestige-tier **weekly points**, 2–4K HS + 1.5K JUCO, portal sub-tab, NIL, letter grades, prestige 0–99.
 
-**Brief:** HS/JUCO class **seeded in preseason** (**Top 60** in News); **year-long recruiting cycle** with **weekly drip**; **Recommended** tab default (`signLikelihood` for your school); **optional in-season recruiting dashboard tasks**; **sim week** advance when skipped; **signing crunch** offseason weeks **2–5**; **A–F** scout; **no visits**; **50%** carryover. Arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
+**Brief:** HS/JUCO **seeded in preseason**; **year-long cycle**; **weekly recruiting points** fixed per cycle from **prestige tier** (1k–5k/wk); **Recommended** default; optional dashboard tasks; **50%** carryover; signing crunch **1.5×** OS weeks 2–5. Arc: [`recruiting-engine.md`](recruiting-engine.md#year-long-recruiting-cycle-design-lock).
 
 ---
 
@@ -352,16 +352,9 @@ Walk-ons use the same **player card** / roster pipeline as scholarship players (
 | Eligibility incidents | −20% penalty stack |
 | Academic facility grade | +10% cap bonus |
 
-**Recruiting budget formula**
+**Weekly recruiting points:** fixed **per recruiting cycle** from **prestige tier** table — authoritative spec [`recruiting-engine.md`](recruiting-engine.md#prestige-tier-weekly-pool-design-lock). **End of Season** recap prestige/grade moves set the **next** cycle’s pool; coach/facility upgrades affect **efficiency**, not the tier band.
 
-```
-baseBudget = prestigeTierTable[prestige]
-gradeMultiplier = 0.6 + (academicsGrade / 100) * 0.8   // 0.6x – 1.4x
-facilityBonus = 1 + 0.05 * (recruitingFacilityGrade - 3)  // grade 1–10
-recruitingBudget = floor(baseBudget * gradeMultiplier * facilityBonus)
-```
-
-**Upgrades in offseason week 8** apply per [`offseason.md`](offseason.md) (some bonuses next recruiting cycle).
+**Upgrades in offseason week 8** apply per [`offseason.md`](offseason.md) (grades → prestige path for future cycles).
 
 ### Cash sinks
 

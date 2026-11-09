@@ -77,26 +77,14 @@ Preseason (class seed)
 | **Cycle closes** | Offseason **week 5** (**Recruiting week 4** — signing) |
 | **Portal sub-cycle** | Entrants from offseason **week 1**; portal sub-tab spend when window is open ([`offseason.md`](offseason.md)) — same hub, not a second app |
 
-### Weekly economy (replaces “4 weeks only” allowance)
+### Weekly economy
 
-- **Annual recruiting-point budget** set at cycle open (prestige, grades, last year’s results — same drivers as [Budget setup](#budget-setup-annual)).
-- **Every week advance** while the cycle is open (preseason week through offseason week 5):
-  - Grant **weekly recruiting-point drip** (total over the year ≈ former 4-week sprint totals).
-  - **50% carryover** of unspent points to the next week (unchanged).
-  - **NIL** remains **annual pool**; allocate anytime before hard sign.
-- **Signing crunch:** Offseason weeks **2–5** apply a **multiplier** on the weekly drip (e.g. **1.5×**) so the natural “closing period” still matters without being the only time you can act.
+- **Weekly recruiting points** = **fixed for the entire recruiting cycle** (preseason seed → signing close) — same grant every week advance while the cycle is open. See [Prestige tier weekly pool](#prestige-tier-weekly-pool-design-lock).
+- **50% carryover** of unspent points to the next week; rest expires.
+- **NIL** remains **annual pool** (separate economy); allocate anytime before hard sign.
+- **Signing crunch:** Offseason weeks **2–5** apply **1.5×** on the **tier weekly pool** (not a different base).
 
-**Tunable default (starting point for balance JSON):**
-
-| Segment | Weeks (approx.) | Drip weight |
-|---------|-----------------|-------------|
-| Preseason | 1 | 1.0× |
-| Exhibition + RS + byes | ~35 | 1.0× |
-| Postseason + End of Season | ~8+1 | 1.0× (no games ≠ no drip) |
-| Offseason W1 | 1 | 0.5× (retention focus; portal opens) |
-| Offseason W2–W5 | 4 | 1.5× crunch |
-
-User who touches recruiting **3–5 min every other week** keeps pace; user who ignores it until crunch can still close in offseason W2–W5 with crunch multiplier + banked carryover (if any).
+Next cycle’s weekly pool is set at **preseason** from **`programPrestige`** (and grade-driven prestige deltas) frozen at **[End of Season](season-review.md)** recap — not mid-cycle.
 
 ### Commits
 
@@ -252,7 +240,7 @@ programPrestige = f(facilities, academics, conferencePrestige, programHistory, �
 → display 0–99
 ```
 
-Mapping A–F → points is data-driven JSON; **better letter → higher prestige** and **higher weekly recruiting points cap**.
+**Prestige (0–99)** is the **primary** driver for **which weekly recruiting pool** applies. Letter grades move prestige (and other systems) via season performance and upgrades — they do **not** maintain a separate weekly-points formula in UI.
 
 ### Coach & staff
 
@@ -273,24 +261,40 @@ Two spend tracks while the **recruiting cycle** is open:
 | **Recruiting points** | Calls, scouting upgrades, persistent interest gains (no campus visit system) |
 | **NIL dollars** (or **deal points** — one global format) | Allocated offers toward a recruit’s **valuation** / ask |
 
-### Budget setup (annual)
+### Prestige tier weekly pool (design lock)
 
-Annual pools set at **recruiting phase start** (and previewable when class seeds):
+**Authoritative numbers** live in [`balance-2026.json`](../assets/balance/balance-2026.json) → `recruiting.prestigeTiers` (pinned at dynasty create — [ADR-002](../docs/ADR-002-balance-ruleset-bundle.md)).
+
+| Prestige tier | Prestige range | Weekly points pool | Realistic capacity |
+|---------------|----------------|--------------------|--------------------|
+| **Low-Major** | 0 – 25 | **1,000 – 1,250** | **2–3** core targets |
+| **Mid-Major** | 26 – 50 | **1,500 – 2,000** | **3–5** core targets |
+| **High-Major** | 51 – 74 | **2,500 – 3,250** | **5–7** core targets |
+| **National Contender** | 75 – 89 | **3,500 – 4,250** | **7–9** national targets |
+| **Blue Blood** | 90 – 99 | **4,500 – 5,000** | Full national board |
+
+| Rule | Detail |
+|------|--------|
+| **Fixed per cycle** | `weeklyRecruitingPoints` is computed **once** when the cycle opens (preseason **Incoming Class Seed** completes) and is **unchanged** every week until signing close — including through **End of Season** and offseason signing weeks |
+| **Exact value in band** | **Linear map** of `programPrestige` inside the tier’s min–max prestige → pool min–max (integer, round down) unless balance JSON specifies a step table |
+| **When it changes** | **[End of Season](season-review.md)** applies **prestige** and **grade** recap for the year; the **next** cycle’s weekly pool is derived from **post-recap** `programPrestige` (preview on review screen) |
+| **Dynasty start** | First cycle uses prestige at **game start** / entering **Season 1** preseason |
+| **Realistic capacity** | Product guidance for **[Recommended](#recommended-tab-default)** and UI copy — **not** a hard cap on offers or commits |
+| **Spend efficiency** | Coach / staff / **recruiting lounge** may still improve **points-per-action** — not the weekly pool ([`coach-card.md`](coach-card.md)) |
+
+**Grant timing:** Each **week advance** while the cycle is open → add **weekly pool** (+ carryover from prior week) × **1.5** if offseason weeks **2–5**.
+
+### NIL (annual)
+
+NIL pool sizing stays in [`game-design.md`](game-design.md#nil--program-economy) — prestige tiered separately from recruiting **points**.
 
 | Driver | Behavior |
 |--------|----------|
-| **School grades → prestige** | Sets **base** recruiting points / NIL pool |
-| **Prior season performance** | Wins, tournament, fundraising — **raises or lowers** next year’s budget vs baseline |
-| **Academic / facility tiers** | Multipliers per game-design formulas (recruiting lounge, grade multiplier) |
 | **Retention split** | Optional % of NIL reserved for returning players before recruit offers (game-design soft cap) |
 
-### Weekly allowance
-
-See [Year-long recruiting cycle](#year-long-recruiting-cycle-design-lock): drip **each week advance** while the cycle is open, with **signing crunch** multiplier in offseason weeks 2–5.
+### Carryover
 
 **Carryover (design lock):** at week end, **50%** of **unspent recruiting points** roll into the next week’s pool (rounded down). The other 50% expires. NIL unspent does **not** roll week-to-week unless tied to an annual pool remainder rule in NIL doc (annual pool cap only).
-
-Coach upgrades may increase **base drip** or annual pool at cycle open.
 
 ---
 
@@ -471,14 +475,15 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | **HS class size** | **Uniform random 2,000–4,000** per season |
 | **Year-long cycle** | Spend preseason → signing (OS week 5); **optional** in-season dashboard tasks |
 | **Sim week** | Advance may auto-sim games + AI user recruiting after confirmation — [`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week) |
-| **Signing crunch** | **1.5×** weekly drip offseason weeks 2–5 (tunable in balance bundle) |
+| **Weekly recruiting pool** | **Fixed** per cycle from prestige tier table; recap sets **next** cycle |
+| **Signing crunch** | **1.5×** tier weekly pool offseason weeks 2–5 |
 | **Recommended tab** | **Default** hub tab; `signLikelihood` sort; elite reaches hidden unless realistic |
 
 ## Open / TBD
 
 | Topic | Notes |
 |-------|--------|
-| Drip weights & annual point totals | Tune in `balance-2026.json` when loaders ship |
+| Tier interpolation edge cases | `balance-2026.json` → `recruiting.prestigeTiers` |
 | `signLikelihood` bands & prestige–star curve | Tune in balance bundle `recruiting.recommended` |
 | ~~Offseason frame UI~~ | **Resolved** — tasks in [`offseason.md`](offseason.md) + shell in [`game-frame.md`](game-frame.md) |
 
@@ -497,3 +502,4 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | 2026-11-09 | Year-long recruiting cycle; signing crunch weeks |
 | 2026-11-09 | Optional in-season recruiting dashboard tasks; sim-week advance confirmation |
 | 2026-11-09 | Recommended tab default; signLikelihood for low-prestige fit |
+| 2026-11-09 | Prestige tier weekly recruiting pool; fixed per cycle; recap sets next year |

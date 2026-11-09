@@ -53,5 +53,58 @@
   "calendar": {
     "scholarshipLimit": 13,
     "rosterCap": 15
+  },
+  "recruiting": {
+    "weeklyCarryoverFraction": 0.5,
+    "signingCrunchMultiplier": 1.5,
+    "signingCrunchOffseasonWeeks": [2, 3, 4, 5],
+    "prestigeTiers": [
+      {
+        "id": "low_major",
+        "label": "Low-Major",
+        "prestigeMin": 0,
+        "prestigeMax": 25,
+        "weeklyPointsMin": 1000,
+        "weeklyPointsMax": 1250,
+        "realisticCapacity": "2-3 core targets"
+      },
+      {
+        "id": "mid_major",
+        "label": "Mid-Major",
+        "prestigeMin": 26,
+        "prestigeMax": 50,
+        "weeklyPointsMin": 1500,
+        "weeklyPointsMax": 2000,
+        "realisticCapacity": "3-5 core targets"
+      },
+      {
+        "id": "high_major",
+        "label": "High-Major",
+        "prestigeMin": 51,
+        "prestigeMax": 74,
+        "weeklyPointsMin": 2500,
+        "weeklyPointsMax": 3250,
+        "realisticCapacity": "5-7 core targets"
+      },
+      {
+        "id": "national_contender",
+        "label": "National Contender",
+        "prestigeMin": 75,
+        "prestigeMax": 89,
+        "weeklyPointsMin": 3500,
+        "weeklyPointsMax": 4250,
+        "realisticCapacity": "7-9 national targets"
+      },
+      {
+        "id": "blue_blood",
+        "label": "Blue Blood",
+        "prestigeMin": 90,
+        "prestigeMax": 99,
+        "weeklyPointsMin": 4500,
+        "weeklyPointsMax": 5000,
+        "realisticCapacity": "full national board"
+      }
+    ],
+    "weeklyPointsInterpolation": "linear_within_tier"
   }
 }
