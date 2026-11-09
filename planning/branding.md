@@ -22,7 +22,9 @@ Use **Dynasty: College Basketball** on store listings, splash, and in-app title 
 | Asset | Path | Use |
 |-------|------|-----|
 | **Primary app logo** | [`Public-Assets/app-logo.svg`](../Public-Assets/app-logo.svg) | In-app header, marketing, **game splash** |
-| **Novux logos** | `Public-Assets/Novux_Logos/` | **Studio screen** lockups |
+| **Splash screen reference** | [`Public-Assets/screen-previews/splash-screen.png`](../Public-Assets/screen-previews/splash-screen.png) | Marketing / QA mock (1080×2400) |
+| **Novux logos** | `Public-Assets/Novux_Logos/` | **Studio screen** lockups (`2.svg` = light on `#181a25`) |
+| **Studio screen reference** | [`Public-Assets/screen-previews/studio-screen.png`](../Public-Assets/screen-previews/studio-screen.png) | Marketing / QA mock (1080×2400) |
 | **Novux icons** | `Public-Assets/Novux_Icons/` | Studio mark variants |
 
 **Implementation notes**
