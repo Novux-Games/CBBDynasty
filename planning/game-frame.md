@@ -89,7 +89,7 @@ Shows **`#NN`** = your program’s place in the **national composite resume list
 
 | Color | Meaning |
 |-------|---------|
-| **Green** | Projected **NCBA** field (64) — at-large or **conference auto-bid** path |
+| **Green** | Projected **NCBA** field (76) — auto, direct at-large, or Opening invite |
 | **Yellow** | Projected **NCI** (32), not NCBA |
 | **Amber** | Projected **National Heritage Classic** (16) only |
 | **Red** | Outside all national brackets, or reclass (NCBA/NCI blocked; Heritage still possible) |

@@ -605,7 +605,7 @@ All **inspired by** real metrics; labels in UI are generic ("Resume Index", "Tie
 
 | National event | Size | Selection |
 |----------------|------|-----------|
-| **NCBA Men's BB Tournament** | **64** in Round 1 | **32** conference champions + **32** at-large; bottom **24** champs play **12** Opening Round games |
+| **NCBA Men's BB Tournament** | **76** in event · **64** in Round 1 | **32** autos + **20** at-large (seeds 1–52) + **24** at-large Opening (**12** games) |
 | **NCI** | **32** | Highest resume **not** in NCBA |
 | **National Heritage Classic** | **16** | Highest resume **not** in NCBA or NCI |
 
@@ -723,7 +723,7 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | **Resume score** | Composite for bubble/seeding |
 | **NCBA** | National College Basketball Association (universe NCAA) |
 | **NCI** | National College Invitational — 32 teams after NCBA field |
-| **Opening Round** | 12 games — bottom 24 conference champs → 12 NCBA Round 1 slots |
+| **Opening Round** | 24 at-large bubble · 12 games → seeds 53–64 (76-team event) |
 | **March Mayhem** | Universe brand for March postseason |
 | **Grade multiplier** | Academics → recruiting budget |
 

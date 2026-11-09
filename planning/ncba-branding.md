@@ -30,10 +30,12 @@
 | Slot | Count |
 |------|-------|
 | Conference tournament champions (auto) | 32 |
-| At-large (resume) | 32 |
-| **Round 1 (round of 64)** | **64** teams |
+| At-large (direct — seeds **1–52** with autos) | 20 |
+| At-large (Opening Round bubble) | 24 → **12** winners |
+| **Total in event** | **76** teams |
+| **Round 1 (round of 64)** | **64** teams (52 + 12) |
 
-**Opening Round:** bottom **24** conference champions (by resume among the 32 autos) play **12** games; **12** winners join the top **20** champs + **32** at-large in Round 1.
+**Seeds 1–52:** all **32** autos + **20** highest at-large. **Opening Round:** **24** bubble at-large, **12** games, winners take **seeds 53–64**.
 
 ### NCI field
 

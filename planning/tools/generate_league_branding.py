@@ -425,7 +425,7 @@ def main() -> None:
         "|-------------------|-------------------------|--------|",
         "| NCAA | **NCBA** — National College Basketball Association | |",
         "| March Madness | **March Mayhem** | |",
-        "| NCAA tournament | **NCBA Men's BB Tournament** (64 in Round 1) | [`postseason.md`](postseason.md) |",
+        "| NCAA tournament | **NCBA Men's BB Tournament** (76 teams → 64 in Round 1) | [`postseason.md`](postseason.md) |",
         "| NIT | **NCI** (32 teams) | Not selected for NCBA |",
         "| CBI | **National Heritage Classic** (16 teams) | Not selected for NCBA or NCI; reclass eligible |",
         "| Maui / Atlantis / Champions-style / Feast Week events | Island Classic, Caribbean Showdown, Blue Blood Tip-Off, Desert Shootout | One early event per team per season |",

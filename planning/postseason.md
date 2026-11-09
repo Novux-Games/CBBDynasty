@@ -68,37 +68,40 @@ Runs after all **32** conference champions are known. Uses the **national compos
 
 Lock **32** conference tournament champions with `postseasonEligible: true` (reclass winners trigger bid pass-over per conference rules; replacement team becomes an NCBA auto team if they are a conf tourney participant and eligible).
 
-### Step 2 — Rank conference champions
+### Step 2 — At-large (44)
 
-Among the **32** NCBA auto teams, sort by **resume rank** at Selection Sunday.
+From postseason-eligible teams **not** among the **32** conference champions, select the **44 highest** resume ranks → **NCBA at-large** invitees.
 
-| Tier | Count | Opening Round |
-|------|-------|----------------|
-| **Highest-ranked** conference champions | **20** | **Bypass** — enter **NCBA Round 1** (round of 64) directly |
-| **Remaining** conference champions | **24** | **Opening Round** — paired into **12 games**; **12 winners** advance to Round 1 |
+| At-large tier | Count | Role |
+|---------------|-------|------|
+| **Top at-large** | **20** | Locked into **seeds 1–52** (with all 32 autos) — **no** Opening Round |
+| **Bubble at-large** | **24** | **Opening Round** only — **12** games; **12** winners earn **seeds 53–64** |
 
-### Step 3 — NCBA at-large (32)
+### Step 3 — Seeds 1–52
 
-From postseason-eligible teams **not** among the **32** conference champions, select the **32 highest** resume ranks → **NCBA at-large**. All **32** enter **Round 1** directly (no Opening Round).
+Assign **seeds 1–52** across the **52** teams that skip Opening Round:
 
-### Step 4 — NCBA field check
+| In seed pool | Count |
+|--------------|-------|
+| Conference champions (all **32** autos) | 32 |
+| Top **20** at-large | 20 |
+
+**Seeding rule:** Resume / S-curve places **every** auto and top at-large on lines **1–52**. A weak conference champion can land **seed 52** (e.g. 15–15 resume, 19–15 after winning a small conference) while stronger at-large teams sit higher — autos are guaranteed a **slot**, not a **courtesy rank**.
+
+All **32** conference champions **skip** Opening Round and enter **NCBA Round 1** on their assigned seed (even **52**).
+
+### Step 4 — NCBA field check (**76** teams)
 
 | Bucket | Count |
 |--------|-------|
-| Conference champions (all in NCBA event) | 32 |
-| At-large | 32 |
-| **Total NCBA tournament teams** | **64** unique programs |
+| Conference champions | 32 |
+| At-large (direct, seeds 1–52) | 20 |
+| At-large (Opening Round) | 24 |
+| **Total in NCBA event** | **76** |
 
-**Round 1 (round of 64)** composition:
+**Round 1 (round of 64):** **52** teams with seeds **1–52** + **12** Opening Round winners (seeds **53–64**) = **64**.
 
-| Source | In Round 1 |
-|--------|------------|
-| Top **20** conference champions (by resume) | 20 |
-| Opening Round **winners** (from bottom **24** champs) | 12 |
-| At-large | 32 |
-| **Total** | **64** |
-
-Opening Round losers are **eliminated** from NCBA.
+Opening Round **losers** (12) are **eliminated** from NCBA.
 
 ### Step 5 — NCI (32)
 
@@ -112,7 +115,7 @@ Reclass programs **compete for Heritage** selection but are **never** in the NCB
 
 ### Bubble UI
 
-- **Last teams in / out** for NCBA at-large (32-line).
+- **Last teams in / out** for at-large (20-line direct) and **Opening Round** (24 invite / 12 advance).
 - **NCI cut** (team 32 vs 33).
 - **Heritage cut** (team 16 vs 17).
 - Show when reclass bid pass-over flips an auto bid to another school.
@@ -127,12 +130,12 @@ Reclass programs **compete for Heritage** selection but are **never** in the NCB
 
 | Rule | Value |
 |------|--------|
-| Participants | **24** lowest resume ranks among the **32** conference champions |
+| Participants | **24** at-large teams (ranks **21–44** among NCBA at-large selections) — **not** conference champions |
 | Games | **12** |
-| Advance | **12** winners → NCBA **Round 1** |
-| Participants **not** in Opening | Top **20** champs + all **32** at-large |
+| Advance | **12** winners → **seeds 53–64** in NCBA **Round 1** |
+| Skip Opening | All **32** autos + top **20** at-large (**seeds 1–52**) |
 
-Seeding in Opening Round pairs **12 vs 24** style by champ resume order (implementation: `openingRoundPairing` in pack).
+Pairing by resume (e.g. 21 vs 44, 22 vs 43, … — `openingRoundPairing` in pack). Winners inherit **53–64** seed lines assigned on Selection Sunday.
 
 ### Main bracket (64 → champion)
 
@@ -183,7 +186,7 @@ Projected tiers on dashboard **Current ranking** chip ([`game-frame.md`](game-fr
 
 | Color | Projected tier |
 |-------|----------------|
-| **Green** | NCBA field (auto or at-large) |
+| **Green** | NCBA field (auto, top-20 at-large, or Opening Round invite) |
 | **Yellow** | NCI (not NCBA) |
 | **Amber** (optional) | Heritage only |
 | **Red** | None of the above, or reclass blocked from NCBA/NCI |
@@ -207,3 +210,4 @@ During conference tournament week, **green** may reflect **auto bid path** even 
 | Date | Change |
 |------|--------|
 | 2025-11-08 | Initial postseason spec: Selection Sunday, champ Opening Round, NCI, Heritage, reclass |
+| 2025-11-09 | NCBA **76**: 32 auto + 20 at-large (1–52) + 24 at-large Opening → 64 bracket |
