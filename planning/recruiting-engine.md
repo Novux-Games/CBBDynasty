@@ -1,7 +1,7 @@
 # Recruiting engine
 
 **Context:** HS/JUCO pools **seeded in preseason** (Top 60 all season); **year-long recruiting cycle**; **optional** in-season recruiting **dashboard tasks**; **sim-week** advance when user skips games/recruiting ([`game-frame.md`](game-frame.md#advance-week-confirmation-sim-week)).  
-**Companion:** Offseason calendar [`offseason.md`](offseason.md), NIL [`game-design.md`](game-design.md#nil--program-economy), player display [`player-cards.md`](player-cards.md), archetypes [`player-archetypes.md`](player-archetypes.md).  
+**Companion:** Offseason calendar [`offseason.md`](offseason.md), NIL [`game-design.md`](game-design.md#nil--program-economy), loyalty [`player-loyalty-promises.md`](player-loyalty-promises.md), player display [`player-cards.md`](player-cards.md), archetypes [`player-archetypes.md`](player-archetypes.md), balance bundle [ADR-002](../docs/ADR-002-balance-ruleset-bundle.md).  
 **Last updated:** 2026-11-09
 
 ---
@@ -15,6 +15,22 @@
 5. [Program prestige & school grades](#program-prestige--school-grades)
 6. [Resources: recruiting points & NIL](#resources-recruiting-points--nil)
 7. [Interest & offers](#interest--offers)
+   1. [Goal](#goal)
+   2. [Two surfaces](#two-surfaces)
+   3. [Factor catalog](#factor-catalog)
+   4. [Base weights](#base-weights)
+   5. [Top priorities](#top-priorities)
+   6. [Star-tier weight shifts](#star-tier-weight-shifts)
+   7. [Scoring](#scoring)
+   8. [Spend → interest (points system)](#spend--interest-points-system)
+   9. [Promises & trust](#promises--trust)
+   10. [Feed into `signLikelihood`](#feed-into-signlikelihood)
+   11. [Data model](#data-model)
+   12. [Worked examples](#worked-examples)
+   13. [Balance vs sim](#balance-vs-sim)
+   14. [Tuning knobs](#tuning-knobs)
+   15. [Conflicts / non-overrides](#conflicts--non-overrides)
+   16. [Open questions](#open-questions)
 8. [Recruiting UI](#recruiting-ui)
 9. [National rankings (Top 60)](#national-rankings-top-60)
 10. [AI recruiting](#ai-recruiting)
@@ -367,19 +383,279 @@ Loads the **customized roster engine** for incoming commits (and portal signees 
 
 ## Interest & offers
 
-**Interest meter (0–100)** per target, influenced by:
+**Status:** Approved (2026-11-09). Fills the factor weights this section left as “Weight (tunable).” Those numbers are **proposals** for `balance-2026.json` → `recruiting.interest.*` ([ADR-002](../docs/ADR-002-balance-ruleset-bundle.md#recruiting-interest-proposed-keys)). This spec does **not** edit the bundle. When the doc and JSON diverge, **JSON wins**.
 
-| Factor | Weight (tunable) |
-|--------|----------------|
-| **programPrestige** (0–99) | Baseline |
-| **School grade letters** on recruit’s priority dimensions | e.g. facilities-focused recruit cares about Facilities grade |
-| **NIL offered** vs recruit **valuation** | Underfunding stalls interest |
-| **Coach recruiting** + staff | Charisma / point efficiency |
-| **Home state / region** | In-state & nearby-state pipeline vs program `homeState` |
-| **Send the house / bonus points** | Large or remainder **point** actions ([Action costs](#action-costs-design-lock)) |
-| **Recent success** | Tourney run, NET / Media rank |
+### Goal
 
-**NIL** committed at offer time writes toward signing number on [`player-cards.md`](player-cards.md) Overview when hard commit lands.
+Every recruit uses the **same factor catalog**, but **not** one fixed weight vector. Per-recruit **top priorities** (and a light **star-tier** shift) change how much each factor matters. That keeps recruiting readable without a single solvable formula.
+
+This section does **not** replace weekly points, NIL ask/offer math, Soft/Hard commit rules, or Recommended badges. It specifies how **interest** is computed and how it plugs into those systems.
+
+### Two surfaces
+
+| Surface | When | Spend? | UI |
+|---------|------|--------|-----|
+| **`baselineInterest`** | Class seed + week refresh | **Zero user spend** (school state only) | Feeds **`signLikelihood`** / Recommended sort |
+| **`interest` (meter)** | Live while cycle open | Includes offers, NIL $, points actions, visits, promise | Recruit sheet meter **0–100** |
+
+```
+interest = clamp0_100( baselineInterest + spendDelta + promiseDelta )
+signLikelihood ≈ f(baselineInterest, prestigeVsStarFloor, competitionProxy, rosterNeed)
+```
+
+**Design lock (existing):** `signLikelihood` stays **badge-only** (Likely / Possible / Reach / Long shot) — never shown as 0–99 ([`signLikelihood`](#signlikelihood-per-recruit--your-school)).
+
+**NIL** committed at offer time still writes the signing number on [`player-cards.md`](player-cards.md) Overview when the hard commit lands ([NIL Budget](game-design.md#nil-budget-workflow-design-lock)).
+
+### Factor catalog
+
+Six factors. Each scores **0–1** for (recruit × school), then weighted.
+
+| Id | Meaning | School / recruit inputs (existing where noted) |
+|----|---------|-----------------------------------------------|
+| **`nil`** | Money fit | `nilOfferUsd` vs `nilAskUsd` ([Interest & signing](game-design.md#interest--signing)); at baseline use `nilPoolAnnualUsd` vs ask as a **capacity** proxy |
+| **`playingTimeFit`** | Depth chart / freshman minutes / style fit | Roster hole at position, projected minutes band, archetype vs scheme ([`player-archetypes.md`](player-archetypes.md), [`strategy-schemes.md`](strategy-schemes.md)) |
+| **`prestigeWinning`** | Brand + recent winning | `programPrestige` (0–99), recent tourney / NET / Media form, conference strength |
+| **`coachRelationship`** | Effort & pitch | Coach + staff recruiting grades; **spend** actions (DM / call / house / bonus / visit); optional promise bump |
+| **`proximity`** | Geography | Recruit home vs program `homeState` — **tiered** (not linear miles) |
+| **`campusLife`** | Facilities / academics / campus | School letter grades the recruit cares about (Facilities, Academics, Arena / lounge — [Program prestige & school grades](#program-prestige--school-grades)) |
+
+#### Proximity tiers (design proposal)
+
+| Band | Score (default) | Rule of thumb |
+|------|-----------------|---------------|
+| **In-state** | **1.0** | Same `homeState` as program |
+| **Pipeline / adjoining** | **0.65** | Adjoining or declared pipeline states ([`league-branding.md`](league-branding.md#geography--recruiting)) |
+| **Regional** | **0.35** | Same broad region, not pipeline |
+| **Far** | **0.10** | Everything else |
+
+Exact state→region tables → balance JSON (not hard-coded in UI).
+
+### Base weights
+
+**Default vector** (sums to **1.0**) — proposed starting point for `balance-2026.json` → `recruiting.interest.baseWeights`:
+
+| Factor | Weight |
+|--------|--------|
+| `nil` | **0.25** |
+| `playingTimeFit` | **0.20** |
+| `prestigeWinning` | **0.20** |
+| `coachRelationship` | **0.15** |
+| `proximity` | **0.10** |
+| `campusLife` | **0.10** |
+
+**Not a silent override:** the drivers above were already “Weight (tunable)” without numbers. This table **fills** that gap. If product picks different bases, change JSON only.
+
+Point actions (Send the house, bonus points) are **not** a seventh weight. They move **`spendDelta`** through `coachRelationship` ([Spend → interest](#spend--interest-points-system)).
+
+### Top priorities
+
+#### Generation
+
+| Rule | Detail |
+|------|--------|
+| **Count** | Each recruit rolls **1–2** `topPriorities` at class seed (portal entrants re-roll or inherit — [Open](#open-questions)) |
+| **Effect** | Each listed priority **×≈2** on that factor’s weight; **renormalize** so weights still sum to 1 |
+| **Two priorities** | Apply both doubles, then renormalize once |
+| **Display** | Recruit sheet chips (e.g. “Wants to stay close to home”) — **hidden** until scout depth **or** first contact (DM / call / house / visit / offer) — same reveal family as loyalty tendency ([`player-loyalty-promises.md`](player-loyalty-promises.md#loyalty-rating)) |
+
+#### Priority → factor map
+
+| Priority id | Label (UI) | Boosts factor |
+|-------------|------------|---------------|
+| `stay_home` | Stay close to home | `proximity` |
+| `follow_money` | Follow the money | `nil` |
+| `start_now` | Start right away | `playingTimeFit` |
+| `chase_title` | Chase a title | `prestigeWinning` |
+| `coach_bond` | Trust the coach | `coachRelationship` |
+| `campus_fit` | Campus / academics first | `campusLife` |
+
+Aligns with existing copy “school grade letters on recruit’s **priority dimensions**” — priorities **are** those dimensions, made explicit.
+
+#### Renormalize (pseudo)
+
+```
+w = baseWeights
+for p in recruit.topPriorities:
+  w[factor(p)] *= priorityMultiplier   // default 2.0
+w = w / sum(w)
+```
+
+### Star-tier weight shifts
+
+After priority renormalize, apply a **small** star-band nudge (then renormalize again):
+
+| Stars | Shift (proposed) |
+|-------|------------------|
+| **5★** | `nil` **+0.08**, `prestigeWinning` **+0.04**; pull from `playingTimeFit` / `proximity` |
+| **4★** | `nil` **+0.04**; mild |
+| **3★** | near base |
+| **2★** | `playingTimeFit` **+0.06**, `proximity` **+0.04**; pull from `nil` / `prestigeWinning` |
+
+Rationale: blue-chip asks command the bag; lower stars care more about minutes and home. **Does not** change `nilAskUsd` bands (`nil.askByStarBand` in [`balance-2026.json`](../assets/balance/balance-2026.json)) or the **3×** offer cap — only **how much** NIL fit moves the meter.
+
+### Scoring
+
+```
+weighted = Σ (w_i × score_i)          // 0–1
+baselineInterest = round(100 × weighted)
+```
+
+#### Factor score sketches (tunable curves in JSON)
+
+| Factor | 0–1 sketch |
+|--------|------------|
+| **`nil`** (live) | `0` if no $ and high ask; else `(nilOfferUsd / nilAskUsd) ^ interestNilRatioExponent` clamped 0–1 (shipped `nil.interestNilRatioExponent`); ≥ ask → **1.0** ([Interest & signing](game-design.md#interest--signing)); over-ask up to **3×** may add a tiny surplus (cap in JSON) |
+| **`nil`** (baseline) | Capacity: `min(1, nilPoolAnnualUsd / (nilAskUsd × capacityDivisor))` — so Recommended does not assume the pool is already allocated |
+| **`playingTimeFit`** | Blend: open scholarship + position depth rank + scheme/archetype fit letters |
+| **`prestigeWinning`** | Map `programPrestige` vs recruit’s implied floor + recent success bump |
+| **`coachRelationship`** (baseline) | Coach/staff recruiting grades only (0 spend) |
+| **`coachRelationship`** (live) | Baseline + spent-point attention curve + visit completed + promise offered |
+| **`proximity`** | Tier table above |
+| **`campusLife`** | Average (or min) of letter grades on the recruit’s campus-related dims → 0–1 |
+
+### Spend → interest (points system)
+
+Recruiting **points** buy **labor** ([action costs](#action-costs-design-lock)); they do **not** replace NIL $.
+
+| Action | Interest channel |
+|--------|------------------|
+| DM / Phone / Send the house / Bonus points | `spendDelta` via `coachRelationship` (and small global attention) — deltas in `recruiting.actions.*.interestDelta` |
+| Official visit | Larger `coachRelationship` + slight `campusLife` bump when visit completes |
+| Scout their game | **No** direct interest (reveals grades / priorities) |
+| Scholarship offer | Gate for soft commit; small relationship bump; enables promise picker |
+| Assign NIL | Updates **`nil`** score only |
+
+**Refunded** reservations (offer / visit / scout) do **not** reverse interest when points refund at week boundary — interest is about the **relationship state**, not the weekly ledger.
+
+Soft/hard commit thresholds stay as today: interest + offer (+ NIL alignment) → soft; Signing Day → hard.
+
+### Promises & trust
+
+| Phase | Rule |
+|-------|------|
+| **At offer / soft commit** | Choosing a promise ([`player-loyalty-promises.md`](player-loyalty-promises.md#coach-promises)) → small **`promiseDelta`** on interest (especially if priority is `coach_bond` or `start_now` with a Minutes/Role promise). **0** recruiting points (existing lock). |
+| **After hard sign** | Promise is **career-long** at school; **Kept / Broken** drives **loyalty**, portal intent, declare odds — **not** the pre-sign interest meter |
+| **Broken promise** | **Do not** model as a recruiting-interest penalty on *unsigned* targets. Trust hit is **loyalty** post-enroll ([loyalty seed & drift](player-loyalty-promises.md#seed--drift)). Soft-commit **decommit** already has prestige rules — keep those; optional tiny interest floor reset on re-engage ([Open](#open-questions)) |
+| **NIL underfund after sign** | Existing separate trust/loyalty path in game-design — out of scope for pre-sign weights |
+
+### Feed into `signLikelihood`
+
+Existing Recommended drivers stay; this model supplies a cleaner **`baselineInterest`** input.
+
+| Driver (existing) | How this doc maps |
+|-------------------|-------------------|
+| Prestige vs recruit tier / Top 60 | Soft **floor**: even high `baselineInterest` cannot exceed Long shot if prestige gap > band (keep elite-hide rule on Recommended) |
+| Home state / region | `proximity` factor |
+| School grades on priority dims | `campusLife` (+ priority boost) |
+| Roster need | Part of `playingTimeFit` **and** sort tie-break (unchanged) |
+| NIL ask vs annual pool | Baseline `nil` capacity score |
+| Coach + staff | Baseline `coachRelationship` |
+| Competition proxy | **Post** interest: reduce `signLikelihood` when many higher-prestige schools share pipeline — **not** a 7th interest weight |
+
+```
+signLikelihoodRaw = baselineInterest
+                    - prestigeGapPenalty
+                    - competitionProxyPenalty
+                    + rosterNeedBonus
+→ badge via recruiting.recommended.bands
+```
+
+Refresh: class seed + week advance + when the user changes offer / NIL / board (existing). **Coach-point spend does not enter this formula.**
+
+### Data model
+
+**On recruit (class / portal pool record):**
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `topPriorities` | `enum[1..2]` | From priority id table |
+| `homeState` | string | Existing geography |
+| `nilAskUsd` | int | Existing |
+| `stars` | 2–5 | Existing (no 1★ band in HS/JUCO/portal pools) |
+| `prioritiesRevealed` | bool | After scout threshold or first contact |
+
+**Per (recruit × school) runtime:**
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `factorScores` | map factor→0..1 | Optional debug / AI |
+| `effectiveWeights` | map factor→float | After priority + star shift |
+| `baselineInterest` | 0–100 | Recommended input |
+| `interest` | 0–100 | Sheet meter |
+| `signLikelihood` | 0–1 or internal | Badge only in UI |
+| `spendDelta` / `promiseDelta` | number | Live additives |
+
+Loyalty `personality` tags may **bias** which priorities roll — do not duplicate as a second weight system.
+
+### Worked examples
+
+#### A — 2★ in-state, priorities `stay_home` + `start_now`, Mid-Major (prestige 40)
+
+1. Base weights → boost `proximity` & `playingTimeFit` ×2 → renormalize.
+2. Star shift: nudge toward minutes/home.
+3. Scores: proximity **1.0**, playingTimeFit **0.8** (hole at his position), prestigeWinning **0.35**, nil capacity **0.7** (low ask), coach baseline **0.5**, campus **0.55**.
+4. **`baselineInterest` ~ high 60s–70s** → badge **Likely / Possible** — Recommended surfaces him.
+5. User spends DM + offer + meets ask → `interest` climbs; soft commit available.
+
+#### B — 5★ remote, priority `follow_money`, Low-Major (prestige 22)
+
+1. Weights skew hard to **`nil`** (+ 5★ nil shift).
+2. Proximity **0.10**, prestigeWinning crushed by floor, nil capacity **~0** (ask ≫ pool).
+3. **`baselineInterest` low** + prestige gap → **Long shot**; hidden from Recommended unless pipeline exception.
+4. Even “Send the house” cannot fully erase prestige floor — points help `coachRelationship` but Recommended stay honest.
+
+### Balance vs sim
+
+| Belongs in **balance bundle** ([ADR-002](../docs/ADR-002-balance-ruleset-bundle.md) → [`balance-2026.json`](../assets/balance/balance-2026.json)) | Belongs in **sim tuning** ([ADR-003](../docs/ADR-003-sim-tuning-bundle.md)) |
+|--------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| `recruiting.interest.baseWeights` | **Nothing here** — possession pace/fouls/shots only |
+| `recruiting.interest.priorityMultiplier` | |
+| `recruiting.interest.starTierShifts` | |
+| `recruiting.interest.proximityScores` | |
+| `recruiting.interest.factorCurves` / action `interestDelta`s | |
+| `recruiting.recommended.bands` + prestige–star floor (already in [Open / TBD](#open--tbd)) | |
+| Existing `nil.interestNilRatioExponent`, `nil.askByStarBand`, `nil.maxOfferMultiplierOfAsk`, prestige tiers, action costs | |
+
+Planning docs keep **behavior**; JSON keeps **numbers**. When they diverge, **JSON wins** (ADR-002). The `recruiting.interest.*` keys above are **proposals** — not added to the bundle by this spec.
+
+### Tuning knobs
+
+| Knob | Default proposal | Effect |
+|------|------------------|--------|
+| `baseWeights.*` | table above | Global feel |
+| `priorityMultiplier` | **2.0** | How spiky personalities feel |
+| `starTierShifts` | table above | 5★ money vs 2★ home/minutes |
+| `proximityScores` | 1.0 / 0.65 / 0.35 / 0.10 | Pipeline strength |
+| Action `interestDelta` | TBD per action | Points → meter responsiveness |
+| Prestige–star floor | TBD | Protects Recommended honesty |
+| `competitionProxy` strength | TBD | Crowded boards |
+| Promise interest bump | small | Pitch flavor without points cost |
+
+Freeze with dynasty via existing `balanceRulesetId` / `balanceSchemaVersion`.
+
+### Conflicts / non-overrides
+
+| Existing lock | This spec |
+|---------------|-----------|
+| Interest factors listed, weights “tunable” | Supplies **proposed** weights — not a silent change to other locks |
+| `signLikelihood` at **zero spend** | **Coach points spend** affects **`interest` only**; baseline/Recommended ignore spend |
+| Promise = **0 pts**, one per tenure, locks on hard commit | Promise may bump interest at offer; **broken** promise → **loyalty**, not pre-sign interest |
+| NIL ask / 3× cap / annual pool | Unchanged; weights only change **sensitivity** |
+| Prestige tier → **weekly points pool** | Unchanged — pool size ≠ interest weight |
+| Facilities grades → prestige composite | Still true; `campusLife` uses grades **directly** for interest, prestige stays its own factor |
+| AI uses same Recommended rules | AI should use this same weight pipeline |
+
+### Open questions
+
+| # | Question | Suggestion |
+|---|----------|------------|
+| 1 | Portal: new `topPriorities` or carry from prior school personality? | Re-roll 1 priority biased by entry drivers (minutes/broken promise) |
+| 2 | Exact scout depth to reveal priorities? | Same threshold as loyalty tendency letter |
+| 3 | Soft-commit decommit → interest reset? | Drop to `baselineInterest + small residual` |
+| 4 | Overpaying NIL (up to 3×) — interest > full credit? | Cap at 1.0 factor score; surplus is roster flexibility only |
+| 5 | Should `chase_title` read **conference tourney** success for mid-majors or only NCBA/NCI? | Include conf titles + national — mid-majors need a winning story |
+| 6 | Merge this section into `recruiting-engine.md` § Interest & offers, or keep a companion file under `planning/`? | **Resolved** — merged here, with short pointers from loyalty, game-design NIL, and ADR-002 |
 
 ---
 
@@ -420,7 +696,7 @@ Loads the **customized roster engine** for incoming commits (and portal signees 
 
 Computed when class seeds and **refreshed** on week advance (and when user changes offers / NIL / board). **Not** shown as 0–99 — only the **badge** + sort order.
 
-**Inputs** (same family as [Interest & offers](#interest--offers), evaluated at **zero user spend** unless noted):
+**Inputs** (same family as [Interest & offers](#interest--offers), evaluated at **zero user spend**). Point spend moves the sheet meter only — see [Two surfaces](#two-surfaces) and [Feed into `signLikelihood`](#feed-into-signlikelihood):
 
 | Driver | Effect |
 |--------|--------|
@@ -495,7 +771,7 @@ Distinct from **Top 60 draft** pool (in-season / pro-day dynamic) — recruit To
 
 ## AI recruiting
 
-**Design lock:** Non-user schools use the **same rules as the user** — prestige-tier **weekly points**, **annual NIL $** ([`game-design.md`](game-design.md#annual-collective-pool-design-lock)), and the same **`signLikelihood` / Recommended** ordering ([Recommended tab](#recommended-tab-default)). There is no separate “AI cheat list.”
+**Design lock:** Non-user schools use the **same rules as the user** — prestige-tier **weekly points**, **annual NIL $** ([`game-design.md`](game-design.md#annual-collective-pool-design-lock)), the same [interest weight pipeline](#interest--offers), and the same **`signLikelihood` / Recommended** ordering ([Recommended tab](#recommended-tab-default)). There is no separate “AI cheat list.”
 
 ### Visibility (player)
 
@@ -571,6 +847,8 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | Archetype | [`player-archetypes.md`](player-archetypes.md) hidden tag |
 | Offseason weeks 2–5 | Signing crunch (R1–R4); 1.5× tier weekly pool |
 | Signing Day week 6 | Hard sign + rankings + position editor |
+| Interest model | [Interest & offers](#interest--offers); NIL fit [`game-design.md`](game-design.md#interest--signing); promises [`player-loyalty-promises.md`](player-loyalty-promises.md#coach-promises) |
+| Balance numbers | [ADR-002](../docs/ADR-002-balance-ruleset-bundle.md) — proposed `recruiting.interest.*` |
 
 ---
 
@@ -590,6 +868,7 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | **Weekly recruiting pool** | **Fixed** per cycle from prestige tier table; recap sets **next** cycle |
 | **Signing crunch** | **1.5×** tier weekly pool offseason weeks 2–5 |
 | **Recommended tab** | **Default** hub tab; `signLikelihood` sort; elite reaches hidden unless realistic |
+| **Interest model** | Six factors; proposed weights in [Base weights](#base-weights). `signLikelihood` is **zero spend**. Broken promises are loyalty hits. Points pool ≠ interest weights. NIL bands and **3×** cap unchanged |
 
 ## Open / TBD
 
@@ -598,6 +877,8 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | Tier interpolation edge cases | `balance-2026.json` → `recruiting.prestigeTiers` |
 | `signLikelihood` bands & prestige–star curve | Tune in balance bundle `recruiting.recommended` |
 | Interest deltas per action | `recruiting.actions.*` in balance JSON |
+| Interest factor weights | **Proposed** — [Base weights](#base-weights); not written into `balance-2026.json` by this spec |
+| Interest open questions | [Open questions](#open-questions) |
 | ~~Offseason frame UI~~ | **Resolved** — tasks in [`offseason.md`](offseason.md) + shell in [`game-frame.md`](game-frame.md) |
 
 ---
@@ -617,3 +898,4 @@ Authoritative calendar: [`game-design.md`](game-design.md#walk-ons). Recruiting 
 | 2026-11-09 | Recommended tab default; signLikelihood for low-prestige fit |
 | 2026-11-09 | Prestige tier weekly recruiting pool; fixed per cycle; recap sets next year |
 | 2026-11-09 | Action cost table, refunded reservations, official visits, bonus points, Signing Day week 6 |
+| 2026-11-09 | Recruit interest model: factor weights, priorities, star shifts, `signLikelihood` feed |

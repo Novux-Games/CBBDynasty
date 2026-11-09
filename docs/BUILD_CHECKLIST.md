@@ -34,7 +34,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | [`postseason-frame.md`](../planning/postseason-frame.md) | 13.4 |
 | [`postseason.md`](../planning/postseason.md) | 5.5, 11.5, 12.1–12.2, 13.1–13.5 |
 | [`preseason.md`](../planning/preseason.md) | 7.1–7.6, 10.7 |
-| [`recruiting-engine.md`](../planning/recruiting-engine.md) | 2.6, 6.5, 6.8, 6.11–6.13, 6.15–6.20, 7.2, 9.9–9.10, 14.1, 15.1, 15.6 |
+| [`recruiting-engine.md`](../planning/recruiting-engine.md) | 2.6, 6.5, 6.8, 6.11–6.13, 6.15–6.21, 7.2, 9.9–9.10, 14.1, 15.1, 15.6 |
 | [`season-review.md`](../planning/season-review.md) | 5.6, 14.1 |
 | [`selection-engine.md`](../planning/selection-engine.md) | 11.1–11.5 |
 | [`simulation-engine.md`](../planning/simulation-engine.md) | 10.1, 10.8, 6.16 |
@@ -142,7 +142,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 6.5 | `[ ]` Recruiting hub shell (HS/JUCO + Portal sub-tabs) | Opens **Recommended** by default; year-long cycle, not OS-only | [recruiting-engine](../planning/recruiting-engine.md), [game-frame](../planning/game-frame.md) | `ui.recruiting` |
 | 6.11 | `[ ]` **Year-long recruiting economy** | Prestige tier weekly pool, **50%** carryover, OS W2–5 **1.5×** crunch; pool set at EoS recap | [recruiting-engine](../planning/recruiting-engine.md) | `:core/recruiting` |
 | 6.12 | `[ ]` **Transfer portal** sim (1 cycle, no in-season) | ~1k–1.4k considering pool; **Top 40** lock OS Week 2; immediate eligibility | [transfer-portal](../planning/transfer-portal.md) | `:core/portal` |
-| 6.13 | `[ ]` **Recommended** tab + `signLikelihood` badges | Low-prestige reach filter; hidden 0–99 attr until commit | [recruiting-engine](../planning/recruiting-engine.md#recommended-tab-default) | `ui.recruiting` |
+| 6.13 | `[ ]` **Recommended** tab + `signLikelihood` badges | Low-prestige reach filter; badge from **`baselineInterest`** (zero spend); hidden 0–99 attr until commit | [recruiting-engine](../planning/recruiting-engine.md#recommended-tab-default), [interest feed](../planning/recruiting-engine.md#feed-into-signlikelihood) | `ui.recruiting` |
 | 6.14 | `[ ]` Optional **dashboard tasks** (recruiting + portal W2–5) | Triggers + deep links per index; never block advance | [dashboard-tasks](../planning/dashboard-tasks.md), [transfer-portal](../planning/transfer-portal.md) | `ui.dashboard` |
 | 6.15 | `[ ]` **AI recruiting** (league + user on sim-week) | Hidden boards; Recommended parity; auto-maintain on advance confirm | [recruiting-engine](../planning/recruiting-engine.md#ai-recruiting) | `:core/recruiting/ai` |
 | 6.16 | `[ ]` **Sim-week** advance resolver hook | Unplayed games fast-sim + user-school recruiting/portal AI lines in confirm dialog | [game-frame](../planning/game-frame.md#advance-week-confirmation-sim-week) | `:core/advance` |
@@ -150,6 +150,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 6.18 | `[ ]` **Refunded** reservations (offer, scout game, official visit) | Week-bound spend; refund on advance if still active | [recruiting-engine](../planning/recruiting-engine.md#refunded-actions-week-reservation) | `:core/recruiting` |
 | 6.19 | `[ ]` **Official visit** + **scout their game** windows | Visit 50/100/150 by distance; once/recruit/season; RS → end **R4** | [recruiting-engine](../planning/recruiting-engine.md#action-costs-design-lock) | `ui.recruiting` |
 | 6.20 | `[ ]` **Signing Day** (offseason **week 6**) | Required rankings + position editor; hard sign | [recruiting-engine](../planning/recruiting-engine.md#signing-day-offseason-week-6), [dashboard-tasks](../planning/dashboard-tasks.md) | `ui.signingday` |
+| 6.21 | `[ ]` Recruit **interest** meter (`baselineInterest` + spend + promise) | Six-factor catalog; class seed rolls 1–2 `topPriorities`; proposed `recruiting.interest.*` weights (**not** in JSON yet); `signLikelihood` stays **zero spend**; broken promise → loyalty, not pre-sign interest; NIL bands and **3×** cap unchanged | [interest](../planning/recruiting-engine.md#interest--offers) | `:core/recruiting` |
 | 6.6 | `[ ]` Offseason **week 2**: NBA draft results | Scholarships open | [offseason](../planning/offseason.md) | — |
 | 6.7 | `[ ]` Offseason **week 7**: summer workouts (auto) | Report screen | [offseason](../planning/offseason.md) | — |
 | 6.8 | `[ ]` Offseason **week 8**: cuts + roster lock ≤15 + walk-ons | Walk-ons after Signing Day | [recruiting-engine](../planning/recruiting-engine.md), [offseason](../planning/offseason.md) | — |
@@ -163,7 +164,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
 | 7.1 | `[ ]` Preseason task checklist UI (8 tasks) | All required before Start Season | [preseason](../planning/preseason.md) | `ui.preseason` |
-| 7.2 | `[ ]` Incoming class seed + Top 60 News | HS/JUCO pools | [recruiting-engine](../planning/recruiting-engine.md), [preseason](../planning/preseason.md) | `:core` |
+| 7.2 | `[ ]` Incoming class seed + Top 60 News | HS/JUCO pools; each recruit rolls 1–2 `topPriorities` | [recruiting-engine](../planning/recruiting-engine.md#top-priorities), [preseason](../planning/preseason.md) | `:core` |
 | 7.3 | `[ ]` Tournament invites **before** schedule | **32** RS cap; **28** builder slots only if 4-game event | [preseason](../planning/preseason.md), [ncba-branding](../planning/ncba-branding.md) | — |
 | 7.4 | `[ ]` Exhibitions 0–3 + RS schedule solver | Conf visible, double-headers allowed | [preseason](../planning/preseason.md), [game-design](../planning/game-design.md) | `:core/schedule` |
 | 7.5 | `[ ]` Preseason report article component | Reuse for pre/post game later | [preseason](../planning/preseason.md) | `ui.reports` |
@@ -270,7 +271,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 15.1 | `[ ]` **NIL Budget** ledger + per-target offers | `nilRemainingUsd`; **Assign NIL** on recruit/portal/retention; **3× ask** cap; interest ratio; signing snapshot | [game-design](../planning/game-design.md#nil-budget-workflow-design-lock), [recruiting-engine](../planning/recruiting-engine.md#nil-budget-strip-recruiting-hub) | `ui.recruiting`, `:core/nil` |
+| 15.1 | `[ ]` **NIL Budget** ledger + per-target offers | `nilRemainingUsd`; **Assign NIL** on recruit/portal/retention; **3× ask** cap; interest ratio; signing snapshot | [game-design](../planning/game-design.md#nil-budget-workflow-design-lock), [recruiting-engine](../planning/recruiting-engine.md#nil-budget-strip-recruiting-hub), [`nil` factor](../planning/recruiting-engine.md#scoring) | `ui.recruiting`, `:core/nil` |
 | 15.2 | `[ ]` Facility grades + upgrades | Offseason **week 9** integration | [game-design](../planning/game-design.md) | — |
 | 15.3 | `[ ]` Academics → recruiting budget multiplier | Grades on school | [game-design](../planning/game-design.md) | — |
 | 15.4 | `[ ]` Coach skill tree + Sunday points | Auto-spend option | [game-design](../planning/game-design.md), [coach-card](../planning/coach-card.md) | — |
@@ -335,7 +336,7 @@ Minimum **one playable season** for internal testing:
 5. **Phase 12–13** bracket **stub** (single-user conf + 64 NCBA).  
 6. **Phase 14.1** season review → **Phase 6.1** offseason week 1 stub.
 
-Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.20**), **dashboard/sim-week** (9.6–9.7), **portal W1** (6.3), **injuries** (8.7–8.8, 10.8), full 365 sim (9.3), March Mayhem UI (13.4) after slice is fun.
+Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.21**), **dashboard/sim-week** (9.6–9.7), **portal W1** (6.3), **injuries** (8.7–8.8, 10.8), full 365 sim (9.3), March Mayhem UI (13.4) after slice is fun.
 
 ---
 
@@ -362,3 +363,4 @@ Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.20**), **dashboard
 | 2026-11-09 | **Full** locked-spec index (all Done planning docs); **8.8** injury UX; injury wired through 9.4/9.6/9.8/10.2 |
 | 2026-11-09 | In-app `notifications.md` (no push); **16.1** |
 | 2026-11-09 | Notifications **Done** — commits + fired/eliminated modal |
+| 2026-11-09 | Recruit interest model — **6.21**; `signLikelihood` zero-spend on **6.13**; seed priorities on **7.2** |

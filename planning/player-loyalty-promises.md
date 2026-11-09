@@ -1,7 +1,7 @@
 # Player loyalty & coach promises
 
 **Why:** Avoid **automatic** early draft exits for elite players (Campus Dynasty–style “Top 60 = instant declare”) and give **meaning** to recruiting pitches beyond NIL.  
-**Companion:** [`recruiting-engine.md`](recruiting-engine.md), [`player-cards.md`](player-cards.md), [`offseason.md`](offseason.md#week-1--players-leaving), [`game-design.md`](game-design.md#procedural-roster-events).  
+**Companion:** [`recruiting-engine.md`](recruiting-engine.md), interest model [`recruiting-engine.md`](recruiting-engine.md#interest--offers), [`player-cards.md`](player-cards.md), [`offseason.md`](offseason.md#week-1--players-leaving), [`game-design.md`](game-design.md#procedural-roster-events).  
 **Last updated:** 2026-11-09
 
 ---
@@ -24,14 +24,14 @@
 |------|--------|
 | **Scale** | **0–99** integer on the **player record** (same scale family as skill ratings) |
 | **Display** | **Roster player card** — [Ratings tab](player-cards.md#ratings) and compact chip on **Overview** |
-| **Recruits** | Hidden until **scout depth** threshold; rough **letter band** optional on recruit sheet (“Loyalty tendency: High/Med/Low”) |
+| **Recruits** | Hidden until **scout depth** threshold; rough **letter band** optional on recruit sheet (“Loyalty tendency: High/Med/Low”). Same reveal family as recruit **top-priority** chips ([`recruiting-engine.md`](recruiting-engine.md#top-priorities)) |
 | **Sim** | **Not** a possession-engine attribute — drives **portal intent**, **draft declare** rolls, and narrative only |
 
 ### Seed & drift
 
 | Event | Loyalty |
 |-------|---------|
-| **Class generation** | Base from hidden **personality** tag (e.g. hometown kid, one-and-done lean, program guy) — typically **25–75**; tune in balance JSON |
+| **Class generation** | Base from hidden **personality** tag (e.g. hometown kid, one-and-done lean, program guy) — typically **25–75**; tune in balance JSON. The tag may **bias** which `topPriorities` roll ([interest data model](recruiting-engine.md#data-model)) — not a second weight system |
 | **Promise kept** (season check) | **+** bump (cap 99) |
 | **Promise broken** | **−** large hit |
 | **Coach keeps minutes/role in band** | Small **+** per season |
@@ -70,7 +70,8 @@ Promises are **binding commitments** the user (or AI coach) makes at offer/sign.
 | **Scholarship offer** | **Promise picker** — user selects **exactly one** type (minutes / role / stay pledge); required for **high**-loyalty-tendency targets, optional for others — tune AI |
 | **Hard commit** | That **single** promise **locks** for the career at this school; immutable type — only **status** (Kept / Broken) updates |
 | **Amend** | **No** mid-career promise swap or Week 1 “new promise” — retention uses NIL / pitches only ([`offseason.md`](offseason.md)) |
-| **Cost** | No extra recruiting **points** for the promise itself — the **binding** is the cost ([`recruiting-engine.md`](recruiting-engine.md#what-recruiting-points-buy-design-lock)) |
+| **Cost** | No extra recruiting **points** for the promise itself — the **binding** is the cost ([action costs](recruiting-engine.md#action-costs-design-lock)) |
+| **Interest** | Choosing a promise may add a small **`promiseDelta`** on the pre-sign meter ([Promises & trust](recruiting-engine.md#promises--trust)), larger when the priority is `coach_bond` or a Minutes/Role promise matches `start_now`. **Broken** promises hit **loyalty** after enrollment — not interest on unsigned targets |
 
 ---
 
@@ -146,7 +147,7 @@ Tuning: `balance-2026.json` → `player.loyalty` (declare weights, break thresho
 
 | Doc | Hook |
 |-----|------|
-| [`recruiting-engine.md`](recruiting-engine.md) | Offer + promise at commit |
+| [`recruiting-engine.md`](recruiting-engine.md#interest--offers) | Offer + promise at commit; promise bumps **interest** only before sign |
 | [`player-cards.md`](player-cards.md) | Loyalty display |
 | [`offseason.md`](offseason.md) | Retention & declare buckets |
 | [`player-archetypes.md`](player-archetypes.md) | Personality → loyalty seed |
@@ -160,3 +161,4 @@ Tuning: `balance-2026.json` → `player.loyalty` (declare weights, break thresho
 |------|--------|
 | 2026-11-09 | Initial loyalty attribute + promises; anti auto-declare for elites |
 | 2026-11-09 | One promise per tenure; career-long lock; no retention re-pitch |
+| 2026-11-09 | Pointer to recruit interest model; broken promise stays a post-enroll loyalty hit |

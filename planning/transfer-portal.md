@@ -126,6 +126,8 @@ Graduates, draft exits, and completed eligibility are handled on **Roster** / de
 
 Same spend/promise rules as HS/JUCO; **Portal Top 40** visible **Week 2+**.
 
+Portal targets use the same [interest model](recruiting-engine.md#interest--offers) as HS/JUCO (`baselineInterest` at zero spend vs the live meter). Whether an entrant’s `topPriorities` re-roll or carry is [open](recruiting-engine.md#open-questions).
+
 ---
 
 ## AI entry drivers
@@ -183,7 +185,7 @@ User sees **outcomes** only (who entered), not internal reason.
 | Doc | Hook |
 |-----|------|
 | [`offseason.md`](offseason.md) | Week 1 layout |
-| [`recruiting-engine.md`](recruiting-engine.md) | Sub-tab, actions |
+| [`recruiting-engine.md`](recruiting-engine.md#interest--offers) | Sub-tab, actions, same interest weights |
 
 ---
 
@@ -196,3 +198,4 @@ User sees **outcomes** only (who entered), not internal reason.
 | 2026-11-09 | Roster tab excludes portal entrants; mutual exclusion between tabs |
 | 2026-11-09 | Hub-first portal UX; news-hub supplementary |
 | 2026-11-09 | Portal-only optional dashboard tasks Weeks 2–5 |
+| 2026-11-09 | Pointer to recruit interest model; portal priority re-roll stays open |
