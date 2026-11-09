@@ -575,7 +575,7 @@ Gameplay is **sim-only**; see **[`simulation-engine.md`](simulation-engine.md)**
 
 | System | Spec summary |
 |--------|----------------|
-| **Injuries** | Severity tiers; games missed; medical staff reduces duration |
+| **Injuries** | Severity tiers; weeks out (calendar); medical staff reduces duration |
 | **Suspensions** | Administrative; X games |
 | **Academic eligibility** | Rolling grades; bench ineligible |
 | **Portal (in-season)** | Ruleset-driven window; user can lose players midseason |

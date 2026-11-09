@@ -77,8 +77,8 @@
         "label": "Ankle sprain",
         "bodyPart": "ankle",
         "severity": "minor",
-        "durationGamesMin": 1,
-        "durationGamesMax": 3,
+        "durationWeeksMin": 1,
+        "durationWeeksMax": 3,
         "weight": 1.0
       },
       {
@@ -86,8 +86,8 @@
         "label": "Ankle tweak",
         "bodyPart": "ankle",
         "severity": "minor",
-        "durationGamesMin": 1,
-        "durationGamesMax": 2,
+        "durationWeeksMin": 1,
+        "durationWeeksMax": 2,
         "weight": 1.05
       },
       {
@@ -95,8 +95,8 @@
         "label": "Jammed finger",
         "bodyPart": "hand",
         "severity": "minor",
-        "durationGamesMin": 1,
-        "durationGamesMax": 2,
+        "durationWeeksMin": 1,
+        "durationWeeksMax": 2,
         "weight": 0.9
       },
       {
@@ -104,8 +104,8 @@
         "label": "Calf tightness",
         "bodyPart": "leg",
         "severity": "minor",
-        "durationGamesMin": 1,
-        "durationGamesMax": 2,
+        "durationWeeksMin": 1,
+        "durationWeeksMax": 2,
         "weight": 0.85
       },
       {
@@ -113,8 +113,8 @@
         "label": "Back spasm",
         "bodyPart": "torso",
         "severity": "minor",
-        "durationGamesMin": 1,
-        "durationGamesMax": 3,
+        "durationWeeksMin": 1,
+        "durationWeeksMax": 3,
         "weight": 0.75
       },
       {
@@ -122,8 +122,8 @@
         "label": "Hip pointer",
         "bodyPart": "torso",
         "severity": "minor",
-        "durationGamesMin": 1,
-        "durationGamesMax": 3,
+        "durationWeeksMin": 1,
+        "durationWeeksMax": 3,
         "weight": 0.7
       },
       {
@@ -131,8 +131,8 @@
         "label": "Illness",
         "bodyPart": "illness",
         "severity": "minor",
-        "durationGamesMin": 1,
-        "durationGamesMax": 2,
+        "durationWeeksMin": 1,
+        "durationWeeksMax": 2,
         "weight": 0.6
       },
       {
@@ -140,8 +140,8 @@
         "label": "Knee sprain",
         "bodyPart": "knee",
         "severity": "moderate",
-        "durationGamesMin": 2,
-        "durationGamesMax": 6,
+        "durationWeeksMin": 2,
+        "durationWeeksMax": 6,
         "weight": 0.7
       },
       {
@@ -149,8 +149,8 @@
         "label": "Hamstring strain",
         "bodyPart": "leg",
         "severity": "moderate",
-        "durationGamesMin": 2,
-        "durationGamesMax": 5,
+        "durationWeeksMin": 2,
+        "durationWeeksMax": 5,
         "weight": 0.8
       },
       {
@@ -158,8 +158,8 @@
         "label": "Groin strain",
         "bodyPart": "leg",
         "severity": "moderate",
-        "durationGamesMin": 2,
-        "durationGamesMax": 5,
+        "durationWeeksMin": 2,
+        "durationWeeksMax": 5,
         "weight": 0.75
       },
       {
@@ -167,8 +167,8 @@
         "label": "Concussion protocol",
         "bodyPart": "head",
         "severity": "moderate",
-        "durationGamesMin": 1,
-        "durationGamesMax": 4,
+        "durationWeeksMin": 1,
+        "durationWeeksMax": 4,
         "weight": 0.5
       },
       {
@@ -176,8 +176,8 @@
         "label": "Shoulder strain",
         "bodyPart": "arm",
         "severity": "moderate",
-        "durationGamesMin": 3,
-        "durationGamesMax": 8,
+        "durationWeeksMin": 3,
+        "durationWeeksMax": 8,
         "weight": 0.45
       },
       {
@@ -185,8 +185,8 @@
         "label": "Wrist sprain",
         "bodyPart": "hand",
         "severity": "moderate",
-        "durationGamesMin": 2,
-        "durationGamesMax": 4,
+        "durationWeeksMin": 2,
+        "durationWeeksMax": 4,
         "weight": 0.45
       },
       {
@@ -194,8 +194,8 @@
         "label": "High ankle sprain",
         "bodyPart": "ankle",
         "severity": "moderate",
-        "durationGamesMin": 3,
-        "durationGamesMax": 6,
+        "durationWeeksMin": 3,
+        "durationWeeksMax": 6,
         "weight": 0.55
       },
       {
@@ -203,8 +203,8 @@
         "label": "Hand fracture",
         "bodyPart": "hand",
         "severity": "moderate",
-        "durationGamesMin": 3,
-        "durationGamesMax": 7,
+        "durationWeeksMin": 3,
+        "durationWeeksMax": 7,
         "weight": 0.4
       },
       {
@@ -212,8 +212,8 @@
         "label": "Meniscus irritation",
         "bodyPart": "knee",
         "severity": "moderate",
-        "durationGamesMin": 3,
-        "durationGamesMax": 8,
+        "durationWeeksMin": 3,
+        "durationWeeksMax": 8,
         "weight": 0.5
       },
       {
@@ -221,8 +221,8 @@
         "label": "Hyperextended knee",
         "bodyPart": "knee",
         "severity": "moderate",
-        "durationGamesMin": 2,
-        "durationGamesMax": 5,
+        "durationWeeksMin": 2,
+        "durationWeeksMax": 5,
         "weight": 0.5
       },
       {
@@ -230,8 +230,8 @@
         "label": "Foot injury",
         "bodyPart": "foot",
         "severity": "major",
-        "durationGamesMin": 4,
-        "durationGamesMax": 12,
+        "durationWeeksMin": 4,
+        "durationWeeksMax": 12,
         "weight": 0.35
       },
       {
@@ -239,8 +239,8 @@
         "label": "Knee ligament (ACL)",
         "bodyPart": "knee",
         "severity": "major",
-        "durationGamesMin": 8,
-        "durationGamesMax": 32,
+        "durationWeeksMin": 8,
+        "durationWeeksMax": 32,
         "weight": 0.15
       },
       {
@@ -248,8 +248,8 @@
         "label": "Achilles tear",
         "bodyPart": "leg",
         "severity": "major",
-        "durationGamesMin": 12,
-        "durationGamesMax": 32,
+        "durationWeeksMin": 12,
+        "durationWeeksMax": 32,
         "weight": 0.12
       },
       {
@@ -257,8 +257,8 @@
         "label": "Jones fracture",
         "bodyPart": "foot",
         "severity": "major",
-        "durationGamesMin": 8,
-        "durationGamesMax": 16,
+        "durationWeeksMin": 8,
+        "durationWeeksMax": 16,
         "weight": 0.2
       },
       {
@@ -266,8 +266,8 @@
         "label": "Shoulder labrum",
         "bodyPart": "arm",
         "severity": "major",
-        "durationGamesMin": 10,
-        "durationGamesMax": 24,
+        "durationWeeksMin": 10,
+        "durationWeeksMax": 24,
         "weight": 0.18
       },
       {
@@ -275,8 +275,8 @@
         "label": "Stress fracture",
         "bodyPart": "foot",
         "severity": "major",
-        "durationGamesMin": 6,
-        "durationGamesMax": 14,
+        "durationWeeksMin": 6,
+        "durationWeeksMax": 14,
         "weight": 0.25
       },
       {
@@ -284,8 +284,8 @@
         "label": "Torn meniscus",
         "bodyPart": "knee",
         "severity": "major",
-        "durationGamesMin": 10,
-        "durationGamesMax": 20,
+        "durationWeeksMin": 10,
+        "durationWeeksMax": 20,
         "weight": 0.2
       },
       {
@@ -293,8 +293,8 @@
         "label": "Season-ending leg injury",
         "bodyPart": "leg",
         "severity": "major",
-        "durationGamesMin": 16,
-        "durationGamesMax": 32,
+        "durationWeeksMin": 16,
+        "durationWeeksMax": 32,
         "weight": 0.1
       },
       {
@@ -302,8 +302,8 @@
         "label": "Bruised rib",
         "bodyPart": "torso",
         "severity": "minor",
-        "durationGamesMin": 1,
-        "durationGamesMax": 2,
+        "durationWeeksMin": 1,
+        "durationWeeksMax": 2,
         "weight": 0.65
       },
       {
@@ -311,8 +311,8 @@
         "label": "Congestion",
         "bodyPart": "illness",
         "severity": "minor",
-        "durationGamesMin": 1,
-        "durationGamesMax": 2,
+        "durationWeeksMin": 1,
+        "durationWeeksMax": 2,
         "weight": 0.55
       },
       {
@@ -320,8 +320,8 @@
         "label": "Quad tweak",
         "bodyPart": "leg",
         "severity": "minor",
-        "durationGamesMin": 1,
-        "durationGamesMax": 2,
+        "durationWeeksMin": 1,
+        "durationWeeksMax": 2,
         "weight": 0.8
       },
       {
@@ -329,8 +329,8 @@
         "label": "Toe sprain",
         "bodyPart": "foot",
         "severity": "minor",
-        "durationGamesMin": 1,
-        "durationGamesMax": 2,
+        "durationWeeksMin": 1,
+        "durationWeeksMax": 2,
         "weight": 0.5
       },
       {
@@ -338,8 +338,8 @@
         "label": "Shin splints",
         "bodyPart": "leg",
         "severity": "minor",
-        "durationGamesMin": 2,
-        "durationGamesMax": 4,
+        "durationWeeksMin": 2,
+        "durationWeeksMax": 4,
         "weight": 0.55
       },
       {
@@ -347,8 +347,8 @@
         "label": "Rib fracture",
         "bodyPart": "torso",
         "severity": "moderate",
-        "durationGamesMin": 4,
-        "durationGamesMax": 8,
+        "durationWeeksMin": 4,
+        "durationWeeksMax": 8,
         "weight": 0.35
       },
       {
@@ -356,8 +356,8 @@
         "label": "MCL sprain",
         "bodyPart": "knee",
         "severity": "moderate",
-        "durationGamesMin": 3,
-        "durationGamesMax": 7,
+        "durationWeeksMin": 3,
+        "durationWeeksMax": 7,
         "weight": 0.55
       },
       {
@@ -365,8 +365,8 @@
         "label": "Elbow sprain",
         "bodyPart": "arm",
         "severity": "moderate",
-        "durationGamesMin": 2,
-        "durationGamesMax": 5,
+        "durationWeeksMin": 2,
+        "durationWeeksMax": 5,
         "weight": 0.4
       },
       {
@@ -374,8 +374,8 @@
         "label": "Plantar fasciitis",
         "bodyPart": "foot",
         "severity": "moderate",
-        "durationGamesMin": 2,
-        "durationGamesMax": 6,
+        "durationWeeksMin": 2,
+        "durationWeeksMax": 6,
         "weight": 0.45
       },
       {
@@ -383,8 +383,8 @@
         "label": "Oblique strain",
         "bodyPart": "torso",
         "severity": "moderate",
-        "durationGamesMin": 3,
-        "durationGamesMax": 6,
+        "durationWeeksMin": 3,
+        "durationWeeksMax": 6,
         "weight": 0.45
       },
       {
@@ -392,8 +392,8 @@
         "label": "Facial fracture",
         "bodyPart": "head",
         "severity": "moderate",
-        "durationGamesMin": 2,
-        "durationGamesMax": 5,
+        "durationWeeksMin": 2,
+        "durationWeeksMax": 5,
         "weight": 0.35
       },
       {
@@ -401,8 +401,8 @@
         "label": "MCL tear",
         "bodyPart": "knee",
         "severity": "major",
-        "durationGamesMin": 6,
-        "durationGamesMax": 16,
+        "durationWeeksMin": 6,
+        "durationWeeksMax": 16,
         "weight": 0.22
       },
       {
@@ -410,8 +410,8 @@
         "label": "Broken hand",
         "bodyPart": "hand",
         "severity": "major",
-        "durationGamesMin": 8,
-        "durationGamesMax": 18,
+        "durationWeeksMin": 8,
+        "durationWeeksMax": 18,
         "weight": 0.28
       },
       {
@@ -419,8 +419,8 @@
         "label": "Patellar tendon tear",
         "bodyPart": "knee",
         "severity": "major",
-        "durationGamesMin": 10,
-        "durationGamesMax": 24,
+        "durationWeeksMin": 10,
+        "durationWeeksMax": 24,
         "weight": 0.16
       },
       {
@@ -428,8 +428,8 @@
         "label": "Dislocated shoulder",
         "bodyPart": "arm",
         "severity": "major",
-        "durationGamesMin": 8,
-        "durationGamesMax": 20,
+        "durationWeeksMin": 8,
+        "durationWeeksMax": 20,
         "weight": 0.2
       }
     ]

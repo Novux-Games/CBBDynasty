@@ -54,8 +54,8 @@ Per completed game (each team):
     pInjury = baseRate × phaseMultiplier × minutesWeight × fatigueWeight × medicalStaffFactor × historyFactor
     if roll < pInjury and under team cap:
       pick bank row (weighted)
-      roll durationGames in [min, max]
-      append InjuryEvent { playerId, injuryId, gamesRemaining, severity }
+      roll durationWeeks in [min, max]
+      append InjuryEvent { playerId, injuryId, weeksRemaining, severity }
 ```
 
 | Tunable | Location |
@@ -66,6 +66,8 @@ Per completed game (each team):
 **Mid-game exit (watch mode):** If injury fires before the player is pulled, the **possession log** gets an injury line; the player stops accruing minutes for the rest of that game (DNP‑injury from injury minute onward).
 
 **Batch sim:** Same logic — no separate “injury cheat” for user or AI.
+
+**Persist:** Caller writes `weeksRemaining` from the rolled bank range (staff −1 on minor). **Do not** decrement until the next **week advance** (injury week still counts as time OUT).
 
 ---
 
@@ -79,7 +81,7 @@ Per completed game (each team):
 | `label` | UI copy |
 | `bodyPart` | `ankle` / `knee` / `leg` / `foot` / `hand` / `arm` / `head` / `torso` / `illness` — UI + history |
 | `severity` | `minor` / `moderate` / `major` — news tier + medical RS eligibility |
-| `durationGamesMin` / `durationGamesMax` | **Games missed** (inclusive roll) |
+| `durationWeeksMin` / `durationWeeksMax` | **Calendar weeks out** (inclusive roll) |
 | `weight` | Relative pick weight |
 
 **Mix (tunable):** ~**50%** minor, ~**35%** moderate, ~**15%** major by weight sum.
@@ -100,11 +102,11 @@ Per completed game (each team):
 
 | Rule | Detail |
 |------|--------|
-| **OUT** | Player **cannot** be in starting five or rotation for games while `gamesRemaining > 0` |
-| **Tick** | Each **missed** scheduled game for that team decrements `gamesRemaining` on week advance (or immediately after that game’s sim completes) |
-| **Byes** | Injury clock **does not** tick on bye weeks with no game |
-| **Return** | At `gamesRemaining == 0`, status → **healthy**; **auto-restore lineup** (see below) before next prep unless medical redshirt ended season |
-| **Staff** | High **medical** staff grade: **−1** game on **minor** injuries only (min 1 game if rolled 1) |
+| **OUT** | Player **cannot** be in starting five or rotation while `weeksRemaining > 0` |
+| **Tick** | On each **week advance** ([`time-system.md`](time-system.md#advance-rules)), decrement `weeksRemaining` by **1** for every injured player on that program — **injury week included** |
+| **Byes** | **Bye weeks tick** the clock — no game required (healing/progress tied to the calendar, not games played) |
+| **Return** | When `weeksRemaining` hits **0** on a week advance, status → **healthy** and **auto-restore lineup** before that week’s prep unless medical redshirt ended the season |
+| **Staff** | High **medical** staff grade: **−1 week** on **minor** injuries only (minimum **1** week if rolled 1) |
 
 ### Games played (medical RS counters)
 
@@ -144,7 +146,7 @@ rebalance rotation bands: injured pinned to Reserves; promoted starters inherit 
 
 ### Auto-restore on return (design lock)
 
-When `gamesRemaining` becomes **0** (injury tick after a missed game or same-moment clear for 1-game injuries), run **`applyInjuryReturnLineupAdjust`** for that player — **before** next game prep.
+When `weeksRemaining` becomes **0** on **week advance**, run **`applyInjuryReturnLineupAdjust`** for that player — **before** that week’s game prep.
 
 ```
 if injuryWasStarterSlot is set:
@@ -173,7 +175,7 @@ else (was reserve / rotation only):
 | **Strategy / game prep** | Injured **greyed**; cannot drag into lineup or rotation |
 | **Auto-sim** | Engine substitutes healthy reserves per rotation; injured not eligible |
 | **Foul trouble** | Normal foul rules; injured players not eligible to re-enter |
-| **Dashboard** | Optional task: **“{Name} out {N} games”** → Strategy (lineup already adjusted) |
+| **Dashboard** | Optional task: **“{Name} out {N} weeks”** → Strategy (lineup already adjusted) |
 
 ---
 
@@ -181,8 +183,8 @@ else (was reserve / rotation only):
 
 | Surface | Content |
 |---------|---------|
-| **Roster row** | `OUT` chip + `"{label} · {N}g"` |
-| **Player card → Overview** | Injury block: label, severity, games remaining, expected return (next game date or “After {opponent}”) |
+| **Roster row** | `OUT` chip + `"{label} · {N}w"` |
+| **Player card → Overview** | Injury block: label, severity, **weeks remaining**, expected return (calendar week label or “Week {N}”) |
 | **Game log** | `DNP‑INJ` or partial line if hurt mid-game |
 | **Edit mode** | No position/NIL edits blocked; cannot toggle “play” while OUT |
 
@@ -196,7 +198,7 @@ See [`player-cards.md`](player-cards.md) — injury strip under identity when ac
 |------|---------|
 | **User school** | Any user player injury → notification + optional dashboard task |
 | **League headline** | **Major** bank injury on player above **overall** threshold, or **Top N** scorer on team; **moderate** for high prestige programs only (balance) |
-| **Stories feed** | One-line with team, player, injury label, games out — [`news-hub.md`](news-hub.md) |
+| **Stories feed** | One-line with team, player, injury label, weeks out — [`news-hub.md`](news-hub.md) |
 
 ---
 
@@ -226,7 +228,7 @@ Separate from **preseason 0-game redshirt** ([`game-design.md`](game-design.md#r
 
 1. Injury postgame sheet → **Apply for medical redshirt** (if eligible) or **Dismiss**.
 2. Confirmation cites games played + schedule index.
-3. On confirm: clear `gamesRemaining` as irrelevant; set `medicalRedshirtSeason: true`; optional news line.
+3. On confirm: clear `weeksRemaining` as irrelevant; set `medicalRedshirtSeason: true`; optional news line.
 4. **Staff grade:** edge approval only if ambiguous cases (future balance); your rules above are **hard** gates.
 
 ### Dashboard
@@ -246,7 +248,7 @@ Separate from **preseason 0-game redshirt** ([`game-design.md`](game-design.md#r
 |-------|------|-------|
 | `injuryActive` | bool | |
 | `injuryId` | string? | Bank id |
-| `gamesRemaining` | int | |
+| `weeksRemaining` | int | Calendar weeks; ticks on every week advance |
 | `injuryOccurredAtRsWeek` | int | Calendar week when recorded |
 | `injuryOccurredAtRsGameIndex` | int | 1–32 |
 | `rsGamesPlayedAtInjury` | int | Snapshot for medical RS audit |
@@ -257,12 +259,12 @@ Separate from **preseason 0-game redshirt** ([`game-design.md`](game-design.md#r
 **GameSimResult** append:
 
 ```text
-injuries: [{ playerId, injuryId, bodyPart?, gamesRemaining, severity, occurredInGameMinute? }]
+injuries: [{ playerId, injuryId, bodyPart?, weeksRemaining, severity, occurredInGameMinute? }]
 ```
 
 **Caller after persist:** `applyInjuryLineupAdjust(teamId, injuredPlayerIds)` — [Auto-adjust on injury](#auto-adjust-on-injury-design-lock).
 
-**Caller on injury clear:** `applyInjuryReturnLineupAdjust(teamId, playerId)` — [Auto-restore on return](#auto-restore-on-return-design-lock).
+**Caller on injury clear:** `applyInjuryReturnLineupAdjust(teamId, playerId)` on week advance when `weeksRemaining` → 0 — [Auto-restore on return](#auto-restore-on-return-design-lock).
 
 ---
 
@@ -286,3 +288,4 @@ injuries: [{ playerId, injuryId, bodyPart?, gamesRemaining, severity, occurredIn
 | 2026-11-09 | Sim hook, lineup, UI, news, data model, phase rules |
 | 2026-11-09 | Auto lineup on injury; bank v1 (25 rows + bodyPart) |
 | 2026-11-09 | Bank v2 (40 rows); auto-restore starters + top reserve on return |
+| 2026-11-09 | **Weeks remaining** (calendar tick; bye weeks count) |

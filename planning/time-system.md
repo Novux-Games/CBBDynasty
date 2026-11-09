@@ -159,7 +159,7 @@ Top **52** skip Opening Round: **bye** week **1**, enter week **2** at Round 1.
 | Phase | Advance |
 |-------|---------|
 | **Exhibition / RS** | **Advance week** sims all games in that week label for the league; user game(s) first or batch order per settings |
-| **Bye week** | Allowed — no games for user does not block advance |
+| **Bye week** | Allowed — no games for user does not block advance; still ticks **injury** `weeksRemaining` ([`injuries.md`](injuries.md#duration--availability)) |
 | **Conf tourney / postseason** | Fixed week index league-wide; sim all brackets active that week; byes OK |
 | **End of Season** | No games — [`season-review.md`](season-review.md) → offseason |
 
@@ -183,3 +183,4 @@ Coach **Sunday skill points** tie to RS week boundary ([`game-design.md`](game-d
 |------|--------|
 | 2025-11-09 | Exhibition 1–3, RS 1–32, event byes, conf/postseason weeks |
 | 2025-11-09 | Unified conf/postseason weeks; End of Season → season-review.md |
+| 2026-11-09 | Bye week advance ticks injury weeks remaining |
