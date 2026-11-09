@@ -29,6 +29,13 @@ cd android
 ./gradlew :app:assembleDebug    # requires Android SDK + platform 35
 ```
 
+## CI (GitHub Actions)
+
+| Workflow | Trigger | Task |
+|----------|---------|------|
+| [`core-test.yml`](../.github/workflows/core-test.yml) | PRs and pushes to `main` | `:core:test` |
+| [`android-assemble-debug.yml`](../.github/workflows/android-assemble-debug.yml) | Manual dispatch; tags `v*` | `:app:assembleDebug` + APK artifact |
+
 ## Next engineering tracks
 
 **Step-by-step checklist:** [`BUILD_CHECKLIST.md`](BUILD_CHECKLIST.md) (phases 0–16).

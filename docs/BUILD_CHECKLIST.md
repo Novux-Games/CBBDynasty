@@ -25,8 +25,8 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 |------|--------|-----------|------|------|
 | 0.1 | `[x]` Gradle multi-module `:app` + `:core` | `:core:test` green | [ARCHITECTURE](../docs/ARCHITECTURE.md) | `android/` |
 | 0.2 | `[x]` Studio → Splash → Home Compose nav | Manual cold start flow | [app-shell](../planning/app-shell.md) | `ui.shell`, `DynastyApp` |
-| 0.3 | `[ ]` CI workflow (`:core:test` on every PR) | GitHub Action passes | — | `.github/workflows/` |
-| 0.4 | `[ ]` Android assemble on tag/manual | `:app:assembleDebug` artifact | — | CI optional job |
+| 0.3 | `[x]` CI workflow (`:core:test` on every PR) | GitHub Action passes | — | `.github/workflows/core-test.yml` |
+| 0.4 | `[x]` Android assemble on tag/manual | `:app:assembleDebug` artifact | — | `.github/workflows/android-assemble-debug.yml` |
 
 ---
 
