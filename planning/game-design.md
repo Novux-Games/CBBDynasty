@@ -615,6 +615,8 @@ All **inspired by** real metrics; labels in UI are generic ("Resume Index", "Tie
 
 ### Conference tournaments
 
+**National slots:** **124** teams per year (**76** NCBA + **32** NCI + **16** Heritage); **241** programs end without a national invite — see [`postseason.md`](postseason.md#season-end-census-365-teams).
+
 Each conference uses a **TournamentTemplate** (real **2026–27** formats in default pack). Example shape:
 
 ```json
@@ -625,6 +627,7 @@ Each conference uses a **TournamentTemplate** (real **2026–27** formats in def
   "byes": [],
   "reseedingAfterRound": false,
   "sitePolicy": "neutral-primary",
+  "qualificationPolicy": "top-14",
   "rounds": [
     { "name": "R1", "games": 8 },
     { "name": "QF", "games": 4 },
@@ -748,4 +751,5 @@ Ordered build tracks toward **shippable game** (not a separate “demo SKU”).
 | 2025-11-08 | HS/JUCO recruit seed moved to preseason (Top 60 in-season) |
 | 2025-11-08 | NCBA/NCI/March Mayhem; early events; round labels — `ncba-branding.md` |
 | 2025-11-08 | `postseason.md` — Selection Sunday, Heritage, reclass conf tourney |
+| 2025-11-09 | Postseason census 124 national / 241 done (see `postseason.md`) |
 | 2025-11-08 | Linked `player-cards.md` |

@@ -9,14 +9,15 @@
 ## Contents
 
 1. [Calendar order](#calendar-order)
-2. [Postseason eligibility (reclass)](#postseason-eligibility-reclass)
-3. [Conference tournaments](#conference-tournaments)
-4. [Selection Sunday](#selection-sunday)
-5. [NCBA Men's BB Tournament](#ncba-mens-bb-tournament)
-6. [NCI](#nci--national-college-invitational)
-7. [National Heritage Classic](#national-heritage-classic)
-8. [Resume & UI tiers](#resume--ui-tiers)
-9. [Cross-links](#cross-links)
+2. [Season-end census (365 teams)](#season-end-census-365-teams)
+3. [Postseason eligibility (reclass)](#postseason-eligibility-reclass)
+4. [Conference tournaments](#conference-tournaments)
+5. [Selection Sunday](#selection-sunday)
+6. [NCBA Men's BB Tournament](#ncba-mens-bb-tournament)
+7. [NCI](#nci--national-college-invitational)
+8. [National Heritage Classic](#national-heritage-classic)
+9. [Resume & UI tiers](#resume--ui-tiers)
+10. [Cross-links](#cross-links)
 
 ---
 
@@ -32,6 +33,31 @@
 | **National Heritage Classic** | Per template | 16 teams |
 
 League sim batches non-user games; user rounds use same possession engine as regular season.
+
+---
+
+## Season-end census (365 teams)
+
+Each season, exactly **124** programs receive a **national** postseason assignment; the other **241** end the year without one (still **365** active D-I teams in the default pack).
+
+| National postseason | Teams |
+|---------------------|------:|
+| **NCBA** Men's BB Tournament | 76 |
+| **NCI** | 32 |
+| **National Heritage Classic** (HC) | 16 |
+| **Total national postseason** | **124** |
+| **No national postseason** | **241** |
+
+Selection Sunday + NCI/Heritage invites partition **postseason-eligible** certified teams (reclass may occupy **Heritage** slots only; NCBA/NCI counts stay **76** + **32** invitees from eligible pool).
+
+### When the other 241 stop playing
+
+| Last game | Who |
+|-----------|-----|
+| **Conference tournament** exit (or conf title game loss) | Teams that **qualified** for their conference bracket |
+| **Regular season** finale | Teams **not** selected for the conference tournament |
+
+**Conference bracket membership** is **not** uniform: each `TournamentTemplate` defines who qualifies — e.g. **all** conference members, **top N** by standings, or **min seed** cutoff (pack data per real **2026–27** format). The sim sets `seasonComplete` when a program’s last allowed game is played.
 
 ---
 
@@ -54,7 +80,8 @@ Certified programs use normal rules below.
 
 ## Conference tournaments
 
-- One **TournamentTemplate** per conference (size, byes, sites) — **2026–27** real formats in default pack.
+- One **TournamentTemplate** per conference (size, byes, sites, **qualification policy**) — **2026–27** real formats in default pack.
+- **`qualificationPolicy`** (per template): which teams enter — **all members**, **top N**, or **above cutoff** (programs below cutoff end on **regular-season** final).
 - Winner = **conference tournament champion** (distinct from regular-season title).
 - Output: **32** champion slots feeding Selection Sunday (eligible teams only for NCBA bid purposes).
 
@@ -221,3 +248,4 @@ During conference tournament week, **green** may reflect **auto bid path** even 
 | 2025-11-08 | Initial postseason spec: Selection Sunday, champ Opening Round, NCI, Heritage, reclass |
 | 2025-11-09 | NCBA **76**: 32 auto + 20/24 non-champion at-large; seeds 1–52 |
 | 2025-11-09 | Terminology: non–conf-tourney champion = at-large (not champ Opening) |
+| 2025-11-09 | Census: 124 national (76+32+16) vs 241 season-end; conf qual policy |
