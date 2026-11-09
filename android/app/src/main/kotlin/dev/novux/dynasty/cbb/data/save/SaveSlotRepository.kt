@@ -3,10 +3,14 @@ package dev.novux.dynasty.cbb.data.save
 import androidx.room.withTransaction
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
 import dev.novux.dynasty.cbb.core.save.DynastyBootstrap
+import dev.novux.dynasty.cbb.core.save.DynastyLoadFailure
+import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
+import dev.novux.dynasty.cbb.core.save.DynastySaveValidator
 import dev.novux.dynasty.cbb.core.save.DynastySchema
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.save.SaveSlotSummary
 import dev.novux.dynasty.cbb.core.save.SaveSlots
+import dev.novux.dynasty.cbb.database.calendar.DynastyCalendarEntity
 import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import dev.novux.dynasty.cbb.database.dynasty.toEntity
@@ -24,6 +28,7 @@ class SaveSlotRepository(
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
+    private val calendarDao = database.dynastyCalendarDao()
     private val mutex = Any()
 
     suspend fun ensureInitialized() {
@@ -65,25 +70,89 @@ class SaveSlotRepository(
             ?.slotIndex
     }
 
-    suspend fun loadSlot(slotIndex: Int): LoadedDynasty? {
+    suspend fun loadSlot(slotIndex: Int): DynastyLoadResult {
         require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
+        return try {
+            ensureInitialized()
+            val entity = slotDao.getByIndex(slotIndex)
+                ?: return DynastyLoadResult.Unreadable(
+                    slotIndex,
+                    DynastyLoadFailure.DatabaseRead("slot row missing"),
+                )
+            val summary = entity.toSummary()
+            if (summary.isEmpty) return DynastyLoadResult.SlotEmpty
+
+            val slotSnap = DynastySaveValidator.SlotSnapshot(
+                slotIndex = slotIndex,
+                dynastyId = summary.dynastyId,
+                packId = summary.packId,
+                isEmpty = false,
+            )
+            val metadataEntity = summary.dynastyId?.let { metadataDao.getById(it) }
+            val metadata = metadataEntity?.toDomain()
+            val metaSnap = metadata?.let {
+                DynastySaveValidator.MetadataSnapshot(
+                    dynastyId = it.dynastyId,
+                    packId = it.packId,
+                    seasonIndex = it.seasonIndex,
+                    phase = it.phase,
+                )
+            }
+            DynastySaveValidator.validateBeforeLoad(slotSnap, metaSnap)?.let { failure ->
+                return DynastyLoadResult.Unreadable(slotIndex, failure)
+            }
+            val meta = metadata
+                ?: return DynastyLoadResult.Unreadable(
+                    slotIndex,
+                    DynastyLoadFailure.MissingMetadata(summary.dynastyId!!),
+                )
+
+            val calendarRow = calendarDao.getByDynastyId(meta.dynastyId)
+            calendarRow?.toCalendarSnapshot()?.let { snap ->
+                DynastySaveValidator.validateCalendar(snap)?.let { failure ->
+                    return DynastyLoadResult.Unreadable(slotIndex, failure)
+                }
+            }
+
+            val weekCheckpoint = if (calendarRow == null) {
+                database.withTransaction {
+                    weekCheckpointRepository.repairCalendarFromMetadata(meta)
+                }
+            } else {
+                weekCheckpointRepository.loadCheckpoint(meta.dynastyId)
+                    ?: return DynastyLoadResult.Unreadable(
+                        slotIndex,
+                        DynastyLoadFailure.InvalidCalendar("calendar row unreadable"),
+                    )
+            }
+
+            val now = System.currentTimeMillis()
+            val updatedSummary = summary.copy(lastPlayedAtEpochMillis = now)
+            slotDao.update(entity.copy(lastPlayedAtEpochMillis = now))
+            DynastyLoadResult.Success(
+                LoadedDynasty(
+                    slotIndex = slotIndex,
+                    dynastyId = meta.dynastyId,
+                    summary = updatedSummary,
+                    metadata = meta,
+                    weekCheckpoint = weekCheckpoint,
+                ),
+            )
+        } catch (e: Exception) {
+            DynastyLoadResult.Unreadable(
+                slotIndex,
+                DynastyLoadFailure.DatabaseRead(e.message ?: "load failed"),
+            )
+        }
+    }
+
+    /** True when occupied slot header rows are present (fast list hint; load still validates). */
+    suspend fun isSlotLikelyLoadable(slotIndex: Int): Boolean {
         ensureInitialized()
-        val entity = slotDao.getByIndex(slotIndex) ?: return null
+        val entity = slotDao.getByIndex(slotIndex) ?: return false
         val summary = entity.toSummary()
-        val dynastyId = summary.dynastyId ?: return null
-        if (summary.isEmpty) return null
-        val metadata = metadataDao.getById(dynastyId)?.toDomain() ?: return null
-        val weekCheckpoint = weekCheckpointRepository.loadOrBootstrap(metadata)
-        val now = System.currentTimeMillis()
-        val updatedSummary = summary.copy(lastPlayedAtEpochMillis = now)
-        slotDao.update(entity.copy(lastPlayedAtEpochMillis = now))
-        return LoadedDynasty(
-            slotIndex = slotIndex,
-            dynastyId = dynastyId,
-            summary = updatedSummary,
-            metadata = metadata,
-            weekCheckpoint = weekCheckpoint,
-        )
+        if (summary.isEmpty || summary.dynastyId.isNullOrBlank()) return true
+        return metadataDao.getById(summary.dynastyId) != null
     }
 
     suspend fun deleteSlot(slotIndex: Int) {
@@ -158,6 +227,16 @@ class SaveSlotRepository(
             weekCheckpoint = weekCheckpoint,
         )
     }
+
+    private fun DynastyCalendarEntity.toCalendarSnapshot(): DynastySaveValidator.CalendarSnapshot =
+        DynastySaveValidator.CalendarSnapshot(
+            seasonIndex = seasonIndex,
+            phase = phase,
+            activeWeekIndex = activeWeekIndex,
+            committedSeasonIndex = committedSeasonIndex,
+            committedPhase = committedPhase,
+            committedWeekIndex = committedWeekIndex,
+        )
 
     suspend fun createEmptyDynastyInFirstOpenSlot(
         schoolDisplayName: String,

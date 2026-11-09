@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.core.save.SaveSlotSummary
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
@@ -44,9 +45,21 @@ fun LoadGameScreen(
     val slots by saveSlotRepository.observeSlots().collectAsState(initial = emptyList())
     val scope = rememberCoroutineScope()
     var pendingDelete by remember { mutableStateOf<SaveSlotSummary?>(null) }
+    var unavailableSlot by remember { mutableStateOf<SaveSlotSummary?>(null) }
+    var loadableSlots by remember { mutableStateOf<Map<Int, Boolean>>(emptyMap()) }
 
     LaunchedEffect(Unit) {
         saveSlotRepository.ensureInitialized()
+    }
+
+    LaunchedEffect(slots) {
+        loadableSlots = slots.associate { slot ->
+            slot.slotIndex to if (slot.isEmpty) {
+                true
+            } else {
+                saveSlotRepository.isSlotLikelyLoadable(slot.slotIndex)
+            }
+        }
     }
 
     Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
@@ -69,11 +82,17 @@ fun LoadGameScreen(
             items(slots, key = { it.slotIndex }) { slot ->
                 SaveSlotRow(
                     slot = slot,
+                    likelyLoadable = loadableSlots[slot.slotIndex] != false,
                     onOpen = {
                         scope.launch {
-                            val loaded = saveSlotRepository.loadSlot(slot.slotIndex) ?: return@launch
-                            ActiveDynastySession.set(loaded)
-                            onDynastyLoaded()
+                            when (val result = saveSlotRepository.loadSlot(slot.slotIndex)) {
+                                is DynastyLoadResult.Success -> {
+                                    ActiveDynastySession.set(result.loaded)
+                                    onDynastyLoaded()
+                                }
+                                is DynastyLoadResult.Unreadable -> unavailableSlot = slot
+                                DynastyLoadResult.SlotEmpty -> Unit
+                            }
                         }
                     },
                     onDelete = { pendingDelete = slot },
@@ -87,6 +106,22 @@ fun LoadGameScreen(
         ) {
             Text(stringResource(R.string.settings_back))
         }
+    }
+
+    unavailableSlot?.let { slot ->
+        SaveLoadUnavailableDialog(
+            slotDisplayNumber = slot.slotIndex + 1,
+            onDelete = {
+                scope.launch {
+                    saveSlotRepository.deleteSlot(slot.slotIndex)
+                    if (ActiveDynastySession.current?.slotIndex == slot.slotIndex) {
+                        ActiveDynastySession.clear()
+                    }
+                    unavailableSlot = null
+                }
+            },
+            onDismiss = { unavailableSlot = null },
+        )
     }
 
     pendingDelete?.let { slot ->
@@ -121,11 +156,14 @@ fun LoadGameScreen(
 @Composable
 private fun SaveSlotRow(
     slot: SaveSlotSummary,
+    likelyLoadable: Boolean,
     onOpen: () -> Unit,
     onDelete: () -> Unit,
 ) {
     val label = if (slot.isEmpty) {
         stringResource(R.string.load_slot_empty, slot.slotIndex + 1)
+    } else if (!likelyLoadable) {
+        stringResource(R.string.load_slot_maybe_unavailable, slot.slotIndex + 1)
     } else {
         stringResource(
             R.string.load_slot_occupied,

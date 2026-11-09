@@ -58,9 +58,10 @@ JSON stays appropriate for **identity pack import** and for **dynasty export fil
 - Room `version` + **migrations** for every schema change.
 - `dynastySchemaVersion` on each dynasty row for one-off data migrations if needed.
 
-## Corruption & recovery
+## Integrity & recovery
 
-- Room integrity + try/catch on load; corrupt slot surfaces error UI ([game-start](../planning/game-start.md), checklist 2.5).
+- **Primary:** transactional writes (slot + metadata + calendar) so normal play does not leave half saves.
+- **Load:** `DynastySaveValidator` + optional calendar repair; unreadable slots show delete fallback ([game-start](../planning/game-start.md), checklist 2.5).
 - User can delete slot or re-import from a prior **export** if one exists.
 
 ## Consequences

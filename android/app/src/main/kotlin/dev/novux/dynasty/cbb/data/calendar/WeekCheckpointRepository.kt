@@ -19,16 +19,23 @@ class WeekCheckpointRepository(
     private val provisionalDao = database.provisionalGameDao()
     private val metadataDao = database.dynastyMetadataDao()
 
-    suspend fun loadOrBootstrap(metadata: DynastyMetadata): WeekCheckpointState {
-        val row = calendarDao.getByDynastyId(metadata.dynastyId)
-        if (row == null) {
-            val initial = metadata.bootstrapCalendarEntity()
-            calendarDao.upsert(initial)
-            return initial.toCheckpointState(emptyList())
-        }
-        val provisional = provisionalDao.listForDynasty(metadata.dynastyId)
+    /** Loads existing checkpoint or null if never written (e.g. legacy row). */
+    suspend fun loadCheckpoint(dynastyId: String): WeekCheckpointState? {
+        val row = calendarDao.getByDynastyId(dynastyId) ?: return null
+        val provisional = provisionalDao.listForDynasty(dynastyId)
         return row.toCheckpointState(provisional)
     }
+
+    /** Repairs a missing calendar row from dynasty metadata (app-created saves always write both). */
+    suspend fun repairCalendarFromMetadata(metadata: DynastyMetadata): WeekCheckpointState {
+        val initial = metadata.bootstrapCalendarEntity()
+        calendarDao.upsert(initial)
+        return initial.toCheckpointState(emptyList())
+    }
+
+    suspend fun loadOrBootstrap(metadata: DynastyMetadata): WeekCheckpointState =
+        loadCheckpoint(metadata.dynastyId)
+            ?: repairCalendarFromMetadata(metadata)
 
     suspend fun persist(dynastyId: String, state: WeekCheckpointState) {
         database.withTransaction {

@@ -15,4 +15,7 @@ interface DynastyMetadataDao {
 
     @Query("DELETE FROM dynasty_metadata WHERE dynastyId = :dynastyId")
     suspend fun deleteById(dynastyId: String)
+
+    @Query("SELECT dynastyId FROM dynasty_metadata")
+    suspend fun listAllDynastyIds(): List<String>
 }

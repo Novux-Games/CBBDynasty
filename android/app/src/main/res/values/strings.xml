@@ -35,4 +35,9 @@
     <string name="new_bootstrap_school">New Program</string>
     <string name="new_bootstrap_coach">Head Coach</string>
     <string name="new_no_empty_slot">All save slots are full. Delete a save from Load first.</string>
+    <string name="load_unavailable_title">Unable to load save</string>
+    <string name="load_unavailable_message">Save slot %1$d couldn\'t be read. Normal play writes saves in one transaction; this screen is a fallback. Delete the slot to free it, or try again after updating the app.</string>
+    <string name="load_unavailable_delete">Delete save</string>
+    <string name="load_unavailable_dismiss">Back</string>
+    <string name="load_slot_maybe_unavailable">Slot %1$d — unavailable</string>
 </resources>

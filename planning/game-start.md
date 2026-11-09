@@ -60,7 +60,7 @@ Cold start lands on the **title / home** screen (no bottom nav — pre-dynasty).
 | **Continue** | Same as Load on **latest `lastPlayedAt`** save |
 | **Load** | **10 slots**; show school display name, coach name, season year, W–L; tap → validate pack id → **`game-frame`** or offseason UI. **Export/import** dynasty archives per [ADR-001](../docs/ADR-001-dynasty-save-backend.md). |
 
-Corrupt save → error sheet; offer delete slot.
+Saves are written in **one transaction** per create/advance; unreadable slots should be rare. If load validation fails → **Unable to load save** sheet; offer delete slot (fallback only).
 
 ### Save slots (implemented)
 
@@ -82,6 +82,14 @@ Corrupt save → error sheet; offer delete slot.
 | `dynastySchemaVersion` | `dynasty_metadata` | **1** |
 
 **New** (bootstrap until wizard ships): first empty slot → placeholder school/coach labels + metadata row; wizard will replace display names and attach `teamId`.
+
+### Save load integrity (implemented)
+
+| Piece | Role |
+|-------|------|
+| **Validate** on load | [`DynastySaveValidator`](../android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/save/DynastySaveValidator.kt) — metadata + calendar |
+| **Repair** | Missing `dynasty_calendar` row restored from metadata when header is otherwise valid |
+| **Fallback UI** | [`SaveLoadUnavailableDialog`](../android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/shell/SaveLoadUnavailableDialog.kt) — delete slot; not expected in normal play |
 
 ### Week checkpoint (implemented)
 

@@ -21,7 +21,9 @@ import androidx.compose.material3.Scaffold
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.settings.AppSettings
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
+import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
+import dev.novux.dynasty.cbb.ui.shell.SaveLoadUnavailableDialog
 import dev.novux.dynasty.cbb.data.settings.AppSettingsRepository
 import dev.novux.dynasty.cbb.requireDynastyApplication
 import dev.novux.dynasty.cbb.ui.navigation.AppRoute
@@ -69,6 +71,7 @@ fun DynastyApp(
                 .collectAsState(initial = null)
             val context = LocalContext.current
             val snackbarHostState = remember { SnackbarHostState() }
+            var continueLoadFailedSlot by remember { mutableStateOf<Int?>(null) }
 
             Scaffold(
                 snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -100,9 +103,13 @@ fun DynastyApp(
                         onContinue = {
                             val slot = continueSlot ?: return@HomeMenuScreen
                             scope.launch {
-                                val loaded = saveSlotRepository.loadSlot(slot.slotIndex)
-                                    ?: return@launch
-                                ActiveDynastySession.set(loaded)
+                                when (val result = saveSlotRepository.loadSlot(slot.slotIndex)) {
+                                    is DynastyLoadResult.Success ->
+                                        ActiveDynastySession.set(result.loaded)
+                                    is DynastyLoadResult.Unreadable ->
+                                        continueLoadFailedSlot = slot.slotIndex
+                                    DynastyLoadResult.SlotEmpty -> Unit
+                                }
                             }
                         },
                         onNew = {
@@ -141,6 +148,22 @@ fun DynastyApp(
                         onBack = { navController.popBackStack() },
                     )
                 }
+            }
+
+            continueLoadFailedSlot?.let { slotIndex ->
+                SaveLoadUnavailableDialog(
+                    slotDisplayNumber = slotIndex + 1,
+                    onDelete = {
+                        scope.launch {
+                            saveSlotRepository.deleteSlot(slotIndex)
+                            if (ActiveDynastySession.current?.slotIndex == slotIndex) {
+                                ActiveDynastySession.clear()
+                            }
+                            continueLoadFailedSlot = null
+                        }
+                    },
+                    onDismiss = { continueLoadFailedSlot = null },
+                )
             }
             }
         }
