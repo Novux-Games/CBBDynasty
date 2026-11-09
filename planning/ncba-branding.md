@@ -13,6 +13,8 @@
 | Real (reference) | Universe (default pack) |
 |------------------|-------------------------|
 | NCAA | **NCBA** — **National College Basketball Association** |
+| NET | **NCBA NET Rankings** — formula résumé (`netScore`; selection) |
+| AP / Coaches polls | **Media Poll** · **Coaches Poll** — human sim voters (not selection) |
 
 ---
 

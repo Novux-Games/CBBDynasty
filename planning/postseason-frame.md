@@ -21,7 +21,7 @@
 
 | Phase | Primary navigation |
 |-------|-------------------|
-| **Conference tournaments** | **Calendar** + conf bracket overlays; **Rankings** still show poll `#NN` |
+| **Conference tournaments** | **Calendar** + conf bracket overlays; **Rankings** still show **NET #NN** (+ human polls) |
 | **Selection Sunday → April** | **March Mayhem** hub (national monitor) + **Calendar** for your next tip |
 
 Bottom nav unchanged (**Roster · Calendar · Dashboard · News**). **March Mayhem** appears in the **hamburger** hub list once Selection Sunday publishes brackets (stays through last national game).
@@ -46,11 +46,11 @@ Bottom nav unchanged (**Roster · Calendar · Dashboard · News**). **March Mayh
 |---------|------|
 | **Brackets** | Seed chip on every team: `NCBA #12`, `NCI #5`, `HC #3` |
 | **Dashboard** | If user’s team is in a national event: row **Postseason** → e.g. `NCBA #4 · East` (region when NCBA) |
-| **School hub → Overview** | During March: show **poll `#NN`** (if still published) **and** tournament line(s) only for events that team joined |
+| **School hub → Overview** | During March: **NET #NN** (+ Media/Coaches if useful) **and** tournament line(s) for events joined |
 | **News / notifications** | Headlines use short label: *“Shock: #15 NCBA upset”*, *“NCI #1 falls in Quarterfinals”* |
 | **Game preview** | Header: opponent + `NCBA #7` vs `NCBA #10` (or NCI/HC) |
 
-**Poll rank** stays **`#NN`** (365-team list). **Never** replace poll rank with seed on Rankings hub during March.
+**NET rank** stays **`#NN`** (365-team list). **Never** replace NET with tournament seed on Rankings hub during March.
 
 ### Save shape (per team, season)
 
@@ -116,7 +116,7 @@ Only **one** national tournament per team per season. Omitted when program did n
 Before Selection Sunday:
 
 - Brackets live under **Calendar** and **School → Schedule** (conference context).
-- Teams show **poll `#NN`** only — **no** NCBA/NCI/HC seed labels until Selection Sunday.
+- Teams show **NET `#NN`** only — **no** NCBA/NCI/HC seed labels until Selection Sunday.
 - Conf-champion notification deep-links to **postseason** news, not March Mayhem (hub hidden until national field is set).
 
 ---

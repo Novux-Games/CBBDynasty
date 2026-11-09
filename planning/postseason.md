@@ -89,7 +89,7 @@ Certified programs use normal rules below.
 
 ## Selection Sunday
 
-Runs after all **32** conference champions are known. Uses the **national poll order** — **all 365** teams ranked **`#1`–`#365`** (same list as in-season; **T25** highlight is display-only for **`#1`–`#25`** — [`game-frame.md`](game-frame.md)). **Poll rank is not a seed** until Selection Sunday assigns **seeds** for national brackets.
+Runs after all **32** conference champions are known. Uses **NCBA NET** order — **all 365** teams **`NET #1`–`#365`** ([`selection-engine.md`](selection-engine.md)). **Media / Coaches** polls may publish for news; they **do not** set the field. **NET rank is not a tournament seed** until Selection Sunday assigns **NCBA / NCI / HC** seeds ([`postseason-frame.md`](postseason-frame.md)).
 
 ### Terminology (read this once)
 
@@ -136,11 +136,11 @@ Among postseason-eligible teams that are **not** conference tournament champions
 
 ### Step 5 — NCI (32)
 
-Among postseason-eligible teams **not** selected for NCBA, invite the **32 highest** poll ranks → **National College Invitational**.
+Among postseason-eligible teams **not** selected for NCBA, invite the **32 highest NET ranks** → **National College Invitational**.
 
 ### Step 6 — National Heritage Classic (16)
 
-Among postseason-eligible teams **not** in NCBA or NCI, invite the **16 highest** poll ranks → **National Heritage Classic** (CBI analog).
+Among postseason-eligible teams **not** in NCBA or NCI, invite the **16 highest NET ranks** → **National Heritage Classic** (CBI analog).
 
 Reclass programs **compete for Heritage** selection but are **never** in the NCBA or NCI pools.
 
@@ -166,7 +166,7 @@ Reclass programs **compete for Heritage** selection but are **never** in the NCB
 | Advance | **12** winners → **seeds 53–64** in NCBA **Round 1** |
 | Skip Opening | All **32** auto-bids + top **20** at-large |
 
-**Pairing (24 teams, 12 games):** Sort the Opening Round invitees by **poll rank** (best = 1 within the group). Pair **1 vs 24**, **2 vs 23**, … **12 vs 13** (1vN high-low). Winners receive **seeds 53–64** assigned on Selection Sunday (`openingRoundPairing` in pack may add neutral sites only).
+**Pairing (24 teams, 12 games):** Sort Opening invitees by **NET rank** within the bubble group (best = 1). Pair **1 vs 24**, **2 vs 23**, … **12 vs 13** (1vN high-low). Winners receive **seeds 53–64** assigned on Selection Sunday (`openingRoundPairing` in pack may add neutral sites only).
 
 ### Main bracket (64 → champion)
 
@@ -211,11 +211,11 @@ Coach **Achievements** track W–L and titles per bracket ([`coach-card.md`](coa
 
 ---
 
-## Poll rank vs seeds (in-season vs March)
+## NET / polls vs seeds (in-season vs March)
 
 | Phase | What the user sees |
 |-------|---------------------|
-| **Regular season / conf tourneys** | Poll rank **`#1`–`#365`** for every team; **T25** styling for top 25 — **not** seeds |
+| **Regular season / conf tourneys** | **NET `#1`–`#365`**; Media & Coaches **T25** callouts — **not** tournament seeds |
 | **Selection Sunday onward** | **Tournament-labeled seeds** — never a bare “#1 seed” |
 
 **Seed display (design lock):** Each national event has its **own** seed ladder. UI always prefixes the tournament short label ([`postseason-frame.md`](postseason-frame.md#tournament-seed-labels)):
@@ -230,7 +230,7 @@ Coach **Achievements** track W–L and titles per bracket ([`coach-card.md`](coa
 
 **March UI:** **[March Mayhem](postseason-frame.md#march-mayhem-hub)** hub (hamburger) monitors **NCBA · NCI · HC** brackets and games after Selection Sunday.
 
-No in-season UI for projected NCBA / NCI / Heritage. Poll rank is informational; **auto-bids and national invites** are assigned only after conference tournaments and Selection Sunday ([`game-frame.md`](game-frame.md)).
+No in-season UI for projected NCBA / NCI / Heritage. **NET** is the résumé tracker; human polls are flavor. **Auto-bids and national invites** use **final NET** after conference tournaments ([`game-frame.md`](game-frame.md)).
 
 ---
 

@@ -75,19 +75,28 @@ At-a-glance card(s) for **your program**:
 | Field (examples) | Notes |
 |------------------|--------|
 | Overall record | W–L |
-| **T25** | **T25** badge when poll rank **`#1`–`#25`**; else `—` (rank always on **Current ranking**) |
+| **T25** | **Media** and/or **Coaches** Top 25 badges when applicable (see Rankings hub) |
 | Conference rank | League standing |
-| **Current ranking** | **National poll rank** `#NN` — **all 365** teams ordered as poll voters would rank them (see below) |
+| **NCBA NET** | **NET rank** `#NN` — résumé / selection order (**365** teams); primary “where am I for March?” |
+| **Media / Coaches** (optional row) | `#NN` when user cares about human polls; compact if both differ from NET |
 | Conference affiliation | From identity pack |
 | (extend) | Streak, home/away split, last 10 — optional rows |
 
-### Current ranking (dashboard)
+### Rankings on dashboard
 
-**Design lock:** **Poll rank** and **AP-style national ranking** are **one list** — sim voters rank **every** program **`#1`–`#365`** each week (no team is unranked). **`#1`–`#25`** get the **T25** highlight (badge / row styling) in Rankings, news, and school rows where poll rank is shown; **`#26`–`#365`** still show **`#NN`** with no T25 treatment. Selection Sunday uses this same order ([`postseason.md`](postseason.md)).
+**Design lock — three lists** ([`selection-engine.md`](selection-engine.md)):
 
-**Not seeds:** In-season rank is **not** a tournament seed. After Selection Sunday, **tournament seeds** use event labels (**NCBA #**, **NCI #**, **HC #**) — see [`postseason-frame.md`](postseason-frame.md#tournament-seed-labels). Poll **`#NN`** stays on Rankings through March.
+| List | Driver | Use |
+|------|--------|-----|
+| **NCBA NET** | `netScore` formula | Selection Sunday, quads, bubble — **authoritative résumé** |
+| **Media Poll** | Sim media voters | **T25 (Media)**, headlines, hype |
+| **Coaches Poll** | Sim coaches | **T25 (Coaches)**, respect / peers |
 
-Tap **Current ranking** → Rankings hub (full **#1–#365** list).
+All **365** teams have a **NET #** every week. Media & Coaches also rank **365** internally; UI highlights **#1–#25** per poll.
+
+**Not seeds:** NET / poll ranks are **not** tournament seeds. After Selection Sunday: **NCBA #**, **NCI #**, **HC #** ([`postseason-frame.md`](postseason-frame.md#tournament-seed-labels)). **NET #NN** stays on Rankings through March.
+
+Tap **NCBA NET** (or Rankings entry) → Rankings hub.
 
 ### Postseason row (dashboard)
 
@@ -188,8 +197,8 @@ Bottom tabs remain available; hubs stack or replace main content per navigation 
 | Block | Content |
 |-------|---------|
 | **Staff (teaser)** | Head coach name + record; **View staff** → Staff tab |
-| **Info** | Conference, **prestige (0–99)**, overall record, conference record, top-25 record, **strength of schedule (0–99)** — same `sosRating` / `programPrestige` fields as poll & seeding ([`selection-engine.md`](selection-engine.md)), **power index**, etc. |
-| **Rankings** | National + conference placement snapshot |
+| **Info** | Conference, **prestige (0–99)**, overall record, conference record, top-25 record, **strength of schedule (0–99)** — same `sosRating` / `programPrestige` as **NET** & seeding ([`selection-engine.md`](selection-engine.md)), **power index**, etc. |
+| **Rankings** | **NCBA NET #**, Media #, Coaches # (when published) + conference standing |
 | **Ratings** | Team offensive/defensive ratings (display layer) |
 | **Record** | Current season W–L breakdown |
 
@@ -285,13 +294,16 @@ Tap player → player preview / card; tap team → School hub (view).
 
 ## Rankings hub
 
+**Picker:** **NCBA NET** · **Media Poll** · **Coaches Poll** · **Conference standings**
+
 | View | Content |
 |------|---------|
-| **T25** | **`#1`–`#25`** — highlighted poll callout (same list as full ranking) |
-| **National ranking** | **`#1`–`#365`** — complete poll order; non-T25 rows show rank only |
-| **Conference rankings** | Standings per conference (W–L, conf record, tiebreaker note on drill-down) |
+| **NCBA NET** | Full **`#1`–`#365`** — formula résumé; **default tab** for bubble / Selection Sunday |
+| **Media Poll** | Full **`#1`–`#365`**; **T25 (Media)** highlight on **#1–#25** |
+| **Coaches Poll** | Full **`#1`–`#365`**; **T25 (Coaches)** highlight on **#1–#25** |
+| **Conference** | Standings per conference (W–L, conf record, tiebreaker on drill-down) |
 
-One poll list: **365** teams ranked; **T25** is a presentation layer on ranks 1–25, not a separate ordering.
+**News** may quote Media or Coaches T25; **Selection Sunday** reads **final NET only** ([`postseason.md`](postseason.md)).
 
 Tap team → School hub.
 
@@ -369,6 +381,7 @@ Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`g
 | 2025-11-08 | Recruit Top 60: preseason seed, in-season News |
 | 2025-11-08 | Dashboard: Current ranking; full national list in Rankings |
 | 2025-11-09 | Poll = full #1–365 rank; seeds postseason-only |
+| 2025-11-09 | Split NCBA NET vs Media & Coaches polls |
 | 2025-11-09 | Removed tier color chips from UI spec |
 | 2025-11-09 | T25 highlight for #1–25; all 365 ranked every week |
 | 2025-11-08 | School Staff tab; AD trust; staff detail sheets |

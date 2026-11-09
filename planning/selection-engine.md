@@ -1,6 +1,6 @@
-# Selection engine — poll, Selection Sunday, seeding
+# Selection engine — NET, human polls, Selection Sunday, seeding
 
-**Authoritative** formulas for the national poll (**365** teams), **NCBA / NCI / Heritage** invites, and **NCBA seeds 1–64**. Postseason rules: [`postseason.md`](postseason.md). UI: **T25** = poll ranks **#1–#25** ([`game-frame.md`](game-frame.md)).
+**Authoritative** formulas for **NCBA NET Rankings** (**365** teams), **Media** & **Coaches** polls (human sim voters), **NCBA / NCI / Heritage** invites, and **NCBA seeds 1–64**. Postseason rules: [`postseason.md`](postseason.md). UI: [`game-frame.md`](game-frame.md).
 
 **Last updated:** 2025-11-09
 
@@ -8,33 +8,41 @@
 
 ## Contents
 
-1. [Two outputs (don’t conflate)](#two-outputs-dont-conflate)
+1. [Three ranking systems (don’t conflate)](#three-ranking-systems-dont-conflate)
 2. [Team indices (inputs)](#team-indices-inputs)
-3. [National poll (weekly)](#national-poll-weekly)
-4. [Selection Sunday — who gets in](#selection-sunday--who-gets-in)
-5. [Seeds 1–52 (NCBA main bracket)](#seeds-152-ncba-main-bracket)
-6. [Seeds 53–64 & regions](#seeds-5364--regions)
-7. [Tuning & saves](#tuning--saves)
-8. [Cross-links](#cross-links)
+3. [NCBA NET rankings (weekly)](#ncba-net-rankings-weekly)
+4. [Media poll & Coaches poll (weekly)](#media-poll--coaches-poll-weekly)
+5. [Selection Sunday — who gets in](#selection-sunday--who-gets-in)
+6. [Seeds 1–52 (NCBA main bracket)](#seeds-152-ncba-main-bracket)
+7. [Seeds 53–64 & regions](#seeds-5364--regions)
+8. [Tuning & saves](#tuning--saves)
+9. [Cross-links](#cross-links)
 
 ---
 
-## Two outputs (don’t conflate)
+## Three ranking systems (don’t conflate)
+
+| System | UI name (default pack) | Range | Driver | Primary use |
+|--------|------------------------|-------|--------|-------------|
+| **NCBA NET** | **NCBA NET Rankings** | `#1`–`#365` | **`netScore`** — formula only (no voter emotion) | **Selection Sunday** cuts, **quad** buckets, **Opening Round** order, **seed index** inputs |
+| **Media poll** | **Media Poll** | `#1`–`#365` (public **Top 25** callout) | Sim **media** voters — similar inputs, **more** prestige / inertia / narrative | News, prestige, fan expectation, **T25 (Media)** |
+| **Coaches poll** | **Coaches Poll** | `#1`–`#365` (public **Top 25** callout) | Sim **coaches** — similar inputs, **different** bias weights than media | News, respect, **T25 (Coaches)** |
+
+**Design lock:** **Resume / committee logic = NET only.** Media and Coaches **never** grant bids or set seeds. They can disagree with NET (e.g. Media **#12**, NET **#28**) — that’s intentional.
 
 | Output | When | What it decides |
 |--------|------|------------------|
-| **Poll rank** `#1`–`#365` | Weekly (plus **final** after conf tourneys) | **Membership** cuts: which non-champions make NCBA (20 / 24), NCI (32), Heritage (16) |
-| **NCBA seed** `1`–`64` | Selection Sunday (after field locked) | **Bracket placement** only — strength order among teams already in the event |
+| **NET rank** `#1`–`#365` | Weekly (+ **final** after conf tourneys) | **Membership** cuts: NCBA at-large (20 / 24), NCI (32), Heritage (16) |
+| **Media / Coaches rank** | Weekly | **Flavor & UI** only (headlines, T25 chips, AD mood hooks — not selection) |
+| **NCBA seed** `1`–`64` | Selection Sunday | **Bracket placement** among teams already in the event |
 
-**Design lock:** At-large **berths** follow **final poll rank** among **non–conference-tournament champions**. **Seeds** follow **Seed Index** among the **52** teams that skip Opening Round (and pre-defined lines for **53–64**).
-
-A team can be **poll #8** (at-large) and **NCBA seed 4**, while a conference champion is **poll #140** but **NCBA seed 52**. Auto-bid guarantees **a berth** and a slot in the **1–52** seed sort; it does **not** guarantee a good seed.
+A team can be **NET #8** (at-large) and **NCBA seed 4**, while a conference champion is **NET #140** but **NCBA seed 52**. Media might still show that champ **unranked in T25** or **#22** after a conf tourney run — **NET** ranks the full **365** for cuts.
 
 ---
 
 ## Team indices (inputs)
 
-Recomputed when the weekly poll runs (and frozen as **final indices** at Selection Sunday). Built from **week-finalized** games ([`simulation-engine.md`](simulation-engine.md) box scores).
+Recomputed each ranking pass (weekly NET + human polls; frozen **final NET** at Selection Sunday). Built from **week-finalized** games ([`simulation-engine.md`](simulation-engine.md) box scores).
 
 ### School hub parity
 
@@ -45,7 +53,7 @@ The **same saved fields** drive School hub **Info** and this engine ([`game-fram
 | **Strength of schedule** | `sosRating` | **0–99** (integer UI) |
 | **Prestige** | `programPrestige` | **0–99** (integer UI) |
 
-**`sosRating`** is a first-class input to **poll** and **Seed Index** — not a hidden duplicate scale. Players who read **SOS 82** on a school card are seeing the number that selection math uses.
+**`sosRating`** is a first-class input to **NET**, human polls, and **Seed Index** — not a hidden duplicate scale. Players who read **SOS 82** on a school card are seeing the number that **NET** and selection use.
 
 **There is only one SOS per school:** **your** schedule strength. Poll and seeding read **`team.sosRating`** — they do **not** look up some other team’s hub SOS when evaluating you.
 
@@ -65,7 +73,7 @@ The **same saved fields** drive School hub **Info** and this engine ([`game-fram
 | Wrong idea | Why |
 |------------|-----|
 | “Use the opponent’s **SOS** rating” | That’s **their** schedule, not yours — unrelated to how hard **your** year was. |
-| A second hidden SOS for selection only | **One** field: hub display = poll = seeds. |
+| A second hidden SOS for selection only | **One** field: hub display = NET = seeds. |
 
 Iterative “network” tweaks (opponent strength depends on who *they* played) can nudge opponent `NEM` in step 1 — that still rolls up into **your** single `sosRating`, not a separate voter-facing stat.
 
@@ -78,13 +86,13 @@ Iterative “network” tweaks (opponent strength depends on who *they* played) 
 | **Quad record score** | `QRS` | unbounded | Weighted quad wins minus weighted quad losses (see below) |
 | **Form** | `FORM` | 0–100 | Last **10** games `NEM` blended with season `NEM` (60% L10 / 40% season) |
 | **Record quality** | `RQ` | 0–100 | Win% adjusted for schedule (`win% * 0.6 + (sosRating/99) * 0.4`) |
-| **Program prestige** | `programPrestige` | **0–99** | Pack baseline + dynasty drift — **poll voter bias only** (not seeding) |
+| **Program prestige** | `programPrestige` | **0–99** | Pack baseline + dynasty drift — **human polls only** (not NET or seeding) |
 
 ### Quad buckets (per game)
 
-Classify each D-I game at tip using opponent **poll rank at game time** (or frozen SOS proxy if unranked):
+Classify each D-I game at tip using opponent **NET rank at game time** (not Media/Coaches):
 
-| Bucket | Opponent poll rank |
+| Bucket | Opponent NET rank |
 |--------|---------------------|
 | **Q1** | #1–#50 |
 | **Q2** | #51–#150 |
@@ -105,56 +113,88 @@ Classify each D-I game at tip using opponent **poll rank at game time** (or froz
 
 ---
 
-## National poll (weekly)
+## NCBA NET rankings (weekly)
 
-**Goal:** Sim voters produce one ordering of **all 365** teams — same list as AP-style poll ([`game-frame.md`](game-frame.md)).
+**Goal:** Universe **committee / résumé** ordering of **all 365** teams — **deterministic formula**, no voter prestige or narrative.
 
-### Poll score (per team)
+### `netScore` (per team)
 
-Normalize `NEM`, `QRS`, `FORM`, `RQ` to **0–100** league percentiles each week. Use **raw 0–99** hub values for schedule and prestige:
+Normalize `NEM`, `QRS`, `FORM`, `RQ` to **0–100** league percentiles each week. Use **raw** School hub schedule:
 
 ```
-sosTerm   = sosRating / 99
-prestigeTerm = programPrestige / 99   // very slight voter bias — not merit
+sosTerm = sosRating / 99
 
-pollScore =
-    0.30 * NEM_norm
-  + 0.24 * sosTerm
-  + 0.20 * QRS_norm
-  + 0.13 * FORM_norm
-  + 0.10 * RQ_norm
-  + 0.03 * prestigeTerm
+netScore =
+    0.32 * NEM_norm
+  + 0.25 * sosTerm
+  + 0.22 * QRS_norm
+  + 0.12 * FORM_norm
+  + 0.09 * RQ_norm
 ```
 
-**`sosRating`** at **24%** is intentionally heavy — it matches the School hub SOS players already track. **`prestigeTerm`** at **3%** models real poll inertia (names, history) without overriding results; blue bloods nudge up, low-prestige overachievers nudge down, slightly.
+**No** `programPrestige`. **No** prior-week inertia (NET moves strictly with results).
 
-**Sort** all **365** teams by `pollScore` **descending**; ties break `NEM` → `sosRating` → `teamId`.
+**Sort** all **365** teams by `netScore` **descending**; ties break `NEM` → `sosRating` → `teamId`.
 
-**Poll rank** = position in that sort (**#1** = best). **T25** = ranks **#1–#25**.
+**NET rank** = position in that sort (**#1** = best). Shown as **NCBA NET #NN** in UI.
 
-**Inertia (optional polish):** `pollScore += 0.03 * (52 - previousPollRank)` capped ±1.5 so ranks don’t whip week-to-week.
+Weights: pack `ruleset.netWeights` (defaults above).
 
-Weights live in pack `ruleset.pollWeights` (defaults above).
+---
+
+## Media poll & Coaches poll (weekly)
+
+**Goal:** Sim **human** voters — **similar** ingredients to NET, plus **emotion** (prestige, inertia, streak narrative). **Full 365** ranked internally; **Top 25** callouts published per poll ([`game-frame.md`](game-frame.md)).
+
+Shared normalized inputs: same `NEM_norm`, `QRS_norm`, `FORM_norm`, `RQ_norm`, `sosTerm`, and **`netScore`** as anchor.
+
+```
+prestigeTerm = programPrestige / 99
+
+mediaPollScore =
+    0.72 * (netScore / netScoreLeagueMax)   // rescale netScore to ~0–100 band for mix
+  + 0.10 * prestigeTerm * 100
+  + 0.08 * mediaInertia
+  + 0.06 * FORM_norm                       // recency bias — voters overweight hot teams
+  + 0.04 * narrativeBoostMedia             // upset wins, headline momentum (capped)
+
+coachesPollScore =
+    0.78 * (netScore / netScoreLeagueMax)
+  + 0.06 * prestigeTerm * 100
+  + 0.10 * coachesInertia                  // coaches stickier than media
+  + 0.04 * FORM_norm
+  + 0.02 * narrativeBoostCoaches
+```
+
+**Inertia:** `mediaInertia` / `coachesInertia` = `k * (priorPollRank - 183)` capped ±3.0 (pull toward last week’s poll position — **poll-specific**, not NET).
+
+**`narrativeBoost*`** (0–2 pts): optional week events (e.g. won at **NET #3**, buzzer beater on national TV) — **human polls only**.
+
+**Sort** each poll separately → **mediaRank** `#1–#365`, **coachesRank** `#1–#365`.
+
+Weights: `ruleset.mediaPollWeights`, `ruleset.coachesPollWeights`.
+
+**Examples of divergence:** Mid-major on NET **#34** but Media **#19** after a ranked win; blue blood NET **#18** but Coaches **#8** on reputation.
 
 ---
 
 ## Selection Sunday — who gets in
 
-Freeze **final poll ranks** after all conference tournaments (one more poll pass on final stats is allowed — same formula).
+Freeze **final NET ranks** after all conference tournaments (one **NET** refresh on final stats; human polls may publish for news but **do not** change the field).
 
 ### NCBA (76)
 
 1. **Auto-bids:** **32** eligible conference tournament champions (reclass pass-over → **runner-up** per [`postseason.md`](postseason.md)).
-2. **Non-champions only:** sort by **final poll rank** ascending.
-3. **Direct at-large (20):** poll ranks **#1..#20** among non-champions → skip Opening Round.
-4. **Opening at-large (24):** next **#21..#44** among non-champions → **12** games, **12** winners join bracket.
+2. **Non-champions only:** sort by **final NET rank** ascending.
+3. **Direct at-large (20):** NET **#1..#20** among non-champions → skip Opening Round.
+4. **Opening at-large (24):** next NET **#21..#44** among non-champions → **12** games, **12** winners join bracket.
 5. **Eliminated from NCBA:** non-champions below that cut (unless already a champ).
 
-*Champions are not re-sorted for these cuts — they are already in via auto-bid regardless of poll rank.*
+*Champions are not re-sorted for these cuts — they are already in via auto-bid regardless of NET rank.*
 
 ### NCI (32) & Heritage (16)
 
-Among **postseason-eligible** teams **not** on the NCBA list, take the **32** best **final poll ranks** → NCI, then the next **16** → Heritage (reclass eligible for Heritage only — [`postseason.md`](postseason.md)).
+Among **postseason-eligible** teams **not** on the NCBA list, take the **32** best **final NET ranks** → NCI, then the next **16** → Heritage (reclass eligible for Heritage only — [`postseason.md`](postseason.md)).
 
 ---
 
@@ -190,7 +230,7 @@ Sort the **52** teams by **`seedIndex` descending**. Assign **NCBA seeds 1–52*
 
 ### Opening Round teams (seeds 53–64)
 
-The **24** Opening invitees get **provisional** seed lines **53–64** before games (sorted by `seedIndex` within the 24; assign **53** to best, **64** to worst). **Pairing:** poll order within the Opening pool — **1 vs 24**, **2 vs 23**, … **12 vs 13** ([`postseason.md`](postseason.md)). **Winners** assume the provisional seed of that game’s slot; losers leave the event.
+The **24** Opening invitees get **provisional** seed lines **53–64** before games (sorted by `seedIndex` within the 24; assign **53** to best, **64** to worst). **Pairing:** **NET** order within the Opening pool — **1 vs 24**, **2 vs 23**, … **12 vs 13** ([`postseason.md`](postseason.md)). **Winners** assume the provisional seed of that game’s slot; losers leave the event.
 
 ---
 
@@ -221,8 +261,8 @@ NCI / Heritage use separate bracket templates (no shared seed list with NCBA).
 
 | Artifact | Location |
 |----------|----------|
-| Default weights | Pack `ruleset.pollWeights`, `ruleset.seedWeights`, `ruleset.quadWeights` |
-| Weekly poll snapshot | Dynasty save: `pollRankByTeamId`, `pollScore`, `sosRating`, week id |
+| Default weights | `ruleset.netWeights`, `ruleset.mediaPollWeights`, `ruleset.coachesPollWeights`, `ruleset.seedWeights`, `ruleset.quadWeights` |
+| Weekly snapshots | `netRankByTeamId`, `netScore`, `mediaRankByTeamId`, `coachesRankByTeamId`, `sosRating`, week id |
 | Selection Sunday snapshot | `selectionSundayYear`, NCBA/NCI/Heritage lists, `nationalPostseason{tournamentId, seed, regionId?}` per team, frozen indices |
 
 ---
@@ -244,3 +284,4 @@ NCI / Heritage use separate bracket templates (no shared seed list with NCBA).
 | 2025-11-09 | Initial engine: pollScore, seedIndex, poll vs seed split, seeds 1–52 sort |
 | 2025-11-09 | School hub `sosRating` 0–99 + 3% `programPrestige` poll bias |
 | 2025-11-09 | Clarify SOS = your schedule average, not opponent’s hub SOS |
+| 2025-11-09 | Split NCBA NET vs Media & Coaches human polls |

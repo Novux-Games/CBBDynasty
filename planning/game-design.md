@@ -487,7 +487,7 @@ inviteScore = 0.35 * onCourtSuccess
 3. **Regular season schedule** — non-conference + conference auto + optional tournament.
 4. **Coach upgrades** — manual or auto.
 5. **Preseason workouts** — automated deltas.
-6. **Media & preview rankings** — national + conference poll sim; sets expectation meter.
+6. **NET + Media & Coaches polls** — NET résumé + human poll sim; sets expectation meter ([`selection-engine.md`](selection-engine.md)).
 7. **Exhibition scheduling** — up to **3** in **October** (UX: calendar picker, opponent search, travel).
 
 ### Exhibitions vs scrimmages
@@ -501,7 +501,7 @@ Exhibitions affect **morale** and **poll momentum** slightly; injuries can occur
 
 ### Media & preview rankings
 
-- **Preseason Top 25** (national) + conference poll.
+- **Preseason Top 25** (Media + Coaches) + conference poll; **NET** publishes when games exist.
 - **User storyline:** "overrated/underrated" tag if disparity vs roster OVR.
 - Updates partially after exhibitions (small bump).
 
@@ -575,11 +575,11 @@ Gameplay is **sim-only**; see **[`simulation-engine.md`](simulation-engine.md)**
 | **Chemistry** | Roster stability + coaching; affects clutch sim |
 | **Fatigue** | Back-to-back games, travel, and press schemes apply **standard** stamina penalties in sim |
 
-### National poll & selection (authoritative)
+### NCBA NET, human polls & selection (authoritative)
 
-**Formulas, weights, poll vs seed:** [`selection-engine.md`](selection-engine.md).
+**Formulas, weights, NET vs Media/Coaches vs seed:** [`selection-engine.md`](selection-engine.md).
 
-**Summary:** Weekly **poll** ranks **all 365** (`pollScore` from efficiency, School hub **`sosRating` 0–99**, quads, form, record, **~3%** `programPrestige` voter bias). **Selection Sunday** uses **final poll rank** for **who** makes NCBA/NCI/Heritage; **Seed Index** sorts the **52** auto + direct at-large teams for **NCBA seeds 1–52** (merit — weak champs can be seed 52; no prestige in seeds). **T25** = poll **#1–#25** ([`game-frame.md`](game-frame.md)).
+**Summary:** **NCBA NET** ranks **all 365** via **`netScore`** (efficiency, **`sosRating` 0–99**, quads, form, record — **no** prestige). **Media** and **Coaches** polls rank **365** with **similar** inputs plus prestige, inertia, and narrative. **Selection Sunday** uses **final NET only** for NCBA/NCI/Heritage; **Seed Index** sets **NCBA seeds 1–52** (merit). **T25** = Media and Coaches **#1–#25** callouts ([`game-frame.md`](game-frame.md)).
 
 ### Weekly rhythm
 
@@ -598,8 +598,8 @@ Gameplay is **sim-only**; see **[`simulation-engine.md`](simulation-engine.md)**
 | National event | Size | Selection |
 |----------------|------|-----------|
 | **NCBA Men's BB Tournament** | **76** in event · **64** in Round 1 | **32** autos + **20** at-large (seeds 1–52) + **24** at-large Opening (**12** games) |
-| **NCI** | **32** | Highest **poll rank** not in NCBA |
-| **National Heritage Classic** | **16** | Highest **poll rank** not in NCBA or NCI |
+| **NCI** | **32** | Highest **NET rank** not in NCBA |
+| **National Heritage Classic** | **16** | Highest **NET rank** not in NCBA or NCI |
 
 **Reclass** (`postseasonEligible: false`): **conference tournaments** and **Heritage** yes; **NCBA** and **NCI** no (conf tourney win does not confer NCBA bid — pass-over per conference template).
 
@@ -646,7 +646,7 @@ Universe round labels: [`ncba-branding.md`](ncba-branding.md).
 
 ### Media systems
 
-- **Polls:** weekly AP-style top 25 (sim voters).
+- **Rankings:** weekly **NCBA NET** (365) + **Media** & **Coaches** polls (365; T25 callouts).
 - **Bracketology:** updates weekly in February in news feed.
 - **User stories:** win streaks, upset alerts, portal steals.
 
