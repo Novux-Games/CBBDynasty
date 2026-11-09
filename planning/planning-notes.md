@@ -19,7 +19,7 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | NIL on player card | **Overview valuation** (recruiting commit) | [`player-cards.md`](player-cards.md) |
 | NIL annual pool | **Done** — conference × prestige; SEC flagship **~$9.7M–$13.2M** | [`game-design.md`](game-design.md#annual-collective-pool-design-lock) |
 | RS schedule cap | **32** games; **28** builder slots only with 4-game event | [`game-design.md`](game-design.md#scheduling--regular-season), [`preseason.md`](preseason.md#8--schedule-regular-season-games) |
-| Transfer portal | **Done** (UX News/tasks **open**) | [`transfer-portal.md`](transfer-portal.md) |
+| Transfer portal | **Done** — News-heavy; dashboard UI **follow-up** | [`transfer-portal.md`](transfer-portal.md) |
 | AI recruiting | **Done** — Recommended parity; **hidden** from UI | [`recruiting-engine.md`](recruiting-engine.md#ai-recruiting) |
 | Recruit rankings UI | **Top 60 full list** — not T25-style | [`recruiting-engine.md`](recruiting-engine.md#national-rankings-top-60) |
 | GOAT / History depth | **Specced** (computed GOAT list) | [`game-frame.md`](game-frame.md#history-hub) |

@@ -150,12 +150,19 @@ User sees **outcomes** only (who entered), not internal reason.
 
 ---
 
-## Open — UX (discussion)
+## UX — News (design lock)
+
+| Rule | Detail |
+|------|--------|
+| **News-heavy** | League-wide portal activity surfaces in **News** — commits, major entrants, flips, school-name headlines (national **ticker** feel) |
+| **Hub** | **Recruiting → Transfer Portal** stays authoritative for **your** spend; News drives awareness and drill-in |
+| **Deep dive** | Full **News hub** portal product (filters, trackers, layout) — **follow-up doc** (not spec’d here) |
+
+## UX — Dashboard (follow-up)
 
 | Topic | Status |
 |-------|--------|
-| **News** — league portal headline tracker vs hub-only | TBD with Austin |
-| **Dashboard** — optional portal tasks Weeks 2–5 vs offseason-only | TBD with Austin |
+| **Optional portal tasks** Weeks 2–5 | **Follow-up** with in-season recruiting dashboard pattern — not locked in this doc |
 
 ---
 
@@ -175,3 +182,4 @@ User sees **outcomes** only (who entered), not internal reason.
 | 2026-11-09 | Initial spec |
 | 2026-11-09 | Roster/Transfer tabs; considering vs entrant pool; 2026 eligibility; Top 40 @ Week 2 |
 | 2026-11-09 | Roster tab excludes portal entrants; mutual exclusion between tabs |
+| 2026-11-09 | News-heavy portal UX; dashboard/news deep dives deferred |
