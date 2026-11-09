@@ -475,7 +475,7 @@ Point actions (Send the house, bonus points) are **not** a seventh weight. They 
 
 Aligns with existing copy “school grade letters on recruit’s **priority dimensions**” — priorities **are** those dimensions, made explicit.
 
-**“Wants a winning program” (mid-majors):** Players with this priority judge **your** recent **conference titles**, strong regular-season record, and **national postseason** runs (Selection Sunday bid, March Mayhem depth) — not “only schools that win the national championship.” A solid mid-major with a real winning story can score well; a blue blood with a dry spell can score poorly.
+**“Wants a winning program” (mid-majors):** The **recruit** wants winners; each **school** is scored on its own recent story — **conference titles**, strong regular-season record, and **national postseason** runs (Selection Sunday bid, March Mayhem depth). Not “only schools that win the national championship.” A solid mid-major on a heater scores well; a blue blood in a dry spell scores poorly. Same program-results thread also feeds **coach job security** and **AD trust** ([`coach-card.md`](coach-card.md#job-security-user-head-coach)) — winning helps retention with these recruits *and* keeps your job safer.
 
 #### Renormalize (pseudo)
 
