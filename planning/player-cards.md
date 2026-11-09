@@ -57,6 +57,7 @@ Fixed for all tabs (does not scroll away with tab content):
 | **Grade** | Fr / So / Jr / Sr / RS variant as applicable |
 | **Headshot or avatar** | Generated portrait; pack-safe |
 | **Position** | **PG / SG / SF / PF / C** (listed position; see [`positions-and-lineup.md`](positions-and-lineup.md)) |
+| **Injury** (when active) | `OUT` chip + label + games remaining — [`injuries.md`](injuries.md#player-ui) |
 
 ---
 
