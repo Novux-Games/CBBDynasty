@@ -29,7 +29,7 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | GOAT / History depth | **Specced** (computed GOAT list) | [`game-frame.md`](game-frame.md#history-hub) |
 | Notifications | Use game-design mobile UX list | [`game-design.md`](game-design.md) |
 | App updates vs saves | **Rule:** ship migrations; old slots keep working | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility), [`ADR-002`](../docs/ADR-002-balance-ruleset-bundle.md) |
-| Build checklist sync | **Rule:** **Done** specs → steps in [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) | [`docs/BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md#document-maintenance) |
+| Build checklist sync | **Rule:** every **Done** spec → step(s) + [full index](../docs/BUILD_CHECKLIST.md#locked-specs--build-steps-index) | [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
 | Recruiting point actions | **Done** | [`recruiting-engine.md`](recruiting-engine.md#action-costs-design-lock) → **6.17–6.20**, **15.6** UI |
 | Injuries & medical redshirt | **Done** | [`injuries.md`](injuries.md) |
 

@@ -6,21 +6,38 @@
 
 Use phases **in order**. Do not skip persistence or calendar kernel before dynasty UI. Mark items `[x]` in your tracker as you ship.
 
-**Planning sync:** When [`planning-notes.md`](../planning/planning-notes.md) marks a topic **Done**, add or refine steps in this file (same PR when possible). Domain specs stay in `planning/`; this doc is the **build backlog**.
+**Planning sync:** Every **Done** topic in [`planning-notes.md`](../planning/planning-notes.md) must map to step(s) below ([index](#locked-specs--build-steps-index)). Update **Build**, **Done when**, and the index in the **same commit** as the planning change — no orphan specs.
 
 ### Locked specs → build steps (index)
 
-| Planning doc (Done) | Primary phase steps |
-|---------------------|---------------------|
-| [`game-frame.md`](../planning/game-frame.md) | 9.1, 9.6–9.7, 9.10 |
-| [`dashboard-tasks.md`](../planning/dashboard-tasks.md) | 9.6–9.7, 6.14, 6.16, 9.11 |
-| [`recruiting-engine.md`](../planning/recruiting-engine.md) | 2.6, 6.5, 6.11–6.13, 6.15–6.19, 7.2, 9.10, 14.1, 15.1, 15.6 |
-| [`transfer-portal.md`](../planning/transfer-portal.md) | 6.3, 6.12, 6.14 |
-| [`news-hub.md`](../planning/news-hub.md) | 9.8–9.9, 11.x headlines |
-| [`player-loyalty-promises.md`](../planning/player-loyalty-promises.md) | 8.6, 6.3, 14.x declare |
-| [`season-review.md`](../planning/season-review.md) | 14.1 (+ next-cycle weekly pool preview) |
-| [`player-cards.md`](../planning/player-cards.md) | 8.1–8.2, 8.6 chips |
-| [`injuries.md`](../planning/injuries.md) | 8.7, 10.8, 2.6 `injuries.bank` |
+| Planning doc | Build steps |
+|--------------|-------------|
+| [`app-shell.md`](../planning/app-shell.md) | 0.2, 1.2 |
+| [`branding.md`](../planning/branding.md) | 1.1, 1.4–1.5, 16.5 |
+| [`coach-card.md`](../planning/coach-card.md) | 4.2, 8.3, 8.5, 15.4; medical staff → **8.7** duration |
+| [`dashboard-tasks.md`](../planning/dashboard-tasks.md) | 6.14, 6.16, 9.6, 9.7, 9.11; injury optional tasks → **9.6** |
+| [`game-design.md`](../planning/game-design.md) | 2.3, 4.7, 9.3–9.4, 12.1, 14.2, 15.1–15.5, 16.1–16.4; RS cap → **7.3–7.4** |
+| [`game-frame.md`](../planning/game-frame.md) | 6.16, 7.6, 9.1–9.2, 9.6–9.10, 10.5–10.6, 14.3 |
+| [`game-start.md`](../planning/game-start.md) | 1.3, 2.2, 2.5, 4.1–4.6 |
+| [`injuries.md`](../planning/injuries.md) | **2.6**, **5.3**, **8.7–8.8**, **9.4**, **9.6–9.8**, **10.2**, **10.8** |
+| [`league-branding.md`](../planning/league-branding.md) + [`2026-NCAA-Directory.md`](../planning/2026-NCAA-Directory.md) | 3.1–3.2, 9.3 |
+| [`ncba-branding.md`](../planning/ncba-branding.md) | 7.3, 9.5, 11.5, 13.2 |
+| [`news-hub.md`](../planning/news-hub.md) | 9.8–9.9, 14.2; injury stories → **9.8** |
+| [`offseason.md`](../planning/offseason.md) | 4.6, 6.1–6.10, 14.4 |
+| [`player-archetypes.md`](../planning/player-archetypes.md) | 8.2 |
+| [`player-cards.md`](../planning/player-cards.md) | 8.1, 8.6; injury strip → **8.1** + **8.7** |
+| [`player-loyalty-promises.md`](../planning/player-loyalty-promises.md) | 6.3, 8.6, 14.x declare |
+| [`positions-and-lineup.md`](../planning/positions-and-lineup.md) | 8.1, 10.2; injury auto lineup → **8.7**, **10.2** |
+| [`postseason-frame.md`](../planning/postseason-frame.md) | 13.4 |
+| [`postseason.md`](../planning/postseason.md) | 5.5, 11.5, 12.1–12.2, 13.1–13.5 |
+| [`preseason.md`](../planning/preseason.md) | 7.1–7.6, 10.7 |
+| [`recruiting-engine.md`](../planning/recruiting-engine.md) | 2.6, 6.5, 6.8, 6.11–6.13, 6.15–6.20, 7.2, 9.9–9.10, 14.1, 15.1, 15.6 |
+| [`season-review.md`](../planning/season-review.md) | 5.6, 14.1 |
+| [`selection-engine.md`](../planning/selection-engine.md) | 11.1–11.5 |
+| [`simulation-engine.md`](../planning/simulation-engine.md) | 10.1, 10.8, 6.16 |
+| [`strategy-schemes.md`](../planning/strategy-schemes.md) | 4.3, 10.3–10.5 |
+| [`time-system.md`](../planning/time-system.md) | 5.1–5.6, 9.2, 9.5, 9.7, 12.3, 13.5 |
+| [`transfer-portal.md`](../planning/transfer-portal.md) | 6.3, 6.12, 6.14, 9.9 |
 
 ---
 
@@ -68,7 +85,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 2.3 | `[x]` Dynasty metadata schema (`seasonIndex`, `phase`, `packId`) | Round-trip one empty dynasty | [game-design](../planning/game-design.md) | `:core`, Room `dynasty_metadata`, **New** bootstrap |
 | 2.4 | `[x]` **Week advance** checkpoint semantics | Replay before advance; lock after | [game-design](../planning/game-design.md) | `:core/calendar/checkpoint`, Room `dynasty_calendar` + `provisional_games` |
 | 2.5 | `[x]` Unreadable-save handling on Load | Validate + repair calendar; fallback delete UI | [game-start](../planning/game-start.md) | `DynastySaveValidator`, `SaveLoadUnavailableDialog` |
-| 2.6 | `[ ]` **Balance ruleset** loader + pin on dynasty | `balanceSchemaVersion`; scholarship **15**, prestige tiers, `recruiting.actions` costs, loyalty constants, `injuries.bank` (40, `bodyPart`, `durationWeeks*`) | [ADR-002](ADR-002-balance-ruleset-bundle.md), [`balance-2026.json`](../assets/balance/balance-2026.json), [injuries](../planning/injuries.md) | `:core/balance` |
+| 2.6 | `[ ]` **Balance ruleset** loader + pin on dynasty | Loads & pins: scholarship **15**, `recruiting.*`, loyalty, `nil.annualPoolByConferenceTier` + blue blood band, `injuries.occurrence`, `injuries.medicalRedshirt`, `injuries.bank` (40 × `bodyPart`, `durationWeeks*`, `weight`) | [ADR-002](ADR-002-balance-ruleset-bundle.md), [`balance-2026.json`](../assets/balance/balance-2026.json), [injuries](../planning/injuries.md), [game-design](../planning/game-design.md#annual-collective-pool-design-lock) | `:core/balance` |
 | 2.7 | `[ ]` **Sim tuning** loader + pin on dynasty | `simSchemaVersion`; possession tables load in sim module | [ADR-003](ADR-003-sim-tuning-bundle.md) | `:core/sim/tuning` |
 
 ---
@@ -155,13 +172,14 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 8.1 | `[ ]` Player model (ratings, position, eligibility) | Matches player card fields | [player-cards](../planning/player-cards.md), [positions](../planning/positions-and-lineup.md) | `:core` |
+| 8.1 | `[ ]` Player model (ratings, position, eligibility) | Matches player card fields; injury strip fields (`weeksRemaining`, label) | [player-cards](../planning/player-cards.md), [positions](../planning/positions-and-lineup.md), [injuries](../planning/injuries.md#player-ui) | `:core` |
 | 8.2 | `[ ]` Archetypes + hidden ratings / letter grades | Scout view | [player-archetypes](../planning/player-archetypes.md), [recruiting-engine](../planning/recruiting-engine.md) | — |
 | 8.3 | `[ ]` Head coach + assistants (cards) | Staff tab vs support list | [coach-card](../planning/coach-card.md) | `ui.coach` |
 | 8.4 | `[ ]` School hub data (prestige, SOS, NET on card) | Read-only opponent schools | [game-frame](../planning/game-frame.md) | `ui.school` |
 | 8.5 | `[ ]` Job security + AD trust | Coach card + Staff tab | [coach-card](../planning/coach-card.md) | — |
 | 8.6 | `[ ]` **Loyalty** (0–99) + **one promise** per tenure | Kept/broken → portal / declare rolls; card chips | [player-loyalty-promises](../planning/player-loyalty-promises.md), [player-cards](../planning/player-cards.md) | `:core/player` |
-| 8.7 | `[ ]` **Injury** state + medical redshirt + **auto lineup** | `weeksRemaining` (calendar); demote/promote on injury; **return restores** slot/top reserve on clear; medical RS gates; UI `{N}w` | [injuries](../planning/injuries.md) | `:core/injuries` |
+| 8.7 | `[ ]` **Injury** state + medical redshirt + **auto lineup** | Save fields per spec; `weeksRemaining` + snapshots; `applyInjuryLineupAdjust` / `applyInjuryReturnLineupAdjust`; medical RS hard gates; medical staff −1 week (minor) | [injuries](../planning/injuries.md) | `:core/injuries` |
+| 8.8 | `[ ]` **Injury UX** (postgame + cards + strategy) | Postgame sheet; roster `OUT` / `{N}w`; greyed in Strategy; optional dashboard deep links | [injuries](../planning/injuries.md#player-ui), [injuries#medical-redshirt](../planning/injuries.md#medical-redshirt), [dashboard-tasks](../planning/dashboard-tasks.md) | `ui.postgame`, `ui.strategy` |
 
 ---
 
@@ -172,11 +190,11 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 9.1 | `[ ]` **Dynasty shell** (all phases): bottom nav + phase header | Same chrome offseason→March; Dashboard default | [game-frame](../planning/game-frame.md) | `ui.dynasty` |
 | 9.2 | `[ ]` Calendar tab (week labels, bye display) | Matches time-system | [game-frame](../planning/game-frame.md), [time-system](../planning/time-system.md) | — |
 | 9.3 | `[ ]` Schedule generation for AI leagues | 365 teams progress | [game-design](../planning/game-design.md) | `:core/league` |
-| 9.4 | `[ ]` Batch sim non-user games on week advance | Standings update | [game-design](../planning/game-design.md) | — |
+| 9.4 | `[ ]` Batch sim non-user games on week advance | Standings update; AI injury rolls + lineup adjust per team | [game-design](../planning/game-design.md), [injuries](../planning/injuries.md), [simulation-engine](../planning/simulation-engine.md) | `:core/league` |
 | 9.5 | `[ ]` Early event brackets (Island/Desert 4wk, etc.) | Elimination byes | [ncba-branding](../planning/ncba-branding.md), [time-system](../planning/time-system.md) | — |
-| 9.6 | `[ ]` **Dashboard task gate** (Required / Optional cards) | Preseason 8 required; in-season games optional; links to hubs | [dashboard-tasks](../planning/dashboard-tasks.md), [game-frame](../planning/game-frame.md#dashboard-task-gate) | `ui.dashboard` |
+| 9.6 | `[ ]` **Dashboard task gate** (Required / Optional cards) | Preseason 8 required; in-season games optional; injury **Review** + **Medical RS?** optional cards | [dashboard-tasks](../planning/dashboard-tasks.md), [game-frame](../planning/game-frame.md#dashboard-task-gate), [injuries](../planning/injuries.md#medical-redshirt) | `ui.dashboard` |
 | 9.7 | `[ ]` **Advance week** + sim-week **confirmation** | Game auto-sim + recruiting summary; decrement injury `weeksRemaining` (byes included); return lineup at **0** | [game-frame](../planning/game-frame.md#advance-week-confirmation-sim-week), [injuries](../planning/injuries.md) | `ui.dashboard` |
-| 9.8 | `[ ]` **News** tab (shallow headlines) | Top **N** league stories; not full hub | [game-frame](../planning/game-frame.md#news-tab-dashboard), [news-hub](../planning/news-hub.md#surfaces) | `ui.news` |
+| 9.8 | `[ ]` **News** tab (shallow headlines) | Top **N** league stories; user injury notify; league injury headlines (severity tiers) | [game-frame](../planning/game-frame.md#news-tab-dashboard), [news-hub](../planning/news-hub.md), [injuries](../planning/injuries.md#news--league) | `ui.news` |
 | 9.9 | `[ ]` **News hub** (hamburger): Stories / Portal / Recruits / Draft | Top 60 recruits full list; Portal Top 40 @ OS W2 | [news-hub](../planning/news-hub.md) | `ui.newshub` |
 | 9.10 | `[ ]` Hamburger hubs (School, Strategy, Stats, Rankings, History, Recruiting) | Recruiting opens **Recommended**; March Mayhem when eligible | [game-frame](../planning/game-frame.md) | `ui.hubs` |
 | 9.11 | `[ ]` Optional **Sunday coach points** dashboard nudge | Deep link Coach card spend / bank | [dashboard-tasks](../planning/dashboard-tasks.md), [game-design](../planning/game-design.md) | — |
@@ -188,7 +206,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
 | 10.1 | `[ ]` Possession loop, 40:00 clock, 3–30s trips | Box score totals sane | [simulation-engine](../planning/simulation-engine.md) | `:core/sim` |
-| 10.2 | `[ ]` Lineups PG–C, rotation minutes | [positions](../planning/positions-and-lineup.md) | — |
+| 10.2 | `[ ]` Lineups PG–C, rotation minutes | Default starter algorithm; interchange rules; injured ineligible + auto-fill hooks | [positions](../planning/positions-and-lineup.md), [injuries](../planning/injuries.md#lineup--rotation) | `:core/sim` |
 | 10.3 | `[ ]` O/D scheme modifiers | 7×7 presets | [strategy-schemes](../planning/strategy-schemes.md) | — |
 | 10.4 | `[ ]` Gameplan knobs (usage, deny-primary, late fouls) | Pre-game + halftime | [strategy-schemes](../planning/strategy-schemes.md) | `ui.strategy` |
 | 10.5 | `[ ]` Live text / 2s watch mode | Halftime edit | [strategy-schemes](../planning/strategy-schemes.md), [game-frame](../planning/game-frame.md) | — |
@@ -312,7 +330,7 @@ Minimum **one playable season** for internal testing:
 5. **Phase 12–13** bracket **stub** (single-user conf + 64 NCBA).  
 6. **Phase 14.1** season review → **Phase 6.1** offseason week 1 stub.
 
-Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.20** point actions / visits / Signing Day), **dashboard/sim-week** (9.6–9.7), **portal W1 tabs** (6.3), full 365 sim (9.3), and March Mayhem UI (13.4) after slice is fun.
+Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.20**), **dashboard/sim-week** (9.6–9.7), **portal W1** (6.3), **injuries** (8.7–8.8, 10.8), full 365 sim (9.3), March Mayhem UI (13.4) after slice is fun.
 
 ---
 
@@ -321,7 +339,7 @@ Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.20** point actions
 | Rule | Action |
 |------|--------|
 | **Spec locked** | Entry in [`planning-notes.md`](../planning/planning-notes.md) → **Done** |
-| **This file** | Add step(s) or fix **Done when** + **Spec** links; update [Locked specs index](#locked-specs--build-steps-index) |
+| **This file** | **Required:** new/updated step(s), **Done when**, spec links, and [index](#locked-specs--build-steps-index) row — same change set as planning |
 | **Shipped code** | Mark step `[x]` in the phase table |
 | **History** | Row in [Document history](#document-history) below |
 
@@ -335,3 +353,4 @@ Expand **year-long recruiting** (6.5, 6.11–6.13, **6.17–6.20** point actions
 | 2026-11-09 | Fix Phase 6 steps 6.17–6.20; move Signing Day out of Phase 15; correct OS week labels 7–10 |
 | 2026-11-09 | Injuries sim output, persistence, lineup block, news — per injuries.md |
 | 2026-11-09 | Injury bank v2 (40), auto lineup + return restore; **weeksRemaining** + bye-week tick (8.7, 9.7, 10.8, 2.6) |
+| 2026-11-09 | **Full** locked-spec index (all Done planning docs); **8.8** injury UX; injury wired through 9.4/9.6/9.8/10.2 |
