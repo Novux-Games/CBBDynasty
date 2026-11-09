@@ -16,13 +16,13 @@
 4. [Overview](#overview)
 5. [Job security (user head coach)](#job-security-user-head-coach)
 6. [Contract](#contract)
-6. [History](#history)
-7. [Hall of Fame](#hall-of-fame)
-8. [Draft](#draft)
-9. [Assistant coach card](#assistant-coach-card)
-10. [Staff (School hub)](#staff-school-hub)
-11. [Edit mode](#edit-mode)
-12. [Cross-links](#cross-links)
+7. [History](#history)
+8. [Hall of Fame](#hall-of-fame)
+9. [Draft](#draft)
+10. [Assistant coach card](#assistant-coach-card)
+11. [Staff (School hub)](#staff-school-hub)
+12. [Edit mode](#edit-mode)
+13. [Cross-links](#cross-links)
 
 ---
 
