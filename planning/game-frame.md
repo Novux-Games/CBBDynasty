@@ -87,16 +87,16 @@ At-a-glance card(s) for **your program**:
 
 **Not seeds:** In-season rank is **not** a tournament seed. **Seeds** appear only on **postseason** brackets after Selection Sunday (no tier colors there).
 
-**Tier color** = **likely** national destination if the season ended today (projection only):
+**Tier color** = **assumed** national destination from **poll rank vs projected cut lines** (NCBA / NCI / Heritage). **Heuristic only** — not binding and **not** seeds.
 
-| Color | Likely |
-|-------|--------|
-| **Green** | NCBA (76) |
-| **Yellow** | NCI |
-| **Amber** | Heritage |
-| **Red** | Outside the 124 national slots |
+| Color | Assumption |
+|-------|------------|
+| **Green** | Likely NCBA (76) on poll position alone |
+| **Yellow** | Likely NCI |
+| **Amber** | Likely Heritage |
+| **Red** | Likely outside the 124 national slots |
 
-A **red** team can still **win the conference tournament** and receive an NCBA auto-bid and a **seed** in March. Colors are not binding.
+**Does not model conference tournaments:** in-season, the UI **cannot** know if a **red** program will win its league tournament. Colors **ignore** auto-bid paths; a **red** chip can still become an NCBA **seed** in March after a conf title. Selection Sunday assigns real bids/seeds; colors disappear on bracket screens.
 
 Tap **Current ranking** → Rankings hub (full **#1–#365** list).
 
@@ -375,5 +375,6 @@ Scheme catalog: [`strategy-schemes.md`](strategy-schemes.md). Notifications: [`g
 | 2025-11-08 | Recruit Top 60: preseason seed, in-season News |
 | 2025-11-08 | Dashboard: Current ranking + NCBA/NCI tier colors; full resume list in Rankings |
 | 2025-11-09 | Poll = full #1–365 rank; colors = likely tier; seeds postseason-only |
+| 2025-11-09 | Tier colors poll-only; no conf-tourney champ projection |
 | 2025-11-08 | School Staff tab; AD trust; staff detail sheets |
 | 2025-11-08 | Assistants = coach cards; support list-only |
