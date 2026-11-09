@@ -29,6 +29,7 @@ Quick pointers so we don't re-ask settled items. **Details live in linked docs.*
 | GOAT / History depth | **Specced** (computed GOAT list) | [`game-frame.md`](game-frame.md#history-hub) |
 | Notifications | Use game-design mobile UX list | [`game-design.md`](game-design.md) |
 | App updates vs saves | **Rule:** ship migrations; old slots keep working | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility), [`ADR-002`](../docs/ADR-002-balance-ruleset-bundle.md) |
+| Build checklist sync | **Rule:** **Done** specs → steps in [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) | [`docs/BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md#document-maintenance) |
 
 ---
 
@@ -87,3 +88,4 @@ Pre-game: schemes, rotation, usage. Halftime: same knobs. Coach **default** sche
 | Implementation build order | **Done** | [`docs/BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
 | 2026-11-09 | App-update save compatibility rule | [`ADR-001`](../docs/ADR-001-dynasty-save-backend.md#app-updates--save-compatibility) |
 | 2026-11-09 | Unified shell + week advance + dashboard task gate | [`game-frame.md`](game-frame.md) |
+| 2026-11-09 | BUILD_CHECKLIST sync for locked recruiting, portal, news, loyalty, dashboard | [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) |
