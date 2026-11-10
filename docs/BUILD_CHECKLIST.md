@@ -293,7 +293,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 16.2 | `[x]` Automation toggles (sim week, staff) | Settings + dynasty | [game-design](../planning/game-design.md) | `DynastyAutomationRepository`, `DynastyAutomationScreen` |
 | 16.3 | `[x]` Identity import hardening (URL allowlist, size cap) | [game-design](../planning/game-design.md) | `PackUrlPolicy`, `PackPayloadPolicy`, `HttpPackRemoteFetcher` |
 | 16.4 | `[x]` Performance: 365-team week batch under target | Profiling doc | [game-design](../planning/game-design.md) | [LEAGUE_WEEK_BATCH_PROFILING.md](LEAGUE_WEEK_BATCH_PROFILING.md), `LeagueWeekBatchPerformanceTest` |
-| 16.5 | `[ ]` Play Store assets, privacy, offline copy | Store listing | [branding](../planning/branding.md) | — |
+| 16.5 | `[x]` Play Store assets, privacy, offline copy | Store listing | [branding](../planning/branding.md) | [PLAY_STORE_LISTING.md](PLAY_STORE_LISTING.md), [PRIVACY_POLICY.md](PRIVACY_POLICY.md), `PlayStoreListingCopy`, Credits/Settings legal copy |
 
 ---
 

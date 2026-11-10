@@ -23,6 +23,12 @@
     <string name="settings_back">Back</string>
     <string name="credits_publisher">Published by %1$s</string>
     <string name="credits_website">https://novux.dev</string>
+    <string name="credits_legal_disclaimer">Dynasty: College Basketball is an unofficial college basketball simulation. Novux Games is not affiliated with, endorsed by, or sponsored by the NCAA, any conference, or any school.</string>
+    <string name="credits_offline_play">Dynasty saves stay on your device. You can play seasons and sim weeks without an internet connection. Optional identity pack import may use the network once when you enter an HTTPS URL.</string>
+    <string name="credits_privacy_policy">Privacy policy: %1$s</string>
+    <string name="credits_privacy_url">https://novux.dev/privacy/dynasty-college-basketball</string>
+    <string name="settings_section_legal">Privacy &amp; offline play</string>
+    <string name="settings_offline_play_summary">All dynasty progress is stored locally. The app does not require an account. Network access is only used when you choose to import a league pack from a URL.</string>
     <string name="load_slots_subtitle">Choose a save, or delete one to make room.</string>
     <string name="load_slot_empty">Empty</string>
     <string name="load_slot_occupied">%1$s · %2$s · %3$d–%4$d</string>

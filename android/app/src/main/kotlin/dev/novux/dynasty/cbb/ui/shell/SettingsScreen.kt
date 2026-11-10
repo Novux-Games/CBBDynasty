@@ -117,6 +117,21 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
+            text = stringResource(R.string.settings_section_legal),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        Text(
+            text = stringResource(R.string.settings_offline_play_summary),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(vertical = 8.dp),
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        HorizontalDivider()
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
             text = stringResource(R.string.settings_section_audio),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,
