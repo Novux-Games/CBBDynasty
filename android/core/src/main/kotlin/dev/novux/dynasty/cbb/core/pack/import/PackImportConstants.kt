@@ -4,9 +4,7 @@ package dev.novux.dynasty.cbb.core.pack.import
 object PackImportConstants {
     const val MAX_REMOTE_BYTES: Long = 5L * 1024 * 1024
 
-    /**
-     * HTTPS hosts permitted for one-shot pack fetch (ship allowlist; expand in Phase 16.3).
-     */
+    /** HTTPS hosts permitted for one-shot pack fetch (ship allowlist). */
     val ALLOWED_URL_HOSTS: Set<String> = setOf(
         "packs.novux.dev",
         "raw.githubusercontent.com",

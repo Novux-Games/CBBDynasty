@@ -18,6 +18,9 @@ object IdentityPackImportPipeline {
         if (trimmed.isEmpty()) {
             return PackImportResult.Rejected(PackImportError.InvalidTxt("Empty payload"))
         }
+        PackPayloadPolicy.validateUtf8Payload(trimmed)?.let {
+            return PackImportResult.Rejected(it)
+        }
         val resolvedFormat = when (format) {
             PackImportFormat.Auto -> if (trimmed.startsWith("{")) PackImportFormat.Json else PackImportFormat.Txt
             else -> format
