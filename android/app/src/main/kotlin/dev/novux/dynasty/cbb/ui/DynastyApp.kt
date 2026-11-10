@@ -295,6 +295,7 @@ fun DynastyApp(
                             chemistryRepository = LocalContext.current.requireDynastyApplication().chemistryRepository,
                             userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
                             newsFeedRepository = LocalContext.current.requireDynastyApplication().newsFeedRepository,
+                            coachSkillPointRepository = LocalContext.current.requireDynastyApplication().coachSkillPointRepository,
                             hubMenuCallbacks = hubMenuCallbacks,
                             onOpenDiscipline = { incident ->
                                 disciplineIncident = incident

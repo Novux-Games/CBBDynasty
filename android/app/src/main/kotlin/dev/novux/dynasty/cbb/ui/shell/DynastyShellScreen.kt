@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -51,6 +52,7 @@ import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
 import dev.novux.dynasty.cbb.data.coach.CoachSecurityRepository
+import dev.novux.dynasty.cbb.data.coach.CoachSkillPointRepository
 import dev.novux.dynasty.cbb.data.coach.SchoolStaffRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
@@ -97,6 +99,7 @@ fun DynastyShellScreen(
     staffRepository: SchoolStaffRepository,
     schoolHubRepository: SchoolHubRepository,
     coachSecurityRepository: CoachSecurityRepository,
+    coachSkillPointRepository: CoachSkillPointRepository,
     rosterRepository: DynastyRosterRepository,
     disciplineRepository: DisciplineRepository,
     chemistryRepository: ChemistryRepository,
@@ -124,6 +127,7 @@ fun DynastyShellScreen(
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     var newsHeadlines by remember { mutableStateOf<List<NewsHeadline>>(emptyList()) }
+    var coachSkillPointBank by remember { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
     val medicalRules = remember { BalanceMedicalRedshirtRules() }
     val position = loaded.weekCheckpoint.activePosition
@@ -135,6 +139,7 @@ fun DynastyShellScreen(
         disciplinePending = disciplinePending,
         rosterPlayers = rosterPlayers,
         medicalRules = medicalRules,
+        coachSkillPointBank = coachSkillPointBank,
     )
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint) {
@@ -169,6 +174,11 @@ fun DynastyShellScreen(
             loaded.weekCheckpoint.activePosition.weekIndex,
             rosterPlayers,
         )
+        val skillState = coachSkillPointRepository.ensureSundayGrant(
+            loaded.dynastyId,
+            loaded.weekCheckpoint.activePosition,
+        )
+        coachSkillPointBank = skillState.unspentBank
     }
 
     PlayerCardSheet(player = cardPlayer, onDismiss = { cardPlayer = null })
@@ -258,6 +268,7 @@ fun DynastyShellScreen(
                 HeadCoachCardScreen(
                     card = view.card,
                     userCoachSecurity = coachSecurity,
+                    skillPointBank = coachSkillPointBank,
                     modifier = Modifier.weight(1f),
                 )
             }
@@ -380,7 +391,10 @@ fun DynastyShellScreen(
                     dismissedIds = dismissedInjuryTasks,
                     onDismiss = { dismissedInjuryTasks = dismissedInjuryTasks + it },
                     onDeepLink = { },
-                    onStrategyOpen = onOpenStrategy,
+                    onStrategyOpen = hubMenuCallbacks.onOpenStrategy,
+                    onCoachCardOpen = {
+                        staffRoster?.headCoach?.let { coachView = ShellCoachView.HeadCoach(it) }
+                    },
                 )
                 focus?.firstGame?.let { game ->
                     NextGameCard(

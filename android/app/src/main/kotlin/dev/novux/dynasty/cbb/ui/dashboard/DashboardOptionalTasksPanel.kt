@@ -27,6 +27,7 @@ fun DashboardOptionalTasksPanel(
     onDismiss: (DashboardTaskId) -> Unit,
     onDeepLink: (RecruitingHubTab) -> Unit,
     onStrategyOpen: () -> Unit = {},
+    onCoachCardOpen: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val visible = tasks.filterNot { it.id in dismissedIds }
@@ -48,6 +49,7 @@ fun DashboardOptionalTasksPanel(
                         DashboardDeepLink.Strategy,
                         DashboardDeepLink.PlayWeekGame,
                         -> onStrategyOpen()
+                        DashboardDeepLink.CoachCard -> onCoachCardOpen()
                         else -> onDeepLink(task.deepLink.toHubTab())
                     }
                 },
@@ -121,6 +123,10 @@ private fun taskMessage(task: DashboardTask): String = when (task.id) {
             stringResource(R.string.dynasty_shell_away)
         },
     )
+    DashboardTaskId.CoachSundaySkillPoints -> stringResource(
+        R.string.dashboard_task_coach_sunday_points,
+        task.formatArgs.firstOrNull() ?: 0,
+    )
     DashboardTaskId.PreseasonRequired -> ""
 }
 
@@ -133,5 +139,6 @@ private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {
     DashboardDeepLink.SigningDayRankings,
     DashboardDeepLink.SigningDayPositions,
     DashboardDeepLink.PreseasonChecklist,
+    DashboardDeepLink.CoachCard,
     -> RecruitingHubTab.Recommended
 }

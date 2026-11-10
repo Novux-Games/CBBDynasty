@@ -73,4 +73,19 @@ class DashboardTaskGateTest {
         )
         assertTrue(snapshot.optional.none { it.id == DashboardTaskId.PlayScheduledGame })
     }
+
+    @Test
+    fun coachSundayNudgeWhenBankPositive() {
+        val snapshot = DashboardTaskGate.inSeason(
+            CalendarPosition(1, CalendarPhase.RegularSeason, 2),
+            null,
+            0,
+            false,
+            null,
+            emptyList(),
+            BalanceMedicalRedshirtRules(),
+            coachSkillPointBank = 1,
+        )
+        assertTrue(snapshot.optional.any { it.id == DashboardTaskId.CoachSundaySkillPoints })
+    }
 }

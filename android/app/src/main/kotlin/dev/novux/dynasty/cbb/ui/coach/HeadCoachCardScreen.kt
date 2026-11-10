@@ -23,6 +23,7 @@ import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 fun HeadCoachCardScreen(
     card: HeadCoachCard,
     userCoachSecurity: CoachSecuritySnapshot? = null,
+    skillPointBank: Int? = null,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -44,6 +45,14 @@ fun HeadCoachCardScreen(
             style = MaterialTheme.typography.bodyLarge,
         )
         userCoachSecurity?.let { JobSecurityMeter(it) }
+        skillPointBank?.takeIf { it > 0 }?.let { bank ->
+            Text(
+                stringResource(R.string.coach_skill_point_bank, bank),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
         RatingCard(
             title = stringResource(R.string.coach_card_ratings_headline),
             lines = listOf(

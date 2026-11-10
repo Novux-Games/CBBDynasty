@@ -45,6 +45,7 @@ import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
+import dev.novux.dynasty.cbb.data.coach.CoachSkillPointRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
@@ -81,6 +82,7 @@ class SaveSlotRepository(
     private val chemistryRepository: ChemistryRepository,
     private val leagueWeekBatchRepository: LeagueWeekBatchRepository,
     private val preseasonScheduleRepository: PreseasonScheduleRepository,
+    private val coachSkillPointRepository: CoachSkillPointRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -552,6 +554,7 @@ class SaveSlotRepository(
             teamPlayedGame,
             userWonGame,
         )
+        coachSkillPointRepository.ensureSundayGrant(loaded.dynastyId, advanceResult.committedWeek)
         val meta = metadataDao.getById(loaded.dynastyId)?.toDomain()
         if (meta != null) {
             val slotEntity = slotDao.getByIndex(slotIndex)
