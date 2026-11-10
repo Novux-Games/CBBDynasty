@@ -399,4 +399,18 @@
     <string name="shell_news_kind_recruiting">Recruiting</string>
     <string name="shell_news_kind_general">League</string>
     <string name="shell_menu_exit_home">Exit to home</string>
+    <string name="shell_menu_news_hub">News hub</string>
+    <string name="news_hub_title">News hub</string>
+    <string name="news_hub_tab_stories">Stories</string>
+    <string name="news_hub_tab_portal">Portal</string>
+    <string name="news_hub_tab_recruits">Recruits</string>
+    <string name="news_hub_tab_draft">Draft</string>
+    <string name="news_hub_stories_empty">No stories yet. Advance the week or play games to build the archive.</string>
+    <string name="news_hub_portal_hidden">Transfer portal tracker is hidden outside the offseason window.</string>
+    <string name="news_hub_portal_pre_lock">Portal Top 40 publishes at the start of offseason week 2. Check Stories for entry headlines.</string>
+    <string name="news_hub_portal_top40_heading">Portal Top 40</string>
+    <string name="news_hub_portal_row">#%1$d %2$s · %3$s · %4$d★</string>
+    <string name="news_hub_recruits_heading">National Top 60</string>
+    <string name="news_hub_draft_empty">Draft results publish in offseason week 2 after the pro day.</string>
+    <string name="news_hub_draft_row">%1$s · %2$s — %3$s</string>
 </resources>

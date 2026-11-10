@@ -89,6 +89,7 @@ fun OffseasonScreen(
     weekNineRepository: OffseasonWeekNineRepository,
     weekTenRepository: OffseasonWeekTenRepository,
     onExitHome: () -> Unit,
+    onOpenNewsHub: () -> Unit = {},
     onOpenRecruiting: (RecruitingHubTab) -> Unit = {},
     onOpenSigningDay: (DashboardDeepLink) -> Unit = {},
     userCalendarRepository: UserCalendarRepository,
@@ -132,6 +133,7 @@ fun OffseasonScreen(
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val menu = listOf(
+        DynastyShellMenuAction(R.string.shell_menu_news_hub, onOpenNewsHub),
         DynastyShellMenuAction(R.string.shell_menu_exit_home, onExitHome),
     )
 

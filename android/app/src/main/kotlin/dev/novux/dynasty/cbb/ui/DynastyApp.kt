@@ -45,6 +45,7 @@ import dev.novux.dynasty.cbb.ui.offseason.OffseasonScreen
 import dev.novux.dynasty.cbb.ui.preseason.PreseasonScreen
 import dev.novux.dynasty.cbb.ui.signingday.SigningDayInitialTab
 import dev.novux.dynasty.cbb.ui.signingday.SigningDayScreen
+import dev.novux.dynasty.cbb.ui.news.NewsHubScreen
 import dev.novux.dynasty.cbb.ui.seasonreview.SeasonReviewScreen
 import dev.novux.dynasty.cbb.ui.shell.SplashScreen
 import dev.novux.dynasty.cbb.ui.shell.StudioScreen
@@ -249,6 +250,7 @@ fun DynastyApp(
                                     popUpTo(AppRoute.Home.route) { inclusive = false }
                                 }
                             },
+                            onOpenNewsHub = { navController.navigate(AppRoute.NewsHub.route) },
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
@@ -277,6 +279,7 @@ fun DynastyApp(
                             onOpenStrategy = {
                                 navController.navigate(AppRoute.Strategy.route)
                             },
+                            onOpenNewsHub = { navController.navigate(AppRoute.NewsHub.route) },
                             onOpenDiscipline = { incident ->
                                 disciplineIncident = incident
                                 navController.navigate(AppRoute.Discipline.route)
@@ -356,6 +359,7 @@ fun DynastyApp(
                             weekEightRepository = offseasonWeekEightRepository,
                             weekNineRepository = offseasonWeekNineRepository,
                             weekTenRepository = offseasonWeekTenRepository,
+                            onOpenNewsHub = { navController.navigate(AppRoute.NewsHub.route) },
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
@@ -432,6 +436,26 @@ fun DynastyApp(
                         settingsRepository = settingsRepository,
                         onBack = { navController.popBackStack() },
                     )
+                }
+                composable(AppRoute.NewsHub.route) {
+                    val session = ActiveDynastySession.current
+                    val app = LocalContext.current.requireDynastyApplication()
+                    if (session != null) {
+                        NewsHubScreen(
+                            dynastyId = session.dynastyId,
+                            seasonIndex = session.metadata.seasonIndex,
+                            position = session.weekCheckpoint.activePosition,
+                            newsFeedRepository = app.newsFeedRepository,
+                            incomingClassSeedRepository = incomingClassSeedRepository,
+                            portalCycleRepository = portalCycleRepository,
+                            offseasonWeekTwoRepository = offseasonWeekTwoRepository,
+                            onBack = { navController.popBackStack() },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
                 }
             }
 

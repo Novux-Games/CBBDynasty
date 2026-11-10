@@ -29,6 +29,12 @@ class NewsFeedRepository(
         return Json.decodeFromString(raw)
     }
 
+    suspend fun storiesFeed(dynastyId: String, seasonIndex: Int): List<NewsHeadline> {
+        ensureRecruitingSpotlight(dynastyId, seasonIndex)
+        return loadArchive(dynastyId, seasonIndex)
+            .sortedWith(compareByDescending<NewsHeadline> { it.createdAtMs }.thenByDescending { it.priority })
+    }
+
     suspend fun shallowFeed(
         dynastyId: String,
         seasonIndex: Int,

@@ -69,6 +69,7 @@ fun PreseasonScreen(
     seasonStartRepository: PreseasonSeasonStartRepository,
     onSeasonStarted: () -> Unit,
     onExitHome: () -> Unit,
+    onOpenNewsHub: () -> Unit = {},
     rosterRepository: DynastyRosterRepository,
     userCalendarRepository: UserCalendarRepository,
 ) {
@@ -94,7 +95,10 @@ fun PreseasonScreen(
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val phaseLabel = CalendarWeekLabel.display(position)
-    val menu = listOf(DynastyShellMenuAction(R.string.shell_menu_exit_home, onExitHome))
+    val menu = listOf(
+        DynastyShellMenuAction(R.string.shell_menu_news_hub, onOpenNewsHub),
+        DynastyShellMenuAction(R.string.shell_menu_exit_home, onExitHome),
+    )
 
     DynastyShellChrome(
         schoolDisplayName = schoolName,

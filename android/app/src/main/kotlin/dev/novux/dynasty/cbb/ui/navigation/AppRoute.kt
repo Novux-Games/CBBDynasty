@@ -36,4 +36,6 @@ sealed class AppRoute(val route: String) {
     data object Recruiting : AppRoute("recruiting")
 
     data object SigningDay : AppRoute("signing_day")
+
+    data object NewsHub : AppRoute("news_hub")
 }

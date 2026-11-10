@@ -101,6 +101,7 @@ fun DynastyShellScreen(
     userCalendarRepository: UserCalendarRepository,
     newsFeedRepository: NewsFeedRepository,
     onOpenStrategy: () -> Unit,
+    onOpenNewsHub: () -> Unit,
     onOpenDiscipline: (PendingDisciplineIncident) -> Unit,
     onExitHome: () -> Unit,
 ) {
@@ -309,6 +310,7 @@ fun DynastyShellScreen(
         },
         DynastyShellMenuAction(R.string.staff_open_tab) { coachView = ShellCoachView.Staff },
         DynastyShellMenuAction(R.string.dynasty_shell_open_strategy, onOpenStrategy),
+        DynastyShellMenuAction(R.string.shell_menu_news_hub, onOpenNewsHub),
         DynastyShellMenuAction(R.string.shell_menu_exit_home, onExitHome),
     )
 
