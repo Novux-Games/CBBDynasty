@@ -303,7 +303,16 @@ class SaveSlotRepository(
         val slotIndex = firstEmptySlotIndex() ?: return null
         val dynastyId = UUID.randomUUID().toString()
         val coachName = draft.coach.displayName()
-        val metadata = DynastyBootstrap.newDynasty(dynastyId = dynastyId, packId = packId)
+        val shippedBalance = balanceRulesetRepository.ensureShippedDefaultLoaded()
+        val shippedSim = simTuningRepository.ensureShippedDefaultLoaded()
+        val metadata = DynastyBootstrap.newDynasty(
+            dynastyId = dynastyId,
+            packId = packId,
+            balanceRulesetId = shippedBalance.balanceRulesetId,
+            balanceSchemaVersion = shippedBalance.schemaVersion,
+            simTuningId = shippedSim.simTuningId,
+            simSchemaVersion = shippedSim.schemaVersion,
+        )
         val seasonLabel = SeasonMembershipYear.label(metadata.seasonIndex)
         val now = System.currentTimeMillis()
 
@@ -347,6 +356,8 @@ class SaveSlotRepository(
             summary = summary,
             metadata = metadata,
             weekCheckpoint = weekCheckpoint,
+            balanceRuleset = shippedBalance,
+            simTuning = shippedSim,
         )
     }
 
