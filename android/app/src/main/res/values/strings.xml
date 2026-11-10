@@ -323,6 +323,11 @@
     <string name="recruiting_badge_reach">Reach</string>
     <string name="recruiting_badge_long_shot">Long shot</string>
     <string name="dashboard_optional_heading">Optional tasks</string>
+    <string name="dashboard_notification_heading">Notifications</string>
+    <string name="dashboard_notification_modal_continue">Continue</string>
+    <string name="settings_section_notifications">Notifications</string>
+    <string name="settings_dashboard_notification_feed">Show dashboard notification feed</string>
+    <string name="settings_dashboard_notification_feed_summary">In-app alerts on your dynasty dashboard (no phone push).</string>
     <string name="dashboard_required_heading">Required tasks</string>
     <string name="dashboard_task_signing_rankings">View recruiting rankings (Top 60)</string>
     <string name="dashboard_task_signing_positions">Change positions on your incoming class</string>

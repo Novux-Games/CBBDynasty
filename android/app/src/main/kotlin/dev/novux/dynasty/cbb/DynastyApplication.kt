@@ -106,6 +106,9 @@ class DynastyApplication : Application() {
     lateinit var nilAnnualPoolRepository: dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository
         private set
 
+    lateinit var notificationFeedRepository: dev.novux.dynasty.cbb.data.notification.NotificationFeedRepository
+        private set
+
     lateinit var offseasonWeekTwoRepository: OffseasonWeekTwoRepository
         private set
 
@@ -193,6 +196,9 @@ class DynastyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         appSettingsRepository = AppSettingsRepository(applicationContext)
+        notificationFeedRepository = dev.novux.dynasty.cbb.data.notification.NotificationFeedRepository(
+            applicationContext,
+        )
         packRepository = PackRepository(applicationContext)
         balanceRulesetRepository = BalanceRulesetRepository(applicationContext)
         simTuningRepository = SimTuningRepository(applicationContext)

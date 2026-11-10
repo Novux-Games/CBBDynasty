@@ -32,7 +32,12 @@ class AppSettingsRepository(
             prefs[Keys.SFX_ENABLED] = updated.sfxEnabled
             prefs[Keys.MUSIC_ENABLED] = updated.musicEnabled
             prefs[Keys.MASTER_VOLUME_PERCENT] = updated.masterVolumePercent
+            prefs[Keys.SHOW_DASHBOARD_NOTIFICATION_FEED] = updated.showDashboardNotificationFeed
         }
+    }
+
+    suspend fun setShowDashboardNotificationFeed(enabled: Boolean) {
+        update { it.copy(showDashboardNotificationFeed = enabled) }
     }
 
     suspend fun setSkipStudioIntro(enabled: Boolean) {
@@ -58,6 +63,7 @@ class AppSettingsRepository(
             musicEnabled = this[Keys.MUSIC_ENABLED] ?: true,
             masterVolumePercent = this[Keys.MASTER_VOLUME_PERCENT]
                 ?: AppSettings.DEFAULT_MASTER_VOLUME,
+            showDashboardNotificationFeed = this[Keys.SHOW_DASHBOARD_NOTIFICATION_FEED] ?: true,
         )
 
     private object Keys {
@@ -65,5 +71,6 @@ class AppSettingsRepository(
         val SFX_ENABLED = booleanPreferencesKey("sfx_enabled")
         val MUSIC_ENABLED = booleanPreferencesKey("music_enabled")
         val MASTER_VOLUME_PERCENT = intPreferencesKey("master_volume_percent")
+        val SHOW_DASHBOARD_NOTIFICATION_FEED = booleanPreferencesKey("show_dashboard_notification_feed")
     }
 }

@@ -31,9 +31,14 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.balance.BalanceMedicalRedshirtRules
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
+import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentStatus
 import dev.novux.dynasty.cbb.core.dashboard.DashboardAdvanceGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
+import dev.novux.dynasty.cbb.core.dashboard.InSeasonWeekGames
+import dev.novux.dynasty.cbb.core.notification.NotificationFeedItem
+import dev.novux.dynasty.cbb.core.notification.NotificationSnapshotInput
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
@@ -68,7 +73,11 @@ import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
 import dev.novux.dynasty.cbb.data.school.SchoolHubRepository
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
+import dev.novux.dynasty.cbb.ui.dashboard.CareerBlockNotificationDialog
+import dev.novux.dynasty.cbb.ui.dashboard.DashboardNotificationFeedPanel
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardOptionalTasksPanel
+import dev.novux.dynasty.cbb.data.coach.CoachEmploymentRepository
+import dev.novux.dynasty.cbb.data.notification.NotificationFeedRepository
 import dev.novux.dynasty.cbb.ui.player.PlayerCardSheet
 import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
 import dev.novux.dynasty.cbb.ui.player.PlayerLoyaltyChips
@@ -112,9 +121,14 @@ fun DynastyShellScreen(
     chemistryRepository: ChemistryRepository,
     userCalendarRepository: UserCalendarRepository,
     newsFeedRepository: NewsFeedRepository,
+    notificationFeedRepository: NotificationFeedRepository,
+    coachEmploymentRepository: CoachEmploymentRepository,
+    showNotificationFeed: Boolean = true,
     hubMenuCallbacks: DynastyHubMenuCallbacks,
     onOpenDiscipline: (PendingDisciplineIncident) -> Unit,
     onOpenGamePreview: () -> Unit = {},
+    onOpenSigningDay: () -> Unit = {},
+    onOpenRecruitingTab: (RecruitingHubTab) -> Unit = {},
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
@@ -140,6 +154,8 @@ fun DynastyShellScreen(
     var coachSkillState by remember {
         mutableStateOf(dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointState())
     }
+    var notificationFeed by remember { mutableStateOf<List<NotificationFeedItem>>(emptyList()) }
+    var careerModal by remember { mutableStateOf<NotificationFeedItem?>(null) }
     val scope = rememberCoroutineScope()
     val medicalRules = remember { BalanceMedicalRedshirtRules() }
     val position = loaded.weekCheckpoint.activePosition
@@ -154,7 +170,7 @@ fun DynastyShellScreen(
         coachSkillPointBank = coachSkillPointBank,
     )
 
-    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint) {
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint, showNotificationFeed) {
         teamChemistry = chemistryRepository.loadState(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
@@ -195,6 +211,33 @@ fun DynastyShellScreen(
         )
         coachSkillState = skillState
         coachSkillPointBank = skillState.unspentBank
+        if (showNotificationFeed) {
+            val weekGames = InSeasonWeekGames.forPosition(
+                loaded.weekCheckpoint.activePosition,
+                schedulePlan,
+                exhibitionCount,
+            )
+            val gameLabel = weekGames.firstOrNull()?.let { game ->
+                val prep = if (game.homeGame) "vs" else "at"
+                "Week ${loaded.weekCheckpoint.activePosition.weekIndex} — $prep ${game.opponentDisplayName}"
+            }
+            val injuryLines = rosterPlayers.filter { it.injuryActive }.map { player ->
+                "${player.displayName} is injured."
+            }
+            val employment = coachEmploymentRepository.loadState(loaded.dynastyId)
+            val snapshot = NotificationSnapshotInput(
+                asOfMs = System.currentTimeMillis(),
+                newInjurySummaries = injuryLines,
+                gameThisWeekLabel = gameLabel,
+                coachSkillPointsBank = skillState.unspentBank,
+                careerFired = employment.status == CoachEmploymentStatus.Unemployed,
+            )
+            notificationFeed = notificationFeedRepository.refreshFromSnapshot(loaded.dynastyId, snapshot)
+            careerModal = notificationFeedRepository.pendingCareerModal(loaded.dynastyId)
+        } else {
+            notificationFeed = emptyList()
+            careerModal = null
+        }
     }
 
     PlayerCardSheet(player = cardPlayer, onDismiss = { cardPlayer = null })
@@ -241,6 +284,25 @@ fun DynastyShellScreen(
             }
         },
     )
+
+    careerModal?.let { modal ->
+        CareerBlockNotificationDialog(
+            item = modal,
+            onAcknowledge = {
+                scope.launch {
+                    notificationFeedRepository.acknowledgeCareerModal(loaded.dynastyId, modal.eventKey)
+                    careerModal = notificationFeedRepository.pendingCareerModal(loaded.dynastyId)
+                }
+            },
+            onOpenDestination = {
+                when (modal.kind) {
+                    dev.novux.dynasty.cbb.core.notification.NotificationEventKind.CareerFired ->
+                        hubMenuCallbacks.onExitHome()
+                    else -> staffRoster?.headCoach?.let { coachView = ShellCoachView.HeadCoach(it) }
+                }
+            },
+        )
+    }
 
     when (val view = coachView) {
         is ShellCoachView.School -> {
@@ -420,16 +482,27 @@ fun DynastyShellScreen(
                         }
                     }
                 }
+                if (showNotificationFeed) {
+                    DashboardNotificationFeedPanel(
+                        feed = notificationFeed,
+                        onDeepLink = onOpenRecruitingTab,
+                        onStrategyOpen = hubMenuCallbacks.onOpenStrategy,
+                        onCoachCardOpen = {
+                            staffRoster?.headCoach?.let { coachView = ShellCoachView.HeadCoach(it) }
+                        },
+                        onSigningDayOpen = onOpenSigningDay,
+                    )
+                }
                 DashboardRequiredTasksPanel(
                     tasks = dashboardTasks.required,
-                    onOpenSigningDay = { },
+                    onOpenSigningDay = onOpenSigningDay,
                     onOpenDiscipline = { disciplinePending?.let(onOpenDiscipline) },
                 )
                 DashboardOptionalTasksPanel(
                     tasks = dashboardTasks.optional,
                     dismissedIds = dismissedInjuryTasks,
                     onDismiss = { dismissedInjuryTasks = dismissedInjuryTasks + it },
-                    onDeepLink = { },
+                    onDeepLink = onOpenRecruitingTab,
                     onStrategyOpen = hubMenuCallbacks.onOpenStrategy,
                     onCoachCardOpen = {
                         staffRoster?.headCoach?.let { coachView = ShellCoachView.HeadCoach(it) }

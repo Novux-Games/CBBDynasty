@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -84,6 +86,7 @@ fun DynastyApp(
 ) {
     DynastyTheme {
         var launchSettings by remember { mutableStateOf<AppSettings?>(null) }
+        val appSettings by settingsRepository.settingsFlow.collectAsState(initial = AppSettings())
         val scope = rememberCoroutineScope()
 
         LaunchedEffect(settingsRepository) {
@@ -364,7 +367,15 @@ fun DynastyApp(
                             userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
                             newsFeedRepository = LocalContext.current.requireDynastyApplication().newsFeedRepository,
                             coachSkillPointRepository = LocalContext.current.requireDynastyApplication().coachSkillPointRepository,
+                            notificationFeedRepository = LocalContext.current.requireDynastyApplication().notificationFeedRepository,
+                            coachEmploymentRepository = coachEmploymentRepository,
+                            showNotificationFeed = appSettings.showDashboardNotificationFeed,
                             hubMenuCallbacks = hubMenuCallbacks,
+                            onOpenSigningDay = { navController.navigate(AppRoute.SigningDay.route) },
+                            onOpenRecruitingTab = { tab ->
+                                recruitingLaunchTab = tab
+                                navController.navigate(AppRoute.Recruiting.route)
+                            },
                             onOpenDiscipline = { incident ->
                                 disciplineIncident = incident
                                 navController.navigate(AppRoute.Discipline.route)

@@ -8,6 +8,8 @@ data class AppSettings(
     val sfxEnabled: Boolean = true,
     val musicEnabled: Boolean = true,
     val masterVolumePercent: Int = DEFAULT_MASTER_VOLUME,
+    /** In-app dashboard notification feed ([planning/notifications.md#defaults--settings]). */
+    val showDashboardNotificationFeed: Boolean = true,
 ) {
     init {
         require(masterVolumePercent in 0..100) {
