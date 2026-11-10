@@ -16,6 +16,7 @@ import dev.novux.dynasty.cbb.core.preseason.tournament.EarlySeasonBracketSeason
 import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
 import dev.novux.dynasty.cbb.core.schedule.ScheduleGameKind
 import dev.novux.dynasty.cbb.data.preseason.EarlySeasonBracketRepository
+import dev.novux.dynasty.cbb.data.news.NewsFeedRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import kotlinx.coroutines.flow.first
@@ -31,6 +32,7 @@ class LeagueWeekBatchRepository(
     private val leagueScheduleRepository: LeagueScheduleRepository,
     private val preseasonScheduleRepository: PreseasonScheduleRepository,
     private val earlySeasonBracketRepository: EarlySeasonBracketRepository,
+    private val newsFeedRepository: NewsFeedRepository,
     private val database: DynastyDatabase,
 ) {
     suspend fun loadStandings(dynastyId: String, seasonIndex: Int): LeagueStandingsState? {
@@ -84,6 +86,7 @@ class LeagueWeekBatchRepository(
             seed = seed,
         )
         persist(dynastyId, batch.standings)
+        newsFeedRepository.appendLeagueWeek(dynastyId, batch.standings)
     }
 
     private fun buildUserResult(

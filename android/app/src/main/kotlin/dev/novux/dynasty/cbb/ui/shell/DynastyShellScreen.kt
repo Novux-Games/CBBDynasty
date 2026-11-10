@@ -73,7 +73,9 @@ import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
-import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTab
+import dev.novux.dynasty.cbb.core.news.NewsHeadline
+import dev.novux.dynasty.cbb.data.news.NewsFeedRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import kotlinx.coroutines.launch
 
@@ -97,6 +99,7 @@ fun DynastyShellScreen(
     disciplineRepository: DisciplineRepository,
     chemistryRepository: ChemistryRepository,
     userCalendarRepository: UserCalendarRepository,
+    newsFeedRepository: NewsFeedRepository,
     onOpenStrategy: () -> Unit,
     onOpenDiscipline: (PendingDisciplineIncident) -> Unit,
     onExitHome: () -> Unit,
@@ -119,6 +122,7 @@ fun DynastyShellScreen(
     var exhibitionCount by remember { mutableStateOf(0) }
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
+    var newsHeadlines by remember { mutableStateOf<List<NewsHeadline>>(emptyList()) }
     val scope = rememberCoroutineScope()
     val medicalRules = remember { BalanceMedicalRedshirtRules() }
     val position = loaded.weekCheckpoint.activePosition
@@ -158,6 +162,12 @@ fun DynastyShellScreen(
         rosterPreview = fullRoster.take(6)
         disciplinePending = disciplineRepository.loadState(loaded.dynastyId, loaded.metadata.seasonIndex).pending
         postgameEvents = rosterRepository.peekPostgameInjuries(loaded.dynastyId)
+        newsHeadlines = newsFeedRepository.shallowFeed(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+            loaded.weekCheckpoint.activePosition.weekIndex,
+            rosterPlayers,
+        )
     }
 
     PlayerCardSheet(player = cardPlayer, onDismiss = { cardPlayer = null })
@@ -173,6 +183,24 @@ fun DynastyShellScreen(
             ).eligible
         },
         onDismiss = {
+            scope.launch {
+                if (postgameEvents.isNotEmpty()) {
+                    val names = rosterPlayers.associate { it.playerId to it.displayName }
+                    newsFeedRepository.appendUserInjuries(
+                        loaded.dynastyId,
+                        loaded.metadata.seasonIndex,
+                        loaded.weekCheckpoint.activePosition.weekIndex,
+                        names,
+                        postgameEvents,
+                    )
+                    newsHeadlines = newsFeedRepository.shallowFeed(
+                        loaded.dynastyId,
+                        loaded.metadata.seasonIndex,
+                        loaded.weekCheckpoint.activePosition.weekIndex,
+                        rosterPlayers,
+                    )
+                }
+            }
             rosterRepository.clearPostgameInjuries(loaded.dynastyId)
             postgameEvents = emptyList()
         },
@@ -304,7 +332,7 @@ fun DynastyShellScreen(
                 calendarRepository = userCalendarRepository,
                 contentPadding = padding,
             )
-            DynastyShellTab.News -> DynastyShellNewsTabPlaceholder(padding)
+            DynastyShellTab.News -> DynastyShellNewsTab(headlines = newsHeadlines, contentPadding = padding)
             DynastyShellTab.Dashboard -> Column(
                 modifier = Modifier
                     .fillMaxSize()

@@ -273,6 +273,7 @@ fun DynastyApp(
                             disciplineRepository = LocalContext.current.requireDynastyApplication().disciplineRepository,
                             chemistryRepository = LocalContext.current.requireDynastyApplication().chemistryRepository,
                             userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
+                            newsFeedRepository = LocalContext.current.requireDynastyApplication().newsFeedRepository,
                             onOpenStrategy = {
                                 navController.navigate(AppRoute.Strategy.route)
                             },

@@ -18,6 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.news.NewsHeadline
+import dev.novux.dynasty.cbb.core.news.NewsHeadlineKind
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
 import dev.novux.dynasty.cbb.ui.player.PlayerLoyaltyChips
@@ -90,23 +92,56 @@ fun DynastyShellCalendarTabPlaceholder(contentPadding: PaddingValues) {
 }
 
 @Composable
-fun DynastyShellNewsTabPlaceholder(contentPadding: PaddingValues) {
+fun DynastyShellNewsTab(
+    headlines: List<NewsHeadline>,
+    contentPadding: PaddingValues,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(contentPadding)
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+            .padding(horizontal = 20.dp, vertical = 12.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
             text = stringResource(R.string.shell_tab_news),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
         )
-        Text(
-            text = stringResource(R.string.shell_news_placeholder),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        if (headlines.isEmpty()) {
+            Text(
+                text = stringResource(R.string.shell_news_empty),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        } else {
+            headlines.forEach { headline ->
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text(
+                            text = newsKindLabel(headline.kind),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                        Text(text = headline.title, style = MaterialTheme.typography.bodyLarge)
+                    }
+                }
+            }
+        }
     }
+}
+
+@Composable
+private fun newsKindLabel(kind: NewsHeadlineKind): String = when (kind) {
+    NewsHeadlineKind.UserInjury -> stringResource(R.string.shell_news_kind_user_injury)
+    NewsHeadlineKind.LeagueInjury -> stringResource(R.string.shell_news_kind_league_injury)
+    NewsHeadlineKind.LeagueResult -> stringResource(R.string.shell_news_kind_league_result)
+    NewsHeadlineKind.RecruitingSpotlight -> stringResource(R.string.shell_news_kind_recruiting)
+    NewsHeadlineKind.General -> stringResource(R.string.shell_news_kind_general)
+}
+
+@Composable
+fun DynastyShellNewsTabPlaceholder(contentPadding: PaddingValues) {
+    DynastyShellNewsTab(headlines = emptyList(), contentPadding = contentPadding)
 }

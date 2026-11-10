@@ -12,6 +12,7 @@ import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
 import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.league.LeagueScheduleRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
+import dev.novux.dynasty.cbb.data.news.NewsFeedRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
@@ -60,6 +61,9 @@ class DynastyApplication : Application() {
         private set
 
     lateinit var userCalendarRepository: UserCalendarRepository
+        private set
+
+    lateinit var newsFeedRepository: NewsFeedRepository
         private set
 
     lateinit var leagueScheduleRepository: LeagueScheduleRepository
@@ -184,11 +188,13 @@ class DynastyApplication : Application() {
             leagueScheduleRepository,
         )
         userCalendarRepository = UserCalendarRepository(preseasonScheduleRepository, packRepository, database)
+        newsFeedRepository = NewsFeedRepository(applicationContext, incomingClassSeedRepository)
         leagueWeekBatchRepository = LeagueWeekBatchRepository(
             applicationContext,
             leagueScheduleRepository,
             preseasonScheduleRepository,
             earlySeasonBracketRepository,
+            newsFeedRepository,
             database,
         )
         preseasonReportRepository = PreseasonReportRepository(
