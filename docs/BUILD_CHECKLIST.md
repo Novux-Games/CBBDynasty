@@ -127,7 +127,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 |------|--------|-----------|------|------|
 | 5.1 | `[x]` `CalendarPhase` state machine | All phases in [time-system](../planning/time-system.md) | [time-system](../planning/time-system.md) | `:core/calendar` |
 | 5.2 | `[x]` Exhibition weeks 1–3 labels | Advancing empty exhib week OK | [time-system](../planning/time-system.md) | — |
-| 5.3 | `[ ]` RS weeks 1–32 + bye weeks (events, conf, postseason) | Unit tests for bye logic; bye **advance** ticks injury `weeksRemaining` | [time-system](../planning/time-system.md), [injuries](../planning/injuries.md) | `:core` tests |
+| 5.3 | `[x]` RS weeks 1–32 + bye weeks (events, conf, postseason) | Unit tests for bye logic; bye **advance** ticks injury `weeksRemaining` | [time-system](../planning/time-system.md), [injuries](../planning/injuries.md) | `:core` tests |
 | 5.4 | `[ ]` Conf-tourney week count = **pack max rounds** | Short conf byes while others play | [time-system](../planning/time-system.md) | — |
 | 5.5 | `[ ]` Postseason **7** league weeks always | Non-participant can advance + view brackets | [time-system](../planning/time-system.md), [postseason](../planning/postseason.md) | — |
 | 5.6 | `[ ]` **End of Season** week → offseason entry | [season-review](../planning/season-review.md) gate | [season-review](../planning/season-review.md) | `ui.seasonreview` |
