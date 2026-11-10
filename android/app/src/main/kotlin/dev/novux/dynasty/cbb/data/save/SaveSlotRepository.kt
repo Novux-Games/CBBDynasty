@@ -38,6 +38,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.recruiting.ai.AiRecruitingWeekRunner
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
+import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
@@ -69,6 +70,7 @@ class SaveSlotRepository(
     private val recruitingEconomyRepository: RecruitingEconomyRepository,
     private val portalCycleRepository: PortalCycleRepository,
     private val aiRecruitingRepository: AiRecruitingRepository,
+    private val dynastyRosterRepository: DynastyRosterRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -354,6 +356,7 @@ class SaveSlotRepository(
             coachDao.upsert(draft.toCoachEntity(dynastyId))
             val roster = SeasonOneRosterGenerator.generate(dynastyId)
             rosterDao.upsertAll(roster.toEntities())
+            dynastyRosterRepository.normalizeDefaultLineup(dynastyId)
             weekCheckpointRepository.insertBootstrapCalendar(metadata)
             slotDao.upsert(
                 SaveSlotEntity(
@@ -492,7 +495,11 @@ class SaveSlotRepository(
         val checkpoint = preAdvance.checkpointAfterPreAdvance
         val aiWeek = aiRecruitingRepository.runLeagueWeekIfActive(loaded, ledger, userManualRecruitingSpent)
         val recruitingSpentClosingWeek = aiWeek?.userPointsSpent ?: 0
-        weekCheckpointRepository.advanceWeek(loaded.dynastyId, checkpoint)
+        val advanceResult = weekCheckpointRepository.advanceWeek(loaded.dynastyId, checkpoint)
+        dynastyRosterRepository.tickInjuriesForWeekAdvance(
+            loaded.dynastyId,
+            advanceResult.committedWeek.phase,
+        )
         val meta = metadataDao.getById(loaded.dynastyId)?.toDomain()
         if (meta != null) {
             val slotEntity = slotDao.getByIndex(slotIndex)

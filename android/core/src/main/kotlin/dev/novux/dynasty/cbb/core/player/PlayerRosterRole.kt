@@ -7,4 +7,6 @@ data class PlayerRosterRole(
     val declaredForDraft: Boolean,
     val draftStockPoints: Int,
     val proDayCompleted: Boolean,
+    val starterSlotWire: String? = null,
+    val rsGamesPlayedSeason: Int = 0,
 )

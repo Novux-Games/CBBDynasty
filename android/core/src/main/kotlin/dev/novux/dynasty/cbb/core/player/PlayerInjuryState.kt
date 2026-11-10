@@ -8,6 +8,12 @@ data class PlayerInjuryState(
     val injuryId: String?,
     val weeksRemaining: Int,
     val label: String?,
+    val severityWire: String? = null,
+    val occurredAtRsWeek: Int = 0,
+    val occurredAtRsGameIndex: Int = 0,
+    val rsGamesPlayedAtInjury: Int = 0,
+    val wasStarterSlotWire: String? = null,
+    val priorRotationBand: Int? = null,
 ) {
     init {
         require(weeksRemaining >= 0)

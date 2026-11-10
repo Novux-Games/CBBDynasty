@@ -163,6 +163,7 @@ class DynastyApplication : Application() {
             recruitingEconomyRepository,
             portalCycleRepository,
             aiRecruitingRepository,
+            dynastyRosterRepository,
         )
         preseasonSeasonStartRepository = PreseasonSeasonStartRepository(
             saveSlotRepository,

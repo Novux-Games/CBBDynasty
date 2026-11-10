@@ -4,6 +4,34 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.novux.dynasty.cbb.core.save.DynastySchema
 
+val MIGRATION_12_13 = object : Migration(12, 13) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN injurySeverityWire TEXT")
+        db.execSQL(
+            "ALTER TABLE dynasty_roster_player ADD COLUMN injuryOccurredAtRsWeek INTEGER NOT NULL DEFAULT 0",
+        )
+        db.execSQL(
+            "ALTER TABLE dynasty_roster_player ADD COLUMN injuryOccurredAtRsGameIndex INTEGER NOT NULL DEFAULT 0",
+        )
+        db.execSQL(
+            "ALTER TABLE dynasty_roster_player ADD COLUMN rsGamesPlayedAtInjury INTEGER NOT NULL DEFAULT 0",
+        )
+        db.execSQL(
+            "ALTER TABLE dynasty_roster_player ADD COLUMN rsGamesPlayedSeason INTEGER NOT NULL DEFAULT 0",
+        )
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN injuryWasStarterSlotWire TEXT")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN injuryPriorRotationBand INTEGER")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN starterSlotWire TEXT")
+        db.execSQL(
+            """
+            UPDATE dynasty_roster_player
+            SET starterSlotWire = positionWire
+            WHERE isStarter = 1 AND starterSlotWire IS NULL
+            """.trimIndent(),
+        )
+    }
+}
+
 val MIGRATION_11_12 = object : Migration(11, 12) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN loyaltyRating INTEGER NOT NULL DEFAULT 50")

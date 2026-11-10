@@ -1,0 +1,47 @@
+package dev.novux.dynasty.cbb.core.injuries
+
+import dev.novux.dynasty.cbb.core.balance.BalanceMedicalRedshirtRules
+import dev.novux.dynasty.cbb.core.roster.RosterPlayer
+
+object MedicalRedshirtPolicy {
+    data class Eligibility(
+        val eligible: Boolean,
+        val reason: String? = null,
+    )
+
+    fun evaluate(
+        player: RosterPlayer,
+        rsWeekIndex: Int,
+        rules: BalanceMedicalRedshirtRules,
+    ): Eligibility {
+        if (!player.injuryActive) return Eligibility(false, "not_injured")
+        if (player.medicalRedshirtSeason) return Eligibility(false, "already_medical_rs")
+        val severity = player.injurySeverityWire?.let(InjurySeverity::fromWire)
+            ?: return Eligibility(false, "unknown_severity")
+        if (severity.wire !in rules.qualifyingSeverities) {
+            return Eligibility(false, "severity_not_qualifying")
+        }
+        if (rsWeekIndex >= rules.blockedFromRegularSeasonWeek) {
+            return Eligibility(false, "after_week_gate")
+        }
+        if (player.rsGamesPlayedSeason > rules.maxGamesPlayed) {
+            return Eligibility(false, "too_many_games_played")
+        }
+        if (player.rsGamesPlayedSeason < rules.maxGamesPlayed &&
+            player.injuryOccurredAtRsGameIndex > rules.maxScheduleRsGameIndex
+        ) {
+            return Eligibility(false, "schedule_index_too_late")
+        }
+        return Eligibility(true)
+    }
+
+    fun apply(player: RosterPlayer): RosterPlayer =
+        player.copy(
+            medicalRedshirtSeason = true,
+            injuryActive = false,
+            injuryWeeksRemaining = 0,
+            injuryLabel = "Medical redshirt",
+            isStarter = false,
+            starterSlotWire = null,
+        )
+}

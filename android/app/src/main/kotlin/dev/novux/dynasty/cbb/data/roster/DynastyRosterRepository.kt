@@ -1,5 +1,11 @@
 package dev.novux.dynasty.cbb.data.roster
 
+import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
+import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
+import dev.novux.dynasty.cbb.core.injuries.InjuryApplyContext
+import dev.novux.dynasty.cbb.core.injuries.InjuryRosterOps
+import dev.novux.dynasty.cbb.core.injuries.MedicalRedshirtPolicy
+import dev.novux.dynasty.cbb.core.lineup.DefaultStarterAlgorithm
 import dev.novux.dynasty.cbb.core.offseason.weekone.DraftStockLine
 import dev.novux.dynasty.cbb.core.offseason.weekone.PortalWeekOnePartition
 import dev.novux.dynasty.cbb.core.offseason.weekone.ProDayEligibility
@@ -98,4 +104,35 @@ class DynastyRosterRepository(
 
     fun transferTab(players: List<RosterPlayer>): List<RosterPlayer> =
         PortalWeekOnePartition.onTransferTab(players)
+
+    suspend fun normalizeDefaultLineup(dynastyId: String): List<RosterPlayer> {
+        val players = listPlayers(dynastyId)
+        val starters = DefaultStarterAlgorithm.pickStarters(players)
+        val adjusted = DefaultStarterAlgorithm.applyToRoster(players, starters)
+        adjusted.forEach { dao.upsert(it.toEntity()) }
+        return adjusted
+    }
+
+    suspend fun tickInjuriesForWeekAdvance(dynastyId: String, phaseCommitted: CalendarPhase): List<RosterPlayer> {
+        val ticked = InjuryRosterOps.tickWeekAdvance(phaseCommitted, listPlayers(dynastyId))
+        ticked.players.forEach { dao.upsert(it.toEntity()) }
+        return ticked.players
+    }
+
+    suspend fun applyGameInjuries(
+        dynastyId: String,
+        events: List<GameSimInjuryEvent>,
+        context: InjuryApplyContext,
+    ): List<RosterPlayer> {
+        val updated = InjuryRosterOps.applyGameInjuries(listPlayers(dynastyId), events, context)
+        updated.forEach { dao.upsert(it.toEntity()) }
+        return updated
+    }
+
+    suspend fun applyMedicalRedshirt(dynastyId: String, playerId: String): List<RosterPlayer> {
+        val player = listPlayers(dynastyId).first { it.playerId == playerId }
+        val next = MedicalRedshirtPolicy.apply(player)
+        dao.upsert(next.toEntity())
+        return listPlayers(dynastyId)
+    }
 }
