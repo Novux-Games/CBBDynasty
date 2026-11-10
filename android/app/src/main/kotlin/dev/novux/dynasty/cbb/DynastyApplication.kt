@@ -169,6 +169,9 @@ class DynastyApplication : Application() {
     lateinit var coachSecurityRepository: CoachSecurityRepository
         private set
 
+    lateinit var seasonReviewRepository: dev.novux.dynasty.cbb.data.seasonreview.SeasonReviewRepository
+        private set
+
     lateinit var coachSkillPointRepository: CoachSkillPointRepository
         private set
 
@@ -306,6 +309,14 @@ class DynastyApplication : Application() {
             database,
         )
         coachSecurityRepository = CoachSecurityRepository(applicationContext, database)
+        seasonReviewRepository = dev.novux.dynasty.cbb.data.seasonreview.SeasonReviewRepository(
+            database,
+            packRepository,
+            leagueWeekBatchRepository,
+            recruitingEconomyRepository,
+            offseasonWeekNineRepository,
+            coachSecurityRepository,
+        )
         applicationScope.launch {
             saveSlotRepository.ensureInitialized()
             packRepository.ensureEmbeddedLoaded()

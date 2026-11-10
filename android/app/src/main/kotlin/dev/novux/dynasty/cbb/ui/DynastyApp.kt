@@ -232,6 +232,7 @@ fun DynastyApp(
                         SeasonReviewScreen(
                             loaded = session,
                             saveSlotRepository = saveSlotRepository,
+                            seasonReviewRepository = LocalContext.current.requireDynastyApplication().seasonReviewRepository,
                             onReturnedHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
