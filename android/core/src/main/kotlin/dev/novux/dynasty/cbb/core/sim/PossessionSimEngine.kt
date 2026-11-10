@@ -1,8 +1,5 @@
 package dev.novux.dynasty.cbb.core.sim
 
-import dev.novux.dynasty.cbb.core.strategy.GameplanEffectsResolver
-import dev.novux.dynasty.cbb.core.strategy.GameplanUsageNormalizer
-import dev.novux.dynasty.cbb.core.strategy.SchemeMatchupResolver
 import dev.novux.dynasty.cbb.core.strategy.ResolvedSchemeEffects
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
 import kotlin.math.max
@@ -13,77 +10,23 @@ import kotlin.random.Random
  * Possession-based regulation sim — [planning/simulation-engine.md#possession-loop--clock].
  */
 object PossessionSimEngine {
-    fun simulate(input: GameSimInput): GameSimResult {
-        val random = Random(input.seed)
-        var gameClock = GameSimClock.REGULATION_SECONDS
-        var offenseHome = random.nextBoolean()
-        var homeBox = TeamBoxScore(teamId = input.home.teamId)
-        var awayBox = TeamBoxScore(teamId = input.away.teamId)
-        val log = mutableListOf<String>()
-        var totalPossessions = 0
+    fun simulate(input: GameSimInput): GameSimResult =
+        simulate(input, SimulateOptions())
 
-        while (gameClock > 0) {
-            val sides = if (offenseHome) {
-                PossessionSides(input.home, input.away, homeBox, "HOME")
-            } else {
-                PossessionSides(input.away, input.home, awayBox, "AWAY")
+    fun simulate(input: GameSimInput, options: SimulateOptions): GameSimResult {
+        val session = PossessionSimSession(input, options.resume, options.stopAtHalftime)
+        while (session.hasNext()) {
+            val step = session.step()
+            if (step.haltedAtHalftime) {
+                return session.toResult(isComplete = false)
             }
-            val schemeEffects = SchemeMatchupResolver.resolve(
-                sides.offense.offensiveScheme,
-                sides.defense.defensiveScheme,
-            )
-            val offGameplan = if (offenseHome) {
-                input.activeHomeGameplan(gameClock)
-            } else {
-                input.activeAwayGameplan(gameClock)
-            }
-            val defGameplan = if (offenseHome) {
-                input.activeAwayGameplan(gameClock)
-            } else {
-                input.activeHomeGameplan(gameClock)
-            }
-            val defenseScore = if (offenseHome) awayBox.points else homeBox.points
-            val offenseScore = if (offenseHome) homeBox.points else awayBox.points
-            val usagePeak = GameplanUsageNormalizer.normalize(offGameplan?.usageWeights.orEmpty())
-                .values
-                .maxOrNull() ?: 0.2
-            val effects = GameplanEffectsResolver.mergeInto(
-                schemeEffects,
-                GameplanEffectsResolver.offenseTweaks(offGameplan, usagePeak),
-                GameplanEffectsResolver.defenseTweaks(defGameplan, gameClock, defenseScore, offenseScore),
-            )
-            val tripSeconds = pacedTripSeconds(input.tuning, random, effects.tripPaceScale)
-            val used = min(tripSeconds, gameClock)
-            gameClock -= used
-            totalPossessions++
-
-            val offRating = (if (offenseHome) input.homeOffensive() else input.awayOffensive()) +
-                effects.offensiveRatingDelta
-            val defRating = (if (offenseHome) input.awayDefensive() else input.homeDefensive()) +
-                effects.defensiveRatingDelta
-            val after = resolvePossession(sides.box, offRating, defRating, effects, random)
-            if (offenseHome) {
-                homeBox = after
-            } else {
-                awayBox = after
-            }
-            log += formatLog(used, gameClock, sides.label, sides.box, after)
-            offenseHome = !offenseHome
         }
-
-        val result = GameSimResult(
-            homeScore = homeBox.points,
-            awayScore = awayBox.points,
-            homeBox = homeBox,
-            awayBox = awayBox,
-            totalPossessions = totalPossessions,
-            possessionLog = log,
-        )
+        val result = session.toResult(isComplete = true)
         BoxScoreCoherence.assertValid(result)
         return result
     }
 
-    private data class PossessionSides(
+    internal data class Sides(
         val offense: GameSimTeamInput,
         val defense: GameSimTeamInput,
         val box: TeamBoxScore,
@@ -113,7 +56,7 @@ object PossessionSimEngine {
         return raw.coerceIn(GameSimClock.MIN_TRIP_SECONDS, GameSimClock.MAX_TRIP_SECONDS)
     }
 
-    private fun resolvePossession(
+    internal fun resolvePossessionForSession(
         offense: TeamBoxScore,
         offRating: Int,
         defRating: Int,
@@ -147,7 +90,7 @@ object PossessionSimEngine {
             else -> {
                 val attempt = box.fieldGoalsAttempted + 1
                 val three = random.nextDouble() < effects.threePointAttemptRate * 0.92
-                val next = if (three) {
+                if (three) {
                     box.copy(
                         fieldGoalsAttempted = attempt,
                         threePointsAttempted = box.threePointsAttempted + 1,
@@ -155,12 +98,11 @@ object PossessionSimEngine {
                 } else {
                     box.copy(fieldGoalsAttempted = attempt)
                 }
-                next
             }
         }
     }
 
-    private fun formatLog(
+    internal fun formatPossessionLog(
         used: Int,
         clockRemaining: Int,
         offense: String,

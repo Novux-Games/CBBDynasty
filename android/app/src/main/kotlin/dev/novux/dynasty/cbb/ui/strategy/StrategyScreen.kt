@@ -11,6 +11,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +42,9 @@ fun StrategyScreen(
     fatigueTuning: dev.novux.dynasty.cbb.core.balance.BalanceFatigue =
         dev.novux.dynasty.cbb.core.balance.BalanceFatigue(),
     onBack: () -> Unit,
+    onWatchScrimmage: () -> Unit = {},
+    homeTeamLabel: String = "Home",
+    awayTeamLabel: String = "Away",
 ) {
     var players by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
     LaunchedEffect(dynastyId) {
@@ -118,6 +122,17 @@ fun StrategyScreen(
             halftimeGameplan = halftimeGameplan,
             onHalftimeChange = { halftimeGameplan = it },
         )
+        Button(
+            onClick = {
+                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeGameplan = halftimeGameplan ?: gameplan
+                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeName = homeTeamLabel
+                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.awayName = awayTeamLabel
+                onWatchScrimmage()
+            },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(stringResource(R.string.strategy_watch_scrimmage))
+        }
         OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.settings_back))
         }

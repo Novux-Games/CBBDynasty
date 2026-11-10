@@ -70,4 +70,6 @@ data class GameSimResult(
     val awayBox: TeamBoxScore,
     val totalPossessions: Int,
     val possessionLog: List<String>,
+    val isComplete: Boolean = true,
+    val midGame: MidGameState? = null,
 )

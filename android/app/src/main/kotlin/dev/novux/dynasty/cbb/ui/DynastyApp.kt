@@ -15,6 +15,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Scaffold
@@ -35,6 +36,8 @@ import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
 import dev.novux.dynasty.cbb.ui.shell.DynastyShellScreen
 import dev.novux.dynasty.cbb.ui.strategy.StrategyScreen
+import dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch
+import dev.novux.dynasty.cbb.ui.sim.GameWatchScreen
 import dev.novux.dynasty.cbb.ui.discipline.DisciplineDecisionScreen
 import dev.novux.dynasty.cbb.ui.newgame.NewGameWizardScreen
 import dev.novux.dynasty.cbb.ui.offseason.CoachingCarouselScreen
@@ -353,12 +356,35 @@ fun DynastyApp(
                             rosterRepository = app.dynastyRosterRepository,
                             teamChemistry = teamChem,
                             fatigueTuning = fatigueTuning,
+                            homeTeamLabel = session.summary.schoolDisplayName.orEmpty().ifBlank { "Home" },
+                            awayTeamLabel = stringResource(R.string.game_watch_opponent_scrimmage),
+                            onWatchScrimmage = { navController.navigate(AppRoute.GameWatch.route) },
                             onBack = { navController.popBackStack() },
                         )
                     } else {
                         LaunchedEffect(Unit) {
                             navController.popBackStack(AppRoute.Home.route, inclusive = false)
                         }
+                    }
+                }
+                composable(AppRoute.GameWatch.route) {
+                    val app = LocalContext.current.requireDynastyApplication()
+                    var tuning by remember {
+                        mutableStateOf<dev.novux.dynasty.cbb.core.sim.tuning.SimTuning?>(null)
+                    }
+                    LaunchedEffect(Unit) {
+                        tuning = app.simTuningRepository.activeTuning()
+                    }
+                    val ready = tuning
+                    if (ready != null) {
+                        GameWatchScreen(
+                            tuning = ready,
+                            homeName = GameWatchLaunch.homeName,
+                            awayName = GameWatchLaunch.awayName,
+                            homeGameplan = GameWatchLaunch.homeGameplan,
+                            onHomeHalftimeGameplan = { GameWatchLaunch.homeGameplan = it },
+                            onBack = { navController.popBackStack() },
+                        )
                     }
                 }
                 composable(AppRoute.Offseason.route) {
