@@ -91,8 +91,8 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 2.3 | `[x]` Dynasty metadata schema (`seasonIndex`, `phase`, `packId`) | Round-trip one empty dynasty | [game-design](../planning/game-design.md) | `:core`, Room `dynasty_metadata`, **New** bootstrap |
 | 2.4 | `[x]` **Week advance** checkpoint semantics | Replay before advance; lock after | [game-design](../planning/game-design.md) | `:core/calendar/checkpoint`, Room `dynasty_calendar` + `provisional_games` |
 | 2.5 | `[x]` Unreadable-save handling on Load | Validate + repair calendar; fallback delete UI | [game-start](../planning/game-start.md) | `DynastySaveValidator`, `SaveLoadUnavailableDialog` |
-| 2.6 | `[ ]` **Balance ruleset** loader + pin on dynasty | Loads & pins: scholarship **15**, `recruiting.*`, loyalty, `nil.*`, `injuries.*`, `discipline.*`, `chemistry`, `fatigue` | [ADR-002](ADR-002-balance-ruleset-bundle.md), [`balance-2026.json`](../assets/balance/balance-2026.json) | `:core/balance` |
-| 2.7 | `[ ]` **Sim tuning** loader + pin on dynasty | `simSchemaVersion`; possession tables load in sim module | [ADR-003](ADR-003-sim-tuning-bundle.md) | `:core/sim/tuning` |
+| 2.6 | `[x]` **Balance ruleset** loader + pin on dynasty | Loads & pins: scholarship **15**, `recruiting.*`, loyalty, `nil.*`, `injuries.*`, `discipline.*`, `chemistry`, `fatigue` | [ADR-002](ADR-002-balance-ruleset-bundle.md), [`balance-2026.json`](../assets/balance/balance-2026.json) | `:core/balance` |
+| 2.7 | `[x]` **Sim tuning** loader + pin on dynasty | `simSchemaVersion`; possession tables load in sim module | [ADR-003](ADR-003-sim-tuning-bundle.md) | `:core/sim/tuning` |
 
 ---
 
