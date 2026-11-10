@@ -110,6 +110,8 @@ fun DynastyApp(
                 LocalContext.current.requireDynastyApplication().incomingClassSeedRepository
             val tournamentInvitesRepository =
                 LocalContext.current.requireDynastyApplication().tournamentInvitesRepository
+            val preseasonScheduleRepository =
+                LocalContext.current.requireDynastyApplication().preseasonScheduleRepository
 
             suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
@@ -220,6 +222,7 @@ fun DynastyApp(
                             progressRepository = preseasonProgressRepository,
                             incomingClassSeedRepository = incomingClassSeedRepository,
                             tournamentInvitesRepository = tournamentInvitesRepository,
+                            scheduleRepository = preseasonScheduleRepository,
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },

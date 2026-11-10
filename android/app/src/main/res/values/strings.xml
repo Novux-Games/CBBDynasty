@@ -202,6 +202,17 @@
     <string name="tournament_invites_declined_all">Declined all invites — full 32 builder slots</string>
     <string name="tournament_invites_none_ack">No invites — full 32 builder slots</string>
     <string name="preseason_rs_builder_slots">Schedule builder: %1$d of %2$d regular-season slots available</string>
+    <string name="preseason_exhibitions_title">Exhibition games</string>
+    <string name="preseason_exhibitions_hint">Pick 0–3 exhibitions. They do not count on your record.</string>
+    <string name="preseason_exhibitions_skip">Skip exhibitions</string>
+    <string name="preseason_exhibitions_confirm">Schedule %1$d exhibitions</string>
+    <string name="preseason_rs_schedule_title">Regular-season schedule</string>
+    <string name="preseason_rs_schedule_summary">%1$d RS games · %2$d conference · %3$d non-conference · %4$d event</string>
+    <string name="preseason_rs_line_conf">Conference · %1$s (%2$s)</string>
+    <string name="preseason_rs_more_conf">Additional conference games on calendar…</string>
+    <string name="preseason_rs_run_solver">Build schedule</string>
+    <string name="preseason_rs_solving">Building schedule…</string>
+    <string name="preseason_rs_locked">Schedule saved</string>
     <string name="recruiting_hub_title">Recruiting</string>
     <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
     <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>

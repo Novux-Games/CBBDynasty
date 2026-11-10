@@ -37,6 +37,7 @@ import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.preseason.tournament.TournamentInvitesState
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonProgressRepository
+import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.preseason.TournamentInvitesRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
@@ -49,6 +50,7 @@ fun PreseasonScreen(
     progressRepository: PreseasonProgressRepository,
     incomingClassSeedRepository: IncomingClassSeedRepository,
     tournamentInvitesRepository: TournamentInvitesRepository,
+    scheduleRepository: PreseasonScheduleRepository,
     onExitHome: () -> Unit,
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
@@ -130,6 +132,42 @@ fun PreseasonScreen(
                                     loaded.dynastyId,
                                     loaded.metadata.seasonIndex,
                                 )
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    return@items
+                }
+                if (taskId == PreseasonTaskId.ScheduleExhibitions &&
+                    taskProgress.canComplete(taskId) &&
+                    !taskProgress.isComplete(taskId)
+                ) {
+                    ExhibitionSchedulePanel(
+                        dynastyId = loaded.dynastyId,
+                        seasonIndex = loaded.metadata.seasonIndex,
+                        scheduleRepository = scheduleRepository,
+                        progressRepository = progressRepository,
+                        onSaved = {
+                            scope.launch {
+                                progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    return@items
+                }
+                if (taskId == PreseasonTaskId.ScheduleRegularSeason &&
+                    taskProgress.canComplete(taskId) &&
+                    !taskProgress.isComplete(taskId)
+                ) {
+                    RegularSeasonSchedulePanel(
+                        dynastyId = loaded.dynastyId,
+                        seasonIndex = loaded.metadata.seasonIndex,
+                        scheduleRepository = scheduleRepository,
+                        progressRepository = progressRepository,
+                        onSaved = {
+                            scope.launch {
+                                progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
