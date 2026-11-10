@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.core.sim
 
+import dev.novux.dynasty.cbb.core.strategy.SchemeMatchupResolver
+import dev.novux.dynasty.cbb.core.strategy.ResolvedSchemeEffects
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
 import kotlin.math.max
 import kotlin.math.min
@@ -19,23 +21,31 @@ object PossessionSimEngine {
         var totalPossessions = 0
 
         while (gameClock > 0) {
-            val tripSeconds = pacedTripSeconds(input.tuning, random)
+            val sides = if (offenseHome) {
+                PossessionSides(input.home, input.away, homeBox, "HOME")
+            } else {
+                PossessionSides(input.away, input.home, awayBox, "AWAY")
+            }
+            val effects = SchemeMatchupResolver.resolve(
+                sides.offense.offensiveScheme,
+                sides.defense.defensiveScheme,
+            )
+            val tripSeconds = pacedTripSeconds(input.tuning, random, effects.tripPaceScale)
             val used = min(tripSeconds, gameClock)
             gameClock -= used
             totalPossessions++
 
-            val (before, offTeam, offRating, defRating) = if (offenseHome) {
-                Quad(homeBox, "HOME", input.homeOffensive(), input.awayDefensive())
-            } else {
-                Quad(awayBox, "AWAY", input.awayOffensive(), input.homeDefensive())
-            }
-            val after = resolvePossession(before, offRating, defRating, random)
+            val offRating = (if (offenseHome) input.homeOffensive() else input.awayOffensive()) +
+                effects.offensiveRatingDelta
+            val defRating = (if (offenseHome) input.awayDefensive() else input.homeDefensive()) +
+                effects.defensiveRatingDelta
+            val after = resolvePossession(sides.box, offRating, defRating, effects, random)
             if (offenseHome) {
                 homeBox = after
             } else {
                 awayBox = after
             }
-            log += formatLog(used, gameClock, offTeam, before, after)
+            log += formatLog(used, gameClock, sides.label, sides.box, after)
             offenseHome = !offenseHome
         }
 
@@ -51,20 +61,21 @@ object PossessionSimEngine {
         return result
     }
 
-    private data class Quad(
-        val offense: TeamBoxScore,
+    private data class PossessionSides(
+        val offense: GameSimTeamInput,
+        val defense: GameSimTeamInput,
+        val box: TeamBoxScore,
         val label: String,
-        val offRating: Int,
-        val defRating: Int,
     )
 
-    internal fun pacedTripSeconds(tuning: SimTuning, random: Random): Int {
+    internal fun pacedTripSeconds(tuning: SimTuning, random: Random, tripPaceScale: Double = 1.0): Int {
         val raw = sampleTripSeconds(tuning, random)
         val targetPerTeam = (tuning.possessionsPerGameTarget.min + tuning.possessionsPerGameTarget.max) / 2
         val targetTrips = targetPerTeam * 2
         val baselineAvg = 12.0
         val scale = (GameSimClock.REGULATION_SECONDS.toDouble() / targetTrips) / baselineAvg
-        return (raw * scale).toInt().coerceIn(GameSimClock.MIN_TRIP_SECONDS, GameSimClock.MAX_TRIP_SECONDS)
+        val adjusted = (raw * scale * tripPaceScale).toInt()
+        return adjusted.coerceIn(GameSimClock.MIN_TRIP_SECONDS, GameSimClock.MAX_TRIP_SECONDS)
     }
 
     internal fun sampleTripSeconds(tuning: SimTuning, random: Random): Int {
@@ -84,16 +95,17 @@ object PossessionSimEngine {
         offense: TeamBoxScore,
         offRating: Int,
         defRating: Int,
+        effects: ResolvedSchemeEffects,
         random: Random,
     ): TeamBoxScore {
         var box = offense.copy(possessions = offense.possessions + 1)
         val edge = (offRating - defRating).coerceIn(-30, 30)
-        val makeBias = 0.42 + edge * 0.004
+        val makeBias = (0.42 + edge * 0.004 + effects.makeRateAdjust).coerceIn(0.25, 0.65)
         val roll = random.nextDouble()
         return when {
-            roll < 0.22 -> box.copy(turnovers = box.turnovers + 1)
-            roll < 0.55 -> {
-                val three = random.nextDouble() < 0.38
+            roll < effects.turnoverChance -> box.copy(turnovers = box.turnovers + 1)
+            roll < effects.turnoverChance + 0.33 -> {
+                val three = random.nextDouble() < effects.threePointAttemptRate
                 val attempt = box.fieldGoalsAttempted + 1
                 val made = random.nextDouble() < makeBias
                 var next = box.copy(fieldGoalsAttempted = attempt)
@@ -112,7 +124,7 @@ object PossessionSimEngine {
             }
             else -> {
                 val attempt = box.fieldGoalsAttempted + 1
-                val three = random.nextDouble() < 0.35
+                val three = random.nextDouble() < effects.threePointAttemptRate * 0.92
                 val next = if (three) {
                     box.copy(
                         fieldGoalsAttempted = attempt,

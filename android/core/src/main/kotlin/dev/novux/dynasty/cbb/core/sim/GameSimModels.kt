@@ -1,6 +1,8 @@
 package dev.novux.dynasty.cbb.core.sim
 
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
+import dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset
+import dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset
 
 /** Regulation length — [planning/simulation-engine.md#possession-loop--clock]. */
 object GameSimClock {
@@ -14,6 +16,8 @@ data class GameSimTeamInput(
     val teamId: String,
     val offensiveRating: Int,
     val defensiveRating: Int,
+    val offensiveScheme: OffensiveSchemePreset = OffensiveSchemePreset.Balanced,
+    val defensiveScheme: DefensiveSchemePreset = DefensiveSchemePreset.ManToMan,
 )
 
 data class GameSimInput(

@@ -8,6 +8,7 @@ import dev.novux.dynasty.cbb.core.sim.tuning.SimShotClock
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTimeUsedSeconds
 import dev.novux.dynasty.cbb.core.sim.tuning.SimVenueModifiers
 import dev.novux.dynasty.cbb.core.sim.tuning.IntMinMax
+import dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset
 import kotlinx.serialization.json.JsonObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -104,6 +105,40 @@ class PossessionSimEngineTest {
         )
         assertTrue(result.homeScore + result.awayScore > 0)
         assertTrue(strong.weightedOffensive() > weak.weightedOffensive())
+    }
+
+    @Test
+    fun perimeterSchemeAttemptsMoreThreesThanPost() {
+        val team = GameSimTeamInput("t", 75, 75)
+        var perimeterThrees = 0
+        var postThrees = 0
+        repeat(40) { i ->
+            val perimeter = PossessionSimEngine.simulate(
+                GameSimInput(
+                    home = team.copy(
+                        teamId = "perim",
+                        offensiveScheme = OffensiveSchemePreset.Perimeter,
+                    ),
+                    away = team.copy(teamId = "opp"),
+                    tuning = tuning,
+                    seed = 1000L + i,
+                ),
+            )
+            val post = PossessionSimEngine.simulate(
+                GameSimInput(
+                    home = team.copy(
+                        teamId = "post",
+                        offensiveScheme = OffensiveSchemePreset.Post,
+                    ),
+                    away = team.copy(teamId = "opp2"),
+                    tuning = tuning,
+                    seed = 1000L + i,
+                ),
+            )
+            perimeterThrees += perimeter.homeBox.threePointsAttempted
+            postThrees += post.homeBox.threePointsAttempted
+        }
+        assertTrue(perimeterThrees > postThrees)
     }
 
     @Test
