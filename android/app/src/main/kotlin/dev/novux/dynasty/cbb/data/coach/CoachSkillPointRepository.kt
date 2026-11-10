@@ -7,8 +7,12 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
+import dev.novux.dynasty.cbb.core.coach.CoachArchetype
+import dev.novux.dynasty.cbb.core.coach.skill.CoachAutoSpendEngine
+import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillBranch
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointState
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointStateReducer
+import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillTreeEngine
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -23,12 +27,32 @@ class CoachSkillPointRepository(private val context: Context) {
         return Json.decodeFromString(raw)
     }
 
-    suspend fun ensureSundayGrant(dynastyId: String, position: CalendarPosition): CoachSkillPointState {
+    suspend fun ensureSundayGrant(
+        dynastyId: String,
+        position: CalendarPosition,
+        archetype: CoachArchetype = CoachArchetype.Balanced,
+    ): CoachSkillPointState {
         val current = loadState(dynastyId)
-        val next = CoachSkillPointStateReducer.ensureSundayGrant(current, position)
+        val next = CoachSkillPointStateReducer.ensureSundayGrant(current, position, archetype)
         if (next != current) {
             persist(dynastyId, next)
         }
+        return next
+    }
+
+    suspend fun spendOnBranch(dynastyId: String, branch: CoachSkillBranch): CoachSkillPointState {
+        val current = loadState(dynastyId)
+        val next = CoachSkillTreeEngine.spend(current, branch)
+        persist(dynastyId, next)
+        return next
+    }
+
+    suspend fun setAutoSpend(dynastyId: String, enabled: Boolean, archetype: CoachArchetype): CoachSkillPointState {
+        var next = loadState(dynastyId).copy(autoSpendEnabled = enabled)
+        if (enabled && next.unspentBank > 0) {
+            next = CoachAutoSpendEngine.applyAll(next, archetype)
+        }
+        persist(dynastyId, next)
         return next
     }
 

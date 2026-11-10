@@ -137,6 +137,9 @@ fun DynastyShellScreen(
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     var newsHeadlines by remember { mutableStateOf<List<NewsHeadline>>(emptyList()) }
     var coachSkillPointBank by remember { mutableIntStateOf(0) }
+    var coachSkillState by remember {
+        mutableStateOf(dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointState())
+    }
     val scope = rememberCoroutineScope()
     val medicalRules = remember { BalanceMedicalRedshirtRules() }
     val position = loaded.weekCheckpoint.activePosition
@@ -183,10 +186,14 @@ fun DynastyShellScreen(
             loaded.weekCheckpoint.activePosition.weekIndex,
             rosterPlayers,
         )
+        val archetype = staffRoster?.headCoach?.archetype
+            ?: dev.novux.dynasty.cbb.core.coach.CoachArchetype.Balanced
         val skillState = coachSkillPointRepository.ensureSundayGrant(
             loaded.dynastyId,
             loaded.weekCheckpoint.activePosition,
+            archetype,
         )
+        coachSkillState = skillState
         coachSkillPointBank = skillState.unspentBank
     }
 
@@ -278,6 +285,29 @@ fun DynastyShellScreen(
                     card = view.card,
                     userCoachSecurity = coachSecurity,
                     skillPointBank = coachSkillPointBank,
+                    skillState = coachSkillState,
+                    displayRatings = dev.novux.dynasty.cbb.core.coach.skill.HeadCoachSkillRatings.effective(
+                        view.card.ratings,
+                        coachSkillState,
+                    ),
+                    onSpendSkill = { branch ->
+                        scope.launch {
+                            val next = coachSkillPointRepository.spendOnBranch(loaded.dynastyId, branch)
+                            coachSkillState = next
+                            coachSkillPointBank = next.unspentBank
+                        }
+                    },
+                    onAutoSpendChanged = { enabled ->
+                        scope.launch {
+                            val next = coachSkillPointRepository.setAutoSpend(
+                                loaded.dynastyId,
+                                enabled,
+                                view.card.archetype,
+                            )
+                            coachSkillState = next
+                            coachSkillPointBank = next.unspentBank
+                        }
+                    },
                     modifier = Modifier.weight(1f),
                 )
             }

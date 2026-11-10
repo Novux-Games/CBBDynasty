@@ -47,6 +47,7 @@ import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
+import dev.novux.dynasty.cbb.core.coach.CoachArchetype
 import dev.novux.dynasty.cbb.data.coach.CoachSkillPointRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
@@ -557,7 +558,11 @@ class SaveSlotRepository(
             teamPlayedGame,
             userWonGame,
         )
-        coachSkillPointRepository.ensureSundayGrant(loaded.dynastyId, advanceResult.committedWeek)
+        coachSkillPointRepository.ensureSundayGrant(
+            loaded.dynastyId,
+            advanceResult.committedWeek,
+            coachArchetype(loaded.dynastyId),
+        )
         val meta = metadataDao.getById(loaded.dynastyId)?.toDomain()
         if (meta != null) {
             val slotEntity = slotDao.getByIndex(slotIndex)
@@ -642,6 +647,11 @@ class SaveSlotRepository(
             unresolvedOptionalTaskCount = unresolvedOptionalTaskCount,
             injuredPlayersTicking = injuredTicking,
         )
+    }
+
+    private suspend fun coachArchetype(dynastyId: String): CoachArchetype {
+        val wire = coachDao.getByDynastyId(dynastyId)?.archetypeWire
+        return CoachArchetype.fromWire(wire.orEmpty()) ?: CoachArchetype.Balanced
     }
 
     suspend fun completeSeasonReviewEnterOffseason(slotIndex: Int): DynastyLoadResult {
