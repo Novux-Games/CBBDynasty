@@ -184,6 +184,9 @@ class DynastyApplication : Application() {
     lateinit var coachSkillPointRepository: CoachSkillPointRepository
         private set
 
+    lateinit var coachEmploymentRepository: dev.novux.dynasty.cbb.data.coach.CoachEmploymentRepository
+        private set
+
     override fun onCreate() {
         super.onCreate()
         appSettingsRepository = AppSettingsRepository(applicationContext)
@@ -330,6 +333,11 @@ class DynastyApplication : Application() {
             database,
         )
         coachSecurityRepository = CoachSecurityRepository(applicationContext, database)
+        coachEmploymentRepository = dev.novux.dynasty.cbb.data.coach.CoachEmploymentRepository(
+            applicationContext,
+            database,
+            packRepository,
+        )
         historyRepository = dev.novux.dynasty.cbb.data.history.HistoryRepository(
             applicationContext,
             database,

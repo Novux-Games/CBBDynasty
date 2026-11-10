@@ -5,6 +5,8 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.calendar.SeasonReviewGate
 import dev.novux.dynasty.cbb.core.carousel.CoachingCarouselGate
 import dev.novux.dynasty.cbb.core.carousel.CoachingCarouselState
+import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentStatus
+import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentState
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 
 /** Routes after a dynasty load or sign ([planning/game-start.md], [planning/offseason.md]). */
@@ -13,8 +15,12 @@ object DynastyLaunch {
         navController: NavHostController,
         loaded: LoadedDynasty,
         carousel: CoachingCarouselState,
+        employment: CoachEmploymentState = CoachEmploymentState(),
     ) {
         when {
+            employment.status == CoachEmploymentStatus.Unemployed -> {
+                navController.navigate(AppRoute.JobCenter.route)
+            }
             SeasonReviewGate.isActive(loaded.weekCheckpoint) -> {
                 navController.navigate(AppRoute.SeasonReview.route)
             }

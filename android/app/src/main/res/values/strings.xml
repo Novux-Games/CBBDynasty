@@ -403,6 +403,11 @@
     <string name="coach_skill_branch_level">%1$s — level %2$d / %3$d</string>
     <string name="coach_skill_spend_point">Spend 1</string>
     <string name="coach_skill_auto_spend">Auto-spend Sundays</string>
+    <string name="job_center_title">Job center</string>
+    <string name="job_center_hint">You are unemployed — the league keeps simming. Accept an offer to take a program, or wait for new cards next week.</string>
+    <string name="job_center_offer_meta">Prestige %1$d · %2$s</string>
+    <string name="job_center_accept">Accept offer</string>
+    <string name="job_center_decline_wait">Decline all and wait</string>
     <string name="discipline_dismiss_player">Dismiss from team</string>
     <string name="discipline_suspend_games_label">Suspend for games (1–10)</string>
     <string name="discipline_suspend_games">Suspend player</string>

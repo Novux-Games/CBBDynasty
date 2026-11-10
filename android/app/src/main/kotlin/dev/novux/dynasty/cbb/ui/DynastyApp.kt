@@ -145,6 +145,8 @@ fun DynastyApp(
                 LocalContext.current.requireDynastyApplication().schoolHubRepository
             val coachSecurityRepository =
                 LocalContext.current.requireDynastyApplication().coachSecurityRepository
+            val coachEmploymentRepository =
+                LocalContext.current.requireDynastyApplication().coachEmploymentRepository
 
             val hubMenuCallbacks = DynastyHubMenuCallbacks(
                 onOpenSchool = { navController.navigate(AppRoute.SchoolHub.route) },
@@ -171,7 +173,11 @@ fun DynastyApp(
                     loaded.dynastyId,
                     loaded.metadata.seasonIndex,
                 )
-                DynastyLaunch.navigateForLoaded(navController, loaded, carousel)
+                val employment = coachEmploymentRepository.refreshOffersIfNeeded(
+                    loaded.dynastyId,
+                    loaded.metadata.seasonIndex,
+                )
+                DynastyLaunch.navigateForLoaded(navController, loaded, carousel, employment)
             }
 
             Scaffold(
@@ -239,7 +245,23 @@ fun DynastyApp(
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
                             onEnteredOffseason = { updated ->
-                                scope.launch { onDynastyReady(updated) }
+                                scope.launch {
+                                    val security = coachSecurityRepository.loadForUserDynasty(updated.dynastyId)
+                                    if (
+                                        dev.novux.dynasty.cbb.core.coach.employment.CoachFiringEngine
+                                            .shouldEnterUnemployed(
+                                                security.jobSecurity.score,
+                                                updated.metadata.seasonIndex,
+                                                updated.dynastyId,
+                                            )
+                                    ) {
+                                        coachEmploymentRepository.enterUnemployed(
+                                            updated.dynastyId,
+                                            updated.metadata.seasonIndex,
+                                        )
+                                    }
+                                    onDynastyReady(updated)
+                                }
                             },
                             userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
                         )
@@ -258,6 +280,38 @@ fun DynastyApp(
                             onComplete = {
                                 navController.navigate(AppRoute.Offseason.route) {
                                     popUpTo(AppRoute.Home.route) { inclusive = false }
+                                }
+                            },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
+                }
+                composable(AppRoute.JobCenter.route) {
+                    val session = ActiveDynastySession.current
+                    var employment by remember {
+                        mutableStateOf(dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentState())
+                    }
+                    if (session != null) {
+                        LaunchedEffect(session.dynastyId, session.metadata.seasonIndex) {
+                            employment = coachEmploymentRepository.refreshOffersIfNeeded(
+                                session.dynastyId,
+                                session.metadata.seasonIndex,
+                            )
+                        }
+                        dev.novux.dynasty.cbb.ui.coach.JobCenterScreen(
+                            offers = employment.pendingOffers,
+                            onAccept = { offer ->
+                                scope.launch {
+                                    coachEmploymentRepository.acceptOffer(session.dynastyId, offer)
+                                    onDynastyReady(session)
+                                }
+                            },
+                            onWait = {
+                                navController.navigate(AppRoute.Home.route) {
+                                    popUpTo(AppRoute.Home.route) { inclusive = true }
                                 }
                             },
                         )
