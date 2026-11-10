@@ -50,8 +50,18 @@ data class BalanceNetWeights(
 )
 
 @Serializable
+data class BalanceSeedIndexWeights(
+    val nem: Double = 0.34,
+    val qrs: Double = 0.24,
+    val sos: Double = 0.22,
+    val form: Double = 0.12,
+    val rq: Double = 0.08,
+)
+
+@Serializable
 data class BalanceSelectionTuning(
     val netWeights: BalanceNetWeights = BalanceNetWeights(),
+    val seedIndexWeights: BalanceSeedIndexWeights = BalanceSeedIndexWeights(),
     val mediaPollWeights: BalancePollWeights = BalancePollWeights(),
     val coachesPollWeights: BalancePollWeights = BalancePollWeights(
         netAnchor = 0.78,

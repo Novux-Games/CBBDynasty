@@ -169,6 +169,10 @@ class LeagueWeekBatchRepository(
         )
     }
 
+    suspend fun persistStandings(dynastyId: String, state: LeagueStandingsState) {
+        persist(dynastyId, state)
+    }
+
     private suspend fun persist(dynastyId: String, state: LeagueStandingsState) {
         context.leagueStandingsStore.edit {
             it[key(dynastyId, state.seasonIndex)] = Json.encodeToString(state)
