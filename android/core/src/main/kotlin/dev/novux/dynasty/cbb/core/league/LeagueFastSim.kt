@@ -1,11 +1,36 @@
 package dev.novux.dynasty.cbb.core.league
 
-import kotlin.random.Random
+import dev.novux.dynasty.cbb.core.sim.GameSimInput
+import dev.novux.dynasty.cbb.core.sim.GameSimTeamInput
+import dev.novux.dynasty.cbb.core.sim.PossessionSimEngine
+import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
 
-/** Placeholder possession-free sim for league batch ([planning/simulation-engine.md]). */
+/** Fast batch sim using possession engine when tuning is supplied ([planning/simulation-engine.md]). */
 object LeagueFastSim {
-    fun simGame(matchup: LeagueMatchup, seed: Long): LeagueGameResult {
-        val random = Random(seed xor matchup.homeTeamId.hashCode().toLong() xor matchup.awayTeamId.hashCode().toLong())
+    fun simGame(matchup: LeagueMatchup, seed: Long, tuning: SimTuning? = null): LeagueGameResult {
+        if (tuning != null) {
+            val sim = PossessionSimEngine.simulate(
+                GameSimInput(
+                    home = GameSimTeamInput(matchup.homeTeamId, DEFAULT_RATING, DEFAULT_RATING),
+                    away = GameSimTeamInput(matchup.awayTeamId, DEFAULT_RATING, DEFAULT_RATING),
+                    tuning = tuning,
+                    seed = seed xor matchup.homeTeamId.hashCode().toLong() xor matchup.awayTeamId.hashCode().toLong(),
+                ),
+            )
+            var home = sim.homeScore
+            var away = sim.awayScore
+            if (home == away) home += 1
+            return LeagueGameResult(
+                homeTeamId = matchup.homeTeamId,
+                awayTeamId = matchup.awayTeamId,
+                homeScore = home,
+                awayScore = away,
+                rsWeekIndex = matchup.rsWeekIndex,
+            )
+        }
+        val random = kotlin.random.Random(
+            seed xor matchup.homeTeamId.hashCode().toLong() xor matchup.awayTeamId.hashCode().toLong(),
+        )
         var home = 58 + random.nextInt(40)
         var away = 58 + random.nextInt(40)
         if (home == away) {
@@ -19,4 +44,6 @@ object LeagueFastSim {
             rsWeekIndex = matchup.rsWeekIndex,
         )
     }
+
+    private const val DEFAULT_RATING = 72
 }

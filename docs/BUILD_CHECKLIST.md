@@ -215,7 +215,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 10.1 | `[ ]` Possession loop, 40:00 clock, 3–30s trips | Box score totals sane | [simulation-engine](../planning/simulation-engine.md) | `:core/sim` |
+| 10.1 | `[x]` Possession loop, 40:00 clock, 3–30s trips | Box score totals sane | [simulation-engine](../planning/simulation-engine.md) | `:core/sim` |
 | 10.2 | `[ ]` Lineups PG–C, rotation minutes | Default starter algorithm; interchange rules; injured ineligible + auto-fill hooks | [positions](../planning/positions-and-lineup.md), [injuries](../planning/injuries.md#lineup--rotation) | `:core/sim` |
 | 10.3 | `[ ]` O/D scheme modifiers | 7×7 presets | [strategy-schemes](../planning/strategy-schemes.md) | — |
 | 10.4 | `[ ]` Gameplan knobs (usage, deny-primary, late fouls) | Pre-game + halftime | [strategy-schemes](../planning/strategy-schemes.md) | `ui.strategy` |
