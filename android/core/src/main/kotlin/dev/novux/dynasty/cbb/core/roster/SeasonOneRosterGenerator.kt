@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.core.roster
 
+import dev.novux.dynasty.cbb.core.player.PlayerBootstrapFactory
+
 object RosterConstants {
     const val SCHOLARSHIP_CAP = 15
 }
@@ -28,13 +30,15 @@ object SeasonOneRosterGenerator {
         return positions.mapIndexed { index, position ->
             val classYear = classRotation[index % classRotation.size]
             val starter = index < PlayerPosition.STARTER_ORDER.size
-            RosterPlayerSeed(
-                playerId = "$dynastyId-player-${index + 1}",
-                dynastyId = dynastyId,
-                position = position,
-                classYear = classYear,
-                isStarter = starter,
-                depthOrder = index + 1,
+            PlayerBootstrapFactory.enrichSeed(
+                RosterPlayerSeed(
+                    playerId = "$dynastyId-player-${index + 1}",
+                    dynastyId = dynastyId,
+                    position = position,
+                    classYear = classYear,
+                    isStarter = starter,
+                    depthOrder = index + 1,
+                ),
             )
         }
     }

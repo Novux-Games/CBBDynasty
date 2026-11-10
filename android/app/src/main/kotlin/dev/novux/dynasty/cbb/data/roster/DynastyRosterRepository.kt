@@ -9,6 +9,7 @@ import dev.novux.dynasty.cbb.core.offseason.weekone.WeekOnePortalBootstrap
 import dev.novux.dynasty.cbb.core.offseason.weekone.WeekTwoDraftResults
 import dev.novux.dynasty.cbb.core.offseason.weektwo.NbaDraftResolution
 import dev.novux.dynasty.cbb.core.roster.PlayerClassYear
+import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import dev.novux.dynasty.cbb.database.roster.toDomain
@@ -21,6 +22,9 @@ class DynastyRosterRepository(
 
     suspend fun listPlayers(dynastyId: String): List<RosterPlayer> =
         dao.listForDynasty(dynastyId).map { it.toDomain() }
+
+    suspend fun listDynastyPlayers(dynastyId: String): List<DynastyPlayer> =
+        listPlayers(dynastyId).map { it.toDynastyPlayer() }
 
     suspend fun prepareWeekOneLeaving(dynastyId: String): List<RosterPlayer> {
         var players = listPlayers(dynastyId)

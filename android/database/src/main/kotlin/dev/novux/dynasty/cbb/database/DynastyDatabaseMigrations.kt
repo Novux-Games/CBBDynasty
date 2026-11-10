@@ -4,6 +4,29 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.novux.dynasty.cbb.core.save.DynastySchema
 
+val MIGRATION_8_9 = object : Migration(8, 9) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN displayName TEXT NOT NULL DEFAULT ''")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN hometownCity TEXT NOT NULL DEFAULT ''")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN hometownState TEXT NOT NULL DEFAULT ''")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN heightInches INTEGER NOT NULL DEFAULT 76")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN weightLbs INTEGER NOT NULL DEFAULT 200")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN nilUsdPerYear INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN ovr INTEGER NOT NULL DEFAULT 60")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN offRating INTEGER NOT NULL DEFAULT 60")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN defRating INTEGER NOT NULL DEFAULT 60")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN eligibilityYearsUsed INTEGER NOT NULL DEFAULT 0")
+        db.execSQL(
+            "ALTER TABLE dynasty_roster_player ADD COLUMN eligibilityYearsRemaining INTEGER NOT NULL DEFAULT 4",
+        )
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN medicalRedshirtSeason INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN injuryActive INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN injuryId TEXT")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN injuryWeeksRemaining INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN injuryLabel TEXT")
+    }
+}
+
 val MIGRATION_7_8 = object : Migration(7, 8) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
