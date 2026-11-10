@@ -28,7 +28,8 @@ import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
-import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTabPlaceholder
+import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +44,7 @@ fun SeasonReviewScreen(
     saveSlotRepository: SaveSlotRepository,
     onReturnedHome: () -> Unit,
     onEnteredOffseason: (LoadedDynasty) -> Unit = { onReturnedHome() },
+    userCalendarRepository: UserCalendarRepository,
 ) {
     val scope = rememberCoroutineScope()
     val weekHeader = CalendarWeekLabel.display(loaded.weekCheckpoint.activePosition)
@@ -58,7 +60,13 @@ fun SeasonReviewScreen(
         menuActions = menu,
     ) { padding ->
         when (selectedTab) {
-            DynastyShellTab.Calendar -> DynastyShellCalendarTabPlaceholder(padding)
+            DynastyShellTab.Calendar -> DynastyShellCalendarTab(
+                dynastyId = loaded.dynastyId,
+                seasonIndex = loaded.metadata.seasonIndex,
+                activePosition = loaded.weekCheckpoint.activePosition,
+                calendarRepository = userCalendarRepository,
+                contentPadding = padding,
+            )
             DynastyShellTab.News -> DynastyShellNewsTabPlaceholder(padding)
             DynastyShellTab.Roster,
             DynastyShellTab.Dashboard,

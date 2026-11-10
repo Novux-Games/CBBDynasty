@@ -204,6 +204,7 @@ fun DynastyApp(
                             onEnteredOffseason = { updated ->
                                 scope.launch { onDynastyReady(updated) }
                             },
+                            userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
                         )
                     } else {
                         LaunchedEffect(Unit) {
@@ -242,6 +243,7 @@ fun DynastyApp(
                             preseasonReportRepository = preseasonReportRepository,
                             seasonStartRepository = preseasonSeasonStartRepository,
                             rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
+                            userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
                             onSeasonStarted = {
                                 navController.navigate(AppRoute.DynastyShell.route) {
                                     popUpTo(AppRoute.Home.route) { inclusive = false }
@@ -269,6 +271,7 @@ fun DynastyApp(
                             rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
                             disciplineRepository = LocalContext.current.requireDynastyApplication().disciplineRepository,
                             chemistryRepository = LocalContext.current.requireDynastyApplication().chemistryRepository,
+                            userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
                             onOpenStrategy = {
                                 navController.navigate(AppRoute.Strategy.route)
                             },
@@ -366,6 +369,7 @@ fun DynastyApp(
                                 }
                                 navController.navigate(AppRoute.SigningDay.route)
                             },
+                            userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
                         )
                     } else {
                         LaunchedEffect(Unit) {

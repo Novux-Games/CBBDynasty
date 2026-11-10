@@ -48,7 +48,8 @@ import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
-import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTabPlaceholder
+import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import kotlinx.coroutines.launch
@@ -66,6 +67,7 @@ fun PreseasonScreen(
     onSeasonStarted: () -> Unit,
     onExitHome: () -> Unit,
     rosterRepository: DynastyRosterRepository,
+    userCalendarRepository: UserCalendarRepository,
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     var progress by remember { mutableStateOf<PreseasonTaskProgress?>(null) }
@@ -103,7 +105,13 @@ fun PreseasonScreen(
                 contentPadding = padding,
                 onPlayerClick = { },
             )
-            DynastyShellTab.Calendar -> DynastyShellCalendarTabPlaceholder(padding)
+            DynastyShellTab.Calendar -> DynastyShellCalendarTab(
+                dynastyId = loaded.dynastyId,
+                seasonIndex = loaded.metadata.seasonIndex,
+                activePosition = position,
+                calendarRepository = userCalendarRepository,
+                contentPadding = padding,
+            )
             DynastyShellTab.News -> DynastyShellNewsTabPlaceholder(padding)
             DynastyShellTab.Dashboard -> Column(
                 modifier = Modifier

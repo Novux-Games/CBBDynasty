@@ -64,7 +64,8 @@ import dev.novux.dynasty.cbb.ui.school.SchoolHubScreen
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
-import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTabPlaceholder
+import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import kotlinx.coroutines.launch
@@ -87,6 +88,7 @@ fun DynastyShellScreen(
     rosterRepository: DynastyRosterRepository,
     disciplineRepository: DisciplineRepository,
     chemistryRepository: ChemistryRepository,
+    userCalendarRepository: UserCalendarRepository,
     onOpenStrategy: () -> Unit,
     onOpenDiscipline: (PendingDisciplineIncident) -> Unit,
     onExitHome: () -> Unit,
@@ -273,7 +275,13 @@ fun DynastyShellScreen(
                 contentPadding = padding,
                 onPlayerClick = { cardPlayer = it },
             )
-            DynastyShellTab.Calendar -> DynastyShellCalendarTabPlaceholder(padding)
+            DynastyShellTab.Calendar -> DynastyShellCalendarTab(
+                dynastyId = loaded.dynastyId,
+                seasonIndex = loaded.metadata.seasonIndex,
+                activePosition = position,
+                calendarRepository = userCalendarRepository,
+                contentPadding = padding,
+            )
             DynastyShellTab.News -> DynastyShellNewsTabPlaceholder(padding)
             DynastyShellTab.Dashboard -> Column(
                 modifier = Modifier

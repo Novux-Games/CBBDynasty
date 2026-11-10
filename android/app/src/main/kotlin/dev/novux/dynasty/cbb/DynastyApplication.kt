@@ -12,6 +12,7 @@ import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
 import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
+import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
@@ -53,6 +54,9 @@ class DynastyApplication : Application() {
         private set
 
     lateinit var chemistryRepository: ChemistryRepository
+        private set
+
+    lateinit var userCalendarRepository: UserCalendarRepository
         private set
 
     lateinit var weekCheckpointRepository: WeekCheckpointRepository
@@ -159,6 +163,7 @@ class DynastyApplication : Application() {
             database,
             tournamentInvitesRepository,
         )
+        userCalendarRepository = UserCalendarRepository(preseasonScheduleRepository, packRepository, database)
         preseasonReportRepository = PreseasonReportRepository(
             applicationContext,
             packRepository,

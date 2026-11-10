@@ -61,7 +61,8 @@ import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
-import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTabPlaceholder
+import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import dev.novux.dynasty.cbb.ui.offseason.leaving.DraftResultsWeekTwoPanel
@@ -90,6 +91,7 @@ fun OffseasonScreen(
     onExitHome: () -> Unit,
     onOpenRecruiting: (RecruitingHubTab) -> Unit = {},
     onOpenSigningDay: (DashboardDeepLink) -> Unit = {},
+    userCalendarRepository: UserCalendarRepository,
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     var ledger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
@@ -146,7 +148,13 @@ fun OffseasonScreen(
                 contentPadding = padding,
                 onPlayerClick = { },
             )
-            DynastyShellTab.Calendar -> DynastyShellCalendarTabPlaceholder(padding)
+            DynastyShellTab.Calendar -> DynastyShellCalendarTab(
+                dynastyId = loaded.dynastyId,
+                seasonIndex = loaded.metadata.seasonIndex,
+                activePosition = position,
+                calendarRepository = userCalendarRepository,
+                contentPadding = padding,
+            )
             DynastyShellTab.News -> DynastyShellNewsTabPlaceholder(padding)
             DynastyShellTab.Dashboard -> Column(
                 modifier = Modifier
