@@ -13,6 +13,7 @@ import dev.novux.dynasty.cbb.core.schedule.PreseasonScheduleSolver
 import dev.novux.dynasty.cbb.core.schedule.ScheduleGameKind
 import dev.novux.dynasty.cbb.core.schedule.ScheduledGameStub
 import dev.novux.dynasty.cbb.core.schedule.PreseasonScheduleConstants
+import dev.novux.dynasty.cbb.data.league.LeagueScheduleRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import kotlinx.coroutines.flow.first
@@ -26,6 +27,7 @@ class PreseasonScheduleRepository(
     private val packRepository: PackRepository,
     private val database: DynastyDatabase,
     private val tournamentInvitesRepository: TournamentInvitesRepository,
+    private val leagueScheduleRepository: LeagueScheduleRepository,
 ) {
     suspend fun loadExhibitionCount(dynastyId: String, seasonIndex: Int): Int =
         context.preseasonScheduleStore.data.first()[exhibitionKey(dynastyId, seasonIndex)] ?: 0
@@ -68,6 +70,7 @@ class PreseasonScheduleRepository(
         context.preseasonScheduleStore.edit { prefs ->
             prefs[planKey(dynastyId, seasonIndex)] = encodePlan(plan)
         }
+        leagueScheduleRepository.generateAndPersist(dynastyId, seasonIndex)
         return plan
     }
 

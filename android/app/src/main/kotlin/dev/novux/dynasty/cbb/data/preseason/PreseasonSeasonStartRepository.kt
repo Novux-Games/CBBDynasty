@@ -6,12 +6,14 @@ import dev.novux.dynasty.cbb.core.preseason.PreseasonStartGate
 import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
 import dev.novux.dynasty.cbb.core.save.DynastyLoadFailure
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
+import dev.novux.dynasty.cbb.data.league.LeagueScheduleRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 
 class PreseasonSeasonStartRepository(
     private val saveSlotRepository: SaveSlotRepository,
     private val progressRepository: PreseasonProgressRepository,
     private val scheduleRepository: PreseasonScheduleRepository,
+    private val leagueScheduleRepository: LeagueScheduleRepository,
 ) {
     suspend fun startSeason(slotIndex: Int): DynastyLoadResult {
         val loaded = when (val initial = saveSlotRepository.loadSlot(slotIndex)) {
@@ -35,6 +37,7 @@ class PreseasonSeasonStartRepository(
             exhibitionCount,
             plan,
         )
+        leagueScheduleRepository.generateAndPersist(loaded.dynastyId, loaded.metadata.seasonIndex)
         return saveSlotRepository.enterInSeasonFromPreseason(slotIndex, focus)
     }
 }

@@ -10,6 +10,7 @@ import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
 import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
+import dev.novux.dynasty.cbb.data.league.LeagueScheduleRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
@@ -57,6 +58,9 @@ class DynastyApplication : Application() {
         private set
 
     lateinit var userCalendarRepository: UserCalendarRepository
+        private set
+
+    lateinit var leagueScheduleRepository: LeagueScheduleRepository
         private set
 
     lateinit var weekCheckpointRepository: WeekCheckpointRepository
@@ -157,11 +161,13 @@ class DynastyApplication : Application() {
         preseasonProgressRepository = PreseasonProgressRepository(applicationContext)
         incomingClassSeedRepository = IncomingClassSeedRepository(applicationContext)
         tournamentInvitesRepository = TournamentInvitesRepository(applicationContext)
+        leagueScheduleRepository = LeagueScheduleRepository(applicationContext, packRepository)
         preseasonScheduleRepository = PreseasonScheduleRepository(
             applicationContext,
             packRepository,
             database,
             tournamentInvitesRepository,
+            leagueScheduleRepository,
         )
         userCalendarRepository = UserCalendarRepository(preseasonScheduleRepository, packRepository, database)
         preseasonReportRepository = PreseasonReportRepository(
@@ -187,6 +193,7 @@ class DynastyApplication : Application() {
             saveSlotRepository,
             preseasonProgressRepository,
             preseasonScheduleRepository,
+            leagueScheduleRepository,
         )
         schoolStaffRepository = SchoolStaffRepository(database, packRepository)
         schoolHubRepository = SchoolHubRepository(database, packRepository, preseasonProgressRepository)
