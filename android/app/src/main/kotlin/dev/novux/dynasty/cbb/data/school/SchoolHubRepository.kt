@@ -34,6 +34,8 @@ class SchoolHubRepository(
         val standings = leagueWeekBatchRepository.loadStandings(dynastyId, seasonIndex)
         val resume = standings?.let { resumeMetrics(it, teamId) }
         val netRankings = standings?.netRankByTeam?.takeIf { it.isNotEmpty() }
+        val mediaPoll = standings?.mediaPollRankByTeam?.takeIf { it.isNotEmpty() }
+        val coachesPoll = standings?.coachesPollRankByTeam?.takeIf { it.isNotEmpty() }
         return SchoolHubSnapshotFactory.build(
             team = team,
             packIndex = index,
@@ -42,6 +44,8 @@ class SchoolHubRepository(
             rankingsPublished = rankingsPublished,
             resume = resume,
             netRankings = netRankings,
+            mediaPollRankings = mediaPoll,
+            coachesPollRankings = coachesPoll,
         )
     }
 

@@ -26,6 +26,8 @@ data class LeagueStandingsState(
     val lastWeekResults: List<LeagueGameResult> = emptyList(),
     val seasonResults: List<LeagueGameResult> = emptyList(),
     val netRankByTeam: Map<String, Int> = emptyMap(),
+    val mediaPollRankByTeam: Map<String, Int> = emptyMap(),
+    val coachesPollRankByTeam: Map<String, Int> = emptyMap(),
     val netRankingsWeek: Int = 0,
     val aiInjuryRollsLastWeek: Int = 0,
 ) {

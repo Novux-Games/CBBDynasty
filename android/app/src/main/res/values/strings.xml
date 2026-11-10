@@ -263,6 +263,8 @@
     <string name="school_hub_net_rank">NCBA NET #%1$d</string>
     <string name="school_hub_media_rank">Media poll #%1$d</string>
     <string name="school_hub_coaches_rank">Coaches poll #%1$d</string>
+    <string name="school_hub_media_poll_chip">National media spotlight (ranked in the public top 25)</string>
+    <string name="school_hub_coaches_poll_chip">Coaches poll spotlight (ranked in the public top 25)</string>
     <string name="job_security_title">Job security</string>
     <string name="job_security_meter">%1$d · %2$s %3$s</string>
     <string name="job_security_helping">helping</string>

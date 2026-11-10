@@ -13,6 +13,8 @@ object SchoolHubSnapshotFactory {
         rankingsPublished: Boolean,
         resume: TeamResumeMetrics? = null,
         netRankings: Map<String, Int>? = null,
+        mediaPollRankings: Map<String, Int>? = null,
+        coachesPollRankings: Map<String, Int>? = null,
     ): SchoolHubOverview {
         val conference = packIndex.conference(team.conferenceId)
         val mates = packIndex.allTeamDisplays().filter {
@@ -28,11 +30,17 @@ object SchoolHubSnapshotFactory {
         val sos = resume?.sosRating
             ?: SchoolMetricsEstimator.strengthOfSchedule(team, mates)
         val (off, def) = SchoolMetricsEstimator.teamRatings(team)
+        val mediaRank = mediaPollRankings?.get(team.teamId)
+            ?: netRank?.let { SchoolNetRankIndex.mediaPollRank(it) }
+        val coachesRank = coachesPollRankings?.get(team.teamId)
+            ?: netRank?.let { SchoolNetRankIndex.coachesPollRank(it) }
         val rankings = if (rankingsPublished && netRank != null) {
             SchoolRankingsSnapshot(
                 netRank = netRank,
-                mediaPollRank = SchoolNetRankIndex.mediaPollRank(netRank),
-                coachesPollRank = SchoolNetRankIndex.coachesPollRank(netRank),
+                mediaPollRank = mediaRank,
+                coachesPollRank = coachesRank,
+                mediaTop25 = mediaRank != null && mediaRank <= 25,
+                coachesTop25 = coachesRank != null && coachesRank <= 25,
                 conferenceStandingLabel = confStanding,
             )
         } else {

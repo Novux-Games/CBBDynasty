@@ -91,9 +91,15 @@ private fun RankingsBlock(overview: SchoolHubOverview) {
     )
     rankings.mediaPollRank?.let {
         Text(stringResource(R.string.school_hub_media_rank, it), style = MaterialTheme.typography.bodySmall)
+        if (rankings.mediaTop25) {
+            Text(stringResource(R.string.school_hub_media_poll_chip), style = MaterialTheme.typography.labelSmall)
+        }
     }
     rankings.coachesPollRank?.let {
         Text(stringResource(R.string.school_hub_coaches_rank, it), style = MaterialTheme.typography.bodySmall)
+        if (rankings.coachesTop25) {
+            Text(stringResource(R.string.school_hub_coaches_poll_chip), style = MaterialTheme.typography.labelSmall)
+        }
     }
     rankings.conferenceStandingLabel?.let {
         Text(it, style = MaterialTheme.typography.bodySmall)

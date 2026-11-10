@@ -32,6 +32,15 @@ data class BalanceSosVenueWeights(
 )
 
 @Serializable
+data class BalancePollWeights(
+    val netAnchor: Double = 0.72,
+    val prestige: Double = 0.10,
+    val inertia: Double = 0.08,
+    val form: Double = 0.06,
+    val narrative: Double = 0.04,
+)
+
+@Serializable
 data class BalanceNetWeights(
     val nem: Double = 0.32,
     val sos: Double = 0.25,
@@ -43,6 +52,16 @@ data class BalanceNetWeights(
 @Serializable
 data class BalanceSelectionTuning(
     val netWeights: BalanceNetWeights = BalanceNetWeights(),
+    val mediaPollWeights: BalancePollWeights = BalancePollWeights(),
+    val coachesPollWeights: BalancePollWeights = BalancePollWeights(
+        netAnchor = 0.78,
+        prestige = 0.06,
+        inertia = 0.10,
+        form = 0.04,
+        narrative = 0.02,
+    ),
+    val pollInertiaCap: Double = 3.0,
+    val pollInertiaK: Double = 1.0,
     val quadCutoffs: BalanceQuadCutoffs = BalanceQuadCutoffs(),
     val quadPoints: BalanceQuadPoints = BalanceQuadPoints(),
     val sosVenueWeights: BalanceSosVenueWeights = BalanceSosVenueWeights(),
