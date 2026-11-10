@@ -10,10 +10,13 @@ import kotlin.random.Random
  * Possession-based regulation sim — [planning/simulation-engine.md#possession-loop--clock].
  */
 object PossessionSimEngine {
-    fun simulate(input: GameSimInput): GameSimResult =
-        simulate(input, SimulateOptions())
+    fun simulate(input: GameSimInput): GameSimResult = simulate(input, SimulateOptions())
 
-    fun simulate(input: GameSimInput, options: SimulateOptions): GameSimResult {
+    fun simulate(
+        input: GameSimInput,
+        options: SimulateOptions = SimulateOptions(),
+        injuryRoll: GameSimInjuryRollInput? = null,
+    ): GameSimResult {
         val session = PossessionSimSession(input, options.resume, options.stopAtHalftime)
         while (session.hasNext()) {
             val step = session.step()
@@ -21,8 +24,11 @@ object PossessionSimEngine {
                 return session.toResult(isComplete = false)
             }
         }
-        val result = session.toResult(isComplete = true)
+        var result = session.toResult(isComplete = true)
         BoxScoreCoherence.assertValid(result)
+        if (injuryRoll != null) {
+            result = GameSimInjuryRoll.attach(input, result, injuryRoll)
+        }
         return result
     }
 

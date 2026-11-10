@@ -28,6 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.sim.GameSimInput
+import dev.novux.dynasty.cbb.core.sim.GameSimInjuryRollInput
+import dev.novux.dynasty.cbb.core.sim.GameSimResult
+import dev.novux.dynasty.cbb.core.sim.GameSimRosterInput
 import dev.novux.dynasty.cbb.core.sim.GameSimTeamInput
 import dev.novux.dynasty.cbb.core.sim.GameWatchPlayback
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
@@ -46,6 +49,9 @@ fun GameWatchScreen(
     awayName: String,
     homeGameplan: GameplanInput,
     onHomeHalftimeGameplan: (GameplanInput) -> Unit,
+    homeSimRoster: GameSimRosterInput? = null,
+    injuryRoll: GameSimInjuryRollInput? = null,
+    onSimComplete: (GameSimResult) -> Unit = {},
     onBack: () -> Unit,
     seed: Long = 17L,
 ) {
@@ -59,13 +65,14 @@ fun GameWatchScreen(
     val listState = rememberLazyListState()
     val resumeGate = remember { mutableStateOf<((GameplanInput) -> Unit)?>(null) }
 
-    val baseInput = remember(tuning, seed, homeGameplan, homeName, awayName) {
+    val baseInput = remember(tuning, seed, homeGameplan, homeName, awayName, homeSimRoster) {
         GameSimInput(
             home = GameSimTeamInput(homeName, 78, 74),
             away = GameSimTeamInput(awayName, 76, 75),
             tuning = tuning,
             seed = seed,
             homeGameplan = homeGameplan,
+            homeRoster = homeSimRoster,
         )
     }
 
@@ -74,6 +81,7 @@ fun GameWatchScreen(
         val result = GameWatchPlayback.watch(
             input = baseInput,
             speedMultiplier = 8.0,
+            injuryRoll = injuryRoll,
             onLine = { line ->
                 lines.add(line)
                 listState.animateScrollToItem(lines.lastIndex)
@@ -108,6 +116,16 @@ fun GameWatchScreen(
             userScore = result.homeScore,
             opponentScore = result.awayScore,
         )
+        result.homeInjuries.forEach { event ->
+            lines.add(
+                context.getString(
+                    R.string.game_watch_injury_log,
+                    event.label,
+                    event.weeksRemaining,
+                ),
+            )
+        }
+        onSimComplete(result)
     }
 
     Column(

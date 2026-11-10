@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.core.sim
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
 import dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset
 import dev.novux.dynasty.cbb.core.strategy.GameplanInput
+import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
 import dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset
 
 /** Regulation length — [planning/simulation-engine.md#possession-loop--clock]. */
@@ -72,4 +73,9 @@ data class GameSimResult(
     val possessionLog: List<String>,
     val isComplete: Boolean = true,
     val midGame: MidGameState? = null,
-)
+    val homeInjuries: List<GameSimInjuryEvent> = emptyList(),
+    val awayInjuries: List<GameSimInjuryEvent> = emptyList(),
+) {
+    fun userTeamInjuries(userTeamIsHome: Boolean): List<GameSimInjuryEvent> =
+        if (userTeamIsHome) homeInjuries else awayInjuries
+}

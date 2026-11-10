@@ -29,6 +29,7 @@ import dev.novux.dynasty.cbb.core.discipline.DisciplineResolver
 import dev.novux.dynasty.cbb.core.lineup.DefaultStarterAlgorithm
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
+import dev.novux.dynasty.cbb.core.sim.GameLineupPrep
 import dev.novux.dynasty.cbb.core.strategy.GameplanInput
 import dev.novux.dynasty.cbb.core.strategy.GameplanUsageNormalizer
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
@@ -127,6 +128,9 @@ fun StrategyScreen(
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeGameplan = halftimeGameplan ?: gameplan
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeName = homeTeamLabel
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.awayName = awayTeamLabel
+                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeRosterPlayers = players
+                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeSimRoster =
+                    GameLineupPrep.build(dynastyId, players)
                 onWatchScrimmage()
             },
             modifier = Modifier.fillMaxWidth(),

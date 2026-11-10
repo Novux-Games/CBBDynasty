@@ -11,6 +11,7 @@ object GameWatchPlayback {
     suspend fun watch(
         input: GameSimInput,
         speedMultiplier: Double = 1.0,
+        injuryRoll: GameSimInjuryRollInput? = null,
         onLine: suspend (String) -> Unit,
         onHalftime: suspend (GameSimResult, MidGameState) -> GameSimInput,
     ): GameSimResult {
@@ -36,11 +37,17 @@ object GameWatchPlayback {
                 resumedAfterHalftime = true
             }
         }
-        val final = session.toResult(isComplete = true)
+        var final = session.toResult(isComplete = true)
         require(resumedAfterHalftime || final.totalPossessions > 0)
+        if (injuryRoll != null) {
+            final = GameSimInjuryRoll.attach(input, final, injuryRoll)
+        }
         BoxScoreCoherence.assertValid(final)
         return final
     }
 
-    fun simToEnd(input: GameSimInput): GameSimResult = PossessionSimEngine.simulate(input)
+    fun simToEnd(
+        input: GameSimInput,
+        injuryRoll: GameSimInjuryRollInput? = null,
+    ): GameSimResult = PossessionSimEngine.simulate(input, injuryRoll = injuryRoll)
 }

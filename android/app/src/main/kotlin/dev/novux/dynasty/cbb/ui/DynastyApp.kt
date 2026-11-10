@@ -389,11 +389,27 @@ fun DynastyApp(
                 }
                 composable(AppRoute.GameWatch.route) {
                     val app = LocalContext.current.requireDynastyApplication()
+                    val scope = rememberCoroutineScope()
                     var tuning by remember {
                         mutableStateOf<dev.novux.dynasty.cbb.core.sim.tuning.SimTuning?>(null)
                     }
                     LaunchedEffect(Unit) {
                         tuning = app.simTuningRepository.activeTuning()
+                    }
+                    LaunchedEffect(Unit) {
+                        val session = ActiveDynastySession.current ?: return@LaunchedEffect
+                        val ruleset = app.balanceRulesetRepository.activeRuleset()
+                        val injuryTuning = ruleset.injuryTuning()
+                        val bank = dev.novux.dynasty.cbb.core.injuries.InjuryOccurrenceEngine
+                            .bankFromBalance(ruleset.injuries.bank)
+                        GameWatchLaunch.injuryRoll = dev.novux.dynasty.cbb.core.sim.GameSimInjuryRollInput(
+                            phase = session.metadata.phase,
+                            bank = bank,
+                            occurrence = injuryTuning.occurrence,
+                            medicalStaffGrade = 70,
+                            homeRosterPlayers = GameWatchLaunch.homeRosterPlayers,
+                            awayRosterPlayers = null,
+                        )
                     }
                     val ready = tuning
                     if (ready != null) {
@@ -402,7 +418,26 @@ fun DynastyApp(
                             homeName = GameWatchLaunch.homeName,
                             awayName = GameWatchLaunch.awayName,
                             homeGameplan = GameWatchLaunch.homeGameplan,
+                            homeSimRoster = GameWatchLaunch.homeSimRoster,
+                            injuryRoll = GameWatchLaunch.injuryRoll,
                             onHomeHalftimeGameplan = { GameWatchLaunch.homeGameplan = it },
+                            onSimComplete = { result ->
+                                scope.launch {
+                                    val session = ActiveDynastySession.current ?: return@launch
+                                    val events = result.userTeamInjuries(userTeamIsHome = true)
+                                    if (events.isEmpty()) return@launch
+                                    val week = session.weekCheckpoint.activePosition.weekIndex
+                                    app.dynastyRosterRepository.applyGameInjuries(
+                                        session.dynastyId,
+                                        events,
+                                        dev.novux.dynasty.cbb.core.injuries.InjuryApplyContext(
+                                            rsWeekIndex = week,
+                                            rsGameIndex = week,
+                                            rsGamesPlayed = week.coerceAtLeast(0),
+                                        ),
+                                    )
+                                }
+                            },
                             onBack = { navController.popBackStack() },
                         )
                     }
