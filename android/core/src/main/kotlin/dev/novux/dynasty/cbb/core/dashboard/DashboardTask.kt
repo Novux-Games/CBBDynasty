@@ -9,6 +9,8 @@ enum class DashboardDeepLink {
     RecruitingRecommended,
     RecruitingPortal,
     RecruitingHsJuco,
+    SigningDayRankings,
+    SigningDayPositions,
 }
 
 enum class DashboardTaskId {
@@ -17,6 +19,9 @@ enum class DashboardTaskId {
     PortalTop40Published,
     SigningCrunch,
     OpenScholarships,
+    SigningDayViewRankings,
+    SigningDayEditPositions,
+    SigningDayHardSign,
 }
 
 data class DashboardTask(

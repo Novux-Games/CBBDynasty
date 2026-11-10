@@ -13,6 +13,7 @@ import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingReservationRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
+import dev.novux.dynasty.cbb.data.signingday.SigningDayRepository
 import dev.novux.dynasty.cbb.data.settings.AppSettingsRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -56,6 +57,9 @@ class DynastyApplication : Application() {
     lateinit var aiRecruitingRepository: AiRecruitingRepository
         private set
 
+    lateinit var signingDayRepository: SigningDayRepository
+        private set
+
     override fun onCreate() {
         super.onCreate()
         appSettingsRepository = AppSettingsRepository(applicationContext)
@@ -68,6 +72,7 @@ class DynastyApplication : Application() {
             applicationContext,
             recruitingReservationRepository,
         )
+        signingDayRepository = SigningDayRepository(applicationContext, recruitingReservationRepository)
         portalCycleRepository = PortalCycleRepository(applicationContext)
         aiRecruitingRepository = AiRecruitingRepository(applicationContext)
         val database = DynastyDatabase.build(applicationContext)

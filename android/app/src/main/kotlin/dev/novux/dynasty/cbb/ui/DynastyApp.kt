@@ -36,8 +36,11 @@ import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
 import dev.novux.dynasty.cbb.ui.newgame.NewGameWizardScreen
 import dev.novux.dynasty.cbb.ui.offseason.CoachingCarouselScreen
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
+import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.ui.recruiting.RecruitingHubScreen
 import dev.novux.dynasty.cbb.ui.offseason.OffseasonScreen
+import dev.novux.dynasty.cbb.ui.signingday.SigningDayInitialTab
+import dev.novux.dynasty.cbb.ui.signingday.SigningDayScreen
 import dev.novux.dynasty.cbb.ui.seasonreview.SeasonReviewScreen
 import dev.novux.dynasty.cbb.ui.shell.SplashScreen
 import dev.novux.dynasty.cbb.ui.shell.StudioScreen
@@ -87,7 +90,9 @@ fun DynastyApp(
             var recruitingLaunchTab by remember {
                 mutableStateOf(RecruitingHubDefaults.defaultTab)
             }
+            var signingDayInitialTab by remember { mutableStateOf(SigningDayInitialTab.Rankings) }
             val portalCycleRepository = LocalContext.current.requireDynastyApplication().portalCycleRepository
+            val signingDayRepository = LocalContext.current.requireDynastyApplication().signingDayRepository
 
             suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
@@ -198,12 +203,21 @@ fun DynastyApp(
                             rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
                             recruitingEconomyRepository = recruitingEconomyRepository,
                             portalCycleRepository = portalCycleRepository,
+                            signingDayRepository = signingDayRepository,
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
                             onOpenRecruiting = { tab ->
                                 recruitingLaunchTab = tab
                                 navController.navigate(AppRoute.Recruiting.route)
+                            },
+                            onOpenSigningDay = { link ->
+                                signingDayInitialTab = when (link) {
+                                    DashboardDeepLink.SigningDayRankings -> SigningDayInitialTab.Rankings
+                                    DashboardDeepLink.SigningDayPositions -> SigningDayInitialTab.Positions
+                                    else -> SigningDayInitialTab.Rankings
+                                }
+                                navController.navigate(AppRoute.SigningDay.route)
                             },
                         )
                     } else {
@@ -242,6 +256,18 @@ fun DynastyApp(
                             loaded = active,
                             recruitingEconomyRepository = recruitingEconomyRepository,
                             initialTab = recruitingLaunchTab,
+                            onBack = { navController.popBackStack() },
+                        )
+                    }
+                }
+                composable(AppRoute.SigningDay.route) {
+                    val active = ActiveDynastySession.current
+                    if (active != null) {
+                        SigningDayScreen(
+                            loaded = active,
+                            signingDayRepository = signingDayRepository,
+                            recruitingEconomyRepository = recruitingEconomyRepository,
+                            initialTab = signingDayInitialTab,
                             onBack = { navController.popBackStack() },
                         )
                     }

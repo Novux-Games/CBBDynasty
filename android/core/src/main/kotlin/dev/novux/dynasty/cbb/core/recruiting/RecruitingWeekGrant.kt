@@ -10,6 +10,7 @@ data class RecruitingCycleLedger(
     val weeklyPoolBase: Int,
     val pointsAvailable: Int,
     val unspentAtLastWeekEnd: Int = 0,
+    val cycleClosed: Boolean = false,
 ) {
     fun withPointsAvailable(next: Int): RecruitingCycleLedger = copy(pointsAvailable = next.coerceAtLeast(0))
 }
@@ -47,6 +48,16 @@ object RecruitingWeekGrant {
         offseasonWeekIndex: Int?,
         pointsSpentThisWeek: Int,
     ): Pair<RecruitingCycleLedger, WeekGrantBreakdown> {
+        if (ledger.cycleClosed) {
+            val breakdown = WeekGrantBreakdown(
+                weeklyBase = ledger.weeklyPoolBase,
+                crunchMultiplier = 1.0,
+                grantedThisWeek = 0,
+                carryoverFromPrior = 0,
+                newBalance = ledger.pointsAvailable,
+            )
+            return ledger to breakdown
+        }
         val unspent = (ledger.pointsAvailable - pointsSpentThisWeek).coerceAtLeast(0)
         val carryover = (unspent * economy.weeklyCarryoverFraction).roundToInt()
         val multiplier = signingCrunchMultiplier(economy, phase, offseasonWeekIndex)

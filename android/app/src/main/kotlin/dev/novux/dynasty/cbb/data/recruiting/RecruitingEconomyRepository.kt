@@ -200,20 +200,39 @@ class RecruitingEconomyRepository(
 
     private fun ledgerKey(dynastyId: String) = stringPreferencesKey("ledger_$dynastyId")
 
+    suspend fun closeCycleAfterHardSign(dynastyId: String) {
+        val prefs = context.recruitingEconomyStore.data.first()
+        val raw = prefs[ledgerKey(dynastyId)] ?: return
+        val ledger = decode(raw).copy(cycleClosed = true, pointsAvailable = 0)
+        persist(dynastyId, ledger)
+        reservationRepository.saveActive(dynastyId, emptyList())
+    }
+
     private fun encode(ledger: RecruitingCycleLedger): String =
         "${ledger.cycleSeasonIndex}|${ledger.programPrestige}|${ledger.weeklyPoolBase}|" +
-            "${ledger.pointsAvailable}|${ledger.unspentAtLastWeekEnd}"
+            "${ledger.pointsAvailable}|${ledger.unspentAtLastWeekEnd}|${ledger.cycleClosed}"
 
     private fun decode(raw: String): RecruitingCycleLedger {
         val p = raw.split("|")
-        require(p.size == 5)
-        return RecruitingCycleLedger(
-            cycleSeasonIndex = p[0].toInt(),
-            programPrestige = p[1].toInt(),
-            weeklyPoolBase = p[2].toInt(),
-            pointsAvailable = p[3].toInt(),
-            unspentAtLastWeekEnd = p[4].toInt(),
-        )
+        return when (p.size) {
+            5 -> RecruitingCycleLedger(
+                cycleSeasonIndex = p[0].toInt(),
+                programPrestige = p[1].toInt(),
+                weeklyPoolBase = p[2].toInt(),
+                pointsAvailable = p[3].toInt(),
+                unspentAtLastWeekEnd = p[4].toInt(),
+                cycleClosed = false,
+            )
+            6 -> RecruitingCycleLedger(
+                cycleSeasonIndex = p[0].toInt(),
+                programPrestige = p[1].toInt(),
+                weeklyPoolBase = p[2].toInt(),
+                pointsAvailable = p[3].toInt(),
+                unspentAtLastWeekEnd = p[4].toInt(),
+                cycleClosed = p[5].toBooleanStrict(),
+            )
+            else -> error("Invalid ledger encoding")
+        }
     }
 
     companion object {

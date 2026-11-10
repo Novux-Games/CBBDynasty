@@ -143,6 +143,10 @@
     <string name="recruiting_badge_reach">Reach</string>
     <string name="recruiting_badge_long_shot">Long shot</string>
     <string name="dashboard_optional_heading">Optional tasks</string>
+    <string name="dashboard_required_heading">Required tasks</string>
+    <string name="dashboard_task_signing_rankings">View recruiting rankings (Top 60)</string>
+    <string name="dashboard_task_signing_positions">Change positions on your incoming class</string>
+    <string name="dashboard_task_signing_hard_sign">Hard sign your class</string>
     <string name="dashboard_task_open">Open</string>
     <string name="dashboard_task_dismiss">Dismiss for now</string>
     <string name="dashboard_task_spend_points">Spend recruiting points (%1$d available)</string>
@@ -170,4 +174,16 @@
     <string name="recruiting_window_closed">Scout game and official visits are only available in their calendar windows.</string>
     <string name="recruiting_used_this_season">You already used scout or visit on this recruit this season.</string>
     <string name="recruiting_reservation_active">This recruit has a pending refunded action this week.</string>
+    <string name="offseason_signing_day_hint">Signing Day — finalize your incoming class before advancing.</string>
+    <string name="signing_day_title">Signing Day</string>
+    <string name="signing_day_subtitle">Review national rankings, set positions, then hard sign your commits.</string>
+    <string name="signing_day_tab_rankings">Rankings</string>
+    <string name="signing_day_tab_positions">Positions</string>
+    <string name="signing_day_rank_line">#%1$d %2$s · %3$d★ %4$s</string>
+    <string name="signing_day_no_commits">No scholarship offers on the board — hard sign is still available once tasks are complete.</string>
+    <string name="signing_day_signee_meta">%1$d★ · %2$s</string>
+    <string name="signing_day_cycle_position">Position</string>
+    <string name="signing_day_confirm_positions">Confirm positions</string>
+    <string name="signing_day_hard_sign">Hard sign class</string>
+    <string name="signing_day_hard_sign_done">Class signed</string>
 </resources>
