@@ -1,6 +1,8 @@
 package dev.novux.dynasty.cbb.core.recruiting
 
+import dev.novux.dynasty.cbb.core.balance.BalanceNilRules
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommended
+import dev.novux.dynasty.cbb.core.nil.NilInterestScoring
 import kotlin.math.roundToInt
 
 data class RecruitInterestSnapshot(
@@ -18,8 +20,10 @@ object RecruitInterestEngine {
         recommended: BalanceRecruitingRecommended,
         spendDelta: Int = 0,
         promiseDelta: Int = 0,
+        nilOfferUsd: Int? = null,
+        nilRules: BalanceNilRules? = null,
     ): RecruitInterestSnapshot {
-        val scores = factorScores(prospect, school, recommended)
+        val scores = factorScores(prospect, school, recommended, nilOfferUsd, nilRules)
         val weights = RecruitInterestWeights.effectiveWeights(prospect.topPriorities, prospect.stars)
         val weighted = weights.entries.sumOf { (factor, weight) -> weight * scores.getValue(factor) }
         val baseline = (weighted * 100.0).roundToInt().coerceIn(0, 100)
@@ -36,8 +40,15 @@ object RecruitInterestEngine {
         prospect: RecruitProspect,
         school: SchoolRecruitingContext,
         recommended: BalanceRecruitingRecommended,
+        nilOfferUsd: Int?,
+        nilRules: BalanceNilRules?,
     ): Map<RecruitingInterestFactor, Double> = mapOf(
-        RecruitingInterestFactor.Nil to nilCapacity(prospect.nilAskUsd, school.nilPoolAnnualUsd),
+        RecruitingInterestFactor.Nil to nilFactor(
+            prospect.nilAskUsd,
+            nilOfferUsd,
+            school.nilPoolAnnualUsd,
+            nilRules,
+        ),
         RecruitingInterestFactor.PlayingTimeFit to
             if (prospect.position in school.positionsNeed) 0.85 else 0.48,
         RecruitingInterestFactor.PrestigeWinning to prestigeWinning(prospect.stars, school.programPrestige),
@@ -65,6 +76,18 @@ object RecruitInterestEngine {
         homeState.equals(school.schoolHomeState, ignoreCase = true) -> recommended.inStateProximityScore
         homeState.uppercase() in school.pipelineStates.map { it.uppercase() } -> recommended.pipelineProximityScore
         else -> recommended.outOfRegionProximityScore
+    }
+
+    private fun nilFactor(
+        nilAskUsd: Int,
+        nilOfferUsd: Int?,
+        poolUsd: Int,
+        nilRules: BalanceNilRules?,
+    ): Double {
+        if (nilOfferUsd != null && nilOfferUsd > 0 && nilRules != null) {
+            return NilInterestScoring.factor(nilOfferUsd, nilAskUsd, nilRules.interestNilRatioExponent)
+        }
+        return nilCapacity(nilAskUsd, poolUsd)
     }
 
     private fun nilCapacity(nilAskUsd: Int, poolUsd: Int): Double {

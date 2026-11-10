@@ -513,6 +513,7 @@ fun DynastyApp(
                         RecruitingHubScreen(
                             loaded = active,
                             recruitingEconomyRepository = recruitingEconomyRepository,
+                            nilBudgetRepository = LocalContext.current.requireDynastyApplication().nilBudgetRepository,
                             weekNineRepository = offseasonWeekNineRepository,
                             initialTab = recruitingLaunchTab,
                             onBack = { navController.popBackStack() },

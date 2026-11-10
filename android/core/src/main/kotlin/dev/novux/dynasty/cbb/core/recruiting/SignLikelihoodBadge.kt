@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.recruiting
 
+import dev.novux.dynasty.cbb.core.balance.BalanceNilRules
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommended
 import dev.novux.dynasty.cbb.core.balance.BalanceSignLikelihoodBands
 
@@ -25,8 +26,16 @@ object SignLikelihoodEngine {
         prospect: RecruitProspect,
         school: SchoolRecruitingContext,
         recommended: BalanceRecruitingRecommended,
+        nilOfferUsd: Int? = null,
+        nilRules: BalanceNilRules? = null,
     ): RecommendedProspectRow {
-        val snapshot = RecruitInterestEngine.baselineSnapshot(prospect, school, recommended)
+        val snapshot = RecruitInterestEngine.baselineSnapshot(
+            prospect,
+            school,
+            recommended,
+            nilOfferUsd = nilOfferUsd,
+            nilRules = nilRules,
+        )
         val baseline = snapshot.baselineInterest
         var adjusted = baseline.toDouble()
         adjusted -= prestigeGapPenalty(prospect.stars, school.programPrestige, recommended)

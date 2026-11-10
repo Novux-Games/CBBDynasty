@@ -14,6 +14,7 @@ import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignEngine
 import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignResult
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
 import dev.novux.dynasty.cbb.core.signingday.SigningDaySoftCommitResolver
+import dev.novux.dynasty.cbb.data.nil.NilBudgetRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingReservationRepository
 import kotlinx.coroutines.flow.first
 
@@ -22,6 +23,7 @@ private val Context.signingDayStore: DataStore<Preferences> by preferencesDataSt
 class SigningDayRepository(
     private val context: Context,
     private val reservationRepository: RecruitingReservationRepository,
+    private val nilBudgetRepository: NilBudgetRepository,
 ) {
     suspend fun loadProgress(dynastyId: String, cycleSeasonIndex: Int): SigningDayProgress {
         val raw = context.signingDayStore.data.first()[progressKey(dynastyId)] ?: return SigningDayProgress(cycleSeasonIndex)
@@ -66,7 +68,9 @@ class SigningDayRepository(
         val overrides = loadPositionOverrides(dynastyId)
         return base.map { signee ->
             val override = overrides[signee.prospectId]
-            if (override != null) signee.copy(position = override) else signee
+            val nilSigned = nilBudgetRepository.offerUsd(dynastyId, seasonIndex, signee.prospectId).toInt()
+            val withNil = signee.copy(nilSignedUsd = nilSigned)
+            if (override != null) withNil.copy(position = override) else withNil
         }
     }
 
@@ -77,9 +81,19 @@ class SigningDayRepository(
         val progress = loadProgress(dynastyId, seasonIndex)
         val signees = loadIncomingClass(dynastyId, seasonIndex)
         val result = SigningDayHardSignEngine.finalizeClass(progress, signees)
+        val snapshots = nilBudgetRepository.signingSnapshots(
+            dynastyId,
+            seasonIndex,
+            signees.map { it.prospectId to it.nilAskUsd },
+        )
+        nilBudgetRepository.commitSignedDeals(dynastyId, seasonIndex, snapshots)
+        val signedWithNil = result.signed.map { signee ->
+            val snap = snapshots.firstOrNull { it.prospectId == signee.prospectId }
+            if (snap != null) signee.copy(nilSignedUsd = snap.nilSignedUsd) else signee
+        }
         saveProgress(dynastyId, result.progress)
-        saveSignedClass(dynastyId, result.signed)
-        return result
+        saveSignedClass(dynastyId, signedWithNil)
+        return result.copy(signed = signedWithNil)
     }
 
     suspend fun loadSignedClass(dynastyId: String): List<IncomingSignee> {
@@ -134,6 +148,7 @@ class SigningDayRepository(
                 s.position.wire,
                 s.homeState,
                 s.nilAskUsd,
+                s.nilSignedUsd,
                 s.nationalHsRank?.toString().orEmpty(),
                 s.scoutLetterOverall,
             ).joinToString("|")
@@ -142,16 +157,29 @@ class SigningDayRepository(
     private fun decodeSigned(raw: String): List<IncomingSignee> =
         raw.split(";").filter { it.isNotBlank() }.map { token ->
             val p = token.split("|")
-            require(p.size == 8)
-            IncomingSignee(
-                prospectId = p[0],
-                displayName = p[1],
-                stars = p[2].toInt(),
-                position = PlayerPosition.fromWire(p[3])!!,
-                homeState = p[4],
-                nilAskUsd = p[5].toInt(),
-                nationalHsRank = p[6].takeIf { it.isNotBlank() }?.toInt(),
-                scoutLetterOverall = p[7],
-            )
+            when (p.size) {
+                8 -> IncomingSignee(
+                    prospectId = p[0],
+                    displayName = p[1],
+                    stars = p[2].toInt(),
+                    position = PlayerPosition.fromWire(p[3])!!,
+                    homeState = p[4],
+                    nilAskUsd = p[5].toInt(),
+                    nationalHsRank = p[6].takeIf { it.isNotBlank() }?.toInt(),
+                    scoutLetterOverall = p[7],
+                )
+                9 -> IncomingSignee(
+                    prospectId = p[0],
+                    displayName = p[1],
+                    stars = p[2].toInt(),
+                    position = PlayerPosition.fromWire(p[3])!!,
+                    homeState = p[4],
+                    nilAskUsd = p[5].toInt(),
+                    nilSignedUsd = p[6].toInt(),
+                    nationalHsRank = p[7].takeIf { it.isNotBlank() }?.toInt(),
+                    scoutLetterOverall = p[8],
+                )
+                else -> error("invalid signed class row")
+            }
         }
 }

@@ -100,6 +100,9 @@ class DynastyApplication : Application() {
     lateinit var signingDayRepository: SigningDayRepository
         private set
 
+    lateinit var nilBudgetRepository: dev.novux.dynasty.cbb.data.nil.NilBudgetRepository
+        private set
+
     lateinit var offseasonWeekTwoRepository: OffseasonWeekTwoRepository
         private set
 
@@ -193,7 +196,15 @@ class DynastyApplication : Application() {
             applicationContext,
             recruitingReservationRepository,
         )
-        signingDayRepository = SigningDayRepository(applicationContext, recruitingReservationRepository)
+        nilBudgetRepository = dev.novux.dynasty.cbb.data.nil.NilBudgetRepository(
+            applicationContext,
+            recruitingReservationRepository,
+        )
+        signingDayRepository = SigningDayRepository(
+            applicationContext,
+            recruitingReservationRepository,
+            nilBudgetRepository,
+        )
         portalCycleRepository = PortalCycleRepository(applicationContext)
         aiRecruitingRepository = AiRecruitingRepository(applicationContext)
         val database = DynastyDatabase.build(applicationContext)

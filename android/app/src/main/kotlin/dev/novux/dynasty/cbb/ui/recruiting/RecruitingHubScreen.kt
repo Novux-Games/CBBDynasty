@@ -33,7 +33,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.balance.BalanceNilParser
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionsParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
+import dev.novux.dynasty.cbb.core.nil.NilBudgetLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingClassSeed
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
@@ -43,6 +46,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecommendedRecruitList
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.recruiting.SignLikelihoodBadge
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.data.nil.NilBudgetRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import java.text.NumberFormat
@@ -53,6 +57,7 @@ import kotlinx.coroutines.launch
 fun RecruitingHubScreen(
     loaded: LoadedDynasty,
     recruitingEconomyRepository: RecruitingEconomyRepository,
+    nilBudgetRepository: NilBudgetRepository,
     weekNineRepository: OffseasonWeekNineRepository? = null,
     initialTab: RecruitingHubTab = RecruitingHubDefaults.defaultTab,
     onBack: () -> Unit,
@@ -61,14 +66,26 @@ fun RecruitingHubScreen(
         mutableIntStateOf(RecruitingHubDefaults.tabs.indexOf(initialTab))
     }
     var ledger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
+    var nilLedger by remember { mutableStateOf<NilBudgetLedger?>(null) }
+    var nilOffers by remember { mutableStateOf<Map<String, Long>>(emptyMap()) }
     var nilBoostUsd by remember { mutableIntStateOf(0) }
     var gateRefresh by remember { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
     val currency = remember { NumberFormat.getCurrencyInstance(Locale.US) }
 
-    LaunchedEffect(loaded.dynastyId, gateRefresh) {
+    val nilRules = remember(loaded.balanceRuleset) {
+        BalanceNilParser.parse(loaded.balanceRuleset.nil)
+    }
+    val recruitingActions = remember(loaded.balanceRuleset) {
+        BalanceRecruitingActionsParser.parse(loaded.balanceRuleset.recruiting)
+    }
+
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, gateRefresh) {
         ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
         nilBoostUsd = weekNineRepository?.nilPoolBoostUsd(loaded.dynastyId, loaded.metadata.seasonIndex) ?: 0
+        val poolUsd = 900_000L + nilBoostUsd
+        nilOffers = nilBudgetRepository.loadOffers(loaded.dynastyId, loaded.metadata.seasonIndex)
+        nilLedger = nilBudgetRepository.loadLedger(loaded.dynastyId, loaded.metadata.seasonIndex, poolUsd)
     }
 
 
@@ -83,11 +100,14 @@ fun RecruitingHubScreen(
             nilPoolAnnualUsd = 900_000 + nilBoostUsd,
         )
     }
-    val recommendedRows = remember(loaded.metadata.seasonIndex, schoolContext, recommendedConfig) {
+    val offerSnapshot = nilOffers.mapValues { it.value.toInt() }
+    val recommendedRows = remember(loaded.metadata.seasonIndex, schoolContext, recommendedConfig, offerSnapshot, nilRules) {
         RecommendedRecruitList.build(
             RecruitingClassSeed.demoPool(loaded.metadata.seasonIndex),
             schoolContext,
             recommendedConfig,
+            nilOffersByProspect = offerSnapshot,
+            nilRules = nilRules,
         )
     }
 
@@ -113,6 +133,17 @@ fun RecruitingHubScreen(
                     R.string.recruiting_points_pool,
                     row.pointsAvailable,
                     row.weeklyPoolBase,
+                ),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
+        nilLedger?.let { nilRow ->
+            Text(
+                text = stringResource(
+                    R.string.recruiting_nil_budget,
+                    currency.format(nilRow.nilRemainingUsd),
+                    currency.format(nilRow.nilPoolAnnualUsd),
                 ),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
@@ -149,6 +180,9 @@ fun RecruitingHubScreen(
                     rows = recommendedRows,
                     schoolContext = schoolContext,
                     recruitingEconomyRepository = recruitingEconomyRepository,
+                    nilRules = nilRules,
+                    nilOffers = nilOffers,
+                    scholarshipOfferPointCost = recruitingActions.scholarshipOffer.cost,
                     gateRefresh = gateRefresh,
                     onSpend = {
                         scope.launch {
@@ -164,6 +198,40 @@ fun RecruitingHubScreen(
                                 ),
                             )
                             ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+                            gateRefresh++
+                        }
+                    },
+                    onScholarshipOffer = { prospectId ->
+                        scope.launch {
+                            recruitingEconomyRepository.spendRefundableAction(
+                                loaded,
+                                prospectId = prospectId,
+                                offer = true,
+                                scout = false,
+                                officialVisit = false,
+                            )
+                            ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+                            gateRefresh++
+                        }
+                    },
+                    onAssignNil = { prospectId, nilAskUsd, offerUsd ->
+                        scope.launch {
+                            val poolUsd = 900_000L + nilBoostUsd
+                            nilBudgetRepository.assignOffer(
+                                loaded.dynastyId,
+                                loaded.metadata.seasonIndex,
+                                prospectId,
+                                nilAskUsd,
+                                offerUsd,
+                                nilRules,
+                                poolUsd,
+                            )
+                            nilOffers = nilBudgetRepository.loadOffers(loaded.dynastyId, loaded.metadata.seasonIndex)
+                            nilLedger = nilBudgetRepository.loadLedger(
+                                loaded.dynastyId,
+                                loaded.metadata.seasonIndex,
+                                poolUsd,
+                            )
                             gateRefresh++
                         }
                     },
@@ -199,9 +267,15 @@ private fun RecommendedTabBody(
     rows: List<RecommendedProspectRow>,
     schoolContext: SchoolRecruitingContext,
     recruitingEconomyRepository: RecruitingEconomyRepository,
+    nilRules: dev.novux.dynasty.cbb.core.balance.BalanceNilRules,
+    nilOffers: Map<String, Long>,
+    scholarshipOfferPointCost: Int,
     gateRefresh: Int,
     onSpend: (ProspectSpendRequest) -> Unit,
+    onScholarshipOffer: (String) -> Unit,
+    onAssignNil: (prospectId: String, nilAskUsd: Int, offerUsd: Long) -> Unit,
 ) {
+    val currency = remember { NumberFormat.getCurrencyInstance(Locale.US) }
     val likelyCount = rows.count { it.badge == SignLikelihoodBadge.Likely || it.badge == SignLikelihoodBadge.Possible }
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -229,6 +303,9 @@ private fun RecommendedTabBody(
             RecommendedProspectRow(
                 row = row,
                 gates = gates,
+                currency = currency,
+                nilOfferUsd = nilOffers[row.prospect.prospectId] ?: 0L,
+                scholarshipOfferPointCost = scholarshipOfferPointCost,
                 onScout = {
                     onSpend(
                         ProspectSpendRequest(
@@ -249,6 +326,11 @@ private fun RecommendedTabBody(
                         ),
                     )
                 },
+                onScholarshipOffer = { onScholarshipOffer(row.prospect.prospectId) },
+                onMeetNilAsk = {
+                    onAssignNil(row.prospect.prospectId, row.prospect.nilAskUsd, row.prospect.nilAskUsd.toLong())
+                },
+                onClearNil = { onAssignNil(row.prospect.prospectId, row.prospect.nilAskUsd, 0L) },
             )
         }
     }
@@ -259,8 +341,14 @@ private fun RecommendedTabBody(
 private fun RecommendedProspectRow(
     row: RecommendedProspectRow,
     gates: RecruitingProspectActionGates?,
+    currency: NumberFormat,
+    nilOfferUsd: Long,
+    scholarshipOfferPointCost: Int,
     onScout: () -> Unit,
     onOfficialVisit: () -> Unit,
+    onScholarshipOffer: () -> Unit,
+    onMeetNilAsk: () -> Unit,
+    onClearNil: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -312,6 +400,32 @@ private fun RecommendedProspectRow(
             }
         }
         SignLikelihoodChip(row.badge)
+        }
+        Text(
+            text = stringResource(R.string.recruiting_nil_ask_line, currency.format(row.prospect.nilAskUsd)),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        if (nilOfferUsd > 0L) {
+            Text(
+                text = stringResource(R.string.recruiting_nil_offer_line, currency.format(nilOfferUsd)),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            OutlinedButton(onClick = onMeetNilAsk, modifier = Modifier.weight(1f)) {
+                Text(stringResource(R.string.recruiting_nil_assign_meet_ask))
+            }
+            OutlinedButton(onClick = onClearNil, enabled = nilOfferUsd > 0L, modifier = Modifier.weight(1f)) {
+                Text(stringResource(R.string.recruiting_nil_assign_clear))
+            }
+        }
+        OutlinedButton(onClick = onScholarshipOffer, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.recruiting_action_scholarship_offer, scholarshipOfferPointCost))
         }
         gates?.let { g ->
             Row(

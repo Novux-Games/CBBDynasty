@@ -17,14 +17,15 @@ class SigningDayHardSignEngineTest {
             incomplete.copy(positionsConfirmed = true),
             listOf(
                 IncomingSignee(
-                    "p1",
-                    "Test Player",
-                    4,
-                    PlayerPosition.SmallForward,
-                    "OH",
-                    100_000,
-                    12,
-                    "B+",
+                    prospectId = "p1",
+                    displayName = "Test Player",
+                    stars = 4,
+                    position = PlayerPosition.SmallForward,
+                    homeState = "OH",
+                    nilAskUsd = 100_000,
+                    nilSignedUsd = 80_000,
+                    nationalHsRank = 12,
+                    scoutLetterOverall = "B+",
                 ),
             ),
         )

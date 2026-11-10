@@ -12,6 +12,7 @@ data class IncomingSignee(
     val position: PlayerPosition,
     val homeState: String,
     val nilAskUsd: Int,
+    val nilSignedUsd: Int = 0,
     val nationalHsRank: Int?,
     val scoutLetterOverall: String,
 )

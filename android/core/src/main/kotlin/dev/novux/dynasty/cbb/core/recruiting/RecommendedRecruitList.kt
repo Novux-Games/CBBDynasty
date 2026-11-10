@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.recruiting
 
+import dev.novux.dynasty.cbb.core.balance.BalanceNilRules
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommended
 
 /** Recommended tab ordering — [planning/recruiting-engine.md#recommended-tab-default]. */
@@ -8,9 +9,19 @@ object RecommendedRecruitList {
         pool: List<RecruitProspect>,
         school: SchoolRecruitingContext,
         recommended: BalanceRecruitingRecommended,
+        nilOffersByProspect: Map<String, Int> = emptyMap(),
+        nilRules: BalanceNilRules? = null,
     ): List<RecommendedProspectRow> {
         return pool
-            .map { SignLikelihoodEngine.evaluate(it, school, recommended) }
+            .map { prospect ->
+                SignLikelihoodEngine.evaluate(
+                    prospect,
+                    school,
+                    recommended,
+                    nilOfferUsd = nilOffersByProspect[prospect.prospectId],
+                    nilRules = nilRules,
+                )
+            }
             .filterNot { SignLikelihoodEngine.hiddenOnRecommendedTab(it, school, recommended) }
             .sortedWith(
                 compareByDescending<RecommendedProspectRow> { it.adjustedScore }
