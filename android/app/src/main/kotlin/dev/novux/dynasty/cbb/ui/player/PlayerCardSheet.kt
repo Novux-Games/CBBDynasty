@@ -59,13 +59,7 @@ fun PlayerCardOverviewContent(player: DynastyPlayer, modifier: Modifier = Modifi
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        player.injury.injuryStripOrNull()?.let { strip ->
-            Text(
-                text = strip.rosterRowSuffix(),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.error,
-            )
-        }
+        PlayerInjuryOverviewBlock(player.injury)
         PlayerLoyaltyChips(player)
         HorizontalDivider()
         Text(

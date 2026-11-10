@@ -30,6 +30,7 @@ import dev.novux.dynasty.cbb.core.offseason.weekeight.RosterLockPolicy
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekEightRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
+import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -98,8 +99,9 @@ fun RosterCutsWeekEightPanel(
                             .fillMaxWidth()
                             .padding(12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
                     ) {
-                        Text(player.displayLabel())
+                        PlayerInjuryRosterRow(player = player, modifier = Modifier.weight(1f))
                         if (!rosterLocked && player.classYear != dev.novux.dynasty.cbb.core.roster.PlayerClassYear.WalkOn) {
                             OutlinedButton(
                                 onClick = {

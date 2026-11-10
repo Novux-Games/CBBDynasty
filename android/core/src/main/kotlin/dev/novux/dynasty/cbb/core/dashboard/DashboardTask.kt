@@ -11,6 +11,7 @@ enum class DashboardDeepLink {
     RecruitingHsJuco,
     SigningDayRankings,
     SigningDayPositions,
+    Strategy,
 }
 
 enum class DashboardTaskId {
@@ -22,6 +23,8 @@ enum class DashboardTaskId {
     SigningDayViewRankings,
     SigningDayEditPositions,
     SigningDayHardSign,
+    ReviewInjury,
+    MedicalRedshirtCandidate,
 }
 
 data class DashboardTask(
@@ -30,6 +33,7 @@ data class DashboardTask(
     val deepLink: DashboardDeepLink,
     /** Optional format args for UI copy (e.g. points count, week index). */
     val formatArgs: List<Int> = emptyList(),
+    val stringFormatArgs: List<String> = emptyList(),
 )
 
 object DashboardAdvanceGate {

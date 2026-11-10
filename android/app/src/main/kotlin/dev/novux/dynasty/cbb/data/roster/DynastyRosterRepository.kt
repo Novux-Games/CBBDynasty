@@ -17,12 +17,14 @@ import dev.novux.dynasty.cbb.core.offseason.weektwo.NbaDraftResolution
 import dev.novux.dynasty.cbb.core.roster.PlayerClassYear
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
+import dev.novux.dynasty.cbb.data.injuries.PostgameInjuryQueue
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import dev.novux.dynasty.cbb.database.roster.toDomain
 import dev.novux.dynasty.cbb.database.roster.toEntity
 
 class DynastyRosterRepository(
     database: DynastyDatabase,
+    private val postgameInjuryQueue: PostgameInjuryQueue = PostgameInjuryQueue(),
 ) {
     private val dao = database.dynastyRosterDao()
 
@@ -126,8 +128,15 @@ class DynastyRosterRepository(
     ): List<RosterPlayer> {
         val updated = InjuryRosterOps.applyGameInjuries(listPlayers(dynastyId), events, context)
         updated.forEach { dao.upsert(it.toEntity()) }
+        if (events.isNotEmpty()) {
+            postgameInjuryQueue.enqueue(dynastyId, events)
+        }
         return updated
     }
+
+    fun peekPostgameInjuries(dynastyId: String) = postgameInjuryQueue.peek(dynastyId)
+
+    fun clearPostgameInjuries(dynastyId: String) = postgameInjuryQueue.clear(dynastyId)
 
     suspend fun applyMedicalRedshirt(dynastyId: String, playerId: String): List<RosterPlayer> {
         val player = listPlayers(dynastyId).first { it.playerId == playerId }

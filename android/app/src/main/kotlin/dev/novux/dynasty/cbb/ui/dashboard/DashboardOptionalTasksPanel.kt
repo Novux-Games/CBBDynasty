@@ -26,6 +26,7 @@ fun DashboardOptionalTasksPanel(
     dismissedIds: Set<DashboardTaskId>,
     onDismiss: (DashboardTaskId) -> Unit,
     onDeepLink: (RecruitingHubTab) -> Unit,
+    onStrategyOpen: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val visible = tasks.filterNot { it.id in dismissedIds }
@@ -42,7 +43,13 @@ fun DashboardOptionalTasksPanel(
         visible.forEach { task ->
             DashboardTaskCard(
                 task = task,
-                onOpen = { onDeepLink(task.deepLink.toHubTab()) },
+                onOpen = {
+                    if (task.deepLink == DashboardDeepLink.Strategy) {
+                        onStrategyOpen()
+                    } else {
+                        onDeepLink(task.deepLink.toHubTab())
+                    }
+                },
                 onDismiss = { onDismiss(task.id) },
             )
         }
@@ -91,10 +98,27 @@ private fun taskMessage(task: DashboardTask): String = when (task.id) {
         R.string.dashboard_task_open_scholarships,
         task.formatArgs.firstOrNull() ?: 0,
     )
+    DashboardTaskId.ReviewInjury -> stringResource(
+        R.string.dashboard_task_review_injury,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+        task.formatArgs.firstOrNull() ?: 0,
+    )
+    DashboardTaskId.MedicalRedshirtCandidate -> stringResource(
+        R.string.dashboard_task_medical_redshirt,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+    )
+    DashboardTaskId.SigningDayViewRankings,
+    DashboardTaskId.SigningDayEditPositions,
+    DashboardTaskId.SigningDayHardSign,
+    -> ""
 }
 
 private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {
     DashboardDeepLink.RecruitingRecommended -> RecruitingHubTab.Recommended
     DashboardDeepLink.RecruitingPortal -> RecruitingHubTab.TransferPortal
     DashboardDeepLink.RecruitingHsJuco -> RecruitingHubTab.HsJuco
+    DashboardDeepLink.Strategy,
+    DashboardDeepLink.SigningDayRankings,
+    DashboardDeepLink.SigningDayPositions,
+    -> RecruitingHubTab.Recommended
 }

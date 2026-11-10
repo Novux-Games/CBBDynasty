@@ -342,4 +342,19 @@
     <string name="player_card_scout_ovr">Scout OVR: %1$s</string>
     <string name="dynasty_shell_roster">Roster preview</string>
     <string name="leaving_loyalty_line">Loyalty %1$d · %2$s</string>
+    <string name="injury_roster_out_chip">OUT</string>
+    <string name="injury_roster_weeks_suffix">%1$s · %2$dw</string>
+    <string name="player_card_injury_detail">%1$s (%2$s) · %3$d weeks remaining</string>
+    <string name="postgame_injury_title">Injuries</string>
+    <string name="postgame_injury_line">%1$s — %2$s · %3$d weeks</string>
+    <string name="postgame_injury_dismiss">Continue</string>
+    <string name="postgame_medical_redshirt_apply">Apply for medical redshirt</string>
+    <string name="strategy_title">Strategy</string>
+    <string name="strategy_starters">Starting five</string>
+    <string name="strategy_bench">Rotation</string>
+    <string name="strategy_injured_hint">Injured players are greyed out and cannot be added to the lineup.</string>
+    <string name="strategy_slot_empty">Unfilled</string>
+    <string name="dynasty_shell_open_strategy">Open strategy</string>
+    <string name="dashboard_task_review_injury">Review injury — %1$s (%2$d weeks)</string>
+    <string name="dashboard_task_medical_redshirt">Medical redshirt — %1$s?</string>
 </resources>

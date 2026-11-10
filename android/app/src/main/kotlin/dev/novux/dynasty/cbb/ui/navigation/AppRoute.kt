@@ -27,6 +27,8 @@ sealed class AppRoute(val route: String) {
     /** In-season dynasty shell — [planning/game-frame.md]. */
     data object DynastyShell : AppRoute("dynasty_shell")
 
+    data object Strategy : AppRoute("strategy")
+
     data object CoachingCarousel : AppRoute("coaching_carousel")
 
     data object Recruiting : AppRoute("recruiting")

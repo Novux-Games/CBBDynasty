@@ -34,6 +34,7 @@ import dev.novux.dynasty.cbb.ui.shell.SettingsScreen
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
 import dev.novux.dynasty.cbb.ui.shell.DynastyShellScreen
+import dev.novux.dynasty.cbb.ui.strategy.StrategyScreen
 import dev.novux.dynasty.cbb.ui.newgame.NewGameWizardScreen
 import dev.novux.dynasty.cbb.ui.offseason.CoachingCarouselScreen
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
@@ -261,9 +262,26 @@ fun DynastyApp(
                             schoolHubRepository = schoolHubRepository,
                             coachSecurityRepository = coachSecurityRepository,
                             rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
+                            onOpenStrategy = {
+                                navController.navigate(AppRoute.Strategy.route)
+                            },
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
+                }
+                composable(AppRoute.Strategy.route) {
+                    val session = ActiveDynastySession.current
+                    if (session != null) {
+                        StrategyScreen(
+                            dynastyId = session.dynastyId,
+                            rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
+                            onBack = { navController.popBackStack() },
                         )
                     } else {
                         LaunchedEffect(Unit) {

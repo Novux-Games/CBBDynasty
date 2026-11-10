@@ -25,7 +25,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.balance.BalanceMedicalRedshirtRules
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
+import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
+import dev.novux.dynasty.cbb.core.dashboard.InjuryOptionalDashboardTasks
+import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
+import dev.novux.dynasty.cbb.core.injuries.MedicalRedshirtPolicy
 import dev.novux.dynasty.cbb.core.coach.card.AssistantCoachCard
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
@@ -41,8 +46,12 @@ import dev.novux.dynasty.cbb.data.coach.SchoolStaffRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.school.SchoolHubRepository
+import dev.novux.dynasty.cbb.core.roster.RosterPlayer
+import dev.novux.dynasty.cbb.ui.dashboard.DashboardOptionalTasksPanel
 import dev.novux.dynasty.cbb.ui.player.PlayerCardSheet
+import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
 import dev.novux.dynasty.cbb.ui.player.PlayerLoyaltyChips
+import dev.novux.dynasty.cbb.ui.postgame.PostgameInjurySheet
 import dev.novux.dynasty.cbb.ui.coach.AssistantCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.HeadCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.SchoolStaffTabPanel
@@ -65,6 +74,7 @@ fun DynastyShellScreen(
     schoolHubRepository: SchoolHubRepository,
     coachSecurityRepository: CoachSecurityRepository,
     rosterRepository: DynastyRosterRepository,
+    onOpenStrategy: () -> Unit,
     onExitHome: () -> Unit,
 ) {
     var focus by remember { mutableStateOf<SeasonStartFocus?>(null) }
@@ -74,7 +84,11 @@ fun DynastyShellScreen(
     var coachView by remember { mutableStateOf<ShellCoachView>(ShellCoachView.Hub) }
     var rosterPreview by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
+    var rosterPlayers by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
+    var postgameEvents by remember { mutableStateOf<List<GameSimInjuryEvent>>(emptyList()) }
+    var dismissedInjuryTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
     val scope = rememberCoroutineScope()
+    val medicalRules = remember { BalanceMedicalRedshirtRules() }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
         val exhibitionCount = scheduleRepository.loadExhibitionCount(
@@ -93,10 +107,36 @@ fun DynastyShellScreen(
             loaded.metadata.seasonIndex,
         )
         coachSecurity = coachSecurityRepository.loadForUserDynasty(loaded.dynastyId)
+        rosterPlayers = rosterRepository.listPlayers(loaded.dynastyId)
         rosterPreview = rosterRepository.listDynastyPlayers(loaded.dynastyId).take(6)
+        postgameEvents = rosterRepository.peekPostgameInjuries(loaded.dynastyId)
     }
 
     PlayerCardSheet(player = cardPlayer, onDismiss = { cardPlayer = null })
+    PostgameInjurySheet(
+        events = postgameEvents,
+        players = rosterPlayers,
+        medicalEligible = { playerId ->
+            val player = rosterPlayers.firstOrNull { it.playerId == playerId } ?: return@PostgameInjurySheet false
+            MedicalRedshirtPolicy.evaluate(
+                player,
+                loaded.weekCheckpoint.activePosition.weekIndex,
+                medicalRules,
+            ).eligible
+        },
+        onDismiss = {
+            rosterRepository.clearPostgameInjuries(loaded.dynastyId)
+            postgameEvents = emptyList()
+        },
+        onApplyMedicalRedshirt = { playerId ->
+            scope.launch {
+                rosterPlayers = rosterRepository.applyMedicalRedshirt(loaded.dynastyId, playerId)
+                rosterRepository.clearPostgameInjuries(loaded.dynastyId)
+                postgameEvents = emptyList()
+                rosterPreview = rosterRepository.listDynastyPlayers(loaded.dynastyId).take(6)
+            }
+        },
+    )
 
     when (val view = coachView) {
         is ShellCoachView.School -> {
@@ -222,12 +262,24 @@ fun DynastyShellScreen(
                         .clickable { cardPlayer = player },
                 ) {
                     Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(player.identity.displayName, fontWeight = FontWeight.Medium)
+                        PlayerInjuryRosterRow(player = player.toRosterPlayer())
                         PlayerLoyaltyChips(player)
                     }
                 }
             }
         }
+        val injuryTasks = InjuryOptionalDashboardTasks.build(
+            rosterPlayers,
+            loaded.weekCheckpoint.activePosition.weekIndex,
+            medicalRules,
+        )
+        DashboardOptionalTasksPanel(
+            tasks = injuryTasks,
+            dismissedIds = dismissedInjuryTasks,
+            onDismiss = { dismissedInjuryTasks = dismissedInjuryTasks + it },
+            onDeepLink = { },
+            onStrategyOpen = onOpenStrategy,
+        )
         focus?.firstGame?.let { game ->
             NextGameCard(
                 game = game,
@@ -259,6 +311,12 @@ fun DynastyShellScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(stringResource(R.string.staff_open_tab))
+        }
+        OutlinedButton(
+            onClick = onOpenStrategy,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(stringResource(R.string.dynasty_shell_open_strategy))
         }
         OutlinedButton(
             onClick = onExitHome,
