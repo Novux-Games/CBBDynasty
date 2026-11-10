@@ -11,7 +11,9 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -20,14 +22,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
+import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 
 @Composable
 fun RecruitingHubScreen(
+    loaded: LoadedDynasty,
+    recruitingEconomyRepository: RecruitingEconomyRepository,
     onBack: () -> Unit,
 ) {
     var tabIndex by remember { mutableIntStateOf(RecruitingHubDefaults.tabs.indexOf(RecruitingHubDefaults.defaultTab)) }
+    var ledger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
+
+    LaunchedEffect(loaded.dynastyId) {
+        ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+    }
 
     Column(
         modifier = Modifier
@@ -45,6 +57,17 @@ fun RecruitingHubScreen(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        ledger?.let { row ->
+            Text(
+                text = stringResource(
+                    R.string.recruiting_points_pool,
+                    row.pointsAvailable,
+                    row.weeklyPoolBase,
+                ),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
         PrimaryTabRow(selectedTabIndex = tabIndex) {
             Tab(
                 selected = tabIndex == 0,

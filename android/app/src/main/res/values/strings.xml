@@ -135,6 +135,7 @@
     <string name="draft_results_week2_line">Stock %1$d · %2$s</string>
     <string name="recruiting_hub_title">Recruiting</string>
     <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
+    <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>
     <string name="recruiting_tab_recommended">Recommended</string>
     <string name="recruiting_tab_hs_juco">HS / JUCO</string>
     <string name="recruiting_tab_portal">Transfer portal</string>

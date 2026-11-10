@@ -20,6 +20,7 @@ import dev.novux.dynasty.cbb.data.balance.BalanceParseException
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningParseException
+import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import dev.novux.dynasty.cbb.database.dynasty.toCoachEntity
@@ -39,6 +40,7 @@ class SaveSlotRepository(
     private val packRepository: PackRepository,
     private val balanceRulesetRepository: BalanceRulesetRepository,
     private val simTuningRepository: SimTuningRepository,
+    private val recruitingEconomyRepository: RecruitingEconomyRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -397,6 +399,11 @@ class SaveSlotRepository(
                 )
             }
         }
+        val afterAdvance = when (val again = loadSlot(slotIndex)) {
+            is DynastyLoadResult.Success -> again.loaded
+            else -> return again
+        }
+        recruitingEconomyRepository.onCalendarWeekAdvanced(afterAdvance)
         return loadSlot(slotIndex)
     }
 
@@ -426,6 +433,12 @@ class SaveSlotRepository(
             )
         slotDao.upsert(
             slotEntity.copy(seasonLabel = SeasonMembershipYear.label(meta.seasonIndex)),
+        )
+        recruitingEconomyRepository.openNextCycleAfterSeasonReview(
+            dynastyId = loaded.dynastyId,
+            balance = loaded.balanceRuleset,
+            nextSeasonIndex = meta.seasonIndex,
+            postRecapPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
         )
         return loadSlot(slotIndex)
     }

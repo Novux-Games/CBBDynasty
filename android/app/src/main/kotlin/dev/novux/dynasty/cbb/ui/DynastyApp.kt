@@ -54,6 +54,8 @@ fun DynastyApp(
         LocalContext.current.requireDynastyApplication().saveSlotRepository,
     coachingCarouselRepository: dev.novux.dynasty.cbb.data.carousel.CoachingCarouselRepository =
         LocalContext.current.requireDynastyApplication().coachingCarouselRepository,
+    recruitingEconomyRepository: dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository =
+        LocalContext.current.requireDynastyApplication().recruitingEconomyRepository,
 ) {
     DynastyTheme {
         var launchSettings by remember { mutableStateOf<AppSettings?>(null) }
@@ -226,9 +228,14 @@ fun DynastyApp(
                     CreditsScreen(onBack = { navController.popBackStack() })
                 }
                 composable(AppRoute.Recruiting.route) {
-                    RecruitingHubScreen(
-                        onBack = { navController.popBackStack() },
-                    )
+                    val active = ActiveDynastySession.current
+                    if (active != null) {
+                        RecruitingHubScreen(
+                            loaded = active,
+                            recruitingEconomyRepository = recruitingEconomyRepository,
+                            onBack = { navController.popBackStack() },
+                        )
+                    }
                 }
                 composable(AppRoute.Settings.route) {
                     SettingsScreen(
