@@ -65,6 +65,12 @@ fun PlayersLeavingPanel(
             )
         }
         val visible = if (tabIndex == 0) rosterTab else transferTab
+        ProDaysPanel(
+            players = players,
+            rosterRepository = rosterRepository,
+            dynastyId = dynastyId,
+            onPlayersChanged = { players = it },
+        )
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth(),

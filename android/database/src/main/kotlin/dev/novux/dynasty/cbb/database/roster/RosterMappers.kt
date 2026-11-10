@@ -31,6 +31,9 @@ fun DynastyRosterPlayerEntity.toDomain(): RosterPlayer {
         isStarter = isStarter,
         depthOrder = depthOrder,
         inTransferPortal = inTransferPortal,
+        declaredForDraft = declaredForDraft,
+        draftStockPoints = draftStockPoints,
+        proDayCompleted = proDayCompleted,
     )
 }
 
@@ -43,4 +46,7 @@ fun RosterPlayer.toEntity(): DynastyRosterPlayerEntity =
         isStarter = isStarter,
         depthOrder = depthOrder,
         inTransferPortal = inTransferPortal,
+        declaredForDraft = declaredForDraft,
+        draftStockPoints = draftStockPoints,
+        proDayCompleted = proDayCompleted,
     )

@@ -30,6 +30,7 @@ import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
+import dev.novux.dynasty.cbb.ui.offseason.leaving.DraftResultsWeekTwoPanel
 import dev.novux.dynasty.cbb.ui.offseason.leaving.PlayersLeavingPanel
 import kotlinx.coroutines.launch
 
@@ -90,6 +91,12 @@ fun OffseasonScreen(
         }
         if (inOffseason && position.weekIndex == 1) {
             PlayersLeavingPanel(
+                dynastyId = loaded.dynastyId,
+                rosterRepository = rosterRepository,
+                modifier = Modifier.weight(1f),
+            )
+        } else if (inOffseason && position.weekIndex == 2) {
+            DraftResultsWeekTwoPanel(
                 dynastyId = loaded.dynastyId,
                 rosterRepository = rosterRepository,
                 modifier = Modifier.weight(1f),

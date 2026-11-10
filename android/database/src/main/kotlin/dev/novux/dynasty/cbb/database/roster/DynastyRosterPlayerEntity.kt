@@ -16,4 +16,7 @@ data class DynastyRosterPlayerEntity(
     val isStarter: Boolean,
     val depthOrder: Int,
     val inTransferPortal: Boolean = false,
+    val declaredForDraft: Boolean = false,
+    val draftStockPoints: Int = 0,
+    val proDayCompleted: Boolean = false,
 )

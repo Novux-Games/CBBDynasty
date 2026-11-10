@@ -124,4 +124,13 @@
     <string name="leaving_tab_transfer">Transfer</string>
     <string name="leaving_encourage_transfer">Encourage transfer</string>
     <string name="leaving_convince_stay">Convince to stay</string>
+    <string name="pro_days_title">Pro days</string>
+    <string name="pro_days_subtitle">Stock updates lock before NBA draft results in Week 2.</string>
+    <string name="pro_days_stock">Stock %1$d · %2$s</string>
+    <string name="pro_days_not_run">Pro day not run yet</string>
+    <string name="pro_days_run_player">Run pro day</string>
+    <string name="pro_days_sim_all">Sim all pro days</string>
+    <string name="draft_results_week2_title">Pro draft results</string>
+    <string name="draft_results_week2_empty">No pro day stock from Week 1.</string>
+    <string name="draft_results_week2_line">Stock %1$d · %2$s</string>
 </resources>

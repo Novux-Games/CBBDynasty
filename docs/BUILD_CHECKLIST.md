@@ -141,7 +141,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 6.1 | `[x]` Offseason shell + week header (Week 1–10) | Advance week persists | [offseason](../planning/offseason.md) | `ui.offseason` |
 | 6.2 | `[x]` **Coaching Carousel** (Season 2+ only) | AI background + user approvals | [offseason](../planning/offseason.md) | `:core/carousel` |
 | 6.3 | `[x]` Week 1: **Roster / Transfer** tabs (mutual exclusion) | Encourage transfer / convince stay; portal entrants **not** on Roster | [transfer-portal](../planning/transfer-portal.md), [offseason](../planning/offseason.md), [player-loyalty-promises](../planning/player-loyalty-promises.md) | `ui.offseason.leaving` |
-| 6.4 | `[ ]` Week 1: pro days → draft stock | Feeds week 2 results | [offseason](../planning/offseason.md) | — |
+| 6.4 | `[x]` Week 1: pro days → draft stock | Feeds week 2 results | [offseason](../planning/offseason.md) | — |
 | 6.5 | `[ ]` Recruiting hub shell (HS/JUCO + Portal sub-tabs) | Opens **Recommended** by default; year-long cycle, not OS-only | [recruiting-engine](../planning/recruiting-engine.md), [game-frame](../planning/game-frame.md) | `ui.recruiting` |
 | 6.11 | `[ ]` **Year-long recruiting economy** | Prestige tier weekly pool, **50%** carryover, OS W2–5 **1.5×** crunch; pool set at EoS recap | [recruiting-engine](../planning/recruiting-engine.md) | `:core/recruiting` |
 | 6.12 | `[ ]` **Transfer portal** sim (1 cycle, no in-season) | ~1k–1.4k considering pool; **Top 40** lock OS Week 2; immediate eligibility | [transfer-portal](../planning/transfer-portal.md) | `:core/portal` |

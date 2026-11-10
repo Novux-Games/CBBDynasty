@@ -8,6 +8,9 @@ data class RosterPlayer(
     val isStarter: Boolean,
     val depthOrder: Int,
     val inTransferPortal: Boolean,
+    val declaredForDraft: Boolean = false,
+    val draftStockPoints: Int = 0,
+    val proDayCompleted: Boolean = false,
 ) {
     fun displayLabel(): String = "${position.label} · ${classYear.label}"
 }
