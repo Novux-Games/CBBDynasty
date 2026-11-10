@@ -24,6 +24,7 @@ data class LeagueStandingsState(
     val records: Map<String, LeagueTeamRecord> = emptyMap(),
     val lastCommittedRsWeek: Int = 0,
     val lastWeekResults: List<LeagueGameResult> = emptyList(),
+    val seasonResults: List<LeagueGameResult> = emptyList(),
     val aiInjuryRollsLastWeek: Int = 0,
 ) {
     fun recordFor(teamId: String): LeagueTeamRecord =
@@ -38,6 +39,7 @@ data class LeagueStandingsState(
         return copy(
             records = records + (result.homeTeamId to nextHome) + (result.awayTeamId to nextAway),
             lastWeekResults = lastWeekResults + result,
+            seasonResults = seasonResults + result,
         )
     }
 }

@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb.core.school
 
 import dev.novux.dynasty.cbb.core.pack.IdentityPackIndex
 import dev.novux.dynasty.cbb.core.pack.TeamDisplayOverlay
+import dev.novux.dynasty.cbb.core.resume.TeamResumeMetrics
 
 object SchoolHubSnapshotFactory {
     fun build(
@@ -10,6 +11,7 @@ object SchoolHubSnapshotFactory {
         userTeamId: String,
         record: SchoolSeasonRecord = SchoolSeasonRecord.Zero,
         rankingsPublished: Boolean,
+        resume: TeamResumeMetrics? = null,
     ): SchoolHubOverview {
         val conference = packIndex.conference(team.conferenceId)
         val mates = packIndex.allTeamDisplays().filter {
@@ -21,7 +23,8 @@ object SchoolHubSnapshotFactory {
         val confStanding = confRanks.indexOfFirst { it.teamId == team.teamId }.let { idx ->
             if (idx < 0) null else SchoolMetricsEstimator.conferenceStandingPlaceholder(idx + 1, confRanks.size)
         }
-        val sos = SchoolMetricsEstimator.strengthOfSchedule(team, mates)
+        val sos = resume?.sosRating
+            ?: SchoolMetricsEstimator.strengthOfSchedule(team, mates)
         val (off, def) = SchoolMetricsEstimator.teamRatings(team)
         val rankings = if (rankingsPublished && netRank != null) {
             SchoolRankingsSnapshot(

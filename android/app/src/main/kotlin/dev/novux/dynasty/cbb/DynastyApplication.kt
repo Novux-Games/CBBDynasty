@@ -232,7 +232,13 @@ class DynastyApplication : Application() {
             earlySeasonBracketRepository,
         )
         schoolStaffRepository = SchoolStaffRepository(database, packRepository)
-        schoolHubRepository = SchoolHubRepository(database, packRepository, preseasonProgressRepository)
+        schoolHubRepository = SchoolHubRepository(
+            database,
+            packRepository,
+            preseasonProgressRepository,
+            leagueWeekBatchRepository,
+            balanceRulesetRepository,
+        )
         coachSecurityRepository = CoachSecurityRepository(applicationContext, database)
         applicationScope.launch {
             saveSlotRepository.ensureInitialized()

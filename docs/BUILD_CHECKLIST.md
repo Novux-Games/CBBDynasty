@@ -230,7 +230,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 11.1 | `[ ]` `sosRating`, NEM, quads from results | School hub SOS 0–99 | [selection-engine](../planning/selection-engine.md) | `:core/resume` |
+| 11.1 | `[x]` `sosRating`, NEM, quads from results | School hub SOS 0–99 | [selection-engine](../planning/selection-engine.md) | `:core/resume` |
 | 11.2 | `[ ]` Weekly **NCBA NET** (365 teams) | Drives Selection Sunday | [selection-engine](../planning/selection-engine.md) | — |
 | 11.3 | `[ ]` Media & Coaches polls (human bias) | T25 callouts | [selection-engine](../planning/selection-engine.md), [game-frame](../planning/game-frame.md) | — |
 | 11.4 | `[ ]` Rankings hub tabs | NET / Media / Coaches / conf | [game-frame](../planning/game-frame.md) | — |
