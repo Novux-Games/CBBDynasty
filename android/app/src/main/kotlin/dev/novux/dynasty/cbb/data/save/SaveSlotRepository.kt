@@ -22,6 +22,7 @@ import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningParseException
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
+import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
@@ -44,6 +45,7 @@ class SaveSlotRepository(
     private val simTuningRepository: SimTuningRepository,
     private val recruitingEconomyRepository: RecruitingEconomyRepository,
     private val portalCycleRepository: PortalCycleRepository,
+    private val aiRecruitingRepository: AiRecruitingRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -392,6 +394,9 @@ class SaveSlotRepository(
             is DynastyLoadResult.Success -> initial.loaded
             else -> return initial
         }
+        val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+        val aiWeek = aiRecruitingRepository.runLeagueWeekIfActive(loaded, ledger)
+        val recruitingSpentClosingWeek = aiWeek?.userPointsSpent ?: 0
         weekCheckpointRepository.advanceWeek(loaded.dynastyId, loaded.weekCheckpoint)
         val meta = metadataDao.getById(loaded.dynastyId)?.toDomain()
         if (meta != null) {
@@ -406,7 +411,7 @@ class SaveSlotRepository(
             is DynastyLoadResult.Success -> again.loaded
             else -> return again
         }
-        recruitingEconomyRepository.onCalendarWeekAdvanced(afterAdvance)
+        recruitingEconomyRepository.onCalendarWeekAdvanced(afterAdvance, recruitingSpentClosingWeek)
         val pos = afterAdvance.weekCheckpoint.activePosition
         if (pos.phase == CalendarPhase.Offseason) {
             portalCycleRepository.onOffseasonWeekStarted(
