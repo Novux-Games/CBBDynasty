@@ -25,9 +25,9 @@ object PossessionSimEngine {
             totalPossessions++
 
             val (before, offTeam, offRating, defRating) = if (offenseHome) {
-                Quad(homeBox, "HOME", input.home.offensiveRating, input.away.defensiveRating)
+                Quad(homeBox, "HOME", input.homeOffensive(), input.awayDefensive())
             } else {
-                Quad(awayBox, "AWAY", input.away.offensiveRating, input.home.defensiveRating)
+                Quad(awayBox, "AWAY", input.awayOffensive(), input.homeDefensive())
             }
             val after = resolvePossession(before, offRating, defRating, random)
             if (offenseHome) {

@@ -21,7 +21,14 @@ data class GameSimInput(
     val away: GameSimTeamInput,
     val tuning: SimTuning,
     val seed: Long,
-)
+    val homeRoster: GameSimRosterInput? = null,
+    val awayRoster: GameSimRosterInput? = null,
+) {
+    fun homeOffensive(): Int = homeRoster?.weightedOffensive() ?: home.offensiveRating
+    fun homeDefensive(): Int = homeRoster?.weightedDefensive() ?: home.defensiveRating
+    fun awayOffensive(): Int = awayRoster?.weightedOffensive() ?: away.offensiveRating
+    fun awayDefensive(): Int = awayRoster?.weightedDefensive() ?: away.defensiveRating
+}
 
 data class TeamBoxScore(
     val teamId: String,

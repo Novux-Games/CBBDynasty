@@ -1,5 +1,8 @@
 package dev.novux.dynasty.cbb.core.sim
 
+import dev.novux.dynasty.cbb.core.roster.PlayerClassYear
+import dev.novux.dynasty.cbb.core.roster.PlayerPosition
+import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
 import dev.novux.dynasty.cbb.core.sim.tuning.SimShotClock
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTimeUsedSeconds
@@ -50,6 +53,57 @@ class PossessionSimEngineTest {
         assertTrue(result.awayScore in 20..120)
         val possessionsPerTeam = (result.homeBox.possessions + result.awayBox.possessions) / 2
         assertTrue(possessionsPerTeam in 35..100)
+    }
+
+    @Test
+    fun rosterPrepBoostsTeamWithBetterLineup() {
+        fun roster(vararg pairs: Pair<PlayerPosition, Int>) = pairs.map { (pos, off) ->
+            RosterPlayer(
+                playerId = pos.wire,
+                dynastyId = "d",
+                position = pos,
+                classYear = PlayerClassYear.Senior,
+                isStarter = true,
+                depthOrder = 1,
+                inTransferPortal = false,
+                ovr = off,
+                off = off,
+                def = off - 5,
+            )
+        }
+        val strong = GameLineupPrep.build(
+            "h",
+            roster(
+                PlayerPosition.PointGuard to 88,
+                PlayerPosition.ShootingGuard to 86,
+                PlayerPosition.SmallForward to 85,
+                PlayerPosition.PowerForward to 84,
+                PlayerPosition.Center to 83,
+                PlayerPosition.PointGuard to 70,
+            ),
+        )
+        val weak = GameLineupPrep.build(
+            "a",
+            roster(
+                PlayerPosition.PointGuard to 62,
+                PlayerPosition.ShootingGuard to 61,
+                PlayerPosition.SmallForward to 60,
+                PlayerPosition.PowerForward to 59,
+                PlayerPosition.Center to 58,
+            ),
+        )
+        val result = PossessionSimEngine.simulate(
+            GameSimInput(
+                home = GameSimTeamInput("h", 60, 60),
+                away = GameSimTeamInput("a", 60, 60),
+                tuning = tuning,
+                seed = 7L,
+                homeRoster = strong,
+                awayRoster = weak,
+            ),
+        )
+        assertTrue(result.homeScore + result.awayScore > 0)
+        assertTrue(strong.weightedOffensive() > weak.weightedOffensive())
     }
 
     @Test
