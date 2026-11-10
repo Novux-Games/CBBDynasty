@@ -267,7 +267,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 14.1 | `[x]` Season review UI | Grades, prestige, final ranks; **next cycle weekly recruiting pool** preview | [season-review](../planning/season-review.md), [recruiting-engine](../planning/recruiting-engine.md) | `ui.seasonreview`, `:core/seasonreview` |
 | 14.2 | `[x]` Awards & news wrap | POTY, coach honors | [game-design](../planning/game-design.md) | `:core/awards`, `YearlyAwardsRepository`, `NewsFeedRepository` |
 | 14.3 | `[x]` History hub + GOAT + record/HOF + **awards** | Win contribution rollup; yearly awards compute (MVP, NCBA position POY, conf set); archive + runner-ups; unlocks **9.12** current season | [history-hub](../planning/history-hub.md), [awards](../planning/awards.md), [simulation-engine](../planning/simulation-engine.md#season-win-contribution-design-lock), [game-frame](../planning/game-frame.md) | `ui.history`, `:core/history`, `HistoryRepository` |
-| 14.4 | `[ ]` Advance year → offseason carousel | Season 2+ path | [offseason](../planning/offseason.md) | — |
+| 14.4 | `[x]` Advance year → offseason carousel | Season 2+ path | [offseason](../planning/offseason.md) | `SeasonYearAdvanceEngine`, `SaveSlotRepository` carousel/portal priming |
 
 ---
 

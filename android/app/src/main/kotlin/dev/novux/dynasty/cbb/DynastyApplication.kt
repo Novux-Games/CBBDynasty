@@ -263,6 +263,7 @@ class DynastyApplication : Application() {
             leagueWeekBatchRepository,
             preseasonScheduleRepository,
             coachSkillPointRepository,
+            coachingCarouselRepository,
         )
         preseasonSeasonStartRepository = PreseasonSeasonStartRepository(
             saveSlotRepository,

@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.data.save
 import androidx.room.withTransaction
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
 import dev.novux.dynasty.cbb.core.calendar.SeasonReviewGate
+import dev.novux.dynasty.cbb.core.calendar.SeasonYearAdvanceEngine
 import dev.novux.dynasty.cbb.core.save.DynastyBootstrap
 import dev.novux.dynasty.cbb.core.save.DynastyLoadFailure
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
@@ -40,6 +41,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.recruiting.ai.AiRecruitingWeekRunner
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
+import dev.novux.dynasty.cbb.data.carousel.CoachingCarouselRepository
 import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
 import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
@@ -83,6 +85,7 @@ class SaveSlotRepository(
     private val leagueWeekBatchRepository: LeagueWeekBatchRepository,
     private val preseasonScheduleRepository: PreseasonScheduleRepository,
     private val coachSkillPointRepository: CoachSkillPointRepository,
+    private val coachingCarouselRepository: CoachingCarouselRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -654,12 +657,16 @@ class SaveSlotRepository(
                 DynastyLoadFailure.InvalidCalendar("dynasty is not in End of Season week"),
             )
         }
+        val advancePlan = SeasonYearAdvanceEngine.planEnterOffseason(loaded.weekCheckpoint)
         weekCheckpointRepository.advanceWeek(loaded.dynastyId, loaded.weekCheckpoint)
         val meta = metadataDao.getById(loaded.dynastyId)?.toDomain()
             ?: return DynastyLoadResult.Unreadable(
                 slotIndex,
                 DynastyLoadFailure.MissingMetadata(loaded.dynastyId),
             )
+        check(meta.seasonIndex == advancePlan.newSeasonIndex) {
+            "calendar season index out of sync after year advance"
+        }
         val slotEntity = slotDao.getByIndex(slotIndex)
             ?: return DynastyLoadResult.Unreadable(
                 slotIndex,
@@ -674,6 +681,8 @@ class SaveSlotRepository(
             nextSeasonIndex = meta.seasonIndex,
             postRecapPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
         )
+        coachingCarouselRepository.loadOrCreate(loaded.dynastyId, meta.seasonIndex)
+        portalCycleRepository.loadOrSimulate(loaded.dynastyId, meta.seasonIndex)
         return loadSlot(slotIndex)
     }
 }
