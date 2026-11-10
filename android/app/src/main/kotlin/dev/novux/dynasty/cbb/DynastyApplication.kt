@@ -160,6 +160,9 @@ class DynastyApplication : Application() {
     lateinit var ncbaMainBracketRepository: dev.novux.dynasty.cbb.data.brackets.NcbaMainBracketRepository
         private set
 
+    lateinit var parallelNationalBracketRepository: dev.novux.dynasty.cbb.data.brackets.ParallelNationalBracketRepository
+        private set
+
     lateinit var coachSecurityRepository: CoachSecurityRepository
         private set
 
@@ -289,6 +292,9 @@ class DynastyApplication : Application() {
         )
         ncbaMainBracketRepository = dev.novux.dynasty.cbb.data.brackets.NcbaMainBracketRepository(
             packRepository,
+            leagueWeekBatchRepository,
+        )
+        parallelNationalBracketRepository = dev.novux.dynasty.cbb.data.brackets.ParallelNationalBracketRepository(
             leagueWeekBatchRepository,
         )
         coachSecurityRepository = CoachSecurityRepository(applicationContext, database)

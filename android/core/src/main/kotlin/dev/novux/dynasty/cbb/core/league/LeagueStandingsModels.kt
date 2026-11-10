@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.league
 
+import dev.novux.dynasty.cbb.core.brackets.NationalBracketSnapshot
 import dev.novux.dynasty.cbb.core.brackets.NcbaMainBracketSnapshot
 import dev.novux.dynasty.cbb.core.brackets.NcbaOpeningRoundSnapshot
 import dev.novux.dynasty.cbb.core.conference.ConferenceTournamentSeason
@@ -37,6 +38,8 @@ data class LeagueStandingsState(
     val conferenceTournaments: ConferenceTournamentSeason? = null,
     val ncbaOpeningRound: NcbaOpeningRoundSnapshot? = null,
     val ncbaMainBracket: NcbaMainBracketSnapshot? = null,
+    val nciBracket: NationalBracketSnapshot? = null,
+    val heritageBracket: NationalBracketSnapshot? = null,
     val aiInjuryRollsLastWeek: Int = 0,
 ) {
     fun recordFor(teamId: String): LeagueTeamRecord =
