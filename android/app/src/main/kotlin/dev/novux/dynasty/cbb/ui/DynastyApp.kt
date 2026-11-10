@@ -35,6 +35,7 @@ import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
 import dev.novux.dynasty.cbb.ui.newgame.NewGameWizardScreen
 import dev.novux.dynasty.cbb.ui.offseason.CoachingCarouselScreen
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
 import dev.novux.dynasty.cbb.ui.recruiting.RecruitingHubScreen
 import dev.novux.dynasty.cbb.ui.offseason.OffseasonScreen
 import dev.novux.dynasty.cbb.ui.seasonreview.SeasonReviewScreen
@@ -83,6 +84,10 @@ fun DynastyApp(
             val context = LocalContext.current
             val snackbarHostState = remember { SnackbarHostState() }
             var continueLoadFailedSlot by remember { mutableStateOf<Int?>(null) }
+            var recruitingLaunchTab by remember {
+                mutableStateOf(RecruitingHubDefaults.defaultTab)
+            }
+            val portalCycleRepository = LocalContext.current.requireDynastyApplication().portalCycleRepository
 
             suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
@@ -191,10 +196,13 @@ fun DynastyApp(
                             initial = session,
                             saveSlotRepository = saveSlotRepository,
                             rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
+                            recruitingEconomyRepository = recruitingEconomyRepository,
+                            portalCycleRepository = portalCycleRepository,
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
-                            onOpenRecruiting = {
+                            onOpenRecruiting = { tab ->
+                                recruitingLaunchTab = tab
                                 navController.navigate(AppRoute.Recruiting.route)
                             },
                         )
@@ -233,6 +241,7 @@ fun DynastyApp(
                         RecruitingHubScreen(
                             loaded = active,
                             recruitingEconomyRepository = recruitingEconomyRepository,
+                            initialTab = recruitingLaunchTab,
                             onBack = { navController.popBackStack() },
                         )
                     }

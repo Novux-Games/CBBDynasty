@@ -44,9 +44,12 @@ import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 fun RecruitingHubScreen(
     loaded: LoadedDynasty,
     recruitingEconomyRepository: RecruitingEconomyRepository,
+    initialTab: RecruitingHubTab = RecruitingHubDefaults.defaultTab,
     onBack: () -> Unit,
 ) {
-    var tabIndex by remember { mutableIntStateOf(RecruitingHubDefaults.tabs.indexOf(RecruitingHubDefaults.defaultTab)) }
+    var tabIndex by remember(initialTab) {
+        mutableIntStateOf(RecruitingHubDefaults.tabs.indexOf(initialTab))
+    }
     var ledger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
 
     LaunchedEffect(loaded.dynastyId) {

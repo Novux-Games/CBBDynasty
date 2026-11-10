@@ -26,14 +26,26 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.OffseasonWeekHeading
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
+import dev.novux.dynasty.cbb.core.dashboard.OffseasonDashboardContext
+import dev.novux.dynasty.cbb.core.dashboard.OffseasonOptionalDashboardTasks
+import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
+import dev.novux.dynasty.cbb.core.portal.PortalConstants
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
+import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
+import dev.novux.dynasty.cbb.ui.dashboard.DashboardOptionalTasksPanel
 import dev.novux.dynasty.cbb.ui.offseason.leaving.DraftResultsWeekTwoPanel
 import dev.novux.dynasty.cbb.ui.offseason.leaving.PlayersLeavingPanel
+import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.launch
+
+private const val SCHOLARSHIP_LIMIT = 15
 
 /** Offseason shell — week header and advance ([planning/offseason.md]). */
 @Composable
@@ -41,11 +53,25 @@ fun OffseasonScreen(
     initial: LoadedDynasty,
     saveSlotRepository: SaveSlotRepository,
     rosterRepository: DynastyRosterRepository,
+    recruitingEconomyRepository: RecruitingEconomyRepository,
+    portalCycleRepository: PortalCycleRepository,
     onExitHome: () -> Unit,
-    onOpenRecruiting: () -> Unit = {},
+    onOpenRecruiting: (RecruitingHubTab) -> Unit = {},
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
+    var ledger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
+    var portalTop40Locked by remember { mutableStateOf(false) }
+    var openScholarshipSlots by remember { mutableStateOf(0) }
+    var dismissedTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(loaded.dynastyId, loaded.weekCheckpoint) {
+        ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+        val portal = portalCycleRepository.loadOrSimulate(loaded.dynastyId, loaded.metadata.seasonIndex)
+        portalTop40Locked = portal.top40Locked
+        val roster = rosterRepository.listPlayers(loaded.dynastyId)
+        openScholarshipSlots = (SCHOLARSHIP_LIMIT - roster.size).coerceAtLeast(0)
+    }
     val position = loaded.weekCheckpoint.activePosition
     val inOffseason = position.phase == CalendarPhase.Offseason
     val weekHeader = CalendarWeekLabel.display(position)
@@ -114,11 +140,29 @@ fun OffseasonScreen(
 
         if (RecruitingCyclePolicy.hubAccessible(position.phase, position.weekIndex.takeIf { inOffseason })) {
             OutlinedButton(
-                onClick = onOpenRecruiting,
+                onClick = { onOpenRecruiting(RecruitingHubTab.Recommended) },
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(stringResource(R.string.recruiting_open_hub))
             }
+        }
+
+        if (inOffseason) {
+            val dashboardTasks = OffseasonOptionalDashboardTasks.build(
+                OffseasonDashboardContext(
+                    offseasonWeekIndex = position.weekIndex,
+                    recruitingPointsAvailable = ledger?.pointsAvailable ?: 0,
+                    portalTop40Locked = portalTop40Locked,
+                    openScholarshipSlots = openScholarshipSlots,
+                    signingCrunchActive = position.weekIndex in PortalConstants.PORTAL_RECRUITING_WEEKS,
+                ),
+            )
+            DashboardOptionalTasksPanel(
+                tasks = dashboardTasks,
+                dismissedIds = dismissedTasks,
+                onDismiss = { dismissedTasks = dismissedTasks + it },
+                onDeepLink = onOpenRecruiting,
+            )
         }
 
         Button(

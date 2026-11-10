@@ -142,6 +142,14 @@
     <string name="recruiting_badge_possible">Possible</string>
     <string name="recruiting_badge_reach">Reach</string>
     <string name="recruiting_badge_long_shot">Long shot</string>
+    <string name="dashboard_optional_heading">Optional tasks</string>
+    <string name="dashboard_task_open">Open</string>
+    <string name="dashboard_task_dismiss">Dismiss for now</string>
+    <string name="dashboard_task_spend_points">Spend recruiting points (%1$d available)</string>
+    <string name="dashboard_task_portal_window">Transfer Portal — Offseason Week %1$d</string>
+    <string name="dashboard_task_portal_top40">Portal Top 40 published</string>
+    <string name="dashboard_task_signing_crunch">Signing week R%1$d — 1.5× recruiting points</string>
+    <string name="dashboard_task_open_scholarships">%1$d scholarship slots open</string>
     <string name="recruiting_tab_recommended">Recommended</string>
     <string name="recruiting_tab_hs_juco">HS / JUCO</string>
     <string name="recruiting_tab_portal">Transfer portal</string>
