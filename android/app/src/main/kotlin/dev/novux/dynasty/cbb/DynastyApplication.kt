@@ -18,6 +18,7 @@ import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekEightRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekTenRepository
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
+import dev.novux.dynasty.cbb.data.preseason.PreseasonReportRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.preseason.TournamentInvitesRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonProgressRepository
@@ -96,6 +97,9 @@ class DynastyApplication : Application() {
     lateinit var preseasonScheduleRepository: PreseasonScheduleRepository
         private set
 
+    lateinit var preseasonReportRepository: PreseasonReportRepository
+        private set
+
     override fun onCreate() {
         super.onCreate()
         appSettingsRepository = AppSettingsRepository(applicationContext)
@@ -127,6 +131,12 @@ class DynastyApplication : Application() {
             packRepository,
             database,
             tournamentInvitesRepository,
+        )
+        preseasonReportRepository = PreseasonReportRepository(
+            applicationContext,
+            packRepository,
+            database,
+            incomingClassSeedRepository,
         )
         saveSlotRepository = SaveSlotRepository(
             database,

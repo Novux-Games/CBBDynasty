@@ -213,6 +213,9 @@
     <string name="preseason_rs_run_solver">Build schedule</string>
     <string name="preseason_rs_solving">Building schedule…</string>
     <string name="preseason_rs_locked">Schedule saved</string>
+    <string name="preseason_report_title">Preseason report</string>
+    <string name="preseason_report_mark_read">Mark read</string>
+    <string name="preseason_report_done">Report read</string>
     <string name="recruiting_hub_title">Recruiting</string>
     <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
     <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>

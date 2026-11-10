@@ -37,6 +37,7 @@ import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.preseason.tournament.TournamentInvitesState
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonProgressRepository
+import dev.novux.dynasty.cbb.data.preseason.PreseasonReportRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.preseason.TournamentInvitesRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
@@ -51,6 +52,7 @@ fun PreseasonScreen(
     incomingClassSeedRepository: IncomingClassSeedRepository,
     tournamentInvitesRepository: TournamentInvitesRepository,
     scheduleRepository: PreseasonScheduleRepository,
+    preseasonReportRepository: PreseasonReportRepository,
     onExitHome: () -> Unit,
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
@@ -104,6 +106,23 @@ fun PreseasonScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(PreseasonTaskId.entries) { taskId ->
+                if (taskId == PreseasonTaskId.PreseasonReport &&
+                    !taskProgress.isComplete(taskId)
+                ) {
+                    PreseasonReportPanel(
+                        dynastyId = loaded.dynastyId,
+                        seasonIndex = loaded.metadata.seasonIndex,
+                        reportRepository = preseasonReportRepository,
+                        progressRepository = progressRepository,
+                        onMarkedRead = {
+                            scope.launch {
+                                progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    return@items
+                }
                 if (taskId == PreseasonTaskId.IncomingClassSeed && !taskProgress.isComplete(taskId)) {
                     IncomingClassSeedPanel(
                         dynastyId = loaded.dynastyId,
