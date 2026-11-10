@@ -12,6 +12,8 @@ data class RecruitProspect(
     val stars: Int,
     val position: PlayerPosition,
     val homeState: String,
+    /** 1–2 priorities rolled at creation; unchanged if player enters portal. */
+    val topPriorities: List<RecruitPriority> = emptyList(),
     /** National HS rank when in Top 60 band (1 = best). */
     val nationalHsRank: Int? = null,
     val nilAskUsd: Int,

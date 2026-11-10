@@ -17,6 +17,7 @@ data class RecommendedProspectRow(
     val badge: SignLikelihoodBadge,
     val inState: Boolean,
     val positionNeed: Boolean,
+    val influenceBoard: ProspectInfluenceBoard,
 )
 
 object SignLikelihoodEngine {
@@ -25,7 +26,8 @@ object SignLikelihoodEngine {
         school: SchoolRecruitingContext,
         recommended: BalanceRecruitingRecommended,
     ): RecommendedProspectRow {
-        val baseline = BaselineInterestCalculator.compute(prospect, school, recommended)
+        val snapshot = RecruitInterestEngine.baselineSnapshot(prospect, school, recommended)
+        val baseline = snapshot.baselineInterest
         var adjusted = baseline.toDouble()
         adjusted -= prestigeGapPenalty(prospect.stars, school.programPrestige, recommended)
         if (prospect.position in school.positionsNeed) {
@@ -34,6 +36,12 @@ object SignLikelihoodEngine {
         val inState = prospect.homeState.equals(school.schoolHomeState, ignoreCase = true)
         val positionNeed = prospect.position in school.positionsNeed
         val badge = badgeForScore(adjusted, recommended.bands)
+        val influence = InfluenceBoardEngine.build(
+            prospect = prospect,
+            userSchool = school,
+            userProgramId = "user-program",
+            recommended = recommended,
+        )
         return RecommendedProspectRow(
             prospect = prospect,
             baselineInterest = baseline,
@@ -41,6 +49,7 @@ object SignLikelihoodEngine {
             badge = badge,
             inState = inState,
             positionNeed = positionNeed,
+            influenceBoard = influence,
         )
     }
 

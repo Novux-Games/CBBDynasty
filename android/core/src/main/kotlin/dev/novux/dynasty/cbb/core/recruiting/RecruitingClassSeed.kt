@@ -17,8 +17,9 @@ object RecruitingClassSeed {
             val state = states[random.nextInt(states.size)]
             val nationalRank = if (stars >= 4 && index < 60) index + 1 else null
             val nilAsk = nilAskForStars(stars)
+            val prospectId = "hs-$membershipSeasonIndex-$index"
             RecruitProspect(
-                prospectId = "hs-$membershipSeasonIndex-$index",
+                prospectId = prospectId,
                 displayName = "${firstNames[random.nextInt(firstNames.size)]} " +
                     "${lastNames[random.nextInt(lastNames.size)]}",
                 stars = stars,
@@ -27,6 +28,7 @@ object RecruitingClassSeed {
                 nationalHsRank = nationalRank,
                 nilAskUsd = nilAsk,
                 scoutLetterOverall = letterForStars(stars, random),
+                topPriorities = RecruitPriorityRoll.roll(prospectId),
             )
         }
     }

@@ -138,6 +138,7 @@
     <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>
     <string name="recruiting_recommended_summary">%1$d targets look realistic for your program · showing %2$d on Recommended</string>
     <string name="recruiting_row_meta">%1$d★ %2$s · %3$s · Grade %4$s</string>
+    <string name="recruiting_influence_row">Your rank #%1$d · closeness %2$d · interest %3$d (zero spend)</string>
     <string name="recruiting_badge_likely">Likely</string>
     <string name="recruiting_badge_possible">Possible</string>
     <string name="recruiting_badge_reach">Reach</string>

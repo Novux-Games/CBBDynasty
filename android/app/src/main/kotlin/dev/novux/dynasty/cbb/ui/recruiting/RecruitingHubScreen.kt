@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.MaterialTheme
@@ -260,19 +261,41 @@ private fun RecommendedProspectRow(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                 )
+            Text(
+                text = stringResource(
+                    R.string.recruiting_row_meta,
+                    row.prospect.stars,
+                    row.prospect.position.label,
+                    row.prospect.homeState,
+                    row.prospect.scoutLetterOverall,
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            if (row.prospect.topPriorities.isNotEmpty()) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    row.prospect.topPriorities.forEach { priority ->
+                        AssistChip(
+                            onClick = {},
+                            label = { Text(priority.chipLabel) },
+                        )
+                    }
+                }
+            }
+            row.influenceBoard.userRank?.let { rank ->
                 Text(
                     text = stringResource(
-                        R.string.recruiting_row_meta,
-                        row.prospect.stars,
-                        row.prospect.position.label,
-                        row.prospect.homeState,
-                        row.prospect.scoutLetterOverall,
+                        R.string.recruiting_influence_row,
+                        rank,
+                        row.influenceBoard.closeness,
+                        row.baselineInterest,
                     ),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
-            SignLikelihoodChip(row.badge)
+        }
+        SignLikelihoodChip(row.badge)
         }
         gates?.let { g ->
             Row(
