@@ -22,6 +22,7 @@ import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
 fun DashboardRequiredTasksPanel(
     tasks: List<DashboardTask>,
     onOpenSigningDay: (DashboardDeepLink) -> Unit,
+    onOpenDiscipline: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     if (tasks.isEmpty()) return
@@ -42,7 +43,13 @@ fun DashboardRequiredTasksPanel(
                 ) {
                     Text(text = requiredTaskMessage(task), style = MaterialTheme.typography.bodyLarge)
                     OutlinedButton(
-                        onClick = { onOpenSigningDay(task.deepLink) },
+                        onClick = {
+                            if (task.deepLink == DashboardDeepLink.DisciplineSheet) {
+                                onOpenDiscipline()
+                            } else {
+                                onOpenSigningDay(task.deepLink)
+                            }
+                        },
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(stringResource(R.string.dashboard_task_open))
@@ -58,5 +65,9 @@ private fun requiredTaskMessage(task: DashboardTask): String = when (task.id) {
     DashboardTaskId.SigningDayViewRankings -> stringResource(R.string.dashboard_task_signing_rankings)
     DashboardTaskId.SigningDayEditPositions -> stringResource(R.string.dashboard_task_signing_positions)
     DashboardTaskId.SigningDayHardSign -> stringResource(R.string.dashboard_task_signing_hard_sign)
+    DashboardTaskId.TeamDisciplinePending -> stringResource(
+        R.string.dashboard_task_team_discipline,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+    )
     else -> task.id.name
 }

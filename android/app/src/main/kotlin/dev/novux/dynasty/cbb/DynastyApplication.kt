@@ -8,6 +8,7 @@ import dev.novux.dynasty.cbb.data.coach.SchoolStaffRepository
 import dev.novux.dynasty.cbb.data.school.SchoolHubRepository
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
+import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
 import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
@@ -45,6 +46,9 @@ class DynastyApplication : Application() {
         private set
 
     lateinit var dynastyRosterRepository: DynastyRosterRepository
+        private set
+
+    lateinit var disciplineRepository: DisciplineRepository
         private set
 
     lateinit var weekCheckpointRepository: WeekCheckpointRepository
@@ -135,6 +139,7 @@ class DynastyApplication : Application() {
         weekCheckpointRepository = WeekCheckpointRepository(database)
         val postgameInjuryQueue = dev.novux.dynasty.cbb.data.injuries.PostgameInjuryQueue()
         dynastyRosterRepository = DynastyRosterRepository(database, postgameInjuryQueue)
+        disciplineRepository = DisciplineRepository(applicationContext, database, balanceRulesetRepository)
         offseasonWeekTwoRepository = OffseasonWeekTwoRepository(applicationContext, dynastyRosterRepository)
         summerWorkoutRepository = OffseasonSummerWorkoutRepository(applicationContext, dynastyRosterRepository)
         offseasonWeekEightRepository = OffseasonWeekEightRepository(applicationContext, dynastyRosterRepository)
@@ -165,6 +170,7 @@ class DynastyApplication : Application() {
             portalCycleRepository,
             aiRecruitingRepository,
             dynastyRosterRepository,
+            disciplineRepository,
         )
         preseasonSeasonStartRepository = PreseasonSeasonStartRepository(
             saveSlotRepository,

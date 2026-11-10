@@ -35,6 +35,7 @@ import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
 import dev.novux.dynasty.cbb.ui.shell.DynastyShellScreen
 import dev.novux.dynasty.cbb.ui.strategy.StrategyScreen
+import dev.novux.dynasty.cbb.ui.discipline.DisciplineDecisionScreen
 import dev.novux.dynasty.cbb.ui.newgame.NewGameWizardScreen
 import dev.novux.dynasty.cbb.ui.offseason.CoachingCarouselScreen
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
@@ -94,6 +95,9 @@ fun DynastyApp(
                 mutableStateOf(RecruitingHubDefaults.defaultTab)
             }
             var signingDayInitialTab by remember { mutableStateOf(SigningDayInitialTab.Rankings) }
+            var disciplineIncident by remember {
+                mutableStateOf<dev.novux.dynasty.cbb.core.discipline.PendingDisciplineIncident?>(null)
+            }
             val portalCycleRepository = LocalContext.current.requireDynastyApplication().portalCycleRepository
             val signingDayRepository = LocalContext.current.requireDynastyApplication().signingDayRepository
             val offseasonWeekTwoRepository =
@@ -262,12 +266,39 @@ fun DynastyApp(
                             schoolHubRepository = schoolHubRepository,
                             coachSecurityRepository = coachSecurityRepository,
                             rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
+                            disciplineRepository = LocalContext.current.requireDynastyApplication().disciplineRepository,
                             onOpenStrategy = {
                                 navController.navigate(AppRoute.Strategy.route)
+                            },
+                            onOpenDiscipline = { incident ->
+                                disciplineIncident = incident
+                                navController.navigate(AppRoute.Discipline.route)
                             },
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
+                }
+                composable(AppRoute.Discipline.route) {
+                    val session = ActiveDynastySession.current
+                    val app = LocalContext.current.requireDynastyApplication()
+                    val incident = disciplineIncident
+                    if (session != null && incident != null) {
+                        DisciplineDecisionScreen(
+                            dynastyId = session.dynastyId,
+                            seasonIndex = session.metadata.seasonIndex,
+                            incident = incident,
+                            disciplineRepository = app.disciplineRepository,
+                            onResolved = {
+                                disciplineIncident = null
+                                navController.popBackStack(AppRoute.DynastyShell.route, inclusive = false)
+                            },
+                            onBack = { navController.popBackStack() },
                         )
                     } else {
                         LaunchedEffect(Unit) {

@@ -38,6 +38,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.recruiting.ai.AiRecruitingWeekRunner
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
+import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
@@ -71,6 +72,7 @@ class SaveSlotRepository(
     private val portalCycleRepository: PortalCycleRepository,
     private val aiRecruitingRepository: AiRecruitingRepository,
     private val dynastyRosterRepository: DynastyRosterRepository,
+    private val disciplineRepository: DisciplineRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -484,6 +486,9 @@ class SaveSlotRepository(
             is DynastyLoadResult.Success -> initial.loaded
             else -> return initial
         }
+        if (disciplineRepository.hasPending(loaded.dynastyId, loaded.metadata.seasonIndex)) {
+            return loadSlot(slotIndex)
+        }
         val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
         val input = buildSimWeekAdvanceInput(loaded, ledger, 0, userManualRecruitingSpent)
         val preAdvance = SimWeekAdvanceResolver.resolvePreAdvance(
@@ -499,6 +504,16 @@ class SaveSlotRepository(
         dynastyRosterRepository.tickInjuriesForWeekAdvance(
             loaded.dynastyId,
             advanceResult.committedWeek.phase,
+        )
+        val teamPlayedGame = advanceResult.committedWeek.phase in SCHEDULED_GAME_PHASES
+        disciplineRepository.afterWeekAdvance(
+            dynastyId = loaded.dynastyId,
+            seasonIndex = loaded.metadata.seasonIndex,
+            phase = advanceResult.committedWeek.phase,
+            rsWeekIndex = advanceResult.committedWeek.weekIndex,
+            players = dynastyRosterRepository.listPlayers(loaded.dynastyId),
+            teamPlayedGame = teamPlayedGame,
+            rollSeed = loaded.dynastyId.hashCode().toLong() + advanceResult.committedWeek.weekIndex,
         )
         val meta = metadataDao.getById(loaded.dynastyId)?.toDomain()
         if (meta != null) {

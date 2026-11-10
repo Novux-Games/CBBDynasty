@@ -187,7 +187,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 8.6 | `[x]` **Loyalty** (0–99) + **one promise** per tenure | Kept/broken → portal / declare rolls; card chips | [player-loyalty-promises](../planning/player-loyalty-promises.md), [player-cards](../planning/player-cards.md) | `:core/player` |
 | 8.7 | `[x]` **Injury** state + medical redshirt + **auto lineup** | Save fields per spec; `weeksRemaining` + snapshots; lineup adjust on injury/return; medical RS gates; bank **40** rows | [injuries](../planning/injuries.md) | `:core/injuries` |
 | 8.8 | `[x]` **Injury UX** (postgame + cards + strategy) | Postgame sheet; roster `OUT` / `{N}w`; greyed in Strategy; optional dashboard deep links | [injuries](../planning/injuries.md#player-ui), [injuries#medical-redshirt](../planning/injuries.md#medical-redshirt), [dashboard-tasks](../planning/dashboard-tasks.md) | `ui.postgame`, `ui.strategy` |
-| 8.9 | `[ ]` **Discipline events** (conduct + academic) | Weekly random roll; required sheet; dismiss / games / conference draw or academic options | [in-season-systems](../planning/in-season-systems.md) | `ui.discipline` |
+| 8.9 | `[x]` **Discipline events** (conduct + academic) | Weekly random roll; required sheet; dismiss / games / conference draw or academic options | [in-season-systems](../planning/in-season-systems.md) | `ui.discipline` |
 | 8.10 | `[ ]` **Chemistry + fatigue** state | `teamChemistry`, per-player `stamina`; weekly tick; sim clutch + injury weight | [in-season-systems](../planning/in-season-systems.md) | `:core/discipline` |
 
 ---

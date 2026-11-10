@@ -357,4 +357,12 @@
     <string name="dynasty_shell_open_strategy">Open strategy</string>
     <string name="dashboard_task_review_injury">Review injury — %1$s (%2$d weeks)</string>
     <string name="dashboard_task_medical_redshirt">Medical redshirt — %1$s?</string>
+    <string name="dashboard_task_team_discipline">Team discipline — %1$s</string>
+    <string name="discipline_dismiss_player">Dismiss from team</string>
+    <string name="discipline_suspend_games_label">Suspend for games (1–10)</string>
+    <string name="discipline_suspend_games">Suspend player</string>
+    <string name="discipline_conference_draw">Delegate to conference</string>
+    <string name="discipline_academic_sweep">Sweep under the rug</string>
+    <string name="discipline_academic_suspend">Suspend — games</string>
+    <string name="discipline_academic_support">Suspend until eligible + Academic Support</string>
 </resources>

@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.discipline.DisciplineResolver
 import dev.novux.dynasty.cbb.core.lineup.DefaultStarterAlgorithm
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
@@ -96,7 +97,7 @@ private fun StrategyLineupCard(
     title: String,
     player: RosterPlayer?,
 ) {
-    val injured = player?.injuryActive == true && player.injuryWeeksRemaining > 0
+    val injured = player != null && DisciplineResolver.isIneligibleForLineup(player)
     Card(
         modifier = Modifier
             .fillMaxWidth()

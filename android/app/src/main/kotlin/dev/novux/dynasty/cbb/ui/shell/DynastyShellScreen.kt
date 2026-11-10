@@ -28,7 +28,9 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.balance.BalanceMedicalRedshirtRules
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
+import dev.novux.dynasty.cbb.core.dashboard.DisciplineRequiredDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.InjuryOptionalDashboardTasks
+import dev.novux.dynasty.cbb.core.discipline.PendingDisciplineIncident
 import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
 import dev.novux.dynasty.cbb.core.injuries.MedicalRedshirtPolicy
 import dev.novux.dynasty.cbb.core.coach.card.AssistantCoachCard
@@ -44,7 +46,9 @@ import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
 import dev.novux.dynasty.cbb.data.coach.CoachSecurityRepository
 import dev.novux.dynasty.cbb.data.coach.SchoolStaffRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
+import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
+import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
 import dev.novux.dynasty.cbb.data.school.SchoolHubRepository
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardOptionalTasksPanel
@@ -74,7 +78,9 @@ fun DynastyShellScreen(
     schoolHubRepository: SchoolHubRepository,
     coachSecurityRepository: CoachSecurityRepository,
     rosterRepository: DynastyRosterRepository,
+    disciplineRepository: DisciplineRepository,
     onOpenStrategy: () -> Unit,
+    onOpenDiscipline: (PendingDisciplineIncident) -> Unit,
     onExitHome: () -> Unit,
 ) {
     var focus by remember { mutableStateOf<SeasonStartFocus?>(null) }
@@ -87,6 +93,7 @@ fun DynastyShellScreen(
     var rosterPlayers by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
     var postgameEvents by remember { mutableStateOf<List<GameSimInjuryEvent>>(emptyList()) }
     var dismissedInjuryTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
+    var disciplinePending by remember { mutableStateOf<PendingDisciplineIncident?>(null) }
     val scope = rememberCoroutineScope()
     val medicalRules = remember { BalanceMedicalRedshirtRules() }
 
@@ -110,6 +117,7 @@ fun DynastyShellScreen(
         rosterPlayers = rosterRepository.listPlayers(loaded.dynastyId)
         rosterPreview = rosterRepository.listDynastyPlayers(loaded.dynastyId).take(6)
         postgameEvents = rosterRepository.peekPostgameInjuries(loaded.dynastyId)
+        disciplinePending = disciplineRepository.loadState(loaded.dynastyId, loaded.metadata.seasonIndex).pending
     }
 
     PlayerCardSheet(player = cardPlayer, onDismiss = { cardPlayer = null })
@@ -268,6 +276,11 @@ fun DynastyShellScreen(
                 }
             }
         }
+        DashboardRequiredTasksPanel(
+            tasks = DisciplineRequiredDashboardTasks.build(disciplinePending),
+            onOpenSigningDay = { },
+            onOpenDiscipline = { disciplinePending?.let(onOpenDiscipline) },
+        )
         val injuryTasks = InjuryOptionalDashboardTasks.build(
             rosterPlayers,
             loaded.weekCheckpoint.activePosition.weekIndex,

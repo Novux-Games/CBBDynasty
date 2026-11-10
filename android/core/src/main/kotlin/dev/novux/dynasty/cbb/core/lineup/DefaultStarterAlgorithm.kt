@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.lineup
 
+import dev.novux.dynasty.cbb.core.discipline.DisciplineResolver
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 
@@ -8,7 +9,9 @@ import dev.novux.dynasty.cbb.core.roster.RosterPlayer
  */
 object DefaultStarterAlgorithm {
     fun pickStarters(players: List<RosterPlayer>): Map<PlayerPosition, String> {
-        val healthy = players.filter { !it.isInjuredOut() && !it.medicalRedshirtSeason }
+        val healthy = players.filter {
+            !it.isInjuredOut() && !it.medicalRedshirtSeason && !DisciplineResolver.isIneligibleForLineup(it)
+        }
         val result = linkedMapOf<PlayerPosition, String>()
         PlayerPosition.STARTER_ORDER.forEach { slot ->
             val best = healthy

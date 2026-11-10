@@ -4,6 +4,18 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.novux.dynasty.cbb.core.save.DynastySchema
 
+val MIGRATION_13_14 = object : Migration(13, 14) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "ALTER TABLE dynasty_roster_player ADD COLUMN gamesSuspendedRemaining INTEGER NOT NULL DEFAULT 0",
+        )
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN academicHold INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN gpaCurrent REAL NOT NULL DEFAULT 2.5")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN academicCoverUp INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN conductIncidentId TEXT")
+    }
+}
+
 val MIGRATION_12_13 = object : Migration(12, 13) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN injurySeverityWire TEXT")
