@@ -192,18 +192,9 @@ class DynastyApplication : Application() {
         simTuningRepository = SimTuningRepository(applicationContext)
         coachingCarouselRepository = CoachingCarouselRepository(applicationContext)
         val recruitingReservationRepository = RecruitingReservationRepository(applicationContext)
-        recruitingEconomyRepository = RecruitingEconomyRepository(
-            applicationContext,
-            recruitingReservationRepository,
-        )
         nilBudgetRepository = dev.novux.dynasty.cbb.data.nil.NilBudgetRepository(
             applicationContext,
             recruitingReservationRepository,
-        )
-        signingDayRepository = SigningDayRepository(
-            applicationContext,
-            recruitingReservationRepository,
-            nilBudgetRepository,
         )
         portalCycleRepository = PortalCycleRepository(applicationContext)
         aiRecruitingRepository = AiRecruitingRepository(applicationContext)
@@ -211,12 +202,23 @@ class DynastyApplication : Application() {
         weekCheckpointRepository = WeekCheckpointRepository(database)
         val postgameInjuryQueue = dev.novux.dynasty.cbb.data.injuries.PostgameInjuryQueue()
         dynastyRosterRepository = DynastyRosterRepository(database, postgameInjuryQueue)
+        offseasonWeekNineRepository = OffseasonWeekNineRepository(applicationContext)
+        recruitingEconomyRepository = RecruitingEconomyRepository(
+            applicationContext,
+            recruitingReservationRepository,
+            dynastyRosterRepository,
+            offseasonWeekNineRepository,
+        )
+        signingDayRepository = SigningDayRepository(
+            applicationContext,
+            recruitingReservationRepository,
+            nilBudgetRepository,
+        )
         disciplineRepository = DisciplineRepository(applicationContext, database, balanceRulesetRepository)
         chemistryRepository = ChemistryRepository(applicationContext, balanceRulesetRepository)
         offseasonWeekTwoRepository = OffseasonWeekTwoRepository(applicationContext, dynastyRosterRepository)
         summerWorkoutRepository = OffseasonSummerWorkoutRepository(applicationContext, dynastyRosterRepository)
         offseasonWeekEightRepository = OffseasonWeekEightRepository(applicationContext, dynastyRosterRepository)
-        offseasonWeekNineRepository = OffseasonWeekNineRepository(applicationContext)
         offseasonWeekTenRepository = OffseasonWeekTenRepository(applicationContext, packRepository, database)
         preseasonProgressRepository = PreseasonProgressRepository(applicationContext)
         incomingClassSeedRepository = IncomingClassSeedRepository(applicationContext)

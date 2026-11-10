@@ -143,6 +143,17 @@ fun RecruitingHubScreen(
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
             )
+            row.programAcademicsGrade?.let { grade ->
+                Text(
+                    text = stringResource(
+                        R.string.recruiting_academics_multiplier,
+                        grade,
+                        row.academicsBudgetMultiplier,
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
         nilLedger?.let { nilRow ->
             Text(

@@ -277,7 +277,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 |------|--------|-----------|------|------|
 | 15.1 | `[x]` **NIL Budget** ledger + per-target offers | `nilRemainingUsd`; **Assign NIL** on recruit/portal/retention; **3× ask** cap; interest ratio; signing snapshot | [game-design](../planning/game-design.md#nil-budget-workflow-design-lock), [recruiting-engine](../planning/recruiting-engine.md#nil-budget-strip-recruiting-hub), [`nil` factor](../planning/recruiting-engine.md#scoring) | `:core/nil`, `NilBudgetRepository`, recruiting hub strip |
 | 15.2 | `[x]` Facility grades + upgrades | Offseason **week 9** integration | [game-design](../planning/game-design.md) | `FacilityGradeEngine`, dynasty-persisted grades, school hub + recruiting |
-| 15.3 | `[ ]` Academics → recruiting budget multiplier | Grades on school | [game-design](../planning/game-design.md) | — |
+| 15.3 | `[x]` Academics → recruiting budget multiplier | Grades on school | [game-design](../planning/game-design.md) | `ProgramAcademicsGradeEngine`, `RecruitingWeekGrant` |
 | 15.4 | `[ ]` Coach skill tree + Sunday points | Auto-spend option | [game-design](../planning/game-design.md), [coach-card](../planning/coach-card.md) | — |
 | 15.5 | `[ ]` Unemployed coach mode | Job center | [game-design](../planning/game-design.md) | — |
 | 15.6 | `[ ]` Recruiting hub **action UX** (all point spends wired) | Ship only after **6.17–6.19** core rules pass tests | [recruiting-engine](../planning/recruiting-engine.md#recruiting-ui) | `ui.recruiting` |

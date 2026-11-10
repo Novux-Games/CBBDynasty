@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.recruiting
 
+import dev.novux.dynasty.cbb.core.academics.AcademicsRecruitingBudgetEngine
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingEconomy
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import kotlin.math.roundToInt
@@ -11,6 +12,8 @@ data class RecruitingCycleLedger(
     val pointsAvailable: Int,
     val unspentAtLastWeekEnd: Int = 0,
     val cycleClosed: Boolean = false,
+    val programAcademicsGrade: Int? = null,
+    val academicsBudgetMultiplier: Double = 1.0,
 ) {
     fun withPointsAvailable(next: Int): RecruitingCycleLedger = copy(pointsAvailable = next.coerceAtLeast(0))
 }
@@ -31,13 +34,18 @@ object RecruitingWeekGrant {
         economy: BalanceRecruitingEconomy,
         cycleSeasonIndex: Int,
         programPrestige: Int,
+        programAcademicsGrade: Int = AcademicsRecruitingBudgetEngine.BASELINE_GRADE,
     ): RecruitingCycleLedger {
-        val base = RecruitingPrestigePool.weeklyPoolPoints(economy, programPrestige)
+        val tierBase = RecruitingPrestigePool.weeklyPoolPoints(economy, programPrestige)
+        val multiplier = AcademicsRecruitingBudgetEngine.budgetMultiplier(programAcademicsGrade)
+        val base = AcademicsRecruitingBudgetEngine.effectiveWeeklyPool(tierBase, programAcademicsGrade)
         return RecruitingCycleLedger(
             cycleSeasonIndex = cycleSeasonIndex,
             programPrestige = programPrestige,
             weeklyPoolBase = base,
             pointsAvailable = base,
+            programAcademicsGrade = programAcademicsGrade,
+            academicsBudgetMultiplier = multiplier,
         )
     }
 
@@ -94,5 +102,9 @@ object RecruitingWeekGrant {
     fun previewNextCycleWeeklyPool(
         economy: BalanceRecruitingEconomy,
         postRecapPrestige: Int,
-    ): Int = RecruitingPrestigePool.weeklyPoolPoints(economy, postRecapPrestige)
+        programAcademicsGrade: Int = AcademicsRecruitingBudgetEngine.BASELINE_GRADE,
+    ): Int {
+        val tierBase = RecruitingPrestigePool.weeklyPoolPoints(economy, postRecapPrestige)
+        return AcademicsRecruitingBudgetEngine.effectiveWeeklyPool(tierBase, programAcademicsGrade)
+    }
 }

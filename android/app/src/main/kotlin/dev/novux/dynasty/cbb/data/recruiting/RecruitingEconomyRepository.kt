@@ -23,8 +23,11 @@ import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.offseason.weektwo.OffseasonScholarshipPolicy
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
+import dev.novux.dynasty.cbb.core.academics.ProgramAcademicsGradeEngine
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingWeekGrant
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
+import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import kotlinx.coroutines.flow.first
 
 private val Context.recruitingEconomyStore: DataStore<Preferences> by preferencesDataStore(
@@ -34,6 +37,8 @@ private val Context.recruitingEconomyStore: DataStore<Preferences> by preference
 class RecruitingEconomyRepository(
     private val context: Context,
     private val reservationRepository: RecruitingReservationRepository,
+    private val dynastyRosterRepository: DynastyRosterRepository,
+    private val offseasonWeekNineRepository: OffseasonWeekNineRepository,
 ) {
     suspend fun loadOrOpenCycle(
         dynasty: LoadedDynasty,
@@ -46,10 +51,12 @@ class RecruitingEconomyRepository(
         if (raw != null) {
             return decode(raw)
         }
+        val academicsGrade = programAcademicsGrade(dynasty.dynastyId, dynasty.metadata.seasonIndex)
         val ledger = RecruitingWeekGrant.openCycle(
             economy,
             cycleSeasonIndex = dynasty.metadata.seasonIndex,
             programPrestige = defaultPrestige,
+            programAcademicsGrade = academicsGrade,
         )
         persist(dynasty.dynastyId, ledger)
         return ledger
@@ -189,15 +196,23 @@ class RecruitingEconomyRepository(
         postRecapPrestige: Int,
     ): RecruitingCycleLedger {
         val economy = economyFrom(balance)
-        val base = RecruitingWeekGrant.previewNextCycleWeeklyPool(economy, postRecapPrestige)
-        val ledger = RecruitingCycleLedger(
+        val academicsGrade = programAcademicsGrade(dynastyId, nextSeasonIndex)
+        val ledger = RecruitingWeekGrant.openCycle(
+            economy,
             cycleSeasonIndex = nextSeasonIndex,
             programPrestige = postRecapPrestige,
-            weeklyPoolBase = base,
-            pointsAvailable = base,
+            programAcademicsGrade = academicsGrade,
         )
         persist(dynastyId, ledger)
         return ledger
+    }
+
+    private suspend fun programAcademicsGrade(dynastyId: String, seasonIndex: Int): Int {
+        val roster = dynastyRosterRepository.listPlayers(dynastyId)
+        val facilities = offseasonWeekNineRepository.loadFacilityGrades(dynastyId, seasonIndex)
+        return ProgramAcademicsGradeEngine.snapshot(
+            ProgramAcademicsGradeEngine.inputsFromRoster(roster, facilities),
+        ).programGrade
     }
 
     private fun economyFrom(balance: BalanceRuleset): BalanceRecruitingEconomy =
@@ -221,7 +236,8 @@ class RecruitingEconomyRepository(
 
     private fun encode(ledger: RecruitingCycleLedger): String =
         "${ledger.cycleSeasonIndex}|${ledger.programPrestige}|${ledger.weeklyPoolBase}|" +
-            "${ledger.pointsAvailable}|${ledger.unspentAtLastWeekEnd}|${ledger.cycleClosed}"
+            "${ledger.pointsAvailable}|${ledger.unspentAtLastWeekEnd}|${ledger.cycleClosed}|" +
+            "${ledger.programAcademicsGrade ?: ""}|${ledger.academicsBudgetMultiplier}"
 
     private fun decode(raw: String): RecruitingCycleLedger {
         val p = raw.split("|")
@@ -241,6 +257,16 @@ class RecruitingEconomyRepository(
                 pointsAvailable = p[3].toInt(),
                 unspentAtLastWeekEnd = p[4].toInt(),
                 cycleClosed = p[5].toBooleanStrict(),
+            )
+            8 -> RecruitingCycleLedger(
+                cycleSeasonIndex = p[0].toInt(),
+                programPrestige = p[1].toInt(),
+                weeklyPoolBase = p[2].toInt(),
+                pointsAvailable = p[3].toInt(),
+                unspentAtLastWeekEnd = p[4].toInt(),
+                cycleClosed = p[5].toBooleanStrict(),
+                programAcademicsGrade = p[6].takeIf { it.isNotBlank() }?.toInt(),
+                academicsBudgetMultiplier = p[7].toDouble(),
             )
             else -> error("Invalid ledger encoding")
         }
