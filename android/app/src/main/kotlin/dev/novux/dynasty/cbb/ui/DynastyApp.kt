@@ -35,6 +35,7 @@ import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
 import dev.novux.dynasty.cbb.ui.newgame.NewGameWizardScreen
 import dev.novux.dynasty.cbb.ui.offseason.CoachingCarouselScreen
+import dev.novux.dynasty.cbb.ui.recruiting.RecruitingHubScreen
 import dev.novux.dynasty.cbb.ui.offseason.OffseasonScreen
 import dev.novux.dynasty.cbb.ui.seasonreview.SeasonReviewScreen
 import dev.novux.dynasty.cbb.ui.shell.SplashScreen
@@ -191,6 +192,9 @@ fun DynastyApp(
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
+                            onOpenRecruiting = {
+                                navController.navigate(AppRoute.Recruiting.route)
+                            },
                         )
                     } else {
                         LaunchedEffect(Unit) {
@@ -220,6 +224,11 @@ fun DynastyApp(
                 }
                 composable(AppRoute.Credits.route) {
                     CreditsScreen(onBack = { navController.popBackStack() })
+                }
+                composable(AppRoute.Recruiting.route) {
+                    RecruitingHubScreen(
+                        onBack = { navController.popBackStack() },
+                    )
                 }
                 composable(AppRoute.Settings.route) {
                     SettingsScreen(

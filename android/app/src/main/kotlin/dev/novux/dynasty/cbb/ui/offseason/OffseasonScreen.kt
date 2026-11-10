@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.OffseasonWeekHeading
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
@@ -41,6 +42,7 @@ fun OffseasonScreen(
     saveSlotRepository: SaveSlotRepository,
     rosterRepository: DynastyRosterRepository,
     onExitHome: () -> Unit,
+    onOpenRecruiting: () -> Unit = {},
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     val scope = rememberCoroutineScope()
@@ -108,6 +110,15 @@ fun OffseasonScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f),
             )
+        }
+
+        if (RecruitingCyclePolicy.hubAccessible(position.phase, position.weekIndex.takeIf { inOffseason })) {
+            OutlinedButton(
+                onClick = onOpenRecruiting,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(R.string.recruiting_open_hub))
+            }
         }
 
         Button(

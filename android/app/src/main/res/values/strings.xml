@@ -133,4 +133,13 @@
     <string name="draft_results_week2_title">Pro draft results</string>
     <string name="draft_results_week2_empty">No pro day stock from Week 1.</string>
     <string name="draft_results_week2_line">Stock %1$d · %2$s</string>
+    <string name="recruiting_hub_title">Recruiting</string>
+    <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
+    <string name="recruiting_tab_recommended">Recommended</string>
+    <string name="recruiting_tab_hs_juco">HS / JUCO</string>
+    <string name="recruiting_tab_portal">Transfer portal</string>
+    <string name="recruiting_placeholder_recommended">Recommended prospects appear here — sorted by sign likelihood for your program.</string>
+    <string name="recruiting_placeholder_hs_juco">High school and junior college pools appear here.</string>
+    <string name="recruiting_placeholder_portal">Transfer portal entrants appear here during the portal window.</string>
+    <string name="recruiting_open_hub">Open recruiting hub</string>
 </resources>
