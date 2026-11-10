@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb.data.save
 
 import androidx.room.withTransaction
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
+import dev.novux.dynasty.cbb.core.calendar.SeasonReviewGate
 import dev.novux.dynasty.cbb.core.save.DynastyBootstrap
 import dev.novux.dynasty.cbb.core.save.DynastyLoadFailure
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
@@ -373,5 +374,38 @@ class SaveSlotRepository(
             coachDisplayName = coachDisplayName,
             packId = packId,
         )
+    }
+
+    /**
+     * End of Season CTA — advances into Offseason Week 1 of the next membership year ([planning/season-review.md]).
+     */
+    suspend fun completeSeasonReviewEnterOffseason(slotIndex: Int): DynastyLoadResult {
+        require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
+        ensureInitialized()
+        val loaded = when (val initial = loadSlot(slotIndex)) {
+            is DynastyLoadResult.Success -> initial.loaded
+            else -> return initial
+        }
+        if (!SeasonReviewGate.canEnterOffseason(loaded.weekCheckpoint)) {
+            return DynastyLoadResult.Unreadable(
+                slotIndex,
+                DynastyLoadFailure.InvalidCalendar("dynasty is not in End of Season week"),
+            )
+        }
+        weekCheckpointRepository.advanceWeek(loaded.dynastyId, loaded.weekCheckpoint)
+        val meta = metadataDao.getById(loaded.dynastyId)?.toDomain()
+            ?: return DynastyLoadResult.Unreadable(
+                slotIndex,
+                DynastyLoadFailure.MissingMetadata(loaded.dynastyId),
+            )
+        val slotEntity = slotDao.getByIndex(slotIndex)
+            ?: return DynastyLoadResult.Unreadable(
+                slotIndex,
+                DynastyLoadFailure.DatabaseRead("slot row missing"),
+            )
+        slotDao.upsert(
+            slotEntity.copy(seasonLabel = SeasonMembershipYear.label(meta.seasonIndex)),
+        )
+        return loadSlot(slotIndex)
     }
 }

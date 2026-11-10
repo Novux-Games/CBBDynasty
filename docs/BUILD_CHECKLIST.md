@@ -130,7 +130,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 5.3 | `[x]` RS weeks 1–32 + bye weeks (events, conf, postseason) | Unit tests for bye logic; bye **advance** ticks injury `weeksRemaining` | [time-system](../planning/time-system.md), [injuries](../planning/injuries.md) | `:core` tests |
 | 5.4 | `[x]` Conf-tourney week count = **pack max rounds** | Short conf byes while others play | [time-system](../planning/time-system.md) | — |
 | 5.5 | `[x]` Postseason **7** league weeks always | Non-participant can advance + view brackets | [time-system](../planning/time-system.md), [postseason](../planning/postseason.md) | — |
-| 5.6 | `[ ]` **End of Season** week → offseason entry | [season-review](../planning/season-review.md) gate | [season-review](../planning/season-review.md) | `ui.seasonreview` |
+| 5.6 | `[x]` **End of Season** week → offseason entry | [season-review](../planning/season-review.md) gate | [season-review](../planning/season-review.md) | `ui.seasonreview` |
 
 ---
 

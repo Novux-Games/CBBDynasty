@@ -31,7 +31,10 @@ import dev.novux.dynasty.cbb.ui.shell.CreditsScreen
 import dev.novux.dynasty.cbb.ui.shell.HomeMenuScreen
 import dev.novux.dynasty.cbb.ui.shell.LoadGameScreen
 import dev.novux.dynasty.cbb.ui.shell.SettingsScreen
+import dev.novux.dynasty.cbb.core.calendar.SeasonReviewGate
+import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.ui.newgame.NewGameWizardScreen
+import dev.novux.dynasty.cbb.ui.seasonreview.SeasonReviewScreen
 import dev.novux.dynasty.cbb.ui.shell.SplashScreen
 import dev.novux.dynasty.cbb.ui.shell.StudioScreen
 import dev.novux.dynasty.cbb.ui.theme.DynastyTheme
@@ -74,6 +77,13 @@ fun DynastyApp(
             val snackbarHostState = remember { SnackbarHostState() }
             var continueLoadFailedSlot by remember { mutableStateOf<Int?>(null) }
 
+            fun onDynastyReady(loaded: LoadedDynasty) {
+                ActiveDynastySession.set(loaded)
+                if (SeasonReviewGate.isActive(loaded.weekCheckpoint)) {
+                    navController.navigate(AppRoute.SeasonReview.route)
+                }
+            }
+
             Scaffold(
                 snackbarHost = { SnackbarHost(snackbarHostState) },
             ) { padding ->
@@ -105,8 +115,7 @@ fun DynastyApp(
                             val slot = continueSlot ?: return@HomeMenuScreen
                             scope.launch {
                                 when (val result = saveSlotRepository.loadSlot(slot.slotIndex)) {
-                                    is DynastyLoadResult.Success ->
-                                        ActiveDynastySession.set(result.loaded)
+                                    is DynastyLoadResult.Success -> onDynastyReady(result.loaded)
                                     is DynastyLoadResult.Unreadable ->
                                         continueLoadFailedSlot = slot.slotIndex
                                     DynastyLoadResult.SlotEmpty -> Unit
@@ -123,8 +132,27 @@ fun DynastyApp(
                     LoadGameScreen(
                         saveSlotRepository = saveSlotRepository,
                         onBack = { navController.popBackStack() },
-                        onDynastyLoaded = { navController.popBackStack() },
+                        onDynastyLoaded = { loaded ->
+                            onDynastyReady(loaded)
+                            navController.popBackStack()
+                        },
                     )
+                }
+                composable(AppRoute.SeasonReview.route) {
+                    val session = ActiveDynastySession.current
+                    if (session != null && SeasonReviewGate.isActive(session.weekCheckpoint)) {
+                        SeasonReviewScreen(
+                            loaded = session,
+                            saveSlotRepository = saveSlotRepository,
+                            onReturnedHome = {
+                                navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                            },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
                 }
                 composable(AppRoute.NewGame.route) {
                     NewGameWizardScreen(

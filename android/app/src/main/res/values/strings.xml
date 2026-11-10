@@ -100,4 +100,10 @@
     <string name="load_error_delete">Delete save</string>
     <string name="load_error_dismiss">Back</string>
     <string name="load_slot_cant_open">This save can\'t be opened</string>
+    <string name="season_review_title">End of Season</string>
+    <string name="season_review_subtitle">Final rankings and program recap. No games this week.</string>
+    <string name="season_review_placeholder">Full rankings, awards, and prestige recap land here in a later phase.</string>
+    <string name="season_review_enter_offseason">Enter offseason</string>
+    <string name="season_review_offseason_week1">Next: Offseason Week 1 — roster and transfers.</string>
+    <string name="season_review_carousel_next">Next: Coaching carousel before offseason begins.</string>
 </resources>
