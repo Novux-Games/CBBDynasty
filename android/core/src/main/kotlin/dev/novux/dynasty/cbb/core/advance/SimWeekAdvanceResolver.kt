@@ -26,6 +26,14 @@ object SimWeekAdvanceResolver {
         if (input.portalRecruitingWeekOpen) {
             lines.add(SimWeekConfirmationLine(SimWeekConfirmationLineKind.PortalRecruitingWeek))
         }
+        if (input.injuredPlayersTicking > 0) {
+            lines.add(
+                SimWeekConfirmationLine(
+                    SimWeekConfirmationLineKind.InjuryWeeksTick,
+                    listOf(input.injuredPlayersTicking),
+                ),
+            )
+        }
         if (input.recruitingHubOpen || input.portalRecruitingWeekOpen) {
             lines.add(SimWeekConfirmationLine(SimWeekConfirmationLineKind.LeagueRecruitingBatch))
         }
@@ -40,7 +48,8 @@ object SimWeekAdvanceResolver {
         val needsDialog = input.unplayedUserGameCount > 0 ||
             willAutoMaintain ||
             input.unresolvedOptionalTaskCount > 0 ||
-            input.portalRecruitingWeekOpen
+            input.portalRecruitingWeekOpen ||
+            input.injuredPlayersTicking > 0
         return SimWeekConfirmation(
             needsDialog = needsDialog,
             nextWeekLabel = input.nextWeekLabel,

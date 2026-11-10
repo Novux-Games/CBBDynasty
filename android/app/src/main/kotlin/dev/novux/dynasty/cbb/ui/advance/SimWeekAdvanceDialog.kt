@@ -54,6 +54,8 @@ private fun lineText(
         stringResource(R.string.advance_confirm_line_league_recruiting)
     SimWeekConfirmationLineKind.PortalRecruitingWeek ->
         stringResource(R.string.advance_confirm_line_portal)
+    SimWeekConfirmationLineKind.InjuryWeeksTick ->
+        stringResource(R.string.advance_confirm_line_injury_tick, args.firstOrNull() ?: 0)
     SimWeekConfirmationLineKind.SimpleAdvance ->
         stringResource(R.string.advance_confirm_line_simple, confirmation.nextWeekLabel)
 }

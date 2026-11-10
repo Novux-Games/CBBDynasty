@@ -7,6 +7,7 @@ enum class SimWeekConfirmationLineKind {
     UserRecruitingAutoMaintain,
     LeagueRecruitingBatch,
     PortalRecruitingWeek,
+    InjuryWeeksTick,
     SimpleAdvance,
 }
 
@@ -30,6 +31,7 @@ data class SimWeekAdvanceInput(
     val estimatedAutoRecruitingSpend: Int,
     val portalRecruitingWeekOpen: Boolean,
     val unresolvedOptionalTaskCount: Int = 0,
+    val injuredPlayersTicking: Int = 0,
 )
 
 data class SimWeekAdvanceResolution(

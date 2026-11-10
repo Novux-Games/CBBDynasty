@@ -301,6 +301,8 @@
     <string name="advance_confirm_line_league_recruiting">League programs will run their weekly recruiting pass.</string>
     <string name="advance_confirm_line_portal">Transfer portal: league portal recruiting runs this week.</string>
     <string name="advance_confirm_line_simple">Advance to %1$s?</string>
+    <string name="advance_confirm_line_injury_tick">Injuries: %1$d players\' recovery clocks tick down (byes included). Healthy returns restore lineup spots.</string>
+    <string name="dynasty_shell_advance_week">Advance week</string>
     <string name="recruiting_tab_recommended">Recommended</string>
     <string name="recruiting_tab_hs_juco">HS / JUCO</string>
     <string name="recruiting_tab_portal">Transfer portal</string>

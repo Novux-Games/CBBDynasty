@@ -11,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,8 +28,14 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.balance.BalanceMedicalRedshirtRules
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
+import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
+import dev.novux.dynasty.cbb.core.dashboard.DashboardAdvanceGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
+import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
+import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
+import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
+import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceDialog
 import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
 import dev.novux.dynasty.cbb.core.discipline.PendingDisciplineIncident
 import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
@@ -80,7 +87,8 @@ private sealed class ShellCoachView {
 
 @Composable
 fun DynastyShellScreen(
-    loaded: LoadedDynasty,
+    initial: LoadedDynasty,
+    saveSlotRepository: SaveSlotRepository,
     scheduleRepository: PreseasonScheduleRepository,
     staffRepository: SchoolStaffRepository,
     schoolHubRepository: SchoolHubRepository,
@@ -93,6 +101,8 @@ fun DynastyShellScreen(
     onOpenDiscipline: (PendingDisciplineIncident) -> Unit,
     onExitHome: () -> Unit,
 ) {
+    var loaded by remember(initial) { mutableStateOf(initial) }
+    var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
     var focus by remember { mutableStateOf<SeasonStartFocus?>(null) }
     var staffRoster by remember { mutableStateOf<SchoolStaffRoster?>(null) }
     var coachSecurity by remember { mutableStateOf<CoachSecuritySnapshot?>(null) }
@@ -122,7 +132,7 @@ fun DynastyShellScreen(
         medicalRules = medicalRules,
     )
 
-    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint) {
         teamChemistry = chemistryRepository.loadState(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
@@ -146,8 +156,8 @@ fun DynastyShellScreen(
         rosterPlayers = rosterRepository.listPlayers(loaded.dynastyId)
         fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
         rosterPreview = fullRoster.take(6)
-        postgameEvents = rosterRepository.peekPostgameInjuries(loaded.dynastyId)
         disciplinePending = disciplineRepository.loadState(loaded.dynastyId, loaded.metadata.seasonIndex).pending
+        postgameEvents = rosterRepository.peekPostgameInjuries(loaded.dynastyId)
     }
 
     PlayerCardSheet(player = cardPlayer, onDismiss = { cardPlayer = null })
@@ -358,6 +368,55 @@ fun DynastyShellScreen(
                             }
                         },
                     )
+                }
+                pendingAdvanceConfirmation?.let { confirmation ->
+                    SimWeekAdvanceDialog(
+                        confirmation = confirmation,
+                        onConfirm = {
+                            pendingAdvanceConfirmation = null
+                            scope.launch {
+                                when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
+                                    is DynastyLoadResult.Success -> {
+                                        loaded = result.loaded
+                                        ActiveDynastySession.set(result.loaded)
+                                        dismissedInjuryTasks = emptySet()
+                                    }
+                                    else -> Unit
+                                }
+                            }
+                        },
+                        onDismiss = { pendingAdvanceConfirmation = null },
+                    )
+                }
+                Button(
+                    onClick = {
+                        scope.launch {
+                            if (DashboardAdvanceGate.blocksWeekAdvance(dashboardTasks.required)) {
+                                return@launch
+                            }
+                            val unresolved = dashboardTasks.optional.count { it.id !in dismissedInjuryTasks }
+                            val confirmation = saveSlotRepository.buildSimWeekAdvanceConfirmation(
+                                loaded.slotIndex,
+                                unresolvedOptionalTaskCount = unresolved,
+                            )
+                            if (confirmation != null && confirmation.needsDialog) {
+                                pendingAdvanceConfirmation = confirmation
+                            } else {
+                                when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
+                                    is DynastyLoadResult.Success -> {
+                                        loaded = result.loaded
+                                        ActiveDynastySession.set(result.loaded)
+                                        dismissedInjuryTasks = emptySet()
+                                    }
+                                    else -> Unit
+                                }
+                            }
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = !DashboardAdvanceGate.blocksWeekAdvance(dashboardTasks.required),
+                ) {
+                    Text(stringResource(R.string.dynasty_shell_advance_week))
                 }
             }
         }

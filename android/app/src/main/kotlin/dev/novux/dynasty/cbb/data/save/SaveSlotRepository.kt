@@ -21,9 +21,11 @@ import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningParseException
 import dev.novux.dynasty.cbb.core.advance.SimWeekAdvanceInput
+import dev.novux.dynasty.cbb.core.dashboard.InSeasonWeekGames
 import dev.novux.dynasty.cbb.core.advance.SimWeekAdvanceResolver
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
 import dev.novux.dynasty.cbb.core.advance.UserWeekGameStatus
+import dev.novux.dynasty.cbb.core.injuries.InjuryCalendarPolicy
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionsParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
@@ -41,6 +43,7 @@ import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
 import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
 import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
+import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
@@ -77,6 +80,7 @@ class SaveSlotRepository(
     private val disciplineRepository: DisciplineRepository,
     private val chemistryRepository: ChemistryRepository,
     private val leagueWeekBatchRepository: LeagueWeekBatchRepository,
+    private val preseasonScheduleRepository: PreseasonScheduleRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -431,7 +435,7 @@ class SaveSlotRepository(
             else -> return null
         }
         val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
-        val input = buildSimWeekAdvanceInput(
+        val input = buildSimWeekAdvanceInputSuspended(
             loaded,
             ledger,
             unresolvedOptionalTaskCount = unresolvedOptionalTaskCount,
@@ -494,7 +498,7 @@ class SaveSlotRepository(
             return loadSlot(slotIndex)
         }
         val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
-        val input = buildSimWeekAdvanceInput(loaded, ledger, 0, userManualRecruitingSpent)
+        val input = buildSimWeekAdvanceInputSuspended(loaded, ledger, 0, userManualRecruitingSpent)
         val preAdvance = SimWeekAdvanceResolver.resolvePreAdvance(
             loaded.weekCheckpoint,
             input,
@@ -573,7 +577,7 @@ class SaveSlotRepository(
         return loadSlot(slotIndex)
     }
 
-    private fun buildSimWeekAdvanceInput(
+    private suspend fun buildSimWeekAdvanceInputSuspended(
         loaded: LoadedDynasty,
         ledger: dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger,
         unresolvedOptionalTaskCount: Int,
@@ -584,7 +588,13 @@ class SaveSlotRepository(
         val offseasonWeek = position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason }
         val hubOpen = RecruitingCyclePolicy.hubAccessible(position.phase, offseasonWeek)
         val portalOpen = PortalCyclePolicy.portalRecruitingWindowOpen(position.phase, offseasonWeek)
-        val hasScheduledGame = position.phase in SCHEDULED_GAME_PHASES
+        val plan = preseasonScheduleRepository.loadPlan(loaded.dynastyId, loaded.metadata.seasonIndex)
+        val exhibitionCount = preseasonScheduleRepository.loadExhibitionCount(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        )
+        val weekGames = InSeasonWeekGames.forPosition(position, plan, exhibitionCount)
+        val hasScheduledGame = weekGames.isNotEmpty()
         val unplayed = UserWeekGameStatus.unplayedUserGames(loaded.weekCheckpoint, hasScheduledGame)
         val economy = BalanceRecruitingParser.parse(loaded.balanceRuleset.recruiting)
         val recommended = BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
@@ -609,6 +619,12 @@ class SaveSlotRepository(
         } else {
             0
         }
+        val injuredTicking = if (InjuryCalendarPolicy.ticksOnWeekAdvance(position.phase)) {
+            dynastyRosterRepository.listPlayers(loaded.dynastyId)
+                .count { it.injuryActive && !it.medicalRedshirtSeason }
+        } else {
+            0
+        }
         return SimWeekAdvanceInput(
             nextWeekLabel = nextLabel,
             unplayedUserGameCount = unplayed,
@@ -618,6 +634,7 @@ class SaveSlotRepository(
             estimatedAutoRecruitingSpend = estimated,
             portalRecruitingWeekOpen = portalOpen,
             unresolvedOptionalTaskCount = unresolvedOptionalTaskCount,
+            injuredPlayersTicking = injuredTicking,
         )
     }
 

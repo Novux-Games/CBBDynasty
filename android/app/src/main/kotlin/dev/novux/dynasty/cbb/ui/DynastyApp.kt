@@ -263,7 +263,8 @@ fun DynastyApp(
                     val session = ActiveDynastySession.current
                     if (session != null) {
                         DynastyShellScreen(
-                            loaded = session,
+                            initial = session,
+                            saveSlotRepository = saveSlotRepository,
                             scheduleRepository = preseasonScheduleRepository,
                             staffRepository = schoolStaffRepository,
                             schoolHubRepository = schoolHubRepository,
