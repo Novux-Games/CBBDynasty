@@ -34,8 +34,10 @@ import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskId
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskProgress
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.core.preseason.tournament.TournamentInvitesState
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonProgressRepository
+import dev.novux.dynasty.cbb.data.preseason.TournamentInvitesRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import kotlinx.coroutines.launch
@@ -46,15 +48,21 @@ fun PreseasonScreen(
     saveSlotRepository: SaveSlotRepository,
     progressRepository: PreseasonProgressRepository,
     incomingClassSeedRepository: IncomingClassSeedRepository,
+    tournamentInvitesRepository: TournamentInvitesRepository,
     onExitHome: () -> Unit,
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     var progress by remember { mutableStateOf<PreseasonTaskProgress?>(null) }
+    var tournamentInvitesState by remember { mutableStateOf<TournamentInvitesState?>(null) }
     val scope = rememberCoroutineScope()
     val position = loaded.weekCheckpoint.activePosition
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
         progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
+        tournamentInvitesState = tournamentInvitesRepository.loadState(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        )
     }
 
     val taskProgress = progress ?: return
@@ -109,6 +117,25 @@ fun PreseasonScreen(
                     )
                     return@items
                 }
+                if (taskId == PreseasonTaskId.TournamentInvites && !taskProgress.isComplete(taskId)) {
+                    TournamentInvitesPanel(
+                        dynastyId = loaded.dynastyId,
+                        seasonIndex = loaded.metadata.seasonIndex,
+                        invitesRepository = tournamentInvitesRepository,
+                        progressRepository = progressRepository,
+                        onResolved = {
+                            scope.launch {
+                                progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
+                                tournamentInvitesState = tournamentInvitesRepository.loadState(
+                                    loaded.dynastyId,
+                                    loaded.metadata.seasonIndex,
+                                )
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    return@items
+                }
                 val done = taskProgress.isComplete(taskId)
                 val enabled = taskProgress.canComplete(taskId) && !done
                 Card(
@@ -141,6 +168,21 @@ fun PreseasonScreen(
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.error,
                                 )
+                            }
+                            if (taskProgress.schedulingUnlocked() &&
+                                taskId == PreseasonTaskId.ScheduleRegularSeason
+                            ) {
+                                tournamentInvitesState?.let { invites ->
+                                    Text(
+                                        text = stringResource(
+                                            R.string.preseason_rs_builder_slots,
+                                            invites.slotBudget.builderSlots,
+                                            invites.slotBudget.totalRsCap,
+                                        ),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                }
                             }
                         }
                         if (done) {

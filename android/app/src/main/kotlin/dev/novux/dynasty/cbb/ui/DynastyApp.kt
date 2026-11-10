@@ -108,6 +108,8 @@ fun DynastyApp(
                 LocalContext.current.requireDynastyApplication().preseasonProgressRepository
             val incomingClassSeedRepository =
                 LocalContext.current.requireDynastyApplication().incomingClassSeedRepository
+            val tournamentInvitesRepository =
+                LocalContext.current.requireDynastyApplication().tournamentInvitesRepository
 
             suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
@@ -217,6 +219,7 @@ fun DynastyApp(
                             saveSlotRepository = saveSlotRepository,
                             progressRepository = preseasonProgressRepository,
                             incomingClassSeedRepository = incomingClassSeedRepository,
+                            tournamentInvitesRepository = tournamentInvitesRepository,
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
