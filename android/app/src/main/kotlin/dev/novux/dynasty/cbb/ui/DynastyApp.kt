@@ -106,6 +106,8 @@ fun DynastyApp(
                 LocalContext.current.requireDynastyApplication().offseasonWeekTenRepository
             val preseasonProgressRepository =
                 LocalContext.current.requireDynastyApplication().preseasonProgressRepository
+            val incomingClassSeedRepository =
+                LocalContext.current.requireDynastyApplication().incomingClassSeedRepository
 
             suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
@@ -214,6 +216,7 @@ fun DynastyApp(
                             initial = session,
                             saveSlotRepository = saveSlotRepository,
                             progressRepository = preseasonProgressRepository,
+                            incomingClassSeedRepository = incomingClassSeedRepository,
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
@@ -303,6 +306,7 @@ fun DynastyApp(
                             loaded = active,
                             signingDayRepository = signingDayRepository,
                             recruitingEconomyRepository = recruitingEconomyRepository,
+                            incomingClassSeedRepository = incomingClassSeedRepository,
                             initialTab = signingDayInitialTab,
                             onBack = { navController.popBackStack() },
                         )

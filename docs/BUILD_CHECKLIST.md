@@ -167,7 +167,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
 | 7.1 | `[x]` Preseason task checklist UI (8 tasks) | All required before Start Season | [preseason](../planning/preseason.md) | `ui.preseason` |
-| 7.2 | `[ ]` Incoming class seed + Top 60 News | HS/JUCO pools; each recruit rolls 1–2 `topPriorities` | [recruiting-engine](../planning/recruiting-engine.md#top-priorities), [preseason](../planning/preseason.md) | `:core` |
+| 7.2 | `[x]` Incoming class seed + Top 60 News | HS/JUCO pools; each recruit rolls 1–2 `topPriorities` | [recruiting-engine](../planning/recruiting-engine.md#top-priorities), [preseason](../planning/preseason.md) | `:core` |
 | 7.3 | `[ ]` Tournament invites **before** schedule | **32** RS cap; **28** builder slots only if 4-game event | [preseason](../planning/preseason.md), [ncba-branding](../planning/ncba-branding.md) | — |
 | 7.4 | `[ ]` Exhibitions 0–3 + RS schedule solver | Conf visible, double-headers allowed | [preseason](../planning/preseason.md), [game-design](../planning/game-design.md) | `:core/schedule` |
 | 7.5 | `[ ]` Preseason report article component | Reuse for pre/post game later | [preseason](../planning/preseason.md) | `ui.reports` |

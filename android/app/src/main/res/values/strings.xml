@@ -184,6 +184,12 @@
     <string name="preseason_task_tournament_invites">Tournament invites</string>
     <string name="preseason_task_exhibitions">Schedule exhibition games</string>
     <string name="preseason_task_regular_schedule">Schedule regular season</string>
+    <string name="incoming_seed_title">Incoming class seed</string>
+    <string name="incoming_seed_run">Run class seed</string>
+    <string name="incoming_seed_running">Seeding class pools…</string>
+    <string name="incoming_seed_done">Class seeded</string>
+    <string name="incoming_seed_top60_heading">Top 60 national recruits</string>
+    <string name="incoming_seed_top60_line">#%1$d %2$s · %3$d★ %4$s · %5$s</string>
     <string name="recruiting_hub_title">Recruiting</string>
     <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
     <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>

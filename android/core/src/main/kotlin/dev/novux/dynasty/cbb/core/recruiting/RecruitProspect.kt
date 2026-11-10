@@ -19,6 +19,9 @@ data class RecruitProspect(
     val nilAskUsd: Int,
     /** Scouted letter grade shown on board — never raw attribute values. */
     val scoutLetterOverall: String,
+    val poolKind: RecruitPoolKind = RecruitPoolKind.HighSchool,
+    /** Internal composite for national order — not shown until commit. */
+    val hiddenRating: Int = 0,
 )
 
 data class SchoolRecruitingContext(

@@ -29,6 +29,7 @@ object RecruitingClassSeed {
                 nilAskUsd = nilAsk,
                 scoutLetterOverall = letterForStars(stars, random),
                 topPriorities = RecruitPriorityRoll.roll(prospectId),
+                hiddenRating = 70 + stars * 5 + random.nextInt(5),
             )
         }
     }

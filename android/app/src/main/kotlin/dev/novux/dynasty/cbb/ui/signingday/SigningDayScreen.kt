@@ -33,6 +33,7 @@ import dev.novux.dynasty.cbb.core.signingday.IncomingSignee
 import dev.novux.dynasty.cbb.core.signingday.NationalRankRow
 import dev.novux.dynasty.cbb.core.signingday.NationalRecruitingRankings
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
+import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.signingday.SigningDayRepository
 import kotlinx.coroutines.launch
@@ -47,6 +48,7 @@ fun SigningDayScreen(
     loaded: LoadedDynasty,
     signingDayRepository: SigningDayRepository,
     recruitingEconomyRepository: RecruitingEconomyRepository,
+    incomingClassSeedRepository: IncomingClassSeedRepository,
     initialTab: SigningDayInitialTab = SigningDayInitialTab.Rankings,
     onBack: () -> Unit,
 ) {
@@ -55,9 +57,7 @@ fun SigningDayScreen(
     }
     var progress by remember { mutableStateOf<SigningDayProgress?>(null) }
     var incoming by remember { mutableStateOf<List<IncomingSignee>>(emptyList()) }
-    val rankings = remember(loaded.metadata.seasonIndex) {
-        NationalRecruitingRankings.top60(loaded.metadata.seasonIndex)
-    }
+    var rankings by remember { mutableStateOf<List<NationalRankRow>>(emptyList()) }
     val scope = rememberCoroutineScope()
 
     suspend fun refresh() {
@@ -65,7 +65,13 @@ fun SigningDayScreen(
         incoming = signingDayRepository.loadIncomingClass(loaded.dynastyId, loaded.metadata.seasonIndex)
     }
 
-    LaunchedEffect(loaded.dynastyId) {
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
+        val pool = incomingClassSeedRepository.loadPool(loaded.dynastyId, loaded.metadata.seasonIndex)
+        rankings = if (pool != null) {
+            NationalRecruitingRankings.top60FromPool(pool)
+        } else {
+            NationalRecruitingRankings.top60(loaded.metadata.seasonIndex)
+        }
         refresh()
         if (tabIndex == 0) {
             signingDayRepository.markRankingsViewed(loaded.dynastyId, loaded.metadata.seasonIndex)

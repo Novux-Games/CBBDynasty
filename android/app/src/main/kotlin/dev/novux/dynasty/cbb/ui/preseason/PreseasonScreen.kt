@@ -34,6 +34,7 @@ import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskId
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskProgress
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonProgressRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
@@ -44,6 +45,7 @@ fun PreseasonScreen(
     initial: LoadedDynasty,
     saveSlotRepository: SaveSlotRepository,
     progressRepository: PreseasonProgressRepository,
+    incomingClassSeedRepository: IncomingClassSeedRepository,
     onExitHome: () -> Unit,
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
@@ -92,6 +94,21 @@ fun PreseasonScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(PreseasonTaskId.entries) { taskId ->
+                if (taskId == PreseasonTaskId.IncomingClassSeed && !taskProgress.isComplete(taskId)) {
+                    IncomingClassSeedPanel(
+                        dynastyId = loaded.dynastyId,
+                        seasonIndex = loaded.metadata.seasonIndex,
+                        seedRepository = incomingClassSeedRepository,
+                        progressRepository = progressRepository,
+                        onSeeded = {
+                            scope.launch {
+                                progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    return@items
+                }
                 val done = taskProgress.isComplete(taskId)
                 val enabled = taskProgress.canComplete(taskId) && !done
                 Card(
