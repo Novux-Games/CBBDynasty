@@ -372,6 +372,17 @@
     <string name="discipline_academic_support">Suspend until eligible + Academic Support</string>
     <string name="strategy_chemistry">Team chemistry: %1$d</string>
     <string name="strategy_stamina">Stamina %1$d</string>
+    <string name="strategy_gameplan_title">Gameplan</string>
+    <string name="strategy_usage_label">Usage targets</string>
+    <string name="strategy_usage_percent">%1$d%%</string>
+    <string name="strategy_deny_primary">Deny primary scorer</string>
+    <string name="strategy_late_fouls">Late-game fouls</string>
+    <string name="strategy_late_foul_standard">Standard</string>
+    <string name="strategy_late_foul_foul_early">Foul to catch up</string>
+    <string name="strategy_late_foul_protect">Protect lead</string>
+    <string name="strategy_halftime_note">Halftime tweaks apply to the second half when you watch a game.</string>
+    <string name="strategy_halftime_set">Copy gameplan for second half</string>
+    <string name="strategy_halftime_clear">Clear second-half copy</string>
     <string name="school_hub_chemistry">Team chemistry: %1$d</string>
     <string name="shell_dynasty_school">Dynasty: %1$s</string>
     <string name="shell_menu_open">Open menu</string>

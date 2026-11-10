@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb.core.sim
 
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
 import dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset
+import dev.novux.dynasty.cbb.core.strategy.GameplanInput
 import dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset
 
 /** Regulation length — [planning/simulation-engine.md#possession-loop--clock]. */
@@ -27,7 +28,24 @@ data class GameSimInput(
     val seed: Long,
     val homeRoster: GameSimRosterInput? = null,
     val awayRoster: GameSimRosterInput? = null,
+    val homeGameplan: GameplanInput? = null,
+    val awayGameplan: GameplanInput? = null,
+    val homeHalftimeGameplan: GameplanInput? = null,
+    val awayHalftimeGameplan: GameplanInput? = null,
 ) {
+    fun activeHomeGameplan(clockSeconds: Int): GameplanInput? =
+        if (clockSeconds <= GameSimClock.HALF_SECONDS) {
+            homeHalftimeGameplan ?: homeGameplan
+        } else {
+            homeGameplan
+        }
+
+    fun activeAwayGameplan(clockSeconds: Int): GameplanInput? =
+        if (clockSeconds <= GameSimClock.HALF_SECONDS) {
+            awayHalftimeGameplan ?: awayGameplan
+        } else {
+            awayGameplan
+        }
     fun homeOffensive(): Int = homeRoster?.weightedOffensive() ?: home.offensiveRating
     fun homeDefensive(): Int = homeRoster?.weightedDefensive() ?: home.defensiveRating
     fun awayOffensive(): Int = awayRoster?.weightedOffensive() ?: away.offensiveRating

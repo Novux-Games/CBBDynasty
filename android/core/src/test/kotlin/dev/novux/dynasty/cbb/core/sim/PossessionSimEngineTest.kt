@@ -8,6 +8,7 @@ import dev.novux.dynasty.cbb.core.sim.tuning.SimShotClock
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTimeUsedSeconds
 import dev.novux.dynasty.cbb.core.sim.tuning.SimVenueModifiers
 import dev.novux.dynasty.cbb.core.sim.tuning.IntMinMax
+import dev.novux.dynasty.cbb.core.strategy.GameplanInput
 import dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset
 import kotlinx.serialization.json.JsonObject
 import org.junit.Assert.assertEquals
@@ -105,6 +106,35 @@ class PossessionSimEngineTest {
         )
         assertTrue(result.homeScore + result.awayScore > 0)
         assertTrue(strong.weightedOffensive() > weak.weightedOffensive())
+    }
+
+    @Test
+    fun denyPrimaryProducesMoreTurnoversThanOpenDefense() {
+        val team = GameSimTeamInput("d", 72, 72)
+        var denyTurnovers = 0
+        var openTurnovers = 0
+        repeat(50) { i ->
+            val deny = PossessionSimEngine.simulate(
+                GameSimInput(
+                    home = team,
+                    away = team.copy(teamId = "o"),
+                    tuning = tuning,
+                    seed = 4000L + i,
+                    homeGameplan = GameplanInput(denyPrimaryScorer = true),
+                ),
+            )
+            val open = PossessionSimEngine.simulate(
+                GameSimInput(
+                    home = team,
+                    away = team.copy(teamId = "o2"),
+                    tuning = tuning,
+                    seed = 4000L + i,
+                ),
+            )
+            denyTurnovers += deny.awayBox.turnovers
+            openTurnovers += open.awayBox.turnovers
+        }
+        assertTrue(denyTurnovers >= openTurnovers)
     }
 
     @Test

@@ -28,6 +28,8 @@ import dev.novux.dynasty.cbb.core.discipline.DisciplineResolver
 import dev.novux.dynasty.cbb.core.lineup.DefaultStarterAlgorithm
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
+import dev.novux.dynasty.cbb.core.strategy.GameplanInput
+import dev.novux.dynasty.cbb.core.strategy.GameplanUsageNormalizer
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
 
@@ -51,6 +53,15 @@ fun StrategyScreen(
     val bench = players
         .filter { it.playerId !in starters.values }
         .sortedBy { it.depthOrder }
+    var gameplan by remember { mutableStateOf(GameplanInput()) }
+    var halftimeGameplan by remember { mutableStateOf<GameplanInput?>(null) }
+    LaunchedEffect(starters.values) {
+        if (gameplan.usageWeights.isEmpty() && starters.isNotEmpty()) {
+            gameplan = gameplan.copy(
+                usageWeights = GameplanUsageNormalizer.defaultForStarters(starters.values),
+            )
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -99,6 +110,14 @@ fun StrategyScreen(
                 player = player,
             )
         }
+        StrategyGameplanPanel(
+            starters = starters,
+            players = players,
+            gameplan = gameplan,
+            onGameplanChange = { gameplan = it },
+            halftimeGameplan = halftimeGameplan,
+            onHalftimeChange = { halftimeGameplan = it },
+        )
         OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.settings_back))
         }
