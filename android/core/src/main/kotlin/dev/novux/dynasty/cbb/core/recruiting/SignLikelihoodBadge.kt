@@ -1,6 +1,7 @@
 package dev.novux.dynasty.cbb.core.recruiting
 
 import dev.novux.dynasty.cbb.core.balance.BalanceNilRules
+import dev.novux.dynasty.cbb.core.facilities.FacilityGradeEngine
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommended
 import dev.novux.dynasty.cbb.core.balance.BalanceSignLikelihoodBands
 
@@ -42,6 +43,8 @@ object SignLikelihoodEngine {
         if (prospect.position in school.positionsNeed) {
             adjusted += recommended.rosterNeedBonus
         }
+        val facilityPitch = FacilityGradeEngine.summarize(school.facilityGrades).recruitingPitchMultiplier
+        adjusted *= facilityPitch
         val inState = prospect.homeState.equals(school.schoolHomeState, ignoreCase = true)
         val positionNeed = prospect.position in school.positionsNeed
         val badge = badgeForScore(adjusted, recommended.bands)

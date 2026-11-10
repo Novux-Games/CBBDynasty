@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb.core.recruiting
 
 import dev.novux.dynasty.cbb.core.balance.BalanceNilRules
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommended
+import dev.novux.dynasty.cbb.core.facilities.FacilityGradeEngine
 import dev.novux.dynasty.cbb.core.nil.NilInterestScoring
 import kotlin.math.roundToInt
 
@@ -54,7 +55,7 @@ object RecruitInterestEngine {
         RecruitingInterestFactor.PrestigeWinning to prestigeWinning(prospect.stars, school.programPrestige),
         RecruitingInterestFactor.CoachRelationship to 0.5,
         RecruitingInterestFactor.Proximity to proximity(prospect.homeState, school, recommended),
-        RecruitingInterestFactor.CampusLife to 0.55,
+        RecruitingInterestFactor.CampusLife to campusWow(school),
     )
 
     private fun prestigeWinning(stars: Int, programPrestige: Int): Double {
@@ -89,6 +90,9 @@ object RecruitInterestEngine {
         }
         return nilCapacity(nilAskUsd, poolUsd)
     }
+
+    private fun campusWow(school: SchoolRecruitingContext): Double =
+        FacilityGradeEngine.summarize(school.facilityGrades).campusWowScore
 
     private fun nilCapacity(nilAskUsd: Int, poolUsd: Int): Double {
         val divisor = 4.0

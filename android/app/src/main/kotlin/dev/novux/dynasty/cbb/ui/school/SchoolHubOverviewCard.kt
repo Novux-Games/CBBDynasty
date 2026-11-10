@@ -65,6 +65,21 @@ fun SchoolHubOverviewCard(
                 ),
                 style = MaterialTheme.typography.bodyMedium,
             )
+            overview.facilitySummary?.let { facilities ->
+                Text(
+                    stringResource(R.string.school_hub_facility_avg, facilities.averageGrade),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Text(
+                    stringResource(
+                        R.string.school_hub_facility_lounge,
+                        facilities.byCategory.getValue(dev.novux.dynasty.cbb.core.offseason.weeknine.FacilityCategory.RecruitingLounge),
+                        facilities.recruitingPitchMultiplier,
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
             RankingsBlock(overview)
         }
     }

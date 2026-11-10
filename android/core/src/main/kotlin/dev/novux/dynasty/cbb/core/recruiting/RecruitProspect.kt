@@ -30,4 +30,6 @@ data class SchoolRecruitingContext(
     val pipelineStates: Set<String> = emptySet(),
     val nilPoolAnnualUsd: Int,
     val positionsNeed: Set<PlayerPosition> = PlayerPosition.entries.toSet(),
+    val facilityGrades: dev.novux.dynasty.cbb.core.offseason.weeknine.FacilityGrades =
+        dev.novux.dynasty.cbb.core.offseason.weeknine.FacilityGrades(),
 )

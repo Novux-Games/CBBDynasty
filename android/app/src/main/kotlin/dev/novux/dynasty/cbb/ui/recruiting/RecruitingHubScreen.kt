@@ -69,6 +69,9 @@ fun RecruitingHubScreen(
     var nilLedger by remember { mutableStateOf<NilBudgetLedger?>(null) }
     var nilOffers by remember { mutableStateOf<Map<String, Long>>(emptyMap()) }
     var nilBoostUsd by remember { mutableIntStateOf(0) }
+    var facilityGrades by remember {
+        mutableStateOf(dev.novux.dynasty.cbb.core.offseason.weeknine.FacilityGrades())
+    }
     var gateRefresh by remember { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
     val currency = remember { NumberFormat.getCurrencyInstance(Locale.US) }
@@ -86,18 +89,21 @@ fun RecruitingHubScreen(
         val poolUsd = 900_000L + nilBoostUsd
         nilOffers = nilBudgetRepository.loadOffers(loaded.dynastyId, loaded.metadata.seasonIndex)
         nilLedger = nilBudgetRepository.loadLedger(loaded.dynastyId, loaded.metadata.seasonIndex, poolUsd)
+        facilityGrades = weekNineRepository?.loadFacilityGrades(loaded.dynastyId, loaded.metadata.seasonIndex)
+            ?: dev.novux.dynasty.cbb.core.offseason.weeknine.FacilityGrades()
     }
 
 
     val recommendedConfig = remember(loaded.balanceRuleset) {
         BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
     }
-    val schoolContext = remember(loaded, nilBoostUsd) {
+    val schoolContext = remember(loaded, nilBoostUsd, facilityGrades) {
         SchoolRecruitingContext(
             programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
             schoolHomeState = "OH",
             pipelineStates = setOf("KY", "IN", "MI", "PA", "WV"),
             nilPoolAnnualUsd = 900_000 + nilBoostUsd,
+            facilityGrades = facilityGrades,
         )
     }
     val offerSnapshot = nilOffers.mapValues { it.value.toInt() }

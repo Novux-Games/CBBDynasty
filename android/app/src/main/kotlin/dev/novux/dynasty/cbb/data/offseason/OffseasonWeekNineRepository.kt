@@ -29,7 +29,7 @@ class OffseasonWeekNineRepository(
         val prefs = context.offseasonWeekNineStore.data.first()
         val cash = prefs[cashKey(dynastyId, seasonIndex)] ?: ProgramEconomyState().cashUsd
         val nilBoost = prefs[nilBoostKey(dynastyId, seasonIndex)] ?: 0
-        val grades = FacilityGrades.decode(prefs[gradesKey(dynastyId, seasonIndex)])
+        val grades = loadFacilityGrades(dynastyId, seasonIndex)
         val events = decodeEvents(prefs[eventsKey(dynastyId, seasonIndex)])
         val naming = prefs[namingKey(dynastyId, seasonIndex)] == true
         return ProgramEconomyState(cash, nilBoost, grades, events, naming)
@@ -37,6 +37,12 @@ class OffseasonWeekNineRepository(
 
     suspend fun nilPoolBoostUsd(dynastyId: String, seasonIndex: Int): Int =
         loadEconomy(dynastyId, seasonIndex).nilBoostUsd
+
+    suspend fun loadFacilityGrades(dynastyId: String, seasonIndex: Int): FacilityGrades {
+        val prefs = context.offseasonWeekNineStore.data.first()
+        prefs[gradesDynastyKey(dynastyId)]?.let { return FacilityGrades.decode(it) }
+        return FacilityGrades.decode(prefs[gradesKey(dynastyId, seasonIndex)])
+    }
 
     suspend fun runFundraising(
         dynastyId: String,
@@ -93,7 +99,7 @@ class OffseasonWeekNineRepository(
         context.offseasonWeekNineStore.edit { prefs ->
             prefs[cashKey(dynastyId, seasonIndex)] = state.cashUsd
             prefs[nilBoostKey(dynastyId, seasonIndex)] = state.nilBoostUsd
-            prefs[gradesKey(dynastyId, seasonIndex)] = state.facilityGrades.encode()
+            prefs[gradesDynastyKey(dynastyId)] = state.facilityGrades.encode()
             prefs[eventsKey(dynastyId, seasonIndex)] = encodeEvents(state.completedEvents)
             prefs[namingKey(dynastyId, seasonIndex)] = state.namingRightsSold
         }
@@ -105,8 +111,10 @@ class OffseasonWeekNineRepository(
     private fun nilBoostKey(dynastyId: String, seasonIndex: Int) =
         intPreferencesKey("nil_boost_${dynastyId}_$seasonIndex")
 
+    private fun gradesDynastyKey(dynastyId: String) = stringPreferencesKey("grades_${dynastyId}")
+
     private fun gradesKey(dynastyId: String, seasonIndex: Int) =
-        stringPreferencesKey("grades_${dynastyId}_$seasonIndex")
+        stringPreferencesKey("grades_legacy_${dynastyId}_$seasonIndex")
 
     private fun eventsKey(dynastyId: String, seasonIndex: Int) =
         stringPreferencesKey("events_${dynastyId}_$seasonIndex")

@@ -290,6 +290,8 @@
     <string name="school_hub_sos">Strength of schedule %1$d</string>
     <string name="school_hub_power_index">Power index %1$d</string>
     <string name="school_hub_team_ratings">Team OFF %1$d · DEF %2$d</string>
+    <string name="school_hub_facility_avg">Facility grades (avg %1$d / 10)</string>
+    <string name="school_hub_facility_lounge">Recruiting lounge %1$d — pitch ×%2$.2f</string>
     <string name="school_hub_rankings_unpublished">Rankings publish after preseason NET review.</string>
     <string name="school_hub_net_rank">NCBA NET #%1$d</string>
     <string name="school_hub_media_rank">Media poll #%1$d</string>

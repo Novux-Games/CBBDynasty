@@ -10,6 +10,8 @@ import dev.novux.dynasty.cbb.core.school.SchoolSeasonRecord
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
+import dev.novux.dynasty.cbb.core.facilities.FacilityGradeEngine
+import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonProgressRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 
@@ -19,6 +21,7 @@ class SchoolHubRepository(
     private val preseasonProgressRepository: PreseasonProgressRepository,
     private val leagueWeekBatchRepository: LeagueWeekBatchRepository,
     private val balanceRulesetRepository: BalanceRulesetRepository,
+    private val offseasonWeekNineRepository: OffseasonWeekNineRepository,
 ) {
     suspend fun loadOverview(
         dynastyId: String,
@@ -36,6 +39,12 @@ class SchoolHubRepository(
         val netRankings = standings?.netRankByTeam?.takeIf { it.isNotEmpty() }
         val mediaPoll = standings?.mediaPollRankByTeam?.takeIf { it.isNotEmpty() }
         val coachesPoll = standings?.coachesPollRankByTeam?.takeIf { it.isNotEmpty() }
+        val facilitySummary = if (team.teamId == coach.userTeamId) {
+            val grades = offseasonWeekNineRepository.loadFacilityGrades(dynastyId, seasonIndex)
+            FacilityGradeEngine.summarize(grades)
+        } else {
+            null
+        }
         return SchoolHubSnapshotFactory.build(
             team = team,
             packIndex = index,
@@ -46,6 +55,7 @@ class SchoolHubRepository(
             netRankings = netRankings,
             mediaPollRankings = mediaPoll,
             coachesPollRankings = coachesPoll,
+            facilitySummary = facilitySummary,
         )
     }
 
