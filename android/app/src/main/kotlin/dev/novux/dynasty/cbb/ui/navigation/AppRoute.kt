@@ -48,4 +48,6 @@ sealed class AppRoute(val route: String) {
     data object HistoryHub : AppRoute("history_hub")
 
     data object MarchMayhem : AppRoute("march_mayhem")
+
+    data object AwardsHub : AppRoute("awards_hub")
 }

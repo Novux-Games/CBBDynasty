@@ -50,6 +50,8 @@ import dev.novux.dynasty.cbb.ui.offseason.OffseasonScreen
 import dev.novux.dynasty.cbb.ui.preseason.PreseasonScreen
 import dev.novux.dynasty.cbb.ui.signingday.SigningDayInitialTab
 import dev.novux.dynasty.cbb.ui.signingday.SigningDayScreen
+import dev.novux.dynasty.cbb.ui.awards.AwardsHubScreen
+import dev.novux.dynasty.cbb.ui.awards.ConferenceOption
 import dev.novux.dynasty.cbb.ui.news.NewsHubScreen
 import dev.novux.dynasty.cbb.ui.seasonreview.SeasonReviewScreen
 import dev.novux.dynasty.cbb.ui.shell.SplashScreen
@@ -146,6 +148,7 @@ fun DynastyApp(
                 onOpenRankings = { navController.navigate(AppRoute.RankingsHub.route) },
                 onOpenNewsHub = { navController.navigate(AppRoute.NewsHub.route) },
                 onOpenHistory = { navController.navigate(AppRoute.HistoryHub.route) },
+                onOpenAwards = { navController.navigate(AppRoute.AwardsHub.route) },
                 onOpenMarchMayhem = { navController.navigate(AppRoute.MarchMayhem.route) },
                 onExitHome = {
                     navController.popBackStack(AppRoute.Home.route, inclusive = false)
@@ -508,6 +511,41 @@ fun DynastyApp(
                 }
                 composable(AppRoute.MarchMayhem.route) {
                     MarchMayhemHubScreen(onBack = { navController.popBackStack() })
+                }
+                composable(AppRoute.AwardsHub.route) {
+                    val session = ActiveDynastySession.current
+                    val app = LocalContext.current.requireDynastyApplication()
+                    var userConferenceId by remember { mutableStateOf("") }
+                    var userConferenceName by remember { mutableStateOf("") }
+                    var conferences by remember { mutableStateOf<List<ConferenceOption>>(emptyList()) }
+                    if (session != null) {
+                        LaunchedEffect(session.dynastyId, session.metadata.seasonIndex) {
+                            val index = app.packRepository.activeSession().index
+                            conferences = index.allConferenceDisplays().map {
+                                ConferenceOption(it.conferenceId, it.displayName)
+                            }
+                            val overview = app.schoolHubRepository.loadUserSchoolOverview(
+                                session.dynastyId,
+                                session.metadata.seasonIndex,
+                            )
+                            userConferenceName = overview?.conferenceName.orEmpty()
+                            userConferenceId = overview?.let { o ->
+                                index.team(o.teamId)?.conferenceId
+                            }.orEmpty().ifBlank { conferences.firstOrNull()?.id.orEmpty() }
+                        }
+                        AwardsHubScreen(
+                            seasonIndex = session.metadata.seasonIndex,
+                            position = session.weekCheckpoint.activePosition,
+                            userConferenceId = userConferenceId,
+                            userConferenceName = userConferenceName,
+                            conferences = conferences,
+                            onBack = { navController.popBackStack() },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
                 }
             }
 

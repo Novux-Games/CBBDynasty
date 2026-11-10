@@ -207,7 +207,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 9.9 | `[x]` **News hub** (hamburger): Stories / Portal / Recruits / Draft | Top 60 recruits full list; Portal Top 40 @ OS W2 | [news-hub](../planning/news-hub.md) | `ui.newshub` |
 | 9.10 | `[x]` Hamburger hubs (School, Strategy, Stats, Rankings, History, Recruiting) | Recruiting opens **Recommended**; March Mayhem when eligible | [game-frame](../planning/game-frame.md) | `ui.hubs` |
 | 9.11 | `[x]` Optional **Sunday coach points** dashboard nudge | Deep link Coach card spend / bank | [dashboard-tasks](../planning/dashboard-tasks.md), [game-design](../planning/game-design.md) | — |
-| 9.12 | `[ ]` **Awards hub** (Yearly + Weekly) | Landing two buttons; Yearly **NCBA** / **Conference** tabs + sub-tabs; conf picker default user conf; **current season yearly locked in-season**; runner-ups; Weekly POTW live | [awards](../planning/awards.md#awards-hub-ui-design-lock), [game-frame](../planning/game-frame.md#awards-hub) | `ui.awards` |
+| 9.12 | `[x]` **Awards hub** (Yearly + Weekly) | Landing two buttons; Yearly **NCBA** / **Conference** tabs + sub-tabs; conf picker default user conf; **current season yearly locked in-season**; runner-ups; Weekly POTW live | [awards](../planning/awards.md#awards-hub-ui-design-lock), [game-frame](../planning/game-frame.md#awards-hub) | `ui.awards` |
 
 ---
 
