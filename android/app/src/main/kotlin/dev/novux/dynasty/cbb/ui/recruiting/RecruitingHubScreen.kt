@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb.ui.recruiting
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -239,6 +240,7 @@ private fun RecommendedTabBody(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun RecommendedProspectRow(
     row: RecommendedProspectRow,
