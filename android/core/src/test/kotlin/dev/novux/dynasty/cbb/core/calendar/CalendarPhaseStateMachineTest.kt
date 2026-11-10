@@ -24,7 +24,7 @@ class CalendarPhaseStateMachineTest {
     fun fullMembershipYear_returnsToOffseasonWeek1NextSeason() {
         val start = PhaseWeekPolicy.bootstrapPosition(1, CalendarPhase.Offseason)
         var pos = start
-        repeat(membershipYearWeekCount()) {
+        repeat(seasonOneAdvanceSteps()) {
             pos = CalendarPhaseStateMachine.advanceWeek(pos)
         }
         assertEquals(CalendarPhase.Offseason, pos.phase)
@@ -55,4 +55,7 @@ class CalendarPhaseStateMachineTest {
         check(total == 10 + 1 + 3 + GameConstants.MAX_REGULAR_SEASON_GAMES + 5 + GameConstants.POSTSEASON_WEEKS + 1)
         return total
     }
+
+    /** Season 1 skips offseason week 10 when advancing week-by-week from a year-1 save. */
+    private fun seasonOneAdvanceSteps(): Int = membershipYearWeekCount() - 1
 }

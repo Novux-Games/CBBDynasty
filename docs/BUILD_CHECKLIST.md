@@ -158,7 +158,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 6.7 | `[x]` Offseason **week 7**: summer workouts (auto) | Report screen | [offseason](../planning/offseason.md) | — |
 | 6.8 | `[x]` Offseason **week 8**: cuts + roster lock ≤15 + walk-ons | Walk-ons after Signing Day | [recruiting-engine](../planning/recruiting-engine.md), [offseason](../planning/offseason.md) | — |
 | 6.9 | `[x]` Offseason **week 9**: fundraising & facility upgrades | Cash/NIL hooks | [game-design](../planning/game-design.md) | — |
-| 6.10 | `[ ]` Offseason **week 10**: conference offers (skip Season 1) | Realignment cards | [offseason](../planning/offseason.md), [game-design](../planning/game-design.md) | — |
+| 6.10 | `[x]` Offseason **week 10**: conference offers (skip Season 1) | Realignment cards | [offseason](../planning/offseason.md), [game-design](../planning/game-design.md) | — |
 
 ---
 

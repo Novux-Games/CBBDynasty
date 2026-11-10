@@ -1,6 +1,7 @@
 package dev.novux.dynasty.cbb.core.calendar
 
 import dev.novux.dynasty.cbb.core.GameConstants
+import dev.novux.dynasty.cbb.core.offseason.weekten.OffseasonWeekAdvancePolicy
 
 /**
  * Week counts and transitions per phase — [planning/time-system.md].
@@ -18,6 +19,9 @@ object PhaseWeekPolicy {
         }
 
     fun nextPosition(current: CalendarPosition): CalendarPosition {
+        if (current.phase == CalendarPhase.Offseason) {
+            return OffseasonWeekAdvancePolicy.nextPosition(current)
+        }
         val maxWeek = weeksInPhase(current.phase)
         return if (current.weekIndex < maxWeek) {
             current.copy(weekIndex = current.weekIndex + 1)

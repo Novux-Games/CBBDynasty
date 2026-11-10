@@ -159,6 +159,17 @@
     <string name="fundraising_facility_grade">Grade %1$d</string>
     <string name="fundraising_upgrade_cost">Upgrade %1$s</string>
     <string name="recruiting_nil_boost_line">Week 9 NIL boost applied: +%1$s to annual pool</string>
+    <string name="conference_offers_title">Conference offers</string>
+    <string name="conference_offers_subtitle">Review realignment invitations before preseason.</string>
+    <string name="conference_offers_empty">No conference invitations this year.</string>
+    <string name="conference_offers_invite">Invite to %1$s (from %2$s)</string>
+    <string name="conference_offers_score">Invite score: %1$d</string>
+    <string name="conference_offers_pros">Pros: %1$s</string>
+    <string name="conference_offers_cons">Cons: %1$s</string>
+    <string name="conference_offers_accept">Accept</string>
+    <string name="conference_offers_decline">Decline</string>
+    <string name="conference_offers_accepted">Accepted for next season</string>
+    <string name="conference_offers_declined">Declined</string>
     <string name="recruiting_hub_title">Recruiting</string>
     <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
     <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>
