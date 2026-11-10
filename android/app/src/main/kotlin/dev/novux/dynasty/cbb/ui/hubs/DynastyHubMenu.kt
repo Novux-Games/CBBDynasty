@@ -15,6 +15,7 @@ data class DynastyHubMenuCallbacks(
     val onOpenHistory: () -> Unit,
     val onOpenAwards: () -> Unit,
     val onOpenMarchMayhem: () -> Unit,
+    val onOpenConferenceTournament: () -> Unit,
     val onExitHome: () -> Unit,
 )
 
@@ -33,6 +34,9 @@ fun buildDynastyHubMenu(
         add(DynastyShellMenuAction(R.string.shell_menu_news_hub, callbacks.onOpenNewsHub))
         add(DynastyShellMenuAction(R.string.shell_menu_history_hub, callbacks.onOpenHistory))
         add(DynastyShellMenuAction(R.string.shell_menu_awards_hub, callbacks.onOpenAwards))
+        if (DynastyHubMenuPolicy.conferenceTournamentMenuVisible(position)) {
+            add(DynastyShellMenuAction(R.string.shell_menu_conf_tourney, callbacks.onOpenConferenceTournament))
+        }
         if (DynastyHubMenuPolicy.marchMayhemMenuVisible(position)) {
             add(DynastyShellMenuAction(R.string.shell_menu_march_mayhem, callbacks.onOpenMarchMayhem))
         }

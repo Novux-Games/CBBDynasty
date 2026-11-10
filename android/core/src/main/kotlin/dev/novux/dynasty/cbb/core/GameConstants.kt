@@ -7,5 +7,7 @@ object GameConstants {
     const val STUDIO_MIN_SKIP_MS = 500L
     const val BRAND_BACKGROUND_HEX = 0xFF181A25
     const val MAX_REGULAR_SEASON_GAMES = 32
+    /** Deepest conference bracket in default pack ([planning/time-system.md]). */
+    const val CONFERENCE_TOURNAMENT_WEEKS = 5
     const val POSTSEASON_WEEKS = 7
 }

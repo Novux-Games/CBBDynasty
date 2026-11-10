@@ -47,6 +47,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
 import dev.novux.dynasty.cbb.ui.hubs.HubScaffoldScreen
+import dev.novux.dynasty.cbb.ui.hubs.ConferenceTournamentHubRouteScreen
 import dev.novux.dynasty.cbb.ui.hubs.MarchMayhemHubScreen
 import dev.novux.dynasty.cbb.ui.hubs.RankingsHubRouteScreen
 import dev.novux.dynasty.cbb.ui.hubs.SchoolHubRouteScreen
@@ -156,6 +157,7 @@ fun DynastyApp(
                 onOpenHistory = { navController.navigate(AppRoute.HistoryHub.route) },
                 onOpenAwards = { navController.navigate(AppRoute.AwardsHub.route) },
                 onOpenMarchMayhem = { navController.navigate(AppRoute.MarchMayhem.route) },
+                onOpenConferenceTournament = { navController.navigate(AppRoute.ConferenceTournamentHub.route) },
                 onExitHome = {
                     navController.popBackStack(AppRoute.Home.route, inclusive = false)
                 },
@@ -599,6 +601,22 @@ fun DynastyApp(
                         bodyRes = R.string.history_hub_placeholder,
                         onBack = { navController.popBackStack() },
                     )
+                }
+                composable(AppRoute.ConferenceTournamentHub.route) {
+                    val session = ActiveDynastySession.current
+                    val app = LocalContext.current.requireDynastyApplication()
+                    if (session != null) {
+                        ConferenceTournamentHubRouteScreen(
+                            dynastyId = session.dynastyId,
+                            seasonIndex = session.metadata.seasonIndex,
+                            repository = app.conferenceTournamentHubRepository,
+                            onBack = { navController.popBackStack() },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
                 }
                 composable(AppRoute.MarchMayhem.route) {
                     MarchMayhemHubScreen(onBack = { navController.popBackStack() })

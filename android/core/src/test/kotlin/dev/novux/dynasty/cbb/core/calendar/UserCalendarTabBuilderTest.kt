@@ -50,6 +50,26 @@ class UserCalendarTabBuilderTest {
         assertTrue(week4.isCurrentWeek)
     }
 
+    @Test
+    fun conferenceTournament_structuralByeWeekMarked() {
+        val plan = PreseasonSchedulePlan(
+            exhibitions = emptyList(),
+            regularSeason = emptyList(),
+            conferenceGameCount = 0,
+            nonConferenceGameCount = 0,
+            earlyEventGameCount = 0,
+        )
+        val rows = UserCalendarTabBuilder.build(
+            activePosition = CalendarPosition(1, CalendarPhase.ConferenceTournament, 5),
+            plan = plan,
+            exhibitionCount = 0,
+            conferenceTourneyByeWeeks = listOf(5),
+            conferenceTourneySimmed = false,
+        )
+        val week5 = rows.first { it.phase == CalendarPhase.ConferenceTournament && it.weekIndex == 5 }
+        assertEquals(UserCalendarRowKind.Bye, week5.rowKind)
+    }
+
     private fun stub(
         kind: ScheduleGameKind,
         name: String,

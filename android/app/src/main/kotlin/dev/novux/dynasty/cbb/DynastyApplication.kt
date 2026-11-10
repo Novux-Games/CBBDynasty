@@ -151,6 +151,9 @@ class DynastyApplication : Application() {
     lateinit var conferenceTournamentRepository: dev.novux.dynasty.cbb.data.conference.ConferenceTournamentRepository
         private set
 
+    lateinit var conferenceTournamentHubRepository: dev.novux.dynasty.cbb.data.conference.ConferenceTournamentHubRepository
+        private set
+
     lateinit var coachSecurityRepository: CoachSecurityRepository
         private set
 
@@ -200,7 +203,6 @@ class DynastyApplication : Application() {
             tournamentInvitesRepository,
             leagueScheduleRepository,
         )
-        userCalendarRepository = UserCalendarRepository(preseasonScheduleRepository, packRepository, database)
         newsFeedRepository = NewsFeedRepository(applicationContext, incomingClassSeedRepository)
         leagueWeekBatchRepository = LeagueWeekBatchRepository(
             applicationContext,
@@ -211,6 +213,12 @@ class DynastyApplication : Application() {
             database,
             packRepository,
             balanceRulesetRepository,
+        )
+        userCalendarRepository = UserCalendarRepository(
+            preseasonScheduleRepository,
+            packRepository,
+            leagueWeekBatchRepository,
+            database,
         )
         preseasonReportRepository = PreseasonReportRepository(
             applicationContext,
@@ -263,6 +271,11 @@ class DynastyApplication : Application() {
         conferenceTournamentRepository = dev.novux.dynasty.cbb.data.conference.ConferenceTournamentRepository(
             packRepository,
             leagueWeekBatchRepository,
+        )
+        conferenceTournamentHubRepository = dev.novux.dynasty.cbb.data.conference.ConferenceTournamentHubRepository(
+            packRepository,
+            leagueWeekBatchRepository,
+            database,
         )
         coachSecurityRepository = CoachSecurityRepository(applicationContext, database)
         applicationScope.launch {

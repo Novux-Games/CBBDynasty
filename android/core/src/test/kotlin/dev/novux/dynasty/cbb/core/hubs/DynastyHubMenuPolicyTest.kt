@@ -7,15 +7,27 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class DynastyHubMenuPolicyTest {
-  @Test
-  fun marchMayhemVisibleInPostseason() {
-    val position = CalendarPosition(1, CalendarPhase.Postseason, 1)
-    assertTrue(DynastyHubMenuPolicy.marchMayhemMenuVisible(position))
-  }
+    @Test
+    fun marchMayhemVisibleInPostseason() {
+        val position = CalendarPosition(1, CalendarPhase.Postseason, 1)
+        assertTrue(DynastyHubMenuPolicy.marchMayhemMenuVisible(position))
+    }
 
-  @Test
-  fun marchMayhemHiddenInRegularSeason() {
-    val position = CalendarPosition(1, CalendarPhase.RegularSeason, 10)
-    assertFalse(DynastyHubMenuPolicy.marchMayhemMenuVisible(position))
-  }
+    @Test
+    fun marchMayhemHiddenInRegularSeason() {
+        val position = CalendarPosition(1, CalendarPhase.RegularSeason, 10)
+        assertFalse(DynastyHubMenuPolicy.marchMayhemMenuVisible(position))
+    }
+
+    @Test
+    fun confTourneyVisibleInConferencePhase() {
+        val position = CalendarPosition(1, CalendarPhase.ConferenceTournament, 1)
+        assertTrue(DynastyHubMenuPolicy.conferenceTournamentMenuVisible(position))
+    }
+
+    @Test
+    fun confTourneyHiddenInRegularSeason() {
+        val position = CalendarPosition(1, CalendarPhase.RegularSeason, 10)
+        assertFalse(DynastyHubMenuPolicy.conferenceTournamentMenuVisible(position))
+    }
 }

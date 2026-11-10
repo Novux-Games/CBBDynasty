@@ -13,7 +13,7 @@ object PhaseWeekPolicy {
             CalendarPhase.Preseason -> 1
             CalendarPhase.Exhibition -> 3
             CalendarPhase.RegularSeason -> GameConstants.MAX_REGULAR_SEASON_GAMES
-            CalendarPhase.ConferenceTournament -> 5
+            CalendarPhase.ConferenceTournament -> GameConstants.CONFERENCE_TOURNAMENT_WEEKS
             CalendarPhase.Postseason -> GameConstants.POSTSEASON_WEEKS
             CalendarPhase.SeasonReview -> 1
         }

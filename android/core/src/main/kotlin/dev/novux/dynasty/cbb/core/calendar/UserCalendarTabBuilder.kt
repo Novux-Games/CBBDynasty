@@ -13,6 +13,9 @@ object UserCalendarTabBuilder {
         plan: PreseasonSchedulePlan?,
         exhibitionCount: Int,
         conferenceTourneyByeWeeks: List<Int> = emptyList(),
+        conferenceTourneyGamesByWeek: Map<Int, List<ScheduledGameStub>> = emptyMap(),
+        conferenceTourneyQualified: Boolean = true,
+        conferenceTourneySimmed: Boolean = false,
     ): List<UserCalendarWeekRow> {
         if (plan == null) {
             return listOf(
@@ -25,7 +28,13 @@ object UserCalendarTabBuilder {
         val rows = mutableListOf<UserCalendarWeekRow>()
         rows += exhibitionWeeks(activePosition, plan, exhibitionCount)
         rows += regularSeasonWeeks(activePosition, plan)
-        rows += conferenceTournamentWeeks(activePosition, conferenceTourneyByeWeeks)
+        rows += conferenceTournamentWeeks(
+            activePosition,
+            conferenceTourneyByeWeeks,
+            conferenceTourneyGamesByWeek,
+            conferenceTourneyQualified,
+            conferenceTourneySimmed,
+        )
         rows += postseasonWeeks(activePosition)
         return rows
     }
@@ -67,15 +76,20 @@ object UserCalendarTabBuilder {
 
     private fun conferenceTournamentWeeks(
         active: CalendarPosition,
-        byeWeeks: List<Int>,
+        structuralByeWeeks: List<Int>,
+        gamesByWeek: Map<Int, List<ScheduledGameStub>>,
+        qualified: Boolean,
+        bracketSimmed: Boolean,
     ): List<UserCalendarWeekRow> {
         val max = PhaseWeekPolicy.weeksInPhase(CalendarPhase.ConferenceTournament)
         return (1..max).map { week ->
             val position = CalendarPosition(active.seasonIndex, CalendarPhase.ConferenceTournament, week)
-            if (week in byeWeeks) {
-                byeRow(active, position)
-            } else {
-                openWeekRow(active, position)
+            when {
+                week in structuralByeWeeks -> byeRow(active, position)
+                !qualified -> byeRow(active, position)
+                gamesByWeek[week].orEmpty().isNotEmpty() -> weekRow(active, position, gamesByWeek[week].orEmpty())
+                bracketSimmed -> byeRow(active, position)
+                else -> openWeekRow(active, position)
             }
         }
     }
