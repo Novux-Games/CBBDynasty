@@ -31,9 +31,10 @@ import dev.novux.dynasty.cbb.ui.shell.CreditsScreen
 import dev.novux.dynasty.cbb.ui.shell.HomeMenuScreen
 import dev.novux.dynasty.cbb.ui.shell.LoadGameScreen
 import dev.novux.dynasty.cbb.ui.shell.SettingsScreen
-import dev.novux.dynasty.cbb.core.calendar.SeasonReviewGate
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
 import dev.novux.dynasty.cbb.ui.newgame.NewGameWizardScreen
+import dev.novux.dynasty.cbb.ui.offseason.OffseasonScreen
 import dev.novux.dynasty.cbb.ui.seasonreview.SeasonReviewScreen
 import dev.novux.dynasty.cbb.ui.shell.SplashScreen
 import dev.novux.dynasty.cbb.ui.shell.StudioScreen
@@ -79,9 +80,7 @@ fun DynastyApp(
 
             fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
-                if (SeasonReviewGate.isActive(loaded.weekCheckpoint)) {
-                    navController.navigate(AppRoute.SeasonReview.route)
-                }
+                DynastyLaunch.navigateForLoaded(navController, loaded)
             }
 
             Scaffold(
@@ -140,11 +139,33 @@ fun DynastyApp(
                 }
                 composable(AppRoute.SeasonReview.route) {
                     val session = ActiveDynastySession.current
-                    if (session != null && SeasonReviewGate.isActive(session.weekCheckpoint)) {
+                    if (session != null) {
                         SeasonReviewScreen(
                             loaded = session,
                             saveSlotRepository = saveSlotRepository,
                             onReturnedHome = {
+                                navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                            },
+                            onEnteredOffseason = { updated ->
+                                ActiveDynastySession.set(updated)
+                                navController.navigate(AppRoute.Offseason.route) {
+                                    popUpTo(AppRoute.Home.route) { inclusive = false }
+                                }
+                            },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
+                }
+                composable(AppRoute.Offseason.route) {
+                    val session = ActiveDynastySession.current
+                    if (session != null) {
+                        OffseasonScreen(
+                            initial = session,
+                            saveSlotRepository = saveSlotRepository,
+                            onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
                         )
@@ -159,7 +180,10 @@ fun DynastyApp(
                         saveSlotRepository = saveSlotRepository,
                         packRepository = LocalContext.current.requireDynastyApplication().packRepository,
                         onExitWizard = { navController.popBackStack() },
-                        onDynastyCreated = { navController.popBackStack() },
+                        onDynastyCreated = {
+                            ActiveDynastySession.current?.let { onDynastyReady(it) }
+                            navController.popBackStack()
+                        },
                         onNoEmptySlot = {
                             scope.launch {
                                 snackbarHostState.showSnackbar(

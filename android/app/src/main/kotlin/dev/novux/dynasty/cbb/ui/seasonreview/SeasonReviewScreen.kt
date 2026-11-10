@@ -33,6 +33,7 @@ fun SeasonReviewScreen(
     loaded: LoadedDynasty,
     saveSlotRepository: SaveSlotRepository,
     onReturnedHome: () -> Unit,
+    onEnteredOffseason: (LoadedDynasty) -> Unit = { onReturnedHome() },
 ) {
     val scope = rememberCoroutineScope()
     val weekHeader = CalendarWeekLabel.display(loaded.weekCheckpoint.activePosition)
@@ -90,7 +91,7 @@ fun SeasonReviewScreen(
                     ) {
                         is DynastyLoadResult.Success -> {
                             ActiveDynastySession.set(result.loaded)
-                            onReturnedHome()
+                            onEnteredOffseason(result.loaded)
                         }
                         else -> onReturnedHome()
                     }

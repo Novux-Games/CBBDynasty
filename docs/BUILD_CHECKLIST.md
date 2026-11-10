@@ -138,7 +138,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 6.1 | `[ ]` Offseason shell + week header (Week 1–10) | Advance week persists | [offseason](../planning/offseason.md) | `ui.offseason` |
+| 6.1 | `[x]` Offseason shell + week header (Week 1–10) | Advance week persists | [offseason](../planning/offseason.md) | `ui.offseason` |
 | 6.2 | `[ ]` **Coaching Carousel** (Season 2+ only) | AI background + user approvals | [offseason](../planning/offseason.md) | `:core/carousel` |
 | 6.3 | `[ ]` Week 1: **Roster / Transfer** tabs (mutual exclusion) | Encourage transfer / convince stay; portal entrants **not** on Roster | [transfer-portal](../planning/transfer-portal.md), [offseason](../planning/offseason.md), [player-loyalty-promises](../planning/player-loyalty-promises.md) | `ui.offseason.leaving` |
 | 6.4 | `[ ]` Week 1: pro days → draft stock | Feeds week 2 results | [offseason](../planning/offseason.md) | — |

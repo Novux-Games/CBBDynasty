@@ -379,6 +379,27 @@ class SaveSlotRepository(
     /**
      * End of Season CTA — advances into Offseason Week 1 of the next membership year ([planning/season-review.md]).
      */
+    /** Advances the active dynasty one calendar week and persists checkpoint + metadata. */
+    suspend fun advanceDynastyWeek(slotIndex: Int): DynastyLoadResult {
+        require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
+        ensureInitialized()
+        val loaded = when (val initial = loadSlot(slotIndex)) {
+            is DynastyLoadResult.Success -> initial.loaded
+            else -> return initial
+        }
+        weekCheckpointRepository.advanceWeek(loaded.dynastyId, loaded.weekCheckpoint)
+        val meta = metadataDao.getById(loaded.dynastyId)?.toDomain()
+        if (meta != null) {
+            val slotEntity = slotDao.getByIndex(slotIndex)
+            if (slotEntity != null) {
+                slotDao.upsert(
+                    slotEntity.copy(seasonLabel = SeasonMembershipYear.label(meta.seasonIndex)),
+                )
+            }
+        }
+        return loadSlot(slotIndex)
+    }
+
     suspend fun completeSeasonReviewEnterOffseason(slotIndex: Int): DynastyLoadResult {
         require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
         ensureInitialized()

@@ -106,4 +106,9 @@
     <string name="season_review_enter_offseason">Enter offseason</string>
     <string name="season_review_offseason_week1">Next: Offseason Week 1 — roster and transfers.</string>
     <string name="season_review_carousel_next">Next: Coaching carousel before offseason begins.</string>
+    <string name="offseason_shell_title">Offseason</string>
+    <string name="offseason_shell_season">Season %1$s</string>
+    <string name="offseason_shell_placeholder">Roster, recruiting, and portal screens arrive in a future update.</string>
+    <string name="offseason_advance_week">Advance week</string>
+    <string name="offseason_advance_to_preseason">Advance to preseason</string>
 </resources>
