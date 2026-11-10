@@ -22,6 +22,8 @@ sealed class AppRoute(val route: String) {
 
     data object Offseason : AppRoute("offseason")
 
+    data object Preseason : AppRoute("preseason")
+
     data object CoachingCarousel : AppRoute("coaching_carousel")
 
     data object Recruiting : AppRoute("recruiting")

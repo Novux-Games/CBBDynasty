@@ -25,6 +25,9 @@ object DynastyLaunch {
             loaded.weekCheckpoint.activePosition.phase == CalendarPhase.Offseason -> {
                 navController.navigate(AppRoute.Offseason.route)
             }
+            loaded.weekCheckpoint.activePosition.phase == CalendarPhase.Preseason -> {
+                navController.navigate(AppRoute.Preseason.route)
+            }
         }
     }
 }

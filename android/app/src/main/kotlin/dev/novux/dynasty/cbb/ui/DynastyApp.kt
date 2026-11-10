@@ -39,6 +39,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.ui.recruiting.RecruitingHubScreen
 import dev.novux.dynasty.cbb.ui.offseason.OffseasonScreen
+import dev.novux.dynasty.cbb.ui.preseason.PreseasonScreen
 import dev.novux.dynasty.cbb.ui.signingday.SigningDayInitialTab
 import dev.novux.dynasty.cbb.ui.signingday.SigningDayScreen
 import dev.novux.dynasty.cbb.ui.seasonreview.SeasonReviewScreen
@@ -103,6 +104,8 @@ fun DynastyApp(
                 LocalContext.current.requireDynastyApplication().offseasonWeekNineRepository
             val offseasonWeekTenRepository =
                 LocalContext.current.requireDynastyApplication().offseasonWeekTenRepository
+            val preseasonProgressRepository =
+                LocalContext.current.requireDynastyApplication().preseasonProgressRepository
 
             suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
@@ -196,6 +199,23 @@ fun DynastyApp(
                                 navController.navigate(AppRoute.Offseason.route) {
                                     popUpTo(AppRoute.Home.route) { inclusive = false }
                                 }
+                            },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
+                }
+                composable(AppRoute.Preseason.route) {
+                    val session = ActiveDynastySession.current
+                    if (session != null) {
+                        PreseasonScreen(
+                            initial = session,
+                            saveSlotRepository = saveSlotRepository,
+                            progressRepository = preseasonProgressRepository,
+                            onExitHome = {
+                                navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
                         )
                     } else {
