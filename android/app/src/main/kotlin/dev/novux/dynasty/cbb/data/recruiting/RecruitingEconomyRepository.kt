@@ -10,8 +10,11 @@ import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionsParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingEconomy
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRuleset
+import dev.novux.dynasty.cbb.core.recruiting.OfficialVisitDistanceBand
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingActionSpend
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingPointAction
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingRefundableActionSpend
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingReservationRefund
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingSpendResult
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
@@ -25,6 +28,7 @@ private val Context.recruitingEconomyStore: DataStore<Preferences> by preference
 
 class RecruitingEconomyRepository(
     private val context: Context,
+    private val reservationRepository: RecruitingReservationRepository,
 ) {
     suspend fun loadOrOpenCycle(
         dynasty: LoadedDynasty,
@@ -65,13 +69,56 @@ class RecruitingEconomyRepository(
         return result
     }
 
+    suspend fun spendRefundableAction(
+        dynasty: LoadedDynasty,
+        prospectId: String,
+        offer: Boolean,
+        scout: Boolean,
+        officialVisit: Boolean,
+        visitDistance: OfficialVisitDistanceBand = OfficialVisitDistanceBand.Regional,
+    ): RecruitingSpendResult {
+        val actions = BalanceRecruitingActionsParser.parse(dynasty.balanceRuleset.recruiting)
+        val ledger = loadOrOpenCycle(dynasty)
+        val active = reservationRepository.loadActive(dynasty.dynastyId)
+        val (result, reservation) = when {
+            offer -> RecruitingRefundableActionSpend.spendScholarshipOffer(prospectId, ledger.pointsAvailable, actions)
+            scout -> RecruitingRefundableActionSpend.spendScoutTheirGame(prospectId, ledger.pointsAvailable, actions, active)
+            officialVisit -> RecruitingRefundableActionSpend.spendOfficialVisit(
+                prospectId,
+                ledger.pointsAvailable,
+                actions,
+                visitDistance,
+                active,
+            )
+            else -> return RecruitingSpendResult(
+                action = RecruitingPointAction.Dm,
+                pointsCharged = 0,
+                pointsRemaining = ledger.pointsAvailable,
+                countsAsWeekReservation = false,
+                success = false,
+            )
+        }
+        if (result.success && reservation != null) {
+            persist(dynasty.dynastyId, ledger.withPointsAvailable(result.pointsRemaining))
+            reservationRepository.addReservation(dynasty.dynastyId, reservation)
+        }
+        return result
+    }
+
     suspend fun onCalendarWeekAdvanced(dynasty: LoadedDynasty, pointsSpentThisWeek: Int = 0) {
         val economy = economyFrom(dynasty.balanceRuleset)
         val ledger = loadOrOpenCycle(dynasty)
+        val activeReservations = reservationRepository.loadActive(dynasty.dynastyId)
+        val afterRefunds = ledger.copy(
+            pointsAvailable = RecruitingReservationRefund.pointsAfterWeekCloseRefunds(
+                ledger.pointsAvailable,
+                activeReservations,
+            ),
+        )
         val pos = dynasty.weekCheckpoint.activePosition
         val (next, _) = RecruitingWeekGrant.applyWeekAdvanceGrant(
             economy,
-            ledger,
+            afterRefunds,
             phase = pos.phase,
             offseasonWeekIndex = pos.weekIndex.takeIf { pos.phase == CalendarPhase.Offseason },
             pointsSpentThisWeek = pointsSpentThisWeek,

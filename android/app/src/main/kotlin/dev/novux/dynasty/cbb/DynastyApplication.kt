@@ -11,6 +11,7 @@ import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
+import dev.novux.dynasty.cbb.data.recruiting.RecruitingReservationRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.data.settings.AppSettingsRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
@@ -62,7 +63,11 @@ class DynastyApplication : Application() {
         balanceRulesetRepository = BalanceRulesetRepository(applicationContext)
         simTuningRepository = SimTuningRepository(applicationContext)
         coachingCarouselRepository = CoachingCarouselRepository(applicationContext)
-        recruitingEconomyRepository = RecruitingEconomyRepository(applicationContext)
+        val recruitingReservationRepository = RecruitingReservationRepository(applicationContext)
+        recruitingEconomyRepository = RecruitingEconomyRepository(
+            applicationContext,
+            recruitingReservationRepository,
+        )
         portalCycleRepository = PortalCycleRepository(applicationContext)
         aiRecruitingRepository = AiRecruitingRepository(applicationContext)
         val database = DynastyDatabase.build(applicationContext)
