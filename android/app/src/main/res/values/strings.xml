@@ -465,6 +465,12 @@
     <string name="statistics_hub_placeholder">National and conference stat leaders will appear here once live game stats are wired in.</string>
     <string name="rankings_hub_title">Rankings</string>
     <string name="rankings_hub_placeholder">NCBA NET #1–#365, Media and Coaches polls, and conference standings will publish here soon.</string>
+    <string name="rankings_tab_net">NCBA NET</string>
+    <string name="rankings_tab_media">Media poll</string>
+    <string name="rankings_tab_coaches">Coaches poll</string>
+    <string name="rankings_tab_conference">Conference</string>
+    <string name="rankings_hub_team_row">#%1$d %2$s</string>
+    <string name="rankings_hub_conf_row">%1$s — %2$d–%3$d</string>
     <string name="history_hub_title">History</string>
     <string name="history_hub_placeholder">Dynasty archive, GOAT, and the record book will live here once league history is online.</string>
     <string name="march_mayhem_hub_title">March Mayhem</string>

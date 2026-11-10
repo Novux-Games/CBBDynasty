@@ -142,6 +142,9 @@ class DynastyApplication : Application() {
     lateinit var schoolHubRepository: SchoolHubRepository
         private set
 
+    lateinit var rankingsHubRepository: dev.novux.dynasty.cbb.data.rankings.RankingsHubRepository
+        private set
+
     lateinit var coachSecurityRepository: CoachSecurityRepository
         private set
 
@@ -240,6 +243,11 @@ class DynastyApplication : Application() {
             preseasonProgressRepository,
             leagueWeekBatchRepository,
             balanceRulesetRepository,
+        )
+        rankingsHubRepository = dev.novux.dynasty.cbb.data.rankings.RankingsHubRepository(
+            packRepository,
+            leagueWeekBatchRepository,
+            preseasonProgressRepository,
         )
         coachSecurityRepository = CoachSecurityRepository(applicationContext, database)
         applicationScope.launch {
