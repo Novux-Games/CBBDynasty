@@ -27,12 +27,14 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.coach.card.AssistantCoachCard
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
+import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.coach.staff.SchoolStaffRoster
 import dev.novux.dynasty.cbb.core.preseason.FirstPlayableGame
 import dev.novux.dynasty.cbb.core.preseason.PreseasonSeasonStartPolicy
 import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
+import dev.novux.dynasty.cbb.data.coach.CoachSecurityRepository
 import dev.novux.dynasty.cbb.data.coach.SchoolStaffRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.school.SchoolHubRepository
@@ -56,10 +58,12 @@ fun DynastyShellScreen(
     scheduleRepository: PreseasonScheduleRepository,
     staffRepository: SchoolStaffRepository,
     schoolHubRepository: SchoolHubRepository,
+    coachSecurityRepository: CoachSecurityRepository,
     onExitHome: () -> Unit,
 ) {
     var focus by remember { mutableStateOf<SeasonStartFocus?>(null) }
     var staffRoster by remember { mutableStateOf<SchoolStaffRoster?>(null) }
+    var coachSecurity by remember { mutableStateOf<CoachSecuritySnapshot?>(null) }
     var userSchool by remember { mutableStateOf<SchoolHubOverview?>(null) }
     var coachView by remember { mutableStateOf<ShellCoachView>(ShellCoachView.Hub) }
     val scope = rememberCoroutineScope()
@@ -80,6 +84,7 @@ fun DynastyShellScreen(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
         )
+        coachSecurity = coachSecurityRepository.loadForUserDynasty(loaded.dynastyId)
     }
 
     when (val view = coachView) {
@@ -95,6 +100,7 @@ fun DynastyShellScreen(
                         {
                             SchoolStaffTabPanel(
                                 roster = staffRoster!!,
+                                adTrust = coachSecurity,
                                 onHeadCoachClick = {
                                     coachView = ShellCoachView.HeadCoach(staffRoster!!.headCoach)
                                 },
@@ -119,7 +125,11 @@ fun DynastyShellScreen(
                     onClick = { coachView = ShellCoachView.Staff },
                     modifier = Modifier.padding(16.dp),
                 ) { Text(stringResource(R.string.coach_card_back_staff)) }
-                HeadCoachCardScreen(card = view.card, modifier = Modifier.weight(1f))
+                HeadCoachCardScreen(
+                    card = view.card,
+                    userCoachSecurity = coachSecurity,
+                    modifier = Modifier.weight(1f),
+                )
             }
             return
         }
@@ -146,6 +156,7 @@ fun DynastyShellScreen(
                 staffRoster?.let { roster ->
                     SchoolStaffTabPanel(
                         roster = roster,
+                        adTrust = coachSecurity,
                         onHeadCoachClick = { coachView = ShellCoachView.HeadCoach(roster.headCoach) },
                         onAssistantClick = { id ->
                             roster.assistants.firstOrNull { it.staffId == id }?.let {

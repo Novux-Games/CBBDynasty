@@ -263,6 +263,14 @@
     <string name="school_hub_net_rank">NCBA NET #%1$d</string>
     <string name="school_hub_media_rank">Media poll #%1$d</string>
     <string name="school_hub_coaches_rank">Coaches poll #%1$d</string>
+    <string name="job_security_title">Job security</string>
+    <string name="job_security_meter">%1$d · %2$s %3$s</string>
+    <string name="job_security_helping">helping</string>
+    <string name="job_security_hurting">hurting</string>
+    <string name="job_security_neutral">neutral</string>
+    <string name="ad_trust_title">AD trust</string>
+    <string name="ad_trust_meter">%1$d · %2$s</string>
+    <string name="ad_trust_staff_hint">AD trust meter lives on the Staff tab for your program.</string>
     <string name="recruiting_hub_title">Recruiting</string>
     <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
     <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>

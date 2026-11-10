@@ -16,17 +16,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.coach.card.CoachCardPolicy
+import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.coach.staff.SchoolStaffRoster
 import dev.novux.dynasty.cbb.core.coach.staff.StaffKind
 
 @Composable
 fun SchoolStaffTabPanel(
     roster: SchoolStaffRoster,
+    adTrust: CoachSecuritySnapshot? = null,
     onHeadCoachClick: () -> Unit,
     onAssistantClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        adTrust?.let { AdTrustMeter(it) }
         Text(
             stringResource(R.string.staff_tab_title),
             style = MaterialTheme.typography.titleLarge,

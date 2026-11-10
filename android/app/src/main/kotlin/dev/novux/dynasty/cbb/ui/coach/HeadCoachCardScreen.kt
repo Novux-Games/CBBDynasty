@@ -17,10 +17,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
+import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 
 @Composable
 fun HeadCoachCardScreen(
     card: HeadCoachCard,
+    userCoachSecurity: CoachSecuritySnapshot? = null,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -41,6 +43,7 @@ fun HeadCoachCardScreen(
             stringResource(R.string.coach_card_record, card.seasonRecordLabel),
             style = MaterialTheme.typography.bodyLarge,
         )
+        userCoachSecurity?.let { JobSecurityMeter(it) }
         RatingCard(
             title = stringResource(R.string.coach_card_ratings_headline),
             lines = listOf(

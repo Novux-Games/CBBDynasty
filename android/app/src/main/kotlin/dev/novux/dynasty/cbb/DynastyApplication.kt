@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb
 import android.app.Application
 import android.content.Context
 import dev.novux.dynasty.cbb.data.carousel.CoachingCarouselRepository
+import dev.novux.dynasty.cbb.data.coach.CoachSecurityRepository
 import dev.novux.dynasty.cbb.data.coach.SchoolStaffRepository
 import dev.novux.dynasty.cbb.data.school.SchoolHubRepository
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
@@ -112,6 +113,9 @@ class DynastyApplication : Application() {
     lateinit var schoolHubRepository: SchoolHubRepository
         private set
 
+    lateinit var coachSecurityRepository: CoachSecurityRepository
+        private set
+
     override fun onCreate() {
         super.onCreate()
         appSettingsRepository = AppSettingsRepository(applicationContext)
@@ -167,6 +171,7 @@ class DynastyApplication : Application() {
         )
         schoolStaffRepository = SchoolStaffRepository(database, packRepository)
         schoolHubRepository = SchoolHubRepository(database, packRepository, preseasonProgressRepository)
+        coachSecurityRepository = CoachSecurityRepository(applicationContext, database)
         applicationScope.launch {
             saveSlotRepository.ensureInitialized()
             packRepository.ensureEmbeddedLoaded()

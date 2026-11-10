@@ -183,7 +183,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 8.2 | `[x]` Archetypes + hidden ratings / letter grades | Scout view | [player-archetypes](../planning/player-archetypes.md), [recruiting-engine](../planning/recruiting-engine.md) | — |
 | 8.3 | `[x]` Head coach + assistants (cards) | Staff tab vs support list | [coach-card](../planning/coach-card.md) | `ui.coach` |
 | 8.4 | `[x]` School hub data (prestige, SOS, NET on card) | Read-only opponent schools | [game-frame](../planning/game-frame.md) | `ui.school` |
-| 8.5 | `[ ]` Job security + AD trust | Coach card + Staff tab | [coach-card](../planning/coach-card.md) | — |
+| 8.5 | `[x]` Job security + AD trust | Coach card + Staff tab | [coach-card](../planning/coach-card.md) | — |
 | 8.6 | `[ ]` **Loyalty** (0–99) + **one promise** per tenure | Kept/broken → portal / declare rolls; card chips | [player-loyalty-promises](../planning/player-loyalty-promises.md), [player-cards](../planning/player-cards.md) | `:core/player` |
 | 8.7 | `[ ]` **Injury** state + medical redshirt + **auto lineup** | Save fields per spec; `weeksRemaining` + snapshots; lineup adjust on injury/return; medical RS gates; bank **40** rows | [injuries](../planning/injuries.md) | `:core/injuries` |
 | 8.8 | `[ ]` **Injury UX** (postgame + cards + strategy) | Postgame sheet; roster `OUT` / `{N}w`; greyed in Strategy; optional dashboard deep links | [injuries](../planning/injuries.md#player-ui), [injuries#medical-redshirt](../planning/injuries.md#medical-redshirt), [dashboard-tasks](../planning/dashboard-tasks.md) | `ui.postgame`, `ui.strategy` |
