@@ -489,6 +489,14 @@
     <string name="march_mayhem_tab_nci">NCI</string>
     <string name="march_mayhem_tab_heritage">Heritage</string>
     <string name="march_mayhem_hub_placeholder">National bracket monitor (NCBA · NCI · Heritage) will fill in once Selection Sunday and postseason play are live.</string>
+    <string name="march_mayhem_ncba_field">NCBA main bracket (%1$d teams)</string>
+    <string name="march_mayhem_opening_advancers">Opening Round advancers: %1$d</string>
+    <string name="march_mayhem_champion_line">Champion: %1$s %2$s</string>
+    <string name="march_mayhem_invitational_field">%1$s field (%2$d teams)</string>
+    <string name="march_mayhem_team_line">%1$s %2$s%3$s</string>
+    <string name="march_mayhem_results_header">Results</string>
+    <string name="march_mayhem_game_week">Postseason week %1$d</string>
+    <string name="march_mayhem_score_line">%1$s %2$s %3$d, %4$s %5$s %6$d</string>
     <string name="shell_menu_awards_hub">Awards</string>
     <string name="awards_hub_title">Awards</string>
     <string name="awards_hub_yearly_button">Yearly awards</string>

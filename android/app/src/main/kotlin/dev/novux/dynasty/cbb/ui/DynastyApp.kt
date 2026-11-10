@@ -48,7 +48,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
 import dev.novux.dynasty.cbb.ui.hubs.HubScaffoldScreen
 import dev.novux.dynasty.cbb.ui.hubs.ConferenceTournamentHubRouteScreen
-import dev.novux.dynasty.cbb.ui.hubs.MarchMayhemHubScreen
+import dev.novux.dynasty.cbb.ui.hubs.MarchMayhemHubRouteScreen
 import dev.novux.dynasty.cbb.ui.hubs.RankingsHubRouteScreen
 import dev.novux.dynasty.cbb.ui.hubs.SchoolHubRouteScreen
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
@@ -619,7 +619,20 @@ fun DynastyApp(
                     }
                 }
                 composable(AppRoute.MarchMayhem.route) {
-                    MarchMayhemHubScreen(onBack = { navController.popBackStack() })
+                    val session = ActiveDynastySession.current
+                    val app = LocalContext.current.requireDynastyApplication()
+                    if (session != null) {
+                        MarchMayhemHubRouteScreen(
+                            dynastyId = session.dynastyId,
+                            seasonIndex = session.metadata.seasonIndex,
+                            repository = app.marchMayhemHubRepository,
+                            onBack = { navController.popBackStack() },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
                 }
                 composable(AppRoute.AwardsHub.route) {
                     val session = ActiveDynastySession.current
