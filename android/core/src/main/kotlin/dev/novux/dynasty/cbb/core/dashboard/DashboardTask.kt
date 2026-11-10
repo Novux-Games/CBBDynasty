@@ -13,6 +13,8 @@ enum class DashboardDeepLink {
     SigningDayPositions,
     Strategy,
     DisciplineSheet,
+    PreseasonChecklist,
+    PlayWeekGame,
 }
 
 enum class DashboardTaskId {
@@ -27,6 +29,8 @@ enum class DashboardTaskId {
     ReviewInjury,
     MedicalRedshirtCandidate,
     TeamDisciplinePending,
+    PreseasonRequired,
+    PlayScheduledGame,
 }
 
 data class DashboardTask(

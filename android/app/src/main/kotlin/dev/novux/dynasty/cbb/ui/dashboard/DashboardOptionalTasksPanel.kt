@@ -44,10 +44,11 @@ fun DashboardOptionalTasksPanel(
             DashboardTaskCard(
                 task = task,
                 onOpen = {
-                    if (task.deepLink == DashboardDeepLink.Strategy) {
-                        onStrategyOpen()
-                    } else {
-                        onDeepLink(task.deepLink.toHubTab())
+                    when (task.deepLink) {
+                        DashboardDeepLink.Strategy,
+                        DashboardDeepLink.PlayWeekGame,
+                        -> onStrategyOpen()
+                        else -> onDeepLink(task.deepLink.toHubTab())
                     }
                 },
                 onDismiss = { onDismiss(task.id) },
@@ -111,6 +112,16 @@ private fun taskMessage(task: DashboardTask): String = when (task.id) {
     DashboardTaskId.SigningDayEditPositions,
     DashboardTaskId.SigningDayHardSign,
     -> ""
+    DashboardTaskId.PlayScheduledGame -> stringResource(
+        R.string.dashboard_task_play_game,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+        if (task.formatArgs.firstOrNull() == 1) {
+            stringResource(R.string.dynasty_shell_home)
+        } else {
+            stringResource(R.string.dynasty_shell_away)
+        },
+    )
+    DashboardTaskId.PreseasonRequired -> ""
 }
 
 private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {
@@ -118,7 +129,9 @@ private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {
     DashboardDeepLink.RecruitingPortal -> RecruitingHubTab.TransferPortal
     DashboardDeepLink.RecruitingHsJuco -> RecruitingHubTab.HsJuco
     DashboardDeepLink.Strategy,
+    DashboardDeepLink.PlayWeekGame,
     DashboardDeepLink.SigningDayRankings,
     DashboardDeepLink.SigningDayPositions,
+    DashboardDeepLink.PreseasonChecklist,
     -> RecruitingHubTab.Recommended
 }

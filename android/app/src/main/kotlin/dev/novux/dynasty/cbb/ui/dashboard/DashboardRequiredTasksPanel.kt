@@ -17,6 +17,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTask
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
+import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskId
 
 @Composable
 fun DashboardRequiredTasksPanel(
@@ -69,5 +70,22 @@ private fun requiredTaskMessage(task: DashboardTask): String = when (task.id) {
         R.string.dashboard_task_team_discipline,
         task.stringFormatArgs.firstOrNull().orEmpty(),
     )
+    DashboardTaskId.PreseasonRequired -> preseasonDashboardTitle(task.stringFormatArgs.firstOrNull())
     else -> task.id.name
+}
+
+@Composable
+private fun preseasonDashboardTitle(taskKey: String?): String {
+    val id = taskKey?.let { runCatching { PreseasonTaskId.valueOf(it) }.getOrNull() }
+        ?: return taskKey.orEmpty()
+    return when (id) {
+        PreseasonTaskId.IncomingClassSeed -> stringResource(R.string.preseason_task_incoming_class)
+        PreseasonTaskId.PreseasonWorkouts -> stringResource(R.string.preseason_task_workouts)
+        PreseasonTaskId.CoachUpgrades -> stringResource(R.string.preseason_task_coach_upgrades)
+        PreseasonTaskId.RankingsReview -> stringResource(R.string.preseason_task_rankings)
+        PreseasonTaskId.PreseasonReport -> stringResource(R.string.preseason_task_report)
+        PreseasonTaskId.TournamentInvites -> stringResource(R.string.preseason_task_tournament_invites)
+        PreseasonTaskId.ScheduleExhibitions -> stringResource(R.string.preseason_task_exhibitions)
+        PreseasonTaskId.ScheduleRegularSeason -> stringResource(R.string.preseason_task_regular_schedule)
+    }
 }

@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.balance.BalanceMedicalRedshirtRules
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
+import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
-import dev.novux.dynasty.cbb.core.dashboard.DisciplineRequiredDashboardTasks
-import dev.novux.dynasty.cbb.core.dashboard.InjuryOptionalDashboardTasks
+import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
 import dev.novux.dynasty.cbb.core.discipline.PendingDisciplineIncident
 import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
 import dev.novux.dynasty.cbb.core.injuries.MedicalRedshirtPolicy
@@ -105,25 +105,37 @@ fun DynastyShellScreen(
     var dismissedInjuryTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
     var disciplinePending by remember { mutableStateOf<PendingDisciplineIncident?>(null) }
     var teamChemistry by remember { mutableStateOf<Int?>(null) }
+    var schedulePlan by remember { mutableStateOf<PreseasonSchedulePlan?>(null) }
+    var exhibitionCount by remember { mutableStateOf(0) }
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     val scope = rememberCoroutineScope()
     val medicalRules = remember { BalanceMedicalRedshirtRules() }
+    val position = loaded.weekCheckpoint.activePosition
+    val dashboardTasks = DashboardTaskGate.inSeason(
+        position = position,
+        plan = schedulePlan,
+        exhibitionCount = exhibitionCount,
+        weekSimStaged = loaded.weekCheckpoint.provisionalGames.isNotEmpty(),
+        disciplinePending = disciplinePending,
+        rosterPlayers = rosterPlayers,
+        medicalRules = medicalRules,
+    )
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
         teamChemistry = chemistryRepository.loadState(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
         ).teamChemistry
-        val exhibitionCount = scheduleRepository.loadExhibitionCount(
+        exhibitionCount = scheduleRepository.loadExhibitionCount(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
         )
-        val plan = scheduleRepository.loadPlan(loaded.dynastyId, loaded.metadata.seasonIndex)
+        schedulePlan = scheduleRepository.loadPlan(loaded.dynastyId, loaded.metadata.seasonIndex)
         focus = PreseasonSeasonStartPolicy.resolve(
             loaded.metadata.seasonIndex,
             exhibitionCount,
-            plan,
+            schedulePlan,
         )
         staffRoster = staffRepository.loadStaffRoster(loaded.dynastyId)
         userSchool = schoolHubRepository.loadUserSchoolOverview(
@@ -319,17 +331,12 @@ fun DynastyShellScreen(
                     }
                 }
                 DashboardRequiredTasksPanel(
-                    tasks = DisciplineRequiredDashboardTasks.build(disciplinePending),
+                    tasks = dashboardTasks.required,
                     onOpenSigningDay = { },
                     onOpenDiscipline = { disciplinePending?.let(onOpenDiscipline) },
                 )
-                val injuryTasks = InjuryOptionalDashboardTasks.build(
-                    rosterPlayers,
-                    loaded.weekCheckpoint.activePosition.weekIndex,
-                    medicalRules,
-                )
                 DashboardOptionalTasksPanel(
-                    tasks = injuryTasks,
+                    tasks = dashboardTasks.optional,
                     dismissedIds = dismissedInjuryTasks,
                     onDismiss = { dismissedInjuryTasks = dismissedInjuryTasks + it },
                     onDeepLink = { },

@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
+import dev.novux.dynasty.cbb.core.dashboard.DashboardAdvanceGate
+import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskGate
 import dev.novux.dynasty.cbb.core.preseason.PreseasonStartGate
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskId
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskProgress
@@ -52,6 +54,7 @@ import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
+import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -87,6 +90,7 @@ fun PreseasonScreen(
     }
 
     val taskProgress = progress ?: return
+    val preseasonDashboard = DashboardTaskGate.preseason(taskProgress)
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val phaseLabel = CalendarWeekLabel.display(position)
@@ -129,6 +133,10 @@ fun PreseasonScreen(
             text = stringResource(R.string.preseason_checklist_hint),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        DashboardRequiredTasksPanel(
+            tasks = preseasonDashboard.required,
+            onOpenSigningDay = { },
         )
         LazyColumn(
             modifier = Modifier.weight(1f),
@@ -310,7 +318,8 @@ fun PreseasonScreen(
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = PreseasonStartGate.canStartSeason(taskProgress),
+            enabled = PreseasonStartGate.canStartSeason(taskProgress) &&
+                !DashboardAdvanceGate.blocksWeekAdvance(preseasonDashboard.required),
         ) {
             Text(stringResource(R.string.preseason_start_season))
         }
