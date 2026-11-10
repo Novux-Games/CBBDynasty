@@ -10,7 +10,7 @@ object PlayStoreListingCopy {
 
     /** Google Play short description (max 80 characters). */
     const val SHORT_DESCRIPTION: String =
-        "Build a college hoops dynasty offline. Recruit, sim seasons, chase March."
+        "Run a 365-team college hoops dynasty offline. Recruit, NIL, March."
 
     const val PRIVACY_POLICY_URL: String = "https://novux.dev/privacy/dynasty-college-basketball"
 
@@ -25,14 +25,23 @@ object PlayStoreListingCopy {
             "only used when you optionally import a league identity pack from an HTTPS URL."
 
     val FULL_DESCRIPTION: String = """
-        Run your program year-round in Dynasty: College Basketball — an unofficial college hoops sim from Novux Games.
+        Dynasty: College Basketball is a year-round head-coach sim from Novux Games—unofficial, offline-first, and built for phone play.
 
-        • Recruit, manage NIL, and fight through portal season
-        • Craft schedules, climb NET and polls, survive conference tournaments
-        • Chase Selection Sunday, March Mayhem, and build your legacy
+        YOUR PROGRAM, EVERY SEASON
+        • Staff, schemes, and player development across offseason, preseason, and the calendar
+        • High school and portal recruiting, NIL offers, and Signing Day closes
+        • Schedule craft, weekly NET and polls, conference tournaments, and résumé building
+        • Selection Sunday, Opening Round, March Mayhem, and national brackets
 
-        Offline-first: continue dynasties without an account or constant connection. Optional one-time pack import can rename the universe while your save IDs stay stable.
+        FULL LEAGUE
+        • A 365-team universe sims around your school while you play or fast-forward your games
+        • Text-based possession sim—watch the feed or sim to the final score
+        • News, awards, history, and a dashboard that keeps the job feeling alive year-round
 
-        Not affiliated with the NCAA or any real institution. Fan identity packs are optional and unofficial.
+        OFFLINE SAVES
+        • Progress stays on your device; no account required
+        • Optional one-time HTTPS pack import can rename the league; save IDs stay stable
+
+        Not affiliated with the NCAA or any real school or conference. Custom identity packs are optional fan overlays only.
     """.trimIndent()
 }
