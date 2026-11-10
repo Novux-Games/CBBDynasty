@@ -25,6 +25,12 @@ fun RosterPlayerSeed.toEntity(): DynastyRosterPlayerEntity =
         eligibilityYearsUsed = eligibility.yearsUsed,
         eligibilityYearsRemaining = eligibility.yearsRemaining,
         archetypeWire = archetypeWire,
+        loyaltyRating = loyaltyRating,
+        loyaltyPersonalityWire = loyaltyPersonalityWire,
+        promiseTypeWire = promiseTypeWire,
+        promiseStatusWire = promiseStatusWire,
+        promiseLockedSeasonIndex = promiseLockedSeasonIndex,
+        promiseStayTopN = promiseStayTopN,
     )
 
 fun List<RosterPlayerSeed>.toEntities(): List<DynastyRosterPlayerEntity> = map { it.toEntity() }
@@ -62,6 +68,12 @@ fun DynastyRosterPlayerEntity.toDomain(): RosterPlayer {
         injuryWeeksRemaining = injuryWeeksRemaining,
         injuryLabel = injuryLabel,
         archetypeWire = archetypeWire,
+        loyaltyRating = loyaltyRating,
+        loyaltyPersonalityWire = loyaltyPersonalityWire,
+        promiseTypeWire = promiseTypeWire,
+        promiseStatusWire = promiseStatusWire,
+        promiseLockedSeasonIndex = promiseLockedSeasonIndex,
+        promiseStayTopN = promiseStayTopN,
     )
 }
 
@@ -94,4 +106,10 @@ fun RosterPlayer.toEntity(): DynastyRosterPlayerEntity =
         injuryWeeksRemaining = injuryWeeksRemaining,
         injuryLabel = injuryLabel,
         archetypeWire = archetypeWire,
+        loyaltyRating = loyaltyRating,
+        loyaltyPersonalityWire = loyaltyPersonalityWire,
+        promiseTypeWire = promiseTypeWire,
+        promiseStatusWire = promiseStatusWire,
+        promiseLockedSeasonIndex = promiseLockedSeasonIndex,
+        promiseStayTopN = promiseStayTopN,
     )

@@ -787,11 +787,16 @@
   },
   "player": {
     "loyalty": {
-      "declareWeightLoyalty": 0.0,
-      "promiseKeptBonus": 0.0,
-      "promiseBrokenPenalty": 0.0,
+      "declareWeightLoyalty": 0.008,
+      "promiseKeptBonus": 0.12,
+      "promiseBrokenPenalty": 0.25,
       "minutesToleranceMpg": 3,
-      "stayPledgeDefaultTopN": 14
+      "stayPledgeDefaultTopN": 14,
+      "loyaltySeedMin": 25,
+      "loyaltySeedMax": 75,
+      "promiseKeptLoyaltyBump": 5,
+      "promiseBrokenLoyaltyHit": 15,
+      "portalBrokenPromiseWeight": 0.35
     }
   }
 }

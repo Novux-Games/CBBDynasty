@@ -32,6 +32,12 @@ data class RosterPlayer(
     val injuryWeeksRemaining: Int = 0,
     val injuryLabel: String? = null,
     val archetypeWire: String = "",
+    val loyaltyRating: Int = 50,
+    val loyaltyPersonalityWire: String = "",
+    val promiseTypeWire: String? = null,
+    val promiseStatusWire: String = "",
+    val promiseLockedSeasonIndex: Int? = null,
+    val promiseStayTopN: Int? = null,
 ) {
     fun displayLabel(): String =
         if (displayName.isNotBlank()) displayName else "${position.label} · ${classYear.label}"

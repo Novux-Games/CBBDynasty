@@ -25,7 +25,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.player.loyalty.PromiseStatus
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
+import dev.novux.dynasty.cbb.ui.player.PlayerLoyaltyChips
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import kotlinx.coroutines.launch
 
@@ -82,6 +84,23 @@ fun PlayersLeavingPanel(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         Text(player.displayLabel(), fontWeight = FontWeight.Medium)
+                        val dynasty = player.toDynastyPlayer()
+                        PlayerLoyaltyChips(dynasty)
+                        dynasty.loyalty.promise?.let { promise ->
+                            Text(
+                                text = stringResource(
+                                    R.string.leaving_loyalty_line,
+                                    dynasty.loyalty.loyalty.value,
+                                    promise.statusChipLabel(),
+                                ),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = if (promise.status == PromiseStatus.Broken) {
+                                    MaterialTheme.colorScheme.error
+                                } else {
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                },
+                            )
+                        }
                         if (tabIndex == 0) {
                             OutlinedButton(
                                 onClick = {

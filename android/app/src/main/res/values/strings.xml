@@ -325,4 +325,21 @@
     <string name="signing_day_confirm_positions">Confirm positions</string>
     <string name="signing_day_hard_sign">Hard sign class</string>
     <string name="signing_day_hard_sign_done">Class signed</string>
+    <string name="player_loyalty_chip">Loyalty %1$d</string>
+    <string name="player_promise_chip">%1$s · %2$s</string>
+    <string name="player_promise_status_kept">Kept</string>
+    <string name="player_promise_status_broken">Broken</string>
+    <string name="player_promise_status_at_risk">At risk</string>
+    <string name="player_promise_status_deferred">Deferred</string>
+    <string name="player_promise_status_pending">Pending</string>
+    <string name="player_ratings_loyalty_row">Loyalty: %1$d</string>
+    <string name="player_card_identity">%1$s · %2$s · %3$s</string>
+    <string name="player_card_overview">Overview</string>
+    <string name="player_card_hometown">Hometown: %1$s, %2$s</string>
+    <string name="player_card_measurements">%1$d\'%2$d\" · %3$d lbs</string>
+    <string name="player_card_ratings_tab">Ratings</string>
+    <string name="player_card_headline_ratings">OVR %1$d · OFF %2$d · DEF %3$d</string>
+    <string name="player_card_scout_ovr">Scout OVR: %1$s</string>
+    <string name="dynasty_shell_roster">Roster preview</string>
+    <string name="leaving_loyalty_line">Loyalty %1$d · %2$s</string>
 </resources>

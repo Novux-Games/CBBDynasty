@@ -260,6 +260,7 @@ fun DynastyApp(
                             staffRepository = schoolStaffRepository,
                             schoolHubRepository = schoolHubRepository,
                             coachSecurityRepository = coachSecurityRepository,
+                            rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },

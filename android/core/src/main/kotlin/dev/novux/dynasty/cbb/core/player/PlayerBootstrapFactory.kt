@@ -2,6 +2,14 @@ package dev.novux.dynasty.cbb.core.player
 
 import dev.novux.dynasty.cbb.core.player.archetype.PlayerArchetype
 import dev.novux.dynasty.cbb.core.player.archetype.PlayerArchetypeAssigner
+import dev.novux.dynasty.cbb.core.player.loyalty.CoachPromise
+import dev.novux.dynasty.cbb.core.player.loyalty.CoachPromiseType
+import dev.novux.dynasty.cbb.core.player.loyalty.LoyaltyBootstrap
+import dev.novux.dynasty.cbb.core.player.loyalty.LoyaltyPersonalityTag
+import dev.novux.dynasty.cbb.core.player.loyalty.LoyaltyRating
+import dev.novux.dynasty.cbb.core.player.loyalty.PlayerLoyaltyProfile
+import dev.novux.dynasty.cbb.core.player.loyalty.PromiseStatus
+import dev.novux.dynasty.cbb.core.player.loyalty.TenurePromiseBootstrap
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayerSeed
 
@@ -12,11 +20,22 @@ object PlayerBootstrapFactory {
         val def = (base + positionDefBias(seed.position)).coerceIn(0, 99)
         val ratings = spreadRatings(base, off, def, seed.position)
         val archetype = PlayerArchetypeAssigner.assign(seed.position, ratings)
-        val identity = placeholderIdentity(seed.playerId, seed.depthOrder)
+        val placeholder = placeholderIdentity(seed.playerId, seed.depthOrder)
+        val (loyalty, personality) = LoyaltyBootstrap.seedLoyalty(seed.playerId, archetype.wire)
+        val promise = seed.promiseTypeWire?.let { wire ->
+            CoachPromiseType.fromWire(wire)?.let { type ->
+                CoachPromise(
+                    type = type,
+                    stayTopN = seed.promiseStayTopN,
+                    lockedAtSeasonIndex = seed.promiseLockedSeasonIndex,
+                    status = PromiseStatus.fromWire(seed.promiseStatusWire) ?: PromiseStatus.Pending,
+                )
+            }
+        } ?: TenurePromiseBootstrap.atHardCommit(seed.isStarter)
         return seed.copy(
-            displayName = identity.first,
-            hometownCity = identity.second,
-            hometownState = identity.third,
+            displayName = seed.displayName.ifBlank { placeholder.first },
+            hometownCity = seed.hometownCity.ifBlank { placeholder.second },
+            hometownState = seed.hometownState.ifBlank { placeholder.third },
             heightInches = defaultHeight(seed.position),
             weightLbs = defaultWeight(seed.position),
             ovr = ratings.ovr,
@@ -36,11 +55,21 @@ object PlayerBootstrapFactory {
             proPotential = ratings.proPotential,
             archetypeWire = archetype.wire,
             eligibility = PlayerEligibility.forClassYear(seed.classYear),
+            loyaltyRating = if (seed.loyaltyRating == 50 && seed.loyaltyPersonalityWire.isBlank()) {
+                loyalty.value
+            } else {
+                seed.loyaltyRating
+            },
+            loyaltyPersonalityWire = seed.loyaltyPersonalityWire.ifBlank { personality.wire },
+            promiseTypeWire = promise.type.wire,
+            promiseStatusWire = promise.status.wire,
+            promiseLockedSeasonIndex = promise.lockedAtSeasonIndex,
+            promiseStayTopN = promise.stayTopN,
         )
     }
 
     fun fromSeed(seed: RosterPlayerSeed): DynastyPlayer {
-        val enriched = if (seed.displayName.isBlank()) enrichSeed(seed) else seed
+        val enriched = if (seed.displayName.isBlank() || seed.promiseTypeWire == null) enrichSeed(seed) else seed
         val ratings = enriched.toRatings()
         val archetype = PlayerArchetype.fromWire(enriched.archetypeWire)
             ?: PlayerArchetypeAssigner.assign(enriched.position, ratings)
@@ -67,6 +96,21 @@ object PlayerBootstrapFactory {
                 declaredForDraft = false,
                 draftStockPoints = 0,
                 proDayCompleted = false,
+            ),
+            loyalty = PlayerLoyaltyProfile(
+                loyalty = LoyaltyRating(enriched.loyaltyRating),
+                personality = LoyaltyPersonalityTag.fromWire(enriched.loyaltyPersonalityWire)
+                    ?: LoyaltyPersonalityTag.ProgramGuy,
+                promise = enriched.promiseTypeWire?.let { wire ->
+                    CoachPromiseType.fromWire(wire)?.let { type ->
+                        CoachPromise(
+                            type = type,
+                            stayTopN = enriched.promiseStayTopN,
+                            lockedAtSeasonIndex = enriched.promiseLockedSeasonIndex,
+                            status = PromiseStatus.fromWire(enriched.promiseStatusWire) ?: PromiseStatus.Pending,
+                        )
+                    }
+                },
             ),
         )
     }

@@ -2,10 +2,16 @@ package dev.novux.dynasty.cbb.core.player
 
 import dev.novux.dynasty.cbb.core.player.archetype.PlayerArchetype
 import dev.novux.dynasty.cbb.core.player.archetype.PlayerArchetypeAssigner
+import dev.novux.dynasty.cbb.core.player.loyalty.PlayerLoyaltyProfile
 import dev.novux.dynasty.cbb.core.player.scout.PlayerScoutReport
 import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
 import dev.novux.dynasty.cbb.core.roster.PlayerClassYear
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
+import dev.novux.dynasty.cbb.core.player.loyalty.CoachPromise
+import dev.novux.dynasty.cbb.core.player.loyalty.CoachPromiseType
+import dev.novux.dynasty.cbb.core.player.loyalty.LoyaltyPersonalityTag
+import dev.novux.dynasty.cbb.core.player.loyalty.LoyaltyRating
+import dev.novux.dynasty.cbb.core.player.loyalty.PromiseStatus
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 
 /** Full player record for cards and simulation — [planning/player-cards.md]. */
@@ -20,6 +26,7 @@ data class DynastyPlayer(
     val eligibility: PlayerEligibility,
     val injury: PlayerInjuryState,
     val role: PlayerRosterRole,
+    val loyalty: PlayerLoyaltyProfile = PlayerLoyaltyProfile.Empty,
 ) {
     fun scoutReport(depth: ScoutDepth = ScoutDepth.Light): PlayerScoutReport =
         PlayerScoutReport.fromPlayer(this, depth)
@@ -52,6 +59,12 @@ data class DynastyPlayer(
         injuryId = injury.injuryId,
         injuryWeeksRemaining = injury.weeksRemaining,
         injuryLabel = injury.label,
+        loyaltyRating = loyalty.loyalty.value,
+        loyaltyPersonalityWire = loyalty.personality.wire,
+        promiseTypeWire = loyalty.promise?.type?.wire,
+        promiseStatusWire = loyalty.promise?.status?.wire ?: "",
+        promiseLockedSeasonIndex = loyalty.promise?.lockedAtSeasonIndex,
+        promiseStayTopN = loyalty.promise?.stayTopN,
     )
 
     companion object {
@@ -90,6 +103,23 @@ data class DynastyPlayer(
                 draftStockPoints = player.draftStockPoints,
                 proDayCompleted = player.proDayCompleted,
             ),
+            loyalty = player.toLoyaltyProfile(),
         )
     }
+}
+
+private fun RosterPlayer.toLoyaltyProfile(): PlayerLoyaltyProfile {
+    val personality = LoyaltyPersonalityTag.fromWire(loyaltyPersonalityWire)
+        ?: LoyaltyPersonalityTag.ProgramGuy
+    val promise = promiseTypeWire?.let { wire ->
+        CoachPromiseType.fromWire(wire)?.let { type ->
+            CoachPromise(
+                type = type,
+                stayTopN = promiseStayTopN,
+                lockedAtSeasonIndex = promiseLockedSeasonIndex,
+                status = PromiseStatus.fromWire(promiseStatusWire) ?: PromiseStatus.Pending,
+            )
+        }
+    }
+    return PlayerLoyaltyProfile(LoyaltyRating(loyaltyRating), personality, promise)
 }

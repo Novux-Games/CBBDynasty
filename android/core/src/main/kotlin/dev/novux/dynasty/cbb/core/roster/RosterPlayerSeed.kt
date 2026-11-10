@@ -35,6 +35,12 @@ data class RosterPlayerSeed(
     val proPotential: Int = ovr,
     val archetypeWire: String = "",
     val eligibility: PlayerEligibility = PlayerEligibility.forClassYear(classYear),
+    val loyaltyRating: Int = 50,
+    val loyaltyPersonalityWire: String = "",
+    val promiseTypeWire: String? = null,
+    val promiseStatusWire: String = "",
+    val promiseLockedSeasonIndex: Int? = null,
+    val promiseStayTopN: Int? = null,
 ) {
     fun toRatings(): PlayerRatings = PlayerRatings(
         ovr = ovr,

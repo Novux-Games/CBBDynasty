@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.ui.shell
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,13 +32,17 @@ import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.coach.staff.SchoolStaffRoster
 import dev.novux.dynasty.cbb.core.preseason.FirstPlayableGame
 import dev.novux.dynasty.cbb.core.preseason.PreseasonSeasonStartPolicy
+import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
 import dev.novux.dynasty.cbb.data.coach.CoachSecurityRepository
 import dev.novux.dynasty.cbb.data.coach.SchoolStaffRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
+import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.school.SchoolHubRepository
+import dev.novux.dynasty.cbb.ui.player.PlayerCardSheet
+import dev.novux.dynasty.cbb.ui.player.PlayerLoyaltyChips
 import dev.novux.dynasty.cbb.ui.coach.AssistantCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.HeadCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.SchoolStaffTabPanel
@@ -59,6 +64,7 @@ fun DynastyShellScreen(
     staffRepository: SchoolStaffRepository,
     schoolHubRepository: SchoolHubRepository,
     coachSecurityRepository: CoachSecurityRepository,
+    rosterRepository: DynastyRosterRepository,
     onExitHome: () -> Unit,
 ) {
     var focus by remember { mutableStateOf<SeasonStartFocus?>(null) }
@@ -66,6 +72,8 @@ fun DynastyShellScreen(
     var coachSecurity by remember { mutableStateOf<CoachSecuritySnapshot?>(null) }
     var userSchool by remember { mutableStateOf<SchoolHubOverview?>(null) }
     var coachView by remember { mutableStateOf<ShellCoachView>(ShellCoachView.Hub) }
+    var rosterPreview by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
+    var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
@@ -85,7 +93,10 @@ fun DynastyShellScreen(
             loaded.metadata.seasonIndex,
         )
         coachSecurity = coachSecurityRepository.loadForUserDynasty(loaded.dynastyId)
+        rosterPreview = rosterRepository.listDynastyPlayers(loaded.dynastyId).take(6)
     }
+
+    PlayerCardSheet(player = cardPlayer, onDismiss = { cardPlayer = null })
 
     when (val view = coachView) {
         is ShellCoachView.School -> {
@@ -198,6 +209,25 @@ fun DynastyShellScreen(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        if (rosterPreview.isNotEmpty()) {
+            Text(
+                text = stringResource(R.string.dynasty_shell_roster),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+            rosterPreview.forEach { player ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { cardPlayer = player },
+                ) {
+                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text(player.identity.displayName, fontWeight = FontWeight.Medium)
+                        PlayerLoyaltyChips(player)
+                    }
+                }
+            }
+        }
         focus?.firstGame?.let { game ->
             NextGameCard(
                 game = game,

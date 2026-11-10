@@ -4,6 +4,24 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.novux.dynasty.cbb.core.save.DynastySchema
 
+val MIGRATION_11_12 = object : Migration(11, 12) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN loyaltyRating INTEGER NOT NULL DEFAULT 50")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN loyaltyPersonalityWire TEXT NOT NULL DEFAULT ''")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN promiseTypeWire TEXT")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN promiseStatusWire TEXT NOT NULL DEFAULT 'pending'")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN promiseLockedSeasonIndex INTEGER")
+        db.execSQL("ALTER TABLE dynasty_roster_player ADD COLUMN promiseStayTopN INTEGER")
+        db.execSQL(
+            """
+            UPDATE dynasty_roster_player
+            SET promiseTypeWire = CASE WHEN isStarter = 1 THEN 'minutes_starter' ELSE 'minutes_rotation' END
+            WHERE promiseTypeWire IS NULL
+            """.trimIndent(),
+        )
+    }
+}
+
 val MIGRATION_10_11 = object : Migration(10, 11) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
