@@ -30,6 +30,27 @@ class SimWeekAdvanceResolverTest {
     }
 
     @Test
+    fun confirmation_skipsRecruitingLineWhenAutomationOff() {
+        val confirmation = SimWeekAdvanceResolver.buildConfirmation(
+            SimWeekAdvanceInput(
+                nextWeekLabel = "Regular Season · Week 2",
+                unplayedUserGameCount = 0,
+                recruitingPointsAvailable = 1500,
+                userManualRecruitingSpent = 0,
+                recruitingHubOpen = true,
+                estimatedAutoRecruitingSpend = 200,
+                portalRecruitingWeekOpen = false,
+                recruitingAutoMaintainEnabled = false,
+            ),
+        )
+        assertTrue(
+            confirmation.lines.none {
+                it.kind == SimWeekConfirmationLineKind.UserRecruitingAutoMaintain
+            },
+        )
+    }
+
+    @Test
     fun resolve_fastSimsUnplayedGameBeforeAdvance() {
         val state = WeekCheckpointState.bootstrap(1, CalendarPhase.RegularSeason)
         val resolution = SimWeekAdvanceResolver.resolvePreAdvance(

@@ -29,6 +29,7 @@ private val Context.aiRecruitingStore: DataStore<Preferences> by preferencesData
 class AiRecruitingRepository(
     private val context: Context,
     private val nilAnnualPoolRepository: dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository,
+    private val dynastyAutomationRepository: dev.novux.dynasty.cbb.data.settings.DynastyAutomationRepository,
 ) {
     suspend fun runLeagueWeekIfActive(
         dynasty: LoadedDynasty,
@@ -50,6 +51,7 @@ class AiRecruitingRepository(
             )
         val offseasonWeek = position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason }
         val hubOpen = RecruitingCyclePolicy.hubAccessible(position.phase, offseasonWeek)
+        val automation = dynastyAutomationRepository.load(dynasty.dynastyId)
         val actionCosts = actionsFrom(dynasty)
         val result = AiRecruitingWeekRunner.runWeek(
             prospectPool = pool,
@@ -59,7 +61,7 @@ class AiRecruitingRepository(
             userSchool = userSchool,
             userPointsAvailable = ledger.pointsAvailable,
             userPointsSpentByPlayer = userManualPointsSpent,
-            autoMaintainUserSchool = hubOpen,
+            autoMaintainUserSchool = hubOpen && automation.recruitingAutoMaintain,
             leaguePrograms = AiLeagueProgramGenerator.demoLeague(
                 seasonIndex = dynasty.metadata.seasonIndex,
                 excludeProgramId = userProgramId,

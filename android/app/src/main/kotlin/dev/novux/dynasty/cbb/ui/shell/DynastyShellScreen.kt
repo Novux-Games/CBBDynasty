@@ -123,12 +123,14 @@ fun DynastyShellScreen(
     newsFeedRepository: NewsFeedRepository,
     notificationFeedRepository: NotificationFeedRepository,
     coachEmploymentRepository: CoachEmploymentRepository,
+    dynastyAutomationRepository: dev.novux.dynasty.cbb.data.settings.DynastyAutomationRepository,
     showNotificationFeed: Boolean = true,
     hubMenuCallbacks: DynastyHubMenuCallbacks,
     onOpenDiscipline: (PendingDisciplineIncident) -> Unit,
     onOpenGamePreview: () -> Unit = {},
     onOpenSigningDay: () -> Unit = {},
     onOpenRecruitingTab: (RecruitingHubTab) -> Unit = {},
+    onOpenAutomation: () -> Unit = {},
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
@@ -366,6 +368,11 @@ fun DynastyShellScreen(
                                 enabled,
                                 view.card.archetype,
                             )
+                            val auto = dynastyAutomationRepository.load(loaded.dynastyId)
+                            dynastyAutomationRepository.save(
+                                loaded.dynastyId,
+                                auto.copy(coachAutoSpend = enabled),
+                            )
                             coachSkillState = next
                             coachSkillPointBank = next.unspentBank
                         }
@@ -423,6 +430,7 @@ fun DynastyShellScreen(
         ),
         leadingExtras = listOf(
             DynastyShellMenuAction(R.string.staff_open_tab) { coachView = ShellCoachView.Staff },
+            DynastyShellMenuAction(R.string.shell_menu_automation, onOpenAutomation),
         ),
     )
 

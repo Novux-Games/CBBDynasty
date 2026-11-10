@@ -33,7 +33,17 @@ class AppSettingsRepository(
             prefs[Keys.MUSIC_ENABLED] = updated.musicEnabled
             prefs[Keys.MASTER_VOLUME_PERCENT] = updated.masterVolumePercent
             prefs[Keys.SHOW_DASHBOARD_NOTIFICATION_FEED] = updated.showDashboardNotificationFeed
+            prefs[Keys.DEFAULT_RECRUITING_AUTO_MAINTAIN] = updated.defaultRecruitingAutoMaintain
+            prefs[Keys.DEFAULT_COACH_AUTO_SPEND] = updated.defaultCoachAutoSpend
         }
+    }
+
+    suspend fun setDefaultRecruitingAutoMaintain(enabled: Boolean) {
+        update { it.copy(defaultRecruitingAutoMaintain = enabled) }
+    }
+
+    suspend fun setDefaultCoachAutoSpend(enabled: Boolean) {
+        update { it.copy(defaultCoachAutoSpend = enabled) }
     }
 
     suspend fun setShowDashboardNotificationFeed(enabled: Boolean) {
@@ -64,6 +74,8 @@ class AppSettingsRepository(
             masterVolumePercent = this[Keys.MASTER_VOLUME_PERCENT]
                 ?: AppSettings.DEFAULT_MASTER_VOLUME,
             showDashboardNotificationFeed = this[Keys.SHOW_DASHBOARD_NOTIFICATION_FEED] ?: true,
+            defaultRecruitingAutoMaintain = this[Keys.DEFAULT_RECRUITING_AUTO_MAINTAIN] ?: true,
+            defaultCoachAutoSpend = this[Keys.DEFAULT_COACH_AUTO_SPEND] ?: false,
         )
 
     private object Keys {
@@ -72,5 +84,7 @@ class AppSettingsRepository(
         val MUSIC_ENABLED = booleanPreferencesKey("music_enabled")
         val MASTER_VOLUME_PERCENT = intPreferencesKey("master_volume_percent")
         val SHOW_DASHBOARD_NOTIFICATION_FEED = booleanPreferencesKey("show_dashboard_notification_feed")
+        val DEFAULT_RECRUITING_AUTO_MAINTAIN = booleanPreferencesKey("default_recruiting_auto_maintain")
+        val DEFAULT_COACH_AUTO_SPEND = booleanPreferencesKey("default_coach_auto_spend")
     }
 }

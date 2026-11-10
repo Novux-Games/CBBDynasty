@@ -109,6 +109,9 @@ class DynastyApplication : Application() {
     lateinit var notificationFeedRepository: dev.novux.dynasty.cbb.data.notification.NotificationFeedRepository
         private set
 
+    lateinit var dynastyAutomationRepository: dev.novux.dynasty.cbb.data.settings.DynastyAutomationRepository
+        private set
+
     lateinit var offseasonWeekTwoRepository: OffseasonWeekTwoRepository
         private set
 
@@ -199,6 +202,9 @@ class DynastyApplication : Application() {
         notificationFeedRepository = dev.novux.dynasty.cbb.data.notification.NotificationFeedRepository(
             applicationContext,
         )
+        dynastyAutomationRepository = dev.novux.dynasty.cbb.data.settings.DynastyAutomationRepository(
+            applicationContext,
+        )
         packRepository = PackRepository(applicationContext)
         balanceRulesetRepository = BalanceRulesetRepository(applicationContext)
         simTuningRepository = SimTuningRepository(applicationContext)
@@ -215,7 +221,11 @@ class DynastyApplication : Application() {
             nilBudgetRepository,
         )
         portalCycleRepository = PortalCycleRepository(applicationContext)
-        aiRecruitingRepository = AiRecruitingRepository(applicationContext, nilAnnualPoolRepository)
+        aiRecruitingRepository = AiRecruitingRepository(
+            applicationContext,
+            nilAnnualPoolRepository,
+            dynastyAutomationRepository,
+        )
         weekCheckpointRepository = WeekCheckpointRepository(database)
         val postgameInjuryQueue = dev.novux.dynasty.cbb.data.injuries.PostgameInjuryQueue()
         dynastyRosterRepository = DynastyRosterRepository(database, postgameInjuryQueue)
@@ -295,6 +305,8 @@ class DynastyApplication : Application() {
             coachSkillPointRepository,
             coachingCarouselRepository,
             nilAnnualPoolRepository,
+            dynastyAutomationRepository,
+            appSettingsRepository,
         )
         preseasonSeasonStartRepository = PreseasonSeasonStartRepository(
             saveSlotRepository,

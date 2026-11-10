@@ -12,7 +12,8 @@ object SimWeekAdvanceResolver {
         if (input.unplayedUserGameCount > 0) {
             lines.add(SimWeekConfirmationLine(SimWeekConfirmationLineKind.UnplayedGameFastSim))
         }
-        val willAutoMaintain = input.recruitingHubOpen &&
+        val willAutoMaintain = input.recruitingAutoMaintainEnabled &&
+            input.recruitingHubOpen &&
             input.userManualRecruitingSpent == 0 &&
             input.recruitingPointsAvailable > 0
         if (willAutoMaintain) {

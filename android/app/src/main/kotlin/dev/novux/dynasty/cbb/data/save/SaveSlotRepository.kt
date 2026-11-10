@@ -88,6 +88,8 @@ class SaveSlotRepository(
     private val coachSkillPointRepository: CoachSkillPointRepository,
     private val coachingCarouselRepository: CoachingCarouselRepository,
     private val nilAnnualPoolRepository: dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository,
+    private val dynastyAutomationRepository: dev.novux.dynasty.cbb.data.settings.DynastyAutomationRepository,
+    private val appSettingsRepository: dev.novux.dynasty.cbb.data.settings.AppSettingsRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -403,7 +405,7 @@ class SaveSlotRepository(
             lastPlayedAtEpochMillis = now,
             packId = packId,
         )
-        return LoadedDynasty(
+        val loaded = LoadedDynasty(
             slotIndex = slotIndex,
             dynastyId = dynastyId,
             summary = summary,
@@ -412,6 +414,12 @@ class SaveSlotRepository(
             balanceRuleset = shippedBalance,
             simTuning = shippedSim,
         )
+        val appDefaults = appSettingsRepository.currentSettings()
+        dynastyAutomationRepository.seedFromAppDefaults(dynastyId, appDefaults)
+        if (appDefaults.defaultCoachAutoSpend) {
+            coachSkillPointRepository.setAutoSpend(dynastyId, true, CoachArchetype.Balanced)
+        }
+        return loaded
     }
 
     suspend fun createEmptyDynastyInFirstOpenSlot(
@@ -619,7 +627,8 @@ class SaveSlotRepository(
                 nilPoolAnnualUsd = dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository.DEFAULT_FALLBACK_USD.toInt(),
             )
         val actionCosts = BalanceRecruitingActionsParser.parse(loaded.balanceRuleset.recruiting)
-        val estimated = if (hubOpen && userManualRecruitingSpent == 0) {
+        val automation = dynastyAutomationRepository.load(loaded.dynastyId)
+        val estimated = if (hubOpen && automation.recruitingAutoMaintain && userManualRecruitingSpent == 0) {
             AiRecruitingWeekRunner.estimateUserAutoMaintainSpend(
                 prospectPool = pool,
                 economy = economy,
@@ -648,8 +657,11 @@ class SaveSlotRepository(
             portalRecruitingWeekOpen = portalOpen,
             unresolvedOptionalTaskCount = unresolvedOptionalTaskCount,
             injuredPlayersTicking = injuredTicking,
+            recruitingAutoMaintainEnabled = automation.recruitingAutoMaintain,
         )
     }
+
+    suspend fun coachArchetypeForDynasty(dynastyId: String): CoachArchetype = coachArchetype(dynastyId)
 
     private suspend fun coachArchetype(dynastyId: String): CoachArchetype {
         val wire = coachDao.getByDynastyId(dynastyId)?.archetypeWire

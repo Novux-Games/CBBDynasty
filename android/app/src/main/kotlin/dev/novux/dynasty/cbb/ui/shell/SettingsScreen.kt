@@ -91,6 +91,32 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
+            text = stringResource(R.string.settings_section_automation_defaults),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        SettingToggleRow(
+            label = stringResource(R.string.settings_default_recruiting_auto),
+            description = stringResource(R.string.settings_default_recruiting_auto_summary),
+            checked = settings.defaultRecruitingAutoMaintain,
+            onCheckedChange = { enabled ->
+                scope.launch { settingsRepository.setDefaultRecruitingAutoMaintain(enabled) }
+            },
+        )
+        SettingToggleRow(
+            label = stringResource(R.string.settings_default_coach_auto_spend),
+            description = stringResource(R.string.settings_default_coach_auto_spend_summary),
+            checked = settings.defaultCoachAutoSpend,
+            onCheckedChange = { enabled ->
+                scope.launch { settingsRepository.setDefaultCoachAutoSpend(enabled) }
+            },
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        HorizontalDivider()
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
             text = stringResource(R.string.settings_section_audio),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,

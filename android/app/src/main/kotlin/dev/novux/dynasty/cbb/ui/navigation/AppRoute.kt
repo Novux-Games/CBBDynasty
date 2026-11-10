@@ -12,6 +12,8 @@ sealed class AppRoute(val route: String) {
 
     data object Settings : AppRoute("settings")
 
+    data object DynastyAutomation : AppRoute("dynasty_automation")
+
     data object Credits : AppRoute("credits")
 
     data object Load : AppRoute("load")

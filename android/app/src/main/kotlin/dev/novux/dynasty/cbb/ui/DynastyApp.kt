@@ -35,6 +35,7 @@ import dev.novux.dynasty.cbb.ui.navigation.AppRoute
 import dev.novux.dynasty.cbb.ui.shell.CreditsScreen
 import dev.novux.dynasty.cbb.ui.shell.HomeMenuScreen
 import dev.novux.dynasty.cbb.ui.shell.LoadGameScreen
+import dev.novux.dynasty.cbb.ui.shell.DynastyAutomationScreen
 import dev.novux.dynasty.cbb.ui.shell.SettingsScreen
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
@@ -369,6 +370,7 @@ fun DynastyApp(
                             coachSkillPointRepository = LocalContext.current.requireDynastyApplication().coachSkillPointRepository,
                             notificationFeedRepository = LocalContext.current.requireDynastyApplication().notificationFeedRepository,
                             coachEmploymentRepository = coachEmploymentRepository,
+                            dynastyAutomationRepository = LocalContext.current.requireDynastyApplication().dynastyAutomationRepository,
                             showNotificationFeed = appSettings.showDashboardNotificationFeed,
                             hubMenuCallbacks = hubMenuCallbacks,
                             onOpenSigningDay = { navController.navigate(AppRoute.SigningDay.route) },
@@ -376,6 +378,7 @@ fun DynastyApp(
                                 recruitingLaunchTab = tab
                                 navController.navigate(AppRoute.Recruiting.route)
                             },
+                            onOpenAutomation = { navController.navigate(AppRoute.DynastyAutomation.route) },
                             onOpenDiscipline = { incident ->
                                 disciplineIncident = incident
                                 navController.navigate(AppRoute.Discipline.route)
@@ -606,6 +609,23 @@ fun DynastyApp(
                         settingsRepository = settingsRepository,
                         onBack = { navController.popBackStack() },
                     )
+                }
+                composable(AppRoute.DynastyAutomation.route) {
+                    val active = ActiveDynastySession.current
+                    if (active != null) {
+                        val app = LocalContext.current.requireDynastyApplication()
+                        DynastyAutomationScreen(
+                            loaded = active,
+                            automationRepository = app.dynastyAutomationRepository,
+                            coachSkillPointRepository = app.coachSkillPointRepository,
+                            saveSlotRepository = saveSlotRepository,
+                            onBack = { navController.popBackStack() },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
                 }
                 composable(AppRoute.NewsHub.route) {
                     val session = ActiveDynastySession.current
