@@ -17,6 +17,8 @@ enum class PostseasonTeamStatus {
 }
 
 object PostseasonCalendar {
+    const val OPENING_ROUND_WEEK = 1
+
     val leagueWeekCount: Int = GameConstants.POSTSEASON_WEEKS
 
     fun leagueWeekIndices(): IntRange = 1..leagueWeekCount
