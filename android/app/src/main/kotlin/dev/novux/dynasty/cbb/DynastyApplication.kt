@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb
 
 import android.app.Application
 import android.content.Context
+import dev.novux.dynasty.cbb.data.carousel.CoachingCarouselRepository
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
@@ -35,12 +36,16 @@ class DynastyApplication : Application() {
     lateinit var simTuningRepository: SimTuningRepository
         private set
 
+    lateinit var coachingCarouselRepository: CoachingCarouselRepository
+        private set
+
     override fun onCreate() {
         super.onCreate()
         appSettingsRepository = AppSettingsRepository(applicationContext)
         packRepository = PackRepository(applicationContext)
         balanceRulesetRepository = BalanceRulesetRepository(applicationContext)
         simTuningRepository = SimTuningRepository(applicationContext)
+        coachingCarouselRepository = CoachingCarouselRepository(applicationContext)
         val database = DynastyDatabase.build(applicationContext)
         weekCheckpointRepository = WeekCheckpointRepository(database)
         saveSlotRepository = SaveSlotRepository(

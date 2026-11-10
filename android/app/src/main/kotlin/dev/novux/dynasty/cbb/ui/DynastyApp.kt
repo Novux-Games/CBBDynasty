@@ -34,6 +34,7 @@ import dev.novux.dynasty.cbb.ui.shell.SettingsScreen
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
 import dev.novux.dynasty.cbb.ui.newgame.NewGameWizardScreen
+import dev.novux.dynasty.cbb.ui.offseason.CoachingCarouselScreen
 import dev.novux.dynasty.cbb.ui.offseason.OffseasonScreen
 import dev.novux.dynasty.cbb.ui.seasonreview.SeasonReviewScreen
 import dev.novux.dynasty.cbb.ui.shell.SplashScreen
@@ -50,6 +51,8 @@ fun DynastyApp(
         LocalContext.current.requireDynastyApplication().appSettingsRepository,
     saveSlotRepository: SaveSlotRepository =
         LocalContext.current.requireDynastyApplication().saveSlotRepository,
+    coachingCarouselRepository: dev.novux.dynasty.cbb.data.carousel.CoachingCarouselRepository =
+        LocalContext.current.requireDynastyApplication().coachingCarouselRepository,
 ) {
     DynastyTheme {
         var launchSettings by remember { mutableStateOf<AppSettings?>(null) }
@@ -78,9 +81,13 @@ fun DynastyApp(
             val snackbarHostState = remember { SnackbarHostState() }
             var continueLoadFailedSlot by remember { mutableStateOf<Int?>(null) }
 
-            fun onDynastyReady(loaded: LoadedDynasty) {
+            suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
-                DynastyLaunch.navigateForLoaded(navController, loaded)
+                val carousel = coachingCarouselRepository.loadOrCreate(
+                    loaded.dynastyId,
+                    loaded.metadata.seasonIndex,
+                )
+                DynastyLaunch.navigateForLoaded(navController, loaded, carousel)
             }
 
             Scaffold(
@@ -147,7 +154,22 @@ fun DynastyApp(
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
                             onEnteredOffseason = { updated ->
-                                ActiveDynastySession.set(updated)
+                                scope.launch { onDynastyReady(updated) }
+                            },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
+                }
+                composable(AppRoute.CoachingCarousel.route) {
+                    val session = ActiveDynastySession.current
+                    if (session != null) {
+                        CoachingCarouselScreen(
+                            loaded = session,
+                            repository = coachingCarouselRepository,
+                            onComplete = {
                                 navController.navigate(AppRoute.Offseason.route) {
                                     popUpTo(AppRoute.Home.route) { inclusive = false }
                                 }
@@ -181,8 +203,10 @@ fun DynastyApp(
                         packRepository = LocalContext.current.requireDynastyApplication().packRepository,
                         onExitWizard = { navController.popBackStack() },
                         onDynastyCreated = {
-                            ActiveDynastySession.current?.let { onDynastyReady(it) }
-                            navController.popBackStack()
+                            scope.launch {
+                                ActiveDynastySession.current?.let { onDynastyReady(it) }
+                                navController.popBackStack()
+                            }
                         },
                         onNoEmptySlot = {
                             scope.launch {

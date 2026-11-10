@@ -111,4 +111,12 @@
     <string name="offseason_shell_placeholder">Roster, recruiting, and portal screens arrive in a future update.</string>
     <string name="offseason_advance_week">Advance week</string>
     <string name="offseason_advance_to_preseason">Advance to preseason</string>
+    <string name="carousel_title">Coaching Carousel</string>
+    <string name="carousel_subtitle">League coaching moves resolve here before Offseason Week 1.</string>
+    <string name="carousel_background_hint">Simulate league firings, hires, and extensions, then handle your own offers.</string>
+    <string name="carousel_sim_league">Sim league carousel</string>
+    <string name="carousel_accept">Accept</string>
+    <string name="carousel_decline">Decline</string>
+    <string name="carousel_complete">Carousel complete.</string>
+    <string name="carousel_continue_offseason">Continue to offseason</string>
 </resources>
