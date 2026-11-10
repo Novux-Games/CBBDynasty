@@ -1,7 +1,10 @@
 package dev.novux.dynasty.cbb.core.recruiting.ai
 
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActions
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingEconomy
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommended
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingActionSpend
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingPointAction
 import dev.novux.dynasty.cbb.core.recruiting.RecruitProspect
 import dev.novux.dynasty.cbb.core.recruiting.RecommendedRecruitList
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingPrestigePool
@@ -23,6 +26,7 @@ object AiRecruitingWeekRunner {
         userSchool: SchoolRecruitingContext,
         userProgramId: String,
         userPointsAvailable: Int,
+        actionCosts: BalanceRecruitingActions,
     ): Int {
         if (userPointsAvailable <= 0) return 0
         return buildBoard(
@@ -32,11 +36,9 @@ object AiRecruitingWeekRunner {
             pool = prospectPool,
             economy = economy,
             recommended = recommended,
+            actionCosts = actionCosts,
         ).pointsSpentThisWeek
     }
-
-    private const val OFFER_COST = 150
-    private const val DM_COST = 50
 
     fun runWeek(
         prospectPool: List<RecruitProspect>,
@@ -48,6 +50,7 @@ object AiRecruitingWeekRunner {
         userPointsSpentByPlayer: Int,
         autoMaintainUserSchool: Boolean,
         leaguePrograms: List<AiProgramSnapshot>,
+        actionCosts: BalanceRecruitingActions,
     ): AiRecruitingWeekResult {
         val leagueBoards = leaguePrograms.map { program ->
             val weeklyPoints = RecruitingPrestigePool.weeklyPoolPoints(economy, program.programPrestige)
@@ -58,6 +61,7 @@ object AiRecruitingWeekRunner {
                 pool = prospectPool,
                 economy = economy,
                 recommended = recommended,
+                actionCosts = actionCosts,
             )
         }
         val shouldAutoMaintain = autoMaintainUserSchool && userPointsSpentByPlayer == 0 && userPointsAvailable > 0
@@ -69,6 +73,7 @@ object AiRecruitingWeekRunner {
                 pool = prospectPool,
                 economy = economy,
                 recommended = recommended,
+                actionCosts = actionCosts,
             )
         } else {
             null
@@ -89,17 +94,29 @@ object AiRecruitingWeekRunner {
         pool: List<RecruitProspect>,
         economy: BalanceRecruitingEconomy,
         recommended: BalanceRecruitingRecommended,
+        actionCosts: BalanceRecruitingActions,
     ): AiRecruitingBoard {
         val ordered = RecommendedRecruitList.build(pool, school, recommended)
         val cap = AiRecruitingCapacity.coreTargetCap(economy, school.programPrestige)
         val targets = ordered.take(cap).map { it.prospect.prospectId }
         var remaining = weeklyPoints
+        val offerCost = RecruitingActionSpend.catalogCost(RecruitingPointAction.ScholarshipOffer, actionCosts)
+        val dmCost = RecruitingActionSpend.catalogCost(RecruitingPointAction.Dm, actionCosts)
         for (targetId in targets) {
             if (targetId.isEmpty()) continue
-            if (remaining < DM_COST) break
-            val offer = if (remaining >= OFFER_COST) OFFER_COST else 0
-            val dm = if (remaining - offer >= DM_COST) DM_COST else 0
-            remaining -= (offer + dm)
+            if (remaining < dmCost) break
+            if (remaining >= offerCost) {
+                val offer = RecruitingActionSpend.spend(
+                    RecruitingPointAction.ScholarshipOffer,
+                    remaining,
+                    actionCosts,
+                )
+                if (offer.success) remaining = offer.pointsRemaining
+            }
+            if (remaining >= dmCost) {
+                val dm = RecruitingActionSpend.spend(RecruitingPointAction.Dm, remaining, actionCosts)
+                if (dm.success) remaining = dm.pointsRemaining
+            }
         }
         val spent = weeklyPoints - remaining
         return AiRecruitingBoard(

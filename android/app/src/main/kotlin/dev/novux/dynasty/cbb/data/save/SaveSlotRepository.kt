@@ -24,6 +24,7 @@ import dev.novux.dynasty.cbb.core.advance.SimWeekAdvanceInput
 import dev.novux.dynasty.cbb.core.advance.SimWeekAdvanceResolver
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
 import dev.novux.dynasty.cbb.core.advance.UserWeekGameStatus
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionsParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
@@ -496,6 +497,7 @@ class SaveSlotRepository(
             pipelineStates = setOf("KY", "IN", "MI", "PA", "WV"),
             nilPoolAnnualUsd = 900_000,
         )
+        val actionCosts = BalanceRecruitingActionsParser.parse(loaded.balanceRuleset.recruiting)
         val estimated = if (hubOpen && userManualRecruitingSpent == 0) {
             AiRecruitingWeekRunner.estimateUserAutoMaintainSpend(
                 prospectPool = pool,
@@ -504,6 +506,7 @@ class SaveSlotRepository(
                 userSchool = userSchool,
                 userProgramId = "user-${loaded.dynastyId}",
                 userPointsAvailable = ledger.pointsAvailable,
+                actionCosts = actionCosts,
             )
         } else {
             0

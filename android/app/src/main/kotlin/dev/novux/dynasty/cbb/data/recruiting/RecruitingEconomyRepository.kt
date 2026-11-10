@@ -6,9 +6,13 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionsParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingEconomy
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRuleset
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingActionSpend
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingPointAction
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingSpendResult
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingWeekGrant
@@ -40,6 +44,25 @@ class RecruitingEconomyRepository(
         )
         persist(dynasty.dynastyId, ledger)
         return ledger
+    }
+
+    suspend fun spendPointAction(
+        dynasty: LoadedDynasty,
+        action: RecruitingPointAction,
+        bonusAmount: Int? = null,
+    ): RecruitingSpendResult {
+        val actions = BalanceRecruitingActionsParser.parse(dynasty.balanceRuleset.recruiting)
+        val ledger = loadOrOpenCycle(dynasty)
+        val result = RecruitingActionSpend.spend(
+            action = action,
+            pointsAvailable = ledger.pointsAvailable,
+            actions = actions,
+            bonusAmount = bonusAmount,
+        )
+        if (result.success) {
+            persist(dynasty.dynastyId, ledger.withPointsAvailable(result.pointsRemaining))
+        }
+        return result
     }
 
     suspend fun onCalendarWeekAdvanced(dynasty: LoadedDynasty, pointsSpentThisWeek: Int = 0) {

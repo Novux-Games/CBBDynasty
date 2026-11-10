@@ -6,6 +6,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActions
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionsParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingEconomy
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
@@ -46,6 +48,7 @@ class AiRecruitingRepository(
         )
         val offseasonWeek = position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason }
         val hubOpen = RecruitingCyclePolicy.hubAccessible(position.phase, offseasonWeek)
+        val actionCosts = actionsFrom(dynasty)
         val result = AiRecruitingWeekRunner.runWeek(
             prospectPool = pool,
             economy = economy,
@@ -59,6 +62,7 @@ class AiRecruitingRepository(
                 seasonIndex = dynasty.metadata.seasonIndex,
                 excludeProgramId = userProgramId,
             ),
+            actionCosts = actionCosts,
         )
         persistSummary(dynasty.dynastyId, result)
         return result
@@ -79,6 +83,9 @@ class AiRecruitingRepository(
 
     private fun economyFrom(dynasty: LoadedDynasty): BalanceRecruitingEconomy =
         BalanceRecruitingParser.parse(dynasty.balanceRuleset.recruiting)
+
+    private fun actionsFrom(dynasty: LoadedDynasty): BalanceRecruitingActions =
+        BalanceRecruitingActionsParser.parse(dynasty.balanceRuleset.recruiting)
 
     private fun userProgramId(dynastyId: String) = "user-$dynastyId"
 
