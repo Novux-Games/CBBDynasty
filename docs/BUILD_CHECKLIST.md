@@ -171,7 +171,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 7.3 | `[x]` Tournament invites **before** schedule | **32** RS cap; **28** builder slots only if 4-game event | [preseason](../planning/preseason.md), [ncba-branding](../planning/ncba-branding.md) | — |
 | 7.4 | `[x]` Exhibitions 0–3 + RS schedule solver | Conf visible, double-headers allowed | [preseason](../planning/preseason.md), [game-design](../planning/game-design.md) | `:core/schedule` |
 | 7.5 | `[x]` Preseason report article component | Reuse for pre/post game later | [preseason](../planning/preseason.md) | `ui.reports` |
-| 7.6 | `[ ]` Start season → first exhib or RS game | [game-frame](../planning/game-frame.md) entry | [preseason](../planning/preseason.md) | Navigation |
+| 7.6 | `[x]` Start season → first exhib or RS game | [game-frame](../planning/game-frame.md) entry | [preseason](../planning/preseason.md) | Navigation |
 
 ---
 

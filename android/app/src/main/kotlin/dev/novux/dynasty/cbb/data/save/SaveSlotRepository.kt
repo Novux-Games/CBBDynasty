@@ -28,6 +28,8 @@ import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionsParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
+import dev.novux.dynasty.cbb.core.calendar.checkpoint.WeekCheckpointState
+import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.PhaseWeekPolicy
 import dev.novux.dynasty.cbb.core.portal.PortalCyclePolicy
@@ -425,6 +427,45 @@ class SaveSlotRepository(
             userManualRecruitingSpent = 0,
         )
         return SimWeekAdvanceResolver.buildConfirmation(input)
+    }
+
+    /**
+     * Preseason **Start season** — jumps to exhibition or first RS week per schedule
+     * ([planning/preseason.md#advance-to-regular-season]).
+     */
+    suspend fun enterInSeasonFromPreseason(
+        slotIndex: Int,
+        focus: SeasonStartFocus,
+    ): DynastyLoadResult {
+        require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
+        ensureInitialized()
+        val loaded = when (val initial = loadSlot(slotIndex)) {
+            is DynastyLoadResult.Success -> initial.loaded
+            else -> return initial
+        }
+        if (loaded.weekCheckpoint.activePosition.phase != CalendarPhase.Preseason) {
+            return DynastyLoadResult.Unreadable(
+                slotIndex,
+                DynastyLoadFailure.InvalidCalendar("expected preseason"),
+            )
+        }
+        val preseasonWeek = loaded.weekCheckpoint.activePosition
+        val nextState = WeekCheckpointState(
+            activePosition = focus.calendarPosition,
+            committedThrough = preseasonWeek,
+            provisionalGames = emptyMap(),
+        )
+        weekCheckpointRepository.persist(loaded.dynastyId, nextState)
+        val metadata = metadataDao.getById(loaded.dynastyId)?.toDomain()
+        if (metadata != null) {
+            metadataDao.upsert(
+                metadata.copy(
+                    seasonIndex = focus.calendarPosition.seasonIndex,
+                    phase = focus.calendarPosition.phase,
+                ).toEntity(),
+            )
+        }
+        return loadSlot(slotIndex)
     }
 
     /** Advances the active dynasty one calendar week and persists checkpoint + metadata. */

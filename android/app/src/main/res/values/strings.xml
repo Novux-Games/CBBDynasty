@@ -216,6 +216,13 @@
     <string name="preseason_report_title">Preseason report</string>
     <string name="preseason_report_mark_read">Mark read</string>
     <string name="preseason_report_done">Report read</string>
+    <string name="dynasty_shell_title">Dynasty</string>
+    <string name="dynasty_shell_hint">Calendar focuses on your next playable game.</string>
+    <string name="dynasty_shell_next_game">Next game</string>
+    <string name="dynasty_shell_matchup">vs %1$s (%2$s)</string>
+    <string name="dynasty_shell_home">Home</string>
+    <string name="dynasty_shell_away">Away</string>
+    <string name="dynasty_shell_game_type">Type: %1$s</string>
     <string name="recruiting_hub_title">Recruiting</string>
     <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
     <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>

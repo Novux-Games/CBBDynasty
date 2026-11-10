@@ -33,6 +33,7 @@ import dev.novux.dynasty.cbb.ui.shell.LoadGameScreen
 import dev.novux.dynasty.cbb.ui.shell.SettingsScreen
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
+import dev.novux.dynasty.cbb.ui.shell.DynastyShellScreen
 import dev.novux.dynasty.cbb.ui.newgame.NewGameWizardScreen
 import dev.novux.dynasty.cbb.ui.offseason.CoachingCarouselScreen
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
@@ -114,6 +115,8 @@ fun DynastyApp(
                 LocalContext.current.requireDynastyApplication().preseasonScheduleRepository
             val preseasonReportRepository =
                 LocalContext.current.requireDynastyApplication().preseasonReportRepository
+            val preseasonSeasonStartRepository =
+                LocalContext.current.requireDynastyApplication().preseasonSeasonStartRepository
 
             suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
@@ -226,6 +229,28 @@ fun DynastyApp(
                             tournamentInvitesRepository = tournamentInvitesRepository,
                             scheduleRepository = preseasonScheduleRepository,
                             preseasonReportRepository = preseasonReportRepository,
+                            seasonStartRepository = preseasonSeasonStartRepository,
+                            onSeasonStarted = {
+                                navController.navigate(AppRoute.DynastyShell.route) {
+                                    popUpTo(AppRoute.Home.route) { inclusive = false }
+                                }
+                            },
+                            onExitHome = {
+                                navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                            },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
+                }
+                composable(AppRoute.DynastyShell.route) {
+                    val session = ActiveDynastySession.current
+                    if (session != null) {
+                        DynastyShellScreen(
+                            loaded = session,
+                            scheduleRepository = preseasonScheduleRepository,
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },

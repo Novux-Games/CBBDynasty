@@ -28,6 +28,16 @@ object DynastyLaunch {
             loaded.weekCheckpoint.activePosition.phase == CalendarPhase.Preseason -> {
                 navController.navigate(AppRoute.Preseason.route)
             }
+            loaded.weekCheckpoint.activePosition.phase in IN_SEASON_PHASES -> {
+                navController.navigate(AppRoute.DynastyShell.route)
+            }
         }
     }
+
+    private val IN_SEASON_PHASES = setOf(
+        CalendarPhase.Exhibition,
+        CalendarPhase.RegularSeason,
+        CalendarPhase.ConferenceTournament,
+        CalendarPhase.Postseason,
+    )
 }

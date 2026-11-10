@@ -38,6 +38,7 @@ import dev.novux.dynasty.cbb.core.preseason.tournament.TournamentInvitesState
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonProgressRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonReportRepository
+import dev.novux.dynasty.cbb.data.preseason.PreseasonSeasonStartRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.preseason.TournamentInvitesRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
@@ -53,6 +54,8 @@ fun PreseasonScreen(
     tournamentInvitesRepository: TournamentInvitesRepository,
     scheduleRepository: PreseasonScheduleRepository,
     preseasonReportRepository: PreseasonReportRepository,
+    seasonStartRepository: PreseasonSeasonStartRepository,
+    onSeasonStarted: () -> Unit,
     onExitHome: () -> Unit,
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
@@ -270,10 +273,11 @@ fun PreseasonScreen(
         Button(
             onClick = {
                 scope.launch {
-                    when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
+                    when (val result = seasonStartRepository.startSeason(loaded.slotIndex)) {
                         is DynastyLoadResult.Success -> {
                             loaded = result.loaded
                             ActiveDynastySession.set(result.loaded)
+                            onSeasonStarted()
                         }
                         else -> Unit
                     }
