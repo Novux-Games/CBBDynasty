@@ -3,18 +3,22 @@ package dev.novux.dynasty.cbb.core.recruiting
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActions
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionEntry
 
-/** Point spends in scope for 6.17 (visit/scout windows ship in 6.19). */
 enum class RecruitingPointAction {
     ScholarshipOffer,
     Dm,
     PhoneCall,
     SendTheHouse,
+    ScoutTheirGame,
+    OfficialVisit,
     BonusPoints,
 }
 
 enum class RecruitingSpendFailure {
     InsufficientPoints,
     InvalidBonusAmount,
+    ActionWindowClosed,
+    AlreadyUsedThisSeason,
+    ReservationAlreadyActive,
 }
 
 data class RecruitingSpendResult(
@@ -39,6 +43,9 @@ object RecruitingActionSpend {
         bonusAmount: Int? = null,
     ): RecruitingSpendResult {
         val cost = when (action) {
+            RecruitingPointAction.ScoutTheirGame,
+            RecruitingPointAction.OfficialVisit,
+            -> return failure(action, pointsAvailable, RecruitingSpendFailure.ActionWindowClosed)
             RecruitingPointAction.BonusPoints -> {
                 val amount = bonusAmount
                     ?: return failure(action, pointsAvailable, RecruitingSpendFailure.InvalidBonusAmount)
@@ -70,6 +77,8 @@ object RecruitingActionSpend {
     fun catalogCost(action: RecruitingPointAction, actions: BalanceRecruitingActions): Int =
         when (action) {
             RecruitingPointAction.BonusPoints -> 0
+            RecruitingPointAction.ScoutTheirGame -> actions.scoutTheirGame.cost
+            RecruitingPointAction.OfficialVisit -> actions.officialVisit.costByDistanceBand.regional
             else -> entryFor(action, actions).cost
         }
 
@@ -79,7 +88,10 @@ object RecruitingActionSpend {
             RecruitingPointAction.Dm -> actions.dm
             RecruitingPointAction.PhoneCall -> actions.phoneCall
             RecruitingPointAction.SendTheHouse -> actions.sendTheHouse
-            RecruitingPointAction.BonusPoints -> error("bonus uses explicit amount")
+            RecruitingPointAction.ScoutTheirGame,
+            RecruitingPointAction.OfficialVisit,
+            RecruitingPointAction.BonusPoints,
+            -> error("use spendRefundableAction or explicit cost for $action")
         }
 
     private fun failure(

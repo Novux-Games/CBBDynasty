@@ -1,6 +1,8 @@
 package dev.novux.dynasty.cbb.core.recruiting
 
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActions
+import dev.novux.dynasty.cbb.core.balance.BalanceVisitAllowedThrough
+import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.balance.BalanceVisitDistanceCosts
 import java.util.UUID
 
@@ -55,12 +57,28 @@ object RecruitingRefundableActionSpend {
         pointsAvailable: Int,
         actions: BalanceRecruitingActions,
         existingReservations: List<RecruitingWeekReservation>,
+        consumption: RecruitingSeasonConsumption,
+        phase: CalendarPhase,
     ): Pair<RecruitingSpendResult, RecruitingWeekReservation?> {
+        if (!RecruitingActionWindows.scoutTheirGameOpen(phase, actions.scoutTheirGame)) {
+            return blocked(RecruitingPointAction.ScoutTheirGame, pointsAvailable, RecruitingSpendFailure.ActionWindowClosed)
+        }
+        if (actions.scoutTheirGame.oncePerRecruitPerSeason && consumption.consumedScout(prospectId)) {
+            return blocked(
+                RecruitingPointAction.ScoutTheirGame,
+                pointsAvailable,
+                RecruitingSpendFailure.AlreadyUsedThisSeason,
+            )
+        }
         if (existingReservations.any {
                 it.prospectId == prospectId && it.action == RecruitingRefundableAction.ScoutTheirGame
             }
         ) {
-            return insufficient(RecruitingPointAction.ScholarshipOffer, pointsAvailable) to null
+            return blocked(
+                RecruitingPointAction.ScoutTheirGame,
+                pointsAvailable,
+                RecruitingSpendFailure.ReservationAlreadyActive,
+            )
         }
         return spendRefundable(
             RecruitingRefundableAction.ScoutTheirGame,
@@ -76,12 +94,34 @@ object RecruitingRefundableActionSpend {
         actions: BalanceRecruitingActions,
         distance: OfficialVisitDistanceBand,
         existingReservations: List<RecruitingWeekReservation>,
+        consumption: RecruitingSeasonConsumption,
+        phase: CalendarPhase,
+        offseasonWeekIndex: Int?,
     ): Pair<RecruitingSpendResult, RecruitingWeekReservation?> {
+        if (!RecruitingActionWindows.officialVisitOpen(
+                phase,
+                offseasonWeekIndex,
+                actions.officialVisit.allowedThrough ?: BalanceVisitAllowedThrough(),
+            )
+        ) {
+            return blocked(RecruitingPointAction.OfficialVisit, pointsAvailable, RecruitingSpendFailure.ActionWindowClosed)
+        }
+        if (actions.officialVisit.oncePerRecruitPerSeason && consumption.consumedOfficialVisit(prospectId)) {
+            return blocked(
+                RecruitingPointAction.OfficialVisit,
+                pointsAvailable,
+                RecruitingSpendFailure.AlreadyUsedThisSeason,
+            )
+        }
         if (existingReservations.any {
                 it.prospectId == prospectId && it.action == RecruitingRefundableAction.OfficialVisit
             }
         ) {
-            return insufficient(RecruitingPointAction.ScholarshipOffer, pointsAvailable) to null
+            return blocked(
+                RecruitingPointAction.OfficialVisit,
+                pointsAvailable,
+                RecruitingSpendFailure.ReservationAlreadyActive,
+            )
         }
         val cost = visitCost(actions.officialVisit.costByDistanceBand, distance)
         return spendRefundable(
@@ -104,7 +144,7 @@ object RecruitingRefundableActionSpend {
         cost: Int,
     ): Pair<RecruitingSpendResult, RecruitingWeekReservation?> {
         if (cost > pointsAvailable) {
-            return insufficient(mapToPointAction(action), pointsAvailable) to null
+            return insufficient(mapToPointAction(action), pointsAvailable)
         }
         val reservation = RecruitingWeekReservation(
             reservationId = UUID.randomUUID().toString(),
@@ -125,9 +165,8 @@ object RecruitingRefundableActionSpend {
     private fun mapToPointAction(action: RecruitingRefundableAction): RecruitingPointAction =
         when (action) {
             RecruitingRefundableAction.ScholarshipOffer -> RecruitingPointAction.ScholarshipOffer
-            RecruitingRefundableAction.ScoutTheirGame,
-            RecruitingRefundableAction.OfficialVisit,
-            -> RecruitingPointAction.ScholarshipOffer
+            RecruitingRefundableAction.ScoutTheirGame -> RecruitingPointAction.ScoutTheirGame
+            RecruitingRefundableAction.OfficialVisit -> RecruitingPointAction.OfficialVisit
         }
 
     private fun visitCost(bands: BalanceVisitDistanceCosts, distance: OfficialVisitDistanceBand): Int =
@@ -140,13 +179,46 @@ object RecruitingRefundableActionSpend {
     private fun insufficient(
         action: RecruitingPointAction,
         pointsAvailable: Int,
-    ): RecruitingSpendResult =
+    ): Pair<RecruitingSpendResult, RecruitingWeekReservation?> =
+        blocked(action, pointsAvailable, RecruitingSpendFailure.InsufficientPoints)
+
+    private fun blocked(
+        action: RecruitingPointAction,
+        pointsAvailable: Int,
+        failure: RecruitingSpendFailure,
+    ): Pair<RecruitingSpendResult, RecruitingWeekReservation?> =
         RecruitingSpendResult(
             action = action,
             pointsCharged = 0,
             pointsRemaining = pointsAvailable,
             countsAsWeekReservation = false,
             success = false,
-            failure = RecruitingSpendFailure.InsufficientPoints,
-        )
+            failure = failure,
+        ) to null
+}
+
+/**
+ * After week close, scout/visit reservations complete for the season; offers persist.
+ */
+object RecruitingWeekReservationClose {
+    fun afterWeekAdvance(
+        active: List<RecruitingWeekReservation>,
+        consumption: RecruitingSeasonConsumption,
+    ): Pair<List<RecruitingWeekReservation>, RecruitingSeasonConsumption> {
+        var nextConsumption = consumption
+        val stillActive = buildList {
+            for (reservation in active) {
+                when (reservation.action) {
+                    RecruitingRefundableAction.ScholarshipOffer -> add(reservation)
+                    RecruitingRefundableAction.ScoutTheirGame -> {
+                        nextConsumption = nextConsumption.recordScout(reservation.prospectId)
+                    }
+                    RecruitingRefundableAction.OfficialVisit -> {
+                        nextConsumption = nextConsumption.recordOfficialVisit(reservation.prospectId)
+                    }
+                }
+            }
+        }
+        return stillActive to nextConsumption
+    }
 }

@@ -20,8 +20,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingActionBlockReason
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingProspectActionGates
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -39,6 +42,7 @@ import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.recruiting.SignLikelihoodBadge
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
+import kotlinx.coroutines.launch
 
 @Composable
 fun RecruitingHubScreen(
@@ -51,10 +55,13 @@ fun RecruitingHubScreen(
         mutableIntStateOf(RecruitingHubDefaults.tabs.indexOf(initialTab))
     }
     var ledger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
+    var gateRefresh by remember { mutableIntStateOf(0) }
+    val scope = rememberCoroutineScope()
 
-    LaunchedEffect(loaded.dynastyId) {
+    LaunchedEffect(loaded.dynastyId, gateRefresh) {
         ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
     }
+
 
     val recommendedConfig = remember(loaded.balanceRuleset) {
         BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
@@ -121,7 +128,30 @@ fun RecruitingHubScreen(
         }
         Column(modifier = Modifier.weight(1f)) {
             when (RecruitingHubDefaults.tabs[tabIndex]) {
-                RecruitingHubTab.Recommended -> RecommendedTabBody(recommendedRows)
+                RecruitingHubTab.Recommended -> RecommendedTabBody(
+                    loaded = loaded,
+                    rows = recommendedRows,
+                    schoolContext = schoolContext,
+                    recruitingEconomyRepository = recruitingEconomyRepository,
+                    gateRefresh = gateRefresh,
+                    onSpend = {
+                        scope.launch {
+                            recruitingEconomyRepository.spendRefundableAction(
+                                loaded,
+                                prospectId = it.prospectId,
+                                offer = false,
+                                scout = it.scout,
+                                officialVisit = it.officialVisit,
+                                visitDistance = recruitingEconomyRepository.visitDistanceFor(
+                                    it.prospectHomeState,
+                                    schoolContext,
+                                ),
+                            )
+                            ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+                            gateRefresh++
+                        }
+                    },
+                )
                 RecruitingHubTab.HsJuco -> PlaceholderBody(stringResource(R.string.recruiting_placeholder_hs_juco))
                 RecruitingHubTab.TransferPortal -> PlaceholderBody(stringResource(R.string.recruiting_placeholder_portal))
             }
@@ -140,8 +170,22 @@ private fun PlaceholderBody(text: String) {
     )
 }
 
+private data class ProspectSpendRequest(
+    val prospectId: String,
+    val prospectHomeState: String,
+    val scout: Boolean,
+    val officialVisit: Boolean,
+)
+
 @Composable
-private fun RecommendedTabBody(rows: List<RecommendedProspectRow>) {
+private fun RecommendedTabBody(
+    loaded: LoadedDynasty,
+    rows: List<RecommendedProspectRow>,
+    schoolContext: SchoolRecruitingContext,
+    recruitingEconomyRepository: RecruitingEconomyRepository,
+    gateRefresh: Int,
+    onSpend: (ProspectSpendRequest) -> Unit,
+) {
     val likelyCount = rows.count { it.badge == SignLikelihoodBadge.Likely || it.badge == SignLikelihoodBadge.Possible }
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -155,37 +199,129 @@ private fun RecommendedTabBody(rows: List<RecommendedProspectRow>) {
             )
         }
         items(rows, key = { it.prospect.prospectId }) { row ->
-            RecommendedProspectRow(row)
+            var gates by remember(row.prospect.prospectId, gateRefresh) {
+                mutableStateOf<RecruitingProspectActionGates?>(null)
+            }
+            LaunchedEffect(row.prospect.prospectId, gateRefresh, loaded.dynastyId) {
+                gates = recruitingEconomyRepository.prospectActionGates(
+                    loaded,
+                    row.prospect.prospectId,
+                    row.prospect.homeState,
+                    schoolContext,
+                )
+            }
+            RecommendedProspectRow(
+                row = row,
+                gates = gates,
+                onScout = {
+                    onSpend(
+                        ProspectSpendRequest(
+                            row.prospect.prospectId,
+                            row.prospect.homeState,
+                            scout = true,
+                            officialVisit = false,
+                        ),
+                    )
+                },
+                onOfficialVisit = {
+                    onSpend(
+                        ProspectSpendRequest(
+                            row.prospect.prospectId,
+                            row.prospect.homeState,
+                            scout = false,
+                            officialVisit = true,
+                        ),
+                    )
+                },
+            )
         }
     }
 }
 
 @Composable
-private fun RecommendedProspectRow(row: RecommendedProspectRow) {
-    Row(
+private fun RecommendedProspectRow(
+    row: RecommendedProspectRow,
+    gates: RecruitingProspectActionGates?,
+    onScout: () -> Unit,
+    onOfficialVisit: () -> Unit,
+) {
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = row.prospect.displayName,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-            )
-            Text(
-                text = stringResource(
-                    R.string.recruiting_row_meta,
-                    row.prospect.stars,
-                    row.prospect.position.label,
-                    row.prospect.homeState,
-                    row.prospect.scoutLetterOverall,
-                ),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = row.prospect.displayName,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = stringResource(
+                        R.string.recruiting_row_meta,
+                        row.prospect.stars,
+                        row.prospect.position.label,
+                        row.prospect.homeState,
+                        row.prospect.scoutLetterOverall,
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            SignLikelihoodChip(row.badge)
         }
-        SignLikelihoodChip(row.badge)
+        gates?.let { g ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                OutlinedButton(
+                    onClick = onScout,
+                    enabled = g.scoutTheirGame.allowed,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(stringResource(R.string.recruiting_action_scout_game, g.scoutTheirGame.pointCost))
+                }
+                OutlinedButton(
+                    onClick = onOfficialVisit,
+                    enabled = g.officialVisit.allowed,
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(
+                        stringResource(
+                            R.string.recruiting_action_official_visit,
+                            g.officialVisit.pointCost,
+                        ),
+                    )
+                }
+            }
+            val hint = blockReasonHint(g)
+            if (hint != null) {
+                Text(
+                    text = hint,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun blockReasonHint(gates: RecruitingProspectActionGates): String? {
+    val scoutReason = gates.scoutTheirGame.blockReason
+    val visitReason = gates.officialVisit.blockReason
+    val reason = scoutReason ?: visitReason ?: return null
+    return when (reason) {
+        RecruitingActionBlockReason.WindowClosed -> stringResource(R.string.recruiting_window_closed)
+        RecruitingActionBlockReason.AlreadyUsedThisSeason -> stringResource(R.string.recruiting_used_this_season)
+        RecruitingActionBlockReason.ReservationActiveThisWeek ->
+            stringResource(R.string.recruiting_reservation_active)
+        RecruitingActionBlockReason.InsufficientPoints -> null
     }
 }
 

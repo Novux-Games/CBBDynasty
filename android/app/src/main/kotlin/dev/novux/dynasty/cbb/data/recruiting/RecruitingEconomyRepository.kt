@@ -14,8 +14,12 @@ import dev.novux.dynasty.cbb.core.recruiting.OfficialVisitDistanceBand
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingActionSpend
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingPointAction
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingRefundableActionSpend
+import dev.novux.dynasty.cbb.core.recruiting.OfficialVisitDistanceResolver
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubActionGateEvaluator
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingProspectActionGates
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingReservationRefund
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingSpendResult
+import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingWeekGrant
@@ -80,15 +84,28 @@ class RecruitingEconomyRepository(
         val actions = BalanceRecruitingActionsParser.parse(dynasty.balanceRuleset.recruiting)
         val ledger = loadOrOpenCycle(dynasty)
         val active = reservationRepository.loadActive(dynasty.dynastyId)
+        val consumption = reservationRepository.loadSeasonConsumption(dynasty.dynastyId, ledger.cycleSeasonIndex)
+        val pos = dynasty.weekCheckpoint.activePosition
+        val offseasonWeek = pos.weekIndex.takeIf { pos.phase == CalendarPhase.Offseason }
         val (result, reservation) = when {
             offer -> RecruitingRefundableActionSpend.spendScholarshipOffer(prospectId, ledger.pointsAvailable, actions)
-            scout -> RecruitingRefundableActionSpend.spendScoutTheirGame(prospectId, ledger.pointsAvailable, actions, active)
+            scout -> RecruitingRefundableActionSpend.spendScoutTheirGame(
+                prospectId,
+                ledger.pointsAvailable,
+                actions,
+                active,
+                consumption,
+                pos.phase,
+            )
             officialVisit -> RecruitingRefundableActionSpend.spendOfficialVisit(
                 prospectId,
                 ledger.pointsAvailable,
                 actions,
                 visitDistance,
                 active,
+                consumption,
+                pos.phase,
+                offseasonWeek,
             )
             else -> return RecruitingSpendResult(
                 action = RecruitingPointAction.Dm,
@@ -123,8 +140,36 @@ class RecruitingEconomyRepository(
             offseasonWeekIndex = pos.weekIndex.takeIf { pos.phase == CalendarPhase.Offseason },
             pointsSpentThisWeek = pointsSpentThisWeek,
         )
+        reservationRepository.closeWeekReservations(dynasty.dynastyId, ledger.cycleSeasonIndex)
         persist(dynasty.dynastyId, next)
     }
+
+    suspend fun prospectActionGates(
+        dynasty: LoadedDynasty,
+        prospectId: String,
+        prospectHomeState: String,
+        school: SchoolRecruitingContext,
+    ): RecruitingProspectActionGates {
+        val actions = BalanceRecruitingActionsParser.parse(dynasty.balanceRuleset.recruiting)
+        val ledger = loadOrOpenCycle(dynasty)
+        val consumption = reservationRepository.loadSeasonConsumption(dynasty.dynastyId, ledger.cycleSeasonIndex)
+        val active = reservationRepository.loadActive(dynasty.dynastyId)
+        val pos = dynasty.weekCheckpoint.activePosition
+        return RecruitingHubActionGateEvaluator.forProspect(
+            prospectId = prospectId,
+            prospectHomeState = prospectHomeState,
+            phase = pos.phase,
+            offseasonWeekIndex = pos.weekIndex.takeIf { pos.phase == CalendarPhase.Offseason },
+            pointsAvailable = ledger.pointsAvailable,
+            actions = actions,
+            school = school,
+            consumption = consumption,
+            activeReservations = active,
+        )
+    }
+
+    fun visitDistanceFor(prospectHomeState: String, school: SchoolRecruitingContext): OfficialVisitDistanceBand =
+        OfficialVisitDistanceResolver.resolve(prospectHomeState, school)
 
     suspend fun openNextCycleAfterSeasonReview(
         dynastyId: String,
