@@ -40,6 +40,7 @@ import dev.novux.dynasty.cbb.core.recruiting.ai.AiRecruitingWeekRunner
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
 import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
 import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
+import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
@@ -75,6 +76,7 @@ class SaveSlotRepository(
     private val dynastyRosterRepository: DynastyRosterRepository,
     private val disciplineRepository: DisciplineRepository,
     private val chemistryRepository: ChemistryRepository,
+    private val leagueWeekBatchRepository: LeagueWeekBatchRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -503,6 +505,12 @@ class SaveSlotRepository(
         val aiWeek = aiRecruitingRepository.runLeagueWeekIfActive(loaded, ledger, userManualRecruitingSpent)
         val recruitingSpentClosingWeek = aiWeek?.userPointsSpent ?: 0
         val advanceResult = weekCheckpointRepository.advanceWeek(loaded.dynastyId, checkpoint)
+        leagueWeekBatchRepository.afterWeekAdvance(
+            dynastyId = loaded.dynastyId,
+            seasonIndex = loaded.metadata.seasonIndex,
+            committedWeek = advanceResult.committedWeek,
+            userGamesCommitted = advanceResult.gamesCommitted,
+        )
         dynastyRosterRepository.tickInjuriesForWeekAdvance(
             loaded.dynastyId,
             advanceResult.committedWeek.phase,
