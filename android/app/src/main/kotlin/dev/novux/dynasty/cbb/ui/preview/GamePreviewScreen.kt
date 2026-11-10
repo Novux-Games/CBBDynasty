@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -18,15 +19,23 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.preview.GamePreviewResult
 import dev.novux.dynasty.cbb.core.preview.GamePreviewVenue
+import dev.novux.dynasty.cbb.core.reports.PregameReportGenerator
+import dev.novux.dynasty.cbb.ui.reports.ReportArticleView
 
 @Composable
 fun GamePreviewScreen(
     matchupLabel: String,
+    userTeamName: String,
+    opponentName: String,
+    venuePhrase: String,
     venue: GamePreviewVenue,
     preview: GamePreviewResult,
     onOpenStrategy: () -> Unit,
     onBack: () -> Unit,
 ) {
+    val pregameArticle = remember(userTeamName, opponentName, venuePhrase, preview) {
+        PregameReportGenerator.generate(userTeamName, opponentName, venuePhrase, preview)
+    }
     val venueLabel = when (venue) {
         GamePreviewVenue.Home -> stringResource(R.string.dynasty_shell_home)
         GamePreviewVenue.Away -> stringResource(R.string.dynasty_shell_away)
@@ -50,6 +59,12 @@ fun GamePreviewScreen(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        Text(
+            text = stringResource(R.string.game_report_pregame_heading),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+        )
+        ReportArticleView(article = pregameArticle)
         Text(
             text = stringResource(R.string.game_preview_win_pct, preview.userWinPercent),
             style = MaterialTheme.typography.headlineMedium,

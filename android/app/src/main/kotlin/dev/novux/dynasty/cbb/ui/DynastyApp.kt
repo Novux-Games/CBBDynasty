@@ -375,6 +375,9 @@ fun DynastyApp(
                     if (preview != null) {
                         GamePreviewScreen(
                             matchupLabel = GamePreviewLaunch.matchupLabel,
+                            userTeamName = GamePreviewLaunch.userTeamName,
+                            opponentName = GamePreviewLaunch.opponentName,
+                            venuePhrase = GamePreviewLaunch.venuePhrase,
                             venue = GamePreviewLaunch.venue,
                             preview = preview,
                             onOpenStrategy = { navController.navigate(AppRoute.Strategy.route) },

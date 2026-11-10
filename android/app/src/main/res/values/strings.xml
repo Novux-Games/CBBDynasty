@@ -406,6 +406,10 @@
     <string name="game_preview_open_strategy">Set lineup and gameplan</string>
     <string name="game_preview_neutral">Neutral court</string>
     <string name="dynasty_shell_game_preview">Game preview</string>
+    <string name="game_preview_venue_phrase_home">home court</string>
+    <string name="game_preview_venue_phrase_away">the road</string>
+    <string name="game_report_pregame_heading">Pregame report</string>
+    <string name="game_report_postgame_heading">Postgame report</string>
     <string name="school_hub_chemistry">Team chemistry: %1$d</string>
     <string name="shell_dynasty_school">Dynasty: %1$s</string>
     <string name="shell_menu_open">Open menu</string>

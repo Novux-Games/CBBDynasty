@@ -31,8 +31,11 @@ import dev.novux.dynasty.cbb.core.sim.GameSimInput
 import dev.novux.dynasty.cbb.core.sim.GameSimTeamInput
 import dev.novux.dynasty.cbb.core.sim.GameWatchPlayback
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
+import dev.novux.dynasty.cbb.core.reports.PostgameReportGenerator
+import dev.novux.dynasty.cbb.core.reports.ReportArticle
 import dev.novux.dynasty.cbb.core.strategy.GameplanInput
 import dev.novux.dynasty.cbb.core.strategy.LateGameFoulStrategy
+import dev.novux.dynasty.cbb.ui.reports.ReportArticleView
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
@@ -52,6 +55,7 @@ fun GameWatchScreen(
     var halftimeOpen by remember { mutableStateOf(false) }
     var halftimeScore by remember { mutableStateOf("") }
     var halftimePlan by remember { mutableStateOf(homeGameplan) }
+    var postgameArticle by remember { mutableStateOf<ReportArticle?>(null) }
     val listState = rememberLazyListState()
     val resumeGate = remember { mutableStateOf<((GameplanInput) -> Unit)?>(null) }
 
@@ -98,6 +102,12 @@ fun GameWatchScreen(
             result.homeScore,
             result.awayScore,
         )
+        postgameArticle = PostgameReportGenerator.generate(
+            userTeamName = homeName,
+            opponentName = awayName,
+            userScore = result.homeScore,
+            opponentScore = result.awayScore,
+        )
     }
 
     Column(
@@ -128,6 +138,14 @@ fun GameWatchScreen(
                     fontFamily = FontFamily.Monospace,
                 )
             }
+        }
+        postgameArticle?.let { article ->
+            Text(
+                text = stringResource(R.string.game_report_postgame_heading),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+            ReportArticleView(article = article)
         }
         OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.settings_back))

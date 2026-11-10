@@ -221,7 +221,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 10.4 | `[x]` Gameplan knobs (usage, deny-primary, late fouls) | Pre-game + halftime | [strategy-schemes](../planning/strategy-schemes.md) | `ui.strategy` |
 | 10.5 | `[x]` Live text / 2s watch mode | Halftime edit | [strategy-schemes](../planning/strategy-schemes.md), [game-frame](../planning/game-frame.md) | — |
 | 10.6 | `[x]` Game preview (win %, predicted score, H2H) | 0 games played OK | [game-frame](../planning/game-frame.md) | — |
-| 10.7 | `[ ]` Pregame + postgame report articles | Shared template | [preseason](../planning/preseason.md) | `ui.reports` |
+| 10.7 | `[x]` Pregame + postgame report articles | Shared template | [preseason](../planning/preseason.md) | `ui.reports` |
 | 10.8 | `[ ]` In-game **injury** rolls | Sample from `injuries.bank`; roll `durationWeeks*` → `weeksRemaining`; persist + `applyInjuryLineupAdjust` | [injuries](../planning/injuries.md), [simulation-engine](../planning/simulation-engine.md) | `:core/sim` |
 
 ---

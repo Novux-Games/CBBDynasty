@@ -461,7 +461,14 @@ fun DynastyShellScreen(
                                     game.opponentDisplayName,
                                     loc,
                                 )
+                                GamePreviewLaunch.userTeamName = user.displayName
+                                GamePreviewLaunch.opponentName = game.opponentDisplayName
                                 GamePreviewLaunch.venue = venue
+                                GamePreviewLaunch.venuePhrase = if (game.homeGame) {
+                                    context.getString(R.string.game_preview_venue_phrase_home)
+                                } else {
+                                    context.getString(R.string.game_preview_venue_phrase_away)
+                                }
                                 GamePreviewLaunch.result = preview
                                 onOpenGamePreview()
                             }
