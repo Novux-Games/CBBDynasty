@@ -44,6 +44,10 @@ cd android
 ./gradlew :app:assembleDebug    # requires Android SDK + platform 35
 ```
 
+## Performance
+
+Full-league **Sim Week** batch sim + weekly NET/polls: [LEAGUE_WEEK_BATCH_PROFILING.md](LEAGUE_WEEK_BATCH_PROFILING.md). CI guard: `LeagueWeekBatchPerformanceTest`.
+
 ## CI (GitHub Actions)
 
 | Workflow | Trigger | Task |

@@ -17,8 +17,7 @@ import dev.novux.dynasty.cbb.core.balance.selectionTuning
 import dev.novux.dynasty.cbb.core.league.LeagueGameResult
 import dev.novux.dynasty.cbb.core.league.LeagueStandingsState
 import dev.novux.dynasty.cbb.core.league.LeagueWeekBatchSimEngine
-import dev.novux.dynasty.cbb.core.resume.HumanPollRankingEngine
-import dev.novux.dynasty.cbb.core.resume.NcbaNetRankingEngine
+import dev.novux.dynasty.cbb.core.league.LeagueWeekBatchWeeklyRankings
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.core.preseason.tournament.EarlySeasonBracketEngine
@@ -188,28 +187,11 @@ class LeagueWeekBatchRepository(
         val prestige = packRepository.activeSession().index.allTeamDisplays()
             .associate { it.teamId to it.programPrestige }
         val tuning = balanceRulesetRepository.activeRuleset().selectionTuning()
-        val table = NcbaNetRankingEngine.compute(
-            teamIds = prestige.keys,
+        return LeagueWeekBatchWeeklyRankings.attach(
+            standings = standings,
             programPrestige = prestige,
-            records = standings.records,
-            results = standings.seasonResults,
+            weekIndex = weekIndex,
             tuning = tuning,
-            rankingsWeek = weekIndex,
-        )
-        val polls = HumanPollRankingEngine.compute(
-            netTable = table,
-            programPrestige = prestige,
-            results = standings.seasonResults,
-            priorMediaRanks = standings.mediaPollRankByTeam,
-            priorCoachesRanks = standings.coachesPollRankByTeam,
-            lastWeekResults = standings.lastWeekResults,
-            tuning = tuning,
-        )
-        return standings.copy(
-            netRankByTeam = table.byTeamId.mapValues { it.value.netRank },
-            mediaPollRankByTeam = polls.mediaRankByTeam,
-            coachesPollRankByTeam = polls.coachesRankByTeam,
-            netRankingsWeek = weekIndex,
         )
     }
 
