@@ -1,5 +1,9 @@
 package dev.novux.dynasty.cbb.core.player
 
+import dev.novux.dynasty.cbb.core.player.archetype.PlayerArchetype
+import dev.novux.dynasty.cbb.core.player.archetype.PlayerArchetypeAssigner
+import dev.novux.dynasty.cbb.core.player.scout.PlayerScoutReport
+import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
 import dev.novux.dynasty.cbb.core.roster.PlayerClassYear
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
@@ -12,10 +16,14 @@ data class DynastyPlayer(
     val position: PlayerPosition,
     val classYear: PlayerClassYear,
     val ratings: PlayerRatings,
+    val archetype: PlayerArchetype,
     val eligibility: PlayerEligibility,
     val injury: PlayerInjuryState,
     val role: PlayerRosterRole,
 ) {
+    fun scoutReport(depth: ScoutDepth = ScoutDepth.Light): PlayerScoutReport =
+        PlayerScoutReport.fromPlayer(this, depth)
+
     fun toRosterPlayer(): RosterPlayer = RosterPlayer(
         playerId = playerId,
         dynastyId = dynastyId,
@@ -36,6 +44,7 @@ data class DynastyPlayer(
         ovr = ratings.ovr,
         off = ratings.off,
         def = ratings.def,
+        archetypeWire = archetype.wire,
         eligibilityYearsUsed = eligibility.yearsUsed,
         eligibilityYearsRemaining = eligibility.yearsRemaining,
         medicalRedshirtSeason = eligibility.medicalRedshirtSeason,
@@ -59,7 +68,9 @@ data class DynastyPlayer(
             ),
             position = player.position,
             classYear = player.classYear,
-            ratings = PlayerRatings.headline(player.ovr, player.off, player.def),
+            ratings = player.toRatings(),
+            archetype = PlayerArchetype.fromWire(player.archetypeWire)
+                ?: PlayerArchetypeAssigner.assign(player.position, player.toRatings()),
             eligibility = PlayerEligibility(
                 yearsUsed = player.eligibilityYearsUsed,
                 yearsRemaining = player.eligibilityYearsRemaining,

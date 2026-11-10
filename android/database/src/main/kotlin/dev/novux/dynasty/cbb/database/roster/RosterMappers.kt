@@ -24,6 +24,7 @@ fun RosterPlayerSeed.toEntity(): DynastyRosterPlayerEntity =
         defRating = def,
         eligibilityYearsUsed = eligibility.yearsUsed,
         eligibilityYearsRemaining = eligibility.yearsRemaining,
+        archetypeWire = archetypeWire,
     )
 
 fun List<RosterPlayerSeed>.toEntities(): List<DynastyRosterPlayerEntity> = map { it.toEntity() }
@@ -60,6 +61,7 @@ fun DynastyRosterPlayerEntity.toDomain(): RosterPlayer {
         injuryId = injuryId,
         injuryWeeksRemaining = injuryWeeksRemaining,
         injuryLabel = injuryLabel,
+        archetypeWire = archetypeWire,
     )
 }
 
@@ -91,4 +93,5 @@ fun RosterPlayer.toEntity(): DynastyRosterPlayerEntity =
         injuryId = injuryId,
         injuryWeeksRemaining = injuryWeeksRemaining,
         injuryLabel = injuryLabel,
+        archetypeWire = archetypeWire,
     )

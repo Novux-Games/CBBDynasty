@@ -1,11 +1,17 @@
 package dev.novux.dynasty.cbb.core.player
 
+import dev.novux.dynasty.cbb.core.player.archetype.PlayerArchetype
+import dev.novux.dynasty.cbb.core.player.archetype.PlayerArchetypeAssigner
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayerSeed
 
 object PlayerBootstrapFactory {
     fun enrichSeed(seed: RosterPlayerSeed): RosterPlayerSeed {
         val base = positionBaseRating(seed.position, seed.isStarter)
+        val off = (base + positionOffBias(seed.position)).coerceIn(0, 99)
+        val def = (base + positionDefBias(seed.position)).coerceIn(0, 99)
+        val ratings = spreadRatings(base, off, def, seed.position)
+        val archetype = PlayerArchetypeAssigner.assign(seed.position, ratings)
         val identity = placeholderIdentity(seed.playerId, seed.depthOrder)
         return seed.copy(
             displayName = identity.first,
@@ -13,15 +19,31 @@ object PlayerBootstrapFactory {
             hometownState = identity.third,
             heightInches = defaultHeight(seed.position),
             weightLbs = defaultWeight(seed.position),
-            ovr = base,
-            off = (base + positionOffBias(seed.position)).coerceIn(0, 99),
-            def = (base + positionDefBias(seed.position)).coerceIn(0, 99),
+            ovr = ratings.ovr,
+            off = ratings.off,
+            def = ratings.def,
+            shootingInside = ratings.shootingInside,
+            shootingMid = ratings.shootingMid,
+            shootingThree = ratings.shootingThree,
+            handling = ratings.handling,
+            passing = ratings.passing,
+            rebounding = ratings.rebounding,
+            perimeterDefense = ratings.perimeterDefense,
+            interiorDefense = ratings.interiorDefense,
+            stealing = ratings.stealing,
+            blocking = ratings.blocking,
+            potentialOverall = ratings.potentialOverall,
+            proPotential = ratings.proPotential,
+            archetypeWire = archetype.wire,
             eligibility = PlayerEligibility.forClassYear(seed.classYear),
         )
     }
 
     fun fromSeed(seed: RosterPlayerSeed): DynastyPlayer {
         val enriched = if (seed.displayName.isBlank()) enrichSeed(seed) else seed
+        val ratings = enriched.toRatings()
+        val archetype = PlayerArchetype.fromWire(enriched.archetypeWire)
+            ?: PlayerArchetypeAssigner.assign(enriched.position, ratings)
         return DynastyPlayer(
             playerId = enriched.playerId,
             dynastyId = enriched.dynastyId,
@@ -34,7 +56,8 @@ object PlayerBootstrapFactory {
             ),
             position = enriched.position,
             classYear = enriched.classYear,
-            ratings = PlayerRatings.headline(enriched.ovr, enriched.off, enriched.def),
+            ratings = ratings,
+            archetype = archetype,
             eligibility = enriched.eligibility,
             injury = PlayerInjuryState.Healthy,
             role = PlayerRosterRole(
@@ -47,6 +70,9 @@ object PlayerBootstrapFactory {
             ),
         )
     }
+
+    private fun spreadRatings(ovr: Int, off: Int, def: Int, position: PlayerPosition): PlayerRatings =
+        PlayerBootstrapFactorySpread.fromHeadline(ovr, off, def, position)
 
     private fun positionBaseRating(position: PlayerPosition, starter: Boolean): Int {
         val starterBump = if (starter) 8 else 0

@@ -1,6 +1,8 @@
 package dev.novux.dynasty.cbb.core.roster
 
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
+import dev.novux.dynasty.cbb.core.player.PlayerRatings
+import dev.novux.dynasty.cbb.core.player.RosterRatingSpread
 
 data class RosterPlayer(
     val playerId: String,
@@ -29,9 +31,12 @@ data class RosterPlayer(
     val injuryId: String? = null,
     val injuryWeeksRemaining: Int = 0,
     val injuryLabel: String? = null,
+    val archetypeWire: String = "",
 ) {
     fun displayLabel(): String =
         if (displayName.isNotBlank()) displayName else "${position.label} · ${classYear.label}"
+
+    fun toRatings(): PlayerRatings = RosterRatingSpread.fromHeadline(ovr, off, def, position)
 
     fun toDynastyPlayer(): DynastyPlayer = DynastyPlayer.fromRosterPlayer(this)
 }

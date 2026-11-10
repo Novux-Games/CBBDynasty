@@ -35,4 +35,5 @@ data class DynastyRosterPlayerEntity(
     val injuryId: String? = null,
     val injuryWeeksRemaining: Int = 0,
     val injuryLabel: String? = null,
+    val archetypeWire: String = "",
 )
