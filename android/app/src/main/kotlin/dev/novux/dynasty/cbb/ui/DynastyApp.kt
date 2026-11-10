@@ -117,6 +117,8 @@ fun DynastyApp(
                 LocalContext.current.requireDynastyApplication().preseasonReportRepository
             val preseasonSeasonStartRepository =
                 LocalContext.current.requireDynastyApplication().preseasonSeasonStartRepository
+            val schoolStaffRepository =
+                LocalContext.current.requireDynastyApplication().schoolStaffRepository
 
             suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
@@ -251,6 +253,7 @@ fun DynastyApp(
                         DynastyShellScreen(
                             loaded = session,
                             scheduleRepository = preseasonScheduleRepository,
+                            staffRepository = schoolStaffRepository,
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },

@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb
 import android.app.Application
 import android.content.Context
 import dev.novux.dynasty.cbb.data.carousel.CoachingCarouselRepository
+import dev.novux.dynasty.cbb.data.coach.SchoolStaffRepository
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
@@ -104,6 +105,9 @@ class DynastyApplication : Application() {
     lateinit var preseasonSeasonStartRepository: PreseasonSeasonStartRepository
         private set
 
+    lateinit var schoolStaffRepository: SchoolStaffRepository
+        private set
+
     override fun onCreate() {
         super.onCreate()
         appSettingsRepository = AppSettingsRepository(applicationContext)
@@ -157,6 +161,7 @@ class DynastyApplication : Application() {
             preseasonProgressRepository,
             preseasonScheduleRepository,
         )
+        schoolStaffRepository = SchoolStaffRepository(database, packRepository)
         applicationScope.launch {
             saveSlotRepository.ensureInitialized()
             packRepository.ensureEmbeddedLoaded()

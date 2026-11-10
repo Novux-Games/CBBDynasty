@@ -74,6 +74,7 @@ class SaveSlotRepository(
     private val metadataDao = database.dynastyMetadataDao()
     private val coachDao = database.dynastyCoachDao()
     private val rosterDao = database.dynastyRosterDao()
+    private val staffDao = database.dynastyStaffDao()
     private val calendarDao = database.dynastyCalendarDao()
     private val mutex = Any()
 
@@ -235,6 +236,7 @@ class SaveSlotRepository(
                 metadataDao.deleteById(dynastyId)
                 coachDao.deleteByDynastyId(dynastyId)
                 rosterDao.deleteForDynasty(dynastyId)
+                staffDao.deleteByDynastyId(dynastyId)
                 weekCheckpointRepository.deleteForDynasty(dynastyId)
             }
             slotDao.clearSlot(slotIndex)

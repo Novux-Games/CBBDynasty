@@ -4,6 +4,38 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.novux.dynasty.cbb.core.save.DynastySchema
 
+val MIGRATION_10_11 = object : Migration(10, 11) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS dynasty_staff_member (
+                staffId TEXT NOT NULL PRIMARY KEY,
+                dynastyId TEXT NOT NULL,
+                staffKindWire TEXT NOT NULL,
+                roleWire TEXT NOT NULL,
+                firstName TEXT NOT NULL,
+                lastName TEXT NOT NULL,
+                age INTEGER NOT NULL DEFAULT 35,
+                recruitingRating INTEGER NOT NULL DEFAULT 0,
+                developmentRating INTEGER NOT NULL DEFAULT 0,
+                scoutingRating INTEGER NOT NULL DEFAULT 0,
+                supportContributionRating INTEGER NOT NULL DEFAULT 0,
+                yearsInRole INTEGER NOT NULL DEFAULT 1,
+                yearsAtSchool INTEGER NOT NULL DEFAULT 1,
+                contractYearsLeft INTEGER NOT NULL DEFAULT 2,
+                contractLengthYears INTEGER NOT NULL DEFAULT 3
+            )
+            """.trimIndent(),
+        )
+        db.execSQL(
+            """
+            CREATE INDEX IF NOT EXISTS index_dynasty_staff_member_dynastyId
+            ON dynasty_staff_member (dynastyId)
+            """.trimIndent(),
+        )
+    }
+}
+
 val MIGRATION_9_10 = object : Migration(9, 10) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
