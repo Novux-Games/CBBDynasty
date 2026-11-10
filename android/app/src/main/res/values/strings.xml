@@ -133,6 +133,10 @@
     <string name="draft_results_week2_title">Pro draft results</string>
     <string name="draft_results_week2_empty">No pro day stock from Week 1.</string>
     <string name="draft_results_week2_line">Stock %1$d · %2$s</string>
+    <string name="draft_results_outcome_drafted">NBA draft: %1$s</string>
+    <string name="draft_results_outcome_undrafted">Undrafted — graduates</string>
+    <string name="draft_results_outcome_returned">Withdrawn — returns to roster</string>
+    <string name="offseason_scholarships_open">Scholarships are open — you can extend offers in the recruiting hub.</string>
     <string name="recruiting_hub_title">Recruiting</string>
     <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
     <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>

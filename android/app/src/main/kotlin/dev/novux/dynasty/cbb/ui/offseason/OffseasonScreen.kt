@@ -41,6 +41,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekTwoRepository
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
@@ -65,6 +66,7 @@ fun OffseasonScreen(
     recruitingEconomyRepository: RecruitingEconomyRepository,
     portalCycleRepository: PortalCycleRepository,
     signingDayRepository: SigningDayRepository,
+    offseasonWeekTwoRepository: OffseasonWeekTwoRepository,
     onExitHome: () -> Unit,
     onOpenRecruiting: (RecruitingHubTab) -> Unit = {},
     onOpenSigningDay: (DashboardDeepLink) -> Unit = {},
@@ -140,7 +142,8 @@ fun OffseasonScreen(
         } else if (inOffseason && position.weekIndex == 2) {
             DraftResultsWeekTwoPanel(
                 dynastyId = loaded.dynastyId,
-                rosterRepository = rosterRepository,
+                seasonIndex = loaded.metadata.seasonIndex,
+                weekTwoRepository = offseasonWeekTwoRepository,
                 modifier = Modifier.weight(1f),
             )
         } else if (inOffseason && position.weekIndex == SigningDayConstants.OFFSEASON_WEEK_INDEX) {

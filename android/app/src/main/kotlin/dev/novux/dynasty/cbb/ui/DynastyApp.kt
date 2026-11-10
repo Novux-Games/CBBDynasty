@@ -93,6 +93,8 @@ fun DynastyApp(
             var signingDayInitialTab by remember { mutableStateOf(SigningDayInitialTab.Rankings) }
             val portalCycleRepository = LocalContext.current.requireDynastyApplication().portalCycleRepository
             val signingDayRepository = LocalContext.current.requireDynastyApplication().signingDayRepository
+            val offseasonWeekTwoRepository =
+                LocalContext.current.requireDynastyApplication().offseasonWeekTwoRepository
 
             suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
@@ -204,6 +206,7 @@ fun DynastyApp(
                             recruitingEconomyRepository = recruitingEconomyRepository,
                             portalCycleRepository = portalCycleRepository,
                             signingDayRepository = signingDayRepository,
+                            offseasonWeekTwoRepository = offseasonWeekTwoRepository,
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },

@@ -20,20 +20,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
-import dev.novux.dynasty.cbb.core.offseason.weekone.DraftStockLine
-import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
+import dev.novux.dynasty.cbb.core.offseason.weektwo.NbaDraftOutcome
+import dev.novux.dynasty.cbb.core.offseason.weektwo.NbaDraftResultLine
+import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekTwoRepository
 
 @Composable
 fun DraftResultsWeekTwoPanel(
     dynastyId: String,
-    rosterRepository: DynastyRosterRepository,
+    seasonIndex: Int,
+    weekTwoRepository: OffseasonWeekTwoRepository,
     modifier: Modifier = Modifier,
 ) {
-    var lines by remember { mutableStateOf<List<DraftStockLine>>(emptyList()) }
+    var lines by remember { mutableStateOf<List<NbaDraftResultLine>>(emptyList()) }
+    var scholarshipsOpen by remember { mutableStateOf(false) }
 
-    LaunchedEffect(dynastyId) {
-        val players = rosterRepository.listPlayers(dynastyId)
-        lines = rosterRepository.weekTwoDraftLines(players)
+    LaunchedEffect(dynastyId, seasonIndex) {
+        lines = weekTwoRepository.ensureDraftResultsPublished(dynastyId, seasonIndex)
+        scholarshipsOpen = weekTwoRepository.scholarshipsOpenRecorded(dynastyId, seasonIndex)
     }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -42,6 +45,14 @@ fun DraftResultsWeekTwoPanel(
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
         )
+        if (scholarshipsOpen) {
+            Text(
+                text = stringResource(R.string.offseason_scholarships_open),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
         if (lines.isEmpty()) {
             Text(
                 text = stringResource(R.string.draft_results_week2_empty),
@@ -62,10 +73,25 @@ fun DraftResultsWeekTwoPanel(
                                 ),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
+                            Text(
+                                text = outcomeLabel(line),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
                         }
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun outcomeLabel(line: NbaDraftResultLine): String = when (line.outcome) {
+    NbaDraftOutcome.Drafted -> stringResource(
+        R.string.draft_results_outcome_drafted,
+        line.pickSummary.orEmpty(),
+    )
+    NbaDraftOutcome.UndraftedGraduate -> stringResource(R.string.draft_results_outcome_undrafted)
+    NbaDraftOutcome.ReturnedToRoster -> stringResource(R.string.draft_results_outcome_returned)
 }

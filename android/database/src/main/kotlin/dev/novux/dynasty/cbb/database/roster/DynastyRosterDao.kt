@@ -18,4 +18,7 @@ interface DynastyRosterDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(player: DynastyRosterPlayerEntity)
+
+    @Query("DELETE FROM dynasty_roster_player WHERE dynastyId = :dynastyId AND playerId = :playerId")
+    suspend fun deletePlayer(dynastyId: String, playerId: String)
 }

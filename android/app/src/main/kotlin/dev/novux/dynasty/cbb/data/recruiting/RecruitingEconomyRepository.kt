@@ -21,6 +21,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingReservationRefund
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingSpendResult
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
+import dev.novux.dynasty.cbb.core.offseason.weektwo.OffseasonScholarshipPolicy
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingWeekGrant
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
@@ -87,6 +88,16 @@ class RecruitingEconomyRepository(
         val consumption = reservationRepository.loadSeasonConsumption(dynasty.dynastyId, ledger.cycleSeasonIndex)
         val pos = dynasty.weekCheckpoint.activePosition
         val offseasonWeek = pos.weekIndex.takeIf { pos.phase == CalendarPhase.Offseason }
+        if (offer && !OffseasonScholarshipPolicy.scholarshipsOpen(pos.phase, offseasonWeek)) {
+            return RecruitingSpendResult(
+                action = RecruitingPointAction.ScholarshipOffer,
+                pointsCharged = 0,
+                pointsRemaining = ledger.pointsAvailable,
+                countsAsWeekReservation = false,
+                success = false,
+                failure = RecruitingSpendFailure.ScholarshipsNotOpen,
+            )
+        }
         val (result, reservation) = when {
             offer -> RecruitingRefundableActionSpend.spendScholarshipOffer(prospectId, ledger.pointsAvailable, actions)
             scout -> RecruitingRefundableActionSpend.spendScoutTheirGame(

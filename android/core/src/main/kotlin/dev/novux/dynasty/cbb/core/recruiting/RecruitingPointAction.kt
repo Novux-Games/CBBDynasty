@@ -19,6 +19,7 @@ enum class RecruitingSpendFailure {
     ActionWindowClosed,
     AlreadyUsedThisSeason,
     ReservationAlreadyActive,
+    ScholarshipsNotOpen,
 }
 
 data class RecruitingSpendResult(

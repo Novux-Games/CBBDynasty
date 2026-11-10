@@ -7,6 +7,7 @@ import dev.novux.dynasty.cbb.core.offseason.weekone.ProDaySimulator
 import dev.novux.dynasty.cbb.core.offseason.weekone.WeekOneLeavingActions
 import dev.novux.dynasty.cbb.core.offseason.weekone.WeekOnePortalBootstrap
 import dev.novux.dynasty.cbb.core.offseason.weekone.WeekTwoDraftResults
+import dev.novux.dynasty.cbb.core.offseason.weektwo.NbaDraftResolution
 import dev.novux.dynasty.cbb.core.roster.PlayerClassYear
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.database.DynastyDatabase
@@ -60,6 +61,13 @@ class DynastyRosterRepository(
 
     fun weekTwoDraftLines(players: List<RosterPlayer>): List<DraftStockLine> =
         WeekTwoDraftResults.fromRoster(players)
+
+    suspend fun applyNbaDraftResolution(dynastyId: String, resolution: NbaDraftResolution) {
+        resolution.playersToRemove.forEach { playerId ->
+            dao.deletePlayer(dynastyId, playerId)
+        }
+        resolution.playersToUpdate.forEach { dao.upsert(it.toEntity()) }
+    }
 
     suspend fun encourageTransfer(dynastyId: String, playerId: String): List<RosterPlayer> {
         val player = listPlayers(dynastyId).first { it.playerId == playerId }
