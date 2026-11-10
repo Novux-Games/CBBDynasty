@@ -20,6 +20,8 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Scaffold
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.awards.YearlyAwardsSeasonArchive
+import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.settings.AppSettings
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
@@ -641,6 +643,7 @@ fun DynastyApp(
                     var userConferenceId by remember { mutableStateOf("") }
                     var userConferenceName by remember { mutableStateOf("") }
                     var conferences by remember { mutableStateOf<List<ConferenceOption>>(emptyList()) }
+                    var awardsArchive by remember { mutableStateOf<YearlyAwardsSeasonArchive?>(null) }
                     if (session != null) {
                         LaunchedEffect(session.dynastyId, session.metadata.seasonIndex) {
                             val index = app.packRepository.activeSession().index
@@ -655,6 +658,16 @@ fun DynastyApp(
                             userConferenceId = overview?.let { o ->
                                 index.team(o.teamId)?.conferenceId
                             }.orEmpty().ifBlank { conferences.firstOrNull()?.id.orEmpty() }
+                            if (session.weekCheckpoint.activePosition.phase == CalendarPhase.SeasonReview) {
+                                app.yearlyAwardsRepository.wrapSeasonIfNeeded(
+                                    session.dynastyId,
+                                    session.metadata.seasonIndex,
+                                )
+                            }
+                            awardsArchive = app.yearlyAwardsRepository.loadArchive(
+                                session.dynastyId,
+                                session.metadata.seasonIndex,
+                            )
                         }
                         AwardsHubScreen(
                             seasonIndex = session.metadata.seasonIndex,
@@ -662,6 +675,7 @@ fun DynastyApp(
                             userConferenceId = userConferenceId,
                             userConferenceName = userConferenceName,
                             conferences = conferences,
+                            currentSeasonArchive = awardsArchive,
                             onBack = { navController.popBackStack() },
                         )
                     } else {

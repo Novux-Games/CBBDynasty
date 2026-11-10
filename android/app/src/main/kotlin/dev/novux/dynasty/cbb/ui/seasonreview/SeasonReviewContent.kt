@@ -79,6 +79,23 @@ fun SeasonReviewScrollContent(
                 fontWeight = FontWeight.Medium,
             )
         }
+        if (snapshot.awardHighlights.isNotEmpty()) {
+            ReviewSection(stringResource(R.string.season_review_section_awards)) {
+                snapshot.awardHighlights.forEach { line ->
+                    Text(
+                        stringResource(R.string.awards_winner_line, line.awardLabel, line.winnerName),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    line.runnerUpName?.let {
+                        Text(
+                            stringResource(R.string.awards_runner_up_line, it),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
+        }
         ReviewSection(stringResource(R.string.season_review_section_coach)) {
             Text(stringResource(R.string.season_review_job_security, snapshot.jobSecurityScore, snapshot.jobSecurityLabel))
             Text(stringResource(R.string.season_review_ad_trust, snapshot.adTrustScore))

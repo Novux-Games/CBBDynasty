@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.seasonreview
 
+import dev.novux.dynasty.cbb.core.awards.AwardHonorLine
 import dev.novux.dynasty.cbb.core.offseason.weeknine.FacilityCategory
 import dev.novux.dynasty.cbb.core.school.SchoolSeasonRecord
 
@@ -30,4 +31,5 @@ data class SeasonReviewSnapshot(
     val jobSecurityLabel: String,
     val adTrustScore: Int,
     val contractYearsLeft: Int,
+    val awardHighlights: List<AwardHonorLine> = emptyList(),
 )

@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.core.news
 import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
 import dev.novux.dynasty.cbb.core.injuries.InjurySeverity
 import dev.novux.dynasty.cbb.core.league.LeagueGameResult
+import dev.novux.dynasty.cbb.core.awards.AwardHonorLine
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import java.util.UUID
 
@@ -84,6 +85,18 @@ object NewsHeadlinePublisher {
             createdAtMs = System.currentTimeMillis(),
         )
     }
+
+    fun yearlyAward(seasonIndex: Int, honor: AwardHonorLine, priorityBoost: Int = 0): NewsHeadline = NewsHeadline(
+        id = "award-$seasonIndex-${honor.awardLabel.filter { it.isLetterOrDigit() }}",
+        seasonIndex = seasonIndex,
+        kind = NewsHeadlineKind.Awards,
+        title = "${honor.awardLabel}: ${honor.winnerName} (${honor.schoolName})",
+        priority = 70 + priorityBoost,
+        createdAtMs = System.currentTimeMillis(),
+    )
+
+    fun awardsWrap(seasonIndex: Int, honors: List<AwardHonorLine>): List<NewsHeadline> =
+        honors.mapIndexed { index, line -> yearlyAward(seasonIndex, line, priorityBoost = index) }
 
     fun recruitingSpotlight(seasonIndex: Int, headline: String): NewsHeadline = NewsHeadline(
         id = "top60-$seasonIndex",

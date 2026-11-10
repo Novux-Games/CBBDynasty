@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.data.seasonreview
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
 import dev.novux.dynasty.cbb.core.seasonreview.SeasonReviewSnapshot
 import dev.novux.dynasty.cbb.core.seasonreview.SeasonReviewSnapshotFactory
+import dev.novux.dynasty.cbb.data.awards.YearlyAwardsRepository
 import dev.novux.dynasty.cbb.data.coach.CoachSecurityRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
@@ -18,8 +19,10 @@ class SeasonReviewRepository(
     private val recruitingEconomyRepository: RecruitingEconomyRepository,
     private val offseasonWeekNineRepository: OffseasonWeekNineRepository,
     private val coachSecurityRepository: CoachSecurityRepository,
+    private val yearlyAwardsRepository: YearlyAwardsRepository,
 ) {
     suspend fun loadSnapshot(loaded: LoadedDynasty): SeasonReviewSnapshot? {
+        yearlyAwardsRepository.wrapSeasonIfNeeded(loaded.dynastyId, loaded.metadata.seasonIndex)
         val index = packRepository.activeSession().index
         val coachEntity = database.dynastyCoachDao().getByDynastyId(loaded.dynastyId) ?: return null
         val team = index.team(coachEntity.userTeamId) ?: return null
@@ -40,6 +43,10 @@ class SeasonReviewRepository(
             contractYearsLeft = contractYearsLeft,
             record = record ?: dev.novux.dynasty.cbb.core.school.SchoolSeasonRecord.Zero,
         )
+        val awards = yearlyAwardsRepository.loadArchive(loaded.dynastyId, loaded.metadata.seasonIndex)
+        val awardHighlights = awards?.let { archive ->
+            archive.ncbaOverview + listOfNotNull(archive.userTeamMvp)
+        }.orEmpty()
         return SeasonReviewSnapshotFactory.build(
             seasonIndex = loaded.metadata.seasonIndex,
             userTeam = team,
@@ -50,6 +57,7 @@ class SeasonReviewRepository(
             facilityGrades = facilities,
             coach = coachSecurity,
             contractYearsLeft = contractYearsLeft,
+            awardHighlights = awardHighlights,
         )
     }
 }

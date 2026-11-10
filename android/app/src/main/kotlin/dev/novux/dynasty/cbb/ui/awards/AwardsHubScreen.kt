@@ -35,6 +35,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.awards.AwardHonorLine
 import dev.novux.dynasty.cbb.core.awards.AwardsDemoCatalog
 import dev.novux.dynasty.cbb.core.awards.AwardsHubPolicy
+import dev.novux.dynasty.cbb.core.awards.YearlyAwardsSeasonArchive
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
 
@@ -56,6 +57,7 @@ fun AwardsHubScreen(
     userConferenceId: String,
     userConferenceName: String,
     conferences: List<ConferenceOption>,
+    currentSeasonArchive: YearlyAwardsSeasonArchive? = null,
     onBack: () -> Unit,
 ) {
     var route by remember { mutableStateOf(AwardsHubRoute.Landing) }
@@ -71,6 +73,7 @@ fun AwardsHubScreen(
             userConferenceId = userConferenceId,
             userConferenceName = userConferenceName,
             conferences = conferences,
+            currentSeasonArchive = currentSeasonArchive,
             onBack = { route = AwardsHubRoute.Landing },
         )
         AwardsHubRoute.Weekly -> AwardsWeeklyScreen(
@@ -114,6 +117,7 @@ private fun AwardsYearlyScreen(
     userConferenceId: String,
     userConferenceName: String,
     conferences: List<ConferenceOption>,
+    currentSeasonArchive: YearlyAwardsSeasonArchive? = null,
     onBack: () -> Unit,
 ) {
     var primaryTab by remember { mutableIntStateOf(YearlyPrimaryTab.Ncba.ordinal) }
@@ -181,14 +185,30 @@ private fun AwardsYearlyScreen(
                         }
                     }
                     if (!locked) {
+                        val useArchive = viewingCurrent && currentSeasonArchive != null
                         honorLines(
                             when (YearlyNcbaSubTab.entries[nbaSub]) {
-                                YearlyNcbaSubTab.Overview -> AwardsDemoCatalog.ncbaOverview(displayLabel)
-                                YearlyNcbaSubTab.Mvp -> AwardsDemoCatalog.ncbaOverview(displayLabel).take(1)
-                                YearlyNcbaSubTab.ByPosition -> AwardsDemoCatalog.ncbaPositionPoy("PG")
+                                YearlyNcbaSubTab.Overview -> if (useArchive) {
+                                    currentSeasonArchive!!.ncbaOverview
+                                } else {
+                                    AwardsDemoCatalog.ncbaOverview(displayLabel)
+                                }
+                                YearlyNcbaSubTab.Mvp -> if (useArchive) {
+                                    currentSeasonArchive!!.ncbaMvp
+                                } else {
+                                    AwardsDemoCatalog.ncbaOverview(displayLabel).take(1)
+                                }
+                                YearlyNcbaSubTab.ByPosition -> if (useArchive) {
+                                    currentSeasonArchive!!.ncbaByPosition["PG"].orEmpty()
+                                } else {
+                                    AwardsDemoCatalog.ncbaPositionPoy("PG")
+                                }
                                 YearlyNcbaSubTab.AllAmerica -> emptyList()
-                                YearlyNcbaSubTab.Coaches ->
+                                YearlyNcbaSubTab.Coaches -> if (useArchive) {
+                                    currentSeasonArchive!!.ncbaCoaches
+                                } else {
                                     AwardsDemoCatalog.ncbaOverview(displayLabel).drop(1)
+                                }
                             },
                         )
                     }
@@ -238,7 +258,14 @@ private fun AwardsYearlyScreen(
                         }
                     }
                     if (!locked) {
-                        honorLines(AwardsDemoCatalog.conferenceOverview(selectedName))
+                        val confLines = if (viewingCurrent && currentSeasonArchive != null) {
+                            currentSeasonArchive.conferenceAwards[selectedConfId]
+                                ?: currentSeasonArchive.conferenceAwards[userConferenceId]
+                                .orEmpty()
+                        } else {
+                            AwardsDemoCatalog.conferenceOverview(selectedName)
+                        }
+                        honorLines(confLines)
                     }
                 }
             }

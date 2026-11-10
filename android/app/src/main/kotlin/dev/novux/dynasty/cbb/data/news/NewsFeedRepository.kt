@@ -64,6 +64,18 @@ class NewsFeedRepository(
         appendAll(dynastyId, seasonIndex, headlines)
     }
 
+    suspend fun appendAwardsHeadlines(
+        dynastyId: String,
+        seasonIndex: Int,
+        headlines: List<NewsHeadline>,
+    ) {
+        if (headlines.isEmpty()) return
+        val tagged = headlines.map {
+            if (it.id.startsWith("award-")) it else it.copy(id = "award-${it.id}")
+        }
+        appendAll(dynastyId, seasonIndex, tagged)
+    }
+
     suspend fun appendLeagueWeek(
         dynastyId: String,
         standings: LeagueStandingsState,

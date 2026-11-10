@@ -8,6 +8,7 @@ enum class NewsHeadlineKind {
     LeagueResult,
     RecruitingSpotlight,
     General,
+    Awards,
 }
 
 @Serializable

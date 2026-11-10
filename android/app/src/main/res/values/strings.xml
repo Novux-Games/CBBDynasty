@@ -113,6 +113,7 @@
     <string name="season_review_section_facilities">Team grades (facilities)</string>
     <string name="season_review_section_recruiting">Recruiting economy</string>
     <string name="season_review_section_coach">Coach</string>
+    <string name="season_review_section_awards">Awards</string>
     <string name="season_review_record_line">Record %1$s (conf %2$s)</string>
     <string name="season_review_net_rank">NCBA NET</string>
     <string name="season_review_media_poll">Media poll</string>

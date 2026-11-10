@@ -1,6 +1,7 @@
 package dev.novux.dynasty.cbb.core.seasonreview
 
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingEconomy
+import dev.novux.dynasty.cbb.core.awards.AwardHonorLine
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.league.LeagueStandingsState
 import dev.novux.dynasty.cbb.core.offseason.weeknine.FacilityCategory
@@ -24,6 +25,7 @@ object SeasonReviewSnapshotFactory {
         facilityGrades: FacilityGrades,
         coach: CoachSecuritySnapshot,
         contractYearsLeft: Int,
+        awardHighlights: List<AwardHonorLine> = emptyList(),
     ): SeasonReviewSnapshot {
         val record = standings?.let { SeasonReviewRecordBuilder.build(userTeam.teamId, it, packIndex) }
             ?: SchoolSeasonRecord.Zero
@@ -72,6 +74,7 @@ object SeasonReviewSnapshotFactory {
             jobSecurityLabel = coach.jobSecurity.tier.label,
             adTrustScore = coach.adTrust.score,
             contractYearsLeft = contractYearsLeft,
+            awardHighlights = awardHighlights,
         )
     }
 }
