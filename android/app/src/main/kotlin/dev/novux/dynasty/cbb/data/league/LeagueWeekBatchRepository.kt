@@ -8,9 +8,13 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.calendar.checkpoint.ProvisionalGameMark
+import dev.novux.dynasty.cbb.core.balance.selectionTuning
 import dev.novux.dynasty.cbb.core.league.LeagueGameResult
 import dev.novux.dynasty.cbb.core.league.LeagueStandingsState
 import dev.novux.dynasty.cbb.core.league.LeagueWeekBatchSimEngine
+import dev.novux.dynasty.cbb.core.resume.NcbaNetRankingEngine
+import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
+import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.core.preseason.tournament.EarlySeasonBracketEngine
 import dev.novux.dynasty.cbb.core.preseason.tournament.EarlySeasonBracketSeason
 import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
@@ -34,6 +38,8 @@ class LeagueWeekBatchRepository(
     private val earlySeasonBracketRepository: EarlySeasonBracketRepository,
     private val newsFeedRepository: NewsFeedRepository,
     private val database: DynastyDatabase,
+    private val packRepository: PackRepository,
+    private val balanceRulesetRepository: BalanceRulesetRepository,
 ) {
     suspend fun loadStandings(dynastyId: String, seasonIndex: Int): LeagueStandingsState? {
         val raw = context.leagueStandingsStore.data.first()[key(dynastyId, seasonIndex)] ?: return null
@@ -85,8 +91,31 @@ class LeagueWeekBatchRepository(
             userResult = userResult,
             seed = seed,
         )
-        persist(dynastyId, batch.standings)
-        newsFeedRepository.appendLeagueWeek(dynastyId, batch.standings)
+        val withNet = attachWeeklyNet(batch.standings, committedWeek.weekIndex)
+        persist(dynastyId, withNet)
+        newsFeedRepository.appendLeagueWeek(dynastyId, withNet)
+    }
+
+    private suspend fun attachWeeklyNet(
+        standings: LeagueStandingsState,
+        weekIndex: Int,
+    ): LeagueStandingsState {
+        if (standings.seasonResults.isEmpty()) return standings
+        val prestige = packRepository.activeSession().index.allTeamDisplays()
+            .associate { it.teamId to it.programPrestige }
+        val tuning = balanceRulesetRepository.activeRuleset().selectionTuning()
+        val table = NcbaNetRankingEngine.compute(
+            teamIds = prestige.keys,
+            programPrestige = prestige,
+            records = standings.records,
+            results = standings.seasonResults,
+            tuning = tuning,
+            rankingsWeek = weekIndex,
+        )
+        return standings.copy(
+            netRankByTeam = table.byTeamId.mapValues { it.value.netRank },
+            netRankingsWeek = weekIndex,
+        )
     }
 
     private fun buildUserResult(

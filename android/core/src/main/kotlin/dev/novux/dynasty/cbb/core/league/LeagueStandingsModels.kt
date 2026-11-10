@@ -25,6 +25,8 @@ data class LeagueStandingsState(
     val lastCommittedRsWeek: Int = 0,
     val lastWeekResults: List<LeagueGameResult> = emptyList(),
     val seasonResults: List<LeagueGameResult> = emptyList(),
+    val netRankByTeam: Map<String, Int> = emptyMap(),
+    val netRankingsWeek: Int = 0,
     val aiInjuryRollsLastWeek: Int = 0,
 ) {
     fun recordFor(teamId: String): LeagueTeamRecord =

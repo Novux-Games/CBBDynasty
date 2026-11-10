@@ -12,12 +12,14 @@ object SchoolHubSnapshotFactory {
         record: SchoolSeasonRecord = SchoolSeasonRecord.Zero,
         rankingsPublished: Boolean,
         resume: TeamResumeMetrics? = null,
+        netRankings: Map<String, Int>? = null,
     ): SchoolHubOverview {
         val conference = packIndex.conference(team.conferenceId)
         val mates = packIndex.allTeamDisplays().filter {
             it.conferenceId == team.conferenceId && it.teamId != team.teamId
         }
-        val netMap = SchoolNetRankIndex.build(packIndex.allTeamDisplays())
+        val netMap = netRankings?.takeIf { it.isNotEmpty() }
+            ?: SchoolNetRankIndex.build(packIndex.allTeamDisplays())
         val netRank = netMap[team.teamId]
         val confRanks = mates.plus(team).sortedByDescending { it.programPrestige }
         val confStanding = confRanks.indexOfFirst { it.teamId == team.teamId }.let { idx ->

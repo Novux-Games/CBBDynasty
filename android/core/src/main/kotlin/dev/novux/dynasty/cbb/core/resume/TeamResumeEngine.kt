@@ -5,8 +5,6 @@ import dev.novux.dynasty.cbb.core.balance.BalanceQuadPoints
 import dev.novux.dynasty.cbb.core.balance.BalanceSelectionTuning
 import dev.novux.dynasty.cbb.core.balance.BalanceSosVenueWeights
 import dev.novux.dynasty.cbb.core.league.LeagueGameResult
-import kotlin.math.roundToInt
-
 /**
  * SOS, NEM, and quad record score from finalized results —
  * [planning/selection-engine.md#team-indices-inputs].
@@ -66,7 +64,7 @@ object TeamResumeEngine {
             val w = sosWeight.getValue(id)
             if (w <= 0.0) prestigeNem(programPrestige[id] ?: 50) else sosNumerator.getValue(id) / w
         }
-        val sosRatings = percentileTo99(rawSos)
+        val sosRatings = ResumePercentileNorm.to99Int(rawSos)
 
         return teams.associateWith { teamId ->
             val acc = running.getValue(teamId)
@@ -158,14 +156,4 @@ object TeamResumeEngine {
         }
     }
 
-    private fun percentileTo99(raw: Map<String, Double>): Map<String, Int> {
-        if (raw.isEmpty()) return emptyMap()
-        val ordered = raw.entries.sortedBy { it.value }
-        val n = ordered.size
-        if (n == 1) return mapOf(ordered.single().key to 50)
-        return ordered.mapIndexed { index, (id, _) ->
-            val pct = index.toDouble() / (n - 1).coerceAtLeast(1)
-            id to (pct * 99.0).roundToInt().coerceIn(0, 99)
-        }.toMap()
-    }
 }

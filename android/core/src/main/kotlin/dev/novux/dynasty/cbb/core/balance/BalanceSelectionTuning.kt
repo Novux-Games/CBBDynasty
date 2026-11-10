@@ -32,7 +32,17 @@ data class BalanceSosVenueWeights(
 )
 
 @Serializable
+data class BalanceNetWeights(
+    val nem: Double = 0.32,
+    val sos: Double = 0.25,
+    val qrs: Double = 0.22,
+    val form: Double = 0.12,
+    val rq: Double = 0.09,
+)
+
+@Serializable
 data class BalanceSelectionTuning(
+    val netWeights: BalanceNetWeights = BalanceNetWeights(),
     val quadCutoffs: BalanceQuadCutoffs = BalanceQuadCutoffs(),
     val quadPoints: BalanceQuadPoints = BalanceQuadPoints(),
     val sosVenueWeights: BalanceSosVenueWeights = BalanceSosVenueWeights(),

@@ -200,6 +200,8 @@ class DynastyApplication : Application() {
             earlySeasonBracketRepository,
             newsFeedRepository,
             database,
+            packRepository,
+            balanceRulesetRepository,
         )
         preseasonReportRepository = PreseasonReportRepository(
             applicationContext,

@@ -31,7 +31,9 @@ class SchoolHubRepository(
         val team = index.team(teamId) ?: return null
         val progress = preseasonProgressRepository.load(dynastyId, seasonIndex)
         val rankingsPublished = progress.isComplete(PreseasonTaskId.RankingsReview)
-        val resume = loadResumeMetrics(dynastyId, seasonIndex, teamId)
+        val standings = leagueWeekBatchRepository.loadStandings(dynastyId, seasonIndex)
+        val resume = standings?.let { resumeMetrics(it, teamId) }
+        val netRankings = standings?.netRankByTeam?.takeIf { it.isNotEmpty() }
         return SchoolHubSnapshotFactory.build(
             team = team,
             packIndex = index,
@@ -39,26 +41,24 @@ class SchoolHubRepository(
             record = record,
             rankingsPublished = rankingsPublished,
             resume = resume,
+            netRankings = netRankings,
         )
     }
 
-    private suspend fun loadResumeMetrics(
-        dynastyId: String,
-        seasonIndex: Int,
+    private suspend fun resumeMetrics(
+        standings: dev.novux.dynasty.cbb.core.league.LeagueStandingsState,
         teamId: String,
     ): TeamResumeMetrics? {
-        val standings = leagueWeekBatchRepository.loadStandings(dynastyId, seasonIndex) ?: return null
         if (standings.seasonResults.isEmpty()) return null
-        val index = packRepository.activeSession().index
-        val prestige = index.allTeamDisplays().associate { it.teamId to it.programPrestige }
+        val prestige = packRepository.activeSession().index.allTeamDisplays()
+            .associate { it.teamId to it.programPrestige }
         val tuning = balanceRulesetRepository.activeRuleset().selectionTuning()
-        val metrics = TeamResumeEngine.computeLeague(
+        return TeamResumeEngine.computeLeague(
             prestige.keys,
             prestige,
             standings.seasonResults,
             tuning,
-        )
-        return metrics[teamId]
+        )[teamId]
     }
 
     suspend fun loadUserSchoolOverview(
