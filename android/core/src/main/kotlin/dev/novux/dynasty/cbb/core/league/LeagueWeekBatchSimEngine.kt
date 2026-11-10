@@ -42,5 +42,5 @@ object LeagueWeekBatchSimEngine {
     }
 
     fun phaseSupportsBatch(phase: CalendarPhase): Boolean =
-        phase == CalendarPhase.RegularSeason
+        phase == CalendarPhase.RegularSeason || phase == CalendarPhase.Postseason
 }

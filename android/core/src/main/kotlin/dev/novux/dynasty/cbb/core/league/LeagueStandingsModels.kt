@@ -28,6 +28,7 @@ data class LeagueStandingsState(
     val seasonIndex: Int,
     val records: Map<String, LeagueTeamRecord> = emptyMap(),
     val lastCommittedRsWeek: Int = 0,
+    val lastCommittedPostseasonWeek: Int = 0,
     val lastWeekResults: List<LeagueGameResult> = emptyList(),
     val seasonResults: List<LeagueGameResult> = emptyList(),
     val netRankByTeam: Map<String, Int> = emptyMap(),

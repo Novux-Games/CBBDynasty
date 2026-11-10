@@ -6,6 +6,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dev.novux.dynasty.cbb.core.brackets.NciHeritageBracketEngine
+import dev.novux.dynasty.cbb.core.brackets.NcbaOpeningRoundEngine
+import dev.novux.dynasty.cbb.core.brackets.PostseasonUserGameResolver
+import dev.novux.dynasty.cbb.core.brackets.PostseasonWeekBatchEngine
+import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.calendar.checkpoint.ProvisionalGameMark
 import dev.novux.dynasty.cbb.core.balance.selectionTuning
@@ -54,47 +59,125 @@ class LeagueWeekBatchRepository(
         userGamesCommitted: Map<String, ProvisionalGameMark>,
     ) {
         if (!LeagueWeekBatchSimEngine.phaseSupportsBatch(committedWeek.phase)) return
-        val schedule = leagueScheduleRepository.load(dynastyId, seasonIndex) ?: return
         val coach = database.dynastyCoachDao().getByDynastyId(dynastyId) ?: return
         val userTeamId = coach.userTeamId
-        var standings = loadStandings(dynastyId, seasonIndex)
-            ?: LeagueWeekBatchSimEngine.bootstrap(
-                seasonIndex,
-                schedule.schedules.map { it.teamId },
-            )
-        val plan = preseasonScheduleRepository.loadPlan(dynastyId, seasonIndex)
-        val bracketSeason = earlySeasonBracketRepository.load(dynastyId, seasonIndex)
-        val userResult = buildUserResult(
-            userTeamId,
-            committedWeek.weekIndex,
-            plan,
-            userGamesCommitted,
-            bracketSeason,
-        )
         val seed = dynastyId.hashCode().toLong() + seasonIndex + committedWeek.weekIndex
-        if (bracketSeason != null && bracketSeason.brackets.isNotEmpty()) {
-            val eventOutcome = EarlySeasonBracketEngine.simWeekForLeague(
-                season = bracketSeason,
-                standings = standings,
-                rsWeekIndex = committedWeek.weekIndex,
-                userTeamId = userTeamId,
-                userResults = userResult?.let { listOf(it) }.orEmpty(),
-                seed = seed,
+        when (committedWeek.phase) {
+            CalendarPhase.Postseason -> afterPostseasonWeekAdvance(
+                dynastyId,
+                seasonIndex,
+                committedWeek.weekIndex,
+                userTeamId,
+                userGamesCommitted,
+                seed,
             )
-            standings = eventOutcome.standings
-            earlySeasonBracketRepository.persist(dynastyId, eventOutcome.season)
+            CalendarPhase.RegularSeason -> {
+                val schedule = leagueScheduleRepository.load(dynastyId, seasonIndex) ?: return
+                var standings = loadStandings(dynastyId, seasonIndex)
+                    ?: LeagueWeekBatchSimEngine.bootstrap(
+                        seasonIndex,
+                        schedule.schedules.map { it.teamId },
+                    )
+                val plan = preseasonScheduleRepository.loadPlan(dynastyId, seasonIndex)
+                val bracketSeason = earlySeasonBracketRepository.load(dynastyId, seasonIndex)
+                val userResult = buildUserResult(
+                    userTeamId,
+                    committedWeek.weekIndex,
+                    plan,
+                    userGamesCommitted,
+                    bracketSeason,
+                )
+                if (bracketSeason != null && bracketSeason.brackets.isNotEmpty()) {
+                    val eventOutcome = EarlySeasonBracketEngine.simWeekForLeague(
+                        season = bracketSeason,
+                        standings = standings,
+                        rsWeekIndex = committedWeek.weekIndex,
+                        userTeamId = userTeamId,
+                        userResults = userResult?.let { listOf(it) }.orEmpty(),
+                        seed = seed,
+                    )
+                    standings = eventOutcome.standings
+                    earlySeasonBracketRepository.persist(dynastyId, eventOutcome.season)
+                }
+                val batch = LeagueWeekBatchSimEngine.runRegularSeasonWeek(
+                    schedule = schedule,
+                    standings = standings,
+                    rsWeekIndex = committedWeek.weekIndex,
+                    userTeamId = userTeamId,
+                    userResult = userResult,
+                    seed = seed,
+                )
+                val withNet = attachWeeklyNet(batch.standings, committedWeek.weekIndex)
+                persist(dynastyId, withNet)
+                newsFeedRepository.appendLeagueWeek(dynastyId, withNet)
+            }
+            else -> Unit
         }
-        val batch = LeagueWeekBatchSimEngine.runRegularSeasonWeek(
-            schedule = schedule,
+    }
+
+    private suspend fun afterPostseasonWeekAdvance(
+        dynastyId: String,
+        seasonIndex: Int,
+        postseasonWeek: Int,
+        userTeamId: String,
+        userGamesCommitted: Map<String, ProvisionalGameMark>,
+        seed: Long,
+    ) {
+        val schedule = leagueScheduleRepository.load(dynastyId, seasonIndex)
+        var standings = loadStandings(dynastyId, seasonIndex)
+            ?: schedule?.let {
+                LeagueWeekBatchSimEngine.bootstrap(seasonIndex, it.schedules.map { s -> s.teamId })
+            }
+            ?: return
+        if (standings.selectionSunday == null) return
+        val selection = standings.selectionSunday!!
+        standings = standings.copy(
+            ncbaOpeningRound = standings.ncbaOpeningRound ?: NcbaOpeningRoundEngine.planFromSelection(selection),
+            nciBracket = standings.nciBracket ?: NciHeritageBracketEngine.planNci(selection),
+            heritageBracket = standings.heritageBracket ?: NciHeritageBracketEngine.planHeritage(selection),
+        )
+        val userResult = buildUserPostseasonResult(
+            userTeamId,
+            postseasonWeek,
+            userGamesCommitted,
+            standings,
+        )
+        val index = packRepository.activeSession().index
+        val conferenceIdByTeam = index.allTeamIds().associateWith { id ->
+            index.team(id)?.conferenceId ?: "unknown"
+        }
+        val next = PostseasonWeekBatchEngine.runPostseasonWeek(
             standings = standings,
-            rsWeekIndex = committedWeek.weekIndex,
+            postseasonWeek = postseasonWeek,
             userTeamId = userTeamId,
             userResult = userResult,
+            conferenceIdByTeam = conferenceIdByTeam,
             seed = seed,
         )
-        val withNet = attachWeeklyNet(batch.standings, committedWeek.weekIndex)
-        persist(dynastyId, withNet)
-        newsFeedRepository.appendLeagueWeek(dynastyId, withNet)
+        persist(dynastyId, next)
+    }
+
+    private fun buildUserPostseasonResult(
+        userTeamId: String,
+        postseasonWeek: Int,
+        committed: Map<String, ProvisionalGameMark>,
+        standings: LeagueStandingsState,
+    ): LeagueGameResult? {
+        val mark = committed.values.firstOrNull() ?: return null
+        val matchup = PostseasonUserGameResolver.findMatchup(standings, userTeamId, postseasonWeek) ?: return null
+        val (homeTeamId, awayTeamId) = matchup
+        val (homeScore, awayScore) = if (userTeamId == homeTeamId) {
+            mark.homeScore to mark.awayScore
+        } else {
+            mark.awayScore to mark.homeScore
+        }
+        return LeagueGameResult(
+            homeTeamId = homeTeamId,
+            awayTeamId = awayTeamId,
+            homeScore = homeScore,
+            awayScore = awayScore,
+            rsWeekIndex = postseasonWeek,
+        )
     }
 
     private suspend fun attachWeeklyNet(

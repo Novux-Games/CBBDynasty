@@ -44,4 +44,39 @@ object NcbaOpeningRoundEngine {
             completed = true,
         )
     }
+
+    fun simulatePostseasonWeek(
+        snapshot: NcbaOpeningRoundSnapshot,
+        postseasonWeek: Int,
+        userTeamId: String,
+        userResult: LeagueGameResult?,
+        seed: Long,
+    ): NcbaOpeningRoundSnapshot {
+        if (snapshot.completed) return snapshot
+        require(postseasonWeek == PostseasonCalendar.OPENING_ROUND_WEEK)
+        if (snapshot.gameResults.any { it.rsWeekIndex == postseasonWeek }) return snapshot
+        val played = snapshot.gameResults.toMutableList()
+        val winners = snapshot.winnerTeamIds.toMutableList()
+        snapshot.matchups.forEachIndexed { index, matchup ->
+            if (BracketGameMerge.alreadyPlayed(played, matchup.homeTeamId, matchup.awayTeamId)) {
+                return@forEachIndexed
+            }
+            val game = BracketGameMerge.resolveGame(
+                home = matchup.homeTeamId,
+                away = matchup.awayTeamId,
+                postseasonWeek = postseasonWeek,
+                userTeamId = userTeamId,
+                userResult = userResult,
+                seed = seed + index * 41L,
+            )
+            played += game
+            winners += BracketGameMerge.winnerOf(game)
+        }
+        val completed = winners.size == NcbaOpeningRoundPairing.OPENING_GAME_COUNT
+        return snapshot.copy(
+            gameResults = played,
+            winnerTeamIds = winners,
+            completed = completed,
+        )
+    }
 }
