@@ -48,6 +48,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecommendedRecruitList
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.recruiting.SignLikelihoodBadge
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository
 import dev.novux.dynasty.cbb.data.nil.NilBudgetRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
@@ -60,6 +61,7 @@ fun RecruitingHubScreen(
     loaded: LoadedDynasty,
     recruitingEconomyRepository: RecruitingEconomyRepository,
     nilBudgetRepository: NilBudgetRepository,
+    nilAnnualPoolRepository: NilAnnualPoolRepository,
     weekNineRepository: OffseasonWeekNineRepository? = null,
     initialTab: RecruitingHubTab = RecruitingHubDefaults.defaultTab,
     onBack: () -> Unit,
@@ -71,6 +73,7 @@ fun RecruitingHubScreen(
     var nilLedger by remember { mutableStateOf<NilBudgetLedger?>(null) }
     var nilOffers by remember { mutableStateOf<Map<String, Long>>(emptyMap()) }
     var nilBoostUsd by remember { mutableIntStateOf(0) }
+    var nilBasePoolUsd by remember { mutableStateOf(0L) }
     var facilityGrades by remember {
         mutableStateOf(dev.novux.dynasty.cbb.core.offseason.weeknine.FacilityGrades())
     }
@@ -88,7 +91,8 @@ fun RecruitingHubScreen(
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, gateRefresh) {
         ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
         nilBoostUsd = weekNineRepository?.nilPoolBoostUsd(loaded.dynastyId, loaded.metadata.seasonIndex) ?: 0
-        val poolUsd = 900_000L + nilBoostUsd
+        nilBasePoolUsd = nilAnnualPoolRepository.cycleBasePoolUsd(loaded)
+        val poolUsd = nilBasePoolUsd + nilBoostUsd
         nilOffers = nilBudgetRepository.loadOffers(loaded.dynastyId, loaded.metadata.seasonIndex)
         nilLedger = nilBudgetRepository.loadLedger(loaded.dynastyId, loaded.metadata.seasonIndex, poolUsd)
         facilityGrades = weekNineRepository?.loadFacilityGrades(loaded.dynastyId, loaded.metadata.seasonIndex)
@@ -99,20 +103,20 @@ fun RecruitingHubScreen(
     val recommendedConfig = remember(loaded.balanceRuleset) {
         BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
     }
-    val schoolContext = remember(loaded, nilBoostUsd, facilityGrades) {
-        SchoolRecruitingContext(
-            programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
-            schoolHomeState = "OH",
-            pipelineStates = setOf("KY", "IN", "MI", "PA", "WV"),
-            nilPoolAnnualUsd = 900_000 + nilBoostUsd,
-            facilityGrades = facilityGrades,
+    var schoolContext by remember { mutableStateOf<SchoolRecruitingContext?>(null) }
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, nilBoostUsd, facilityGrades) {
+        schoolContext = nilAnnualPoolRepository.userSchoolRecruitingContext(
+            loaded,
+            nilBoostUsd,
+            facilityGrades,
         )
     }
     val offerSnapshot = nilOffers.mapValues { it.value.toInt() }
     val recommendedRows = remember(loaded.metadata.seasonIndex, schoolContext, recommendedConfig, offerSnapshot, nilRules) {
+        val ctx = schoolContext ?: return@remember emptyList()
         RecommendedRecruitList.build(
             RecruitingClassSeed.demoPool(loaded.metadata.seasonIndex),
-            schoolContext,
+            ctx,
             recommendedConfig,
             nilOffersByProspect = offerSnapshot,
             nilRules = nilRules,
@@ -197,7 +201,11 @@ fun RecruitingHubScreen(
                 RecruitingHubTab.Recommended -> RecommendedTabBody(
                     loaded = loaded,
                     rows = recommendedRows,
-                    schoolContext = schoolContext,
+                    schoolContext = schoolContext ?: SchoolRecruitingContext(
+                        programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
+                        schoolHomeState = "OH",
+                        nilPoolAnnualUsd = (nilBasePoolUsd + nilBoostUsd).toInt(),
+                    ),
                     recruitingEconomyRepository = recruitingEconomyRepository,
                     nilRules = nilRules,
                     nilOffers = nilOffers,
@@ -235,7 +243,7 @@ fun RecruitingHubScreen(
                     },
                     onAssignNil = { prospectId, nilAskUsd, offerUsd ->
                         scope.launch {
-                            val poolUsd = 900_000L + nilBoostUsd
+                            val poolUsd = nilBasePoolUsd + nilBoostUsd
                             nilBudgetRepository.assignOffer(
                                 loaded.dynastyId,
                                 loaded.metadata.seasonIndex,

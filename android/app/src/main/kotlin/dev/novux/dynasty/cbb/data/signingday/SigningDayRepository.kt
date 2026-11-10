@@ -77,6 +77,7 @@ class SigningDayRepository(
     suspend fun hardSign(
         dynastyId: String,
         seasonIndex: Int,
+        poolAnnualUsd: Long,
     ): SigningDayHardSignResult {
         val progress = loadProgress(dynastyId, seasonIndex)
         val signees = loadIncomingClass(dynastyId, seasonIndex)
@@ -85,6 +86,7 @@ class SigningDayRepository(
             dynastyId,
             seasonIndex,
             signees.map { it.prospectId to it.nilAskUsd },
+            poolAnnualUsd,
         )
         nilBudgetRepository.commitSignedDeals(dynastyId, seasonIndex, snapshots)
         val signedWithNil = result.signed.map { signee ->

@@ -87,6 +87,7 @@ class SaveSlotRepository(
     private val preseasonScheduleRepository: PreseasonScheduleRepository,
     private val coachSkillPointRepository: CoachSkillPointRepository,
     private val coachingCarouselRepository: CoachingCarouselRepository,
+    private val nilAnnualPoolRepository: dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -610,12 +611,13 @@ class SaveSlotRepository(
         val economy = BalanceRecruitingParser.parse(loaded.balanceRuleset.recruiting)
         val recommended = BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
         val pool = RecruitingClassSeed.demoPool(loaded.metadata.seasonIndex)
-        val userSchool = SchoolRecruitingContext(
-            programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
-            schoolHomeState = "OH",
-            pipelineStates = setOf("KY", "IN", "MI", "PA", "WV"),
-            nilPoolAnnualUsd = 900_000,
-        )
+        val userSchool = nilAnnualPoolRepository.userSchoolRecruitingContext(loaded)
+            ?: SchoolRecruitingContext(
+                programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
+                schoolHomeState = "OH",
+                pipelineStates = setOf("KY", "IN", "MI", "PA", "WV"),
+                nilPoolAnnualUsd = dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository.DEFAULT_FALLBACK_USD.toInt(),
+            )
         val actionCosts = BalanceRecruitingActionsParser.parse(loaded.balanceRuleset.recruiting)
         val estimated = if (hubOpen && userManualRecruitingSpent == 0) {
             AiRecruitingWeekRunner.estimateUserAutoMaintainSpend(
@@ -685,12 +687,23 @@ class SaveSlotRepository(
         slotDao.upsert(
             slotEntity.copy(seasonLabel = SeasonMembershipYear.label(meta.seasonIndex)),
         )
+        val coach = coachDao.getByDynastyId(loaded.dynastyId)
+        val team = coach?.let { packRepository.activeSession().index.team(it.userTeamId) }
         recruitingEconomyRepository.openNextCycleAfterSeasonReview(
             dynastyId = loaded.dynastyId,
             balance = loaded.balanceRuleset,
             nextSeasonIndex = meta.seasonIndex,
-            postRecapPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
+            postRecapPrestige = team?.programPrestige ?: RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
         )
+        if (team != null) {
+            nilAnnualPoolRepository.openCyclePoolUsd(
+                dynastyId = loaded.dynastyId,
+                balanceNil = loaded.balanceRuleset.nil,
+                cycleSeasonIndex = meta.seasonIndex,
+                conferenceId = team.conferenceId,
+                programPrestige = team.programPrestige,
+            )
+        }
         coachingCarouselRepository.loadOrCreate(loaded.dynastyId, meta.seasonIndex)
         portalCycleRepository.loadOrSimulate(loaded.dynastyId, meta.seasonIndex)
         return loadSlot(slotIndex)

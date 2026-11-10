@@ -24,6 +24,30 @@ class NilBudgetRepository(
     private val context: Context,
     private val reservationRepository: RecruitingReservationRepository,
 ) {
+    suspend fun frozenAnnualPoolUsd(dynastyId: String, cycleSeasonIndex: Int): Long? {
+        val key = poolKey(dynastyId, cycleSeasonIndex)
+        return context.nilBudgetStore.data.first()[key]
+    }
+
+    suspend fun ensureFrozenAnnualPool(
+        dynastyId: String,
+        cycleSeasonIndex: Int,
+        computedUsd: Long,
+    ): Long {
+        val existing = frozenAnnualPoolUsd(dynastyId, cycleSeasonIndex)
+        if (existing != null) return existing
+        context.nilBudgetStore.edit { prefs ->
+            prefs[poolKey(dynastyId, cycleSeasonIndex)] = computedUsd
+        }
+        return computedUsd
+    }
+
+    suspend fun resetFrozenAnnualPool(dynastyId: String, cycleSeasonIndex: Int) {
+        context.nilBudgetStore.edit { prefs ->
+            prefs.remove(poolKey(dynastyId, cycleSeasonIndex))
+        }
+    }
+
     suspend fun loadOffers(dynastyId: String, cycleSeasonIndex: Int): Map<String, Long> {
         val raw = context.nilBudgetStore.data.first()[offersKey(dynastyId, cycleSeasonIndex)] ?: return emptyMap()
         return decodeOffers(raw)
@@ -76,11 +100,12 @@ class NilBudgetRepository(
         dynastyId: String,
         cycleSeasonIndex: Int,
         signeeIds: List<Pair<String, Int>>,
+        poolAnnualUsd: Long,
     ): List<NilSigningSnapshot> {
         val offers = loadOffers(dynastyId, cycleSeasonIndex)
         return signeeIds.map { (prospectId, nilAskUsd) ->
             val offer = offers[prospectId]?.toInt() ?: 0
-            NilSigningSnapshotEngine.forProspect(prospectId, nilAskUsd, offer)
+            NilSigningSnapshotEngine.forProspect(prospectId, nilAskUsd, offer, poolAnnualUsd)
         }
     }
 
@@ -117,6 +142,9 @@ class NilBudgetRepository(
 
     private fun committedKey(dynastyId: String, cycleSeasonIndex: Int) =
         longPreferencesKey("nil_committed_${dynastyId}_$cycleSeasonIndex")
+
+    private fun poolKey(dynastyId: String, cycleSeasonIndex: Int) =
+        longPreferencesKey("nil_pool_${dynastyId}_$cycleSeasonIndex")
 
     private fun encodeOffers(offers: Map<String, Long>): String =
         offers.entries.joinToString(";") { "${it.key}:${it.value}" }

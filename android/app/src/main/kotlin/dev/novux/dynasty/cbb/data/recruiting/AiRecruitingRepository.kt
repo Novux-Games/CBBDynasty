@@ -28,6 +28,7 @@ private val Context.aiRecruitingStore: DataStore<Preferences> by preferencesData
 
 class AiRecruitingRepository(
     private val context: Context,
+    private val nilAnnualPoolRepository: dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository,
 ) {
     suspend fun runLeagueWeekIfActive(
         dynasty: LoadedDynasty,
@@ -40,12 +41,13 @@ class AiRecruitingRepository(
         val recommended = BalanceRecruitingRecommendedParser.parse(dynasty.balanceRuleset.recruiting)
         val pool = RecruitingClassSeed.demoPool(dynasty.metadata.seasonIndex)
         val userProgramId = userProgramId(dynasty.dynastyId)
-        val userSchool = SchoolRecruitingContext(
-            programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
-            schoolHomeState = "OH",
-            pipelineStates = setOf("KY", "IN", "MI", "PA", "WV"),
-            nilPoolAnnualUsd = 900_000,
-        )
+        val userSchool = nilAnnualPoolRepository.userSchoolRecruitingContext(dynasty)
+            ?: SchoolRecruitingContext(
+                programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
+                schoolHomeState = "OH",
+                pipelineStates = setOf("KY", "IN", "MI", "PA", "WV"),
+                nilPoolAnnualUsd = dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository.DEFAULT_FALLBACK_USD.toInt(),
+            )
         val offseasonWeek = position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason }
         val hubOpen = RecruitingCyclePolicy.hubAccessible(position.phase, offseasonWeek)
         val actionCosts = actionsFrom(dynasty)

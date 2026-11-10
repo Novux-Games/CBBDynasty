@@ -103,6 +103,9 @@ class DynastyApplication : Application() {
     lateinit var nilBudgetRepository: dev.novux.dynasty.cbb.data.nil.NilBudgetRepository
         private set
 
+    lateinit var nilAnnualPoolRepository: dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository
+        private set
+
     lateinit var offseasonWeekTwoRepository: OffseasonWeekTwoRepository
         private set
 
@@ -199,9 +202,14 @@ class DynastyApplication : Application() {
             applicationContext,
             recruitingReservationRepository,
         )
-        portalCycleRepository = PortalCycleRepository(applicationContext)
-        aiRecruitingRepository = AiRecruitingRepository(applicationContext)
         val database = DynastyDatabase.build(applicationContext)
+        nilAnnualPoolRepository = dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository(
+            database,
+            packRepository,
+            nilBudgetRepository,
+        )
+        portalCycleRepository = PortalCycleRepository(applicationContext)
+        aiRecruitingRepository = AiRecruitingRepository(applicationContext, nilAnnualPoolRepository)
         weekCheckpointRepository = WeekCheckpointRepository(database)
         val postgameInjuryQueue = dev.novux.dynasty.cbb.data.injuries.PostgameInjuryQueue()
         dynastyRosterRepository = DynastyRosterRepository(database, postgameInjuryQueue)
@@ -280,6 +288,7 @@ class DynastyApplication : Application() {
             preseasonScheduleRepository,
             coachSkillPointRepository,
             coachingCarouselRepository,
+            nilAnnualPoolRepository,
         )
         preseasonSeasonStartRepository = PreseasonSeasonStartRepository(
             saveSlotRepository,

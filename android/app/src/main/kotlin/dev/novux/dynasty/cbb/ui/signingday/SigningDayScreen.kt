@@ -34,6 +34,8 @@ import dev.novux.dynasty.cbb.core.signingday.NationalRankRow
 import dev.novux.dynasty.cbb.core.signingday.NationalRecruitingRankings
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
+import dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository
+import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.signingday.SigningDayRepository
 import kotlinx.coroutines.launch
@@ -48,6 +50,8 @@ fun SigningDayScreen(
     loaded: LoadedDynasty,
     signingDayRepository: SigningDayRepository,
     recruitingEconomyRepository: RecruitingEconomyRepository,
+    nilAnnualPoolRepository: NilAnnualPoolRepository,
+    weekNineRepository: OffseasonWeekNineRepository? = null,
     incomingClassSeedRepository: IncomingClassSeedRepository,
     initialTab: SigningDayInitialTab = SigningDayInitialTab.Rankings,
     onBack: () -> Unit,
@@ -136,7 +140,12 @@ fun SigningDayScreen(
                 },
                 onHardSign = {
                     scope.launch {
-                        signingDayRepository.hardSign(loaded.dynastyId, loaded.metadata.seasonIndex)
+                        val boost = weekNineRepository?.nilPoolBoostUsd(
+                            loaded.dynastyId,
+                            loaded.metadata.seasonIndex,
+                        ) ?: 0
+                        val pool = nilAnnualPoolRepository.effectivePoolUsd(loaded, boost)
+                        signingDayRepository.hardSign(loaded.dynastyId, loaded.metadata.seasonIndex, pool)
                         recruitingEconomyRepository.closeCycleAfterHardSign(loaded.dynastyId)
                         refresh()
                     }
