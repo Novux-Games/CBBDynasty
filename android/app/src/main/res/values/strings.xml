@@ -141,6 +141,13 @@
     <string name="summer_workouts_subtitle">Workouts ran automatically on your returning roster.</string>
     <string name="summer_workouts_summary">Coach training grade %1$d · team avg +%2$d XP · %3$d players</string>
     <string name="summer_workouts_line">+%1$d XP · %2$s</string>
+    <string name="roster_cuts_title">Roster cuts and walk-ons</string>
+    <string name="roster_cuts_count">Roster %1$d / %2$d · walk-ons signed %3$d / %4$d</string>
+    <string name="roster_cuts_over_cap">Cut players to 15 or fewer before advancing.</string>
+    <string name="roster_cuts_locked">Roster locked for this season.</string>
+    <string name="roster_cuts_cut">Cut</string>
+    <string name="roster_cuts_add_walkon">Add walk-on</string>
+    <string name="roster_cuts_lock">Lock roster</string>
     <string name="recruiting_hub_title">Recruiting</string>
     <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
     <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>

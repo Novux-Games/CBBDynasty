@@ -5,6 +5,7 @@ enum class PlayerClassYear(val wire: String, val label: String) {
     Sophomore("so", "So"),
     Junior("jr", "Jr"),
     Senior("sr", "Sr"),
+    WalkOn("wo", "Walk-on"),
     ;
 
     companion object {

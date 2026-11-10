@@ -62,6 +62,14 @@ class DynastyRosterRepository(
     fun weekTwoDraftLines(players: List<RosterPlayer>): List<DraftStockLine> =
         WeekTwoDraftResults.fromRoster(players)
 
+    suspend fun cutPlayer(dynastyId: String, playerId: String) {
+        dao.deletePlayer(dynastyId, playerId)
+    }
+
+    suspend fun upsertPlayer(player: RosterPlayer) {
+        dao.upsert(player.toEntity())
+    }
+
     suspend fun applyNbaDraftResolution(dynastyId: String, resolution: NbaDraftResolution) {
         resolution.playersToRemove.forEach { playerId ->
             dao.deletePlayer(dynastyId, playerId)

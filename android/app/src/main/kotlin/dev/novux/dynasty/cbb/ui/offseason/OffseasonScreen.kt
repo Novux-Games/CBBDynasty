@@ -32,7 +32,10 @@ import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonOptionalDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
 import dev.novux.dynasty.cbb.core.dashboard.SigningDayRequiredDashboardTasks
+import dev.novux.dynasty.cbb.core.offseason.weekeight.OffseasonRosterLockConstants
+import dev.novux.dynasty.cbb.core.offseason.weekeight.RosterLockPolicy
 import dev.novux.dynasty.cbb.core.offseason.weekseven.SummerWorkoutConstants
+import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekEightRepository
 import dev.novux.dynasty.cbb.core.signingday.SigningDayConstants
 import dev.novux.dynasty.cbb.data.offseason.OffseasonSummerWorkoutRepository
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
@@ -70,6 +73,7 @@ fun OffseasonScreen(
     signingDayRepository: SigningDayRepository,
     offseasonWeekTwoRepository: OffseasonWeekTwoRepository,
     summerWorkoutRepository: OffseasonSummerWorkoutRepository,
+    weekEightRepository: OffseasonWeekEightRepository,
     onExitHome: () -> Unit,
     onOpenRecruiting: (RecruitingHubTab) -> Unit = {},
     onOpenSigningDay: (DashboardDeepLink) -> Unit = {},
@@ -78,6 +82,7 @@ fun OffseasonScreen(
     var ledger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
     var portalTop40Locked by remember { mutableStateOf(false) }
     var openScholarshipSlots by remember { mutableStateOf(0) }
+    var rosterPlayerCount by remember { mutableStateOf(0) }
     var dismissedTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
     var signingProgress by remember { mutableStateOf<SigningDayProgress?>(null) }
@@ -89,6 +94,7 @@ fun OffseasonScreen(
         val portal = portalCycleRepository.loadOrSimulate(loaded.dynastyId, loaded.metadata.seasonIndex)
         portalTop40Locked = portal.top40Locked
         val roster = rosterRepository.listPlayers(loaded.dynastyId)
+        rosterPlayerCount = roster.size
         openScholarshipSlots = (SCHOLARSHIP_LIMIT - roster.size).coerceAtLeast(0)
     }
     val position = loaded.weekCheckpoint.activePosition
@@ -147,6 +153,21 @@ fun OffseasonScreen(
                 dynastyId = loaded.dynastyId,
                 seasonIndex = loaded.metadata.seasonIndex,
                 weekTwoRepository = offseasonWeekTwoRepository,
+                modifier = Modifier.weight(1f),
+            )
+        } else if (inOffseason && position.weekIndex == OffseasonRosterLockConstants.OFFSEASON_WEEK_INDEX) {
+            RosterCutsWeekEightPanel(
+                dynastyId = loaded.dynastyId,
+                seasonIndex = loaded.metadata.seasonIndex,
+                rosterRepository = rosterRepository,
+                weekEightRepository = weekEightRepository,
+                onRosterChanged = {
+                    scope.launch {
+                        val roster = rosterRepository.listPlayers(loaded.dynastyId)
+                        rosterPlayerCount = roster.size
+                        openScholarshipSlots = (SCHOLARSHIP_LIMIT - roster.size).coerceAtLeast(0)
+                    }
+                },
                 modifier = Modifier.weight(1f),
             )
         } else if (inOffseason && position.weekIndex == SummerWorkoutConstants.OFFSEASON_WEEK_INDEX) {
@@ -247,6 +268,12 @@ fun OffseasonScreen(
                     ) {
                         return@launch
                     }
+                    if (inOffseason && position.weekIndex == OffseasonRosterLockConstants.OFFSEASON_WEEK_INDEX) {
+                        val roster = rosterRepository.listPlayers(loaded.dynastyId)
+                        if (!RosterLockPolicy.canAdvanceOffseasonWeek8(roster)) {
+                            return@launch
+                        }
+                    }
                     val dashboardTasks = if (inOffseason && position.weekIndex in PortalConstants.PORTAL_RECRUITING_WEEKS) {
                         OffseasonOptionalDashboardTasks.build(
                             OffseasonDashboardContext(
@@ -279,9 +306,12 @@ fun OffseasonScreen(
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = inOffseason && run {
-                if (position.weekIndex != SigningDayConstants.OFFSEASON_WEEK_INDEX) true
-                else signingProgress?.canAdvanceOffseasonWeek() == true
+            enabled = inOffseason && when (position.weekIndex) {
+                SigningDayConstants.OFFSEASON_WEEK_INDEX ->
+                    signingProgress?.canAdvanceOffseasonWeek() == true
+                OffseasonRosterLockConstants.OFFSEASON_WEEK_INDEX ->
+                    rosterPlayerCount <= OffseasonRosterLockConstants.SCHOLARSHIP_ROSTER_CAP
+                else -> true
             },
         ) {
             Text(
