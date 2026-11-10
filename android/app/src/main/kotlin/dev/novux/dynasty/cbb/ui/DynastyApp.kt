@@ -599,11 +599,20 @@ fun DynastyApp(
                     }
                 }
                 composable(AppRoute.HistoryHub.route) {
-                    HubScaffoldScreen(
-                        titleRes = R.string.history_hub_title,
-                        bodyRes = R.string.history_hub_placeholder,
-                        onBack = { navController.popBackStack() },
-                    )
+                    val session = ActiveDynastySession.current
+                    val app = LocalContext.current.requireDynastyApplication()
+                    if (session != null) {
+                        dev.novux.dynasty.cbb.ui.history.HistoryHubRouteScreen(
+                            dynastyId = session.dynastyId,
+                            seasonIndex = session.metadata.seasonIndex,
+                            historyRepository = app.historyRepository,
+                            onBack = { navController.popBackStack() },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
                 }
                 composable(AppRoute.ConferenceTournamentHub.route) {
                     val session = ActiveDynastySession.current

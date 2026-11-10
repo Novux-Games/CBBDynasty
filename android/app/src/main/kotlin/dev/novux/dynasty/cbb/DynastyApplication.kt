@@ -175,6 +175,9 @@ class DynastyApplication : Application() {
     lateinit var yearlyAwardsRepository: dev.novux.dynasty.cbb.data.awards.YearlyAwardsRepository
         private set
 
+    lateinit var historyRepository: dev.novux.dynasty.cbb.data.history.HistoryRepository
+        private set
+
     lateinit var coachSkillPointRepository: CoachSkillPointRepository
         private set
 
@@ -312,6 +315,15 @@ class DynastyApplication : Application() {
             database,
         )
         coachSecurityRepository = CoachSecurityRepository(applicationContext, database)
+        historyRepository = dev.novux.dynasty.cbb.data.history.HistoryRepository(
+            applicationContext,
+            database,
+            packRepository,
+            leagueWeekBatchRepository,
+            dynastyRosterRepository,
+            balanceRulesetRepository,
+            newsFeedRepository,
+        )
         yearlyAwardsRepository = dev.novux.dynasty.cbb.data.awards.YearlyAwardsRepository(
             applicationContext,
             database,
@@ -319,6 +331,8 @@ class DynastyApplication : Application() {
             leagueWeekBatchRepository,
             dynastyRosterRepository,
             newsFeedRepository,
+            balanceRulesetRepository,
+            historyRepository,
         )
         seasonReviewRepository = dev.novux.dynasty.cbb.data.seasonreview.SeasonReviewRepository(
             database,

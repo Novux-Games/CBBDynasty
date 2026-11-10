@@ -10,6 +10,10 @@ import dev.novux.dynasty.cbb.core.awards.YearlyAwardsSeasonArchive
 import dev.novux.dynasty.cbb.core.awards.YearlyAwardsWrapEngine
 import dev.novux.dynasty.cbb.core.awards.YearlyAwardsWrapInput
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCardFactory
+import dev.novux.dynasty.cbb.core.history.BalanceHistoryParser
+import dev.novux.dynasty.cbb.core.history.WinContributionEngine
+import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
+import dev.novux.dynasty.cbb.data.history.HistoryRepository
 import dev.novux.dynasty.cbb.core.news.NewsHeadlinePublisher
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.news.NewsFeedRepository
@@ -29,6 +33,8 @@ class YearlyAwardsRepository(
     private val leagueWeekBatchRepository: LeagueWeekBatchRepository,
     private val dynastyRosterRepository: DynastyRosterRepository,
     private val newsFeedRepository: NewsFeedRepository,
+    private val balanceRulesetRepository: BalanceRulesetRepository,
+    private val historyRepository: HistoryRepository,
 ) {
     suspend fun loadArchive(dynastyId: String, seasonIndex: Int): YearlyAwardsSeasonArchive? {
         val raw = context.yearlyAwardsStore.data.first()[key(dynastyId, seasonIndex)] ?: return null
@@ -43,6 +49,12 @@ class YearlyAwardsRepository(
         val team = index.team(coach.userTeamId) ?: return
         val roster = dynastyRosterRepository.listPlayers(dynastyId)
         val coachName = HeadCoachCardFactory.displayName(coach.firstName, coach.lastName, coach.nameSuffixWire)
+        val tuning = BalanceHistoryParser.parse(balanceRulesetRepository.activeRuleset().history)
+        val winShares = WinContributionEngine.allocateTeamWins(
+            roster,
+            standings.recordFor(coach.userTeamId).wins,
+            tuning.winContribution,
+        )
         val archive = YearlyAwardsWrapEngine.compute(
             YearlyAwardsWrapInput(
                 seasonIndex = seasonIndex,
@@ -53,9 +65,11 @@ class YearlyAwardsRepository(
                 userRoster = roster,
                 standings = standings,
                 packIndex = index,
+                winSharesByPlayer = winShares,
             ),
         )
         persist(dynastyId, archive)
+        historyRepository.finalizeSeason(dynastyId, seasonIndex, archive)
         val headlines = NewsHeadlinePublisher.awardsWrap(
             seasonIndex,
             archive.ncbaOverview + listOfNotNull(archive.userTeamMvp),

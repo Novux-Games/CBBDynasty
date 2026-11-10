@@ -509,6 +509,15 @@
     <string name="rankings_hub_conf_row">%1$s — %2$d–%3$d</string>
     <string name="history_hub_title">History</string>
     <string name="history_hub_placeholder">Dynasty archive, GOAT, and the record book will live here once league history is online.</string>
+    <string name="history_tab_goat">GOAT</string>
+    <string name="history_tab_archive">Year archive</string>
+    <string name="history_goat_empty">Complete an End of Season week to publish GOAT ranks.</string>
+    <string name="history_archive_empty">Season year cards appear after each End of Season recap.</string>
+    <string name="history_goat_line">GOAT %1$.1f · Win shares %2$.1f</string>
+    <string name="history_ncba_champion">NCBA champion: %1$s</string>
+    <string name="history_ncba_mvp">NCBA Most Valuable Player: %1$s</string>
+    <string name="history_goat_one">GOAT #1: %1$s</string>
+    <string name="history_hof_class">National HOF: %1$s</string>
     <string name="march_mayhem_hub_title">March Mayhem</string>
     <string name="march_mayhem_tab_ncba">NCBA</string>
     <string name="march_mayhem_tab_nci">NCI</string>

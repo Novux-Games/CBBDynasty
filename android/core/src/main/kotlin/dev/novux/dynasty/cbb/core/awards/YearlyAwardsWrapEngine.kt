@@ -14,6 +14,7 @@ data class YearlyAwardsWrapInput(
     val userRoster: List<RosterPlayer>,
     val standings: LeagueStandingsState,
     val packIndex: IdentityPackIndex,
+    val winSharesByPlayer: Map<String, Double> = emptyMap(),
 )
 
 /** End-of-season honors wrap — POTY + coach awards ([planning/awards.md], step 14.2). */
@@ -21,8 +22,11 @@ object YearlyAwardsWrapEngine {
     private val positionLabels = listOf("PG", "SG", "SF", "PF", "C")
 
     fun compute(input: YearlyAwardsWrapInput): YearlyAwardsSeasonArchive {
-        val teamMvp = input.userRoster
-            .maxWithOrNull(compareBy<RosterPlayer> { it.ovr }.thenByDescending { it.depthOrder })
+        val teamMvp = input.userRoster.maxWithOrNull(
+            compareBy<RosterPlayer> { input.winSharesByPlayer[it.playerId] ?: 0.0 }
+                .thenBy { it.ovr }
+                .thenByDescending { it.depthOrder },
+        )
         val userTeamMvp = teamMvp?.let {
             AwardHonorLine(
                 awardLabel = "Team MVP",
