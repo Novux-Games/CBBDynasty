@@ -148,6 +148,17 @@
     <string name="roster_cuts_cut">Cut</string>
     <string name="roster_cuts_add_walkon">Add walk-on</string>
     <string name="roster_cuts_lock">Lock roster</string>
+    <string name="fundraising_title">Fundraising and facility upgrades</string>
+    <string name="fundraising_balances">Program cash %1$s · NIL boost this cycle %2$s</string>
+    <string name="fundraising_events_heading">Fundraising events</string>
+    <string name="fundraising_run_event">Run %1$s</string>
+    <string name="fundraising_event_done">%1$s completed</string>
+    <string name="fundraising_naming_rights">Sell arena naming rights</string>
+    <string name="fundraising_naming_sold">Naming rights sold</string>
+    <string name="fundraising_facilities_heading">Facility grades</string>
+    <string name="fundraising_facility_grade">Grade %1$d</string>
+    <string name="fundraising_upgrade_cost">Upgrade %1$s</string>
+    <string name="recruiting_nil_boost_line">Week 9 NIL boost applied: +%1$s to annual pool</string>
     <string name="recruiting_hub_title">Recruiting</string>
     <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
     <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>

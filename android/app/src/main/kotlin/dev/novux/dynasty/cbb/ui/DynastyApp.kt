@@ -99,6 +99,8 @@ fun DynastyApp(
                 LocalContext.current.requireDynastyApplication().summerWorkoutRepository
             val offseasonWeekEightRepository =
                 LocalContext.current.requireDynastyApplication().offseasonWeekEightRepository
+            val offseasonWeekNineRepository =
+                LocalContext.current.requireDynastyApplication().offseasonWeekNineRepository
 
             suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
@@ -213,6 +215,7 @@ fun DynastyApp(
                             offseasonWeekTwoRepository = offseasonWeekTwoRepository,
                             summerWorkoutRepository = summerWorkoutRepository,
                             weekEightRepository = offseasonWeekEightRepository,
+                            weekNineRepository = offseasonWeekNineRepository,
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
@@ -264,6 +267,7 @@ fun DynastyApp(
                         RecruitingHubScreen(
                             loaded = active,
                             recruitingEconomyRepository = recruitingEconomyRepository,
+                            weekNineRepository = offseasonWeekNineRepository,
                             initialTab = recruitingLaunchTab,
                             onBack = { navController.popBackStack() },
                         )

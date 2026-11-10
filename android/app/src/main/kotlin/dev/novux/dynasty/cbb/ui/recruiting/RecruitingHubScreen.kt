@@ -43,13 +43,17 @@ import dev.novux.dynasty.cbb.core.recruiting.RecommendedRecruitList
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.recruiting.SignLikelihoodBadge
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
+import java.text.NumberFormat
+import java.util.Locale
 import kotlinx.coroutines.launch
 
 @Composable
 fun RecruitingHubScreen(
     loaded: LoadedDynasty,
     recruitingEconomyRepository: RecruitingEconomyRepository,
+    weekNineRepository: OffseasonWeekNineRepository? = null,
     initialTab: RecruitingHubTab = RecruitingHubDefaults.defaultTab,
     onBack: () -> Unit,
 ) {
@@ -57,23 +61,26 @@ fun RecruitingHubScreen(
         mutableIntStateOf(RecruitingHubDefaults.tabs.indexOf(initialTab))
     }
     var ledger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
+    var nilBoostUsd by remember { mutableIntStateOf(0) }
     var gateRefresh by remember { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
+    val currency = remember { NumberFormat.getCurrencyInstance(Locale.US) }
 
     LaunchedEffect(loaded.dynastyId, gateRefresh) {
         ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+        nilBoostUsd = weekNineRepository?.nilPoolBoostUsd(loaded.dynastyId, loaded.metadata.seasonIndex) ?: 0
     }
 
 
     val recommendedConfig = remember(loaded.balanceRuleset) {
         BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
     }
-    val schoolContext = remember(loaded) {
+    val schoolContext = remember(loaded, nilBoostUsd) {
         SchoolRecruitingContext(
             programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
             schoolHomeState = "OH",
             pipelineStates = setOf("KY", "IN", "MI", "PA", "WV"),
-            nilPoolAnnualUsd = 900_000,
+            nilPoolAnnualUsd = 900_000 + nilBoostUsd,
         )
     }
     val recommendedRows = remember(loaded.metadata.seasonIndex, schoolContext, recommendedConfig) {
@@ -109,6 +116,13 @@ fun RecruitingHubScreen(
                 ),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
+            )
+        }
+        if (nilBoostUsd > 0) {
+            Text(
+                text = stringResource(R.string.recruiting_nil_boost_line, currency.format(nilBoostUsd)),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
             )
         }
         PrimaryTabRow(selectedTabIndex = tabIndex) {

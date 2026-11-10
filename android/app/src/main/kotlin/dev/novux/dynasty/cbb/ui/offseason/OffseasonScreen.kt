@@ -35,7 +35,9 @@ import dev.novux.dynasty.cbb.core.dashboard.SigningDayRequiredDashboardTasks
 import dev.novux.dynasty.cbb.core.offseason.weekeight.OffseasonRosterLockConstants
 import dev.novux.dynasty.cbb.core.offseason.weekeight.RosterLockPolicy
 import dev.novux.dynasty.cbb.core.offseason.weekseven.SummerWorkoutConstants
+import dev.novux.dynasty.cbb.core.offseason.weeknine.OffseasonWeekNineConstants
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekEightRepository
+import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
 import dev.novux.dynasty.cbb.core.signingday.SigningDayConstants
 import dev.novux.dynasty.cbb.data.offseason.OffseasonSummerWorkoutRepository
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
@@ -74,6 +76,7 @@ fun OffseasonScreen(
     offseasonWeekTwoRepository: OffseasonWeekTwoRepository,
     summerWorkoutRepository: OffseasonSummerWorkoutRepository,
     weekEightRepository: OffseasonWeekEightRepository,
+    weekNineRepository: OffseasonWeekNineRepository,
     onExitHome: () -> Unit,
     onOpenRecruiting: (RecruitingHubTab) -> Unit = {},
     onOpenSigningDay: (DashboardDeepLink) -> Unit = {},
@@ -168,6 +171,13 @@ fun OffseasonScreen(
                         openScholarshipSlots = (SCHOLARSHIP_LIMIT - roster.size).coerceAtLeast(0)
                     }
                 },
+                modifier = Modifier.weight(1f),
+            )
+        } else if (inOffseason && position.weekIndex == OffseasonWeekNineConstants.OFFSEASON_WEEK_INDEX) {
+            FundraisingWeekNinePanel(
+                dynastyId = loaded.dynastyId,
+                seasonIndex = loaded.metadata.seasonIndex,
+                weekNineRepository = weekNineRepository,
                 modifier = Modifier.weight(1f),
             )
         } else if (inOffseason && position.weekIndex == SummerWorkoutConstants.OFFSEASON_WEEK_INDEX) {
