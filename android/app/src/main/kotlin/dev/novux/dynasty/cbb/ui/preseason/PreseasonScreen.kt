@@ -43,6 +43,14 @@ import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.preseason.TournamentInvitesRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
+import dev.novux.dynasty.cbb.core.player.DynastyPlayer
+import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTabPlaceholder
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import kotlinx.coroutines.launch
 
 @Composable
@@ -57,10 +65,13 @@ fun PreseasonScreen(
     seasonStartRepository: PreseasonSeasonStartRepository,
     onSeasonStarted: () -> Unit,
     onExitHome: () -> Unit,
+    rosterRepository: DynastyRosterRepository,
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     var progress by remember { mutableStateOf<PreseasonTaskProgress?>(null) }
     var tournamentInvitesState by remember { mutableStateOf<TournamentInvitesState?>(null) }
+    var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
+    var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     val scope = rememberCoroutineScope()
     val position = loaded.weekCheckpoint.activePosition
 
@@ -70,34 +81,41 @@ fun PreseasonScreen(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
         )
+        fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
     }
 
     val taskProgress = progress ?: return
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 28.dp, vertical = 36.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Text(
-            text = stringResource(R.string.preseason_shell_title),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-        )
-        Text(
-            text = loaded.summary.schoolDisplayName.orEmpty(),
-            style = MaterialTheme.typography.titleLarge,
-        )
+    val schoolName = loaded.summary.schoolDisplayName.orEmpty()
+    val phaseLabel = CalendarWeekLabel.display(position)
+    val menu = listOf(DynastyShellMenuAction(R.string.shell_menu_exit_home, onExitHome))
+
+    DynastyShellChrome(
+        schoolDisplayName = schoolName,
+        phaseWeekLabel = phaseLabel,
+        selectedTab = selectedTab,
+        onTabSelected = { selectedTab = it },
+        menuActions = menu,
+    ) { padding ->
+        when (selectedTab) {
+            DynastyShellTab.Roster -> DynastyShellRosterTab(
+                players = fullRoster,
+                contentPadding = padding,
+                onPlayerClick = { },
+            )
+            DynastyShellTab.Calendar -> DynastyShellCalendarTabPlaceholder(padding)
+            DynastyShellTab.News -> DynastyShellNewsTabPlaceholder(padding)
+            DynastyShellTab.Dashboard -> Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(horizontal = 28.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
         Text(
             text = SeasonMembershipYear.label(loaded.metadata.seasonIndex),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Text(
-            text = CalendarWeekLabel.display(position),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary,
         )
         Text(
             text = stringResource(R.string.preseason_checklist_hint),
@@ -288,11 +306,7 @@ fun PreseasonScreen(
         ) {
             Text(stringResource(R.string.preseason_start_season))
         }
-        OutlinedButton(
-            onClick = onExitHome,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        ) {
-            Text(stringResource(R.string.settings_back))
+            }
         }
     }
 }

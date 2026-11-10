@@ -196,7 +196,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 9.1 | `[ ]` **Dynasty shell** (all phases): bottom nav + phase header | Same chrome offseason→March; Dashboard default | [game-frame](../planning/game-frame.md) | `ui.dynasty` |
+| 9.1 | `[x]` **Dynasty shell** (all phases): bottom nav + phase header | Same chrome offseason→March; Dashboard default | [game-frame](../planning/game-frame.md) | `ui.dynasty` |
 | 9.2 | `[ ]` Calendar tab (week labels, bye display) | Matches time-system | [game-frame](../planning/game-frame.md), [time-system](../planning/time-system.md) | — |
 | 9.3 | `[ ]` Schedule generation for AI leagues | 365 teams progress | [game-design](../planning/game-design.md) | `:core/league` |
 | 9.4 | `[ ]` Batch sim non-user games on week advance | Standings update; AI injury rolls + lineup adjust per team | [game-design](../planning/game-design.md), [injuries](../planning/injuries.md), [simulation-engine](../planning/simulation-engine.md) | `:core/league` |

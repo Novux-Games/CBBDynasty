@@ -61,6 +61,12 @@ import dev.novux.dynasty.cbb.ui.coach.AssistantCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.HeadCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.SchoolStaffTabPanel
 import dev.novux.dynasty.cbb.ui.school.SchoolHubScreen
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTabPlaceholder
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import kotlinx.coroutines.launch
 
 private sealed class ShellCoachView {
@@ -97,6 +103,8 @@ fun DynastyShellScreen(
     var dismissedInjuryTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
     var disciplinePending by remember { mutableStateOf<PendingDisciplineIncident?>(null) }
     var teamChemistry by remember { mutableStateOf<Int?>(null) }
+    var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
+    var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     val scope = rememberCoroutineScope()
     val medicalRules = remember { BalanceMedicalRedshirtRules() }
 
@@ -122,7 +130,8 @@ fun DynastyShellScreen(
         )
         coachSecurity = coachSecurityRepository.loadForUserDynasty(loaded.dynastyId)
         rosterPlayers = rosterRepository.listPlayers(loaded.dynastyId)
-        rosterPreview = rosterRepository.listDynastyPlayers(loaded.dynastyId).take(6)
+        fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
+        rosterPreview = fullRoster.take(6)
         postgameEvents = rosterRepository.peekPostgameInjuries(loaded.dynastyId)
         disciplinePending = disciplineRepository.loadState(loaded.dynastyId, loaded.metadata.seasonIndex).pending
     }
@@ -148,7 +157,8 @@ fun DynastyShellScreen(
                 rosterPlayers = rosterRepository.applyMedicalRedshirt(loaded.dynastyId, playerId)
                 rosterRepository.clearPostgameInjuries(loaded.dynastyId)
                 postgameEvents = emptyList()
-                rosterPreview = rosterRepository.listDynastyPlayers(loaded.dynastyId).take(6)
+                fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
+                rosterPreview = fullRoster.take(6)
             }
         },
     )
@@ -239,111 +249,102 @@ fun DynastyShellScreen(
     }
 
     val position = loaded.weekCheckpoint.activePosition
+    val schoolName = loaded.summary.schoolDisplayName.orEmpty()
+    val phaseLabel = CalendarWeekLabel.display(position)
+    val shellMenu = listOf(
+        DynastyShellMenuAction(R.string.school_hub_open) {
+            userSchool?.let { coachView = ShellCoachView.School(it) }
+        },
+        DynastyShellMenuAction(R.string.staff_open_tab) { coachView = ShellCoachView.Staff },
+        DynastyShellMenuAction(R.string.dynasty_shell_open_strategy, onOpenStrategy),
+        DynastyShellMenuAction(R.string.shell_menu_exit_home, onExitHome),
+    )
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 28.dp, vertical = 36.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Text(
-            text = stringResource(R.string.dynasty_shell_title),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-        )
-        Text(
-            text = loaded.summary.schoolDisplayName.orEmpty(),
-            style = MaterialTheme.typography.titleLarge,
-        )
-        Text(
-            text = CalendarWeekLabel.display(position),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary,
-        )
-        Text(
-            text = stringResource(R.string.dynasty_shell_hint),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        if (rosterPreview.isNotEmpty()) {
-            Text(
-                text = stringResource(R.string.dynasty_shell_roster),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
+    DynastyShellChrome(
+        schoolDisplayName = schoolName,
+        phaseWeekLabel = phaseLabel,
+        selectedTab = selectedTab,
+        onTabSelected = { selectedTab = it },
+        menuActions = shellMenu,
+    ) { padding ->
+        when (selectedTab) {
+            DynastyShellTab.Roster -> DynastyShellRosterTab(
+                players = fullRoster,
+                contentPadding = padding,
+                onPlayerClick = { cardPlayer = it },
             )
-            rosterPreview.forEach { player ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { cardPlayer = player },
-                ) {
-                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        PlayerInjuryRosterRow(player = player.toRosterPlayer())
-                        PlayerLoyaltyChips(player)
-                    }
-                }
-            }
-        }
-        DashboardRequiredTasksPanel(
-            tasks = DisciplineRequiredDashboardTasks.build(disciplinePending),
-            onOpenSigningDay = { },
-            onOpenDiscipline = { disciplinePending?.let(onOpenDiscipline) },
-        )
-        val injuryTasks = InjuryOptionalDashboardTasks.build(
-            rosterPlayers,
-            loaded.weekCheckpoint.activePosition.weekIndex,
-            medicalRules,
-        )
-        DashboardOptionalTasksPanel(
-            tasks = injuryTasks,
-            dismissedIds = dismissedInjuryTasks,
-            onDismiss = { dismissedInjuryTasks = dismissedInjuryTasks + it },
-            onDeepLink = { },
-            onStrategyOpen = onOpenStrategy,
-        )
-        focus?.firstGame?.let { game ->
-            NextGameCard(
-                game = game,
-                onViewOpponentSchool = {
-                    val opponentId = game.opponentTeamId
-                    if (!opponentId.startsWith("event-")) {
-                        scope.launch {
-                            schoolHubRepository.loadOpponentOverview(
-                                loaded.dynastyId,
-                                opponentId,
-                                loaded.metadata.seasonIndex,
-                            )?.let { coachView = ShellCoachView.School(it) }
+            DynastyShellTab.Calendar -> DynastyShellCalendarTabPlaceholder(padding)
+            DynastyShellTab.News -> DynastyShellNewsTabPlaceholder(padding)
+            DynastyShellTab.Dashboard -> Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 28.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(
+                    text = stringResource(R.string.dynasty_shell_hint),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                if (rosterPreview.isNotEmpty()) {
+                    Text(
+                        text = stringResource(R.string.dynasty_shell_roster),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    rosterPreview.forEach { player ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { cardPlayer = player },
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(12.dp),
+                                verticalArrangement = Arrangement.spacedBy(6.dp),
+                            ) {
+                                PlayerInjuryRosterRow(player = player.toRosterPlayer())
+                                PlayerLoyaltyChips(player)
+                            }
                         }
                     }
-                },
-            )
-        }
-        OutlinedButton(
-            onClick = {
-                userSchool?.let { coachView = ShellCoachView.School(it) }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = userSchool != null,
-        ) {
-            Text(stringResource(R.string.school_hub_open))
-        }
-        OutlinedButton(
-            onClick = { coachView = ShellCoachView.Staff },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(stringResource(R.string.staff_open_tab))
-        }
-        OutlinedButton(
-            onClick = onOpenStrategy,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(stringResource(R.string.dynasty_shell_open_strategy))
-        }
-        OutlinedButton(
-            onClick = onExitHome,
-            modifier = Modifier.align(androidx.compose.ui.Alignment.CenterHorizontally),
-        ) {
-            Text(stringResource(R.string.settings_back))
+                }
+                DashboardRequiredTasksPanel(
+                    tasks = DisciplineRequiredDashboardTasks.build(disciplinePending),
+                    onOpenSigningDay = { },
+                    onOpenDiscipline = { disciplinePending?.let(onOpenDiscipline) },
+                )
+                val injuryTasks = InjuryOptionalDashboardTasks.build(
+                    rosterPlayers,
+                    loaded.weekCheckpoint.activePosition.weekIndex,
+                    medicalRules,
+                )
+                DashboardOptionalTasksPanel(
+                    tasks = injuryTasks,
+                    dismissedIds = dismissedInjuryTasks,
+                    onDismiss = { dismissedInjuryTasks = dismissedInjuryTasks + it },
+                    onDeepLink = { },
+                    onStrategyOpen = onOpenStrategy,
+                )
+                focus?.firstGame?.let { game ->
+                    NextGameCard(
+                        game = game,
+                        onViewOpponentSchool = {
+                            val opponentId = game.opponentTeamId
+                            if (!opponentId.startsWith("event-")) {
+                                scope.launch {
+                                    schoolHubRepository.loadOpponentOverview(
+                                        loaded.dynastyId,
+                                        opponentId,
+                                        loaded.metadata.seasonIndex,
+                                    )?.let { coachView = ShellCoachView.School(it) }
+                                }
+                            }
+                        },
+                    )
+                }
+            }
         }
     }
 }

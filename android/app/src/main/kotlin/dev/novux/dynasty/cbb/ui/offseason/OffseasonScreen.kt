@@ -57,6 +57,13 @@ import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardOptionalTasksPanel
+import dev.novux.dynasty.cbb.core.player.DynastyPlayer
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTabPlaceholder
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import dev.novux.dynasty.cbb.ui.offseason.leaving.DraftResultsWeekTwoPanel
 import dev.novux.dynasty.cbb.ui.offseason.leaving.PlayersLeavingPanel
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
@@ -93,6 +100,8 @@ fun OffseasonScreen(
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
     var signingProgress by remember { mutableStateOf<SigningDayProgress?>(null) }
     var conferenceOffersResolved by remember { mutableStateOf(true) }
+    var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
+    var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(loaded.dynastyId, loaded.weekCheckpoint) {
@@ -101,6 +110,7 @@ fun OffseasonScreen(
         val portal = portalCycleRepository.loadOrSimulate(loaded.dynastyId, loaded.metadata.seasonIndex)
         portalTop40Locked = portal.top40Locked
         val roster = rosterRepository.listPlayers(loaded.dynastyId)
+        fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
         rosterPlayerCount = roster.size
         openScholarshipSlots = (SCHOLARSHIP_LIMIT - roster.size).coerceAtLeast(0)
         if (loaded.weekCheckpoint.activePosition.phase == CalendarPhase.Offseason &&
@@ -118,21 +128,33 @@ fun OffseasonScreen(
         null
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 28.dp, vertical = 36.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Text(
-            text = stringResource(R.string.offseason_shell_title),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-        )
-        Text(
-            text = loaded.summary.schoolDisplayName.orEmpty(),
-            style = MaterialTheme.typography.titleLarge,
-        )
+    val schoolName = loaded.summary.schoolDisplayName.orEmpty()
+    val menu = listOf(
+        DynastyShellMenuAction(R.string.shell_menu_exit_home, onExitHome),
+    )
+
+    DynastyShellChrome(
+        schoolDisplayName = schoolName,
+        phaseWeekLabel = weekHeader,
+        selectedTab = selectedTab,
+        onTabSelected = { selectedTab = it },
+        menuActions = menu,
+    ) { padding ->
+        when (selectedTab) {
+            DynastyShellTab.Roster -> DynastyShellRosterTab(
+                players = fullRoster,
+                contentPadding = padding,
+                onPlayerClick = { },
+            )
+            DynastyShellTab.Calendar -> DynastyShellCalendarTabPlaceholder(padding)
+            DynastyShellTab.News -> DynastyShellNewsTabPlaceholder(padding)
+            DynastyShellTab.Dashboard -> Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(horizontal = 28.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
         Text(
             text = stringResource(
                 R.string.offseason_shell_season,
@@ -140,12 +162,6 @@ fun OffseasonScreen(
             ),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Text(
-            text = weekHeader,
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(top = 8.dp),
         )
         themeLine?.let {
             Text(
@@ -363,11 +379,7 @@ fun OffseasonScreen(
             )
         }
 
-        OutlinedButton(
-            onClick = onExitHome,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        ) {
-            Text(stringResource(R.string.settings_back))
+            }
         }
     }
 }

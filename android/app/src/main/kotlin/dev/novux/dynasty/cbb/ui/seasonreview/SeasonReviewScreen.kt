@@ -25,6 +25,15 @@ import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTabPlaceholder
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import kotlinx.coroutines.launch
 
 /** End of Season gate — [planning/season-review.md]. */
@@ -37,22 +46,33 @@ fun SeasonReviewScreen(
 ) {
     val scope = rememberCoroutineScope()
     val weekHeader = CalendarWeekLabel.display(loaded.weekCheckpoint.activePosition)
+    var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
+    val schoolName = loaded.summary.schoolDisplayName.orEmpty()
+    val menu = listOf(DynastyShellMenuAction(R.string.shell_menu_exit_home, onReturnedHome))
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 28.dp, vertical = 40.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
+    DynastyShellChrome(
+        schoolDisplayName = schoolName,
+        phaseWeekLabel = weekHeader,
+        selectedTab = selectedTab,
+        onTabSelected = { selectedTab = it },
+        menuActions = menu,
+    ) { padding ->
+        when (selectedTab) {
+            DynastyShellTab.Calendar -> DynastyShellCalendarTabPlaceholder(padding)
+            DynastyShellTab.News -> DynastyShellNewsTabPlaceholder(padding)
+            DynastyShellTab.Roster,
+            DynastyShellTab.Dashboard,
+            -> Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(horizontal = 28.dp, vertical = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
         Text(
             text = stringResource(R.string.season_review_title),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
-        )
-        Text(
-            text = weekHeader,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary,
         )
         Text(
             text = stringResource(R.string.season_review_subtitle),
@@ -103,11 +123,7 @@ fun SeasonReviewScreen(
             Text(stringResource(R.string.season_review_enter_offseason))
         }
 
-        OutlinedButton(
-            onClick = onReturnedHome,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        ) {
-            Text(stringResource(R.string.settings_back))
+            }
         }
     }
 }

@@ -241,6 +241,7 @@ fun DynastyApp(
                             scheduleRepository = preseasonScheduleRepository,
                             preseasonReportRepository = preseasonReportRepository,
                             seasonStartRepository = preseasonSeasonStartRepository,
+                            rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
                             onSeasonStarted = {
                                 navController.navigate(AppRoute.DynastyShell.route) {
                                     popUpTo(AppRoute.Home.route) { inclusive = false }
