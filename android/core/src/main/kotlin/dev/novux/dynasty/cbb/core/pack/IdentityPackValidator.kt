@@ -70,6 +70,11 @@ object IdentityPackValidator {
             ) {
                 return PackValidationError.InvalidTeam(team.id, "colors must be #RRGGBB")
             }
+            team.programPrestige?.let { prestige ->
+                if (prestige !in WizardProgramPrestige.MIN..WizardProgramPrestige.MAX) {
+                    return PackValidationError.InvalidTeam(team.id, "programPrestige out of range")
+                }
+            }
         }
 
         return null

@@ -549,6 +549,27 @@
         "allowedThrough": { "phase": "offseason", "weekIndexMax": 5, "includesRegularSeason": true }
       },
       "bonusPoints": { "refunded": false, "spendUnspentWeeklyBalance": true }
+    },
+    "recommended": {
+      "listCap": 50,
+      "rosterNeedBonus": 8,
+      "bands": {
+        "likelyMin": 72,
+        "possibleMin": 55,
+        "reachMin": 38
+      },
+      "prestigeFloorByStars": {
+        "5": 75,
+        "4": 52,
+        "3": 30,
+        "2": 0
+      },
+      "prestigeGapPenaltyPerPoint": 0.9,
+      "eliteNationalRankHideThrough": 5,
+      "eliteShowMinAdjustedScore": 48,
+      "pipelineProximityScore": 0.65,
+      "inStateProximityScore": 1.0,
+      "outOfRegionProximityScore": 0.22
     }
   },
   "nil": {
@@ -648,11 +669,16 @@
   },
   "player": {
     "loyalty": {
-      "declareWeightLoyalty": 0.0,
-      "promiseKeptBonus": 0.0,
-      "promiseBrokenPenalty": 0.0,
+      "declareWeightLoyalty": 0.008,
+      "promiseKeptBonus": 0.12,
+      "promiseBrokenPenalty": 0.25,
       "minutesToleranceMpg": 3,
-      "stayPledgeDefaultTopN": 14
+      "stayPledgeDefaultTopN": 14,
+      "loyaltySeedMin": 25,
+      "loyaltySeedMax": 75,
+      "promiseKeptLoyaltyBump": 5,
+      "promiseBrokenLoyaltyHit": 15,
+      "portalBrokenPromiseWeight": 0.35
     }
   }
 }

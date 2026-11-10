@@ -91,8 +91,8 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 2.3 | `[x]` Dynasty metadata schema (`seasonIndex`, `phase`, `packId`) | Round-trip one empty dynasty | [game-design](../planning/game-design.md) | `:core`, Room `dynasty_metadata`, **New** bootstrap |
 | 2.4 | `[x]` **Week advance** checkpoint semantics | Replay before advance; lock after | [game-design](../planning/game-design.md) | `:core/calendar/checkpoint`, Room `dynasty_calendar` + `provisional_games` |
 | 2.5 | `[x]` Unreadable-save handling on Load | Validate + repair calendar; fallback delete UI | [game-start](../planning/game-start.md) | `DynastySaveValidator`, `SaveLoadUnavailableDialog` |
-| 2.6 | `[ ]` **Balance ruleset** loader + pin on dynasty | Loads & pins: scholarship **15**, `recruiting.*`, loyalty, `nil.*`, `injuries.*`, `discipline.*`, `chemistry`, `fatigue` | [ADR-002](ADR-002-balance-ruleset-bundle.md), [`balance-2026.json`](../assets/balance/balance-2026.json) | `:core/balance` |
-| 2.7 | `[ ]` **Sim tuning** loader + pin on dynasty | `simSchemaVersion`; possession tables load in sim module | [ADR-003](ADR-003-sim-tuning-bundle.md) | `:core/sim/tuning` |
+| 2.6 | `[x]` **Balance ruleset** loader + pin on dynasty | Loads & pins: scholarship **15**, `recruiting.*`, loyalty, `nil.*`, `injuries.*`, `discipline.*`, `chemistry`, `fatigue` | [ADR-002](ADR-002-balance-ruleset-bundle.md), [`balance-2026.json`](../assets/balance/balance-2026.json) | `:core/balance` |
+| 2.7 | `[x]` **Sim tuning** loader + pin on dynasty | `simSchemaVersion`; possession tables load in sim module | [ADR-003](ADR-003-sim-tuning-bundle.md) | `:core/sim/tuning` |
 
 ---
 
@@ -111,13 +111,13 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 4.1 | `[ ]` Nav: Home → multi-step **New** | Back stack works | [game-start](../planning/game-start.md) | `ui.newgame` |
-| 4.2 | `[ ]` Coach info + avatar presets | Saved on coach entity | [game-start](../planning/game-start.md), [coach-card](../planning/coach-card.md) | `:core` + UI |
-| 4.3 | `[ ]` Archetype + default O/D schemes | Matches strategy presets | [game-start](../planning/game-start.md), [strategy-schemes](../planning/strategy-schemes.md) | `:core` |
-| 4.4 | `[ ]` Dynasty toggles (auto-upgrade, unlimited age) | On save metadata | [game-start](../planning/game-start.md) | — |
-| 4.5 | `[ ]` School picker (prestige ≤40, unlock all) | Summary sheet + contract preview | [game-start](../planning/game-start.md) | UI + pack |
-| 4.6 | `[ ]` Sign contract → bootstrap **Offseason Week 1** | Season 1, no carousel | [offseason](../planning/offseason.md), [game-start](../planning/game-start.md) | `domain/bootstrap` |
-| 4.7 | `[ ]` Generate Season 1 roster (starters, class years) | 15-man cap path started | [game-design](../planning/game-design.md) | `:core` |
+| 4.1 | `[x]` Nav: Home → multi-step **New** | Back stack works | [game-start](../planning/game-start.md) | `ui.newgame` |
+| 4.2 | `[x]` Coach info + avatar presets | Saved on coach entity | [game-start](../planning/game-start.md), [coach-card](../planning/coach-card.md) | `:core` + UI |
+| 4.3 | `[x]` Archetype + default O/D schemes | Matches strategy presets | [game-start](../planning/game-start.md), [strategy-schemes](../planning/strategy-schemes.md) | `:core` |
+| 4.4 | `[x]` Dynasty toggles (auto-upgrade, unlimited age) | On save metadata | [game-start](../planning/game-start.md) | — |
+| 4.5 | `[x]` School picker (prestige ≤40, unlock all) | Summary sheet + contract preview | [game-start](../planning/game-start.md) | UI + pack |
+| 4.6 | `[x]` Sign contract → bootstrap **Offseason Week 1** | Season 1, no carousel | [offseason](../planning/offseason.md), [game-start](../planning/game-start.md) | `domain/bootstrap` |
+| 4.7 | `[x]` Generate Season 1 roster (starters, class years) | 15-man cap path started | [game-design](../planning/game-design.md) | `:core` |
 
 ---
 
@@ -125,12 +125,12 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 5.1 | `[ ]` `CalendarPhase` state machine | All phases in [time-system](../planning/time-system.md) | [time-system](../planning/time-system.md) | `:core/calendar` |
-| 5.2 | `[ ]` Exhibition weeks 1–3 labels | Advancing empty exhib week OK | [time-system](../planning/time-system.md) | — |
-| 5.3 | `[ ]` RS weeks 1–32 + bye weeks (events, conf, postseason) | Unit tests for bye logic; bye **advance** ticks injury `weeksRemaining` | [time-system](../planning/time-system.md), [injuries](../planning/injuries.md) | `:core` tests |
-| 5.4 | `[ ]` Conf-tourney week count = **pack max rounds** | Short conf byes while others play | [time-system](../planning/time-system.md) | — |
-| 5.5 | `[ ]` Postseason **7** league weeks always | Non-participant can advance + view brackets | [time-system](../planning/time-system.md), [postseason](../planning/postseason.md) | — |
-| 5.6 | `[ ]` **End of Season** week → offseason entry | [season-review](../planning/season-review.md) gate | [season-review](../planning/season-review.md) | `ui.seasonreview` |
+| 5.1 | `[x]` `CalendarPhase` state machine | All phases in [time-system](../planning/time-system.md) | [time-system](../planning/time-system.md) | `:core/calendar` |
+| 5.2 | `[x]` Exhibition weeks 1–3 labels | Advancing empty exhib week OK | [time-system](../planning/time-system.md) | — |
+| 5.3 | `[x]` RS weeks 1–32 + bye weeks (events, conf, postseason) | Unit tests for bye logic; bye **advance** ticks injury `weeksRemaining` | [time-system](../planning/time-system.md), [injuries](../planning/injuries.md) | `:core` tests |
+| 5.4 | `[x]` Conf-tourney week count = **pack max rounds** | Short conf byes while others play | [time-system](../planning/time-system.md) | — |
+| 5.5 | `[x]` Postseason **7** league weeks always | Non-participant can advance + view brackets | [time-system](../planning/time-system.md), [postseason](../planning/postseason.md) | — |
+| 5.6 | `[x]` **End of Season** week → offseason entry | [season-review](../planning/season-review.md) gate | [season-review](../planning/season-review.md) | `ui.seasonreview` |
 
 ---
 
@@ -138,27 +138,27 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 6.1 | `[ ]` Offseason shell + week header (Week 1–10) | Advance week persists | [offseason](../planning/offseason.md) | `ui.offseason` |
-| 6.2 | `[ ]` **Coaching Carousel** (Season 2+ only) | AI background + user approvals | [offseason](../planning/offseason.md) | `:core/carousel` |
-| 6.3 | `[ ]` Week 1: **Roster / Transfer** tabs (mutual exclusion) | Encourage transfer / convince stay; portal entrants **not** on Roster | [transfer-portal](../planning/transfer-portal.md), [offseason](../planning/offseason.md), [player-loyalty-promises](../planning/player-loyalty-promises.md) | `ui.offseason.leaving` |
-| 6.4 | `[ ]` Week 1: pro days → draft stock | Feeds week 2 results | [offseason](../planning/offseason.md) | — |
-| 6.5 | `[ ]` Recruiting hub shell (HS/JUCO + Portal sub-tabs) | Opens **Recommended** by default; year-long cycle, not OS-only | [recruiting-engine](../planning/recruiting-engine.md), [game-frame](../planning/game-frame.md) | `ui.recruiting` |
-| 6.11 | `[ ]` **Year-long recruiting economy** | Prestige tier weekly pool, **50%** carryover, OS W2–5 **1.5×** crunch; pool set at EoS recap | [recruiting-engine](../planning/recruiting-engine.md) | `:core/recruiting` |
-| 6.12 | `[ ]` **Transfer portal** sim (1 cycle, no in-season) | ~1k–1.4k considering pool; **Top 40** lock OS Week 2; immediate eligibility | [transfer-portal](../planning/transfer-portal.md) | `:core/portal` |
-| 6.13 | `[ ]` **Recommended** tab + `signLikelihood` badges | Low-prestige reach filter; badge from **`baselineInterest`** (zero spend); hidden 0–99 attr until commit | [recruiting-engine](../planning/recruiting-engine.md#recommended-tab-default), [interest feed](../planning/recruiting-engine.md#feed-into-signlikelihood) | `ui.recruiting` |
-| 6.14 | `[ ]` Optional **dashboard tasks** (recruiting + portal W2–5) | Triggers + deep links per index; never block advance | [dashboard-tasks](../planning/dashboard-tasks.md), [transfer-portal](../planning/transfer-portal.md) | `ui.dashboard` |
-| 6.15 | `[ ]` **AI recruiting** (league + user on sim-week) | Hidden boards; Recommended parity; auto-maintain on advance confirm | [recruiting-engine](../planning/recruiting-engine.md#ai-recruiting) | `:core/recruiting/ai` |
-| 6.16 | `[ ]` **Sim-week** advance resolver hook | Unplayed games fast-sim + user-school recruiting/portal AI lines in confirm dialog | [game-frame](../planning/game-frame.md#advance-week-confirmation-sim-week) | `:core/advance` |
-| 6.17 | `[ ]` Recruiting **point actions** (DM, call, house, offer, bonus) | Costs + non-refunded spend per [action table](../planning/recruiting-engine.md#action-costs-design-lock) | [recruiting-engine](../planning/recruiting-engine.md), `recruiting.actions` | `:core/recruiting` |
-| 6.18 | `[ ]` **Refunded** reservations (offer, scout game, official visit) | Week-bound spend; refund on advance if still active | [recruiting-engine](../planning/recruiting-engine.md#refunded-actions-week-reservation) | `:core/recruiting` |
-| 6.19 | `[ ]` **Official visit** + **scout their game** windows | Visit 50/100/150 by distance; once/recruit/season; RS → end **R4** | [recruiting-engine](../planning/recruiting-engine.md#action-costs-design-lock) | `ui.recruiting` |
-| 6.20 | `[ ]` **Signing Day** (offseason **week 6**) | Required rankings + position editor; hard sign | [recruiting-engine](../planning/recruiting-engine.md#signing-day-offseason-week-6), [dashboard-tasks](../planning/dashboard-tasks.md) | `ui.signingday` |
-| 6.21 | `[ ]` Recruit **interest** + **Influence board** | Six-factor catalog; **1–2 priorities** at player creation (portal keeps); chips visible; **Influence board** ranks + closeness; decommit no full reset; proposed `recruiting.interest.*` in JSON later; `signLikelihood` zero spend | [interest](../planning/recruiting-engine.md#interest--offers), [influence board](../planning/recruiting-engine.md#influence-board-design-lock) | `:core/recruiting` |
-| 6.6 | `[ ]` Offseason **week 2**: NBA draft results | Scholarships open | [offseason](../planning/offseason.md) | — |
-| 6.7 | `[ ]` Offseason **week 7**: summer workouts (auto) | Report screen | [offseason](../planning/offseason.md) | — |
-| 6.8 | `[ ]` Offseason **week 8**: cuts + roster lock ≤15 + walk-ons | Walk-ons after Signing Day | [recruiting-engine](../planning/recruiting-engine.md), [offseason](../planning/offseason.md) | — |
-| 6.9 | `[ ]` Offseason **week 9**: fundraising & facility upgrades | Cash/NIL hooks | [game-design](../planning/game-design.md) | — |
-| 6.10 | `[ ]` Offseason **week 10**: conference offers (skip Season 1) | Realignment cards | [offseason](../planning/offseason.md), [game-design](../planning/game-design.md) | — |
+| 6.1 | `[x]` Offseason shell + week header (Week 1–10) | Advance week persists | [offseason](../planning/offseason.md) | `ui.offseason` |
+| 6.2 | `[x]` **Coaching Carousel** (Season 2+ only) | AI background + user approvals | [offseason](../planning/offseason.md) | `:core/carousel` |
+| 6.3 | `[x]` Week 1: **Roster / Transfer** tabs (mutual exclusion) | Encourage transfer / convince stay; portal entrants **not** on Roster | [transfer-portal](../planning/transfer-portal.md), [offseason](../planning/offseason.md), [player-loyalty-promises](../planning/player-loyalty-promises.md) | `ui.offseason.leaving` |
+| 6.4 | `[x]` Week 1: pro days → draft stock | Feeds week 2 results | [offseason](../planning/offseason.md) | — |
+| 6.5 | `[x]` Recruiting hub shell (HS/JUCO + Portal sub-tabs) | Opens **Recommended** by default; year-long cycle, not OS-only | [recruiting-engine](../planning/recruiting-engine.md), [game-frame](../planning/game-frame.md) | `ui.recruiting` |
+| 6.11 | `[x]` **Year-long recruiting economy** | Prestige tier weekly pool, **50%** carryover, OS W2–5 **1.5×** crunch; pool set at EoS recap | [recruiting-engine](../planning/recruiting-engine.md) | `:core/recruiting` |
+| 6.12 | `[x]` **Transfer portal** sim (1 cycle, no in-season) | ~1k–1.4k considering pool; **Top 40** lock OS Week 2; immediate eligibility | [transfer-portal](../planning/transfer-portal.md) | `:core/portal` |
+| 6.13 | `[x]` **Recommended** tab + `signLikelihood` badges | Low-prestige reach filter; badge from **`baselineInterest`** (zero spend); hidden 0–99 attr until commit | [recruiting-engine](../planning/recruiting-engine.md#recommended-tab-default), [interest feed](../planning/recruiting-engine.md#feed-into-signlikelihood) | `ui.recruiting` |
+| 6.14 | `[x]` Optional **dashboard tasks** (recruiting + portal W2–5) | Triggers + deep links per index; never block advance | [dashboard-tasks](../planning/dashboard-tasks.md), [transfer-portal](../planning/transfer-portal.md) | `ui.dashboard` |
+| 6.15 | `[x]` **AI recruiting** (league + user on sim-week) | Hidden boards; Recommended parity; auto-maintain on advance confirm | [recruiting-engine](../planning/recruiting-engine.md#ai-recruiting) | `:core/recruiting/ai` |
+| 6.16 | `[x]` **Sim-week** advance resolver hook | Unplayed games fast-sim + user-school recruiting/portal AI lines in confirm dialog | [game-frame](../planning/game-frame.md#advance-week-confirmation-sim-week) | `:core/advance` |
+| 6.17 | `[x]` Recruiting **point actions** (DM, call, house, offer, bonus) | Costs + non-refunded spend per [action table](../planning/recruiting-engine.md#action-costs-design-lock) | [recruiting-engine](../planning/recruiting-engine.md), `recruiting.actions` | `:core/recruiting` |
+| 6.18 | `[x]` **Refunded** reservations (offer, scout game, official visit) | Week-bound spend; refund on advance if still active | [recruiting-engine](../planning/recruiting-engine.md#refunded-actions-week-reservation) | `:core/recruiting` |
+| 6.19 | `[x]` **Official visit** + **scout their game** windows | Visit 50/100/150 by distance; once/recruit/season; RS → end **R4** | [recruiting-engine](../planning/recruiting-engine.md#action-costs-design-lock) | `ui.recruiting` |
+| 6.20 | `[x]` **Signing Day** (offseason **week 6**) | Required rankings + position editor; hard sign | [recruiting-engine](../planning/recruiting-engine.md#signing-day-offseason-week-6), [dashboard-tasks](../planning/dashboard-tasks.md) | `ui.signingday` |
+| 6.21 | `[x]` Recruit **interest** + **Influence board** | Six-factor catalog; **1–2 priorities** at player creation (portal keeps); chips visible; **Influence board** ranks + closeness; decommit no full reset; proposed `recruiting.interest.*` in JSON later; `signLikelihood` zero spend | [interest](../planning/recruiting-engine.md#interest--offers), [influence board](../planning/recruiting-engine.md#influence-board-design-lock) | `:core/recruiting` |
+| 6.6 | `[x]` Offseason **week 2**: NBA draft results | Scholarships open | [offseason](../planning/offseason.md) | — |
+| 6.7 | `[x]` Offseason **week 7**: summer workouts (auto) | Report screen | [offseason](../planning/offseason.md) | — |
+| 6.8 | `[x]` Offseason **week 8**: cuts + roster lock ≤15 + walk-ons | Walk-ons after Signing Day | [recruiting-engine](../planning/recruiting-engine.md), [offseason](../planning/offseason.md) | — |
+| 6.9 | `[x]` Offseason **week 9**: fundraising & facility upgrades | Cash/NIL hooks | [game-design](../planning/game-design.md) | — |
+| 6.10 | `[x]` Offseason **week 10**: conference offers (skip Season 1) | Realignment cards | [offseason](../planning/offseason.md), [game-design](../planning/game-design.md) | — |
 
 ---
 
@@ -166,12 +166,12 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 7.1 | `[ ]` Preseason task checklist UI (8 tasks) | All required before Start Season | [preseason](../planning/preseason.md) | `ui.preseason` |
-| 7.2 | `[ ]` Incoming class seed + Top 60 News | HS/JUCO pools; each recruit rolls 1–2 `topPriorities` | [recruiting-engine](../planning/recruiting-engine.md#top-priorities), [preseason](../planning/preseason.md) | `:core` |
-| 7.3 | `[ ]` Tournament invites **before** schedule | **32** RS cap; **28** builder slots only if 4-game event | [preseason](../planning/preseason.md), [ncba-branding](../planning/ncba-branding.md) | — |
-| 7.4 | `[ ]` Exhibitions 0–3 + RS schedule solver | Conf visible, double-headers allowed | [preseason](../planning/preseason.md), [game-design](../planning/game-design.md) | `:core/schedule` |
-| 7.5 | `[ ]` Preseason report article component | Reuse for pre/post game later | [preseason](../planning/preseason.md) | `ui.reports` |
-| 7.6 | `[ ]` Start season → first exhib or RS game | [game-frame](../planning/game-frame.md) entry | [preseason](../planning/preseason.md) | Navigation |
+| 7.1 | `[x]` Preseason task checklist UI (8 tasks) | All required before Start Season | [preseason](../planning/preseason.md) | `ui.preseason` |
+| 7.2 | `[x]` Incoming class seed + Top 60 News | HS/JUCO pools; each recruit rolls 1–2 `topPriorities` | [recruiting-engine](../planning/recruiting-engine.md#top-priorities), [preseason](../planning/preseason.md) | `:core` |
+| 7.3 | `[x]` Tournament invites **before** schedule | **32** RS cap; **28** builder slots only if 4-game event | [preseason](../planning/preseason.md), [ncba-branding](../planning/ncba-branding.md) | — |
+| 7.4 | `[x]` Exhibitions 0–3 + RS schedule solver | Conf visible, double-headers allowed | [preseason](../planning/preseason.md), [game-design](../planning/game-design.md) | `:core/schedule` |
+| 7.5 | `[x]` Preseason report article component | Reuse for pre/post game later | [preseason](../planning/preseason.md) | `ui.reports` |
+| 7.6 | `[x]` Start season → first exhib or RS game | [game-frame](../planning/game-frame.md) entry | [preseason](../planning/preseason.md) | Navigation |
 
 ---
 
@@ -179,16 +179,16 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 8.1 | `[ ]` Player model (ratings, position, eligibility) | Matches player card fields; injury strip fields (`weeksRemaining`, label) | [player-cards](../planning/player-cards.md), [positions](../planning/positions-and-lineup.md), [injuries](../planning/injuries.md#player-ui) | `:core` |
-| 8.2 | `[ ]` Archetypes + hidden ratings / letter grades | Scout view | [player-archetypes](../planning/player-archetypes.md), [recruiting-engine](../planning/recruiting-engine.md) | — |
-| 8.3 | `[ ]` Head coach + assistants (cards) | Staff tab vs support list | [coach-card](../planning/coach-card.md) | `ui.coach` |
-| 8.4 | `[ ]` School hub data (prestige, SOS, NET on card) | Read-only opponent schools | [game-frame](../planning/game-frame.md) | `ui.school` |
-| 8.5 | `[ ]` Job security + AD trust | Coach card + Staff tab | [coach-card](../planning/coach-card.md) | — |
-| 8.6 | `[ ]` **Loyalty** (0–99) + **one promise** per tenure | Kept/broken → portal / declare rolls; card chips | [player-loyalty-promises](../planning/player-loyalty-promises.md), [player-cards](../planning/player-cards.md) | `:core/player` |
-| 8.7 | `[ ]` **Injury** state + medical redshirt + **auto lineup** | Save fields per spec; `weeksRemaining` + snapshots; lineup adjust on injury/return; medical RS gates; bank **40** rows | [injuries](../planning/injuries.md) | `:core/injuries` |
-| 8.8 | `[ ]` **Injury UX** (postgame + cards + strategy) | Postgame sheet; roster `OUT` / `{N}w`; greyed in Strategy; optional dashboard deep links | [injuries](../planning/injuries.md#player-ui), [injuries#medical-redshirt](../planning/injuries.md#medical-redshirt), [dashboard-tasks](../planning/dashboard-tasks.md) | `ui.postgame`, `ui.strategy` |
-| 8.9 | `[ ]` **Discipline events** (conduct + academic) | Weekly random roll; required sheet; dismiss / games / conference draw or academic options | [in-season-systems](../planning/in-season-systems.md) | `ui.discipline` |
-| 8.10 | `[ ]` **Chemistry + fatigue** state | `teamChemistry`, per-player `stamina`; weekly tick; sim clutch + injury weight | [in-season-systems](../planning/in-season-systems.md) | `:core/discipline` |
+| 8.1 | `[x]` Player model (ratings, position, eligibility) | Matches player card fields; injury strip fields (`weeksRemaining`, label) | [player-cards](../planning/player-cards.md), [positions](../planning/positions-and-lineup.md), [injuries](../planning/injuries.md#player-ui) | `:core` |
+| 8.2 | `[x]` Archetypes + hidden ratings / letter grades | Scout view | [player-archetypes](../planning/player-archetypes.md), [recruiting-engine](../planning/recruiting-engine.md) | — |
+| 8.3 | `[x]` Head coach + assistants (cards) | Staff tab vs support list | [coach-card](../planning/coach-card.md) | `ui.coach` |
+| 8.4 | `[x]` School hub data (prestige, SOS, NET on card) | Read-only opponent schools | [game-frame](../planning/game-frame.md) | `ui.school` |
+| 8.5 | `[x]` Job security + AD trust | Coach card + Staff tab | [coach-card](../planning/coach-card.md) | — |
+| 8.6 | `[x]` **Loyalty** (0–99) + **one promise** per tenure | Kept/broken → portal / declare rolls; card chips | [player-loyalty-promises](../planning/player-loyalty-promises.md), [player-cards](../planning/player-cards.md) | `:core/player` |
+| 8.7 | `[x]` **Injury** state + medical redshirt + **auto lineup** | Save fields per spec; `weeksRemaining` + snapshots; lineup adjust on injury/return; medical RS gates; bank **40** rows | [injuries](../planning/injuries.md) | `:core/injuries` |
+| 8.8 | `[x]` **Injury UX** (postgame + cards + strategy) | Postgame sheet; roster `OUT` / `{N}w`; greyed in Strategy; optional dashboard deep links | [injuries](../planning/injuries.md#player-ui), [injuries#medical-redshirt](../planning/injuries.md#medical-redshirt), [dashboard-tasks](../planning/dashboard-tasks.md) | `ui.postgame`, `ui.strategy` |
+| 8.9 | `[x]` **Discipline events** (conduct + academic) | Weekly random roll; required sheet; dismiss / games / conference draw or academic options | [in-season-systems](../planning/in-season-systems.md) | `ui.discipline` |
+| 8.10 | `[x]` **Chemistry + fatigue** state | `teamChemistry`, per-player `stamina`; weekly tick; sim clutch + injury weight | [in-season-systems](../planning/in-season-systems.md) | `:core/discipline` |
 
 ---
 
@@ -196,18 +196,18 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 9.1 | `[ ]` **Dynasty shell** (all phases): bottom nav + phase header | Same chrome offseason→March; Dashboard default | [game-frame](../planning/game-frame.md) | `ui.dynasty` |
-| 9.2 | `[ ]` Calendar tab (week labels, bye display) | Matches time-system | [game-frame](../planning/game-frame.md), [time-system](../planning/time-system.md) | — |
-| 9.3 | `[ ]` Schedule generation for AI leagues | 365 teams progress | [game-design](../planning/game-design.md) | `:core/league` |
-| 9.4 | `[ ]` Batch sim non-user games on week advance | Standings update; AI injury rolls + lineup adjust per team | [game-design](../planning/game-design.md), [injuries](../planning/injuries.md), [simulation-engine](../planning/simulation-engine.md) | `:core/league` |
-| 9.5 | `[ ]` Early event brackets (Island/Desert 4wk, etc.) | Elimination byes | [ncba-branding](../planning/ncba-branding.md), [time-system](../planning/time-system.md) | — |
-| 9.6 | `[ ]` **Dashboard task gate** (Required / Optional cards) | Preseason 8 required; in-season games optional; injury **Review** + **Medical RS?** optional cards | [dashboard-tasks](../planning/dashboard-tasks.md), [game-frame](../planning/game-frame.md#dashboard-task-gate), [injuries](../planning/injuries.md#medical-redshirt) | `ui.dashboard` |
-| 9.7 | `[ ]` **Advance week** + sim-week **confirmation** | Game auto-sim + recruiting summary; decrement injury `weeksRemaining` (byes included); return lineup at **0** | [game-frame](../planning/game-frame.md#advance-week-confirmation-sim-week), [injuries](../planning/injuries.md) | `ui.dashboard` |
-| 9.8 | `[ ]` **News** tab (shallow headlines) | Top **N** league stories; user injury notify; league injury headlines (severity tiers) | [game-frame](../planning/game-frame.md#news-tab-dashboard), [news-hub](../planning/news-hub.md), [injuries](../planning/injuries.md#news--league) | `ui.news` |
-| 9.9 | `[ ]` **News hub** (hamburger): Stories / Portal / Recruits / Draft | Top 60 recruits full list; Portal Top 40 @ OS W2 | [news-hub](../planning/news-hub.md) | `ui.newshub` |
-| 9.10 | `[ ]` Hamburger hubs (School, Strategy, Stats, Rankings, History, Recruiting) | Recruiting opens **Recommended**; March Mayhem when eligible | [game-frame](../planning/game-frame.md) | `ui.hubs` |
-| 9.11 | `[ ]` Optional **Sunday coach points** dashboard nudge | Deep link Coach card spend / bank | [dashboard-tasks](../planning/dashboard-tasks.md), [game-design](../planning/game-design.md) | — |
-| 9.12 | `[ ]` **Awards hub** (Yearly + Weekly) | Landing two buttons; Yearly **NCBA** / **Conference** tabs + sub-tabs; conf picker default user conf; **current season yearly locked in-season**; runner-ups; Weekly POTW live | [awards](../planning/awards.md#awards-hub-ui-design-lock), [game-frame](../planning/game-frame.md#awards-hub) | `ui.awards` |
+| 9.1 | `[x]` **Dynasty shell** (all phases): bottom nav + phase header | Same chrome offseason→March; Dashboard default | [game-frame](../planning/game-frame.md) | `ui.dynasty` |
+| 9.2 | `[x]` Calendar tab (week labels, bye display) | Matches time-system | [game-frame](../planning/game-frame.md), [time-system](../planning/time-system.md) | — |
+| 9.3 | `[x]` Schedule generation for AI leagues | 365 teams progress | [game-design](../planning/game-design.md) | `:core/league` |
+| 9.4 | `[x]` Batch sim non-user games on week advance | Standings update; AI injury rolls + lineup adjust per team | [game-design](../planning/game-design.md), [injuries](../planning/injuries.md), [simulation-engine](../planning/simulation-engine.md) | `:core/league` |
+| 9.5 | `[x]` Early event brackets (Island/Desert 4wk, etc.) | Elimination byes | [ncba-branding](../planning/ncba-branding.md), [time-system](../planning/time-system.md) | — |
+| 9.6 | `[x]` **Dashboard task gate** (Required / Optional cards) | Preseason 8 required; in-season games optional; injury **Review** + **Medical RS?** optional cards | [dashboard-tasks](../planning/dashboard-tasks.md), [game-frame](../planning/game-frame.md#dashboard-task-gate), [injuries](../planning/injuries.md#medical-redshirt) | `ui.dashboard` |
+| 9.7 | `[x]` **Advance week** + sim-week **confirmation** | Game auto-sim + recruiting summary; decrement injury `weeksRemaining` (byes included); return lineup at **0** | [game-frame](../planning/game-frame.md#advance-week-confirmation-sim-week), [injuries](../planning/injuries.md) | `ui.dashboard` |
+| 9.8 | `[x]` **News** tab (shallow headlines) | Top **N** league stories; user injury notify; league injury headlines (severity tiers) | [game-frame](../planning/game-frame.md#news-tab-dashboard), [news-hub](../planning/news-hub.md), [injuries](../planning/injuries.md#news--league) | `ui.news` |
+| 9.9 | `[x]` **News hub** (hamburger): Stories / Portal / Recruits / Draft | Top 60 recruits full list; Portal Top 40 @ OS W2 | [news-hub](../planning/news-hub.md) | `ui.newshub` |
+| 9.10 | `[x]` Hamburger hubs (School, Strategy, Stats, Rankings, History, Recruiting) | Recruiting opens **Recommended**; March Mayhem when eligible | [game-frame](../planning/game-frame.md) | `ui.hubs` |
+| 9.11 | `[x]` Optional **Sunday coach points** dashboard nudge | Deep link Coach card spend / bank | [dashboard-tasks](../planning/dashboard-tasks.md), [game-design](../planning/game-design.md) | — |
+| 9.12 | `[x]` **Awards hub** (Yearly + Weekly) | Landing two buttons; Yearly **NCBA** / **Conference** tabs + sub-tabs; conf picker default user conf; **current season yearly locked in-season**; runner-ups; Weekly POTW live | [awards](../planning/awards.md#awards-hub-ui-design-lock), [game-frame](../planning/game-frame.md#awards-hub) | `ui.awards` |
 
 ---
 
@@ -215,14 +215,14 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 10.1 | `[ ]` Possession loop, 40:00 clock, 3–30s trips | Box score totals sane | [simulation-engine](../planning/simulation-engine.md) | `:core/sim` |
-| 10.2 | `[ ]` Lineups PG–C, rotation minutes | Default starter algorithm; interchange rules; injured ineligible + auto-fill hooks | [positions](../planning/positions-and-lineup.md), [injuries](../planning/injuries.md#lineup--rotation) | `:core/sim` |
-| 10.3 | `[ ]` O/D scheme modifiers | 7×7 presets | [strategy-schemes](../planning/strategy-schemes.md) | — |
-| 10.4 | `[ ]` Gameplan knobs (usage, deny-primary, late fouls) | Pre-game + halftime | [strategy-schemes](../planning/strategy-schemes.md) | `ui.strategy` |
-| 10.5 | `[ ]` Live text / 2s watch mode | Halftime edit | [strategy-schemes](../planning/strategy-schemes.md), [game-frame](../planning/game-frame.md) | — |
-| 10.6 | `[ ]` Game preview (win %, predicted score, H2H) | 0 games played OK | [game-frame](../planning/game-frame.md) | — |
-| 10.7 | `[ ]` Pregame + postgame report articles | Shared template | [preseason](../planning/preseason.md) | `ui.reports` |
-| 10.8 | `[ ]` In-game **injury** rolls | Sample from `injuries.bank`; roll `durationWeeks*` → `weeksRemaining`; persist + `applyInjuryLineupAdjust` | [injuries](../planning/injuries.md), [simulation-engine](../planning/simulation-engine.md) | `:core/sim` |
+| 10.1 | `[x]` Possession loop, 40:00 clock, 3–30s trips | Box score totals sane | [simulation-engine](../planning/simulation-engine.md) | `:core/sim` |
+| 10.2 | `[x]` Lineups PG–C, rotation minutes | Default starter algorithm; interchange rules; injured ineligible + auto-fill hooks | [positions](../planning/positions-and-lineup.md), [injuries](../planning/injuries.md#lineup--rotation) | `:core/sim` |
+| 10.3 | `[x]` O/D scheme modifiers | 7×7 presets | [strategy-schemes](../planning/strategy-schemes.md) | — |
+| 10.4 | `[x]` Gameplan knobs (usage, deny-primary, late fouls) | Pre-game + halftime | [strategy-schemes](../planning/strategy-schemes.md) | `ui.strategy` |
+| 10.5 | `[x]` Live text / 2s watch mode | Halftime edit | [strategy-schemes](../planning/strategy-schemes.md), [game-frame](../planning/game-frame.md) | — |
+| 10.6 | `[x]` Game preview (win %, predicted score, H2H) | 0 games played OK | [game-frame](../planning/game-frame.md) | — |
+| 10.7 | `[x]` Pregame + postgame report articles | Shared template | [preseason](../planning/preseason.md) | `ui.reports` |
+| 10.8 | `[x]` In-game **injury** rolls | Sample from `injuries.bank`; roll `durationWeeks*` → `weeksRemaining`; persist + `applyInjuryLineupAdjust` | [injuries](../planning/injuries.md), [simulation-engine](../planning/simulation-engine.md) | `:core/sim` |
 
 ---
 
@@ -230,11 +230,11 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 11.1 | `[ ]` `sosRating`, NEM, quads from results | School hub SOS 0–99 | [selection-engine](../planning/selection-engine.md) | `:core/resume` |
-| 11.2 | `[ ]` Weekly **NCBA NET** (365 teams) | Drives Selection Sunday | [selection-engine](../planning/selection-engine.md) | — |
-| 11.3 | `[ ]` Media & Coaches polls (human bias) | T25 callouts | [selection-engine](../planning/selection-engine.md), [game-frame](../planning/game-frame.md) | — |
-| 11.4 | `[ ]` Rankings hub tabs | NET / Media / Coaches / conf | [game-frame](../planning/game-frame.md) | — |
-| 11.5 | `[ ]` Selection Sunday + seed index | NCBA 76, NCI, HC | [postseason](../planning/postseason.md), [selection-engine](../planning/selection-engine.md) | `:core/selection` |
+| 11.1 | `[x]` `sosRating`, NEM, quads from results | School hub SOS 0–99 | [selection-engine](../planning/selection-engine.md) | `:core/resume` |
+| 11.2 | `[x]` Weekly **NCBA NET** (365 teams) | Drives Selection Sunday | [selection-engine](../planning/selection-engine.md) | — |
+| 11.3 | `[x]` Media & Coaches polls (human bias) | T25 callouts | [selection-engine](../planning/selection-engine.md), [game-frame](../planning/game-frame.md) | — |
+| 11.4 | `[x]` Rankings hub tabs | NET / Media / Coaches / conf | [game-frame](../planning/game-frame.md) | — |
+| 11.5 | `[x]` Selection Sunday + seed index | NCBA 76, NCI, HC | [postseason](../planning/postseason.md), [selection-engine](../planning/selection-engine.md) | `:core/selection` |
 
 ---
 
@@ -242,9 +242,9 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 12.1 | `[ ]` Per-conf `TournamentTemplate` sim | Real 2026–27 formats | [game-design](../planning/game-design.md), [postseason](../planning/postseason.md) | `:core` |
-| 12.2 | `[ ]` Reclass pass-over runner-up | Auto-bid rules | [postseason](../planning/postseason.md) | — |
-| 12.3 | `[ ]` Conf-tourney UI + unified week calendar | Byes for short brackets | [time-system](../planning/time-system.md) | — |
+| 12.1 | `[x]` Per-conf `TournamentTemplate` sim | Real 2026–27 formats | [game-design](../planning/game-design.md), [postseason](../planning/postseason.md) | `:core` |
+| 12.2 | `[x]` Reclass pass-over runner-up | Auto-bid rules | [postseason](../planning/postseason.md) | — |
+| 12.3 | `[x]` Conf-tourney UI + unified week calendar | Byes for short brackets | [time-system](../planning/time-system.md) | — |
 
 ---
 
@@ -252,11 +252,11 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 13.1 | `[ ]` NCBA Opening Round (24→12) | Pairing 1v24… | [postseason](../planning/postseason.md) | `:core/brackets` |
-| 13.2 | `[ ]` NCBA rounds R1→NC, 4 regions | S-curve, NCBA # seeds | [postseason](../planning/postseason.md), [ncba-branding](../planning/ncba-branding.md) | — |
-| 13.3 | `[ ]` NCI (32) + Heritage (16) parallel | Same 7-week calendar | [postseason](../planning/postseason.md) | — |
-| 13.4 | `[ ]` **March Mayhem** hub | NCBA / NCI / HC tabs | [postseason-frame](../planning/postseason-frame.md) | `ui.march` |
-| 13.5 | `[ ]` Sim user postseason games + batch rest | Week advance | [postseason](../planning/postseason.md) | — |
+| 13.1 | `[x]` NCBA Opening Round (24→12) | Pairing 1v24… | [postseason](../planning/postseason.md) | `:core/brackets` |
+| 13.2 | `[x]` NCBA rounds R1→NC, 4 regions | S-curve, NCBA # seeds | [postseason](../planning/postseason.md), [ncba-branding](../planning/ncba-branding.md) | — |
+| 13.3 | `[x]` NCI (32) + Heritage (16) parallel | Same 7-week calendar | [postseason](../planning/postseason.md) | — |
+| 13.4 | `[x]` **March Mayhem** hub | NCBA / NCI / HC tabs | [postseason-frame](../planning/postseason-frame.md) | `ui.march` |
+| 13.5 | `[x]` Sim user postseason games + batch rest | Week advance | [postseason](../planning/postseason.md) | `:core/brackets`, `LeagueWeekBatchRepository` |
 
 ---
 
@@ -264,10 +264,10 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 14.1 | `[ ]` Season review UI | Grades, prestige, final ranks; **next cycle weekly recruiting pool** preview | [season-review](../planning/season-review.md), [recruiting-engine](../planning/recruiting-engine.md) | `ui.seasonreview` |
-| 14.2 | `[ ]` Awards & news wrap | POTY, coach honors | [game-design](../planning/game-design.md) | — |
-| 14.3 | `[ ]` History hub + GOAT + record/HOF + **awards** | Win contribution rollup; yearly awards compute (MVP, NCBA position POY, conf set); archive + runner-ups; unlocks **9.12** current season | [history-hub](../planning/history-hub.md), [awards](../planning/awards.md), [simulation-engine](../planning/simulation-engine.md#season-win-contribution-design-lock), [game-frame](../planning/game-frame.md) | `ui.history`, `:core/history`, `:core/awards` |
-| 14.4 | `[ ]` Advance year → offseason carousel | Season 2+ path | [offseason](../planning/offseason.md) | — |
+| 14.1 | `[x]` Season review UI | Grades, prestige, final ranks; **next cycle weekly recruiting pool** preview | [season-review](../planning/season-review.md), [recruiting-engine](../planning/recruiting-engine.md) | `ui.seasonreview`, `:core/seasonreview` |
+| 14.2 | `[x]` Awards & news wrap | POTY, coach honors | [game-design](../planning/game-design.md) | `:core/awards`, `YearlyAwardsRepository`, `NewsFeedRepository` |
+| 14.3 | `[x]` History hub + GOAT + record/HOF + **awards** | Win contribution rollup; yearly awards compute (MVP, NCBA position POY, conf set); archive + runner-ups; unlocks **9.12** current season | [history-hub](../planning/history-hub.md), [awards](../planning/awards.md), [simulation-engine](../planning/simulation-engine.md#season-win-contribution-design-lock), [game-frame](../planning/game-frame.md) | `ui.history`, `:core/history`, `HistoryRepository` |
+| 14.4 | `[x]` Advance year → offseason carousel | Season 2+ path | [offseason](../planning/offseason.md) | `SeasonYearAdvanceEngine`, `SaveSlotRepository` carousel/portal priming |
 
 ---
 
@@ -275,13 +275,13 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 15.1 | `[ ]` **NIL Budget** ledger + per-target offers | `nilRemainingUsd`; **Assign NIL** on recruit/portal/retention; **3× ask** cap; interest ratio; signing snapshot | [game-design](../planning/game-design.md#nil-budget-workflow-design-lock), [recruiting-engine](../planning/recruiting-engine.md#nil-budget-strip-recruiting-hub), [`nil` factor](../planning/recruiting-engine.md#scoring) | `ui.recruiting`, `:core/nil` |
-| 15.2 | `[ ]` Facility grades + upgrades | Offseason **week 9** integration | [game-design](../planning/game-design.md) | — |
-| 15.3 | `[ ]` Academics → recruiting budget multiplier | Grades on school | [game-design](../planning/game-design.md) | — |
-| 15.4 | `[ ]` Coach skill tree + Sunday points | Auto-spend option | [game-design](../planning/game-design.md), [coach-card](../planning/coach-card.md) | — |
-| 15.5 | `[ ]` Unemployed coach mode | Job center | [game-design](../planning/game-design.md) | — |
-| 15.6 | `[ ]` Recruiting hub **action UX** (all point spends wired) | Ship only after **6.17–6.19** core rules pass tests | [recruiting-engine](../planning/recruiting-engine.md#recruiting-ui) | `ui.recruiting` |
-| 15.7 | `[ ]` Annual **NIL collective** pool (conference tier × prestige) | `nil.annualPoolByConferenceTier` + `blueBloodPoolBand`; signing snapshot | [game-design](../planning/game-design.md#annual-collective-pool-design-lock) | `:core/nil` |
+| 15.1 | `[x]` **NIL Budget** ledger + per-target offers | `nilRemainingUsd`; **Assign NIL** on recruit/portal/retention; **3× ask** cap; interest ratio; signing snapshot | [game-design](../planning/game-design.md#nil-budget-workflow-design-lock), [recruiting-engine](../planning/recruiting-engine.md#nil-budget-strip-recruiting-hub), [`nil` factor](../planning/recruiting-engine.md#scoring) | `:core/nil`, `NilBudgetRepository`, recruiting hub strip |
+| 15.2 | `[x]` Facility grades + upgrades | Offseason **week 9** integration | [game-design](../planning/game-design.md) | `FacilityGradeEngine`, dynasty-persisted grades, school hub + recruiting |
+| 15.3 | `[x]` Academics → recruiting budget multiplier | Grades on school | [game-design](../planning/game-design.md) | `ProgramAcademicsGradeEngine`, `RecruitingWeekGrant` |
+| 15.4 | `[x]` Coach skill tree + Sunday points | Auto-spend option | [game-design](../planning/game-design.md), [coach-card](../planning/coach-card.md) | `CoachSkillTreeEngine`, head coach card spend UI |
+| 15.5 | `[x]` Unemployed coach mode | Job center | [game-design](../planning/game-design.md) | `JobCenterEngine`, `CoachEmploymentRepository`, `JobCenterScreen` |
+| 15.6 | `[x]` Recruiting hub **action UX** (all point spends wired) | Ship only after **6.17–6.19** core rules pass tests | [recruiting-engine](../planning/recruiting-engine.md#recruiting-ui) | `RecruitingHubScreen` contact + bonus + revoke |
+| 15.7 | `[x]` Annual **NIL collective** pool (conference tier × prestige) | `nil.annualPoolByConferenceTier` + `blueBloodPoolBand`; signing snapshot | [game-design](../planning/game-design.md#annual-collective-pool-design-lock) | `NilAnnualPoolEngine`, `NilAnnualPoolRepository` |
 
 ---
 
@@ -289,11 +289,11 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
-| 16.1 | `[ ]` **In-app notification feed** + default on | Dashboard rows, deep links, no OS push; all commits; **fired/eliminated modal**; major records; News not duplicated | [notifications](../planning/notifications.md), [history-hub](../planning/history-hub.md) | `ui.dashboard` |
-| 16.2 | `[ ]` Automation toggles (sim week, staff) | Settings + dynasty | [game-design](../planning/game-design.md) | — |
-| 16.3 | `[ ]` Identity import hardening (URL allowlist, size cap) | [game-design](../planning/game-design.md) | — |
-| 16.4 | `[ ]` Performance: 365-team week batch under target | Profiling doc | [game-design](../planning/game-design.md) | — |
-| 16.5 | `[ ]` Play Store assets, privacy, offline copy | Store listing | [branding](../planning/branding.md) | — |
+| 16.1 | `[x]` **In-app notification feed** + default on | Dashboard rows, deep links, no OS push; all commits; **fired/eliminated modal**; major records; News not duplicated | [notifications](../planning/notifications.md), [history-hub](../planning/history-hub.md) | `NotificationFeedRepository`, `DashboardNotificationFeedPanel` |
+| 16.2 | `[x]` Automation toggles (sim week, staff) | Settings + dynasty | [game-design](../planning/game-design.md) | `DynastyAutomationRepository`, `DynastyAutomationScreen` |
+| 16.3 | `[x]` Identity import hardening (URL allowlist, size cap) | [game-design](../planning/game-design.md) | `PackUrlPolicy`, `PackPayloadPolicy`, `HttpPackRemoteFetcher` |
+| 16.4 | `[x]` Performance: 365-team week batch under target | Profiling doc | [game-design](../planning/game-design.md) | [LEAGUE_WEEK_BATCH_PROFILING.md](LEAGUE_WEEK_BATCH_PROFILING.md), `LeagueWeekBatchPerformanceTest` |
+| 16.5 | `[x]` Play Store assets, privacy, offline copy | Store listing | [branding](../planning/branding.md) | [PLAY_STORE_LISTING.md](PLAY_STORE_LISTING.md), [PRIVACY_POLICY.md](PRIVACY_POLICY.md), `PlayStoreListingCopy`, Credits/Settings legal copy |
 
 ---
 

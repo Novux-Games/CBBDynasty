@@ -73,6 +73,65 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
+            text = stringResource(R.string.settings_section_notifications),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        SettingToggleRow(
+            label = stringResource(R.string.settings_dashboard_notification_feed),
+            description = stringResource(R.string.settings_dashboard_notification_feed_summary),
+            checked = settings.showDashboardNotificationFeed,
+            onCheckedChange = { enabled ->
+                scope.launch { settingsRepository.setShowDashboardNotificationFeed(enabled) }
+            },
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        HorizontalDivider()
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = stringResource(R.string.settings_section_automation_defaults),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        SettingToggleRow(
+            label = stringResource(R.string.settings_default_recruiting_auto),
+            description = stringResource(R.string.settings_default_recruiting_auto_summary),
+            checked = settings.defaultRecruitingAutoMaintain,
+            onCheckedChange = { enabled ->
+                scope.launch { settingsRepository.setDefaultRecruitingAutoMaintain(enabled) }
+            },
+        )
+        SettingToggleRow(
+            label = stringResource(R.string.settings_default_coach_auto_spend),
+            description = stringResource(R.string.settings_default_coach_auto_spend_summary),
+            checked = settings.defaultCoachAutoSpend,
+            onCheckedChange = { enabled ->
+                scope.launch { settingsRepository.setDefaultCoachAutoSpend(enabled) }
+            },
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        HorizontalDivider()
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = stringResource(R.string.settings_section_legal),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        Text(
+            text = stringResource(R.string.settings_offline_play_summary),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(vertical = 8.dp),
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        HorizontalDivider()
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
             text = stringResource(R.string.settings_section_audio),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,

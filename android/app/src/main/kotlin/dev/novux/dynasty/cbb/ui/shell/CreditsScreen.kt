@@ -71,6 +71,26 @@ fun CreditsScreen(onBack: () -> Unit) {
             modifier = Modifier.padding(top = 12.dp),
         )
 
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = stringResource(R.string.credits_legal_disclaimer),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        Text(
+            text = stringResource(R.string.credits_offline_play),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(top = 12.dp),
+        )
+        Text(
+            text = stringResource(
+                R.string.credits_privacy_policy,
+                stringResource(R.string.credits_privacy_url),
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = 12.dp),
+        )
+
         Spacer(modifier = Modifier.height(32.dp))
         OutlinedButton(
             onClick = onBack,

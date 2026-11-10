@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
+import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.save.SaveSlotSummary
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
@@ -40,7 +41,7 @@ import kotlinx.coroutines.launch
 fun LoadGameScreen(
     saveSlotRepository: SaveSlotRepository,
     onBack: () -> Unit,
-    onDynastyLoaded: () -> Unit,
+    onDynastyLoaded: (LoadedDynasty) -> Unit,
 ) {
     val slots by saveSlotRepository.observeSlots().collectAsState(initial = emptyList())
     val scope = rememberCoroutineScope()
@@ -86,10 +87,7 @@ fun LoadGameScreen(
                     onOpen = {
                         scope.launch {
                             when (val result = saveSlotRepository.loadSlot(slot.slotIndex)) {
-                                is DynastyLoadResult.Success -> {
-                                    ActiveDynastySession.set(result.loaded)
-                                    onDynastyLoaded()
-                                }
+                                is DynastyLoadResult.Success -> onDynastyLoaded(result.loaded)
                                 is DynastyLoadResult.Unreadable -> unavailableSlot = slot
                                 DynastyLoadResult.SlotEmpty -> Unit
                             }
