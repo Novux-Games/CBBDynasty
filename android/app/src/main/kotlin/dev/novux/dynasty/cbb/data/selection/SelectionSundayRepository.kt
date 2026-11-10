@@ -39,7 +39,9 @@ class SelectionSundayRepository(
                 netRankByTeam = net,
                 postseasonEligible = teams.associate { it.teamId to it.postseasonEligible },
                 heritageEligible = teams.associate { it.teamId to true },
-                conferenceChampions = ConferenceChampionResolver.topNetChampionPerConference(teams, net),
+                conferenceChampions = standings.conferenceTournaments?.let {
+                    ConferenceChampionResolver.ncbaAutoBidsFromTournaments(it)
+                } ?: ConferenceChampionResolver.topNetChampionPerConference(teams, net),
                 programPrestige = teams.associate { it.teamId to it.programPrestige },
                 records = standings.records,
                 results = standings.seasonResults,

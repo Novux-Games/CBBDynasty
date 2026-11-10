@@ -148,6 +148,9 @@ class DynastyApplication : Application() {
     lateinit var selectionSundayRepository: dev.novux.dynasty.cbb.data.selection.SelectionSundayRepository
         private set
 
+    lateinit var conferenceTournamentRepository: dev.novux.dynasty.cbb.data.conference.ConferenceTournamentRepository
+        private set
+
     lateinit var coachSecurityRepository: CoachSecurityRepository
         private set
 
@@ -256,6 +259,10 @@ class DynastyApplication : Application() {
             packRepository,
             leagueWeekBatchRepository,
             balanceRulesetRepository,
+        )
+        conferenceTournamentRepository = dev.novux.dynasty.cbb.data.conference.ConferenceTournamentRepository(
+            packRepository,
+            leagueWeekBatchRepository,
         )
         coachSecurityRepository = CoachSecurityRepository(applicationContext, database)
         applicationScope.launch {

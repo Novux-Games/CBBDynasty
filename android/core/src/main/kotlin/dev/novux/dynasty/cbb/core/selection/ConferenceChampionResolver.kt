@@ -10,6 +10,9 @@ object ConferenceChampionResolver {
     fun fromTournamentSeason(season: ConferenceTournamentSeason): Set<String> =
         season.resultsByConference.values.map { it.championTeamId }.toSet()
 
+    fun ncbaAutoBidsFromTournaments(season: ConferenceTournamentSeason): Set<String> =
+        season.resultsByConference.values.map { it.ncbaAutoBidTeamId }.toSet()
+
     fun topNetChampionPerConference(
         teams: List<TeamDisplayOverlay>,
         netRankByTeam: Map<String, Int>,

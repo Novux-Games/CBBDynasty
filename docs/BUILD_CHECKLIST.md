@@ -243,7 +243,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | Step | Build | Done when | Spec | Code |
 |------|--------|-----------|------|------|
 | 12.1 | `[x]` Per-conf `TournamentTemplate` sim | Real 2026–27 formats | [game-design](../planning/game-design.md), [postseason](../planning/postseason.md) | `:core` |
-| 12.2 | `[ ]` Reclass pass-over runner-up | Auto-bid rules | [postseason](../planning/postseason.md) | — |
+| 12.2 | `[x]` Reclass pass-over runner-up | Auto-bid rules | [postseason](../planning/postseason.md) | — |
 | 12.3 | `[ ]` Conf-tourney UI + unified week calendar | Byes for short brackets | [time-system](../planning/time-system.md) | — |
 
 ---

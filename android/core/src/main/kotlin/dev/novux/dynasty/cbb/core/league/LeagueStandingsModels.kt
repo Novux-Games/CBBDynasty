@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.league
 
+import dev.novux.dynasty.cbb.core.conference.ConferenceTournamentSeason
 import dev.novux.dynasty.cbb.core.selection.SelectionSundaySnapshot
 import kotlinx.serialization.Serializable
 
@@ -31,6 +32,7 @@ data class LeagueStandingsState(
     val coachesPollRankByTeam: Map<String, Int> = emptyMap(),
     val netRankingsWeek: Int = 0,
     val selectionSunday: SelectionSundaySnapshot? = null,
+    val conferenceTournaments: ConferenceTournamentSeason? = null,
     val aiInjuryRollsLastWeek: Int = 0,
 ) {
     fun recordFor(teamId: String): LeagueTeamRecord =

@@ -35,6 +35,7 @@ class ConferenceTournamentEngineTest {
                 template = template,
                 teamIds = teams,
                 records = records,
+                postseasonEligible = teams.associateWith { true },
                 seasonIndex = 1,
                 seed = 42L,
             ),
@@ -113,6 +114,7 @@ class ConferenceTournamentEngineTest {
             conferences = templates,
             records = pack.teams.associate { it.id to LeagueTeamRecord(it.id, 10, 5) },
             teamsByConference = teamsByConf,
+            postseasonEligible = pack.teams.associate { it.id to it.postseasonEligible },
             seasonIndex = 1,
             seed = 7L,
         )

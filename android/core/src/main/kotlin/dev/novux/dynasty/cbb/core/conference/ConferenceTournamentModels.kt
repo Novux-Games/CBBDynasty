@@ -10,6 +10,7 @@ data class ConferenceTournamentInput(
     val template: TournamentTemplatePack,
     val teamIds: List<String>,
     val records: Map<String, LeagueTeamRecord>,
+    val postseasonEligible: Map<String, Boolean> = emptyMap(),
     val seasonIndex: Int,
     val baseWeekIndex: Int = 1,
     val seed: Long,
@@ -22,6 +23,8 @@ data class ConferenceTournamentResult(
     val qualifiedTeamIds: List<String>,
     val championTeamId: String,
     val runnerUpTeamId: String?,
+    val finishOrder: List<String> = emptyList(),
+    val ncbaAutoBidTeamId: String,
     val gameResults: List<LeagueGameResult>,
 )
 

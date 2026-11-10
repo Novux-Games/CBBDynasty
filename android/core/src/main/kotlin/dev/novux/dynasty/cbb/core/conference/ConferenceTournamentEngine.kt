@@ -20,6 +20,7 @@ object ConferenceTournamentEngine {
         }
         val seeds = alive.toList()
         val results = mutableListOf<LeagueGameResult>()
+        val eliminated = mutableListOf<String>()
         var runnerUp: String? = null
         input.template.rounds.forEachIndexed { roundIndex, round ->
             if (alive.size <= 1) return@forEachIndexed
@@ -43,6 +44,7 @@ object ConferenceTournamentEngine {
                 val winner = if (homeWon) home else away
                 val loser = if (homeWon) away else home
                 winners += winner
+                eliminated += loser
                 if (roundIndex == input.template.rounds.lastIndex) {
                     runnerUp = loser
                 }
@@ -50,20 +52,31 @@ object ConferenceTournamentEngine {
             alive = byeTeams + winners
         }
         val champion = alive.singleOrNull() ?: alive.first()
-        return ConferenceTournamentResult(
+        val finishOrder = buildList {
+            add(champion)
+            runnerUp?.let { add(it) }
+            addAll(eliminated.asReversed().filter { it != champion && it != runnerUp })
+        }
+        val eligible: (String) -> Boolean = { input.postseasonEligible[it] == true }
+        val draft = ConferenceTournamentResult(
             conferenceId = input.conferenceId,
             templateId = input.template.id,
             qualifiedTeamIds = seeds,
             championTeamId = champion,
             runnerUpTeamId = runnerUp,
+            finishOrder = finishOrder,
+            ncbaAutoBidTeamId = champion,
             gameResults = results,
         )
+        val autoBid = NcbaAutoBidResolver.resolve(draft, eligible)
+        return draft.copy(ncbaAutoBidTeamId = autoBid)
     }
 
     fun simulateLeague(
         conferences: List<Pair<String, TournamentTemplatePack>>,
         records: Map<String, LeagueTeamRecord>,
         teamsByConference: Map<String, List<String>>,
+        postseasonEligible: Map<String, Boolean>,
         seasonIndex: Int,
         seed: Long,
     ): ConferenceTournamentSeason {
@@ -77,6 +90,7 @@ object ConferenceTournamentEngine {
                     template = template,
                     teamIds = teams,
                     records = confRecords,
+                    postseasonEligible = teams.associateWith { postseasonEligible[it] == true },
                     seasonIndex = seasonIndex,
                     seed = seed + confId.hashCode(),
                 ),
