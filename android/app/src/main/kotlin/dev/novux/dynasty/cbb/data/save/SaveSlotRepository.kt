@@ -20,6 +20,8 @@ import dev.novux.dynasty.cbb.data.balance.BalanceParseException
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningParseException
+import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
+import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
@@ -41,6 +43,7 @@ class SaveSlotRepository(
     private val balanceRulesetRepository: BalanceRulesetRepository,
     private val simTuningRepository: SimTuningRepository,
     private val recruitingEconomyRepository: RecruitingEconomyRepository,
+    private val portalCycleRepository: PortalCycleRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -404,6 +407,14 @@ class SaveSlotRepository(
             else -> return again
         }
         recruitingEconomyRepository.onCalendarWeekAdvanced(afterAdvance)
+        val pos = afterAdvance.weekCheckpoint.activePosition
+        if (pos.phase == CalendarPhase.Offseason) {
+            portalCycleRepository.onOffseasonWeekStarted(
+                afterAdvance.dynastyId,
+                afterAdvance.metadata.seasonIndex,
+                pos.weekIndex,
+            )
+        }
         return loadSlot(slotIndex)
     }
 
