@@ -20,7 +20,20 @@ import dev.novux.dynasty.cbb.data.balance.BalanceParseException
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningParseException
+import dev.novux.dynasty.cbb.core.advance.SimWeekAdvanceInput
+import dev.novux.dynasty.cbb.core.advance.SimWeekAdvanceResolver
+import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
+import dev.novux.dynasty.cbb.core.advance.UserWeekGameStatus
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
+import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
+import dev.novux.dynasty.cbb.core.calendar.PhaseWeekPolicy
+import dev.novux.dynasty.cbb.core.portal.PortalCyclePolicy
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingClassSeed
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
+import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
+import dev.novux.dynasty.cbb.core.recruiting.ai.AiRecruitingWeekRunner
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
@@ -36,6 +49,13 @@ import dev.novux.dynasty.cbb.database.save.toSummary
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.UUID
+
+private val SCHEDULED_GAME_PHASES = setOf(
+    CalendarPhase.Exhibition,
+    CalendarPhase.RegularSeason,
+    CalendarPhase.ConferenceTournament,
+    CalendarPhase.Postseason,
+)
 
 class SaveSlotRepository(
     private val database: DynastyDatabase,
@@ -386,8 +406,31 @@ class SaveSlotRepository(
     /**
      * End of Season CTA — advances into Offseason Week 1 of the next membership year ([planning/season-review.md]).
      */
+    suspend fun buildSimWeekAdvanceConfirmation(
+        slotIndex: Int,
+        unresolvedOptionalTaskCount: Int = 0,
+    ): SimWeekConfirmation? {
+        require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
+        ensureInitialized()
+        val loaded = when (val initial = loadSlot(slotIndex)) {
+            is DynastyLoadResult.Success -> initial.loaded
+            else -> return null
+        }
+        val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+        val input = buildSimWeekAdvanceInput(
+            loaded,
+            ledger,
+            unresolvedOptionalTaskCount = unresolvedOptionalTaskCount,
+            userManualRecruitingSpent = 0,
+        )
+        return SimWeekAdvanceResolver.buildConfirmation(input)
+    }
+
     /** Advances the active dynasty one calendar week and persists checkpoint + metadata. */
-    suspend fun advanceDynastyWeek(slotIndex: Int): DynastyLoadResult {
+    suspend fun advanceDynastyWeek(
+        slotIndex: Int,
+        userManualRecruitingSpent: Int = 0,
+    ): DynastyLoadResult {
         require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
         ensureInitialized()
         val loaded = when (val initial = loadSlot(slotIndex)) {
@@ -395,9 +438,17 @@ class SaveSlotRepository(
             else -> return initial
         }
         val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
-        val aiWeek = aiRecruitingRepository.runLeagueWeekIfActive(loaded, ledger)
+        val input = buildSimWeekAdvanceInput(loaded, ledger, 0, userManualRecruitingSpent)
+        val preAdvance = SimWeekAdvanceResolver.resolvePreAdvance(
+            loaded.weekCheckpoint,
+            input,
+            loaded.dynastyId.hashCode().toLong(),
+        )
+        weekCheckpointRepository.persist(loaded.dynastyId, preAdvance.checkpointAfterPreAdvance)
+        val checkpoint = preAdvance.checkpointAfterPreAdvance
+        val aiWeek = aiRecruitingRepository.runLeagueWeekIfActive(loaded, ledger, userManualRecruitingSpent)
         val recruitingSpentClosingWeek = aiWeek?.userPointsSpent ?: 0
-        weekCheckpointRepository.advanceWeek(loaded.dynastyId, loaded.weekCheckpoint)
+        weekCheckpointRepository.advanceWeek(loaded.dynastyId, checkpoint)
         val meta = metadataDao.getById(loaded.dynastyId)?.toDomain()
         if (meta != null) {
             val slotEntity = slotDao.getByIndex(slotIndex)
@@ -421,6 +472,52 @@ class SaveSlotRepository(
             )
         }
         return loadSlot(slotIndex)
+    }
+
+    private fun buildSimWeekAdvanceInput(
+        loaded: LoadedDynasty,
+        ledger: dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger,
+        unresolvedOptionalTaskCount: Int,
+        userManualRecruitingSpent: Int,
+    ): SimWeekAdvanceInput {
+        val position = loaded.weekCheckpoint.activePosition
+        val nextLabel = CalendarWeekLabel.display(PhaseWeekPolicy.nextPosition(position))
+        val offseasonWeek = position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason }
+        val hubOpen = RecruitingCyclePolicy.hubAccessible(position.phase, offseasonWeek)
+        val portalOpen = PortalCyclePolicy.portalRecruitingWindowOpen(position.phase, offseasonWeek)
+        val hasScheduledGame = position.phase in SCHEDULED_GAME_PHASES
+        val unplayed = UserWeekGameStatus.unplayedUserGames(loaded.weekCheckpoint, hasScheduledGame)
+        val economy = BalanceRecruitingParser.parse(loaded.balanceRuleset.recruiting)
+        val recommended = BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
+        val pool = RecruitingClassSeed.demoPool(loaded.metadata.seasonIndex)
+        val userSchool = SchoolRecruitingContext(
+            programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
+            schoolHomeState = "OH",
+            pipelineStates = setOf("KY", "IN", "MI", "PA", "WV"),
+            nilPoolAnnualUsd = 900_000,
+        )
+        val estimated = if (hubOpen && userManualRecruitingSpent == 0) {
+            AiRecruitingWeekRunner.estimateUserAutoMaintainSpend(
+                prospectPool = pool,
+                economy = economy,
+                recommended = recommended,
+                userSchool = userSchool,
+                userProgramId = "user-${loaded.dynastyId}",
+                userPointsAvailable = ledger.pointsAvailable,
+            )
+        } else {
+            0
+        }
+        return SimWeekAdvanceInput(
+            nextWeekLabel = nextLabel,
+            unplayedUserGameCount = unplayed,
+            recruitingPointsAvailable = ledger.pointsAvailable,
+            userManualRecruitingSpent = userManualRecruitingSpent,
+            recruitingHubOpen = hubOpen,
+            estimatedAutoRecruitingSpend = estimated,
+            portalRecruitingWeekOpen = portalOpen,
+            unresolvedOptionalTaskCount = unresolvedOptionalTaskCount,
+        )
     }
 
     suspend fun completeSeasonReviewEnterOffseason(slotIndex: Int): DynastyLoadResult {

@@ -150,6 +150,14 @@
     <string name="dashboard_task_portal_top40">Portal Top 40 published</string>
     <string name="dashboard_task_signing_crunch">Signing week R%1$d — 1.5× recruiting points</string>
     <string name="dashboard_task_open_scholarships">%1$d scholarship slots open</string>
+    <string name="advance_confirm_title">Advance week?</string>
+    <string name="advance_confirm_confirm">Advance</string>
+    <string name="advance_confirm_cancel">Stay on this week</string>
+    <string name="advance_confirm_line_fast_sim">Your unplayed game will be simulated with the current lineup. Results are final for this week.</string>
+    <string name="advance_confirm_line_recruiting">Recruiting: your program will auto-spend about %1$d points on the recommended board.</string>
+    <string name="advance_confirm_line_league_recruiting">League programs will run their weekly recruiting pass.</string>
+    <string name="advance_confirm_line_portal">Transfer portal: league portal recruiting runs this week.</string>
+    <string name="advance_confirm_line_simple">Advance to %1$s?</string>
     <string name="recruiting_tab_recommended">Recommended</string>
     <string name="recruiting_tab_hs_juco">HS / JUCO</string>
     <string name="recruiting_tab_portal">Transfer portal</string>

@@ -16,6 +16,25 @@ data class AiRecruitingWeekResult(
 )
 
 object AiRecruitingWeekRunner {
+    fun estimateUserAutoMaintainSpend(
+        prospectPool: List<RecruitProspect>,
+        economy: BalanceRecruitingEconomy,
+        recommended: BalanceRecruitingRecommended,
+        userSchool: SchoolRecruitingContext,
+        userProgramId: String,
+        userPointsAvailable: Int,
+    ): Int {
+        if (userPointsAvailable <= 0) return 0
+        return buildBoard(
+            programId = userProgramId,
+            school = userSchool,
+            weeklyPoints = userPointsAvailable,
+            pool = prospectPool,
+            economy = economy,
+            recommended = recommended,
+        ).pointsSpentThisWeek
+    }
+
     private const val OFFER_COST = 150
     private const val DM_COST = 50
 

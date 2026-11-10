@@ -42,6 +42,8 @@ import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardOptionalTasksPanel
 import dev.novux.dynasty.cbb.ui.offseason.leaving.DraftResultsWeekTwoPanel
 import dev.novux.dynasty.cbb.ui.offseason.leaving.PlayersLeavingPanel
+import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
+import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceDialog
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.launch
 
@@ -63,6 +65,7 @@ fun OffseasonScreen(
     var portalTop40Locked by remember { mutableStateOf(false) }
     var openScholarshipSlots by remember { mutableStateOf(0) }
     var dismissedTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
+    var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(loaded.dynastyId, loaded.weekCheckpoint) {
@@ -165,15 +168,56 @@ fun OffseasonScreen(
             )
         }
 
+        pendingAdvanceConfirmation?.let { confirmation ->
+            SimWeekAdvanceDialog(
+                confirmation = confirmation,
+                onConfirm = {
+                    pendingAdvanceConfirmation = null
+                    scope.launch {
+                        when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
+                            is DynastyLoadResult.Success -> {
+                                loaded = result.loaded
+                                ActiveDynastySession.set(result.loaded)
+                            }
+                            else -> Unit
+                        }
+                    }
+                },
+                onDismiss = { pendingAdvanceConfirmation = null },
+            )
+        }
+
         Button(
             onClick = {
                 scope.launch {
-                    when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
-                        is DynastyLoadResult.Success -> {
-                            loaded = result.loaded
-                            ActiveDynastySession.set(result.loaded)
+                    val dashboardTasks = if (inOffseason) {
+                        OffseasonOptionalDashboardTasks.build(
+                            OffseasonDashboardContext(
+                                offseasonWeekIndex = position.weekIndex,
+                                recruitingPointsAvailable = ledger?.pointsAvailable ?: 0,
+                                portalTop40Locked = portalTop40Locked,
+                                openScholarshipSlots = openScholarshipSlots,
+                                signingCrunchActive = position.weekIndex in PortalConstants.PORTAL_RECRUITING_WEEKS,
+                            ),
+                        )
+                    } else {
+                        emptyList()
+                    }
+                    val unresolved = dashboardTasks.count { it.id !in dismissedTasks }
+                    val confirmation = saveSlotRepository.buildSimWeekAdvanceConfirmation(
+                        loaded.slotIndex,
+                        unresolvedOptionalTaskCount = unresolved,
+                    )
+                    if (confirmation != null && confirmation.needsDialog) {
+                        pendingAdvanceConfirmation = confirmation
+                    } else {
+                        when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
+                            is DynastyLoadResult.Success -> {
+                                loaded = result.loaded
+                                ActiveDynastySession.set(result.loaded)
+                            }
+                            else -> Unit
                         }
-                        else -> Unit
                     }
                 }
             },
