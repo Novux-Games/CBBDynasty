@@ -35,13 +35,19 @@ import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
 fun StrategyScreen(
     dynastyId: String,
     rosterRepository: DynastyRosterRepository,
+    teamChemistry: Int? = null,
+    fatigueTuning: dev.novux.dynasty.cbb.core.balance.BalanceFatigue =
+        dev.novux.dynasty.cbb.core.balance.BalanceFatigue(),
     onBack: () -> Unit,
 ) {
     var players by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
     LaunchedEffect(dynastyId) {
         players = rosterRepository.listPlayers(dynastyId)
     }
-    val starters = DefaultStarterAlgorithm.pickStarters(players)
+    val starters = DefaultStarterAlgorithm.pickStarters(
+        players,
+        starterBlockStamina = fatigueTuning.starterBlockThreshold,
+    )
     val bench = players
         .filter { it.playerId !in starters.values }
         .sortedBy { it.depthOrder }
@@ -63,6 +69,13 @@ fun StrategyScreen(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        teamChemistry?.let { chem ->
+            Text(
+                text = stringResource(R.string.strategy_chemistry, chem),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
         Text(
             text = stringResource(R.string.strategy_starters),
             style = MaterialTheme.typography.titleMedium,
@@ -98,12 +111,14 @@ private fun StrategyLineupCard(
     player: RosterPlayer?,
 ) {
     val injured = player != null && DisciplineResolver.isIneligibleForLineup(player)
+    val exhausted = player != null && player.stamina < 20
+    val dimmed = injured || exhausted
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .alpha(if (injured) 0.45f else 1f),
+            .alpha(if (dimmed) 0.45f else 1f),
         colors = CardDefaults.cardColors(
-            containerColor = if (injured) {
+            containerColor = if (dimmed) {
                 MaterialTheme.colorScheme.surfaceVariant
             } else {
                 MaterialTheme.colorScheme.surface
@@ -122,6 +137,11 @@ private fun StrategyLineupCard(
                 PlayerInjuryRosterRow(player)
             } else {
                 Text(text = player.displayLabel(), style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    text = stringResource(R.string.strategy_stamina, player.stamina),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
     }

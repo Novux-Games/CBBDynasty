@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.roster
 
+import dev.novux.dynasty.cbb.core.fatigue.FatigueEngine
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.player.PlayerRatings
 import dev.novux.dynasty.cbb.core.player.RosterRatingSpread
@@ -51,6 +52,7 @@ data class RosterPlayer(
     val promiseStatusWire: String = "",
     val promiseLockedSeasonIndex: Int? = null,
     val promiseStayTopN: Int? = null,
+    val stamina: Int = FatigueEngine.FRESH,
 ) {
     fun displayLabel(): String =
         if (displayName.isNotBlank()) displayName else "${position.label} · ${classYear.label}"

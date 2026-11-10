@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.core.injuries
 import dev.novux.dynasty.cbb.core.balance.BalanceInjuryBankEntry
 import dev.novux.dynasty.cbb.core.balance.BalanceInjuryOccurrence
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
+import dev.novux.dynasty.cbb.core.fatigue.FatigueEngine
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import kotlin.math.pow
 
@@ -41,7 +42,9 @@ object InjuryOccurrenceEngine {
             val minutes = minutesByPlayerId[player.playerId] ?: 0.0
             val minutesWeight = (minutes / 32.0).pow(tuning.minutesWeightExponent).coerceIn(0.05, 2.5)
             val historyFactor = if (player.injuryId != null) 1.15 else 1.0
-            val pInjury = tuning.baseChancePerPlayerGame * phaseMultiplier * minutesWeight * staffFactor * historyFactor
+            val fatigueWeight = FatigueEngine.fatigueInjuryWeight(player.stamina, tuning.fatigueWeightExponent)
+            val pInjury = tuning.baseChancePerPlayerGame * phaseMultiplier * minutesWeight *
+                staffFactor * historyFactor * fatigueWeight
             val roll = ((gameSeed + index * 997 + player.playerId.hashCode()) % 10_000) / 10_000.0
             if (roll >= pInjury) return@forEachIndexed
             val row = InjuryBankPicker.pickWeighted(

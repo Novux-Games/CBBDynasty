@@ -31,6 +31,7 @@ fun RosterPlayerSeed.toEntity(): DynastyRosterPlayerEntity =
         promiseStatusWire = promiseStatusWire,
         promiseLockedSeasonIndex = promiseLockedSeasonIndex,
         promiseStayTopN = promiseStayTopN,
+        stamina = stamina,
     )
 
 fun List<RosterPlayerSeed>.toEntities(): List<DynastyRosterPlayerEntity> = map { it.toEntity() }
@@ -87,6 +88,7 @@ fun DynastyRosterPlayerEntity.toDomain(): RosterPlayer {
         promiseStatusWire = promiseStatusWire,
         promiseLockedSeasonIndex = promiseLockedSeasonIndex,
         promiseStayTopN = promiseStayTopN,
+        stamina = stamina,
     )
 }
 
@@ -138,4 +140,5 @@ fun RosterPlayer.toEntity(): DynastyRosterPlayerEntity =
         promiseStatusWire = promiseStatusWire,
         promiseLockedSeasonIndex = promiseLockedSeasonIndex,
         promiseStayTopN = promiseStayTopN,
+        stamina = stamina,
     )

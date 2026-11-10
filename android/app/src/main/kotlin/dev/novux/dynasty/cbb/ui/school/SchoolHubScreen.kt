@@ -19,6 +19,7 @@ import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
 @Composable
 fun SchoolHubScreen(
     overview: SchoolHubOverview,
+    teamChemistry: Int? = null,
     staffSection: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
@@ -35,6 +36,15 @@ fun SchoolHubScreen(
             fontWeight = FontWeight.Bold,
         )
         SchoolHubOverviewCard(overview)
+        if (overview.isUserSchool) {
+            teamChemistry?.let { chem ->
+                Text(
+                    stringResource(R.string.school_hub_chemistry, chem),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
+        }
         staffSection?.invoke()
     }
 }

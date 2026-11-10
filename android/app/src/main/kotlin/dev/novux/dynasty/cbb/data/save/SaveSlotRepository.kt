@@ -38,6 +38,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.recruiting.ai.AiRecruitingWeekRunner
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
+import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
 import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
@@ -73,6 +74,7 @@ class SaveSlotRepository(
     private val aiRecruitingRepository: AiRecruitingRepository,
     private val dynastyRosterRepository: DynastyRosterRepository,
     private val disciplineRepository: DisciplineRepository,
+    private val chemistryRepository: ChemistryRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -506,14 +508,37 @@ class SaveSlotRepository(
             advanceResult.committedWeek.phase,
         )
         val teamPlayedGame = advanceResult.committedWeek.phase in SCHEDULED_GAME_PHASES
+        val playersAfterDiscipline = dynastyRosterRepository.listPlayers(loaded.dynastyId)
         disciplineRepository.afterWeekAdvance(
             dynastyId = loaded.dynastyId,
             seasonIndex = loaded.metadata.seasonIndex,
             phase = advanceResult.committedWeek.phase,
             rsWeekIndex = advanceResult.committedWeek.weekIndex,
-            players = dynastyRosterRepository.listPlayers(loaded.dynastyId),
+            players = playersAfterDiscipline,
             teamPlayedGame = teamPlayedGame,
             rollSeed = loaded.dynastyId.hashCode().toLong() + advanceResult.committedWeek.weekIndex,
+        )
+        val balance = balanceRulesetRepository.activeRuleset()
+        dynastyRosterRepository.tickFatigueForWeekAdvance(
+            loaded.dynastyId,
+            advanceResult.committedWeek.phase,
+            teamPlayedGame,
+            balance.fatigue,
+        )
+        val userWonGame = if (teamPlayedGame) {
+            preAdvance.checkpointAfterPreAdvance.provisionalGames.lastOrNull()?.let { mark ->
+                mark.homeScore > mark.awayScore
+            }
+        } else {
+            null
+        }
+        chemistryRepository.afterWeekAdvance(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+            advanceResult.committedWeek.phase,
+            dynastyRosterRepository.listPlayers(loaded.dynastyId),
+            teamPlayedGame,
+            userWonGame,
         )
         val meta = metadataDao.getById(loaded.dynastyId)?.toDomain()
         if (meta != null) {

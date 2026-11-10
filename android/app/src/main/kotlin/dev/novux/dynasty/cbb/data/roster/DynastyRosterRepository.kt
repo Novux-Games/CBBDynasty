@@ -1,6 +1,8 @@
 package dev.novux.dynasty.cbb.data.roster
 
+import dev.novux.dynasty.cbb.core.balance.BalanceFatigue
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
+import dev.novux.dynasty.cbb.core.fatigue.FatigueEngine
 import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
 import dev.novux.dynasty.cbb.core.injuries.InjuryApplyContext
 import dev.novux.dynasty.cbb.core.injuries.InjuryRosterOps
@@ -119,6 +121,21 @@ class DynastyRosterRepository(
         val ticked = InjuryRosterOps.tickWeekAdvance(phaseCommitted, listPlayers(dynastyId))
         ticked.players.forEach { dao.upsert(it.toEntity()) }
         return ticked.players
+    }
+
+    suspend fun tickFatigueForWeekAdvance(
+        dynastyId: String,
+        phaseCommitted: CalendarPhase,
+        teamPlayedGame: Boolean,
+        tuning: BalanceFatigue,
+    ): List<RosterPlayer> {
+        var players = listPlayers(dynastyId)
+        if (teamPlayedGame) {
+            players = FatigueEngine.applyEstimatedGameDrain(players, tuning)
+        }
+        players = FatigueEngine.applyWeeklyRecovery(players, phaseCommitted, teamPlayedGame, tuning)
+        players.forEach { dao.upsert(it.toEntity()) }
+        return players
     }
 
     suspend fun applyGameInjuries(

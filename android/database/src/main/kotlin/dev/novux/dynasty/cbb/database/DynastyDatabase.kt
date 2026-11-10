@@ -29,7 +29,7 @@ import dev.novux.dynasty.cbb.database.staff.DynastyStaffMemberEntity
         DynastyRosterPlayerEntity::class,
         DynastyStaffMemberEntity::class,
     ],
-    version = 14,
+    version = 15,
     exportSchema = false,
 )
 @androidx.room.TypeConverters(Converters::class)
@@ -67,6 +67,7 @@ abstract class DynastyDatabase : RoomDatabase() {
                     MIGRATION_11_12,
                     MIGRATION_12_13,
                     MIGRATION_13_14,
+                    MIGRATION_14_15,
                 )
                 .build()
     }

@@ -1,6 +1,7 @@
 package dev.novux.dynasty.cbb.core.lineup
 
 import dev.novux.dynasty.cbb.core.discipline.DisciplineResolver
+import dev.novux.dynasty.cbb.core.fatigue.FatigueEngine
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 
@@ -8,9 +9,13 @@ import dev.novux.dynasty.cbb.core.roster.RosterPlayer
  * Default starting five by **listed position** OVR — [planning/positions-and-lineup.md#default-starters-algorithm].
  */
 object DefaultStarterAlgorithm {
-    fun pickStarters(players: List<RosterPlayer>): Map<PlayerPosition, String> {
+    fun pickStarters(
+        players: List<RosterPlayer>,
+        starterBlockStamina: Int = 20,
+    ): Map<PlayerPosition, String> {
         val healthy = players.filter {
-            !it.isInjuredOut() && !it.medicalRedshirtSeason && !DisciplineResolver.isIneligibleForLineup(it)
+            !it.isInjuredOut() && !it.medicalRedshirtSeason && !DisciplineResolver.isIneligibleForLineup(it) &&
+                it.stamina >= starterBlockStamina
         }
         val result = linkedMapOf<PlayerPosition, String>()
         PlayerPosition.STARTER_ORDER.forEach { slot ->

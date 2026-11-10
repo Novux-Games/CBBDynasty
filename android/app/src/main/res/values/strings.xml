@@ -365,4 +365,7 @@
     <string name="discipline_academic_sweep">Sweep under the rug</string>
     <string name="discipline_academic_suspend">Suspend — games</string>
     <string name="discipline_academic_support">Suspend until eligible + Academic Support</string>
+    <string name="strategy_chemistry">Team chemistry: %1$d</string>
+    <string name="strategy_stamina">Stamina %1$d</string>
+    <string name="school_hub_chemistry">Team chemistry: %1$d</string>
 </resources>

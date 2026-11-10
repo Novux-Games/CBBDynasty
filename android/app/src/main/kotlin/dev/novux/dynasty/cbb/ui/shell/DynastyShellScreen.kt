@@ -46,6 +46,7 @@ import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
 import dev.novux.dynasty.cbb.data.coach.CoachSecurityRepository
 import dev.novux.dynasty.cbb.data.coach.SchoolStaffRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
+import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
 import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
@@ -79,6 +80,7 @@ fun DynastyShellScreen(
     coachSecurityRepository: CoachSecurityRepository,
     rosterRepository: DynastyRosterRepository,
     disciplineRepository: DisciplineRepository,
+    chemistryRepository: ChemistryRepository,
     onOpenStrategy: () -> Unit,
     onOpenDiscipline: (PendingDisciplineIncident) -> Unit,
     onExitHome: () -> Unit,
@@ -94,10 +96,15 @@ fun DynastyShellScreen(
     var postgameEvents by remember { mutableStateOf<List<GameSimInjuryEvent>>(emptyList()) }
     var dismissedInjuryTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
     var disciplinePending by remember { mutableStateOf<PendingDisciplineIncident?>(null) }
+    var teamChemistry by remember { mutableStateOf<Int?>(null) }
     val scope = rememberCoroutineScope()
     val medicalRules = remember { BalanceMedicalRedshirtRules() }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
+        teamChemistry = chemistryRepository.loadState(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        ).teamChemistry
         val exhibitionCount = scheduleRepository.loadExhibitionCount(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
@@ -155,6 +162,7 @@ fun DynastyShellScreen(
                 ) { Text(stringResource(R.string.dynasty_shell_back)) }
                 SchoolHubScreen(
                     overview = view.overview,
+                    teamChemistry = if (view.overview.isUserSchool) teamChemistry else null,
                     staffSection = if (view.overview.isUserSchool && staffRoster != null) {
                         {
                             SchoolStaffTabPanel(

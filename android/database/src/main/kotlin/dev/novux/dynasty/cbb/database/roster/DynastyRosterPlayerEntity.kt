@@ -55,4 +55,5 @@ data class DynastyRosterPlayerEntity(
     val promiseStatusWire: String = "",
     val promiseLockedSeasonIndex: Int? = null,
     val promiseStayTopN: Int? = null,
+    val stamina: Int = 100,
 )

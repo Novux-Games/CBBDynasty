@@ -267,6 +267,7 @@ fun DynastyApp(
                             coachSecurityRepository = coachSecurityRepository,
                             rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
                             disciplineRepository = LocalContext.current.requireDynastyApplication().disciplineRepository,
+                            chemistryRepository = LocalContext.current.requireDynastyApplication().chemistryRepository,
                             onOpenStrategy = {
                                 navController.navigate(AppRoute.Strategy.route)
                             },
@@ -308,10 +309,24 @@ fun DynastyApp(
                 }
                 composable(AppRoute.Strategy.route) {
                     val session = ActiveDynastySession.current
+                    val app = LocalContext.current.requireDynastyApplication()
+                    var teamChem by remember { mutableStateOf<Int?>(null) }
+                    var fatigueTuning by remember {
+                        mutableStateOf(dev.novux.dynasty.cbb.core.balance.BalanceFatigue(0.35, 25, 15, 20, 35))
+                    }
                     if (session != null) {
+                        LaunchedEffect(session.dynastyId, session.metadata.seasonIndex) {
+                            teamChem = app.chemistryRepository.loadState(
+                                session.dynastyId,
+                                session.metadata.seasonIndex,
+                            ).teamChemistry
+                            fatigueTuning = app.balanceRulesetRepository.activeRuleset().fatigue
+                        }
                         StrategyScreen(
                             dynastyId = session.dynastyId,
-                            rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
+                            rosterRepository = app.dynastyRosterRepository,
+                            teamChemistry = teamChem,
+                            fatigueTuning = fatigueTuning,
                             onBack = { navController.popBackStack() },
                         )
                     } else {
