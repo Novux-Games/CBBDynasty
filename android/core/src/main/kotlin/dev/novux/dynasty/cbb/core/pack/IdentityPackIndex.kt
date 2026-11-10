@@ -56,6 +56,12 @@ class IdentityPackIndex private constructor(
             .mapNotNull { conference(it) }
             .sortedBy { it.displayName.lowercase() }
 
+    fun tournamentTemplate(templateId: String): TournamentTemplatePack? =
+        source.tournamentTemplates.firstOrNull { it.id == templateId }
+
+    fun teamsInConference(conferenceId: String): List<TeamDisplayOverlay> =
+        allTeamDisplays().filter { it.conferenceId == conferenceId }
+
     companion object {
         fun from(pack: IdentityPack): IdentityPackIndex {
             val teams = pack.teams.associateBy { it.id }
