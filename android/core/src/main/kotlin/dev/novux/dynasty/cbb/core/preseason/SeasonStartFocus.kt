@@ -23,6 +23,7 @@ object PreseasonSeasonStartPolicy {
                 calendarPosition = CalendarPosition(seasonIndex, CalendarPhase.Exhibition, 1),
                 firstGame = FirstPlayableGame(
                     gameId = "exhib-1-${first.opponentTeamId}",
+                    opponentTeamId = first.opponentTeamId,
                     opponentDisplayName = first.opponentDisplayName,
                     homeGame = first.homeGame,
                     kind = ScheduleGameKind.Exhibition,
@@ -37,6 +38,7 @@ object PreseasonSeasonStartPolicy {
             calendarPosition = CalendarPosition(seasonIndex, CalendarPhase.RegularSeason, week),
             firstGame = FirstPlayableGame(
                 gameId = firstRs?.let { "rs-${week}-${it.opponentTeamId}" } ?: "rs-${week}-opener",
+                opponentTeamId = firstRs?.opponentTeamId ?: "opponent-opener",
                 opponentDisplayName = firstRs?.opponentDisplayName ?: "League opponent",
                 homeGame = firstRs?.homeGame ?: true,
                 kind = firstRs?.kind ?: ScheduleGameKind.NonConference,

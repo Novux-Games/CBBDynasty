@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,6 +47,12 @@ import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.coach.staff.SchoolStaffRoster
 import dev.novux.dynasty.cbb.core.preseason.FirstPlayableGame
+import dev.novux.dynasty.cbb.core.preview.GamePreviewEngine
+import dev.novux.dynasty.cbb.core.preview.GamePreviewRequest
+import dev.novux.dynasty.cbb.core.preview.GamePreviewVenue
+import dev.novux.dynasty.cbb.core.preview.HeadToHeadHistory
+import dev.novux.dynasty.cbb.core.preview.TeamPreviewSide
+import dev.novux.dynasty.cbb.ui.preview.GamePreviewLaunch
 import dev.novux.dynasty.cbb.core.preseason.PreseasonSeasonStartPolicy
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
@@ -107,6 +114,7 @@ fun DynastyShellScreen(
     newsFeedRepository: NewsFeedRepository,
     hubMenuCallbacks: DynastyHubMenuCallbacks,
     onOpenDiscipline: (PendingDisciplineIncident) -> Unit,
+    onOpenGamePreview: () -> Unit = {},
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
@@ -118,6 +126,7 @@ fun DynastyShellScreen(
     var rosterPreview by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     var rosterPlayers by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
+    val context = LocalContext.current
     var postgameEvents by remember { mutableStateOf<List<GameSimInjuryEvent>>(emptyList()) }
     var dismissedInjuryTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
     var disciplinePending by remember { mutableStateOf<PendingDisciplineIncident?>(null) }
@@ -411,6 +420,52 @@ fun DynastyShellScreen(
                                 }
                             }
                         },
+                        onOpenPreview = {
+                            scope.launch {
+                                val user = userSchool ?: return@launch
+                                val oppOverview = if (!game.opponentTeamId.startsWith("event-")) {
+                                    schoolHubRepository.loadOpponentOverview(
+                                        loaded.dynastyId,
+                                        game.opponentTeamId,
+                                        loaded.metadata.seasonIndex,
+                                    )
+                                } else {
+                                    null
+                                }
+                                val opponent = oppOverview?.let { TeamPreviewSide.fromOverview(it) }
+                                    ?: TeamPreviewSide.fromPrestige(
+                                        game.opponentTeamId,
+                                        game.opponentDisplayName,
+                                        58,
+                                    )
+                                val venue = if (game.homeGame) {
+                                    GamePreviewVenue.Home
+                                } else {
+                                    GamePreviewVenue.Away
+                                }
+                                val preview = GamePreviewEngine.predict(
+                                    GamePreviewRequest(
+                                        user = TeamPreviewSide.fromOverview(user),
+                                        opponent = opponent,
+                                        venue = venue,
+                                        headToHead = HeadToHeadHistory.summarize(emptyList()),
+                                    ),
+                                )
+                                val loc = if (game.homeGame) {
+                                    context.getString(R.string.dynasty_shell_home)
+                                } else {
+                                    context.getString(R.string.dynasty_shell_away)
+                                }
+                                GamePreviewLaunch.matchupLabel = context.getString(
+                                    R.string.dynasty_shell_matchup,
+                                    game.opponentDisplayName,
+                                    loc,
+                                )
+                                GamePreviewLaunch.venue = venue
+                                GamePreviewLaunch.result = preview
+                                onOpenGamePreview()
+                            }
+                        },
                     )
                 }
                 pendingAdvanceConfirmation?.let { confirmation ->
@@ -471,6 +526,7 @@ fun DynastyShellScreen(
 private fun NextGameCard(
     game: FirstPlayableGame,
     onViewOpponentSchool: () -> Unit,
+    onOpenPreview: () -> Unit,
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -501,6 +557,9 @@ private fun NextGameCard(
             )
             OutlinedButton(onClick = onViewOpponentSchool) {
                 Text(stringResource(R.string.school_hub_view_opponent))
+            }
+            OutlinedButton(onClick = onOpenPreview, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.dynasty_shell_game_preview))
             }
         }
     }

@@ -31,6 +31,8 @@ sealed class AppRoute(val route: String) {
 
     data object GameWatch : AppRoute("game_watch")
 
+    data object GamePreview : AppRoute("game_preview")
+
     data object Discipline : AppRoute("discipline")
 
     data object CoachingCarousel : AppRoute("coaching_carousel")

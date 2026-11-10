@@ -395,6 +395,17 @@
     <string name="game_watch_halftime_deny_off">Deny primary: Off</string>
     <string name="game_watch_halftime_resume">Resume second half</string>
     <string name="game_watch_opponent_scrimmage">Scrimmage foe</string>
+    <string name="game_preview_title">Game preview</string>
+    <string name="game_preview_venue">Location: %1$s</string>
+    <string name="game_preview_win_pct">Win chance %1$d%%</string>
+    <string name="game_preview_predicted_score">Predicted score %1$d–%2$d</string>
+    <string name="game_preview_h2h_heading">Head-to-head</string>
+    <string name="game_preview_h2h_empty">No prior meetings in this dynasty.</string>
+    <string name="game_preview_h2h_record">Series %1$d–%2$d</string>
+    <string name="game_preview_h2h_meeting">%1$s: %2$d–%3$d</string>
+    <string name="game_preview_open_strategy">Set lineup and gameplan</string>
+    <string name="game_preview_neutral">Neutral court</string>
+    <string name="dynasty_shell_game_preview">Game preview</string>
     <string name="school_hub_chemistry">Team chemistry: %1$d</string>
     <string name="shell_dynasty_school">Dynasty: %1$s</string>
     <string name="shell_menu_open">Open menu</string>

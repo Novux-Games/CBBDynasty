@@ -38,6 +38,8 @@ import dev.novux.dynasty.cbb.ui.shell.DynastyShellScreen
 import dev.novux.dynasty.cbb.ui.strategy.StrategyScreen
 import dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch
 import dev.novux.dynasty.cbb.ui.sim.GameWatchScreen
+import dev.novux.dynasty.cbb.ui.preview.GamePreviewLaunch
+import dev.novux.dynasty.cbb.ui.preview.GamePreviewScreen
 import dev.novux.dynasty.cbb.ui.discipline.DisciplineDecisionScreen
 import dev.novux.dynasty.cbb.ui.newgame.NewGameWizardScreen
 import dev.novux.dynasty.cbb.ui.offseason.CoachingCarouselScreen
@@ -307,6 +309,7 @@ fun DynastyApp(
                                 disciplineIncident = incident
                                 navController.navigate(AppRoute.Discipline.route)
                             },
+                            onOpenGamePreview = { navController.navigate(AppRoute.GamePreview.route) },
                         )
                     } else {
                         LaunchedEffect(Unit) {
@@ -365,6 +368,20 @@ fun DynastyApp(
                         LaunchedEffect(Unit) {
                             navController.popBackStack(AppRoute.Home.route, inclusive = false)
                         }
+                    }
+                }
+                composable(AppRoute.GamePreview.route) {
+                    val preview = GamePreviewLaunch.result
+                    if (preview != null) {
+                        GamePreviewScreen(
+                            matchupLabel = GamePreviewLaunch.matchupLabel,
+                            venue = GamePreviewLaunch.venue,
+                            preview = preview,
+                            onOpenStrategy = { navController.navigate(AppRoute.Strategy.route) },
+                            onBack = { navController.popBackStack() },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) { navController.popBackStack() }
                     }
                 }
                 composable(AppRoute.GameWatch.route) {
