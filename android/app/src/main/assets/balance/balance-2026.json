@@ -32,7 +32,7 @@
     },
     "mediaPollWeights": {
       "netAnchor": 0.72,
-      "prestige": 0.10,
+      "prestige": 0.1,
       "inertia": 0.08,
       "form": 0.06,
       "narrative": 0.04
@@ -40,7 +40,7 @@
     "coachesPollWeights": {
       "netAnchor": 0.78,
       "prestige": 0.06,
-      "inertia": 0.10,
+      "inertia": 0.1,
       "form": 0.04,
       "narrative": 0.02
     },
@@ -58,7 +58,13 @@
     "occurrence": {
       "baseChancePerTeamWeek": 0.06,
       "maxPerSeason": 3,
-      "academicWindowWeeks": [18, 19, 20, 21, 22],
+      "academicWindowWeeks": [
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
       "academicOffWindowChanceMultiplier": 0.05
     },
     "academic": {
@@ -77,9 +83,21 @@
       "dismissedWeight": 0.1
     },
     "conductTemplates": [
-      { "id": "arrest", "label": "Arrest", "weight": 0.4 },
-      { "id": "campus_conduct", "label": "Campus conduct", "weight": 0.35 },
-      { "id": "team_rules", "label": "Team rules violation", "weight": 0.25 }
+      {
+        "id": "arrest",
+        "label": "Arrest",
+        "weight": 0.4
+      },
+      {
+        "id": "campus_conduct",
+        "label": "Campus conduct",
+        "weight": 0.35
+      },
+      {
+        "id": "team_rules",
+        "label": "Team rules violation",
+        "weight": 0.25
+      }
     ]
   },
   "chemistry": {
@@ -111,7 +129,10 @@
       "maxGamesPlayed": 15,
       "maxScheduleRsGameIndex": 20,
       "blockedFromRegularSeasonWeek": 21,
-      "qualifyingSeverities": ["moderate", "major"]
+      "qualifyingSeverities": [
+        "moderate",
+        "major"
+      ]
     },
     "bank": [
       {
@@ -479,7 +500,12 @@
   "recruiting": {
     "weeklyCarryoverFraction": 0.5,
     "signingCrunchMultiplier": 1.5,
-    "signingCrunchOffseasonWeeks": [2, 3, 4, 5],
+    "signingCrunchOffseasonWeeks": [
+      2,
+      3,
+      4,
+      5
+    ],
     "prestigeTiers": [
       {
         "id": "low_major",
@@ -530,25 +556,72 @@
     "weeklyPointsInterpolation": "linear_within_tier",
     "signingDayOffseasonWeek": 6,
     "actions": {
-      "scholarshipOffer": { "cost": 150, "refunded": true, "refundPolicy": "week_boundary_while_active" },
-      "dm": { "cost": 50, "refunded": false },
-      "phoneCall": { "cost": 100, "refunded": false },
-      "sendTheHouse": { "cost": 500, "refunded": false },
+      "scholarshipOffer": {
+        "cost": 150,
+        "refunded": true,
+        "refundPolicy": "week_boundary_while_active"
+      },
+      "dm": {
+        "cost": 50,
+        "refunded": false
+      },
+      "phoneCall": {
+        "cost": 100,
+        "refunded": false
+      },
+      "sendTheHouse": {
+        "cost": 500,
+        "refunded": false
+      },
       "scoutTheirGame": {
         "cost": 50,
         "refunded": true,
         "refundPolicy": "week_boundary_while_active",
         "oncePerRecruitPerSeason": true,
-        "allowedPhases": ["regular_season"]
+        "allowedPhases": [
+          "regular_season"
+        ]
       },
       "officialVisit": {
-        "costByDistanceBand": { "local": 50, "regional": 100, "remote": 150 },
+        "costByDistanceBand": {
+          "local": 50,
+          "regional": 100,
+          "remote": 150
+        },
         "refunded": true,
         "refundPolicy": "week_boundary_while_active",
         "oncePerRecruitPerSeason": true,
-        "allowedThrough": { "phase": "offseason", "weekIndexMax": 5, "includesRegularSeason": true }
+        "allowedThrough": {
+          "phase": "offseason",
+          "weekIndexMax": 5,
+          "includesRegularSeason": true
+        }
       },
-      "bonusPoints": { "refunded": false, "spendUnspentWeeklyBalance": true }
+      "bonusPoints": {
+        "refunded": false,
+        "spendUnspentWeeklyBalance": true
+      }
+    },
+    "recommended": {
+      "listCap": 50,
+      "rosterNeedBonus": 8,
+      "bands": {
+        "likelyMin": 72,
+        "possibleMin": 55,
+        "reachMin": 38
+      },
+      "prestigeFloorByStars": {
+        "5": 75,
+        "4": 52,
+        "3": 30,
+        "2": 0
+      },
+      "prestigeGapPenaltyPerPoint": 0.9,
+      "eliteNationalRankHideThrough": 5,
+      "eliteShowMinAdjustedScore": 48,
+      "pipelineProximityScore": 0.65,
+      "inStateProximityScore": 1.0,
+      "outOfRegionProximityScore": 0.22
     }
   },
   "nil": {
@@ -565,7 +638,13 @@
       {
         "tierId": "power",
         "label": "Power (flagship leagues)",
-        "conferenceIds": ["conf-sedc", "conf-g10", "conf-c12", "conf-acrown", "conf-epc"],
+        "conferenceIds": [
+          "conf-sedc",
+          "conf-g10",
+          "conf-c12",
+          "conf-acrown",
+          "conf-epc"
+        ],
         "annualPoolMinUsd": 1800000,
         "annualPoolMaxUsd": 8500000,
         "blueBloodEligible": true
@@ -573,7 +652,14 @@
       {
         "tierId": "upper",
         "label": "Upper mid-major / strong multi-bid",
-        "conferenceIds": ["conf-aucc", "conf-cat10", "conf-pvc", "conf-rmwc", "conf-wcc", "conf-pr12"],
+        "conferenceIds": [
+          "conf-aucc",
+          "conf-cat10",
+          "conf-pvc",
+          "conf-rmwc",
+          "conf-wcc",
+          "conf-pr12"
+        ],
         "annualPoolMinUsd": 900000,
         "annualPoolMaxUsd": 4500000,
         "blueBloodEligible": false
@@ -582,9 +668,21 @@
         "tierId": "mid",
         "label": "Mid-major",
         "conferenceIds": [
-          "conf-ucc", "conf-sbc", "conf-cca", "conf-lhl", "conf-summit", "conf-nsc",
-          "conf-mac", "conf-ascu", "conf-metro", "conf-gwc", "conf-uac", "conf-psc",
-          "conf-gcc", "conf-scf", "conf-ova"
+          "conf-ucc",
+          "conf-sbc",
+          "conf-cca",
+          "conf-lhl",
+          "conf-summit",
+          "conf-nsc",
+          "conf-mac",
+          "conf-ascu",
+          "conf-metro",
+          "conf-gwc",
+          "conf-uac",
+          "conf-psc",
+          "conf-gcc",
+          "conf-scf",
+          "conf-ova"
         ],
         "annualPoolMinUsd": 350000,
         "annualPoolMaxUsd": 2200000,
@@ -593,7 +691,14 @@
       {
         "tierId": "low",
         "label": "Low-major",
-        "conferenceIds": ["conf-nac", "conf-nec", "conf-meac", "conf-scal", "conf-psl", "conf-fel"],
+        "conferenceIds": [
+          "conf-nac",
+          "conf-nec",
+          "conf-meac",
+          "conf-scal",
+          "conf-psl",
+          "conf-fel"
+        ],
         "annualPoolMinUsd": 120000,
         "annualPoolMaxUsd": 850000,
         "blueBloodEligible": false
@@ -607,16 +712,45 @@
     "maxOfferMultiplierOfAsk": 3,
     "interestNilRatioExponent": 1.0,
     "askByStarBand": [
-      { "stars": 5, "askMinUsd": 400000, "askMaxUsd": 2500000, "nationalTop60Multiplier": 1.35 },
-      { "stars": 4, "askMinUsd": 120000, "askMaxUsd": 650000 },
-      { "stars": 3, "askMinUsd": 25000, "askMaxUsd": 180000 },
-      { "stars": 2, "askMinUsd": 0, "askMaxUsd": 45000 },
-      { "stars": 1, "askMinUsd": 0, "askMaxUsd": 15000 }
+      {
+        "stars": 5,
+        "askMinUsd": 400000,
+        "askMaxUsd": 2500000,
+        "nationalTop60Multiplier": 1.35
+      },
+      {
+        "stars": 4,
+        "askMinUsd": 120000,
+        "askMaxUsd": 650000
+      },
+      {
+        "stars": 3,
+        "askMinUsd": 25000,
+        "askMaxUsd": 180000
+      },
+      {
+        "stars": 2,
+        "askMinUsd": 0,
+        "askMaxUsd": 45000
+      },
+      {
+        "stars": 1,
+        "askMinUsd": 0,
+        "askMaxUsd": 15000
+      }
     ],
     "portalAskMultiplierVsHs": 0.85,
     "retentionRaiseAskBands": [
-      { "tier": "breakout", "additionalAskMinUsd": 50000, "additionalAskMaxUsd": 400000 },
-      { "tier": "steady", "additionalAskMinUsd": 0, "additionalAskMaxUsd": 75000 }
+      {
+        "tier": "breakout",
+        "additionalAskMinUsd": 50000,
+        "additionalAskMaxUsd": 400000
+      },
+      {
+        "tier": "steady",
+        "additionalAskMinUsd": 0,
+        "additionalAskMaxUsd": 75000
+      }
     ]
   },
   "awards": {
@@ -639,7 +773,12 @@
   },
   "history": {
     "winContribution": {
-      "productionWeights": { "pts": 1.0, "ast": 1.5, "reb": 1.0, "to": -1.0 },
+      "productionWeights": {
+        "pts": 1.0,
+        "ast": 1.5,
+        "reb": 1.0,
+        "to": -1.0
+      },
       "minuteBlend": 0.6,
       "productionBlend": 0.4,
       "productionIdxClampMin": 0.25,
