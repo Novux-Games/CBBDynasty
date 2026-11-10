@@ -11,7 +11,11 @@ import dev.novux.dynasty.cbb.core.calendar.checkpoint.ProvisionalGameMark
 import dev.novux.dynasty.cbb.core.league.LeagueGameResult
 import dev.novux.dynasty.cbb.core.league.LeagueStandingsState
 import dev.novux.dynasty.cbb.core.league.LeagueWeekBatchSimEngine
+import dev.novux.dynasty.cbb.core.preseason.tournament.EarlySeasonBracketEngine
+import dev.novux.dynasty.cbb.core.preseason.tournament.EarlySeasonBracketSeason
 import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
+import dev.novux.dynasty.cbb.core.schedule.ScheduleGameKind
+import dev.novux.dynasty.cbb.data.preseason.EarlySeasonBracketRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import kotlinx.coroutines.flow.first
@@ -26,6 +30,7 @@ class LeagueWeekBatchRepository(
     private val context: Context,
     private val leagueScheduleRepository: LeagueScheduleRepository,
     private val preseasonScheduleRepository: PreseasonScheduleRepository,
+    private val earlySeasonBracketRepository: EarlySeasonBracketRepository,
     private val database: DynastyDatabase,
 ) {
     suspend fun loadStandings(dynastyId: String, seasonIndex: Int): LeagueStandingsState? {
@@ -48,13 +53,28 @@ class LeagueWeekBatchRepository(
                 seasonIndex,
                 schedule.schedules.map { it.teamId },
             )
+        val plan = preseasonScheduleRepository.loadPlan(dynastyId, seasonIndex)
+        val bracketSeason = earlySeasonBracketRepository.load(dynastyId, seasonIndex)
         val userResult = buildUserResult(
             userTeamId,
             committedWeek.weekIndex,
-            preseasonScheduleRepository.loadPlan(dynastyId, seasonIndex),
+            plan,
             userGamesCommitted,
+            bracketSeason,
         )
         val seed = dynastyId.hashCode().toLong() + seasonIndex + committedWeek.weekIndex
+        if (bracketSeason != null && bracketSeason.brackets.isNotEmpty()) {
+            val eventOutcome = EarlySeasonBracketEngine.simWeekForLeague(
+                season = bracketSeason,
+                standings = standings,
+                rsWeekIndex = committedWeek.weekIndex,
+                userTeamId = userTeamId,
+                userResults = userResult?.let { listOf(it) }.orEmpty(),
+                seed = seed,
+            )
+            standings = eventOutcome.standings
+            earlySeasonBracketRepository.persist(dynastyId, eventOutcome.season)
+        }
         val batch = LeagueWeekBatchSimEngine.runRegularSeasonWeek(
             schedule = schedule,
             standings = standings,
@@ -71,9 +91,29 @@ class LeagueWeekBatchRepository(
         rsWeekIndex: Int,
         plan: PreseasonSchedulePlan?,
         committed: Map<String, ProvisionalGameMark>,
+        bracketSeason: EarlySeasonBracketSeason?,
     ): LeagueGameResult? {
         val mark = committed.values.firstOrNull() ?: return null
         val game = plan?.regularSeason?.firstOrNull { it.rsWeekIndex == rsWeekIndex } ?: return null
+        if (game.kind == ScheduleGameKind.EarlyEvent) {
+            val snapshot = bracketSeason?.brackets?.values?.firstOrNull { it.isParticipant(userTeamId) }
+                ?: return null
+            val matchup = EarlySeasonBracketEngine.pairingsForWeek(snapshot, rsWeekIndex)
+                .firstOrNull { userTeamId == it.homeTeamId || userTeamId == it.awayTeamId }
+                ?: return null
+            val (homeScore, awayScore) = if (userTeamId == matchup.homeTeamId) {
+                mark.homeScore to mark.awayScore
+            } else {
+                mark.awayScore to mark.homeScore
+            }
+            return LeagueGameResult(
+                homeTeamId = matchup.homeTeamId,
+                awayTeamId = matchup.awayTeamId,
+                homeScore = homeScore,
+                awayScore = awayScore,
+                rsWeekIndex = rsWeekIndex,
+            )
+        }
         val homeTeam = if (game.homeGame) userTeamId else game.opponentTeamId
         val awayTeam = if (game.homeGame) game.opponentTeamId else userTeamId
         return LeagueGameResult(

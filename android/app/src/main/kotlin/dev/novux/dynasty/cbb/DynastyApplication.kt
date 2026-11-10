@@ -25,6 +25,7 @@ import dev.novux.dynasty.cbb.data.offseason.OffseasonSummerWorkoutRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekEightRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekTenRepository
+import dev.novux.dynasty.cbb.data.preseason.EarlySeasonBracketRepository
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonReportRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonSeasonStartRepository
@@ -118,6 +119,9 @@ class DynastyApplication : Application() {
     lateinit var tournamentInvitesRepository: TournamentInvitesRepository
         private set
 
+    lateinit var earlySeasonBracketRepository: EarlySeasonBracketRepository
+        private set
+
     lateinit var preseasonScheduleRepository: PreseasonScheduleRepository
         private set
 
@@ -165,6 +169,12 @@ class DynastyApplication : Application() {
         preseasonProgressRepository = PreseasonProgressRepository(applicationContext)
         incomingClassSeedRepository = IncomingClassSeedRepository(applicationContext)
         tournamentInvitesRepository = TournamentInvitesRepository(applicationContext)
+        earlySeasonBracketRepository = EarlySeasonBracketRepository(
+            applicationContext,
+            packRepository,
+            tournamentInvitesRepository,
+            database,
+        )
         leagueScheduleRepository = LeagueScheduleRepository(applicationContext, packRepository)
         preseasonScheduleRepository = PreseasonScheduleRepository(
             applicationContext,
@@ -178,6 +188,7 @@ class DynastyApplication : Application() {
             applicationContext,
             leagueScheduleRepository,
             preseasonScheduleRepository,
+            earlySeasonBracketRepository,
             database,
         )
         preseasonReportRepository = PreseasonReportRepository(
@@ -205,6 +216,7 @@ class DynastyApplication : Application() {
             preseasonProgressRepository,
             preseasonScheduleRepository,
             leagueScheduleRepository,
+            earlySeasonBracketRepository,
         )
         schoolStaffRepository = SchoolStaffRepository(database, packRepository)
         schoolHubRepository = SchoolHubRepository(database, packRepository, preseasonProgressRepository)

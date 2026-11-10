@@ -14,6 +14,7 @@ class PreseasonSeasonStartRepository(
     private val progressRepository: PreseasonProgressRepository,
     private val scheduleRepository: PreseasonScheduleRepository,
     private val leagueScheduleRepository: LeagueScheduleRepository,
+    private val earlySeasonBracketRepository: EarlySeasonBracketRepository,
 ) {
     suspend fun startSeason(slotIndex: Int): DynastyLoadResult {
         val loaded = when (val initial = saveSlotRepository.loadSlot(slotIndex)) {
@@ -38,6 +39,7 @@ class PreseasonSeasonStartRepository(
             plan,
         )
         leagueScheduleRepository.generateAndPersist(loaded.dynastyId, loaded.metadata.seasonIndex)
+        earlySeasonBracketRepository.bootstrapForSeason(loaded.dynastyId, loaded.metadata.seasonIndex)
         return saveSlotRepository.enterInSeasonFromPreseason(slotIndex, focus)
     }
 }
