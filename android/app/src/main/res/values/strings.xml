@@ -119,4 +119,9 @@
     <string name="carousel_decline">Decline</string>
     <string name="carousel_complete">Carousel complete.</string>
     <string name="carousel_continue_offseason">Continue to offseason</string>
+    <string name="leaving_week_title">Players Leaving</string>
+    <string name="leaving_tab_roster">Roster</string>
+    <string name="leaving_tab_transfer">Transfer</string>
+    <string name="leaving_encourage_transfer">Encourage transfer</string>
+    <string name="leaving_convince_stay">Convince to stay</string>
 </resources>

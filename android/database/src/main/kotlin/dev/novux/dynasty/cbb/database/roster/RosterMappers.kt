@@ -1,5 +1,8 @@
 package dev.novux.dynasty.cbb.database.roster
 
+import dev.novux.dynasty.cbb.core.roster.PlayerClassYear
+import dev.novux.dynasty.cbb.core.roster.PlayerPosition
+import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.roster.RosterPlayerSeed
 
 fun RosterPlayerSeed.toEntity(): DynastyRosterPlayerEntity =
@@ -10,6 +13,34 @@ fun RosterPlayerSeed.toEntity(): DynastyRosterPlayerEntity =
         classYearWire = classYear.wire,
         isStarter = isStarter,
         depthOrder = depthOrder,
+        inTransferPortal = false,
     )
 
 fun List<RosterPlayerSeed>.toEntities(): List<DynastyRosterPlayerEntity> = map { it.toEntity() }
+
+fun DynastyRosterPlayerEntity.toDomain(): RosterPlayer {
+    val position = PlayerPosition.fromWire(positionWire)
+        ?: error("unknown position $positionWire")
+    val classYear = PlayerClassYear.fromWire(classYearWire)
+        ?: error("unknown class year $classYearWire")
+    return RosterPlayer(
+        playerId = playerId,
+        dynastyId = dynastyId,
+        position = position,
+        classYear = classYear,
+        isStarter = isStarter,
+        depthOrder = depthOrder,
+        inTransferPortal = inTransferPortal,
+    )
+}
+
+fun RosterPlayer.toEntity(): DynastyRosterPlayerEntity =
+    DynastyRosterPlayerEntity(
+        playerId = playerId,
+        dynastyId = dynastyId,
+        positionWire = position.wire,
+        classYearWire = classYear.wire,
+        isStarter = isStarter,
+        depthOrder = depthOrder,
+        inTransferPortal = inTransferPortal,
+    )

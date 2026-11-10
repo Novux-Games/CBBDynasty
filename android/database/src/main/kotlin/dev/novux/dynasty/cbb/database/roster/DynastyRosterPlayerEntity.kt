@@ -15,4 +15,5 @@ data class DynastyRosterPlayerEntity(
     val classYearWire: String,
     val isStarter: Boolean,
     val depthOrder: Int,
+    val inTransferPortal: Boolean = false,
 )

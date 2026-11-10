@@ -5,6 +5,7 @@ import android.content.Context
 import dev.novux.dynasty.cbb.data.carousel.CoachingCarouselRepository
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
+import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
 import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
@@ -22,6 +23,9 @@ class DynastyApplication : Application() {
         private set
 
     lateinit var saveSlotRepository: SaveSlotRepository
+        private set
+
+    lateinit var dynastyRosterRepository: DynastyRosterRepository
         private set
 
     lateinit var weekCheckpointRepository: WeekCheckpointRepository
@@ -48,6 +52,7 @@ class DynastyApplication : Application() {
         coachingCarouselRepository = CoachingCarouselRepository(applicationContext)
         val database = DynastyDatabase.build(applicationContext)
         weekCheckpointRepository = WeekCheckpointRepository(database)
+        dynastyRosterRepository = DynastyRosterRepository(database)
         saveSlotRepository = SaveSlotRepository(
             database,
             weekCheckpointRepository,

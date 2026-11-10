@@ -26,7 +26,7 @@ import dev.novux.dynasty.cbb.database.save.SaveSlotEntity
         DynastyCoachEntity::class,
         DynastyRosterPlayerEntity::class,
     ],
-    version = 6,
+    version = 7,
     exportSchema = false,
 )
 @androidx.room.TypeConverters(Converters::class)
@@ -54,6 +54,7 @@ abstract class DynastyDatabase : RoomDatabase() {
                     MIGRATION_3_4,
                     MIGRATION_4_5,
                     MIGRATION_5_6,
+                    MIGRATION_6_7,
                 )
                 .build()
     }

@@ -27,8 +27,10 @@ import dev.novux.dynasty.cbb.core.calendar.OffseasonWeekHeading
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
+import dev.novux.dynasty.cbb.ui.offseason.leaving.PlayersLeavingPanel
 import kotlinx.coroutines.launch
 
 /** Offseason shell — week header and advance ([planning/offseason.md]). */
@@ -36,6 +38,7 @@ import kotlinx.coroutines.launch
 fun OffseasonScreen(
     initial: LoadedDynasty,
     saveSlotRepository: SaveSlotRepository,
+    rosterRepository: DynastyRosterRepository,
     onExitHome: () -> Unit,
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
@@ -85,12 +88,20 @@ fun OffseasonScreen(
                 fontWeight = FontWeight.SemiBold,
             )
         }
-        Text(
-            text = stringResource(R.string.offseason_shell_placeholder),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.weight(1f),
-        )
+        if (inOffseason && position.weekIndex == 1) {
+            PlayersLeavingPanel(
+                dynastyId = loaded.dynastyId,
+                rosterRepository = rosterRepository,
+                modifier = Modifier.weight(1f),
+            )
+        } else {
+            Text(
+                text = stringResource(R.string.offseason_shell_placeholder),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.weight(1f),
+            )
+        }
 
         Button(
             onClick = {

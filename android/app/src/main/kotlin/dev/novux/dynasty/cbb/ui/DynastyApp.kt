@@ -187,6 +187,7 @@ fun DynastyApp(
                         OffseasonScreen(
                             initial = session,
                             saveSlotRepository = saveSlotRepository,
+                            rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
                             onExitHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
