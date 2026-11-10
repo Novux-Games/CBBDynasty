@@ -280,7 +280,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 15.3 | `[x]` Academics → recruiting budget multiplier | Grades on school | [game-design](../planning/game-design.md) | `ProgramAcademicsGradeEngine`, `RecruitingWeekGrant` |
 | 15.4 | `[x]` Coach skill tree + Sunday points | Auto-spend option | [game-design](../planning/game-design.md), [coach-card](../planning/coach-card.md) | `CoachSkillTreeEngine`, head coach card spend UI |
 | 15.5 | `[x]` Unemployed coach mode | Job center | [game-design](../planning/game-design.md) | `JobCenterEngine`, `CoachEmploymentRepository`, `JobCenterScreen` |
-| 15.6 | `[ ]` Recruiting hub **action UX** (all point spends wired) | Ship only after **6.17–6.19** core rules pass tests | [recruiting-engine](../planning/recruiting-engine.md#recruiting-ui) | `ui.recruiting` |
+| 15.6 | `[x]` Recruiting hub **action UX** (all point spends wired) | Ship only after **6.17–6.19** core rules pass tests | [recruiting-engine](../planning/recruiting-engine.md#recruiting-ui) | `RecruitingHubScreen` contact + bonus + revoke |
 | 15.7 | `[ ]` Annual **NIL collective** pool (conference tier × prestige) | `nil.annualPoolByConferenceTier` + `blueBloodPoolBand`; signing snapshot | [game-design](../planning/game-design.md#annual-collective-pool-design-lock) | `:core/nil` |
 
 ---

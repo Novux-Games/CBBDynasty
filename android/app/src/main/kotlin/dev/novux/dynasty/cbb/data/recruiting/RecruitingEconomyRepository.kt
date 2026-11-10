@@ -13,7 +13,9 @@ import dev.novux.dynasty.cbb.core.balance.BalanceRuleset
 import dev.novux.dynasty.cbb.core.recruiting.OfficialVisitDistanceBand
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingActionSpend
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingPointAction
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingRefundableAction
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingRefundableActionSpend
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingSpendFailure
 import dev.novux.dynasty.cbb.core.recruiting.OfficialVisitDistanceResolver
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubActionGateEvaluator
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingProspectActionGates
@@ -60,6 +62,22 @@ class RecruitingEconomyRepository(
         )
         persist(dynasty.dynastyId, ledger)
         return ledger
+    }
+
+    suspend fun revokeRefundableReservation(
+        dynasty: LoadedDynasty,
+        prospectId: String,
+        action: RecruitingRefundableAction,
+    ) {
+        val active = reservationRepository.loadActive(dynasty.dynastyId)
+        val match = active.firstOrNull { it.prospectId == prospectId && it.action == action } ?: return
+        val ledger = loadOrOpenCycle(dynasty)
+        val refunded = ledger.pointsAvailable + match.pointsReserved
+        persist(dynasty.dynastyId, ledger.withPointsAvailable(refunded))
+        reservationRepository.saveActive(
+            dynasty.dynastyId,
+            RecruitingRefundableActionSpend.revokeReservation(active, match.reservationId),
+        )
     }
 
     suspend fun spendPointAction(

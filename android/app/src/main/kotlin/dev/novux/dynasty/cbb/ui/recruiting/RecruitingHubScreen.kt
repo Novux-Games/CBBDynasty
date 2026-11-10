@@ -41,6 +41,8 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingClassSeed
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingPointAction
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingRefundableAction
 import dev.novux.dynasty.cbb.core.recruiting.RecommendedProspectRow
 import dev.novux.dynasty.cbb.core.recruiting.RecommendedRecruitList
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
@@ -252,6 +254,24 @@ fun RecruitingHubScreen(
                             gateRefresh++
                         }
                     },
+                    onPointAction = { action, bonusAmount ->
+                        scope.launch {
+                            recruitingEconomyRepository.spendPointAction(loaded, action, bonusAmount)
+                            ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+                            gateRefresh++
+                        }
+                    },
+                    onRevokeOffer = { prospectId ->
+                        scope.launch {
+                            recruitingEconomyRepository.revokeRefundableReservation(
+                                loaded,
+                                prospectId,
+                                RecruitingRefundableAction.ScholarshipOffer,
+                            )
+                            ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+                            gateRefresh++
+                        }
+                    },
                 )
                 RecruitingHubTab.HsJuco -> PlaceholderBody(stringResource(R.string.recruiting_placeholder_hs_juco))
                 RecruitingHubTab.TransferPortal -> PlaceholderBody(stringResource(R.string.recruiting_placeholder_portal))
@@ -291,6 +311,8 @@ private fun RecommendedTabBody(
     onSpend: (ProspectSpendRequest) -> Unit,
     onScholarshipOffer: (String) -> Unit,
     onAssignNil: (prospectId: String, nilAskUsd: Int, offerUsd: Long) -> Unit,
+    onPointAction: (RecruitingPointAction, Int?) -> Unit,
+    onRevokeOffer: (String) -> Unit,
 ) {
     val currency = remember { NumberFormat.getCurrencyInstance(Locale.US) }
     val likelyCount = rows.count { it.badge == SignLikelihoodBadge.Likely || it.badge == SignLikelihoodBadge.Possible }
@@ -348,6 +370,17 @@ private fun RecommendedTabBody(
                     onAssignNil(row.prospect.prospectId, row.prospect.nilAskUsd, row.prospect.nilAskUsd.toLong())
                 },
                 onClearNil = { onAssignNil(row.prospect.prospectId, row.prospect.nilAskUsd, 0L) },
+                onDm = { onPointAction(RecruitingPointAction.Dm, null) },
+                onPhoneCall = { onPointAction(RecruitingPointAction.PhoneCall, null) },
+                onSendTheHouse = { onPointAction(RecruitingPointAction.SendTheHouse, null) },
+                onBonusPoints = {
+                    gates?.let { g ->
+                        if (g.bonusPoints.allowed) {
+                            onPointAction(RecruitingPointAction.BonusPoints, g.bonusPoints.pointCost)
+                        }
+                    }
+                },
+                onRevokeOffer = { onRevokeOffer(row.prospect.prospectId) },
             )
         }
     }
@@ -366,6 +399,11 @@ private fun RecommendedProspectRow(
     onScholarshipOffer: () -> Unit,
     onMeetNilAsk: () -> Unit,
     onClearNil: () -> Unit,
+    onDm: () -> Unit,
+    onPhoneCall: () -> Unit,
+    onSendTheHouse: () -> Unit,
+    onBonusPoints: () -> Unit,
+    onRevokeOffer: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -441,10 +479,50 @@ private fun RecommendedProspectRow(
                 Text(stringResource(R.string.recruiting_nil_assign_clear))
             }
         }
-        OutlinedButton(onClick = onScholarshipOffer, modifier = Modifier.fillMaxWidth()) {
-            Text(stringResource(R.string.recruiting_action_scholarship_offer, scholarshipOfferPointCost))
-        }
         gates?.let { g ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                OutlinedButton(onClick = onDm, enabled = g.dm.allowed, modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.recruiting_action_dm, g.dm.pointCost))
+                }
+                OutlinedButton(onClick = onPhoneCall, enabled = g.phoneCall.allowed, modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.recruiting_action_phone, g.phoneCall.pointCost))
+                }
+            }
+            OutlinedButton(
+                onClick = onSendTheHouse,
+                enabled = g.sendTheHouse.allowed,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(R.string.recruiting_action_send_house, g.sendTheHouse.pointCost))
+            }
+            if (g.hasActiveScholarshipOffer) {
+                OutlinedButton(onClick = onRevokeOffer, modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.recruiting_action_revoke_offer))
+                }
+            } else {
+                OutlinedButton(
+                    onClick = onScholarshipOffer,
+                    enabled = g.scholarshipOffer.allowed,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(stringResource(R.string.recruiting_action_scholarship_offer, g.scholarshipOffer.pointCost))
+                }
+            }
+            OutlinedButton(
+                onClick = onBonusPoints,
+                enabled = g.bonusPoints.allowed,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    stringResource(
+                        R.string.recruiting_action_bonus_points,
+                        g.bonusPoints.pointCost,
+                    ),
+                )
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),

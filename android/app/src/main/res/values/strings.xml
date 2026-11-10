@@ -189,6 +189,11 @@
     <string name="recruiting_nil_offer_line">Your NIL offer: %1$s</string>
     <string name="recruiting_nil_assign_meet_ask">Assign NIL (meet ask)</string>
     <string name="recruiting_nil_assign_clear">Clear NIL offer</string>
+    <string name="recruiting_action_dm">DM (%1$d pts)</string>
+    <string name="recruiting_action_phone">Call (%1$d pts)</string>
+    <string name="recruiting_action_send_house">Send the house (%1$d pts)</string>
+    <string name="recruiting_action_bonus_points">Bonus points (spend %1$d pts)</string>
+    <string name="recruiting_action_revoke_offer">Revoke scholarship offer (refund pts)</string>
     <string name="recruiting_action_scholarship_offer">Scholarship offer (%1$d pts)</string>
     <string name="conference_offers_title">Conference offers</string>
     <string name="conference_offers_subtitle">Review realignment invitations before preseason.</string>
