@@ -59,8 +59,9 @@ import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardOptionalTasksPanel
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
-import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
+import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
+import dev.novux.dynasty.cbb.ui.hubs.buildDynastyHubMenu
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
@@ -88,8 +89,7 @@ fun OffseasonScreen(
     weekEightRepository: OffseasonWeekEightRepository,
     weekNineRepository: OffseasonWeekNineRepository,
     weekTenRepository: OffseasonWeekTenRepository,
-    onExitHome: () -> Unit,
-    onOpenNewsHub: () -> Unit = {},
+    hubMenuCallbacks: DynastyHubMenuCallbacks,
     onOpenRecruiting: (RecruitingHubTab) -> Unit = {},
     onOpenSigningDay: (DashboardDeepLink) -> Unit = {},
     userCalendarRepository: UserCalendarRepository,
@@ -132,10 +132,7 @@ fun OffseasonScreen(
     }
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
-    val menu = listOf(
-        DynastyShellMenuAction(R.string.shell_menu_news_hub, onOpenNewsHub),
-        DynastyShellMenuAction(R.string.shell_menu_exit_home, onExitHome),
-    )
+    val menu = buildDynastyHubMenu(position, hubMenuCallbacks)
 
     DynastyShellChrome(
         schoolDisplayName = schoolName,

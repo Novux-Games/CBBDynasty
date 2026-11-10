@@ -39,6 +39,11 @@ import dev.novux.dynasty.cbb.ui.discipline.DisciplineDecisionScreen
 import dev.novux.dynasty.cbb.ui.newgame.NewGameWizardScreen
 import dev.novux.dynasty.cbb.ui.offseason.CoachingCarouselScreen
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
+import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
+import dev.novux.dynasty.cbb.ui.hubs.HubScaffoldScreen
+import dev.novux.dynasty.cbb.ui.hubs.MarchMayhemHubScreen
+import dev.novux.dynasty.cbb.ui.hubs.SchoolHubRouteScreen
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.ui.recruiting.RecruitingHubScreen
 import dev.novux.dynasty.cbb.ui.offseason.OffseasonScreen
@@ -129,6 +134,23 @@ fun DynastyApp(
                 LocalContext.current.requireDynastyApplication().schoolHubRepository
             val coachSecurityRepository =
                 LocalContext.current.requireDynastyApplication().coachSecurityRepository
+
+            val hubMenuCallbacks = DynastyHubMenuCallbacks(
+                onOpenSchool = { navController.navigate(AppRoute.SchoolHub.route) },
+                onOpenRecruiting = {
+                    recruitingLaunchTab = RecruitingHubTab.Recommended
+                    navController.navigate(AppRoute.Recruiting.route)
+                },
+                onOpenStrategy = { navController.navigate(AppRoute.Strategy.route) },
+                onOpenStatistics = { navController.navigate(AppRoute.StatisticsHub.route) },
+                onOpenRankings = { navController.navigate(AppRoute.RankingsHub.route) },
+                onOpenNewsHub = { navController.navigate(AppRoute.NewsHub.route) },
+                onOpenHistory = { navController.navigate(AppRoute.HistoryHub.route) },
+                onOpenMarchMayhem = { navController.navigate(AppRoute.MarchMayhem.route) },
+                onExitHome = {
+                    navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                },
+            )
 
             suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
@@ -250,10 +272,7 @@ fun DynastyApp(
                                     popUpTo(AppRoute.Home.route) { inclusive = false }
                                 }
                             },
-                            onOpenNewsHub = { navController.navigate(AppRoute.NewsHub.route) },
-                            onExitHome = {
-                                navController.popBackStack(AppRoute.Home.route, inclusive = false)
-                            },
+                            hubMenuCallbacks = hubMenuCallbacks,
                         )
                     } else {
                         LaunchedEffect(Unit) {
@@ -276,16 +295,10 @@ fun DynastyApp(
                             chemistryRepository = LocalContext.current.requireDynastyApplication().chemistryRepository,
                             userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
                             newsFeedRepository = LocalContext.current.requireDynastyApplication().newsFeedRepository,
-                            onOpenStrategy = {
-                                navController.navigate(AppRoute.Strategy.route)
-                            },
-                            onOpenNewsHub = { navController.navigate(AppRoute.NewsHub.route) },
+                            hubMenuCallbacks = hubMenuCallbacks,
                             onOpenDiscipline = { incident ->
                                 disciplineIncident = incident
                                 navController.navigate(AppRoute.Discipline.route)
-                            },
-                            onExitHome = {
-                                navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },
                         )
                     } else {
@@ -359,10 +372,7 @@ fun DynastyApp(
                             weekEightRepository = offseasonWeekEightRepository,
                             weekNineRepository = offseasonWeekNineRepository,
                             weekTenRepository = offseasonWeekTenRepository,
-                            onOpenNewsHub = { navController.navigate(AppRoute.NewsHub.route) },
-                            onExitHome = {
-                                navController.popBackStack(AppRoute.Home.route, inclusive = false)
-                            },
+                            hubMenuCallbacks = hubMenuCallbacks,
                             onOpenRecruiting = { tab ->
                                 recruitingLaunchTab = tab
                                 navController.navigate(AppRoute.Recruiting.route)
@@ -456,6 +466,47 @@ fun DynastyApp(
                             navController.popBackStack(AppRoute.Home.route, inclusive = false)
                         }
                     }
+                }
+                composable(AppRoute.SchoolHub.route) {
+                    val session = ActiveDynastySession.current
+                    val app = LocalContext.current.requireDynastyApplication()
+                    if (session != null) {
+                        SchoolHubRouteScreen(
+                            dynastyId = session.dynastyId,
+                            seasonIndex = session.metadata.seasonIndex,
+                            schoolHubRepository = schoolHubRepository,
+                            chemistryRepository = app.chemistryRepository,
+                            onBack = { navController.popBackStack() },
+                        )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                        }
+                    }
+                }
+                composable(AppRoute.StatisticsHub.route) {
+                    HubScaffoldScreen(
+                        titleRes = R.string.statistics_hub_title,
+                        bodyRes = R.string.statistics_hub_placeholder,
+                        onBack = { navController.popBackStack() },
+                    )
+                }
+                composable(AppRoute.RankingsHub.route) {
+                    HubScaffoldScreen(
+                        titleRes = R.string.rankings_hub_title,
+                        bodyRes = R.string.rankings_hub_placeholder,
+                        onBack = { navController.popBackStack() },
+                    )
+                }
+                composable(AppRoute.HistoryHub.route) {
+                    HubScaffoldScreen(
+                        titleRes = R.string.history_hub_title,
+                        bodyRes = R.string.history_hub_placeholder,
+                        onBack = { navController.popBackStack() },
+                    )
+                }
+                composable(AppRoute.MarchMayhem.route) {
+                    MarchMayhemHubScreen(onBack = { navController.popBackStack() })
                 }
             }
 

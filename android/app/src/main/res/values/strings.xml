@@ -413,4 +413,20 @@
     <string name="news_hub_recruits_heading">National Top 60</string>
     <string name="news_hub_draft_empty">Draft results publish in offseason week 2 after the pro day.</string>
     <string name="news_hub_draft_row">%1$s · %2$s — %3$s</string>
+    <string name="shell_menu_recruiting_hub">Recruiting</string>
+    <string name="shell_menu_statistics_hub">Statistics</string>
+    <string name="shell_menu_rankings_hub">Rankings</string>
+    <string name="shell_menu_history_hub">History</string>
+    <string name="shell_menu_march_mayhem">March Mayhem</string>
+    <string name="statistics_hub_title">Statistics</string>
+    <string name="statistics_hub_placeholder">National and conference stat leaders will appear here once live game stats are wired in.</string>
+    <string name="rankings_hub_title">Rankings</string>
+    <string name="rankings_hub_placeholder">NCBA NET #1–#365, Media and Coaches polls, and conference standings will publish here soon.</string>
+    <string name="history_hub_title">History</string>
+    <string name="history_hub_placeholder">Dynasty archive, GOAT, and the record book will live here once league history is online.</string>
+    <string name="march_mayhem_hub_title">March Mayhem</string>
+    <string name="march_mayhem_tab_ncba">NCBA</string>
+    <string name="march_mayhem_tab_nci">NCI</string>
+    <string name="march_mayhem_tab_heritage">Heritage</string>
+    <string name="march_mayhem_hub_placeholder">National bracket monitor (NCBA · NCI · Heritage) will fill in once Selection Sunday and postseason play are live.</string>
 </resources>

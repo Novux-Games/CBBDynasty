@@ -71,6 +71,8 @@ import dev.novux.dynasty.cbb.ui.school.SchoolHubScreen
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
+import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
+import dev.novux.dynasty.cbb.ui.hubs.buildDynastyHubMenu
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTab
@@ -100,10 +102,8 @@ fun DynastyShellScreen(
     chemistryRepository: ChemistryRepository,
     userCalendarRepository: UserCalendarRepository,
     newsFeedRepository: NewsFeedRepository,
-    onOpenStrategy: () -> Unit,
-    onOpenNewsHub: () -> Unit,
+    hubMenuCallbacks: DynastyHubMenuCallbacks,
     onOpenDiscipline: (PendingDisciplineIncident) -> Unit,
-    onExitHome: () -> Unit,
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
@@ -304,14 +304,14 @@ fun DynastyShellScreen(
     val position = loaded.weekCheckpoint.activePosition
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val phaseLabel = CalendarWeekLabel.display(position)
-    val shellMenu = listOf(
-        DynastyShellMenuAction(R.string.school_hub_open) {
-            userSchool?.let { coachView = ShellCoachView.School(it) }
-        },
-        DynastyShellMenuAction(R.string.staff_open_tab) { coachView = ShellCoachView.Staff },
-        DynastyShellMenuAction(R.string.dynasty_shell_open_strategy, onOpenStrategy),
-        DynastyShellMenuAction(R.string.shell_menu_news_hub, onOpenNewsHub),
-        DynastyShellMenuAction(R.string.shell_menu_exit_home, onExitHome),
+    val shellMenu = buildDynastyHubMenu(
+        position = position,
+        callbacks = hubMenuCallbacks.copy(
+            onOpenSchool = { userSchool?.let { coachView = ShellCoachView.School(it) } },
+        ),
+        leadingExtras = listOf(
+            DynastyShellMenuAction(R.string.staff_open_tab) { coachView = ShellCoachView.Staff },
+        ),
     )
 
     DynastyShellChrome(
