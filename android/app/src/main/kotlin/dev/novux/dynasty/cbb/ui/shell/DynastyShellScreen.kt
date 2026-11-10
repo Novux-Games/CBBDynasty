@@ -17,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -31,15 +32,20 @@ import dev.novux.dynasty.cbb.core.preseason.FirstPlayableGame
 import dev.novux.dynasty.cbb.core.preseason.PreseasonSeasonStartPolicy
 import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
 import dev.novux.dynasty.cbb.data.coach.SchoolStaffRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
+import dev.novux.dynasty.cbb.data.school.SchoolHubRepository
 import dev.novux.dynasty.cbb.ui.coach.AssistantCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.HeadCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.SchoolStaffTabPanel
+import dev.novux.dynasty.cbb.ui.school.SchoolHubScreen
+import kotlinx.coroutines.launch
 
 private sealed class ShellCoachView {
     data object Hub : ShellCoachView()
     data object Staff : ShellCoachView()
+    data class School(val overview: SchoolHubOverview) : ShellCoachView()
     data class HeadCoach(val card: HeadCoachCard) : ShellCoachView()
     data class Assistant(val card: AssistantCoachCard) : ShellCoachView()
 }
@@ -49,11 +55,14 @@ fun DynastyShellScreen(
     loaded: LoadedDynasty,
     scheduleRepository: PreseasonScheduleRepository,
     staffRepository: SchoolStaffRepository,
+    schoolHubRepository: SchoolHubRepository,
     onExitHome: () -> Unit,
 ) {
     var focus by remember { mutableStateOf<SeasonStartFocus?>(null) }
     var staffRoster by remember { mutableStateOf<SchoolStaffRoster?>(null) }
+    var userSchool by remember { mutableStateOf<SchoolHubOverview?>(null) }
     var coachView by remember { mutableStateOf<ShellCoachView>(ShellCoachView.Hub) }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
         val exhibitionCount = scheduleRepository.loadExhibitionCount(
@@ -67,9 +76,43 @@ fun DynastyShellScreen(
             plan,
         )
         staffRoster = staffRepository.loadStaffRoster(loaded.dynastyId)
+        userSchool = schoolHubRepository.loadUserSchoolOverview(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        )
     }
 
     when (val view = coachView) {
+        is ShellCoachView.School -> {
+            Column(modifier = Modifier.fillMaxSize()) {
+                OutlinedButton(
+                    onClick = { coachView = ShellCoachView.Hub },
+                    modifier = Modifier.padding(16.dp),
+                ) { Text(stringResource(R.string.dynasty_shell_back)) }
+                SchoolHubScreen(
+                    overview = view.overview,
+                    staffSection = if (view.overview.isUserSchool && staffRoster != null) {
+                        {
+                            SchoolStaffTabPanel(
+                                roster = staffRoster!!,
+                                onHeadCoachClick = {
+                                    coachView = ShellCoachView.HeadCoach(staffRoster!!.headCoach)
+                                },
+                                onAssistantClick = { id ->
+                                    staffRoster!!.assistants.firstOrNull { it.staffId == id }?.let {
+                                        coachView = ShellCoachView.Assistant(it)
+                                    }
+                                },
+                            )
+                        }
+                    } else {
+                        null
+                    },
+                    modifier = Modifier.weight(1f),
+                )
+            }
+            return
+        }
         is ShellCoachView.HeadCoach -> {
             Column(modifier = Modifier.fillMaxSize()) {
                 OutlinedButton(
@@ -144,7 +187,32 @@ fun DynastyShellScreen(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        focus?.firstGame?.let { game -> NextGameCard(game) }
+        focus?.firstGame?.let { game ->
+            NextGameCard(
+                game = game,
+                onViewOpponentSchool = {
+                    val opponentId = game.opponentTeamId
+                    if (!opponentId.startsWith("event-")) {
+                        scope.launch {
+                            schoolHubRepository.loadOpponentOverview(
+                                loaded.dynastyId,
+                                opponentId,
+                                loaded.metadata.seasonIndex,
+                            )?.let { coachView = ShellCoachView.School(it) }
+                        }
+                    }
+                },
+            )
+        }
+        OutlinedButton(
+            onClick = {
+                userSchool?.let { coachView = ShellCoachView.School(it) }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = userSchool != null,
+        ) {
+            Text(stringResource(R.string.school_hub_open))
+        }
         OutlinedButton(
             onClick = { coachView = ShellCoachView.Staff },
             modifier = Modifier.fillMaxWidth(),
@@ -161,7 +229,10 @@ fun DynastyShellScreen(
 }
 
 @Composable
-private fun NextGameCard(game: FirstPlayableGame) {
+private fun NextGameCard(
+    game: FirstPlayableGame,
+    onViewOpponentSchool: () -> Unit,
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
@@ -189,6 +260,9 @@ private fun NextGameCard(game: FirstPlayableGame) {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            OutlinedButton(onClick = onViewOpponentSchool) {
+                Text(stringResource(R.string.school_hub_view_opponent))
+            }
         }
     }
 }
