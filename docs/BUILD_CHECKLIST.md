@@ -155,7 +155,7 @@ Use phases **in order**. Do not skip persistence or calendar kernel before dynas
 | 6.20 | `[x]` **Signing Day** (offseason **week 6**) | Required rankings + position editor; hard sign | [recruiting-engine](../planning/recruiting-engine.md#signing-day-offseason-week-6), [dashboard-tasks](../planning/dashboard-tasks.md) | `ui.signingday` |
 | 6.21 | `[x]` Recruit **interest** + **Influence board** | Six-factor catalog; **1–2 priorities** at player creation (portal keeps); chips visible; **Influence board** ranks + closeness; decommit no full reset; proposed `recruiting.interest.*` in JSON later; `signLikelihood` zero spend | [interest](../planning/recruiting-engine.md#interest--offers), [influence board](../planning/recruiting-engine.md#influence-board-design-lock) | `:core/recruiting` |
 | 6.6 | `[x]` Offseason **week 2**: NBA draft results | Scholarships open | [offseason](../planning/offseason.md) | — |
-| 6.7 | `[ ]` Offseason **week 7**: summer workouts (auto) | Report screen | [offseason](../planning/offseason.md) | — |
+| 6.7 | `[x]` Offseason **week 7**: summer workouts (auto) | Report screen | [offseason](../planning/offseason.md) | — |
 | 6.8 | `[ ]` Offseason **week 8**: cuts + roster lock ≤15 + walk-ons | Walk-ons after Signing Day | [recruiting-engine](../planning/recruiting-engine.md), [offseason](../planning/offseason.md) | — |
 | 6.9 | `[ ]` Offseason **week 9**: fundraising & facility upgrades | Cash/NIL hooks | [game-design](../planning/game-design.md) | — |
 | 6.10 | `[ ]` Offseason **week 10**: conference offers (skip Season 1) | Realignment cards | [offseason](../planning/offseason.md), [game-design](../planning/game-design.md) | — |

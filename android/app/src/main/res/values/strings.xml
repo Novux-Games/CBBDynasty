@@ -137,6 +137,10 @@
     <string name="draft_results_outcome_undrafted">Undrafted — graduates</string>
     <string name="draft_results_outcome_returned">Withdrawn — returns to roster</string>
     <string name="offseason_scholarships_open">Scholarships are open — you can extend offers in the recruiting hub.</string>
+    <string name="summer_workouts_title">Summer workout report</string>
+    <string name="summer_workouts_subtitle">Workouts ran automatically on your returning roster.</string>
+    <string name="summer_workouts_summary">Coach training grade %1$d · team avg +%2$d XP · %3$d players</string>
+    <string name="summer_workouts_line">+%1$d XP · %2$s</string>
     <string name="recruiting_hub_title">Recruiting</string>
     <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
     <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>

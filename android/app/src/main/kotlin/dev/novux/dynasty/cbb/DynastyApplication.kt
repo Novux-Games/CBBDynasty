@@ -13,6 +13,7 @@ import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingReservationRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
+import dev.novux.dynasty.cbb.data.offseason.OffseasonSummerWorkoutRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekTwoRepository
 import dev.novux.dynasty.cbb.data.signingday.SigningDayRepository
 import dev.novux.dynasty.cbb.data.settings.AppSettingsRepository
@@ -64,6 +65,9 @@ class DynastyApplication : Application() {
     lateinit var offseasonWeekTwoRepository: OffseasonWeekTwoRepository
         private set
 
+    lateinit var summerWorkoutRepository: OffseasonSummerWorkoutRepository
+        private set
+
     override fun onCreate() {
         super.onCreate()
         appSettingsRepository = AppSettingsRepository(applicationContext)
@@ -83,6 +87,7 @@ class DynastyApplication : Application() {
         weekCheckpointRepository = WeekCheckpointRepository(database)
         dynastyRosterRepository = DynastyRosterRepository(database)
         offseasonWeekTwoRepository = OffseasonWeekTwoRepository(applicationContext, dynastyRosterRepository)
+        summerWorkoutRepository = OffseasonSummerWorkoutRepository(applicationContext, dynastyRosterRepository)
         saveSlotRepository = SaveSlotRepository(
             database,
             weekCheckpointRepository,

@@ -32,7 +32,9 @@ import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonOptionalDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
 import dev.novux.dynasty.cbb.core.dashboard.SigningDayRequiredDashboardTasks
+import dev.novux.dynasty.cbb.core.offseason.weekseven.SummerWorkoutConstants
 import dev.novux.dynasty.cbb.core.signingday.SigningDayConstants
+import dev.novux.dynasty.cbb.data.offseason.OffseasonSummerWorkoutRepository
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
 import dev.novux.dynasty.cbb.data.signingday.SigningDayRepository
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
@@ -67,6 +69,7 @@ fun OffseasonScreen(
     portalCycleRepository: PortalCycleRepository,
     signingDayRepository: SigningDayRepository,
     offseasonWeekTwoRepository: OffseasonWeekTwoRepository,
+    summerWorkoutRepository: OffseasonSummerWorkoutRepository,
     onExitHome: () -> Unit,
     onOpenRecruiting: (RecruitingHubTab) -> Unit = {},
     onOpenSigningDay: (DashboardDeepLink) -> Unit = {},
@@ -144,6 +147,13 @@ fun OffseasonScreen(
                 dynastyId = loaded.dynastyId,
                 seasonIndex = loaded.metadata.seasonIndex,
                 weekTwoRepository = offseasonWeekTwoRepository,
+                modifier = Modifier.weight(1f),
+            )
+        } else if (inOffseason && position.weekIndex == SummerWorkoutConstants.OFFSEASON_WEEK_INDEX) {
+            SummerWorkoutReportPanel(
+                dynastyId = loaded.dynastyId,
+                seasonIndex = loaded.metadata.seasonIndex,
+                summerWorkoutRepository = summerWorkoutRepository,
                 modifier = Modifier.weight(1f),
             )
         } else if (inOffseason && position.weekIndex == SigningDayConstants.OFFSEASON_WEEK_INDEX) {
