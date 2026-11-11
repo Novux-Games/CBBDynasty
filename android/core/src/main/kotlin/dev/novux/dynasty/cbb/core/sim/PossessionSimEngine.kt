@@ -197,6 +197,9 @@ object PossessionSimEngine {
             turnedOver -> "TO"
             change == PossessionChange.OffenseRetainsOffensiveRebound ->
                 "miss | OREB +1 | retain possession"
+            after.fieldGoalsAttempted > before.fieldGoalsAttempted &&
+                change == PossessionChange.DefenseTakesBall ->
+                "miss | DREB | change possession"
             after.fieldGoalsAttempted > before.fieldGoalsAttempted -> "miss"
             else -> "possession"
         }

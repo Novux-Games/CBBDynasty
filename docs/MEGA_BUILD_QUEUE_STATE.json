@@ -167,7 +167,8 @@
     "MEGA-RECR-146",
     "MEGA-RECR-147",
     "MEGA-SIM-088",
-    "MEGA-SIM-089"
+    "MEGA-SIM-089",
+    "MEGA-SIM-091"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
