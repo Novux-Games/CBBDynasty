@@ -89,7 +89,7 @@
 | MEGA-GDD-045 | P0 | PASS | Postseason · Opening Round 24 + 64 main; seeds 1–52 | Opening round + selection repos. | `NcbaOpeningRoundEngine.kt`, `SelectionSundayRepository.kt` |
 | MEGA-GDD-046 | P0 | PASS | Postseason · NCI 32 + Heritage 16 parallel | `NciHeritageBracketEngine`, `ParallelNationalBracketRepository`. | `android/core/.../postseason/` |
 | MEGA-GDD-047 | P0 | PASS | Postseason · conf tournaments from pack templates | `ConferenceTournamentEngine` + embedded templates. | `ConferenceTournamentEngine.kt`, `embedded-default.json` `tournamentTemplates` |
-| MEGA-GDD-048 | P0 | FAIL | Postseason UI · March Mayhem hub body | Route exists; main panel still **placeholder** string. | `MarchMayhemHubScreen.kt`, `march_mayhem_hub_placeholder` |
+| MEGA-GDD-048 | P0 | PASS | Postseason UI · March Mayhem hub body | Overview tab (rails, Opening strip, latest scores) + NCBA/NCI/HC event tabs with field, results, my-team filter. | `MarchMayhemHubScreen.kt`, `MarchMayhemHubSnapshot.kt` |
 
 ---
 

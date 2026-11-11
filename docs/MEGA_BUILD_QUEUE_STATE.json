@@ -29,7 +29,8 @@
     "MEGA-COACH-151",
     "MEGA-COACH-154",
     "MEGA-GDD-027",
-    "MEGA-GDD-041"
+    "MEGA-GDD-041",
+    "MEGA-GDD-048"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
