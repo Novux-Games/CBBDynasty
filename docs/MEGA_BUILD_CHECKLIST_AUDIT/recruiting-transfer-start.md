@@ -16,7 +16,7 @@
 | MEGA-RECR-002 | P0 | FAIL | Star percentiles within pool | Stars assigned by **list index order**, not by sorting on `hiddenRating` percentiles. Top 60 order uses hidden rating, but star labels disagree with spec bands. | `IncomingClassSeeder.generatePool` |
 | MEGA-RECR-003 | P1 | FAIL | JUCO 5★ = top 2% | JUCO uses `jucoBias && pct < 0.01` (~1% 5★), not 2%. | `IncomingClassSeeder.starBand` |
 | MEGA-RECR-004 | P1 | FAIL | 3★ = 20–50% band | 3★ cutoff at `pct < 0.45` (30% band after 4★), not 50%. | `IncomingClassSeeder.starBand` |
-| MEGA-RECR-005 | P0 | PARTIAL | Single persisted class pool | Hub, AI, signing use `ensurePool`; sim-week estimate still `demoPool`. | `IncomingClassSeedRepository.kt`, `SaveSlotRepository.kt` |
+| MEGA-RECR-005 | P0 | PASS | Single persisted class pool | Hub, AI, signing, sim-week advance use `ensurePool`. | `IncomingClassSeedRepository.kt`, `SaveSlotRepository.kt` |
 | MEGA-RECR-006 | P0 | FAIL | Top 60 fixed at seed | `demoPool` sets `nationalHsRank` from index (`index < 60`), not hidden-rating national order across HS+JUCO. | `RecruitingClassSeed.kt` |
 | MEGA-RECR-007 | P1 | GAP | Top 60 HS+JUCO combined | Seeder ranks combined pool correctly when used; most UI paths never load that persisted pool. | `IncomingClassSeedRepository` vs hub |
 | MEGA-RECR-008 | P1 | FAIL | News / signing fallback | `NationalRecruitingRankings.top60(season)` always builds from `demoPool`, not dynasty seed. | `NationalRecruitingRankings.kt` |
@@ -42,7 +42,7 @@
 | MEGA-RECR-021 | P2 | GAP | Week 6 no new drip | `closeCycleAfterHardSign` zeroes points and sets `cycleClosed` — aligns with Signing Day admin week. | `RecruitingEconomyRepository` |
 | MEGA-RECR-022 | P1 | FAIL | Action costs from balance | Hub reads `BalanceRecruitingActionsParser` — PASS — but **DM/call/house/bonus spend has no `prospectId`**; spend is global, not per-target. | `spendPointAction` |
 | MEGA-RECR-023 | P2 | GAP | Bonus points “remainder” | UI spends `g.bonusPoints.pointCost` gate max, not user-chosen partial remainder. | `RecruitingHubScreen` Recommended row |
-| MEGA-RECR-024 | P2 | RISK | Sim-week spend estimate | Auto-maintain estimate uses `demoPool` + default prestige context. | `SaveSlotRepository.buildSimWeekAdvanceInputSuspended` |
+| MEGA-RECR-024 | P2 | PASS | Sim-week spend estimate | Auto-maintain estimate uses `ensurePool` + resolved prestige context. | `SaveSlotRepository.buildSimWeekAdvanceInputSuspended` |
 | MEGA-RECR-025 | P1 | GAP | Next cycle pool at EoS recap | `openNextCycleAfterSeasonReview` uses `postRecapPrestige` — PASS when called; first cycle still wrong until recap. | `SeasonReviewRepository` |
 
 ---

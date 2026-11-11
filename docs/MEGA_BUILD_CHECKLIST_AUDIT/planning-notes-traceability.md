@@ -69,12 +69,12 @@
 
 | ID | Pri | Status | Spec quote | Finding vs Android | Evidence |
 |----|-----|--------|------------|-------------------|----------|
-| MEGA-NOTES-036 | P0 | FAIL | Recruiting engine **Done** | Hub/AI/signing use `RecruitingClassSeed.demoPool` (120), not persisted 2k–4k seeder. | `MEGA-RECR-005`; `RecruitingHubScreen.kt` |
+| MEGA-NOTES-036 | P0 | PASS | Recruiting engine **Done** | Hub, AI week, signing, and sim-week auto-maintain use `IncomingClassSeedRepository.ensurePool` (2k–4k seeder). | `MEGA-RECR-005` PASS; GDD-111 |
 | MEGA-NOTES-037 | P0 | FAIL | Recruit interest model **Done** — weights in JSON | `spendDelta` on point actions not applied to interest meter in live spend path. | `MEGA-RECR-027`; `RecruitingEconomyRepository.spendPointAction` |
 | MEGA-NOTES-038 | P2 | PASS | Recruiting interest open questions **Resolved** | Resolved prose in `recruiting-engine.md`; Android implements subset (Recommended row, influence board partial). | `recruiting-engine.md` § Resolved decisions |
 | MEGA-NOTES-039 | P1 | PARTIAL | Recruiting point actions **Done** | Costs read from `balance-2026.json`; per-target spend attribution missing for DM/call/house. | `MEGA-RECR-022`; `BalanceRecruitingActionsParser` |
 | MEGA-NOTES-040 | P1 | GAP | Recruiting dashboard tasks **Done** (triggers) | In-season optional recruiting tasks not emitted from `DashboardTaskGate`. | `MEGA-RECR-042`; `DashboardTaskGate.inSeason` |
-| MEGA-NOTES-041 | P1 | PARTIAL | AI recruiting **Done** — parity; **hidden** from UI | `AiRecruitingRepository` runs on demo pool; no player-facing AI debug (correct); parity vs user not proven. | `MEGA-RECR-005`; `AiRecruitingRepository.kt` |
+| MEGA-NOTES-041 | P1 | PARTIAL | AI recruiting **Done** — parity; **hidden** from UI | AI uses same persisted class pool as user; parity vs user interest spend not fully audited. | `AiRecruitingRepository.kt` |
 | MEGA-NOTES-042 | P0 | FAIL | Transfer portal **Done** | Portal tab placeholder; offseason portal core exists but UI stub. | `MEGA-RECR-035`–`036`; `transfer_portal_placeholder` |
 | MEGA-NOTES-043 | P1 | PARTIAL | Portal dashboard tasks **Done** | Offseason portal tasks in spec; wiring partial vs recruiting signing handoff. | `recruiting-transfer-start.md` § Portal |
 | MEGA-NOTES-044 | P1 | PARTIAL | NIL annual pool **Done** | Collective pool in balance + game-design shard; program pool binding at dynasty create partial. | `MEGA-GDD-*` NIL rows; `balance-2026.json` |

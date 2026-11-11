@@ -38,7 +38,7 @@ import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.PhaseWeekPolicy
 import dev.novux.dynasty.cbb.core.portal.PortalCyclePolicy
-import dev.novux.dynasty.cbb.core.recruiting.RecruitingClassSeed
+import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.recruiting.ai.AiRecruitingWeekRunner
@@ -94,6 +94,7 @@ class SaveSlotRepository(
     private val dynastyAutomationRepository: dev.novux.dynasty.cbb.data.settings.DynastyAutomationRepository,
     private val appSettingsRepository: dev.novux.dynasty.cbb.data.settings.AppSettingsRepository,
     private val playerStatsRepository: PlayerStatsRepository,
+    private val incomingClassSeedRepository: IncomingClassSeedRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -635,7 +636,7 @@ class SaveSlotRepository(
         val unplayed = UserWeekGameStatus.unplayedUserGames(loaded.weekCheckpoint, hasScheduledGame)
         val economy = BalanceRecruitingParser.parse(loaded.balanceRuleset.recruiting)
         val recommended = BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
-        val pool = RecruitingClassSeed.demoPool(loaded.metadata.seasonIndex)
+        val pool = incomingClassSeedRepository.ensurePool(loaded.dynastyId, loaded.metadata.seasonIndex)
         val userSchool = nilAnnualPoolRepository.userSchoolRecruitingContext(loaded)
             ?: SchoolRecruitingContext(
                 programPrestige = recruitingEconomyRepository.resolveUserProgramPrestige(loaded),
