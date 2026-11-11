@@ -69,7 +69,7 @@ jobs:
             export ANDROID_KEY_ALIAS
             export ANDROID_KEY_PASSWORD="${ANDROID_KEY_PASSWORD:-$ANDROID_KEYSTORE_PASSWORD}"
           fi
-          ./gradlew :app:bundleRelease --no-daemon
+          ./gradlew :app:bundleRelease :app:extractReleaseNativeDebugMetadata --no-daemon
 
       - name: Upload release AAB
         uses: actions/upload-artifact@v4
@@ -77,3 +77,17 @@ jobs:
           name: app-release-aab
           path: android/app/build/outputs/bundle/release/*.aab
           if-no-files-found: error
+
+      - name: Upload Play deobfuscation (R8 mapping)
+        uses: actions/upload-artifact@v4
+        with:
+          name: play-mapping-txt
+          path: android/app/build/outputs/mapping/release/mapping.txt
+          if-no-files-found: error
+
+      - name: Upload Play native debug symbols
+        uses: actions/upload-artifact@v4
+        with:
+          name: play-native-debug-symbols
+          path: android/app/build/outputs/native-debug-symbols/release/native-debug-symbols.zip
+          if-no-files-found: warn
