@@ -62,6 +62,8 @@ bash scripts/verify_release_r8_minify.sh
 
 See `ReleaseR8MinifyPath` in `:core` and `android/app/proguard-rules.pro`.
 
+**Serialization + R8 (MEGA-QA-152):** critical `@Serializable` types round-trip in `ReleaseSerializationR8SmokeTest`; CI runs `bash scripts/verify_release_serialization_smoke.sh` (tests + mapping spot-check). Manual: release build → new game + load dynasty without `SerializerNotFound`.
+
 ## Local release build (optional)
 
 Requires Android SDK (`sdk.dir` in `android/local.properties`). CI signs via env vars; locally, without those vars, Gradle falls back to the **debug** keystore so `:app:bundleRelease` still runs for smoke checks:

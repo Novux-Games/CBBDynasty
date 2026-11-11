@@ -52,6 +52,10 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: bash scripts/verify_release_r8_minify.sh
 
+      - name: Verify kotlinx.serialization release smoke (MEGA-QA-152)
+        working-directory: ${{ github.workspace }}
+        run: bash scripts/verify_release_serialization_smoke.sh
+
       - name: Run Play update migration smoke tests
         working-directory: android
         run: |

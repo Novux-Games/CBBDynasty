@@ -262,7 +262,7 @@
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
 | MEGA-QA-151 | P0 | BOT | PASS | Release minify on | Build `bundleRelease` | `isMinifyEnabled = true` | `verify_release_r8_minify.sh`; `ReleaseR8MinifyPath`; mapping.txt artifact |
-| MEGA-QA-152 | P0 | REL | OPEN | kotlinx.serialization survive R8 | Release: new game + load | No `SerializerNotFound` crash | `proguard-rules.pro` |
+| MEGA-QA-152 | P0 | BOT | PASS | kotlinx.serialization survive R8 | Release: new game + load | No `SerializerNotFound` crash | `ReleaseSerializationR8SmokeTest`; `verify_release_serialization_smoke.sh`; `proguard-rules.pro` |
 | MEGA-QA-153 | P0 | REL | OPEN | Room entities survive R8 | Release: advance 3 weeks | DB read/write OK | Room keep rules |
 | MEGA-QA-154 | P1 | REL | OPEN | Compose reflection keeps | Navigate all major routes | No `AbstractMethodError` | Compose keep rules |
 | MEGA-QA-155 | P1 | REL | OPEN | Mapping file completeness | Unzip mapping from CI artifact | Line numbers present | `SourceFile,LineNumberTable` |
