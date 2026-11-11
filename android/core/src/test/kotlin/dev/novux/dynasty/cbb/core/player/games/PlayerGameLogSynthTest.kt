@@ -9,6 +9,7 @@ import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSynth
 import dev.novux.dynasty.cbb.core.roster.PlayerClassYear
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.player.PlayerEligibility
+import dev.novux.dynasty.cbb.core.player.appearance.PlayerAppearance
 import dev.novux.dynasty.cbb.core.player.PlayerInjuryState
 import dev.novux.dynasty.cbb.core.player.PlayerRosterRole
 import org.junit.Assert.assertEquals
@@ -29,6 +30,7 @@ class PlayerGameLogSynthTest {
     private fun samplePlayer(gp: Int): DynastyPlayer = DynastyPlayer(
         playerId = "p-test-001",
         dynastyId = "d1",
+        appearance = PlayerAppearance.fromPlayerId("p-test-001"),
         identity = PlayerIdentity(
             displayName = "Test Player",
             hometownCity = "Austin",

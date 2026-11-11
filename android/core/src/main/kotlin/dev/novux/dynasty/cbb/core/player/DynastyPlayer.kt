@@ -12,12 +12,14 @@ import dev.novux.dynasty.cbb.core.player.loyalty.CoachPromiseType
 import dev.novux.dynasty.cbb.core.player.loyalty.LoyaltyPersonalityTag
 import dev.novux.dynasty.cbb.core.player.loyalty.LoyaltyRating
 import dev.novux.dynasty.cbb.core.player.loyalty.PromiseStatus
+import dev.novux.dynasty.cbb.core.player.appearance.PlayerAppearance
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 
 /** Full player record for cards and simulation — [planning/player-cards.md]. */
 data class DynastyPlayer(
     val playerId: String,
     val dynastyId: String,
+    val appearance: PlayerAppearance,
     val identity: PlayerIdentity,
     val position: PlayerPosition,
     val classYear: PlayerClassYear,
@@ -73,12 +75,17 @@ data class DynastyPlayer(
         promiseStatusWire = loyalty.promise?.status?.wire ?: "",
         promiseLockedSeasonIndex = loyalty.promise?.lockedAtSeasonIndex,
         promiseStayTopN = loyalty.promise?.stayTopN,
+        skinToneId = appearance.skinToneId,
+        hairColorId = appearance.hairColorId,
+        hairStyleId = appearance.hairStyleId,
+        avatarPresetId = appearance.avatarPresetId,
     )
 
     companion object {
         fun fromRosterPlayer(player: RosterPlayer): DynastyPlayer = DynastyPlayer(
             playerId = player.playerId,
             dynastyId = player.dynastyId,
+            appearance = player.resolvedAppearance(),
             identity = PlayerIdentity(
                 displayName = player.displayName,
                 hometownCity = player.hometownCity,

@@ -56,4 +56,8 @@ data class DynastyRosterPlayerEntity(
     val promiseLockedSeasonIndex: Int? = null,
     val promiseStayTopN: Int? = null,
     val stamina: Int = 100,
+    val skinToneId: String = "",
+    val hairColorId: String = "",
+    val hairStyleId: String = "",
+    val avatarPresetId: String = "",
 )

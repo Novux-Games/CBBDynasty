@@ -147,6 +147,7 @@ private fun PlayerIdentityStrip(player: DynastyPlayer) {
     ) {
         PlayerPortraitSlot(
             displayName = player.identity.displayName,
+            avatarPresetId = player.appearance.avatarPresetId,
             playerId = player.playerId,
         )
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {

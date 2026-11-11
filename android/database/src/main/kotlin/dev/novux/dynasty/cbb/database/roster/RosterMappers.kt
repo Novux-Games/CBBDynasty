@@ -32,6 +32,10 @@ fun RosterPlayerSeed.toEntity(): DynastyRosterPlayerEntity =
         promiseLockedSeasonIndex = promiseLockedSeasonIndex,
         promiseStayTopN = promiseStayTopN,
         stamina = stamina,
+        skinToneId = skinToneId,
+        hairColorId = hairColorId,
+        hairStyleId = hairStyleId,
+        avatarPresetId = avatarPresetId,
     )
 
 fun List<RosterPlayerSeed>.toEntities(): List<DynastyRosterPlayerEntity> = map { it.toEntity() }
@@ -89,6 +93,10 @@ fun DynastyRosterPlayerEntity.toDomain(): RosterPlayer {
         promiseLockedSeasonIndex = promiseLockedSeasonIndex,
         promiseStayTopN = promiseStayTopN,
         stamina = stamina,
+        skinToneId = skinToneId,
+        hairColorId = hairColorId,
+        hairStyleId = hairStyleId,
+        avatarPresetId = avatarPresetId,
     )
 }
 
@@ -141,4 +149,8 @@ fun RosterPlayer.toEntity(): DynastyRosterPlayerEntity =
         promiseLockedSeasonIndex = promiseLockedSeasonIndex,
         promiseStayTopN = promiseStayTopN,
         stamina = stamina,
+        skinToneId = skinToneId,
+        hairColorId = hairColorId,
+        hairStyleId = hairStyleId,
+        avatarPresetId = avatarPresetId,
     )

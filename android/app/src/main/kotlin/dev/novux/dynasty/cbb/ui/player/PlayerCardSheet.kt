@@ -44,6 +44,7 @@ fun PlayerCardPreviewSheet(
             )
             PlayerPortraitSlot(
                 displayName = player.identity.displayName,
+                avatarPresetId = player.appearance.avatarPresetId,
                 playerId = player.playerId,
             )
             PlayerCardOverviewContent(

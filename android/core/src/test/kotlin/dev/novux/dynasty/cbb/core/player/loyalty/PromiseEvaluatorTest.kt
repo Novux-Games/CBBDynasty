@@ -16,6 +16,7 @@ class PromiseEvaluatorTest {
   private fun player(starter: Boolean): DynastyPlayer = DynastyPlayer(
         playerId = "p1",
         dynastyId = "d1",
+        appearance = dev.novux.dynasty.cbb.core.player.appearance.PlayerAppearance.fromPlayerId("p1"),
         identity = PlayerIdentity(
             displayName = "Test",
             hometownCity = "Columbus",

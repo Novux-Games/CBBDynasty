@@ -171,8 +171,8 @@
 
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
-| MEGA-COACH-096 | P0 | FAIL | Pack-driven **player** appearance preset table | No player skin/hair/style ids on `DynastyPlayer` / roster seed |
-| MEGA-COACH-097 | P0 | FAIL | `avatarPresetId` on player save row | Coach entity has ids; roster player lacks appearance columns |
+| MEGA-COACH-096 | P0 | PASS | Pack-driven **player** appearance preset table | `PlayerAppearance` + `PlayerAvatarPresets`; seed/DB/Roster/DynastyPlayer wired | `PlayerAppearance.kt`, `RosterPlayer*.kt`, migration 15→16, `PlayerBootstrapFactory` |
+| MEGA-COACH-097 | P0 | PASS | `avatarPresetId` on player save row | `dynasty_roster_player.avatarPresetId` + component columns | `DynastyRosterPlayerEntity`, `RosterMappers.kt` |
 | MEGA-COACH-098 | P0 | FAIL | Shared `PresetPortrait` / headshot composable | Zero matches for `Portrait`/`Headshot` in `android/app` |
 | MEGA-COACH-099 | P1 | FAIL | Deterministic render from preset id (repro across devices) | No renderer module |
 | MEGA-COACH-100 | P1 | FAIL | Player card identity strip hosts headshot | `PlayerCardSheet` text-only header |
