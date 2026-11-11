@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-NOTES-042",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "planning-notes-traceability.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/planning-notes-traceability.md"
-  },
-  {
     "id": "MEGA-QA-013",
     "pri": "P0",
     "status": "FAIL",
@@ -92,20 +85,6 @@
   },
   {
     "id": "MEGA-RECR-006",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-035",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-036",
     "pri": "P0",
     "status": "FAIL",
     "shard": "recruiting-transfer-start.md",
@@ -7441,13 +7420,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
   },
   {
-    "id": "MEGA-RECR-065",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
     "id": "MEGA-RECR-066",
     "pri": "P2",
     "status": "GAP",
@@ -7540,13 +7512,6 @@
   },
   {
     "id": "MEGA-RECR-096",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-101",
     "pri": "P2",
     "status": "GAP",
     "shard": "recruiting-transfer-start.md",

@@ -3,9 +3,12 @@ package dev.novux.dynasty.cbb.ui.offseason
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -105,6 +108,8 @@ fun OffseasonScreen(
     var rosterPlayerCount by remember { mutableStateOf(0) }
     var dismissedTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
+    var weekAdvanceInProgress by remember { mutableStateOf(false) }
+    var dialogAdvanceInProgress by remember { mutableStateOf(false) }
     var signingProgress by remember { mutableStateOf<SigningDayProgress?>(null) }
     var conferenceOffersResolved by remember { mutableStateOf(true) }
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
@@ -319,19 +324,29 @@ fun OffseasonScreen(
         pendingAdvanceConfirmation?.let { confirmation ->
             SimWeekAdvanceDialog(
                 confirmation = confirmation,
+                isAdvancing = dialogAdvanceInProgress,
                 onConfirm = {
-                    pendingAdvanceConfirmation = null
                     scope.launch {
-                        when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
-                            is DynastyLoadResult.Success -> {
-                                loaded = result.loaded
-                                ActiveDynastySession.set(result.loaded)
+                        dialogAdvanceInProgress = true
+                        try {
+                            when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
+                                is DynastyLoadResult.Success -> {
+                                    loaded = result.loaded
+                                    ActiveDynastySession.set(result.loaded)
+                                    pendingAdvanceConfirmation = null
+                                }
+                                else -> Unit
                             }
-                            else -> Unit
+                        } finally {
+                            dialogAdvanceInProgress = false
                         }
                     }
                 },
-                onDismiss = { pendingAdvanceConfirmation = null },
+                onDismiss = {
+                    if (!dialogAdvanceInProgress) {
+                        pendingAdvanceConfirmation = null
+                    }
+                },
             )
         }
 
@@ -379,26 +394,33 @@ fun OffseasonScreen(
                     } else {
                         emptyList()
                     }
-                    val unresolved = dashboardTasks.count { it.id !in dismissedTasks }
-                    val confirmation = saveSlotRepository.buildSimWeekAdvanceConfirmation(
-                        loaded.slotIndex,
-                        unresolvedOptionalTaskCount = unresolved,
-                    )
-                    if (confirmation != null && confirmation.needsDialog) {
-                        pendingAdvanceConfirmation = confirmation
-                    } else {
-                        when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
-                            is DynastyLoadResult.Success -> {
-                                loaded = result.loaded
-                                ActiveDynastySession.set(result.loaded)
+                    weekAdvanceInProgress = true
+                    try {
+                        val unresolved = dashboardTasks.count { it.id !in dismissedTasks }
+                        val confirmation = saveSlotRepository.buildSimWeekAdvanceConfirmation(
+                            loaded.slotIndex,
+                            unresolvedOptionalTaskCount = unresolved,
+                        )
+                        if (confirmation != null && confirmation.needsDialog) {
+                            pendingAdvanceConfirmation = confirmation
+                        } else {
+                            when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
+                                is DynastyLoadResult.Success -> {
+                                    loaded = result.loaded
+                                    ActiveDynastySession.set(result.loaded)
+                                }
+                                else -> Unit
                             }
-                            else -> Unit
                         }
+                    } finally {
+                        weekAdvanceInProgress = false
                     }
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = inOffseason && when (position.weekIndex) {
+            enabled = !weekAdvanceInProgress &&
+                !dialogAdvanceInProgress &&
+                inOffseason && when (position.weekIndex) {
                 SigningDayConstants.OFFSEASON_WEEK_INDEX ->
                     signingProgress?.canAdvanceOffseasonWeek() == true
                 OffseasonRosterLockConstants.OFFSEASON_WEEK_INDEX ->
@@ -407,13 +429,23 @@ fun OffseasonScreen(
                 else -> true
             },
         ) {
-            Text(
-                if (inOffseason && position.weekIndex >= 10) {
-                    stringResource(R.string.offseason_advance_to_preseason)
-                } else {
-                    stringResource(R.string.offseason_advance_week)
-                },
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (weekAdvanceInProgress) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(18.dp),
+                        strokeWidth = 2.dp,
+                    )
+                }
+                Text(
+                    if (weekAdvanceInProgress) {
+                        stringResource(R.string.dynasty_shell_advance_week_in_progress)
+                    } else if (inOffseason && position.weekIndex >= 10) {
+                        stringResource(R.string.offseason_advance_to_preseason)
+                    } else {
+                        stringResource(R.string.offseason_advance_week)
+                    },
+                )
+            }
         }
 
             }

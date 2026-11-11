@@ -46,7 +46,7 @@
 
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
-| MEGA-QA-013 | P0 | DEV | FAIL | Advance week UI freeze | RS W8 → confirm sim week | Button disabled + spinner; known gap | `DynastyShellScreen.kt`, MEGA-FRAME-091 |
+| MEGA-QA-013 | P0 | DEV | PASS | Advance week UI freeze | RS W8 → confirm sim week | Advance disabled + spinner during `buildSimWeekAdvanceConfirmation` / `advanceDynastyWeek` | `DynastyShellScreen.kt`, `OffseasonScreen.kt` |
 | MEGA-QA-014 | P0 | DEV | OPEN | Sim week wall time RS | Profile CPU; Advance through 1 RS week with user game | Advance completes ≤ 2.5 s UI thread work per `LEAGUE_WEEK_BATCH_PROFILING.md` | `advanceDynastyWeek`, `LeagueWeekBatchRepository` |
 | MEGA-QA-015 | P0 | BOT | GUARD | Core league batch budget | `./gradlew :core:test --tests *LeagueWeekBatchPerformanceTest` | Median iter < 12 s @ 365 teams | `LeagueWeekBatchPerformanceTest` |
 | MEGA-QA-016 | P1 | DEV | OPEN | Offseason advance chain | Offseason W2→W3 with portal optional tasks | No duplicate week index in header | `OffseasonScreen.kt` advance |
@@ -58,7 +58,7 @@
 | MEGA-QA-022 | P2 | DEV | OPEN | Exhibition week advance | Exhibition W2 sim week | Exhibition games resolve | Calendar phase `Exhibition` |
 | MEGA-QA-023 | P1 | DEV | OPEN | AI recruiting during advance | Offseason W3 advance with AI on | Points ledger updates; no crash | `aiRecruitingRepository.runLeagueWeekIfActive` |
 | MEGA-QA-024 | P2 | DEV | OPEN | Fatigue/injury tick after advance | Advance week team played | Fatigue delta visible roster | `tickFatigueForWeekAdvance` |
-| MEGA-QA-025 | P1 | EMU | OPEN | Sim dialog confirm spinner | Open dialog → Confirm | Confirm disabled until `DynastyLoadResult.Success` | MEGA-FRAME-092 |
+| MEGA-QA-025 | P1 | EMU | PASS | Sim dialog confirm spinner | Open dialog → Confirm | Confirm disabled + progress until advance completes | `SimWeekAdvanceDialog.kt` |
 | MEGA-QA-026 | P2 | DEV | OPEN | Manual recruiting spend on advance | Spend points in hub → return → Advance | `userManualRecruitingSpent` reflected in ledger | Default `0` in UI — MEGA-FRAME-110 |
 | MEGA-QA-027 | P1 | DEV | OPEN | Season review → offseason advance | EoS acknowledge → advance | Season index increments once | `SeasonYearAdvanceEngine` |
 

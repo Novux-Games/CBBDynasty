@@ -4,14 +4,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -153,6 +156,8 @@ fun DynastyShellScreen(
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
+    var weekAdvanceInProgress by remember { mutableStateOf(false) }
+    var dialogAdvanceInProgress by remember { mutableStateOf(false) }
     var focus by remember { mutableStateOf<SeasonStartFocus?>(null) }
     var staffRoster by remember { mutableStateOf<SchoolStaffRoster?>(null) }
     var coachSecurity by remember { mutableStateOf<CoachSecuritySnapshot?>(null) }
@@ -695,20 +700,30 @@ fun DynastyShellScreen(
                 pendingAdvanceConfirmation?.let { confirmation ->
                     SimWeekAdvanceDialog(
                         confirmation = confirmation,
+                        isAdvancing = dialogAdvanceInProgress,
                         onConfirm = {
-                            pendingAdvanceConfirmation = null
                             scope.launch {
-                                when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
-                                    is DynastyLoadResult.Success -> {
-                                        loaded = result.loaded
-                                        ActiveDynastySession.set(result.loaded)
-                                        dismissedInjuryTasks = emptySet()
+                                dialogAdvanceInProgress = true
+                                try {
+                                    when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
+                                        is DynastyLoadResult.Success -> {
+                                            loaded = result.loaded
+                                            ActiveDynastySession.set(result.loaded)
+                                            dismissedInjuryTasks = emptySet()
+                                            pendingAdvanceConfirmation = null
+                                        }
+                                        else -> Unit
                                     }
-                                    else -> Unit
+                                } finally {
+                                    dialogAdvanceInProgress = false
                                 }
                             }
                         },
-                        onDismiss = { pendingAdvanceConfirmation = null },
+                        onDismiss = {
+                            if (!dialogAdvanceInProgress) {
+                                pendingAdvanceConfirmation = null
+                            }
+                        },
                     )
                 }
                 Button(
@@ -717,29 +732,52 @@ fun DynastyShellScreen(
                             if (DashboardAdvanceGate.blocksWeekAdvance(dashboardTasks.required)) {
                                 return@launch
                             }
-                            val unresolved = dashboardTasks.optional.count { it.id !in dismissedInjuryTasks }
-                            val confirmation = saveSlotRepository.buildSimWeekAdvanceConfirmation(
-                                loaded.slotIndex,
-                                unresolvedOptionalTaskCount = unresolved,
-                            )
-                            if (confirmation != null && confirmation.needsDialog) {
-                                pendingAdvanceConfirmation = confirmation
-                            } else {
-                                when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
-                                    is DynastyLoadResult.Success -> {
-                                        loaded = result.loaded
-                                        ActiveDynastySession.set(result.loaded)
-                                        dismissedInjuryTasks = emptySet()
+                            weekAdvanceInProgress = true
+                            try {
+                                val unresolved = dashboardTasks.optional.count { it.id !in dismissedInjuryTasks }
+                                val confirmation = saveSlotRepository.buildSimWeekAdvanceConfirmation(
+                                    loaded.slotIndex,
+                                    unresolvedOptionalTaskCount = unresolved,
+                                )
+                                if (confirmation != null && confirmation.needsDialog) {
+                                    pendingAdvanceConfirmation = confirmation
+                                } else {
+                                    when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
+                                        is DynastyLoadResult.Success -> {
+                                            loaded = result.loaded
+                                            ActiveDynastySession.set(result.loaded)
+                                            dismissedInjuryTasks = emptySet()
+                                        }
+                                        else -> Unit
                                     }
-                                    else -> Unit
                                 }
+                            } finally {
+                                weekAdvanceInProgress = false
                             }
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = !DashboardAdvanceGate.blocksWeekAdvance(dashboardTasks.required),
+                    enabled = !weekAdvanceInProgress &&
+                        !dialogAdvanceInProgress &&
+                        !DashboardAdvanceGate.blocksWeekAdvance(dashboardTasks.required),
                 ) {
-                    Text(stringResource(R.string.dynasty_shell_advance_week))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        if (weekAdvanceInProgress) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(18.dp),
+                                strokeWidth = 2.dp,
+                            )
+                        }
+                        Text(
+                            stringResource(
+                                if (weekAdvanceInProgress) {
+                                    R.string.dynasty_shell_advance_week_in_progress
+                                } else {
+                                    R.string.dynasty_shell_advance_week
+                                },
+                            ),
+                        )
+                    }
                 }
             }
         }
