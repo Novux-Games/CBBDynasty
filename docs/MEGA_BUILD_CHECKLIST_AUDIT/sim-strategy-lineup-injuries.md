@@ -314,7 +314,7 @@
 
 | ID | Pri | Status | Requirement (spec) | Code / test | Finding |
 |----|-----|--------|-------------------|-------------|---------|
-| MEGA-SIM-175 | P0 | FAIL | **League user games** use full possession engine + injuries + box persistence | `LeagueWeekBatchRepository` | Split brain with `LeagueFastSim` |
+| MEGA-SIM-175 | P0 | PASS | **League user games** use full possession engine + injuries + box persistence | `UserLeagueGameSimulator`, `ProvisionalGameMark`, `SaveSlotRepository` | Watch + advance fast-sim on possession path; box JSON in `provisional_games` |
 | MEGA-SIM-176 | P1 | FAIL | **AI games** possession sim with roster-derived ratings (no random score fallback) | `LeagueFastSim` `tuning == null` | Random scores |
 | MEGA-SIM-177 | P1 | FAIL | Possession count **enforced** in band 60–70 via tuning feedback | MEGA-SIM-008 | Soft target only |
 | MEGA-SIM-178 | P2 | FAIL | **Tie** handling: OT in possession sim; standings use true W/L | MEGA-SIM-085 | Artificial +1 in wrapper |

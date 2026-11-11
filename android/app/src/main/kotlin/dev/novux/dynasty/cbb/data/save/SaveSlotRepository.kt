@@ -23,6 +23,7 @@ import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningParseException
 import dev.novux.dynasty.cbb.core.advance.SimWeekAdvanceInput
+import dev.novux.dynasty.cbb.core.advance.UserLeagueFastSimBundle
 import dev.novux.dynasty.cbb.core.dashboard.InSeasonWeekGames
 import dev.novux.dynasty.cbb.core.advance.SimWeekAdvanceResolver
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
@@ -34,7 +35,10 @@ import kotlinx.coroutines.sync.withLock
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
+import dev.novux.dynasty.cbb.core.calendar.checkpoint.ProvisionalGameMark
+import dev.novux.dynasty.cbb.core.calendar.checkpoint.ArchivedGameInjuryEvent
 import dev.novux.dynasty.cbb.core.calendar.checkpoint.WeekCheckpointState
+import dev.novux.dynasty.cbb.core.injuries.InjuryApplyContext
 import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.PhaseWeekPolicy
@@ -52,6 +56,7 @@ import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
+import dev.novux.dynasty.cbb.data.sim.UserLeagueGameSimFactory
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.core.coach.CoachArchetype
 import dev.novux.dynasty.cbb.data.coach.CoachSkillPointRepository
@@ -99,6 +104,7 @@ class SaveSlotRepository(
     private val playerStatsRepository: PlayerStatsRepository,
     private val incomingClassSeedRepository: IncomingClassSeedRepository,
     private val newsFeedRepository: NewsFeedRepository,
+    private val userLeagueGameSimFactory: UserLeagueGameSimFactory,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -491,6 +497,7 @@ class SaveSlotRepository(
             ledger,
             unresolvedOptionalTaskCount = unresolvedOptionalTaskCount,
             userManualRecruitingSpent = 0,
+            dynastySeed = loaded.dynastyId.hashCode().toLong(),
         )
         return SimWeekAdvanceResolver.buildConfirmation(input)
     }
@@ -549,12 +556,26 @@ class SaveSlotRepository(
             return loadSlot(slotIndex)
         }
         val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
-        val input = buildSimWeekAdvanceInputSuspended(loaded, ledger, 0, userManualRecruitingSpent)
+        val dynastySeed = loaded.dynastyId.hashCode().toLong()
+        val input = buildSimWeekAdvanceInputSuspended(
+            loaded,
+            ledger,
+            0,
+            userManualRecruitingSpent,
+            dynastySeed,
+        )
         val preAdvance = SimWeekAdvanceResolver.resolvePreAdvance(
             loaded.weekCheckpoint,
             input,
-            loaded.dynastyId.hashCode().toLong(),
+            dynastySeed,
         )
+        if (preAdvance.fastSimmedGames > 0) {
+            applyFastSimInjuries(
+                dynastyId = loaded.dynastyId,
+                marks = preAdvance.checkpointAfterPreAdvance.provisionalGames.values,
+                weekIndex = loaded.weekCheckpoint.activePosition.weekIndex,
+            )
+        }
         weekCheckpointRepository.persist(loaded.dynastyId, preAdvance.checkpointAfterPreAdvance)
         val checkpoint = preAdvance.checkpointAfterPreAdvance
         val aiWeek = aiRecruitingRepository.runLeagueWeekIfActive(loaded, ledger, userManualRecruitingSpent)
@@ -644,11 +665,36 @@ class SaveSlotRepository(
         return loadSlot(slotIndex)
     }
 
+    private suspend fun applyFastSimInjuries(
+        dynastyId: String,
+        marks: Collection<ProvisionalGameMark>,
+        weekIndex: Int,
+    ) {
+        marks.forEach { mark ->
+            val archived = mark.boxArchive?.userTeamInjuries.orEmpty()
+            if (archived.isEmpty()) return@forEach
+            val events = archived.map { ArchivedGameInjuryEvent.toDomain(it) }
+            val before = dynastyRosterRepository.listPlayers(dynastyId)
+            val rsGames = before.firstOrNull { it.playerId == events.first().playerId }
+                ?.rsGamesPlayedSeason ?: 0
+            dynastyRosterRepository.applyGameInjuries(
+                dynastyId,
+                events,
+                InjuryApplyContext(
+                    rsWeekIndex = weekIndex,
+                    rsGameIndex = weekIndex.coerceAtLeast(1),
+                    rsGamesPlayed = rsGames,
+                ),
+            )
+        }
+    }
+
     private suspend fun buildSimWeekAdvanceInputSuspended(
         loaded: LoadedDynasty,
         ledger: dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger,
         unresolvedOptionalTaskCount: Int,
         userManualRecruitingSpent: Int,
+        dynastySeed: Long,
     ): SimWeekAdvanceInput {
         val position = loaded.weekCheckpoint.activePosition
         val nextLabel = CalendarWeekLabel.display(PhaseWeekPolicy.nextPosition(position))
@@ -694,6 +740,11 @@ class SaveSlotRepository(
         } else {
             0
         }
+        val userLeagueFastSim: UserLeagueFastSimBundle? = if (unplayed > 0) {
+            userLeagueGameSimFactory.buildFastSimBundle(loaded, unplayed, dynastySeed)
+        } else {
+            null
+        }
         return SimWeekAdvanceInput(
             nextWeekLabel = nextLabel,
             unplayedUserGameCount = unplayed,
@@ -705,6 +756,7 @@ class SaveSlotRepository(
             unresolvedOptionalTaskCount = unresolvedOptionalTaskCount,
             injuredPlayersTicking = injuredTicking,
             recruitingAutoMaintainEnabled = automation.recruitingAutoMaintain,
+            userLeagueFastSim = userLeagueFastSim,
         )
     }
 

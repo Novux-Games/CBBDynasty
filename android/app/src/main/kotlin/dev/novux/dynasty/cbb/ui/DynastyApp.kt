@@ -27,6 +27,8 @@ import dev.novux.dynasty.cbb.core.awards.YearlyAwardsSeasonArchive
 import dev.novux.dynasty.cbb.core.balance.injuryTuning
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.settings.AppSettings
+import dev.novux.dynasty.cbb.core.advance.UserLeagueGameIds
+import dev.novux.dynasty.cbb.core.calendar.checkpoint.ProvisionalGameMark
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
@@ -568,9 +570,24 @@ fun DynastyApp(
                             onSimComplete = { result ->
                                 scope.launch {
                                     val active = ActiveDynastySession.current ?: return@launch
+                                    val position = active.weekCheckpoint.activePosition
+                                    val gameId = UserLeagueGameIds.forPosition(position)
+                                    val priorGen = active.weekCheckpoint.provisionalGames[gameId]?.simGeneration
+                                    val mark = ProvisionalGameMark.fromGameSim(
+                                        gameId = gameId,
+                                        result = result,
+                                        userTeamIsHome = true,
+                                        previousGeneration = priorGen ?: 0,
+                                    )
+                                    val staged = app.weekCheckpointRepository.stageSim(
+                                        active.dynastyId,
+                                        active.weekCheckpoint,
+                                        mark,
+                                    )
+                                    ActiveDynastySession.set(active.copy(weekCheckpoint = staged))
                                     val events = result.userTeamInjuries(userTeamIsHome = true)
                                     if (events.isEmpty()) return@launch
-                                    val week = active.weekCheckpoint.activePosition.weekIndex
+                                    val week = position.weekIndex
                                     val before = app.dynastyRosterRepository.listPlayers(active.dynastyId)
                                     val rsGames = before.firstOrNull { it.playerId == events.first().playerId }
                                         ?.rsGamesPlayedSeason ?: 0

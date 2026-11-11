@@ -303,6 +303,14 @@ class DynastyApplication : Application() {
         )
         coachSkillPointRepository = CoachSkillPointRepository(applicationContext)
         playerStatsRepository = dev.novux.dynasty.cbb.data.player.PlayerStatsRepository(applicationContext)
+        val userLeagueGameSimFactory = dev.novux.dynasty.cbb.data.sim.UserLeagueGameSimFactory(
+            database,
+            packRepository,
+            balanceRulesetRepository,
+            simTuningRepository,
+            preseasonScheduleRepository,
+            dynastyRosterRepository,
+        )
         saveSlotRepository = SaveSlotRepository(
             database,
             weekCheckpointRepository,
@@ -325,6 +333,7 @@ class DynastyApplication : Application() {
             playerStatsRepository,
             incomingClassSeedRepository,
             newsFeedRepository,
+            userLeagueGameSimFactory,
         )
         preseasonSeasonStartRepository = PreseasonSeasonStartRepository(
             saveSlotRepository,

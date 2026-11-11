@@ -61,16 +61,22 @@ object SimWeekAdvanceResolver {
     fun resolvePreAdvance(
         checkpoint: WeekCheckpointState,
         input: SimWeekAdvanceInput,
-        dynastySeed: Long,
+        @Suppress("UNUSED_PARAMETER") dynastySeed: Long,
     ): SimWeekAdvanceResolution {
-        val afterSim = UserFastGameSim.fastSimUnplayedGames(
+        if (input.unplayedUserGameCount <= 0) {
+            return SimWeekAdvanceResolution(checkpoint, fastSimmedGames = 0)
+        }
+        if (checkpoint.provisionalGames.isNotEmpty()) {
+            return SimWeekAdvanceResolution(checkpoint, fastSimmedGames = 0)
+        }
+        val (afterSim, outcomes) = UserLeagueGameSimulator.fastSimUnplayed(
             checkpoint,
+            input.userLeagueFastSim,
             input.unplayedUserGameCount,
-            dynastySeed,
         )
         return SimWeekAdvanceResolution(
             checkpointAfterPreAdvance = afterSim,
-            fastSimmedGames = input.unplayedUserGameCount,
+            fastSimmedGames = outcomes.size,
         )
     }
 }

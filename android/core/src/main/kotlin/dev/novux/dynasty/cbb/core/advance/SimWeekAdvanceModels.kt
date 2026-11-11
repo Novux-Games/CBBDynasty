@@ -33,6 +33,8 @@ data class SimWeekAdvanceInput(
     val unresolvedOptionalTaskCount: Int = 0,
     val injuredPlayersTicking: Int = 0,
     val recruitingAutoMaintainEnabled: Boolean = true,
+    /** Required when [unplayedUserGameCount] > 0 and no provisional mark is staged. */
+    val userLeagueFastSim: UserLeagueFastSimBundle? = null,
 )
 
 data class SimWeekAdvanceResolution(
