@@ -28,7 +28,7 @@ fun RecruitInterestMeterRow(
         )
         Text(
             text = if (gain > 0) {
-                stringResource(R.string.recruiting_interest_meter_with_gain, live, gain)
+                stringResource(R.string.recruiting_interest_meter_with_gain, live, baselineInterest.coerceIn(0, 100))
             } else {
                 stringResource(R.string.recruiting_interest_meter, live)
             },

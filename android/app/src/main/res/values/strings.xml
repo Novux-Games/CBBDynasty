@@ -461,9 +461,10 @@
     <string name="recruiting_scout_cat_handling">Handling</string>
     <string name="recruiting_scout_cat_athleticism">Athleticism</string>
     <string name="recruiting_scout_cat_potential">Potential</string>
-    <string name="recruiting_influence_row">Your rank #%1$d · closeness %2$d</string>
-    <string name="recruiting_interest_meter">Interest %1$d / 100</string>
-    <string name="recruiting_interest_meter_with_gain">Interest %1$d / 100 (+%2$d from spend)</string>
+    <string name="recruiting_influence_row">Competition rank #%1$d · baseline closeness %2$d</string>
+    <string name="recruiting_interest_meter">Live interest %1$d / 100</string>
+    <string name="recruiting_interest_meter_with_gain">Live interest %1$d / 100 (baseline %2$d)</string>
+    <string name="recruiting_sign_likelihood_baseline_hint">Sign likelihood uses baseline interest only (no spend).</string>
     <string name="recruiting_badge_likely">Likely</string>
     <string name="recruiting_badge_possible">Possible</string>
     <string name="recruiting_badge_reach">Reach</string>

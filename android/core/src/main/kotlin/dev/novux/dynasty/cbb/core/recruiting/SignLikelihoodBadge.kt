@@ -31,17 +31,23 @@ object SignLikelihoodEngine {
         nilOfferUsd: Int? = null,
         nilRules: BalanceNilRules? = null,
         spendDelta: Int = 0,
+        promiseDelta: Int = 0,
     ): RecommendedProspectRow {
-        val snapshot = RecruitInterestEngine.baselineSnapshot(
+        val baselineSnapshot = RecruitInterestTwoSurfaces.baselineSnapshotForSignLikelihood(
             prospect,
             school,
             recommended,
+        )
+        val baseline = baselineSnapshot.baselineInterest
+        val live = RecruitInterestTwoSurfaces.liveInterestMeter(
+            prospect = prospect,
+            school = school,
+            recommended = recommended,
             spendDelta = spendDelta,
+            promiseDelta = promiseDelta,
             nilOfferUsd = nilOfferUsd,
             nilRules = nilRules,
         )
-        val baseline = snapshot.baselineInterest
-        val live = snapshot.liveInterest
         var adjusted = baseline.toDouble()
         adjusted -= prestigeGapPenalty(prospect.stars, school.programPrestige, recommended)
         if (prospect.position in school.positionsNeed) {

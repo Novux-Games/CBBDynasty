@@ -911,6 +911,11 @@ private fun RecommendedProspectRow(
             )
         }
         SignLikelihoodChip(row.badge)
+            Text(
+                text = stringResource(R.string.recruiting_sign_likelihood_baseline_hint),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
         RecruitScoutLetterSheet(letters = RecruitScoutLetterEngine.fromProspect(row.prospect))
         Text(
