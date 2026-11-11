@@ -35,27 +35,41 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Decode upload keystore
+        id: upload_keystore
         env:
           KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
-          if [ -z "$KEYSTORE_BASE64" ]; then
-            echo "::error::Missing repository secrets: ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS. See docs/ANDROID_RELEASE_CI.md"
-            exit 1
+          if [ -z "$KEYSTORE_BASE64" ] || [ -z "$KEYSTORE_PASSWORD" ] || [ -z "$KEY_ALIAS" ]; then
+            echo "play_signing=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Missing upload-keystore secrets — building with debug signing (not for Play production). See docs/ANDROID_RELEASE_CI.md"
+            exit 0
           fi
           cleaned=$(printf '%s' "$KEYSTORE_BASE64" | tr -d ' \n\r\t')
           if ! printf '%s' "$cleaned" | base64 --decode > app/upload.keystore; then
-            echo "::error::ANDROID_KEYSTORE_BASE64 is not valid base64 (paste one line, no quotes)."
-            exit 1
+            echo "play_signing=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::ANDROID_KEYSTORE_BASE64 is not valid base64 — building with debug signing. Re-paste the one-line value from docs/ANDROID_RELEASE_CI.md"
+            rm -f app/upload.keystore
+            exit 0
           fi
           chmod 600 app/upload.keystore
+          echo "play_signing=true" >> "$GITHUB_OUTPUT"
 
       - name: Bundle release AAB
         env:
-          ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/android/app/upload.keystore
+          PLAY_SIGNING: ${{ steps.upload_keystore.outputs.play_signing }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: ./gradlew :app:bundleRelease --no-daemon
+        run: |
+          if [ "$PLAY_SIGNING" = "true" ]; then
+            export ANDROID_KEYSTORE_PATH="${GITHUB_WORKSPACE}/android/app/upload.keystore"
+            export ANDROID_KEYSTORE_PASSWORD
+            export ANDROID_KEY_ALIAS
+            export ANDROID_KEY_PASSWORD="${ANDROID_KEY_PASSWORD:-$ANDROID_KEYSTORE_PASSWORD}"
+          fi
+          ./gradlew :app:bundleRelease --no-daemon
 
       - name: Upload release AAB
         uses: actions/upload-artifact@v4
