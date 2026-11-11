@@ -19,18 +19,29 @@ import dev.novux.dynasty.cbb.core.player.stats.PlayerRateStats
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsEngine
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
 
+/** Stats tab card 1 — season rate stats through FT% ([MEGA-COACH-150]). */
+@Composable
+fun PlayerSeasonAveragesCard(
+    averages: PlayerRateStats,
+    gamesPlayedSeason: Int,
+    modifier: Modifier = Modifier,
+) {
+    PlayerStatsCard(
+        modifier = modifier,
+        title = stringResource(R.string.player_card_stats_season_avg_title),
+        subtitle = stringResource(R.string.player_card_stats_gp_suffix, gamesPlayedSeason),
+    ) {
+        seasonAverageLines(averages).forEach { StatLine(it) }
+    }
+}
+
 @Composable
 fun PlayerStatsFourCards(summary: PlayerStatsSummary, modifier: Modifier = Modifier) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        PlayerStatsCard(
-            title = stringResource(R.string.player_card_stats_season_avg_title),
-            subtitle = stringResource(
-                R.string.player_card_stats_gp_suffix,
-                summary.gamesPlayedSeason,
-            ),
-        ) {
-            seasonAverageLines(summary.seasonAverages).forEach { StatLine(it) }
-        }
+        PlayerSeasonAveragesCard(
+            averages = summary.seasonAverages,
+            gamesPlayedSeason = summary.gamesPlayedSeason,
+        )
         PlayerStatsCard(
             title = stringResource(R.string.player_card_stats_season_tot_title),
         ) {
@@ -57,10 +68,11 @@ fun PlayerStatsFourCards(summary: PlayerStatsSummary, modifier: Modifier = Modif
 private fun PlayerStatsCard(
     title: String,
     subtitle: String? = null,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
         ),

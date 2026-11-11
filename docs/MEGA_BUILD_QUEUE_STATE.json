@@ -24,7 +24,8 @@
     "MEGA-COACH-118",
     "MEGA-COACH-119",
     "MEGA-COACH-142",
-    "MEGA-COACH-149"
+    "MEGA-COACH-149",
+    "MEGA-COACH-150"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
