@@ -58,7 +58,9 @@ import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
+import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
 import dev.novux.dynasty.cbb.ui.hubs.buildDynastyHubMenu
 import dev.novux.dynasty.cbb.ui.hubs.notifyRecruitingCycleClosed
@@ -112,7 +114,13 @@ fun PreseasonScreen(
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val phaseLabel = CalendarWeekLabel.display(position)
-    val recruitingCycleClosed = recruitingLedger?.cycleClosed == true
+    val recruitingCycleClosed = recruitingLedger?.let { ledger ->
+        RecruitingCyclePolicy.effectiveCycleClosed(
+            position.phase,
+            position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason },
+            ledger.cycleClosed,
+        )
+    } == true
     val menu = buildDynastyHubMenu(
         position = position,
         callbacks = hubMenuCallbacks,

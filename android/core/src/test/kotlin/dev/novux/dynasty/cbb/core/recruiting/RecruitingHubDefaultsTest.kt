@@ -25,11 +25,12 @@ class RecruitingHubDefaultsTest {
 
     @Test
     fun hubNavigable_blocksWhenCycleClosed() {
-        assertTrue(
+        assertEquals(
+            false,
             RecruitingCyclePolicy.hubNavigable(
                 CalendarPhase.Offseason,
                 offseasonWeekIndex = 7,
-                cycleClosed = false,
+                ledgerCycleClosed = false,
             ),
         )
         assertEquals(
@@ -37,7 +38,14 @@ class RecruitingHubDefaultsTest {
             RecruitingCyclePolicy.hubNavigable(
                 CalendarPhase.Offseason,
                 offseasonWeekIndex = 7,
-                cycleClosed = true,
+                ledgerCycleClosed = true,
+            ),
+        )
+        assertTrue(
+            RecruitingCyclePolicy.hubNavigable(
+                CalendarPhase.Offseason,
+                offseasonWeekIndex = 6,
+                ledgerCycleClosed = false,
             ),
         )
         assertEquals(
@@ -45,7 +53,26 @@ class RecruitingHubDefaultsTest {
             RecruitingCyclePolicy.hubNavigable(
                 CalendarPhase.Preseason,
                 offseasonWeekIndex = null,
-                cycleClosed = true,
+                ledgerCycleClosed = true,
+            ),
+        )
+    }
+
+    @Test
+    fun effectiveCycleClosed_administrationWeeksEvenWhenLedgerOpen() {
+        assertTrue(
+            RecruitingCyclePolicy.effectiveCycleClosed(
+                CalendarPhase.Offseason,
+                offseasonWeekIndex = 8,
+                ledgerCycleClosed = false,
+            ),
+        )
+        assertEquals(
+            false,
+            RecruitingCyclePolicy.effectiveCycleClosed(
+                CalendarPhase.Offseason,
+                offseasonWeekIndex = 6,
+                ledgerCycleClosed = false,
             ),
         )
     }

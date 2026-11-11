@@ -146,7 +146,10 @@ fun OffseasonScreen(
     }
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
-    val recruitingCycleClosed = ledger?.cycleClosed == true
+    val offseasonWeekForCycle = position.weekIndex.takeIf { inOffseason }
+    val recruitingCycleClosed = ledger?.let {
+        RecruitingCyclePolicy.effectiveCycleClosed(position.phase, offseasonWeekForCycle, it.cycleClosed)
+    } == true
     val menu = buildDynastyHubMenu(
         position = position,
         callbacks = hubMenuCallbacks,
@@ -302,13 +305,23 @@ fun OffseasonScreen(
         }
 
         val offseasonWeek = position.weekIndex.takeIf { inOffseason }
-        if (RecruitingCyclePolicy.hubNavigable(position.phase, offseasonWeek, recruitingCycleClosed)) {
+        val ledgerCycleClosed = ledger?.cycleClosed == true
+        if (RecruitingCyclePolicy.hubNavigable(position.phase, offseasonWeek, ledgerCycleClosed)) {
             OutlinedButton(
                 onClick = { onOpenRecruiting(RecruitingHubTab.Recommended) },
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(stringResource(R.string.recruiting_open_hub))
             }
+        } else if (
+            RecruitingCyclePolicy.hubAccessible(position.phase, offseasonWeek) &&
+            recruitingCycleClosed
+        ) {
+            Text(
+                text = stringResource(R.string.recruiting_cycle_closed_body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
 
         if (inOffseason && position.weekIndex in PortalConstants.PORTAL_RECRUITING_WEEKS) {

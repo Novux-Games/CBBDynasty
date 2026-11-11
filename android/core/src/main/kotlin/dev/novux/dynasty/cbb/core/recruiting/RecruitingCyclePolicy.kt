@@ -1,6 +1,7 @@
 package dev.novux.dynasty.cbb.core.recruiting
 
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
+import dev.novux.dynasty.cbb.core.signingday.SigningDayConstants
 
 /**
  * Year-long recruiting cycle — not offseason-only ([planning/recruiting-engine.md]).
@@ -21,12 +22,30 @@ object RecruitingCyclePolicy {
             else -> false
         }
 
+    /**
+     * Ledger flag or offseason administration weeks after Signing Day (W7–10)
+     * ([planning/offseason.md], [MEGA-FRAME-089]).
+     */
+    fun effectiveCycleClosed(
+        phase: CalendarPhase,
+        offseasonWeekIndex: Int?,
+        ledgerCycleClosed: Boolean,
+    ): Boolean =
+        ledgerCycleClosed ||
+            (
+                phase == CalendarPhase.Offseason &&
+                    offseasonWeekIndex != null &&
+                    offseasonWeekIndex > SigningDayConstants.OFFSEASON_WEEK_INDEX
+                )
+
     /** Full recruiting hub (chasing/spend) — blocked after hard sign closes the cycle ([MEGA-FRAME-090]). */
     fun hubNavigable(
         phase: CalendarPhase,
         offseasonWeekIndex: Int? = null,
-        cycleClosed: Boolean,
-    ): Boolean = hubAccessible(phase, offseasonWeekIndex) && !cycleClosed
+        ledgerCycleClosed: Boolean,
+    ): Boolean =
+        hubAccessible(phase, offseasonWeekIndex) &&
+            !effectiveCycleClosed(phase, offseasonWeekIndex, ledgerCycleClosed)
 }
 
 enum class RecruitingHubTab {

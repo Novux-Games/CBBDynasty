@@ -625,7 +625,7 @@ class SaveSlotRepository(
         val position = loaded.weekCheckpoint.activePosition
         val nextLabel = CalendarWeekLabel.display(PhaseWeekPolicy.nextPosition(position))
         val offseasonWeek = position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason }
-        val hubOpen = RecruitingCyclePolicy.hubAccessible(position.phase, offseasonWeek)
+        val hubOpen = RecruitingCyclePolicy.hubNavigable(position.phase, offseasonWeek, ledger.cycleClosed)
         val portalOpen = PortalCyclePolicy.portalRecruitingWindowOpen(position.phase, offseasonWeek)
         val plan = preseasonScheduleRepository.loadPlan(loaded.dynastyId, loaded.metadata.seasonIndex)
         val exhibitionCount = preseasonScheduleRepository.loadExhibitionCount(

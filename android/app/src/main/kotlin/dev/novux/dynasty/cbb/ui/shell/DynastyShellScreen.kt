@@ -270,7 +270,11 @@ fun DynastyShellScreen(
             phase = active.phase,
             offseasonWeekIndex = offseasonWeek,
             pointsAvailable = ledger.pointsAvailable,
-            cycleClosed = ledger.cycleClosed,
+            cycleClosed = RecruitingCyclePolicy.effectiveCycleClosed(
+                active.phase,
+                offseasonWeek,
+                ledger.cycleClosed,
+            ),
             watchlistNudge = watchlistNudge,
         )
     }
@@ -603,7 +607,13 @@ fun DynastyShellScreen(
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val phaseLabel = CalendarWeekLabel.display(position)
-    val recruitingCycleClosed = recruitingLedger?.cycleClosed == true
+    val recruitingCycleClosed = recruitingLedger?.let { ledger ->
+        RecruitingCyclePolicy.effectiveCycleClosed(
+            position.phase,
+            position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason },
+            ledger.cycleClosed,
+        )
+    } == true
     val shellMenu = buildDynastyHubMenu(
         position = position,
         callbacks = hubMenuCallbacks.copy(

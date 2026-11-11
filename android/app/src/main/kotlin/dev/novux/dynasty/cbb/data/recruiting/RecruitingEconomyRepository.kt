@@ -250,13 +250,22 @@ class RecruitingEconomyRepository(
             ),
         )
         val pos = dynasty.weekCheckpoint.activePosition
-        val (next, _) = RecruitingWeekGrant.applyWeekAdvanceGrant(
+        val offseasonWeek = pos.weekIndex.takeIf { pos.phase == CalendarPhase.Offseason }
+        val (granted, _) = RecruitingWeekGrant.applyWeekAdvanceGrant(
             economy,
             afterRefunds,
             phase = pos.phase,
-            offseasonWeekIndex = pos.weekIndex.takeIf { pos.phase == CalendarPhase.Offseason },
+            offseasonWeekIndex = offseasonWeek,
             pointsSpentThisWeek = pointsSpentThisWeek,
         )
+        var next = granted
+        if (
+            pos.phase == CalendarPhase.Offseason &&
+            offseasonWeek != null &&
+            offseasonWeek > dev.novux.dynasty.cbb.core.signingday.SigningDayConstants.OFFSEASON_WEEK_INDEX
+        ) {
+            next = next.copy(cycleClosed = true, pointsAvailable = 0)
+        }
         reservationRepository.closeWeekReservations(dynasty.dynastyId, ledger.cycleSeasonIndex)
         persist(dynasty.dynastyId, next)
     }

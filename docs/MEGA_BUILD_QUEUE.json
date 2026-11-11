@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-QA-101",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "integration-playtest-regression.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md"
-  },
-  {
     "id": "MEGA-QA-102",
     "pri": "P0",
     "status": "FAIL",
@@ -28,13 +21,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
   },
   {
-    "id": "MEGA-RECR-042",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
     "id": "MEGA-RECR-053",
     "pri": "P0",
     "status": "FAIL",
@@ -50,13 +36,6 @@
   },
   {
     "id": "MEGA-RECR-100",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-145",
     "pri": "P0",
     "status": "FAIL",
     "shard": "recruiting-transfer-start.md",
@@ -1660,13 +1639,6 @@
   },
   {
     "id": "MEGA-FRAME-084",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "frame-dashboard-time.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
-  },
-  {
-    "id": "MEGA-FRAME-089",
     "pri": "P1",
     "status": "GAP",
     "shard": "frame-dashboard-time.md",
