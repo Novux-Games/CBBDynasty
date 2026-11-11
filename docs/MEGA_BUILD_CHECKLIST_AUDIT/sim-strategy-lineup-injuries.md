@@ -165,7 +165,7 @@
 | MEGA-SIM-086 | P0 | PASS | Carry **shot-clock seconds remaining** per offensive trip; reset **30** on change, **20** after OReb | `PossessionSimSession.shotClockSeconds`, `PossessionShotClock` | Trip capped by shot clock; log `SC 30→22`; OReb retains offense + 20s reset |
 | MEGA-SIM-087 | P0 | PASS | **Shot-clock violation** terminal event + AST/TO stat + log line | `resolveShotClockViolation`, `isShotClockViolation` | TO++ with `TurnoverTerminal.ShotClockViolation`; log `TO shot-clock` |
 | MEGA-SIM-088 | P1 | PASS | **Late-clock** tuning (22–30s): contested make↓, TO↑, foul↑ | `PossessionLateClockPolicy` on `used` in session | Log `late-clock` tag |
-| MEGA-SIM-089 | P1 | FAIL | Sub-phases optional: drive → kick → shot within one trip | Planning event chains | Single roll → one terminal outcome |
+| MEGA-SIM-089 | P1 | PASS | Sub-phases optional: drive → kick → shot within one trip | `PossessionSubPhaseEngine` | Log chain before terminal make/miss/TO |
 | MEGA-SIM-090 | P0 | PASS | **Offensive rebound** → same team possession + 20s shot clock | `PossessionChange.OffenseRetainsOffensiveRebound` | `resolveMissRebound`; log `OREB +1`; SC 7→20 in log; `OffensiveReboundPossessionTest`; player `offensiveRebounds` |
 | MEGA-SIM-091 | P1 | FAIL | **Defensive rebound** change of possession in log text | `formatPossessionLog` | No rebound vocabulary |
 | MEGA-SIM-092 | P1 | FAIL | **Steal / bad pass / travel / offensive foul** turnover flavors | `eventWeights` unused | All turnovers anonymous |

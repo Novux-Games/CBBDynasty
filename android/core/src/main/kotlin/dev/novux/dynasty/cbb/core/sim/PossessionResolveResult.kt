@@ -15,4 +15,6 @@ data class PossessionResolveResult(
     val box: TeamBoxScore,
     val change: PossessionChange,
     val turnoverTerminal: TurnoverTerminal? = null,
+    /** drive→kick→shot chain text for possession log (MEGA-SIM-089). */
+    val subPhaseChain: String? = null,
 )

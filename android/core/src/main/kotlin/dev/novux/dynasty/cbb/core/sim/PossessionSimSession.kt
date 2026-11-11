@@ -222,6 +222,7 @@ class PossessionSimSession(
             turnoverTerminal = resolution.turnoverTerminal,
             foulNote = foulNote,
             lateGameTag = lateTags,
+            subPhaseChain = resolution.subPhaseChain,
         )
         log += line
         newInjuryLines.forEach { log += it }

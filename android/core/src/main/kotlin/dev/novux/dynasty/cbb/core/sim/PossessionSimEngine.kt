@@ -153,52 +153,8 @@ object PossessionSimEngine {
         defRating: Int,
         effects: ResolvedSchemeEffects,
         random: Random,
-    ): PossessionResolveResult {
-        var box = offense.copy(possessions = offense.possessions + 1)
-        val edge = (offRating - defRating).coerceIn(-30, 30)
-        val makeBias = (0.42 + edge * 0.004 + effects.makeRateAdjust).coerceIn(0.25, 0.65)
-        val roll = random.nextDouble()
-        return when {
-            roll < effects.turnoverChance -> PossessionResolveResult(
-                box.copy(turnovers = box.turnovers + 1),
-                PossessionChange.DefenseTakesBall,
-                turnoverTerminal = TurnoverTerminal.Generic,
-            )
-            roll < effects.turnoverChance + 0.33 -> {
-                val three = random.nextDouble() < effects.threePointAttemptRate
-                val attempt = box.fieldGoalsAttempted + 1
-                val made = random.nextDouble() < makeBias
-                var next = box.copy(fieldGoalsAttempted = attempt)
-                if (three) {
-                    next = next.copy(threePointsAttempted = next.threePointsAttempted + 1)
-                }
-                if (made) {
-                    val pts = if (three) 3 else 2
-                    next = next.copy(
-                        fieldGoalsMade = next.fieldGoalsMade + 1,
-                        points = next.points + pts,
-                        threePointsMade = next.threePointsMade + if (three) 1 else 0,
-                    )
-                    PossessionResolveResult(next, PossessionChange.DefenseTakesBall)
-                } else {
-                    offensiveReboundOrDefReb(next, random)
-                }
-            }
-            else -> {
-                val attempt = box.fieldGoalsAttempted + 1
-                val three = random.nextDouble() < effects.threePointAttemptRate * 0.92
-                val next = if (three) {
-                    box.copy(
-                        fieldGoalsAttempted = attempt,
-                        threePointsAttempted = box.threePointsAttempted + 1,
-                    )
-                } else {
-                    box.copy(fieldGoalsAttempted = attempt)
-                }
-                offensiveReboundOrDefReb(next, random)
-            }
-        }
-    }
+    ): PossessionResolveResult =
+        PossessionSubPhaseEngine.resolve(offense, offRating, defRating, effects, random)
 
     /** Miss terminal → OReb or DReb change ([MEGA-SIM-090]). */
     internal fun resolveMissRebound(
@@ -230,6 +186,7 @@ object PossessionSimEngine {
         turnoverTerminal: TurnoverTerminal? = null,
         foulNote: String? = null,
         lateGameTag: String? = null,
+        subPhaseChain: String? = null,
     ): String {
         val clock = formatClock(clockRemaining)
         val pointsScored = after.points - before.points
@@ -245,7 +202,8 @@ object PossessionSimEngine {
         }
         val foulSuffix = foulNote?.let { " | $it" }.orEmpty()
         val lateSuffix = lateGameTag?.let { " | $it" }.orEmpty()
-        return "$clock | $offense | ${used}s trip | SC $shotClockBefore→$shotClockAfter | $scoreLine$foulSuffix$lateSuffix"
+        val phaseSuffix = subPhaseChain?.let { " | $it" }.orEmpty()
+        return "$clock | $offense | ${used}s trip | SC $shotClockBefore→$shotClockAfter | $scoreLine$foulSuffix$lateSuffix$phaseSuffix"
     }
 
     private fun formatClock(seconds: Int): String {
