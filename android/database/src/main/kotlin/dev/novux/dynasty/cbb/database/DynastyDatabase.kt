@@ -29,7 +29,7 @@ import dev.novux.dynasty.cbb.database.staff.DynastyStaffMemberEntity
         DynastyRosterPlayerEntity::class,
         DynastyStaffMemberEntity::class,
     ],
-    version = 17,
+    version = 18,
     exportSchema = false,
 )
 @androidx.room.TypeConverters(Converters::class)

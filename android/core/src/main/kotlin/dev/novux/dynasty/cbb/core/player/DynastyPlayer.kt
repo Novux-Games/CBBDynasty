@@ -11,6 +11,7 @@ import dev.novux.dynasty.cbb.core.player.loyalty.CoachPromise
 import dev.novux.dynasty.cbb.core.player.loyalty.CoachPromiseType
 import dev.novux.dynasty.cbb.core.player.loyalty.LoyaltyPersonalityTag
 import dev.novux.dynasty.cbb.core.player.loyalty.LoyaltyRating
+import dev.novux.dynasty.cbb.core.player.loyalty.PlayerPromiseHistoryCodec
 import dev.novux.dynasty.cbb.core.player.loyalty.PromiseStatus
 import dev.novux.dynasty.cbb.core.player.appearance.PlayerAppearance
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
@@ -75,6 +76,7 @@ data class DynastyPlayer(
         promiseStatusWire = loyalty.promise?.status?.wire ?: "",
         promiseLockedSeasonIndex = loyalty.promise?.lockedAtSeasonIndex,
         promiseStayTopN = loyalty.promise?.stayTopN,
+        promiseHistoryWire = PlayerPromiseHistoryCodec.encode(loyalty.promiseHistory),
         skinToneId = appearance.skinToneId,
         hairColorId = appearance.hairColorId,
         hairStyleId = appearance.hairStyleId,
@@ -144,5 +146,6 @@ private fun RosterPlayer.toLoyaltyProfile(): PlayerLoyaltyProfile {
             )
         }
     }
-    return PlayerLoyaltyProfile(LoyaltyRating(loyaltyRating), personality, promise)
+    val history = PlayerPromiseHistoryCodec.decode(promiseHistoryWire)
+    return PlayerLoyaltyProfile(LoyaltyRating(loyaltyRating), personality, promise, history)
 }

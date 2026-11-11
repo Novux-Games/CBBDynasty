@@ -147,7 +147,7 @@
 | MEGA-COACH-083 | P1 | PASS | Balance JSON `player.loyalty` tuning codec | `BalanceLoyaltyTuning` |
 | MEGA-COACH-084 | P2 | GAP | Overview loyalty + active promise chips | `PlayerLoyaltyChips` |
 | MEGA-COACH-085 | P2 | GAP | Ratings tab loyalty row | `PlayerLoyaltyRatingsRow` (in sheet, not tab) |
-| MEGA-COACH-086 | P1 | FAIL | History tab locked promise + per-season Kept/Broken | No history UI / `promiseHistory[]` display |
+| MEGA-COACH-086 | P1 | PASS | History tab locked promise + per-season Kept/Broken | `PlayerPromiseHistoryPanel` + `promiseHistoryWire` persistence | `PlayerPromiseHistoryPathTest` |
 | MEGA-COACH-087 | P1 | FAIL | Recruit sheet promise picker at offer | Recruiting UI gap (cross-ref `recruiting-transfer-start` MEGA-RECR-034) |
 | MEGA-COACH-088 | P2 | GAP | Offseason Week 1 declare UI shows loyalty | `PlayersLeavingScreen` loyalty line |
 
@@ -268,7 +268,7 @@
 | MEGA-COACH-155 | P1 | FAIL | Games row tap → box score sheet | No per-player box in sim output |
 | MEGA-COACH-156 | P1 | PASS | Week-finalize gate on official stats | Persists on `advanceWeek` when games committed | `SaveSlotRepository.advanceDynastyWeek` |
 | MEGA-COACH-157 | P1 | FAIL | History tab prior season rows (school transfer) | No UI |
-| MEGA-COACH-158 | P2 | FAIL | History promise audit per season Kept/Broken | Core has status; no `promiseHistory` UI |
+| MEGA-COACH-158 | P2 | PASS | History promise audit per season Kept/Broken | Same as MEGA-COACH-086 — `PlayerPromiseHistoryPanel` |
 | MEGA-COACH-159 | P2 | GAP | History awards optional chips | Not implemented |
 | MEGA-COACH-160 | P2 | FAIL | Leaders / statistics hub tap → same card route | Leaders wiring not traced to sheet in this pass |
 

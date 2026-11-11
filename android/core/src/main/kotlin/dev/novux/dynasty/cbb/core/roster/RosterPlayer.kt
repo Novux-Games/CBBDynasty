@@ -54,6 +54,7 @@ data class RosterPlayer(
     val promiseStatusWire: String = "",
     val promiseLockedSeasonIndex: Int? = null,
     val promiseStayTopN: Int? = null,
+    val promiseHistoryWire: String = "",
     val stamina: Int = FatigueEngine.FRESH,
     val skinToneId: String = "",
     val hairColorId: String = "",

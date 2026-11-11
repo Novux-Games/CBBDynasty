@@ -296,6 +296,7 @@ private fun PlayerCardHistoryTab(
         ),
         style = MaterialTheme.typography.bodyMedium,
     )
+    PlayerPromiseHistoryPanel(player = player, currentSeasonIndex = seasonIndex)
     when (val seasons = priorSeasons) {
         null -> Text(
             stringResource(R.string.player_card_stats_loading),
