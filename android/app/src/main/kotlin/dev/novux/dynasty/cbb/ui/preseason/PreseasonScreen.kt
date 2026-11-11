@@ -65,7 +65,6 @@ import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
-import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -186,10 +185,6 @@ fun PreseasonScreen(
             text = stringResource(R.string.preseason_checklist_hint),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        DashboardRequiredTasksPanel(
-            tasks = preseasonDashboard.required,
-            onOpenSigningDay = { },
         )
         LazyColumn(
             modifier = Modifier.weight(1f),

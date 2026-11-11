@@ -156,7 +156,7 @@
 
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
-| MEGA-QA-088 | P0 | DEV | FAIL | Preseason tasks disappear | Complete task 1 of 8 | Remaining tasks still visible as checklist | MEGA-FRAME-085 |
+| MEGA-QA-088 | P0 | DEV | PASS | Preseason tasks disappear | Complete task 1 of 8 | Remaining tasks still visible as checklist | `PreseasonScreen` LazyColumn checklist |
 | MEGA-QA-089 | P0 | DEV | FAIL | Spurious preseason Complete | Tap Complete without opening feature | Task not marked done | MEGA-FRAME-088 |
 | MEGA-QA-090 | P1 | DEV | OPEN | Required blocks advance | Leave required incomplete → Advance | Button disabled | `DashboardAdvanceGate` |
 | MEGA-QA-091 | P1 | DEV | OPEN | Optional does not block | Dismiss optional → Advance | Allowed when required clear | `DashboardTaskGate.inSeason` |
