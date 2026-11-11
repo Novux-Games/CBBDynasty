@@ -35,7 +35,7 @@ fun SeasonReviewScrollContent(
             Text(snapshot.postseasonFinishLabel, style = MaterialTheme.typography.bodyMedium)
         }
         ReviewSection(stringResource(R.string.season_review_section_rankings)) {
-            RankLine(stringResource(R.string.season_review_net_rank), snapshot.netRank)
+            RankLine(stringResource(R.string.season_review_net_rank), snapshot.netRank, top25 = false)
             RankLine(stringResource(R.string.season_review_media_poll), snapshot.mediaPollRank, snapshot.mediaTop25)
             RankLine(stringResource(R.string.season_review_coaches_poll), snapshot.coachesPollRank, snapshot.coachesTop25)
         }

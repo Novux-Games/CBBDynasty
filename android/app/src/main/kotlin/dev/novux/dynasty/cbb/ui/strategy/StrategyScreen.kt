@@ -41,7 +41,7 @@ fun StrategyScreen(
     rosterRepository: DynastyRosterRepository,
     teamChemistry: Int? = null,
     fatigueTuning: dev.novux.dynasty.cbb.core.balance.BalanceFatigue =
-        dev.novux.dynasty.cbb.core.balance.BalanceFatigue(),
+        dev.novux.dynasty.cbb.core.balance.BalanceFatigue.DEFAULT,
     onBack: () -> Unit,
     onWatchScrimmage: () -> Unit = {},
     homeTeamLabel: String = "Home",

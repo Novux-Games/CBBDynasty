@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.PrimaryTabRow
@@ -56,6 +57,7 @@ import java.text.NumberFormat
 import java.util.Locale
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecruitingHubScreen(
     loaded: LoadedDynasty,
@@ -112,6 +114,11 @@ fun RecruitingHubScreen(
         )
     }
     val offerSnapshot = nilOffers.mapValues { it.value.toInt() }
+    val resolvedSchoolContext = schoolContext ?: SchoolRecruitingContext(
+        programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
+        schoolHomeState = "OH",
+        nilPoolAnnualUsd = (nilBasePoolUsd + nilBoostUsd).toInt(),
+    )
     val recommendedRows = remember(loaded.metadata.seasonIndex, schoolContext, recommendedConfig, offerSnapshot, nilRules) {
         val ctx = schoolContext ?: return@remember emptyList()
         RecommendedRecruitList.build(
@@ -201,11 +208,7 @@ fun RecruitingHubScreen(
                 RecruitingHubTab.Recommended -> RecommendedTabBody(
                     loaded = loaded,
                     rows = recommendedRows,
-                    schoolContext = schoolContext ?: SchoolRecruitingContext(
-                        programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
-                        schoolHomeState = "OH",
-                        nilPoolAnnualUsd = (nilBasePoolUsd + nilBoostUsd).toInt(),
-                    ),
+                    schoolContext = resolvedSchoolContext,
                     recruitingEconomyRepository = recruitingEconomyRepository,
                     nilRules = nilRules,
                     nilOffers = nilOffers,
@@ -221,7 +224,7 @@ fun RecruitingHubScreen(
                                 officialVisit = it.officialVisit,
                                 visitDistance = recruitingEconomyRepository.visitDistanceFor(
                                     it.prospectHomeState,
-                                    schoolContext,
+                                    resolvedSchoolContext,
                                 ),
                             )
                             ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)

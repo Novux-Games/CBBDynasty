@@ -44,7 +44,17 @@ data class BalanceFatigue(
     val recoveryGameWeek: Int,
     val starterBlockThreshold: Int,
     val rotationPullThreshold: Int,
-)
+) {
+  companion object {
+        val DEFAULT = BalanceFatigue(
+            baseDrainPerMinute = 0.35,
+            recoveryByeWeek = 25,
+            recoveryGameWeek = 15,
+            starterBlockThreshold = 20,
+            rotationPullThreshold = 35,
+        )
+    }
+}
 
 @Serializable
 data class BalanceInjuries(

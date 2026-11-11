@@ -28,6 +28,8 @@ import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
 import dev.novux.dynasty.cbb.core.advance.UserWeekGameStatus
 import dev.novux.dynasty.cbb.core.injuries.InjuryCalendarPolicy
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionsParser
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
@@ -97,10 +99,10 @@ class SaveSlotRepository(
     private val rosterDao = database.dynastyRosterDao()
     private val staffDao = database.dynastyStaffDao()
     private val calendarDao = database.dynastyCalendarDao()
-    private val mutex = Any()
+    private val initMutex = Mutex()
 
     suspend fun ensureInitialized() {
-        synchronized(mutex) {
+        initMutex.withLock {
             val existing = slotDao.listAll()
             if (existing.size < SaveSlots.COUNT) {
                 val merged = ensureSlotRows(existing)
@@ -244,8 +246,10 @@ class SaveSlotRepository(
         ensureInitialized()
         val entity = slotDao.getByIndex(slotIndex) ?: return false
         val summary = entity.toSummary()
-        if (summary.isEmpty || summary.dynastyId.isNullOrBlank()) return true
-        return metadataDao.getById(summary.dynastyId) != null
+        if (summary.isEmpty) return true
+        val dynastyId = summary.dynastyId
+        if (dynastyId.isNullOrBlank()) return true
+        return metadataDao.getById(dynastyId) != null
     }
 
     suspend fun deleteSlot(slotIndex: Int) {
@@ -553,7 +557,7 @@ class SaveSlotRepository(
             balance.fatigue,
         )
         val userWonGame = if (teamPlayedGame) {
-            preAdvance.checkpointAfterPreAdvance.provisionalGames.lastOrNull()?.let { mark ->
+            preAdvance.checkpointAfterPreAdvance.provisionalGames.values.lastOrNull()?.let { mark ->
                 mark.homeScore > mark.awayScore
             }
         } else {
