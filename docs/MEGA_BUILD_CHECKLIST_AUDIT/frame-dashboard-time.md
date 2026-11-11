@@ -182,7 +182,7 @@
 
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
-| MEGA-FRAME-095 | GAP | In-season recruiting optional tasks | `DashboardTaskGate.inSeason` never emits `SpendRecruitingPoints` / watchlist nudges — year-long optional recruiting missing on shell dashboard | `DashboardTaskGate.kt`, `InSeasonOptionalDashboardTasks.kt` |
+| MEGA-FRAME-095 | PASS | In-season recruiting optional tasks | `InSeasonRecruitingOptionalDashboardTasks` + shell `InSeasonRecruitingDashboardContext` emit spend + watchlist nudges when cycle open | `DashboardTaskGate.kt`, `DynastyShellScreen.kt` |
 | MEGA-FRAME-096 | GAP | Shell recruiting ledger | `DynastyShellScreen` does not load `RecruitingEconomyRepository` for task counts or sim-week unresolved recruiting line | `DynastyShellScreen.kt` |
 | MEGA-FRAME-097 | GAP | Required / Optional chips | Task cards lack visible **Required** vs **Optional** labels per `game-frame.md#dashboard-task-gate` (extends MEGA-FRAME-024) | `DashboardRequiredTasksPanel`, `DashboardOptionalTasksPanel` |
 | MEGA-FRAME-098 | GAP | Preseason required deep link dead | `DashboardRequiredTasksPanel.onOpenSigningDay` **no-op** on `PreseasonScreen` — **Open** button does not scroll/focus lazy task row | `PreseasonScreen.kt` `onOpenSigningDay = { }` |

@@ -81,7 +81,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-042 | P0 | FAIL | In-season optional recruiting tasks | `DashboardTaskGate.inSeason` never adds `SpendRecruitingPoints` or watchlist/Top60/rival triggers — only games/injury/Sunday. | `DashboardTaskGate.kt`, `InSeasonOptionalDashboardTasks.kt` |
+| MEGA-RECR-042 | P0 | PASS | In-season optional recruiting tasks | `InSeasonRecruitingOptionalDashboardTasks` adds spend + watchlist nudges when cycle open. | `DashboardTaskGate.kt`, `DynastyShellScreen.kt` |
 | MEGA-RECR-043 | P1 | GAP | Offseason W2–5 portal tasks | `OffseasonOptionalDashboardTasks` implements spend/portal/crunch/scholarships — PASS for subset. | `OffseasonOptionalDashboardTasks.kt` |
 | MEGA-RECR-044 | P2 | RISK | Portal Top 40 task trigger | Task when `offseasonWeekIndex == 2 && portalTop40Locked`; verify caller sets flag when week 2 starts. | `OffseasonScreen` context builder |
 | MEGA-RECR-045 | P1 | PASS | Recruiting never blocks advance | Optional kinds only for recruiting; signing day has required tasks separate. | `DashboardTask.kt` |
@@ -289,7 +289,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-145 | P0 | FAIL | In-season drip nudge | No `SpendRecruitingPoints` when `pointsAvailable > 0` after week grant in RS — `InSeasonOptionalDashboardTasks` games only. | `InSeasonOptionalDashboardTasks.kt` |
+| MEGA-RECR-145 | P0 | PASS | In-season drip nudge | `SpendRecruitingPoints` optional card when ledger `pointsAvailable > 0` in RS. | `InSeasonRecruitingOptionalDashboardTasks.kt` |
 | MEGA-RECR-146 | P1 | FAIL | Watchlist threshold tasks | No `DashboardTask` kinds for watchlist / re-engage / rival commit — spec table unimplemented. | `DashboardTask.kt` |
 | MEGA-RECR-147 | P1 | FAIL | Top 60 movement nudge | No trigger when board rank changes for user targets (no persisted watchlist). | `recruiting-engine#in-season-dashboard-tasks` |
 | MEGA-RECR-148 | P1 | GAP | Portal pipeline entrant task | `OffseasonOptionalDashboardTasks` has portal window flavor; **pipeline entrant** `{Name} in portal` trigger not built. | `transfer-portal.md` dashboard table |

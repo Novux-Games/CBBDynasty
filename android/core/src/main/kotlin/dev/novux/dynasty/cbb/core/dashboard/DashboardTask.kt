@@ -33,6 +33,7 @@ enum class DashboardTaskId {
     PreseasonRequired,
     PlayScheduledGame,
     CoachSundaySkillPoints,
+    RecruitingWatchlistNudge,
 }
 
 data class DashboardTask(

@@ -160,7 +160,7 @@
 | MEGA-QA-089 | P0 | DEV | PASS | Spurious preseason Complete | Tap Complete without opening feature | Task not marked done | `PreseasonFeatureTaskPanels.kt`, `PreseasonFeatureTaskCompletionPolicy`, rankings hub Continue |
 | MEGA-QA-090 | P1 | DEV | OPEN | Required blocks advance | Leave required incomplete → Advance | Button disabled | `DashboardAdvanceGate` |
 | MEGA-QA-091 | P1 | DEV | OPEN | Optional does not block | Dismiss optional → Advance | Allowed when required clear | `DashboardTaskGate.inSeason` |
-| MEGA-QA-092 | P0 | DEV | FAIL | In-season recruiting optional tasks | RS week recruiting window | Optional spend/watchlist tasks appear | MEGA-FRAME-095 |
+| MEGA-QA-092 | P0 | DEV | PASS | In-season recruiting optional tasks | RS week recruiting window | Optional spend/watchlist tasks appear | `InSeasonRecruitingOptionalDashboardTasks`, shell ledger context |
 | MEGA-QA-093 | P1 | DEV | OPEN | Discipline required race | Discipline loads after shell paint | Required card appears within 1 frame cycle | `DisciplineRequiredDashboardTasks` |
 | MEGA-QA-094 | P1 | DEV | FAIL | Signing W6 null progress | Offseason W6 first paint | Signing tasks skeleton until load | MEGA-FRAME-105 |
 | MEGA-QA-095 | P2 | DEV | OPEN | Dual preseason lists | Complete via dashboard panel vs lazy row | Single source of truth | MEGA-FRAME-087 |

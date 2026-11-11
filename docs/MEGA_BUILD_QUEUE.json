@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-QA-092",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "integration-playtest-regression.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md"
-  },
-  {
     "id": "MEGA-QA-101",
     "pri": "P0",
     "status": "FAIL",
@@ -1688,13 +1681,6 @@
   },
   {
     "id": "MEGA-FRAME-094",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "frame-dashboard-time.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
-  },
-  {
-    "id": "MEGA-FRAME-095",
     "pri": "P1",
     "status": "GAP",
     "shard": "frame-dashboard-time.md",

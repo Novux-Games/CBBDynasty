@@ -88,6 +88,16 @@ private fun taskMessage(task: DashboardTask): String = when (task.id) {
         R.string.dashboard_task_spend_points,
         task.formatArgs.firstOrNull() ?: 0,
     )
+    DashboardTaskId.RecruitingWatchlistNudge -> {
+        val rank = task.formatArgs.firstOrNull() ?: 0
+        val reEngage = (task.formatArgs.getOrNull(1) ?: 0) == 1
+        val name = task.stringFormatArgs.firstOrNull().orEmpty()
+        when {
+            rank > 0 -> stringResource(R.string.dashboard_task_review_top60_recruit, name, rank)
+            reEngage -> stringResource(R.string.dashboard_task_reengage_recruit, name)
+            else -> stringResource(R.string.dashboard_task_offer_recruit, name)
+        }
+    }
     DashboardTaskId.PortalWindow -> stringResource(
         R.string.dashboard_task_portal_window,
         task.formatArgs.firstOrNull() ?: 2,

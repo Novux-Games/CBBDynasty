@@ -39,9 +39,16 @@ import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
 import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentStatus
 import dev.novux.dynasty.cbb.core.dashboard.DashboardAdvanceGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
+import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
+import dev.novux.dynasty.cbb.core.dashboard.InSeasonRecruitingDashboardContext
+import dev.novux.dynasty.cbb.core.dashboard.InSeasonRecruitingNudgeResolver
 import dev.novux.dynasty.cbb.core.dashboard.InSeasonWeekGames
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
+import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
+import dev.novux.dynasty.cbb.core.signingday.NationalRecruitingRankings
 import dev.novux.dynasty.cbb.core.notification.NotificationFeedItem
 import dev.novux.dynasty.cbb.core.notification.NotificationSnapshotInput
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
@@ -194,6 +201,7 @@ fun DynastyShellScreen(
     var coachPreviewTarget by remember { mutableStateOf<CoachPreviewTarget?>(null) }
     var coachEmploymentStatus by remember { mutableStateOf(CoachEmploymentStatus.Employed) }
     var recruitingLedger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
+    var recruitingDashContext by remember { mutableStateOf<InSeasonRecruitingDashboardContext?>(null) }
     val coachPreviewSheetState = rememberCoachPreviewSheetState()
     val scope = rememberCoroutineScope()
     val recruitingEconomyRepository = context.requireDynastyApplication().recruitingEconomyRepository
@@ -208,6 +216,7 @@ fun DynastyShellScreen(
         rosterPlayers = rosterPlayers,
         medicalRules = medicalRules,
         coachSkillPointBank = coachSkillPointBank,
+        recruiting = recruitingDashContext,
     )
 
     LaunchedEffect(loaded.dynastyId) {
@@ -216,6 +225,54 @@ fun DynastyShellScreen(
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint) {
         recruitingLedger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+    }
+
+    val incomingClassSeedRepository = context.requireDynastyApplication().incomingClassSeedRepository
+    LaunchedEffect(
+        loaded.dynastyId,
+        loaded.metadata.seasonIndex,
+        loaded.weekCheckpoint,
+        recruitingLedger,
+        loaded.balanceRuleset,
+        userSchool,
+    ) {
+        val ledger = recruitingLedger
+        if (ledger == null) {
+            recruitingDashContext = null
+            return@LaunchedEffect
+        }
+        val active = loaded.weekCheckpoint.activePosition
+        val offseasonWeek = active.weekIndex.takeIf { active.phase == CalendarPhase.Offseason }
+        val hubOpen = RecruitingCyclePolicy.hubNavigable(active.phase, offseasonWeek, ledger.cycleClosed)
+        val watchlistNudge = if (hubOpen) {
+            val recommended = BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
+            val pool = incomingClassSeedRepository.ensurePool(loaded.dynastyId, loaded.metadata.seasonIndex)
+            val spendDelta = recruitingEconomyRepository.loadInterestSpendDeltaByProspect(loaded)
+            val prestige = recruitingEconomyRepository.resolveUserProgramPrestige(loaded)
+            val homeState = "OH"
+            val school = SchoolRecruitingContext(
+                programPrestige = prestige,
+                schoolHomeState = homeState,
+                nilPoolAnnualUsd = 0,
+            )
+            val top60 = NationalRecruitingRankings.top60FromPool(pool)
+            InSeasonRecruitingNudgeResolver.watchlistNudge(
+                pool = pool,
+                school = school,
+                recommended = recommended,
+                spendDeltaByProspect = spendDelta,
+                top60 = top60,
+            )
+        } else {
+            null
+        }
+        recruitingDashContext = InSeasonRecruitingDashboardContext(
+            phase = active.phase,
+            offseasonWeekIndex = offseasonWeek,
+            pointsAvailable = ledger.pointsAvailable,
+            cycleClosed = ledger.cycleClosed,
+            watchlistNudge = watchlistNudge,
+        )
     }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint, showNotificationFeed) {
