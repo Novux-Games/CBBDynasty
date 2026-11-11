@@ -43,7 +43,8 @@
     "MEGA-QA-013",
     "MEGA-QA-035",
     "MEGA-QA-052",
-    "MEGA-QA-060"
+    "MEGA-QA-060",
+    "MEGA-QA-061"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

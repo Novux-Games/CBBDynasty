@@ -30,6 +30,7 @@ import dev.novux.dynasty.cbb.core.academics.AcademicsRecruitingBudgetEngine
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingPrestigePool
 import dev.novux.dynasty.cbb.core.recruiting.RecruitInterestSpendDelta
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingWeekGrant
+import dev.novux.dynasty.cbb.core.save.DynastySchema
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
@@ -66,7 +67,9 @@ class RecruitingEconomyRepository(
     }
     suspend fun resolveUserProgramPrestige(dynasty: LoadedDynasty): Int {
         val coach = database.dynastyCoachDao().getByDynastyId(dynasty.dynastyId) ?: return DEFAULT_PROGRAM_PRESTIGE
-        val team = packRepository.activeSession().index.team(coach.userTeamId) ?: return DEFAULT_PROGRAM_PRESTIGE
+        val packId = dynasty.summary.packId ?: DynastySchema.DEFAULT_PACK_ID
+        val session = packRepository.restorePack(packId)
+        val team = session.index.team(coach.userTeamId) ?: return DEFAULT_PROGRAM_PRESTIGE
         return team.programPrestige
     }
 
@@ -82,7 +85,15 @@ class RecruitingEconomyRepository(
         if (raw != null) {
             val decoded = decode(raw)
             if (decoded.cycleSeasonIndex != dynasty.metadata.seasonIndex) {
-                return decoded
+                val academicsGrade = programAcademicsGrade(dynasty.dynastyId, dynasty.metadata.seasonIndex)
+                val ledger = RecruitingWeekGrant.openCycle(
+                    economy,
+                    cycleSeasonIndex = dynasty.metadata.seasonIndex,
+                    programPrestige = programPrestige,
+                    programAcademicsGrade = academicsGrade,
+                )
+                persist(dynasty.dynastyId, ledger)
+                return ledger
             }
             return alignLedgerPrestige(dynasty, economy, decoded, programPrestige)
         }
@@ -109,9 +120,11 @@ class RecruitingEconomyRepository(
         val tierBase = RecruitingPrestigePool.weeklyPoolPoints(economy, programPrestige)
         val weeklyPoolBase = AcademicsRecruitingBudgetEngine.effectiveWeeklyPool(tierBase, academicsGrade)
         val multiplier = AcademicsRecruitingBudgetEngine.budgetMultiplier(academicsGrade)
+        val poolDelta = weeklyPoolBase - ledger.weeklyPoolBase
         val aligned = ledger.copy(
             programPrestige = programPrestige,
             weeklyPoolBase = weeklyPoolBase,
+            pointsAvailable = (ledger.pointsAvailable + poolDelta).coerceAtLeast(0),
             programAcademicsGrade = academicsGrade,
             academicsBudgetMultiplier = multiplier,
         )
