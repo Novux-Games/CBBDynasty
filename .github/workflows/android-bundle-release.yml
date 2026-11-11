@@ -28,7 +28,8 @@ jobs:
           java-version: "21"
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        working-directory: ${{ github.workspace }}
+        run: bash scripts/install_android_sdk.sh
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
