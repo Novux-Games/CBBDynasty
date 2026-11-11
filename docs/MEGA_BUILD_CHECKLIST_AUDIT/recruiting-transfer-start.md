@@ -170,7 +170,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-082 | P0 | FAIL | Live **interest** meter 0–100 | Row string `recruiting_influence_row` prints **baselineInterest** with “(zero spend)” copy — no **`liveInterest`** bar or post-spend value. | `strings.xml`, `RecruitingHubScreen.kt` |
+| MEGA-RECR-082 | P0 | PASS | Live **interest** meter 0–100 | `RecruitInterestMeterRow` shows `liveInterest` 0–100 gauge + spend gain vs baseline; influence line is rank/closeness only. | `RecruitInterestMeterRow.kt`, hub row |
 | MEGA-RECR-083 | P1 | FAIL | Two surfaces (`baseline` vs `interest`) | Spec separates Recommended **`signLikelihood`** (zero spend) from sheet **meter** (includes spend). UI conflates influence line with baseline only. | `recruiting-engine.md#two-surfaces`, hub row |
 | MEGA-RECR-084 | P2 | GAP | Dedicated recruit sheet route | Actions live inline on Recommended list; no full-screen sheet with meter, factor chips, ranked rivals. | `RecruitingHubScreen.kt` |
 | MEGA-RECR-085 | P2 | GAP | Visual meter control | No `LinearProgressIndicator` / gauge for interest or closeness — text labels only. | Hub compose |

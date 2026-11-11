@@ -724,12 +724,15 @@ private fun RecommendedProspectRow(
                         R.string.recruiting_influence_row,
                         rank,
                         row.influenceBoard.closeness,
-                        row.liveInterest,
                     ),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
+            RecruitInterestMeterRow(
+                baselineInterest = row.baselineInterest,
+                liveInterest = row.liveInterest,
+            )
         }
         SignLikelihoodChip(row.badge)
         }
