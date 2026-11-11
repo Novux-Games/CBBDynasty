@@ -75,6 +75,7 @@ import dev.novux.dynasty.cbb.database.save.ensureSlotRows
 import dev.novux.dynasty.cbb.database.save.toSummary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -131,9 +132,9 @@ class SaveSlotRepository(
     }
 
     fun observeSlots(): Flow<List<SaveSlotSummary>> =
-        slotDao.observeAll().map { rows ->
-            ensureSlotRows(rows).map { it.toSummary() }
-        }
+        slotDao.observeAll()
+            .map { rows -> ensureSlotRows(rows).map { it.toSummary() } }
+            .catch { emit(defaultEmptySlotSummaries()) }
 
     fun observeContinueSlot(): Flow<SaveSlotSummary?> =
         observeSlots().map { slots ->
@@ -142,14 +143,18 @@ class SaveSlotRepository(
                 .maxByOrNull { it.lastPlayedAtEpochMillis ?: 0L }
         }
 
-    suspend fun listSlots(): List<SaveSlotSummary> {
+    suspend fun listSlots(): List<SaveSlotSummary> = try {
         ensureInitialized()
-        return ensureSlotRows(slotDao.listAll()).map { it.toSummary() }
+        ensureSlotRows(slotDao.listAll()).map { it.toSummary() }
+    } catch (_: Exception) {
+        defaultEmptySlotSummaries()
     }
 
-    suspend fun continueSlot(): SaveSlotSummary? {
+    suspend fun continueSlot(): SaveSlotSummary? = try {
         ensureInitialized()
-        return slotDao.getMostRecentlyPlayed()?.toSummary()
+        slotDao.getMostRecentlyPlayed()?.toSummary()
+    } catch (_: Exception) {
+        null
     }
 
     suspend fun firstEmptySlotIndex(): Int? {
@@ -261,37 +266,51 @@ class SaveSlotRepository(
         } catch (e: Exception) {
             DynastyLoadResult.Unreadable(
                 slotIndex,
-                DynastyLoadFailure.DatabaseRead(e.message ?: "load failed"),
+                DynastyLoadFailure.fromReadException(e),
             )
         }
     }
 
     /** True when occupied slot header rows are present (fast list hint; load still validates). */
     suspend fun isSlotLikelyLoadable(slotIndex: Int): Boolean {
-        ensureInitialized()
-        val entity = slotDao.getByIndex(slotIndex) ?: return false
-        val summary = entity.toSummary()
-        if (summary.isEmpty) return true
-        val dynastyId = summary.dynastyId
-        if (dynastyId.isNullOrBlank()) return true
-        return metadataDao.getById(dynastyId) != null
+        return try {
+            ensureInitialized()
+            val entity = slotDao.getByIndex(slotIndex) ?: return false
+            val summary = entity.toSummary()
+            when {
+                summary.isEmpty -> true
+                summary.dynastyId.isNullOrBlank() -> true
+                else -> metadataDao.getById(summary.dynastyId!!) != null
+            }
+        } catch (_: Exception) {
+            false
+        }
     }
 
     suspend fun deleteSlot(slotIndex: Int) {
         require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
-        ensureInitialized()
-        val dynastyId = slotDao.getByIndex(slotIndex)?.dynastyId
-        database.withTransaction {
-            if (!dynastyId.isNullOrBlank()) {
-                metadataDao.deleteById(dynastyId)
-                coachDao.deleteByDynastyId(dynastyId)
-                rosterDao.deleteForDynasty(dynastyId)
-                staffDao.deleteByDynastyId(dynastyId)
-                weekCheckpointRepository.deleteForDynasty(dynastyId)
+        try {
+            ensureInitialized()
+            val dynastyId = slotDao.getByIndex(slotIndex)?.dynastyId
+            database.withTransaction {
+                if (!dynastyId.isNullOrBlank()) {
+                    metadataDao.deleteById(dynastyId)
+                    coachDao.deleteByDynastyId(dynastyId)
+                    rosterDao.deleteForDynasty(dynastyId)
+                    staffDao.deleteByDynastyId(dynastyId)
+                    weekCheckpointRepository.deleteForDynasty(dynastyId)
+                }
+                slotDao.clearSlot(slotIndex)
             }
-            slotDao.clearSlot(slotIndex)
+        } catch (_: Exception) {
+            runCatching { slotDao.clearSlot(slotIndex) }
         }
     }
+
+    private fun defaultEmptySlotSummaries(): List<SaveSlotSummary> =
+        SaveSlots.INDICES.map { index ->
+            SaveSlotSummary(slotIndex = index, isEmpty = true)
+        }
 
     /**
      * Creates a new dynasty with default metadata (offseason, season 1, default pack).

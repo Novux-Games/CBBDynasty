@@ -27,6 +27,18 @@ sealed class DynastyLoadFailure {
 
     /** Wizard sign left coach/roster in a non-atomic state ([MEGA-QA-029]). */
     data class IncompleteNewGameSign(val detail: String) : DynastyLoadFailure()
+
+    companion object {
+        /** Maps persistence read errors (including SQLite corruption) to a load failure ([MEGA-QA-030]). */
+        fun fromReadException(cause: Throwable): DatabaseRead {
+            val prefix = when {
+                cause.javaClass.name.contains("SQLite", ignoreCase = true) -> "sqlite"
+                else -> "read"
+            }
+            val message = cause.message?.takeIf { it.isNotBlank() } ?: "failed"
+            return DatabaseRead("$prefix: $message")
+        }
+    }
 }
 
 sealed class DynastyLoadResult {
