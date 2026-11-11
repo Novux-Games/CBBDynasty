@@ -266,7 +266,7 @@
 | MEGA-RECR-133 | P0 | PASS | Uniform HS **2,000–4,000** | `runSeed` → `seed()` without override rolls `resolveHsPoolSize` from dynasty hash + season. | `IncomingClassSeeder.kt`, `IncomingClassSeedRepository.kt` |
 | MEGA-RECR-134 | P1 | RISK | **Lag:** DataStore blob size | ~3900-row `encodePool` single preference string — large read/write on every seed and load. | `IncomingClassSeedRepository` |
 | MEGA-RECR-135 | P2 | PASS | JUCO +1,500 fixed add-on | `JUCO_POOL_SIZE = 1_500` matches spec table. | `IncomingClassSeeder.kt` |
-| MEGA-RECR-136 | P1 | FAIL | Star assignment order bug | `starBand(index, count)` uses **creation index**, not **hiddenRating** percentile sort — stars decorrelated from talent (RECR-002). | `generatePool` + `starBand` |
+| MEGA-RECR-136 | P1 | PASS | Star assignment order bug | `RecruitStarAssignmentEngine` assigns bands from hidden-rating sort rank, not creation index. | `IncomingClassSeeder.generatePool` |
 | MEGA-RECR-137 | P1 | FAIL | Hidden vs star mismatch | `hiddenRatingForStars` drawn after star band from index — reinforces wrong percentile bands for 3★/2★ split. | `IncomingClassSeeder.kt` |
 | MEGA-RECR-138 | P2 | GAP | Demo pool star distribution | `RecruitingClassSeed.demoPool(120)` used in production paths — not representative of 2k–4k tail. | RECR-005 |
 

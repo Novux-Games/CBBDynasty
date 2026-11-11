@@ -59,13 +59,18 @@ class IncomingClassSeederTest {
     }
 
     private fun assertStarBandsMatchHiddenOrder(prospects: List<RecruitProspect>) {
+        val size = prospects.size
         val sorted = prospects.sortedByDescending { it.hiddenRating }
-        val size = sorted.size
-        sorted.forEachIndexed { rank, prospect ->
-            val expected = IncomingClassSeeder.starBandForPercentile(rank.toDouble() / size)
+        val expectedForHidden = sorted
+            .mapIndexed { rank, prospect -> prospect.hiddenRating to rank }
+            .groupBy({ it.first }, { it.second })
+            .mapValues { (_, ranks) ->
+                IncomingClassSeeder.starBandForPercentile(ranks.min().toDouble() / size)
+            }
+        prospects.forEach { prospect ->
             assertEquals(
-                "rank $rank hidden=${prospect.hiddenRating}",
-                expected,
+                "hidden=${prospect.hiddenRating}",
+                expectedForHidden.getValue(prospect.hiddenRating),
                 prospect.stars,
             )
         }

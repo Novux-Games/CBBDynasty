@@ -1,7 +1,6 @@
 package dev.novux.dynasty.cbb.core.recruiting
 
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
-import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
 import kotlin.random.Random
 
 /**
@@ -89,17 +88,7 @@ object IncomingClassSeeder {
                 hiddenRating = hidden,
             )
         }
-        return raw
-            .sortedByDescending { it.hiddenRating }
-            .mapIndexed { rank, prospect ->
-                val stars = starBandForPercentile(rank.toDouble() / size)
-                val letters = RecruitScoutLetterEngine.fromProspect(prospect, ScoutDepth.Light)
-                prospect.copy(
-                    stars = stars,
-                    nilAskUsd = nilAskForStars(stars, jucoBias),
-                    scoutLetterOverall = letters.overall,
-                )
-            }
+        return RecruitStarAssignmentEngine.assignStarsWithinPool(raw, jucoBias)
     }
 
     /** Percentile bands per pool ([planning/recruiting-engine.md#star-distribution]). */
@@ -110,7 +99,7 @@ object IncomingClassSeeder {
         else -> 2
     }
 
-    private fun nilAskForStars(stars: Int, jucoBias: Boolean): Int {
+    internal fun nilAskForStars(stars: Int, jucoBias: Boolean): Int {
         val factor = if (jucoBias) 0.85 else 1.0
         val base = when (stars) {
             5 -> 450_000
