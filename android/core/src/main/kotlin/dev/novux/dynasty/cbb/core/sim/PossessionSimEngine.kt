@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.sim
 
+import dev.novux.dynasty.cbb.core.strategy.LateGamePossessionPolicy
 import dev.novux.dynasty.cbb.core.strategy.ResolvedSchemeEffects
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
 import kotlin.math.max
@@ -43,6 +44,54 @@ object PossessionSimEngine {
         val rawSeconds: Int,
         val foulStoppage: Boolean,
     )
+
+    internal fun sampleTripForLateGame(
+        tuning: SimTuning,
+        random: Random,
+        decision: LateGamePossessionPolicy.PossessionDecision,
+    ): TripSample =
+        when (decision) {
+            LateGamePossessionPolicy.PossessionDecision.IntentionalFoulTrip -> {
+                if (random.nextDouble() < LateGamePossessionPolicy.INTENTIONAL_FOUL_TRIP_RATE) {
+                    foulStoppageTripSample(tuning, random)
+                } else {
+                    sampleTrip(tuning, random)
+                }
+            }
+            LateGamePossessionPolicy.PossessionDecision.ProtectLeadPace -> {
+                val base = sampleTrip(tuning, random)
+                if (base.foulStoppage &&
+                    random.nextDouble() < LateGamePossessionPolicy.PROTECT_LEAD_AVOID_FOUL_STOPPAGE_RATE
+                ) {
+                    quickShotTripSample(tuning, random)
+                } else {
+                    base
+                }
+            }
+            LateGamePossessionPolicy.PossessionDecision.None -> sampleTrip(tuning, random)
+        }
+
+    private fun foulStoppageTripSample(tuning: SimTuning, random: Random): TripSample {
+        val range = tuning.timeUsedSeconds.foulStoppage
+        val lo = range.firstOrNull() ?: GameSimClock.MIN_TRIP_SECONDS
+        val hi = range.lastOrNull() ?: GameSimClock.MAX_TRIP_SECONDS
+        val raw = if (lo >= hi) lo else random.nextInt(lo, hi + 1)
+        return TripSample(
+            rawSeconds = raw.coerceIn(GameSimClock.MIN_TRIP_SECONDS, GameSimClock.MAX_TRIP_SECONDS),
+            foulStoppage = true,
+        )
+    }
+
+    private fun quickShotTripSample(tuning: SimTuning, random: Random): TripSample {
+        val range = tuning.timeUsedSeconds.quickShot
+        val lo = range.firstOrNull() ?: GameSimClock.MIN_TRIP_SECONDS
+        val hi = range.lastOrNull() ?: GameSimClock.MAX_TRIP_SECONDS
+        val raw = if (lo >= hi) lo else random.nextInt(lo, hi + 1)
+        return TripSample(
+            rawSeconds = raw.coerceIn(GameSimClock.MIN_TRIP_SECONDS, GameSimClock.MAX_TRIP_SECONDS),
+            foulStoppage = false,
+        )
+    }
 
     internal fun sampleTrip(tuning: SimTuning, random: Random): TripSample {
         val bucket = random.nextInt(3)
@@ -168,6 +217,7 @@ object PossessionSimEngine {
         change: PossessionChange,
         turnoverTerminal: TurnoverTerminal? = null,
         foulNote: String? = null,
+        lateGameTag: String? = null,
     ): String {
         val clock = formatClock(clockRemaining)
         val pointsScored = after.points - before.points
@@ -181,7 +231,8 @@ object PossessionSimEngine {
             else -> "possession"
         }
         val foulSuffix = foulNote?.let { " | $it" }.orEmpty()
-        return "$clock | $offense | ${used}s trip | SC $shotClockBefore→$shotClockAfter | $scoreLine$foulSuffix"
+        val lateSuffix = lateGameTag?.let { " | $it" }.orEmpty()
+        return "$clock | $offense | ${used}s trip | SC $shotClockBefore→$shotClockAfter | $scoreLine$foulSuffix$lateSuffix"
     }
 
     private fun formatClock(seconds: Int): String {

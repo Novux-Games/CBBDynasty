@@ -1,6 +1,8 @@
 package dev.novux.dynasty.cbb.core.sim
 
 import dev.novux.dynasty.cbb.core.strategy.GameplanEffectsResolver
+import dev.novux.dynasty.cbb.core.strategy.LateGameFoulStrategy
+import dev.novux.dynasty.cbb.core.strategy.LateGamePossessionPolicy
 import dev.novux.dynasty.cbb.core.strategy.GameplanUsageNormalizer
 import dev.novux.dynasty.cbb.core.strategy.SchemeMatchupResolver
 import kotlin.random.Random
@@ -66,7 +68,13 @@ class PossessionSimSession(
             GameplanEffectsResolver.offenseTweaks(offGameplan, usagePeak),
             GameplanEffectsResolver.defenseTweaks(defGameplan, gameClock, defenseScore, offenseScore),
         )
-        val tripSample = PossessionSimEngine.sampleTrip(input.tuning, random)
+        val lateDecision = LateGamePossessionPolicy.defenseDecision(
+            strategy = defGameplan?.lateGameFoulStrategy ?: LateGameFoulStrategy.Standard,
+            gameClockSeconds = gameClock,
+            defenseScore = defenseScore,
+            offenseScore = offenseScore,
+        )
+        val tripSample = PossessionSimEngine.sampleTripForLateGame(input.tuning, random, lateDecision)
         val tripSeconds = PossessionSimEngine.pacedTripSecondsFromRaw(
             input.tuning,
             tripSample.rawSeconds,
@@ -120,6 +128,7 @@ class PossessionSimSession(
             change = resolution.change,
             turnoverTerminal = resolution.turnoverTerminal,
             foulNote = foulNote,
+            lateGameTag = LateGamePossessionPolicy.logTag(lateDecision),
         )
         log += line
         val halftime = stopAtHalftime && gameClock <= GameSimClock.HALF_SECONDS
