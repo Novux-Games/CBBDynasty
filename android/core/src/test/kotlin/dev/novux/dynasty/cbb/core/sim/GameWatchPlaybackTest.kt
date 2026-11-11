@@ -27,6 +27,11 @@ class GameWatchPlaybackTest {
     )
 
     @Test
+    fun defaultWatchSpeedYieldsTwoSecondLineDelay() {
+        assertEquals(2_000L, GameWatchPlayback.lineDelayMs(GameWatchPlayback.DEFAULT_WATCH_SPEED_MULTIPLIER))
+    }
+
+    @Test
     fun watchStreamsLinesAndMatchesSimToEnd() = runBlocking {
         val input = GameSimInput(
             home = GameSimTeamInput("h", 80, 78),

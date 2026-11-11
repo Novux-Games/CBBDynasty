@@ -8,18 +8,24 @@ import kotlinx.coroutines.delay
 object GameWatchPlayback {
     const val DEFAULT_POSSESSION_DELAY_MS: Long = 2_000L
 
-    suspend fun watch(
-        input: GameSimInput,
-        speedMultiplier: Double = 1.0,
-        injuryRoll: GameSimInjuryRollInput? = null,
-        onLine: suspend (String) -> Unit,
-        onHalftime: suspend (GameSimResult, MidGameState) -> GameSimInput,
-    ): GameSimResult {
-        val lineDelay = if (speedMultiplier <= 0.0) {
+    /** Real-time watch uses ~2s per possession line at 1× (not scrimmage fast-forward). */
+    const val DEFAULT_WATCH_SPEED_MULTIPLIER: Double = 1.0
+
+    fun lineDelayMs(speedMultiplier: Double): Long =
+        if (speedMultiplier <= 0.0) {
             0L
         } else {
             (DEFAULT_POSSESSION_DELAY_MS / speedMultiplier).toLong().coerceAtLeast(0L)
         }
+
+    suspend fun watch(
+        input: GameSimInput,
+        speedMultiplier: Double = DEFAULT_WATCH_SPEED_MULTIPLIER,
+        injuryRoll: GameSimInjuryRollInput? = null,
+        onLine: suspend (String) -> Unit,
+        onHalftime: suspend (GameSimResult, MidGameState) -> GameSimInput,
+    ): GameSimResult {
+        val lineDelay = lineDelayMs(speedMultiplier)
         var activeInput = input
         var session = PossessionSimSession(activeInput, stopAtHalftime = true)
         var resumedAfterHalftime = false

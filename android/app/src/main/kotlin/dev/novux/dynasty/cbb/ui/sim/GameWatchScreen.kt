@@ -80,7 +80,7 @@ fun GameWatchScreen(
         scoreLine = context.getString(R.string.game_watch_score_start)
         val result = GameWatchPlayback.watch(
             input = baseInput,
-            speedMultiplier = 8.0,
+            speedMultiplier = GameWatchPlayback.DEFAULT_WATCH_SPEED_MULTIPLIER,
             injuryRoll = injuryRoll,
             onLine = { line ->
                 lines.add(line)
