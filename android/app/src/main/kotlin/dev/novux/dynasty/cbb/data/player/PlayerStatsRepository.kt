@@ -7,6 +7,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
+import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogEntry
+import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogSynth
 import dev.novux.dynasty.cbb.core.player.stats.PlayerCountingStats
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsEngine
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
@@ -27,12 +29,35 @@ data class PlayerSeasonStatRecord(
 )
 
 @Serializable
+data class PlayerGameLogRecord(
+    val playerId: String,
+    val seasonIndex: Int,
+    val gamesPlayed: Int,
+    val entries: List<PlayerGameLogEntry> = emptyList(),
+)
+
+@Serializable
 data class DynastyPlayerStatsBlob(
     val records: List<PlayerSeasonStatRecord> = emptyList(),
+    val gameLogs: List<PlayerGameLogRecord> = emptyList(),
 )
 
 class PlayerStatsRepository(private val context: Context) {
     private val json = Json { ignoreUnknownKeys = true }
+
+    suspend fun gameLogFor(
+        dynastyId: String,
+        seasonIndex: Int,
+        player: DynastyPlayer,
+    ): List<PlayerGameLogEntry> {
+        val gp = player.role.rsGamesPlayedSeason.coerceAtLeast(0)
+        ensureSeasonRecord(dynastyId, player, seasonIndex, gp)
+        ensureGameLogRecord(dynastyId, player, seasonIndex, gp)
+        val blob = loadBlob(dynastyId)
+        return blob.gameLogs.first {
+            it.playerId == player.playerId && it.seasonIndex == seasonIndex
+        }.entries
+    }
 
     suspend fun summaryFor(
         dynastyId: String,
@@ -79,6 +104,38 @@ class PlayerStatsRepository(private val context: Context) {
         if (existing == record) return
         val next = blob.copy(
             records = blob.records
+                .filterNot { it.playerId == player.playerId && it.seasonIndex == seasonIndex } + record,
+        )
+        persist(dynastyId, next)
+    }
+
+    private suspend fun ensureGameLogRecord(
+        dynastyId: String,
+        player: DynastyPlayer,
+        seasonIndex: Int,
+        gamesPlayed: Int,
+    ) {
+        val blob = loadBlob(dynastyId)
+        val totals = blob.records.first {
+            it.playerId == player.playerId && it.seasonIndex == seasonIndex
+        }.totals
+        val existing = blob.gameLogs.firstOrNull {
+            it.playerId == player.playerId && it.seasonIndex == seasonIndex
+        }
+        val entries = when {
+            existing != null && existing.gamesPlayed == gamesPlayed -> existing.entries
+            gamesPlayed <= 0 -> emptyList()
+            else -> PlayerGameLogSynth.buildLog(player, seasonIndex, gamesPlayed, totals)
+        }
+        val record = PlayerGameLogRecord(
+            playerId = player.playerId,
+            seasonIndex = seasonIndex,
+            gamesPlayed = gamesPlayed,
+            entries = entries,
+        )
+        if (existing == record) return
+        val next = blob.copy(
+            gameLogs = blob.gameLogs
                 .filterNot { it.playerId == player.playerId && it.seasonIndex == seasonIndex } + record,
         )
         persist(dynastyId, next)

@@ -9,7 +9,8 @@
     "MEGA-COACH-059",
     "MEGA-COACH-060",
     "MEGA-COACH-139",
-    "MEGA-COACH-067"
+    "MEGA-COACH-067",
+    "MEGA-COACH-068"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

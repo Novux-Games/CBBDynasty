@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
+import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogEntry
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
 import dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
 
@@ -52,6 +53,7 @@ fun PlayerCardScreen(
 ) {
     var selectedTab by remember { mutableStateOf(PlayerCardTab.Overview) }
     var showEditHint by remember { mutableStateOf(false) }
+    var boxScoreEntry by remember { mutableStateOf<PlayerGameLogEntry?>(null) }
     val tabs = PlayerCardTab.ORDER
 
     Column(modifier = modifier.fillMaxSize()) {
@@ -100,11 +102,23 @@ fun PlayerCardScreen(
                     seasonIndex = seasonIndex,
                     playerStatsRepository = playerStatsRepository,
                 )
-                PlayerCardTab.Games -> PlayerCardGamesTab(player = player)
+                PlayerCardTab.Games -> PlayerCardGamesTab(
+                    player = player,
+                    dynastyId = player.dynastyId,
+                    seasonIndex = seasonIndex,
+                    playerStatsRepository = playerStatsRepository,
+                    onOpenBoxScore = { boxScoreEntry = it },
+                )
                 PlayerCardTab.History -> PlayerCardHistoryTab(player = player)
             }
         }
     }
+
+    PlayerGameBoxScoreSheet(
+        player = player,
+        entry = boxScoreEntry,
+        onDismiss = { boxScoreEntry = null },
+    )
 
     if (showEditHint) {
         AlertDialog(
@@ -253,16 +267,34 @@ private fun PlayerCardStatsTab(
 }
 
 @Composable
-private fun PlayerCardGamesTab(player: DynastyPlayer) {
+private fun PlayerCardGamesTab(
+    player: DynastyPlayer,
+    dynastyId: String,
+    seasonIndex: Int,
+    playerStatsRepository: PlayerStatsRepository,
+    onOpenBoxScore: (PlayerGameLogEntry) -> Unit,
+) {
+    var entries by remember(player.playerId) { mutableStateOf<List<PlayerGameLogEntry>?>(null) }
+    LaunchedEffect(player.playerId, player.role.rsGamesPlayedSeason, seasonIndex) {
+        entries = playerStatsRepository.gameLogFor(dynastyId, seasonIndex, player)
+    }
     Text(
         stringResource(R.string.player_card_games_tab),
         style = MaterialTheme.typography.titleMedium,
         fontWeight = FontWeight.SemiBold,
     )
-    Text(
-        stringResource(R.string.player_card_games_empty),
-        style = MaterialTheme.typography.bodyMedium,
-    )
+    val log = entries
+    when {
+        log == null -> Text(
+            stringResource(R.string.player_card_stats_loading),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        log.isEmpty() -> Text(
+            stringResource(R.string.player_card_games_empty),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        else -> PlayerGameLogPanel(entries = log, onEntryClick = onOpenBoxScore)
+    }
 }
 
 @Composable

@@ -115,7 +115,7 @@
 | MEGA-COACH-065 | P1 | FAIL | Projected draft #1–60 + tier label on Overview | No draft projection UI on card |
 | MEGA-COACH-066 | P1 | FAIL | Ratings tab full attribute breakdown + potential | Only headline triplet + scout |
 | MEGA-COACH-067 | P0 | PASS | Stats four cards (season avg/tot, career avg/tot) | `PlayerStatsEngine` + `PlayerStatsRepository` + `PlayerStatsFourCards` on Stats tab | `core/player/stats/*`, `PlayerStatsRepository.kt`, `PlayerStatsCards.kt`, `PlayerCardScreen.kt` |
-| MEGA-COACH-068 | P0 | FAIL | Games tab game log + box score drill-in | Not implemented |
+| MEGA-COACH-068 | P0 | PASS | Games tab game log + box score drill-in | `PlayerGameLogPanel` rows + `PlayerGameBoxScoreSheet`; `PlayerGameLogSynth` + `PlayerStatsRepository.gameLogFor` | `core/player/games/*`, `PlayerGameLogPanel.kt`, `PlayerGameBoxScoreSheet.kt` |
 | MEGA-COACH-069 | P1 | FAIL | History tab prior seasons | Not implemented |
 | MEGA-COACH-070 | P2 | GAP | Injury chip on card identity | `PlayerInjuryOverviewBlock` text line — not `OUT` chip in strip |
 | MEGA-COACH-071 | P2 | FAIL | Edit mode user roster only | No Edit on sheet |

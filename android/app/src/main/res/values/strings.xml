@@ -486,6 +486,16 @@
     <string name="player_stat_tot_blocks">Blocks %1$d</string>
     <string name="player_stat_tot_turnovers">Turnovers %1$d</string>
     <string name="player_card_games_empty">No game log rows yet for this season.</string>
+    <string name="player_game_log_opponent_week">%1$s · RS wk %2$d</string>
+    <string name="player_game_log_result">%1$s %2$s</string>
+    <string name="player_game_log_line">%1$d PTS · %2$d AST · %3$d REB · %4$d STL · %5$d BLK · %6$d TO</string>
+    <string name="player_game_log_home">Home</string>
+    <string name="player_game_log_away">Away</string>
+    <string name="player_box_score_title">Game box score</string>
+    <string name="player_box_score_matchup">vs %1$s · RS week %2$d</string>
+    <string name="player_box_score_team_score">Your team %1$d, %2$s %3$d (%4$s %5$s)</string>
+    <string name="player_box_score_shooting">FG %1$d–%2$d · 3PT %3$d–%4$d · FT %5$d–%6$d</string>
+    <string name="player_box_score_minutes">Minutes: %1$d</string>
     <string name="player_card_history_eligibility">Eligibility used %1$d · remaining %2$d</string>
     <string name="player_card_history_pipeline">Prior-season rows append after each season review.</string>
     <string name="dynasty_shell_roster">Roster preview</string>
