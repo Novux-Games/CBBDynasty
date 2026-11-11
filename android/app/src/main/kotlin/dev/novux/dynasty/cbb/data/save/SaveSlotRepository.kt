@@ -5,6 +5,7 @@ import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
 import dev.novux.dynasty.cbb.core.calendar.SeasonReviewGate
 import dev.novux.dynasty.cbb.core.calendar.SeasonYearAdvanceEngine
 import dev.novux.dynasty.cbb.core.save.DynastyBootstrap
+import dev.novux.dynasty.cbb.core.save.DynastyWizardBootstrapPolicy
 import dev.novux.dynasty.cbb.core.save.DynastyLoadFailure
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.core.save.DynastySaveValidator
@@ -434,10 +435,11 @@ class SaveSlotRepository(
     }
 
     /**
-     * Season 1: persist enrolling class at sign, bind prestige-led recruiting + NIL cycles, and queue Top 60 news
-     * so the class is live before exhibitions ([planning/recruiting-engine.md], MEGA-RECR-053).
+     * Season 1 wizard sign bootstrap ([DynastyWizardBootstrapPolicy]) — class, news, recruiting ledger,
+     * and NIL annual pool for the chosen school (MEGA-RECR-053, MEGA-RECR-100).
      */
     private suspend fun bootstrapSeasonOneRecruitingAfterSign(loaded: LoadedDynasty, draft: NewGameDraft) {
+        if (DynastyWizardBootstrapPolicy.stepsAfterSign(loaded.metadata.seasonIndex).isEmpty()) return
         if (!SeasonOneRecruitingBootstrap.appliesToMembershipYear(loaded.metadata.seasonIndex)) return
         val seasonIndex = SeasonOneRecruitingBootstrap.poolStorageSeasonIndex(loaded.metadata.seasonIndex)
         incomingClassSeedRepository.ensurePool(loaded.dynastyId, seasonIndex)

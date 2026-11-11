@@ -150,7 +150,7 @@
 | MEGA-RECR-073 | P2 | GAP | Pipeline states on summary | Not shown on school summary sheet. | `SchoolStepContent.kt` |
 | MEGA-RECR-074 | P2 | GAP | School demeanor on summary | Not shown. | `SchoolStepContent.kt` |
 | MEGA-RECR-075 | P1 | GAP | Prestige ≤40 default filter | School step should filter — verify `SchoolStepContent` (pack overlay) — present in list UI. | newgame school step |
-| MEGA-RECR-076 | P1 | FAIL | Bootstrap recruiting on sign | `signNewGameFromWizard` does not seed class, open recruiting ledger with **team** prestige, or call `nilAnnualPoolRepository.openCyclePoolUsd` with chosen school. | `SaveSlotRepository.signNewGameFromWizard` |
+| MEGA-RECR-076 | P1 | PASS | Bootstrap recruiting on sign | `bootstrapSeasonOneRecruitingAfterSign` seeds class, opens ledger with chosen-school prestige, and `openCyclePoolUsd`. | `SaveSlotRepository`, `DynastyWizardBootstrapPolicy` |
 | MEGA-RECR-077 | P2 | PASS | Launch → Offseason W1 Players Leaving | Matches `game-start` step 6 narrative. | wizard + calendar |
 | MEGA-RECR-078 | P2 | RISK | `teamId` on coach/save | Wizard stores school in draft; confirm pack `teamId` bound on coach entity for recruiting context (audit: `userSchoolRecruitingContext` depends on loaded dynasty team). | `NilAnnualPoolRepository` |
 
@@ -195,7 +195,7 @@
 | MEGA-RECR-097 | P1 | GAP | Interest NIL tops at ask | `NilInterestScoring` tested; assign path does not refresh row **badge** / meter when offer changes. | hub `gateRefresh` |
 | MEGA-RECR-098 | P1 | GAP | NIL at hard sign snapshot | `IncomingSignee.nilSignedUsd` defaults **0**; hard sign does not persist offer map into signee rows. | `SigningDayIncomingSignee.kt` |
 | MEGA-RECR-099 | P2 | PASS | Annual pool + week-9 boost | Hub loads `nilPoolBoostUsd` from facilities week — PASS wiring. | `RecruitingHubScreen` LaunchedEffect |
-| MEGA-RECR-100 | P0 | FAIL | Dynasty bootstrap NIL cycle | `signNewGameFromWizard` skips `NilAnnualPoolRepository.openCyclePoolUsd` for chosen school (RECR-076). | `SaveSlotRepository` |
+| MEGA-RECR-100 | P0 | PASS | Dynasty bootstrap NIL cycle | Wizard sign calls `openCyclePoolUsd` with conference + prestige from `draft.selectedTeamId` ([DynastyWizardBootstrapPolicy]). | `SaveSlotRepository` |
 | MEGA-RECR-101 | P2 | PASS | Portal NIL same ledger | Portal targets use `assignOffer` by entrant id. | `NilBudgetRepository` |
 | MEGA-RECR-102 | P2 | RISK | NIL offers keyed demo ids | Offers stored by `prospectId`; if user recruits from **demoPool** but seed uses different ids, ledger orphans. | RECR-005 + `NilBudgetRepository` |
 

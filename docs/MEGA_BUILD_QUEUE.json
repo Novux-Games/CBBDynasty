@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-RECR-100",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
     "id": "MEGA-SIM-086",
     "pri": "P0",
     "status": "FAIL",
@@ -729,13 +722,6 @@
   },
   {
     "id": "MEGA-RECR-072",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-076",
     "pri": "P1",
     "status": "FAIL",
     "shard": "recruiting-transfer-start.md",
