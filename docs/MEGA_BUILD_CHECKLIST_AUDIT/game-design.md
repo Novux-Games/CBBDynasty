@@ -224,7 +224,7 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-GDD-129 | P1 | GAP | Postseason UI · bracket monitor NCBA/NCI/Heritage | Hub placeholder; sim engines run in batch without rich UI. | `MarchMayhemHubScreen.kt`, `ParallelNationalBracketRepository.kt` |
-| MEGA-GDD-130 | P1 | MISSING | Media · bracketology weekly February news | GDD calls weekly bracketology in news feed—no `Bracketology` symbol in codebase. | grep `Bracketology` `android/` |
+| MEGA-GDD-130 | P1 | PASS | Media · bracketology weekly February news | `BracketologyNewsEngine` publishes `NewsHeadlineKind.Bracketology` on RS weeks 20–28 via `appendLeagueWeek`. | `BracketologyNewsEngine.kt`, `NewsFeedRepository.kt` |
 | MEGA-GDD-131 | P1 | GAP | Awards · weekly honors during conference play | Engine/policy partial vs `awards.md` weekly cadence UI. | `YearlyAwardsWrapEngine.kt`, `AwardsHubPolicy.kt` |
 | MEGA-GDD-132 | P2 | GAP | Accessibility · large tap targets on calendar | Compose defaults; no explicit calendar minimum touch target spec. | `DynastyShellCalendarTab.kt` |
 | MEGA-GDD-133 | P2 | MISSING | Accessibility · jersey sim pattern overlays for color-blind | Not implemented. | grep `colorblind` / `pattern` `android/app` |

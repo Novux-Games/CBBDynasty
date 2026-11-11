@@ -108,7 +108,13 @@ class LeagueWeekBatchRepository(
                 )
                 val withNet = attachWeeklyNet(batch.standings, committedWeek.weekIndex)
                 persist(dynastyId, withNet)
-                newsFeedRepository.appendLeagueWeek(dynastyId, withNet)
+                val packIndex = packRepository.activeSession().index
+                newsFeedRepository.appendLeagueWeek(
+                    dynastyId = dynastyId,
+                    standings = withNet,
+                    userTeamId = userTeamId,
+                    teamDisplayName = { id -> packIndex.team(id)?.displayName ?: id },
+                )
             }
             else -> Unit
         }

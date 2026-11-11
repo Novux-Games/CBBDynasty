@@ -823,6 +823,7 @@
     <string name="shell_news_kind_recruiting">Recruiting</string>
     <string name="shell_news_kind_general">League</string>
     <string name="shell_news_kind_awards">Awards</string>
+    <string name="shell_news_kind_bracketology">Bracketology</string>
     <string name="shell_menu_exit_home">Exit to home</string>
     <string name="shell_menu_news_hub">News hub</string>
     <string name="news_hub_title">News hub</string>

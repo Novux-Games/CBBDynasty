@@ -219,7 +219,7 @@
 | MEGA-SHELL-135 | GAP | Hub Stories tab hides kind chip | `StoriesTab` shows title only — no category/date | `NewsHubScreen.kt` vs dashboard tab |
 | MEGA-SHELL-136 | GAP | Portal headline kinds in enum | No `PortalEntry` / `Commit` / `Flip` in `NewsHeadlineKind` | `NewsHeadline.kt`, `news-hub.md` |
 | MEGA-SHELL-137 | GAP | Poll / NET movement headlines | `appendLeagueWeek` emits injury wire + upsets only — no poll lines | `NewsFeedRepository.kt` |
-| MEGA-SHELL-138 | GAP | Bracketology (February) stories | No generator wired | `news-hub.md`, `MEGA-GDD-130` |
+| MEGA-SHELL-138 | PASS | Bracketology (February) stories | `BracketologyNewsEngine` on league week advance | `NewsFeedRepository.kt`, `MEGA-GDD-130` |
 | MEGA-SHELL-139 | GAP | Coaching carousel league headlines | No `NewsHeadlineKind` or publisher path for carousel | `news-hub.md` brief list |
 | MEGA-SHELL-140 | PARTIAL | Awards headlines kind | `appendAwardsHeadlines` + `NewsHeadlineKind.Awards` | postseason awards wiring |
 | MEGA-SHELL-141 | SHIP | User vs league injury kinds split | `UserInjury` vs `LeagueInjury` | `NewsHeadlinePublisher.kt` |

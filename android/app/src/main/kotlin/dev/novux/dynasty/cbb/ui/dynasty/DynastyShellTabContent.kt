@@ -140,6 +140,7 @@ private fun newsKindLabel(kind: NewsHeadlineKind): String = when (kind) {
     NewsHeadlineKind.RecruitingSpotlight -> stringResource(R.string.shell_news_kind_recruiting)
     NewsHeadlineKind.General -> stringResource(R.string.shell_news_kind_general)
     NewsHeadlineKind.Awards -> stringResource(R.string.shell_news_kind_awards)
+    NewsHeadlineKind.Bracketology -> stringResource(R.string.shell_news_kind_bracketology)
 }
 
 @Composable

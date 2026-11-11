@@ -9,6 +9,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
 import dev.novux.dynasty.cbb.core.league.LeagueGameResult
 import dev.novux.dynasty.cbb.core.league.LeagueStandingsState
+import dev.novux.dynasty.cbb.core.news.BracketologyNewsEngine
 import dev.novux.dynasty.cbb.core.news.NewsHeadline
 import dev.novux.dynasty.cbb.core.news.NewsHeadlinePublisher
 import dev.novux.dynasty.cbb.core.news.ShallowNewsFeed
@@ -84,6 +85,8 @@ class NewsFeedRepository(
     suspend fun appendLeagueWeek(
         dynastyId: String,
         standings: LeagueStandingsState,
+        userTeamId: String? = null,
+        teamDisplayName: (String) -> String = { it },
     ) {
         val week = standings.lastCommittedRsWeek
         val headlines = mutableListOf<NewsHeadline>()
@@ -98,6 +101,12 @@ class NewsFeedRepository(
             .forEach { result ->
                 headlines += NewsHeadlinePublisher.leagueGameResult(standings.seasonIndex, result)
             }
+        BracketologyNewsEngine.headlineForWeek(
+            standings = standings,
+            rsWeekIndex = week,
+            teamDisplayName = teamDisplayName,
+            userTeamId = userTeamId,
+        )?.let { headlines += NewsHeadlinePublisher.bracketology(it) }
         appendAll(dynastyId, seasonIndex = standings.seasonIndex, headlines)
     }
 
