@@ -243,6 +243,7 @@ fun DynastyApp(
                                         is DynastyLoadResult.Success -> onDynastyReady(result.loaded)
                                         is DynastyLoadResult.Unreadable ->
                                             continueLoadFailedSlot = slot.slotIndex
+                                        is DynastyLoadResult.WeekAdvanceBlocked -> Unit
                                         DynastyLoadResult.SlotEmpty -> Unit
                                     }
                                 } finally {

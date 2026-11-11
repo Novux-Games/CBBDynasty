@@ -8,6 +8,7 @@ import dev.novux.dynasty.cbb.core.save.DynastyBootstrap
 import dev.novux.dynasty.cbb.core.save.DynastyWizardBootstrapPolicy
 import dev.novux.dynasty.cbb.core.save.DynastyLoadFailure
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
+import dev.novux.dynasty.cbb.core.save.DynastyWeekAdvanceBlockReason
 import dev.novux.dynasty.cbb.core.save.DynastySaveValidator
 import dev.novux.dynasty.cbb.core.roster.SeasonOneRosterGenerator
 import dev.novux.dynasty.cbb.core.save.NewGameDraft
@@ -556,7 +557,11 @@ class SaveSlotRepository(
             else -> return@withContext initial
         }
         if (disciplineRepository.hasPending(loaded.dynastyId, loaded.metadata.seasonIndex)) {
-            return@withContext loadSlot(slotIndex)
+            return@withContext DynastyLoadResult.WeekAdvanceBlocked(
+                slotIndex = slotIndex,
+                reason = DynastyWeekAdvanceBlockReason.DisciplinePending,
+                loaded = loaded,
+            )
         }
         val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
         val dynastySeed = loaded.dynastyId.hashCode().toLong()

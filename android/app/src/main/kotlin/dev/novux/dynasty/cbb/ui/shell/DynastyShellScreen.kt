@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.ui.shell
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -56,6 +60,7 @@ import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceDialog
+import dev.novux.dynasty.cbb.ui.advance.applyWeekAdvanceResult
 import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
 import dev.novux.dynasty.cbb.core.discipline.PendingDisciplineIncident
 import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
@@ -168,6 +173,8 @@ fun DynastyShellScreen(
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
     var weekAdvanceInProgress by remember { mutableStateOf(false) }
     var dialogAdvanceInProgress by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
     var focus by remember { mutableStateOf<SeasonStartFocus?>(null) }
     var staffRoster by remember { mutableStateOf<SchoolStaffRoster?>(null) }
     var coachSecurity by remember { mutableStateOf<CoachSecuritySnapshot?>(null) }
@@ -183,7 +190,6 @@ fun DynastyShellScreen(
     var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     var fullScreenPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     var rosterPlayers by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
-    val context = LocalContext.current
     var postgameEvents by remember { mutableStateOf<List<GameSimInjuryEvent>>(emptyList()) }
     var dismissedInjuryTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
     var disciplinePending by remember { mutableStateOf<PendingDisciplineIncident?>(null) }
@@ -631,6 +637,7 @@ fun DynastyShellScreen(
         ),
     )
 
+    Box(modifier = Modifier.fillMaxSize()) {
     DynastyShellChrome(
         schoolDisplayName = schoolName,
         phaseWeekLabel = phaseLabel,
@@ -787,14 +794,16 @@ fun DynastyShellScreen(
                             scope.launch {
                                 dialogAdvanceInProgress = true
                                 try {
-                                    when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
-                                        is DynastyLoadResult.Success -> {
-                                            loaded = result.loaded
-                                            ActiveDynastySession.set(result.loaded)
-                                            dismissedInjuryTasks = emptySet()
-                                            pendingAdvanceConfirmation = null
-                                        }
-                                        else -> Unit
+                                    val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)
+                                    applyWeekAdvanceResult(
+                                        result,
+                                        snackbarHostState,
+                                        context,
+                                    ) { updated ->
+                                        loaded = updated
+                                        ActiveDynastySession.set(updated)
+                                        dismissedInjuryTasks = emptySet()
+                                        pendingAdvanceConfirmation = null
                                     }
                                 } finally {
                                     dialogAdvanceInProgress = false
@@ -824,13 +833,15 @@ fun DynastyShellScreen(
                                 if (confirmation != null && confirmation.needsDialog) {
                                     pendingAdvanceConfirmation = confirmation
                                 } else {
-                                    when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
-                                        is DynastyLoadResult.Success -> {
-                                            loaded = result.loaded
-                                            ActiveDynastySession.set(result.loaded)
-                                            dismissedInjuryTasks = emptySet()
-                                        }
-                                        else -> Unit
+                                    val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)
+                                    applyWeekAdvanceResult(
+                                        result,
+                                        snackbarHostState,
+                                        context,
+                                    ) { updated ->
+                                        loaded = updated
+                                        ActiveDynastySession.set(updated)
+                                        dismissedInjuryTasks = emptySet()
                                     }
                                 }
                             } finally {
@@ -863,6 +874,13 @@ fun DynastyShellScreen(
                 }
             }
         }
+    }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(16.dp),
+        )
     }
 }
 

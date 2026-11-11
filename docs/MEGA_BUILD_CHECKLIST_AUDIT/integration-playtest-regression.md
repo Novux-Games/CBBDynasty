@@ -53,7 +53,7 @@
 | MEGA-QA-017 | P1 | DEV | OPEN | Sim week with user game unplayed | Week with scheduled game → Advance → Fast sim | Game simmed; standings update; calendar shows result | `SimWeekAdvanceResolver` |
 | MEGA-QA-018 | P1 | DEV | OPEN | Bye week advance | RS bye week → Advance | Allowed; injury tick line in dialog if applicable | `ByeWeekPolicy` |
 | MEGA-QA-019 | P1 | DEV | OPEN | Double-tap advance | Rapid double-tap Advance | Single week increment only | MEGA-FRAME-113 |
-| MEGA-QA-020 | P0 | DEV | OPEN | Advance while discipline pending | Trigger discipline → Advance | Blocked; user notified (not silent `Unit`) | `SaveSlotRepository.advanceDynastyWeek` L516–518 |
+| MEGA-QA-020 | P0 | BOT | PASS | Advance while discipline pending | Trigger discipline → Advance | Blocked; user notified (not silent `Unit`) | `WeekAdvanceBlocked` + snackbar via `DynastyWeekAdvanceFeedback` |
 | MEGA-QA-021 | P2 | DEV | OPEN | Postseason week advance | NCBA W3 → Advance | Bracket + checkpoint consistent | `advanceDynastyWeek` postseason branch |
 | MEGA-QA-022 | P2 | DEV | OPEN | Exhibition week advance | Exhibition W2 sim week | Exhibition games resolve | Calendar phase `Exhibition` |
 | MEGA-QA-023 | P1 | DEV | OPEN | AI recruiting during advance | Offseason W3 advance with AI on | Points ledger updates; no crash | `aiRecruitingRepository.runLeagueWeekIfActive` |

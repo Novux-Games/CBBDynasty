@@ -205,7 +205,7 @@
 | MEGA-FRAME-108 | GAP | Offseason lightweight confirm | Offseason advance often skips dialog when `unresolvedOptionalTaskCount == 0` even crossing **Signing Day** / roster lock — no “Advance to Offseason Week N?” | `OffseasonScreen.kt`, `SimWeekAdvanceResolver` |
 | MEGA-FRAME-109 | PARTIAL | Portal line on advance | `PortalRecruitingWeek` confirmation line when portal window open — OK; **absent** after Week 5 | `SimWeekAdvanceResolver.kt` |
 | MEGA-FRAME-110 | GAP | Manual recruiting spend param | UI always calls `advanceDynastyWeek(slot)` with default **`userManualRecruitingSpent = 0`** — no hook from Recruiting hub | `DynastyShellScreen.kt`, `OffseasonScreen.kt` |
-| MEGA-FRAME-111 | GAP | Advance failure UX | Failed `DynastyLoadResult` paths use `else -> Unit` — user gets **no toast** on discipline block or load failure | Shell/offseason advance handlers |
+| MEGA-FRAME-111 | PARTIAL | Advance failure UX | Discipline block shows snackbar (`WeekAdvanceBlocked`); other unreadable load paths still silent | `DynastyWeekAdvanceFeedback.kt` |
 | MEGA-FRAME-112 | PARTIAL | Injury tick on bye | `InjuryWeeksTick` line emitted in resolver — calendar bye weeks may not explain tick in UI | `SimWeekAdvanceDialog`, `ByeWeekPolicy` |
 | MEGA-FRAME-113 | GAP | Double-tap advance | No **debounce** / `enabled = false` while `scope.launch` advance in flight — duplicate week commits risk | `DynastyShellScreen` advance `Button` |
 | MEGA-FRAME-114 | GAP | Advance work ordering | `advanceDynastyWeek` chains checkpoint, **AI recruiting**, league batch, injuries, fatigue, chemistry, coach Sunday — all on confirm path (lag source) | `SaveSlotRepository.advanceDynastyWeek` |

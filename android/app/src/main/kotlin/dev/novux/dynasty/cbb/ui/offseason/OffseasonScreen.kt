@@ -1,6 +1,7 @@
 package dev.novux.dynasty.cbb.ui.offseason
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -74,6 +77,7 @@ import dev.novux.dynasty.cbb.ui.offseason.leaving.DraftResultsWeekTwoPanel
 import dev.novux.dynasty.cbb.ui.offseason.leaving.PlayersLeavingPanel
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceDialog
+import dev.novux.dynasty.cbb.ui.advance.applyWeekAdvanceResult
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import dev.novux.dynasty.cbb.requireDynastyApplication
@@ -111,6 +115,7 @@ fun OffseasonScreen(
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
     var weekAdvanceInProgress by remember { mutableStateOf(false) }
     var dialogAdvanceInProgress by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
     var signingProgress by remember { mutableStateOf<SigningDayProgress?>(null) }
     var conferenceOffersResolved by remember { mutableStateOf(true) }
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
@@ -181,6 +186,7 @@ fun OffseasonScreen(
         return
     }
 
+    Box(modifier = Modifier.fillMaxSize()) {
     DynastyShellChrome(
         schoolDisplayName = schoolName,
         phaseWeekLabel = weekHeader,
@@ -352,13 +358,15 @@ fun OffseasonScreen(
                     scope.launch {
                         dialogAdvanceInProgress = true
                         try {
-                            when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
-                                is DynastyLoadResult.Success -> {
-                                    loaded = result.loaded
-                                    ActiveDynastySession.set(result.loaded)
-                                    pendingAdvanceConfirmation = null
-                                }
-                                else -> Unit
+                            val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)
+                            applyWeekAdvanceResult(
+                                result,
+                                snackbarHostState,
+                                context,
+                            ) { updated ->
+                                loaded = updated
+                                ActiveDynastySession.set(updated)
+                                pendingAdvanceConfirmation = null
                             }
                         } finally {
                             dialogAdvanceInProgress = false
@@ -427,12 +435,14 @@ fun OffseasonScreen(
                         if (confirmation != null && confirmation.needsDialog) {
                             pendingAdvanceConfirmation = confirmation
                         } else {
-                            when (val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)) {
-                                is DynastyLoadResult.Success -> {
-                                    loaded = result.loaded
-                                    ActiveDynastySession.set(result.loaded)
-                                }
-                                else -> Unit
+                            val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)
+                            applyWeekAdvanceResult(
+                                result,
+                                snackbarHostState,
+                                context,
+                            ) { updated ->
+                                loaded = updated
+                                ActiveDynastySession.set(updated)
                             }
                         }
                     } finally {
@@ -473,5 +483,12 @@ fun OffseasonScreen(
 
             }
         }
+    }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(16.dp),
+        )
     }
 }

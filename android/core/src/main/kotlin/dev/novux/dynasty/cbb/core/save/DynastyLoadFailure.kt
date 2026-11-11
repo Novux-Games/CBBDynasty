@@ -31,6 +31,12 @@ sealed class DynastyLoadResult {
 
     data class Success(val loaded: LoadedDynasty) : DynastyLoadResult()
 
+    data class WeekAdvanceBlocked(
+        val slotIndex: Int,
+        val reason: DynastyWeekAdvanceBlockReason,
+        val loaded: LoadedDynasty,
+    ) : DynastyLoadResult()
+
     data class Unreadable(
         val slotIndex: Int,
         val failure: DynastyLoadFailure,

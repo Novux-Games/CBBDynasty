@@ -99,6 +99,7 @@ fun LoadGameScreen(
                                 when (val result = saveSlotRepository.loadSlot(slot.slotIndex)) {
                                     is DynastyLoadResult.Success -> onDynastyLoaded(result.loaded)
                                     is DynastyLoadResult.Unreadable -> unavailableSlot = slot
+                                    is DynastyLoadResult.WeekAdvanceBlocked -> Unit
                                     DynastyLoadResult.SlotEmpty -> Unit
                                 }
                             } finally {
