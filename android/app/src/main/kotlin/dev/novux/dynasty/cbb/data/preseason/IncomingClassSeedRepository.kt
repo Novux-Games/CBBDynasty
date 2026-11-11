@@ -51,21 +51,25 @@ class IncomingClassSeedRepository(private val context: Context) {
         )
     }
 
-    suspend fun runSeed(dynastyId: String, seasonIndex: Int): Top60NewsHeadline {
-        val pool = withContext(Dispatchers.Default) {
-            IncomingClassSeeder.seed(
-                enrollingSeasonIndex = seasonIndex,
-                seedKey = dynastyId.hashCode().toLong(),
-            )
+    suspend fun runSeed(dynastyId: String, seasonIndex: Int): Top60NewsHeadline =
+        withContext(Dispatchers.IO) {
+            val pool = withContext(Dispatchers.Default) {
+                IncomingClassSeeder.seed(
+                    enrollingSeasonIndex = seasonIndex,
+                    seedKey = dynastyId.hashCode().toLong(),
+                )
+            }
+            val news = withContext(Dispatchers.Default) {
+                Top60NewsPublisher.publish(seasonIndex, pool)
+            }
+            val encoded = withContext(Dispatchers.Default) { encodePool(pool) }
+            context.incomingClassSeedStore.edit { prefs ->
+                prefs[seededKey(dynastyId, seasonIndex)] = true
+                prefs[poolKey(dynastyId, seasonIndex)] = encoded
+                prefs[headlineKey(dynastyId, seasonIndex)] = news.headline
+            }
+            news
         }
-        val news = Top60NewsPublisher.publish(seasonIndex, pool)
-        context.incomingClassSeedStore.edit { prefs ->
-            prefs[seededKey(dynastyId, seasonIndex)] = true
-            prefs[poolKey(dynastyId, seasonIndex)] = encodePool(pool)
-            prefs[headlineKey(dynastyId, seasonIndex)] = news.headline
-        }
-        return news
-    }
 
     private fun seededKey(dynastyId: String, seasonIndex: Int) =
         booleanPreferencesKey("seeded_${dynastyId}_$seasonIndex")

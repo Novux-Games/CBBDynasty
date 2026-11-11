@@ -27,7 +27,7 @@
 
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
-| MEGA-QA-001 | P0 | DEV | OPEN | New game seed on main thread | Studio → New Game → pick school/coach → sign; profile CPU during slot create | Slot create + first paint ≤ 3 s on mid-tier; no ANR | `SaveSlotRepository` create path, `IncomingClassSeeder` |
+| MEGA-QA-001 | P0 | BOT | PASS | New game seed on main thread | Studio → New Game → pick school/coach → sign; profile CPU during slot create | Slot create + first paint ≤ 3 s on mid-tier; no ANR | `signNewGameFromWizard` on `Dispatchers.IO`; `IncomingClassSeederPerformanceTest` |
 | MEGA-QA-002 | P0 | DEV | OPEN | Continue load blocking UI | Kill app mid-dynasty; cold start → Continue | Load screen shows progress; shell within 2 s of DB ready | `LoadGameScreen.kt`, `loadSlot` |
 | MEGA-QA-003 | P1 | DEV | OPEN | Pack ingest first launch | Fresh install → first dynasty | Pack read off critical path or chunked; no 5 s frozen splash | `PackRepository`, `DynastyApplication` init |
 | MEGA-QA-004 | P1 | EMU | OPEN | Recruiting hub first open | Offseason W2 → hamburger → Recruiting | Hub lists within 1 s; scroll 60 fps | `RecruitingHubScreen.kt` |
@@ -38,7 +38,7 @@
 | MEGA-QA-009 | P2 | EMU | OPEN | Studio intro skip path | Settings skip intro ON → relaunch | No double black frame > 1 s | `DynastyApp.kt` `skipStudioIntro` |
 | MEGA-QA-010 | P2 | DEV | OPEN | Image decode on coach card | Open coach from roster | Bitmap decode not on main during scroll | Coach UI (see coach shard) |
 | MEGA-QA-011 | P1 | DEV | OPEN | Room migration upgrade | Install N-1 schema test build → upgrade to current | Migration completes; no ANR | Room DB version |
-| MEGA-QA-012 | P2 | BOT | GUARD | Core seed JVM time | Run `IncomingClassSeeder` perf test if present | Within CI budget | `:core:test` |
+| MEGA-QA-012 | P2 | BOT | GUARD | Core seed JVM time | Run `IncomingClassSeeder` perf test if present | Within CI budget | `IncomingClassSeederPerformanceTest`, `:core:test` |
 
 ---
 

@@ -71,8 +71,10 @@ import dev.novux.dynasty.cbb.database.dynasty.toDomain
 import dev.novux.dynasty.cbb.database.save.SaveSlotEntity
 import dev.novux.dynasty.cbb.database.save.ensureSlotRows
 import dev.novux.dynasty.cbb.database.save.toSummary
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
 private val SCHEDULED_GAME_PHASES = setOf(
@@ -369,9 +371,9 @@ class SaveSlotRepository(
         draft: NewGameDraft,
         schoolDisplayName: String,
         packId: String = DynastySchema.DEFAULT_PACK_ID,
-    ): LoadedDynasty? {
-        if (NewGameSignValidator.validate(draft) != null) return null
-        val slotIndex = firstEmptySlotIndex() ?: return null
+    ): LoadedDynasty? = withContext(Dispatchers.IO) {
+        if (NewGameSignValidator.validate(draft) != null) return@withContext null
+        val slotIndex = firstEmptySlotIndex() ?: return@withContext null
         val dynastyId = UUID.randomUUID().toString()
         val coachName = draft.coach.displayName()
         val shippedBalance = balanceRulesetRepository.ensureShippedDefaultLoaded()
@@ -386,12 +388,13 @@ class SaveSlotRepository(
         )
         val seasonLabel = SeasonMembershipYear.label(metadata.seasonIndex)
         val now = System.currentTimeMillis()
+        val rosterEntities =
+            SeasonOneRosterGenerator.generate(dynastyId).toEntities()
 
         database.withTransaction {
             metadataDao.upsert(metadata.toEntity())
             coachDao.upsert(draft.toCoachEntity(dynastyId))
-            val roster = SeasonOneRosterGenerator.generate(dynastyId)
-            rosterDao.upsertAll(roster.toEntities())
+            rosterDao.upsertAll(rosterEntities)
             dynastyRosterRepository.normalizeDefaultLineup(dynastyId)
             weekCheckpointRepository.insertBootstrapCalendar(metadata)
             slotDao.upsert(
@@ -437,7 +440,7 @@ class SaveSlotRepository(
             coachSkillPointRepository.setAutoSpend(dynastyId, true, CoachArchetype.Balanced)
         }
         bootstrapSeasonOneRecruitingAfterSign(loaded, draft)
-        return loaded
+        loaded
     }
 
     /**

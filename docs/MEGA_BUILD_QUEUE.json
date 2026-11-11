@@ -1,19 +1,5 @@
 [
   {
-    "id": "MEGA-NOTES-035",
-    "pri": "P0",
-    "status": "GAP",
-    "shard": "planning-notes-traceability.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/planning-notes-traceability.md"
-  },
-  {
-    "id": "MEGA-NOTES-058",
-    "pri": "P0",
-    "status": "PARTIAL",
-    "shard": "planning-notes-traceability.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/planning-notes-traceability.md"
-  },
-  {
     "id": "MEGA-QA-001",
     "pri": "P0",
     "status": "OPEN",
@@ -260,13 +246,6 @@
   },
   {
     "id": "MEGA-COACH-066",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-069",
     "pri": "P1",
     "status": "FAIL",
     "shard": "coach-player-ui.md",
@@ -995,13 +974,6 @@
   },
   {
     "id": "MEGA-COACH-041",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-057",
     "pri": "P1",
     "status": "GAP",
     "shard": "coach-player-ui.md",
