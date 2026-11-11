@@ -85,7 +85,7 @@
 | MEGA-QA-042 | P1 | DEV | OPEN | Active session vs slot index | Load slot 2; continue expects slot 2 | `ActiveDynastySession` matches | `ActiveDynastySession` |
 | MEGA-QA-043 | P2 | DEV | OPEN | Autosave on week advance only | No mid-screen autosave on tab change | Only checkpoint on advance/start season | Repository design |
 | MEGA-QA-044 | P1 | DEV | OPEN | Signing day progress persist | Offseason W6 complete signing → reload | Week 6 task state restored | `SigningDayRepository` |
-| MEGA-QA-045 | P0 | DEV | OPEN | Concurrent advance mutex | Two coroutines advance same slot (stress) | Single serial outcome | `initMutex` / advance ordering |
+| MEGA-QA-045 | P0 | BOT | PASS | Concurrent advance mutex | Two coroutines advance same slot (stress) | Single serial outcome | `SlotAdvanceSerialGuard` on `advanceDynastyWeek`; `SlotAdvanceSerialGuardTest` |
 
 ---
 

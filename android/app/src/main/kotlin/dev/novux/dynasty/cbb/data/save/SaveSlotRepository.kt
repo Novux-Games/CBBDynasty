@@ -17,6 +17,7 @@ import dev.novux.dynasty.cbb.core.save.DynastySchema
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.save.SaveSlotSummary
 import dev.novux.dynasty.cbb.core.save.SaveSlots
+import dev.novux.dynasty.cbb.core.save.SlotAdvanceSerialGuard
 import dev.novux.dynasty.cbb.database.calendar.DynastyCalendarEntity
 import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
 import dev.novux.dynasty.cbb.data.balance.BalanceParseException
@@ -31,7 +32,6 @@ import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
 import dev.novux.dynasty.cbb.core.advance.UserWeekGameStatus
 import dev.novux.dynasty.cbb.core.injuries.InjuryCalendarPolicy
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionsParser
-import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
@@ -118,7 +118,7 @@ class SaveSlotRepository(
     private val staffDao = database.dynastyStaffDao()
     private val calendarDao = database.dynastyCalendarDao()
     private val initMutex = Mutex()
-    private val advanceMutexBySlot = ConcurrentHashMap<Int, Mutex>()
+    private val advanceSerialGuard = SlotAdvanceSerialGuard()
     private val newGameSignMutex = Mutex()
 
     suspend fun ensureInitialized() {
@@ -581,16 +581,15 @@ class SaveSlotRepository(
         slotIndex: Int,
         userManualRecruitingSpent: Int = 0,
     ): DynastyLoadResult = withContext(Dispatchers.IO) {
-        val advanceMutex = advanceMutexBySlot.getOrPut(slotIndex) { Mutex() }
-        advanceMutex.withLock {
+        advanceSerialGuard.withSlotAdvanceLock(slotIndex) {
         require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
         ensureInitialized()
         val loaded = when (val initial = loadSlot(slotIndex)) {
             is DynastyLoadResult.Success -> initial.loaded
-            else -> return@withContext initial
+            else -> return@withSlotAdvanceLock initial
         }
         if (disciplineRepository.hasPending(loaded.dynastyId, loaded.metadata.seasonIndex)) {
-            return@withContext DynastyLoadResult.WeekAdvanceBlocked(
+            return@withSlotAdvanceLock DynastyLoadResult.WeekAdvanceBlocked(
                 slotIndex = slotIndex,
                 reason = DynastyWeekAdvanceBlockReason.DisciplinePending,
                 loaded = loaded,
@@ -692,7 +691,7 @@ class SaveSlotRepository(
         }
         val afterAdvance = when (val again = loadSlot(slotIndex)) {
             is DynastyLoadResult.Success -> again.loaded
-            else -> return@withContext again
+            else -> return@withSlotAdvanceLock again
         }
         recruitingEconomyRepository.onCalendarWeekAdvanced(afterAdvance, recruitingSpentClosingWeek)
         val pos = afterAdvance.weekCheckpoint.activePosition
