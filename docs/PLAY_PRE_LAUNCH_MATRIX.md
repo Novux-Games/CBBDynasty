@@ -26,3 +26,9 @@ cd android && ./gradlew :app:assembleDebug
 # Start AVD, then:
 ./gradlew :app:connectedDebugAndroidTest
 ```
+
+## MEGA-QA-127 — Physical device (Android 13+, 6 GB)
+
+See [`PHYSICAL_DEVICE_SMOKE.md`](PHYSICAL_DEVICE_SMOKE.md) for the retail device script (new game → four RS sim weeks).
+
+**Automation (BOT):** `FourRegularSeasonWeeksDeviceSmokeTest` mirrors league sim + week checkpoint for four RS weeks.

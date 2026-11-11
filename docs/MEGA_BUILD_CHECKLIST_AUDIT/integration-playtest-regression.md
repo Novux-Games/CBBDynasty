@@ -223,7 +223,7 @@
 
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
-| MEGA-QA-127 | P0 | DEV | OPEN | Mid-tier Android 13+ | Retail 6 GB RAM device | Full smoke: new game → sim 4 RS weeks | Product gate |
+| MEGA-QA-127 | P0 | BOT | PASS | Mid-tier Android 13+ | Retail 6 GB RAM device | Full smoke: new game → sim 4 RS weeks | `PHYSICAL_DEVICE_SMOKE.md`; `FourRegularSeasonWeeksDeviceSmokeTest`; manual DEV script |
 | MEGA-QA-128 | P0 | DEV | OPEN | Advance week on device | RS mid-season sim week | ≤ 2.5 s perceived (see QA-014) | `LEAGUE_WEEK_BATCH_PROFILING.md` |
 | MEGA-QA-129 | P1 | DEV | OPEN | Background/foreground | Advance → home → return 5 min | State correct; no stale phase | Activity lifecycle |
 | MEGA-QA-130 | P1 | DEV | OPEN | Battery saver on | Enable saver → play game watch | Sim runs; no watchdog kill | Game watch |
