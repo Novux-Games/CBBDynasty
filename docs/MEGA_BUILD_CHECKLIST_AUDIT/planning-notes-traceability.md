@@ -80,7 +80,7 @@
 | MEGA-NOTES-044 | P1 | PARTIAL | NIL annual pool **Done** | Collective pool in balance + game-design shard; program pool binding at dynasty create partial. | `MEGA-GDD-*` NIL rows; `balance-2026.json` |
 | MEGA-NOTES-045 | P1 | PARTIAL | NIL Budget / deal depth **Done** — **3× ask** cap | Budget workflow in core/docs; full deal depth UI partial. | `game-design.md` § NIL Budget; `NilBudgetRepository.kt` |
 | MEGA-NOTES-046 | P1 | GAP | Recruit rankings UI — Top 60 full list | National rankings built from demo pool order, not dynasty seed Top 60. | `MEGA-RECR-008`; `NationalRecruitingRankings.kt` |
-| MEGA-NOTES-047 | P1 | FAIL | RS schedule cap — **32** games; **28** builder + 4-game event | Generator aims at cap; symmetry/double-book audits still report issues. | `MEGA-WORLD-062`–`064`; `PreseasonScheduleSolver` |
+| MEGA-NOTES-047 | P1 | PASS | RS schedule cap — **32** games; **28** builder + 4-game event | `LeagueScheduleSymmetricEngine` + `LeagueScheduleIntegrityAudit`; `ScheduleWeekAllocator` prevents user double-books. | `LeagueScheduleSymmetricEngine.kt`, `PreseasonScheduleSolver.kt` |
 
 ---
 

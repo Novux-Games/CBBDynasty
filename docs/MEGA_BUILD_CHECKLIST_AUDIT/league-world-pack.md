@@ -137,9 +137,9 @@
 | ID | Status | Requirement | Code / test | Finding |
 |----|--------|-------------|-------------|---------|
 | MEGA-WORLD-061 | SHIP | Schedule generator consumes full pack team + conf overlays | `LeagueScheduleGenerator.generate` | One plan per program |
-| MEGA-WORLD-062 | PARTIAL | **32** RS game cap + conf `leagueGameCount` | `PreseasonScheduleSolver` via generator | Generator uses `RS_CAP` and conf counts |
-| MEGA-WORLD-063 | PARTIAL | Mutual opponent symmetry across league graph | `ScratchAuditTest.scheduleSymmetry` | Logs asymmetric stubs — known issue |
-| MEGA-WORLD-064 | PARTIAL | No double-booking same RS week per team | Scratch audit `teams with >1 game in a week` | Audit prints collision count; not asserted in CI |
+| MEGA-WORLD-062 | PASS | **32** RS game cap + conf `leagueGameCount` | `LeagueScheduleSymmetricEngine` + cap trim | `LeagueScheduleIntegrityAudit` |
+| MEGA-WORLD-063 | PASS | Mutual opponent symmetry across league graph | `LeagueScheduleIntegrityAudit.audit` | `LeagueScheduleGeneratorTest` |
+| MEGA-WORLD-064 | PASS | No double-booking same RS week per team | Week assign + CI audit | `LeagueScheduleIntegrityAuditTest` |
 | MEGA-WORLD-065 | WIRE | User preseason plan vs league-wide generator parity | `ScratchAuditTest2.userPlan` | User solver path richer (exhibitions, events); league bootstrap uses `DeclinedAll` events |
 | MEGA-WORLD-066 | SHIP | `LeagueMatchupIndex.uniqueRsMatchups` dedupes home/away for batch | `LeagueWeekBatchSimEngine` | Batch sim uses unique matchups per week |
 
