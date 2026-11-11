@@ -209,7 +209,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-GDD-119 | P1 | FAIL | Carousel AI · league-wide firings/extensions behavior table | `CoachingCarouselEngine` returns stub approval cards—not full AI carousel from GDD factors. | `CoachingCarouselEngine.kt` `stubUserApprovalCards()` |
+| MEGA-GDD-119 | P1 | PASS | Carousel AI · league-wide firings/extensions behavior table | `CarouselAiBehaviorTable` + `CarouselLeagueBackgroundSimEngine` drive league churn; user cards from `CarouselUserApprovalPlanner`. | `CarouselAiBehaviorTable.kt`, `CoachingCarouselEngine.kt`, `CarouselSimContextProvider.kt` |
 | MEGA-GDD-120 | P1 | GAP | Carousel · user accept extension / interview offers | Partial flows on coach card; not full renegotiate/resign matrix. | `HeadCoachCardScreen.kt`, `coach-card.md` |
 | MEGA-GDD-121 | P1 | PASS | Unemployed · league keeps simming; job center offers | `JobCenterEngine.generateOffers`, employed vs unemployed routing. | `JobCenterEngine.kt`, `CoachEmploymentRepository.kt` |
 | MEGA-GDD-122 | P1 | GAP | Unemployed · watch any game while jobless | Employment gate on shell not fully audited for spectate-only mode. | `DynastyLaunch.kt`, `JobCenterScreen.kt` |

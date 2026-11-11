@@ -64,6 +64,19 @@ fun CoachingCarouselScreen(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
+        state.backgroundSimSummary?.let { summary ->
+            Text(
+                text = stringResource(
+                    R.string.carousel_league_churn_summary,
+                    summary.aiFired,
+                    summary.aiExtended,
+                    summary.aiHired,
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+
         when (state.status) {
             CarouselStatus.AwaitingBackgroundSim -> {
                 Text(
@@ -74,7 +87,7 @@ fun CoachingCarouselScreen(
                 Button(
                     onClick = {
                         scope.launch {
-                            val next = CoachingCarouselEngine.runBackgroundSim(state)
+                            val next = repository.runBackgroundSim(loaded.dynastyId, seasonIndex, state)
                             repository.save(loaded.dynastyId, seasonIndex, next)
                             carousel = next
                         }

@@ -231,7 +231,6 @@ class DynastyApplication : Application() {
         packRepository = PackRepository(applicationContext)
         balanceRulesetRepository = BalanceRulesetRepository(applicationContext)
         simTuningRepository = SimTuningRepository(applicationContext)
-        coachingCarouselRepository = CoachingCarouselRepository(applicationContext)
         val recruitingReservationRepository = RecruitingReservationRepository(applicationContext)
         recruitOfferPromiseRepository = RecruitOfferPromiseRepository(applicationContext)
         recruitLockedPromiseRepository =
@@ -439,6 +438,17 @@ class DynastyApplication : Application() {
             applicationContext,
             database,
             packRepository,
+        )
+        coachingCarouselRepository = CoachingCarouselRepository(
+            applicationContext,
+            dev.novux.dynasty.cbb.data.carousel.CarouselSimContextProvider(
+                database,
+                packRepository,
+                leagueWeekBatchRepository,
+                schoolStaffRepository,
+                coachSecurityRepository,
+                coachEmploymentRepository,
+            )::load,
         )
         historyRepository = dev.novux.dynasty.cbb.data.history.HistoryRepository(
             applicationContext,
