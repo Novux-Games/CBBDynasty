@@ -61,7 +61,7 @@
 | MEGA-COACH-032 | P2 | GAP | Overview: school + season record | `seasonRecordLabel`, school name on `HeadCoachCardScreen` |
 | MEGA-COACH-033 | P1 | PASS | Overview team card tap → School hub | `CoachOverviewTeamCard` on HC Overview; tap → `ShellCoachView.School` | `CoachOverviewTeamCardPathTest` |
 | MEGA-COACH-034 | P2 | GAP | Overview information: age, alma mater | Age + alma on HC; **no** career/school experience seasons |
-| MEGA-COACH-035 | P1 | FAIL | Contract overview on Overview (years, years left, **prestige**) | Only `contractLengthYears` / `yearsLeft`; no prestige row |
+| MEGA-COACH-035 | P1 | PASS | Contract overview on Overview (years, years left, **prestige**) | `CoachOverviewContractCard` on HC Overview | `CoachOverviewContractCardPathTest` |
 | MEGA-COACH-036 | P1 | FAIL | Overview achievements block (W–L, tourney, titles, NCI, Heritage) | No achievement model/UI on coach card |
 | MEGA-COACH-037 | P2 | GAP | Overview strategy default O/D schemes | HC screen shows scheme labels |
 | MEGA-COACH-038 | P1 | PASS | Headline HC ratings O/D/Training/Recruiting 0–99 | `HeadCoachRatings`, `RatingCard` |

@@ -108,7 +108,8 @@
     "MEGA-RECR-161",
     "MEGA-QA-015",
     "MEGA-COACH-018",
-    "MEGA-COACH-033"
+    "MEGA-COACH-033",
+    "MEGA-COACH-035"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

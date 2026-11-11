@@ -102,6 +102,7 @@ fun HeadCoachCardScreen(
                     skillPointBank = skillPointBank,
                     skillState = skillState,
                     displayRatings = displayRatings,
+                    programPrestige = programPrestige,
                     schoolHubOverview = schoolHubOverview,
                     onOpenSchoolHub = onOpenSchoolHub,
                     onSpendSkill = onSpendSkill,
@@ -198,6 +199,7 @@ private fun HeadCoachOverviewTab(
     skillPointBank: Int?,
     skillState: CoachSkillPointState?,
     displayRatings: HeadCoachRatings,
+    programPrestige: Int,
     schoolHubOverview: SchoolHubOverview?,
     onOpenSchoolHub: (() -> Unit)?,
     onSpendSkill: (CoachSkillBranch) -> Unit,
@@ -209,6 +211,7 @@ private fun HeadCoachOverviewTab(
         schoolHubOverview = schoolHubOverview,
         onOpenSchoolHub = onOpenSchoolHub,
     )
+    CoachOverviewContractCard(card = card, programPrestige = programPrestige)
     Text(
         stringResource(R.string.coach_card_role_head),
         style = MaterialTheme.typography.titleMedium,
@@ -246,20 +249,6 @@ private fun HeadCoachOverviewTab(
             stringResource(R.string.coach_scheme_offense, card.offensiveSchemeLabel),
             stringResource(R.string.coach_scheme_defense, card.defensiveSchemeLabel),
         ),
-    )
-    Text(
-        stringResource(
-            R.string.coach_contract_summary,
-            card.contractLengthYears,
-            card.contractYearsLeft,
-        ),
-        style = MaterialTheme.typography.bodyMedium,
-    )
-    val money = remember { NumberFormat.getCurrencyInstance(Locale.US) }
-    Text(
-        stringResource(R.string.coach_contract_salary, money.format(card.annualSalaryUsd)),
-        style = MaterialTheme.typography.bodyMedium,
-        fontWeight = FontWeight.SemiBold,
     )
     card.almaMaterLabel?.let {
         Text(stringResource(R.string.coach_alma_mater, it), style = MaterialTheme.typography.bodyMedium)
