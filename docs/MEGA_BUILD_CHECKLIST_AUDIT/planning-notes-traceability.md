@@ -23,7 +23,7 @@
 | MEGA-NOTES-008 | P1 | RULE | **Shipped asset retention** — APK keeps JSON/loader for referenced schema **N** | Embedded `balance-2026.json` + pack asset bundled; multi-version loader mapping not proven for ancient N. | `assets/balance/`, `app/src/main/assets/` |
 | MEGA-NOTES-009 | P1 | RULE | **Forward-only features** — new columns default safely | Room additive migrations pattern; new systems attach without rewriting history in typical paths. | Migration review in `:database` |
 | MEGA-NOTES-010 | P2 | RULE | **No player copy** — migrations silent | No “save version upgraded” dialog located in UI layer. | grep `version upgraded` in `android/app` |
-| MEGA-NOTES-011 | P2 | RULE | **CI (target):** migration tests + load fixture across version bump | Unit tests cover pieces (`DynastySaveValidatorTest`, pack tests); full cross-version fixture gate not documented as release CI. | `android/core/src/test`, `.github/workflows` |
+| MEGA-NOTES-011 | P2 | PASS | **CI (target):** migration tests + load fixture across version bump | `DynastyDatabaseMigrationChainTest`, `DynastyDatabaseMigrationRobolectricTest`, `SaveLoadAfterUpdateFixtureTest`; CI runs `:database:test`. | `android/core/src/test`, `android/database/src/test`, `.github/workflows/core-test.yml` |
 
 ---
 
@@ -105,7 +105,7 @@
 | ID | Pri | Status | Spec quote | Finding vs Android | Evidence |
 |----|-----|--------|------------|-------------------|----------|
 | MEGA-NOTES-057 | P2 | RULE | Implementation build order **Done** | `BUILD_CHECKLIST.md` phase order documented; MEGA shards supersede honest `[x]` state. | `docs/BUILD_CHECKLIST.md`, `MEGA_BUILD_CHECKLIST.md` |
-| MEGA-NOTES-058 | P0 | PARTIAL | App updates vs saves — **Rule** | ADR-001 policies reflected in save codec/validator; migration CI target not fully closed. | `ADR-001-dynasty-save-backend.md`; notes A rows |
+| MEGA-NOTES-058 | P0 | PASS | App updates vs saves — **Rule** | ADR-001 migration chain + save-load fixture gates in unit/CI; pinned balance/sim retained in fixture. | `ADR-001-dynasty-save-backend.md`; `DynastyDatabaseMigrations.kt` |
 
 ---
 

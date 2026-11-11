@@ -34,10 +34,10 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Run :core:test
+      - name: Run :core:test and :database:test
         run: |
           for attempt in 1 2 3 4 5; do
-            ./gradlew :core:test --no-daemon && exit 0
+            ./gradlew :core:test :database:test --no-daemon && exit 0
             echo "Gradle attempt $attempt failed; retrying in 25s..."
             sleep 25
           done
