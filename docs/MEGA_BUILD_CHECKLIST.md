@@ -29,7 +29,11 @@
 **Scale:** **~1,788** checklist table rows across **10** shards (**~1,650** unique `MEGA-*` IDs; summary tables may repeat hot P0 IDs).  
 **Method:** Composer sub-agent spec↔code audits (static trace + grep; not a substitute for device QA — see **`MEGA-QA-*`** for executable acceptance).
 
-**How to use**
+## Autonomous queue (subscription)
+
+See **[`MEGA_BUILD_SUBSCRIPTION.md`](MEGA_BUILD_SUBSCRIPTION.md)** — Cloud Agent timer **`mega-build-queue`** implements **one open row per wake**, then re-subscribes until [`MEGA_BUILD_QUEUE.json`](MEGA_BUILD_QUEUE.json) is exhausted. CLI: [`planning/tools/mega_queue.py`](../planning/tools/mega_queue.py).
+
+**How to use (manual)**
 
 1. Pick a shard (or planning doc) and work **P0 → P1 → P2**.
 2. When an item ships, update its row in the shard (`Status` → `DONE`/`PASS`/`SHIP`) and only then flip related phase rows in `BUILD_CHECKLIST.md`.
