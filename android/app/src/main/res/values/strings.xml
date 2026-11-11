@@ -513,6 +513,9 @@
     <string name="player_stat_tot_blocks">Blocks %1$d</string>
     <string name="player_stat_tot_turnovers">Turnovers %1$d</string>
     <string name="player_card_games_empty">No game log rows yet for this season.</string>
+    <string name="player_game_log_table_header">Opponent</string>
+    <string name="player_game_log_table_stats_header">PTS · AST · REB · STL · BLK · TO</string>
+    <string name="player_game_log_table_result_header">Result</string>
     <string name="player_game_log_opponent_week">%1$s · RS wk %2$d</string>
     <string name="player_game_log_result">%1$s %2$s</string>
     <string name="player_game_log_line">%1$d PTS · %2$d AST · %3$d REB · %4$d STL · %5$d BLK · %6$d TO</string>

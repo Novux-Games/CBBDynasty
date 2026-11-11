@@ -26,9 +26,43 @@ fun PlayerGameLogPanel(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        PlayerGameLogTableHeader()
         entries.forEach { entry ->
             PlayerGameLogRow(entry = entry, onClick = { onEntryClick(entry) })
         }
+    }
+}
+
+@Composable
+private fun PlayerGameLogTableHeader() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            stringResource(R.string.player_game_log_table_header),
+            modifier = Modifier.weight(1.1f),
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            stringResource(R.string.player_game_log_table_stats_header),
+            modifier = Modifier.weight(1.6f),
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            stringResource(R.string.player_game_log_table_result_header),
+            modifier = Modifier.weight(0.7f),
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 
@@ -45,15 +79,14 @@ private fun PlayerGameLogRow(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
         ),
     ) {
-        Column(
-            modifier = Modifier.padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+            Column(modifier = Modifier.weight(1.1f)) {
                 Text(
                     stringResource(
                         R.string.player_game_log_opponent_week,
@@ -63,18 +96,15 @@ private fun PlayerGameLogRow(
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
                 )
+                val venue = if (entry.isHome) {
+                    stringResource(R.string.player_game_log_home)
+                } else {
+                    stringResource(R.string.player_game_log_away)
+                }
                 Text(
-                    stringResource(
-                        R.string.player_game_log_result,
-                        entry.resultLabel,
-                        entry.scoreLabel,
-                    ),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = if (entry.won) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.error
-                    },
+                    venue,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             Text(
@@ -87,17 +117,23 @@ private fun PlayerGameLogRow(
                     entry.blocks,
                     entry.turnovers,
                 ),
+                modifier = Modifier.weight(1.6f),
                 style = MaterialTheme.typography.bodyMedium,
             )
-            val venue = if (entry.isHome) {
-                stringResource(R.string.player_game_log_home)
-            } else {
-                stringResource(R.string.player_game_log_away)
-            }
             Text(
-                venue,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                stringResource(
+                    R.string.player_game_log_result,
+                    entry.resultLabel,
+                    entry.scoreLabel,
+                ),
+                modifier = Modifier.weight(0.7f),
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = if (entry.won) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.error
+                },
             )
         }
     }

@@ -264,7 +264,7 @@
 | MEGA-COACH-151 | P0 | PASS | Stats tab card 2 season totals | `PlayerSeasonTotalsCard` (PTS/AST/REB/STL/BLK/TO) | `PlayerStatsCards.kt` |
 | MEGA-COACH-152 | P1 | FAIL | Stats tab card 3 career averages (blended FG%) | No UI |
 | MEGA-COACH-153 | P1 | FAIL | Stats tab card 4 career totals | No UI |
-| MEGA-COACH-154 | P0 | FAIL | Games tab row: opponent, PTS/AST/…, W/L score | No game log table |
+| MEGA-COACH-154 | P0 | PASS | Games tab row: opponent, PTS/AST/…, W/L score | `PlayerGameLogPanel` table header + aligned rows | `PlayerGameLogPanel.kt`, Games tab |
 | MEGA-COACH-155 | P1 | FAIL | Games row tap → box score sheet | No per-player box in sim output |
 | MEGA-COACH-156 | P1 | PASS | Week-finalize gate on official stats | Persists on `advanceWeek` when games committed | `SaveSlotRepository.advanceDynastyWeek` |
 | MEGA-COACH-157 | P1 | FAIL | History tab prior season rows (school transfer) | No UI |
