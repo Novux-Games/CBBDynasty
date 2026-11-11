@@ -92,7 +92,7 @@
 | MEGA-SIM-041 | SHIP | Scheme modifiers affect 3PA rate, TO, pace, make bias | `SchemeModifierCatalog`, `SchemeMatchupResolverTest` | Wired in `PossessionSimSession` |
 | MEGA-SIM-042 | SHIP | O/D interaction nudges (sample matchups) | `SchemeMatchupResolver.interactionNudge` | Partial 7×7 matrix — not exhaustive |
 | MEGA-SIM-043 | SHIP | No separate pace slider — pace from offensive preset + interaction | `ResolvedSchemeEffects.tripPaceScale` | Aligns with spec |
-| MEGA-SIM-044 | WIRE | Per-game offensive/defensive scheme on `GameSimTeamInput` | `GameSimTeamInput`, `LeagueFastSim` | Defaults **Balanced/Man**; Strategy hub does not set team schemes for user games |
+| MEGA-SIM-044 | PASS | Per-game offensive/defensive scheme on `GameSimTeamInput` | `StrategyGameSchemePanel`, `GameWatchLaunch` | User picks O/D on Strategy; wired into watch `GameSimInput` |
 | MEGA-SIM-045 | SHIP | Coach default O/D on new dynasty | `NewGameWizardScreen`, `SchoolStaffRepository` | Wizard + coach card — not per-game override |
 | MEGA-SIM-046 | SHIP | Usage weights in gameplan | `GameplanInput.usageWeights`, `StrategyGameplanPanel` | Stepper per starter |
 | MEGA-SIM-047 | PARTIAL | Usage affects offense via normalized share | `GameplanEffectsResolver.offenseTweaks` | Peak usage only — not per-player on possession |
@@ -263,7 +263,7 @@
 
 | ID | Pri | Status | Requirement (spec) | Code / test | Finding |
 |----|-----|--------|-------------------|-------------|---------|
-| MEGA-SIM-145 | P0 | FAIL | Per-game **offensive + defensive scheme** pickers on Strategy tied to `GameSimTeamInput` | `GameSimTeamInput`, Strategy UI | Defaults Balanced/Man; hub does not set |
+| MEGA-SIM-145 | P0 | PASS | Per-game **offensive + defensive scheme** pickers on Strategy tied to `GameSimTeamInput` | `StrategyGameSchemePanel`, `GameWatchScreen` | 7×7 chips → `GameWatchLaunch` → sim home team |
 | MEGA-SIM-146 | P1 | FAIL | Full **7×7** scheme interaction matrix in tuning data | `SchemeMatchupResolver` sample | Partial nudges only |
 | MEGA-SIM-147 | P1 | FAIL | **Box-and-One** / **Press** fatigue cost during sim minutes | Preset identities | Team stamina not decremented in sim |
 | MEGA-SIM-148 | P1 | FAIL | **Perimeter / Post** presets bump correct slot usage on possessions | `usageWeights` team scalar | No slot-level shot share |

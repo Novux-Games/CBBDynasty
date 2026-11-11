@@ -31,8 +31,10 @@ import dev.novux.dynasty.cbb.core.lineup.RotationMinutesBalancer
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.sim.GameLineupPrep
+import dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset
 import dev.novux.dynasty.cbb.core.strategy.GameplanInput
 import dev.novux.dynasty.cbb.core.strategy.GameplanUsageNormalizer
+import dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
 
@@ -62,6 +64,8 @@ fun StrategyScreen(
     var gameplan by remember { mutableStateOf(GameplanInput()) }
     var halftimeGameplan by remember { mutableStateOf<GameplanInput?>(null) }
     var rotationMinutes by remember { mutableStateOf<Map<String, Int>>(emptyMap()) }
+    var offensiveScheme by remember { mutableStateOf(OffensiveSchemePreset.Balanced) }
+    var defensiveScheme by remember { mutableStateOf(DefensiveSchemePreset.ManToMan) }
     LaunchedEffect(players, starters) {
         if (players.isNotEmpty() && rotationMinutes.isEmpty()) {
             rotationMinutes = RotationMinutesBalancer.baseline(players, starters)
@@ -122,6 +126,12 @@ fun StrategyScreen(
                 player = player,
             )
         }
+        StrategyGameSchemePanel(
+            offensiveScheme = offensiveScheme,
+            defensiveScheme = defensiveScheme,
+            onOffensiveChange = { offensiveScheme = it },
+            onDefensiveChange = { defensiveScheme = it },
+        )
         if (rotationMinutes.isNotEmpty()) {
             StrategyRotationMinutesPanel(
                 players = players,
@@ -147,6 +157,8 @@ fun StrategyScreen(
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.awayName = awayTeamLabel
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeRosterPlayers = players
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeStarters = starters
+                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeOffensiveScheme = offensiveScheme
+                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeDefensiveScheme = defensiveScheme
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.rotationMinutes = normalizedRotation
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeSimRoster =
                     GameLineupPrep.build(dynastyId, players, starters, normalizedRotation)

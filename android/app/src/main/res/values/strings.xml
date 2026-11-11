@@ -629,6 +629,8 @@
     <string name="strategy_halftime_note">Halftime tweaks apply to the second half when you watch a game.</string>
     <string name="strategy_halftime_set">Copy gameplan for second half</string>
     <string name="strategy_halftime_clear">Clear second-half copy</string>
+    <string name="strategy_game_schemes_title">This game\'s schemes</string>
+    <string name="strategy_game_schemes_hint">Offense and defense for the next sim — separate from season defaults.</string>
     <string name="strategy_rotation_title">Rotation minutes</string>
     <string name="strategy_rotation_total">Team total: %1$d / %2$d min</string>
     <string name="strategy_rotation_minutes_value">%1$d min</string>
