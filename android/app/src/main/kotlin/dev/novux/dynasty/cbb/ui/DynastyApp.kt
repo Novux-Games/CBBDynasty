@@ -38,11 +38,14 @@ import dev.novux.dynasty.cbb.requireDynastyApplication
 import dev.novux.dynasty.cbb.ui.navigation.AppRoute
 import dev.novux.dynasty.cbb.ui.shell.CreditsScreen
 import dev.novux.dynasty.cbb.ui.shell.HomeMenuScreen
+import dev.novux.dynasty.cbb.ui.shell.DynastyLoadProgressOverlay
 import dev.novux.dynasty.cbb.ui.shell.LoadGameScreen
 import dev.novux.dynasty.cbb.ui.shell.DynastyAutomationScreen
 import dev.novux.dynasty.cbb.ui.pack.IdentityPackImportScreen
 import dev.novux.dynasty.cbb.ui.shell.SettingsScreen
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
 import dev.novux.dynasty.cbb.ui.shell.DynastyShellScreen
 import dev.novux.dynasty.cbb.ui.strategy.StrategyScreen
@@ -118,6 +121,7 @@ fun DynastyApp(
             val context = LocalContext.current
             val snackbarHostState = remember { SnackbarHostState() }
             var continueLoadFailedSlot by remember { mutableStateOf<Int?>(null) }
+            var continueLoading by remember { mutableStateOf(false) }
             var recruitingLaunchTab by remember {
                 mutableStateOf(RecruitingHubDefaults.defaultTab)
             }
@@ -186,14 +190,18 @@ fun DynastyApp(
 
             suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
-                val carousel = coachingCarouselRepository.loadOrCreate(
-                    loaded.dynastyId,
-                    loaded.metadata.seasonIndex,
-                )
-                val employment = coachEmploymentRepository.refreshOffersIfNeeded(
-                    loaded.dynastyId,
-                    loaded.metadata.seasonIndex,
-                )
+                val carousel = withContext(Dispatchers.IO) {
+                    coachingCarouselRepository.loadOrCreate(
+                        loaded.dynastyId,
+                        loaded.metadata.seasonIndex,
+                    )
+                }
+                val employment = withContext(Dispatchers.IO) {
+                    coachEmploymentRepository.refreshOffersIfNeeded(
+                        loaded.dynastyId,
+                        loaded.metadata.seasonIndex,
+                    )
+                }
                 DynastyLaunch.navigateForLoaded(navController, loaded, carousel, employment)
             }
 
@@ -222,16 +230,23 @@ fun DynastyApp(
                     )
                 }
                 composable(AppRoute.Home.route) {
+                    Box(modifier = Modifier.fillMaxSize()) {
                     HomeMenuScreen(
                         continueSlot = continueSlot,
+                        continueLoading = continueLoading,
                         onContinue = {
                             val slot = continueSlot ?: return@HomeMenuScreen
                             scope.launch {
-                                when (val result = saveSlotRepository.loadSlot(slot.slotIndex)) {
-                                    is DynastyLoadResult.Success -> onDynastyReady(result.loaded)
-                                    is DynastyLoadResult.Unreadable ->
-                                        continueLoadFailedSlot = slot.slotIndex
-                                    DynastyLoadResult.SlotEmpty -> Unit
+                                continueLoading = true
+                                try {
+                                    when (val result = saveSlotRepository.loadSlot(slot.slotIndex)) {
+                                        is DynastyLoadResult.Success -> onDynastyReady(result.loaded)
+                                        is DynastyLoadResult.Unreadable ->
+                                            continueLoadFailedSlot = slot.slotIndex
+                                        DynastyLoadResult.SlotEmpty -> Unit
+                                    }
+                                } finally {
+                                    continueLoading = false
                                 }
                             }
                         },
@@ -240,6 +255,10 @@ fun DynastyApp(
                         onSettings = { navController.navigate(AppRoute.Settings.route) },
                         onCredits = { navController.navigate(AppRoute.Credits.route) },
                     )
+                    if (continueLoading) {
+                        DynastyLoadProgressOverlay()
+                    }
+                    }
                 }
                 composable(AppRoute.Load.route) {
                     LoadGameScreen(

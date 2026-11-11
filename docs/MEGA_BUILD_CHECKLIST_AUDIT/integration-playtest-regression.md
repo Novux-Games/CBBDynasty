@@ -28,7 +28,7 @@
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
 | MEGA-QA-001 | P0 | BOT | PASS | New game seed on main thread | Studio → New Game → pick school/coach → sign; profile CPU during slot create | Slot create + first paint ≤ 3 s on mid-tier; no ANR | `signNewGameFromWizard` on `Dispatchers.IO`; `IncomingClassSeederPerformanceTest` |
-| MEGA-QA-002 | P0 | DEV | OPEN | Continue load blocking UI | Kill app mid-dynasty; cold start → Continue | Load screen shows progress; shell within 2 s of DB ready | `LoadGameScreen.kt`, `loadSlot` |
+| MEGA-QA-002 | P0 | BOT | PASS | Continue load blocking UI | Kill app mid-dynasty; cold start → Continue | Load screen shows progress; shell within 2 s of DB ready | `loadSlot` on `Dispatchers.IO`; `DynastyLoadProgressOverlay` on Home/Load |
 | MEGA-QA-003 | P1 | DEV | OPEN | Pack ingest first launch | Fresh install → first dynasty | Pack read off critical path or chunked; no 5 s frozen splash | `PackRepository`, `DynastyApplication` init |
 | MEGA-QA-004 | P1 | EMU | OPEN | Recruiting hub first open | Offseason W2 → hamburger → Recruiting | Hub lists within 1 s; scroll 60 fps | `RecruitingHubScreen.kt` |
 | MEGA-QA-005 | P1 | DEV | OPEN | Recommended tab scroll jank | 120 demo prospects → fling list | No sustained frame drops > 32 ms | Hub lazy list |

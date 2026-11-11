@@ -155,17 +155,17 @@ class SaveSlotRepository(
             ?.slotIndex
     }
 
-    suspend fun loadSlot(slotIndex: Int): DynastyLoadResult {
+    suspend fun loadSlot(slotIndex: Int): DynastyLoadResult = withContext(Dispatchers.IO) {
         require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
-        return try {
+        try {
             ensureInitialized()
             val entity = slotDao.getByIndex(slotIndex)
-                ?: return DynastyLoadResult.Unreadable(
+                ?: return@withContext DynastyLoadResult.Unreadable(
                     slotIndex,
                     DynastyLoadFailure.DatabaseRead("slot row missing"),
                 )
             val summary = entity.toSummary()
-            if (summary.isEmpty) return DynastyLoadResult.SlotEmpty
+            if (summary.isEmpty) return@withContext DynastyLoadResult.SlotEmpty
 
             val slotSnap = DynastySaveValidator.SlotSnapshot(
                 slotIndex = slotIndex,
@@ -184,10 +184,10 @@ class SaveSlotRepository(
                 )
             }
             DynastySaveValidator.validateBeforeLoad(slotSnap, metaSnap)?.let { failure ->
-                return DynastyLoadResult.Unreadable(slotIndex, failure)
+                return@withContext DynastyLoadResult.Unreadable(slotIndex, failure)
             }
             val meta = metadata
-                ?: return DynastyLoadResult.Unreadable(
+                ?: return@withContext DynastyLoadResult.Unreadable(
                     slotIndex,
                     DynastyLoadFailure.MissingMetadata(summary.dynastyId!!),
                 )
@@ -200,7 +200,7 @@ class SaveSlotRepository(
                     meta.balanceSchemaVersion,
                 )
             } catch (e: BalanceParseException) {
-                return DynastyLoadResult.Unreadable(
+                return@withContext DynastyLoadResult.Unreadable(
                     slotIndex,
                     DynastyLoadFailure.InvalidBalanceRuleset(e.message ?: "balance load failed"),
                 )
@@ -209,7 +209,7 @@ class SaveSlotRepository(
             val simTuning = try {
                 simTuningRepository.restorePinned(meta.simTuningId, meta.simSchemaVersion)
             } catch (e: SimTuningParseException) {
-                return DynastyLoadResult.Unreadable(
+                return@withContext DynastyLoadResult.Unreadable(
                     slotIndex,
                     DynastyLoadFailure.InvalidSimTuning(e.message ?: "sim tuning load failed"),
                 )
@@ -218,7 +218,7 @@ class SaveSlotRepository(
             val calendarRow = calendarDao.getByDynastyId(meta.dynastyId)
             calendarRow?.toCalendarSnapshot()?.let { snap ->
                 DynastySaveValidator.validateCalendar(snap)?.let { failure ->
-                    return DynastyLoadResult.Unreadable(slotIndex, failure)
+                    return@withContext DynastyLoadResult.Unreadable(slotIndex, failure)
                 }
             }
 
@@ -228,7 +228,7 @@ class SaveSlotRepository(
                 }
             } else {
                 weekCheckpointRepository.loadCheckpoint(meta.dynastyId)
-                    ?: return DynastyLoadResult.Unreadable(
+                    ?: return@withContext DynastyLoadResult.Unreadable(
                         slotIndex,
                         DynastyLoadFailure.InvalidCalendar("calendar row unreadable"),
                     )

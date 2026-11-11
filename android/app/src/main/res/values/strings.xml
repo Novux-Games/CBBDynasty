@@ -58,6 +58,7 @@
     <string name="load_delete_confirm">Delete</string>
     <string name="load_delete_cancel">Cancel</string>
     <string name="home_continue_hint">Latest: %1$s</string>
+    <string name="dynasty_load_progress">Loading dynasty…</string>
     <string name="new_draft_school">No school chosen yet</string>
     <string name="new_draft_coach">No coach profile yet</string>
     <string name="new_no_empty_slot">All ten saves are in use. Delete one from Load to start a new dynasty.</string>

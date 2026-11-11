@@ -80,7 +80,8 @@
     "MEGA-NOTES-029",
     "MEGA-NOTES-035",
     "MEGA-NOTES-058",
-    "MEGA-QA-001"
+    "MEGA-QA-001",
+    "MEGA-QA-002"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
