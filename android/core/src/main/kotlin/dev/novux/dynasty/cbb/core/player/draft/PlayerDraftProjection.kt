@@ -35,8 +35,12 @@ object PlayerDraftProjectionEngine {
         nationalTop60RankByPlayerId: Map<String, Int> = emptyMap(),
     ): PlayerDraftProjection {
         if (!isDraftEligible(player)) return PlayerDraftProjection.NotAvailable
-        if (nationalTop60RankByPlayerId.isNotEmpty()) {
-            val poolRank = nationalTop60RankByPlayerId[player.playerId] ?: return PlayerDraftProjection.NotAvailable
+        val usesNationalPool =
+            player.nationalTop60DraftRank != null || nationalTop60RankByPlayerId.isNotEmpty()
+        if (usesNationalPool) {
+            val poolRank = player.nationalTop60DraftRank
+                ?: nationalTop60RankByPlayerId[player.playerId]
+                ?: return PlayerDraftProjection.NotAvailable
             return PlayerDraftProjection(rank = poolRank, tierLabel = tierForRank(poolRank))
         }
         val stock = player.role.draftStockPoints

@@ -280,7 +280,7 @@
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-161 | P2 | FAIL | **Archetype badge** chip on roster row (compact) | Roster shows text in card body only |
 | MEGA-COACH-162 | P2 | FAIL | Archetype badge on player identity strip | Plain text in identity string |
-| MEGA-COACH-163 | P1 | FAIL | Draft line `Draft: #N` when Top 60 + eligible | No rank on `DynastyPlayer` for card |
+| MEGA-COACH-163 | P1 | PASS | Draft line `Draft: #N` when Top 60 + eligible | `nationalTop60DraftRank` on `DynastyPlayer`; `PlayerDraftProjectionLine` + shell enrich | `DynastyPlayer.kt`, `PlayerDraftProjectionLine.kt` |
 | MEGA-COACH-164 | P2 | FAIL | Tier sublabel Lottery / First round / … | No mapper |
 | MEGA-COACH-165 | P2 | FAIL | `N/A` when undrafted / ineligible | No UI branch |
 | MEGA-COACH-166 | P2 | FAIL | Ratings tab archetype flavor one-liner | Spec in `player-archetypes.md` — missing |

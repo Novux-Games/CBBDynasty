@@ -133,7 +133,8 @@
     "MEGA-COACH-152",
     "MEGA-COACH-153",
     "MEGA-COACH-155",
-    "MEGA-COACH-157"
+    "MEGA-COACH-157",
+    "MEGA-COACH-163"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

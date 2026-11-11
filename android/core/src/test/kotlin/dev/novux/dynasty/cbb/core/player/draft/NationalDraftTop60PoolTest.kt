@@ -25,6 +25,15 @@ class NationalDraftTop60PoolTest {
     }
 
     @Test
+    fun resolve_usesRankOnDynastyPlayerWhenSet() {
+        val player = samplePlayer(stock = 97, classYear = PlayerClassYear.Senior)
+            .copy(nationalTop60DraftRank = 12)
+        val projection = PlayerDraftProjectionEngine.resolve(player)
+        assertTrue(projection.isAvailable)
+        org.junit.Assert.assertEquals(12, projection.rank)
+    }
+
+    @Test
     fun resolve_usesPoolRankNotStockWhenMapProvided() {
         val player = samplePlayer(stock = 97, classYear = PlayerClassYear.Senior)
         val projection = PlayerDraftProjectionEngine.resolve(

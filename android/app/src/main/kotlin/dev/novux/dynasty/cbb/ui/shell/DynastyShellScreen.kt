@@ -81,6 +81,7 @@ import dev.novux.dynasty.cbb.ui.preview.GamePreviewLaunch
 import dev.novux.dynasty.cbb.core.preseason.PreseasonSeasonStartPolicy
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.player.draft.NationalDraftTop60Pool
+import dev.novux.dynasty.cbb.core.player.draft.withNationalTop60DraftRank
 import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
@@ -422,11 +423,11 @@ fun DynastyShellScreen(
     }
 
     PlayerCardPreviewSheet(
-        player = cardPlayer,
+        player = cardPlayer?.withNationalTop60DraftRank(nationalTop60RankByPlayerId),
         onDismiss = { cardPlayer = null },
         onViewMore = { player ->
             cardPlayer = null
-            fullScreenPlayer = player
+            fullScreenPlayer = player.withNationalTop60DraftRank(nationalTop60RankByPlayerId)
         },
         nationalTop60RankByPlayerId = nationalTop60RankByPlayerId,
     )

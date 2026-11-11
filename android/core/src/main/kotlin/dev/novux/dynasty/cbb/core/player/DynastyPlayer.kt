@@ -30,6 +30,8 @@ data class DynastyPlayer(
     val injury: PlayerInjuryState,
     val role: PlayerRosterRole,
     val loyalty: PlayerLoyaltyProfile = PlayerLoyaltyProfile.Empty,
+    /** National Top 60 slot (1–60) when eligible; set at card open ([MEGA-COACH-163]). */
+    val nationalTop60DraftRank: Int? = null,
 ) {
     fun scoutReport(depth: ScoutDepth = ScoutDepth.Light): PlayerScoutReport =
         PlayerScoutReport.fromPlayer(this, depth)
