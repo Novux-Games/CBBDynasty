@@ -184,6 +184,9 @@ class DynastyApplication : Application() {
     lateinit var seasonReviewRepository: dev.novux.dynasty.cbb.data.seasonreview.SeasonReviewRepository
         private set
 
+    lateinit var playerStatsRepository: dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
+        private set
+
     lateinit var yearlyAwardsRepository: dev.novux.dynasty.cbb.data.awards.YearlyAwardsRepository
         private set
 
@@ -393,6 +396,7 @@ class DynastyApplication : Application() {
             coachSecurityRepository,
             yearlyAwardsRepository,
         )
+        playerStatsRepository = dev.novux.dynasty.cbb.data.player.PlayerStatsRepository(applicationContext)
         applicationScope.launch {
             saveSlotRepository.ensureInitialized()
             packRepository.ensureEmbeddedLoaded()

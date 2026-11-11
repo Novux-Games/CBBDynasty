@@ -114,7 +114,7 @@
 | MEGA-COACH-064 | P1 | FAIL | NIL valuation line on Overview | Not on `PlayerCardSheet` |
 | MEGA-COACH-065 | P1 | FAIL | Projected draft #1–60 + tier label on Overview | No draft projection UI on card |
 | MEGA-COACH-066 | P1 | FAIL | Ratings tab full attribute breakdown + potential | Only headline triplet + scout |
-| MEGA-COACH-067 | P0 | FAIL | Stats four cards (season avg/tot, career avg/tot) | No stats aggregation layer or UI |
+| MEGA-COACH-067 | P0 | PASS | Stats four cards (season avg/tot, career avg/tot) | `PlayerStatsEngine` + `PlayerStatsRepository` + `PlayerStatsFourCards` on Stats tab | `core/player/stats/*`, `PlayerStatsRepository.kt`, `PlayerStatsCards.kt`, `PlayerCardScreen.kt` |
 | MEGA-COACH-068 | P0 | FAIL | Games tab game log + box score drill-in | Not implemented |
 | MEGA-COACH-069 | P1 | FAIL | History tab prior seasons | Not implemented |
 | MEGA-COACH-070 | P2 | GAP | Injury chip on card identity | `PlayerInjuryOverviewBlock` text line — not `OUT` chip in strip |

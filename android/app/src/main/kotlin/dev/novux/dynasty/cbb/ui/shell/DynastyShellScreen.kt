@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.requireDynastyApplication
 import dev.novux.dynasty.cbb.core.balance.BalanceMedicalRedshirtRules
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
@@ -266,6 +267,8 @@ fun DynastyShellScreen(
             player = player,
             schoolDisplayName = loaded.summary.schoolDisplayName.orEmpty(),
             seasonRecordLabel = staffRoster?.headCoach?.seasonRecordLabel ?: "0-0",
+            seasonIndex = loaded.metadata.seasonIndex,
+            playerStatsRepository = context.requireDynastyApplication().playerStatsRepository,
             allowEdit = true,
             onBack = { fullScreenPlayer = null },
         )

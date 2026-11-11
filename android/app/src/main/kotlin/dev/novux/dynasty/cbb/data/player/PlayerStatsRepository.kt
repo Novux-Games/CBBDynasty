@@ -1,0 +1,103 @@
+package dev.novux.dynasty.cbb.data.player
+
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import dev.novux.dynasty.cbb.core.player.DynastyPlayer
+import dev.novux.dynasty.cbb.core.player.stats.PlayerCountingStats
+import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsEngine
+import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
+import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSynth
+import kotlinx.coroutines.flow.first
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+private val Context.playerStatsStore: DataStore<Preferences> by preferencesDataStore(name = "player_stats")
+
+@Serializable
+data class PlayerSeasonStatRecord(
+    val playerId: String,
+    val seasonIndex: Int,
+    val gamesPlayed: Int,
+    val totals: PlayerCountingStats,
+)
+
+@Serializable
+data class DynastyPlayerStatsBlob(
+    val records: List<PlayerSeasonStatRecord> = emptyList(),
+)
+
+class PlayerStatsRepository(private val context: Context) {
+    private val json = Json { ignoreUnknownKeys = true }
+
+    suspend fun summaryFor(
+        dynastyId: String,
+        seasonIndex: Int,
+        player: DynastyPlayer,
+    ): PlayerStatsSummary {
+        val gp = player.role.rsGamesPlayedSeason.coerceAtLeast(0)
+        ensureSeasonRecord(dynastyId, player, seasonIndex, gp)
+        val blob = loadBlob(dynastyId)
+        val currentTotals = blob.records.first {
+            it.playerId == player.playerId && it.seasonIndex == seasonIndex
+        }.totals
+        val playerRows = blob.records.filter { it.playerId == player.playerId }.sortedBy { it.seasonIndex }
+        val prior = playerRows.filter { it.seasonIndex < seasonIndex }
+        return PlayerStatsEngine.seasonSummary(
+            gamesPlayed = gp,
+            seasonTotals = currentTotals,
+            priorSeasonTotals = prior.map { it.totals },
+            priorGamesPlayed = prior.map { it.gamesPlayed },
+        )
+    }
+
+    private suspend fun ensureSeasonRecord(
+        dynastyId: String,
+        player: DynastyPlayer,
+        seasonIndex: Int,
+        gamesPlayed: Int,
+    ) {
+        val blob = loadBlob(dynastyId)
+        val existing = blob.records.firstOrNull {
+            it.playerId == player.playerId && it.seasonIndex == seasonIndex
+        }
+        val totals = when {
+            existing != null && existing.gamesPlayed == gamesPlayed -> existing.totals
+            gamesPlayed <= 0 -> PlayerCountingStats.ZERO
+            else -> PlayerStatsSynth.totalsForSeason(player, gamesPlayed)
+        }
+        val record = PlayerSeasonStatRecord(
+            playerId = player.playerId,
+            seasonIndex = seasonIndex,
+            gamesPlayed = gamesPlayed,
+            totals = totals,
+        )
+        if (existing == record) return
+        val next = blob.copy(
+            records = blob.records
+                .filterNot { it.playerId == player.playerId && it.seasonIndex == seasonIndex } + record,
+        )
+        persist(dynastyId, next)
+    }
+
+    private suspend fun loadBlob(dynastyId: String): DynastyPlayerStatsBlob {
+        val key = blobKey(dynastyId)
+        val prefs = context.playerStatsStore.data.first()
+        val raw = prefs[key] ?: return DynastyPlayerStatsBlob()
+        return runCatching { json.decodeFromString<DynastyPlayerStatsBlob>(raw) }
+            .getOrElse { DynastyPlayerStatsBlob() }
+    }
+
+    private suspend fun persist(dynastyId: String, blob: DynastyPlayerStatsBlob) {
+        val key = blobKey(dynastyId)
+        context.playerStatsStore.edit { prefs ->
+            prefs[key] = json.encodeToString(blob)
+        }
+    }
+
+    private fun blobKey(dynastyId: String) = stringPreferencesKey("blob_$dynastyId")
+}

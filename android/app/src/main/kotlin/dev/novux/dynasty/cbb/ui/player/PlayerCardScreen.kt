@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
+import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
+import dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +44,8 @@ fun PlayerCardScreen(
     player: DynastyPlayer,
     schoolDisplayName: String,
     seasonRecordLabel: String,
+    seasonIndex: Int,
+    playerStatsRepository: PlayerStatsRepository,
     allowEdit: Boolean,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -89,7 +94,12 @@ fun PlayerCardScreen(
                     seasonRecordLabel = seasonRecordLabel,
                 )
                 PlayerCardTab.Ratings -> PlayerCardRatingsTab(player = player)
-                PlayerCardTab.Stats -> PlayerCardStatsTab(player = player)
+                PlayerCardTab.Stats -> PlayerCardStatsTab(
+                    player = player,
+                    dynastyId = player.dynastyId,
+                    seasonIndex = seasonIndex,
+                    playerStatsRepository = playerStatsRepository,
+                )
                 PlayerCardTab.Games -> PlayerCardGamesTab(player = player)
                 PlayerCardTab.History -> PlayerCardHistoryTab(player = player)
             }
@@ -216,7 +226,16 @@ private fun PlayerCardRatingsTab(player: DynastyPlayer) {
 }
 
 @Composable
-private fun PlayerCardStatsTab(player: DynastyPlayer) {
+private fun PlayerCardStatsTab(
+    player: DynastyPlayer,
+    dynastyId: String,
+    seasonIndex: Int,
+    playerStatsRepository: PlayerStatsRepository,
+) {
+    var summary by remember(player.playerId) { mutableStateOf<PlayerStatsSummary?>(null) }
+    LaunchedEffect(player.playerId, player.role.rsGamesPlayedSeason, seasonIndex) {
+        summary = playerStatsRepository.summaryFor(dynastyId, seasonIndex, player)
+    }
     Text(
         stringResource(R.string.player_card_stats_tab),
         style = MaterialTheme.typography.titleMedium,
@@ -226,11 +245,11 @@ private fun PlayerCardStatsTab(player: DynastyPlayer) {
         stringResource(R.string.player_card_rs_games_played, player.role.rsGamesPlayedSeason),
         style = MaterialTheme.typography.bodyLarge,
     )
-    Text(
-        stringResource(R.string.player_card_stats_pipeline),
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
+    summary?.let { PlayerStatsFourCards(summary = it) }
+        ?: Text(
+            stringResource(R.string.player_card_stats_loading),
+            style = MaterialTheme.typography.bodyMedium,
+        )
 }
 
 @Composable
