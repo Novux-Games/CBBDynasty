@@ -82,7 +82,7 @@ fun SigningDayScreen(
 
     suspend fun refresh() {
         progress = signingDayRepository.loadProgress(loaded.dynastyId, loaded.metadata.seasonIndex)
-        incoming = signingDayRepository.loadIncomingClass(loaded.dynastyId, loaded.metadata.seasonIndex)
+        incoming = signingDayRepository.loadIncomingClass(loaded)
         offerPromises = recruitOfferPromiseRepository.loadAll(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
@@ -163,7 +163,7 @@ fun SigningDayScreen(
                             loaded.metadata.seasonIndex,
                         ) ?: 0
                         val pool = nilAnnualPoolRepository.effectivePoolUsd(loaded, boost)
-                        signingDayRepository.hardSign(loaded.dynastyId, loaded.metadata.seasonIndex, pool)
+                        signingDayRepository.hardSign(loaded, pool)
                         recruitingEconomyRepository.closeCycleAfterHardSign(loaded.dynastyId)
                         refresh()
                     }

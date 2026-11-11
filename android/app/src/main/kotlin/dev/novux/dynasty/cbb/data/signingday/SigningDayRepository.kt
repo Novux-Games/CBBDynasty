@@ -13,7 +13,13 @@ import dev.novux.dynasty.cbb.core.signingday.IncomingSignee
 import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignEngine
 import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignResult
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
+import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
+import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.core.signingday.SigningDaySoftCommitInputs
 import dev.novux.dynasty.cbb.core.signingday.SigningDaySoftCommitResolver
+import dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository
+import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.nil.NilBudgetRepository
 import dev.novux.dynasty.cbb.core.player.loyalty.RecruitCommitPromiseLockEngine
 import dev.novux.dynasty.cbb.data.recruiting.RecruitLockedPromiseRepository
@@ -30,7 +36,23 @@ class SigningDayRepository(
     private val incomingClassSeedRepository: IncomingClassSeedRepository,
     private val recruitOfferPromiseRepository: RecruitOfferPromiseRepository,
     private val recruitLockedPromiseRepository: RecruitLockedPromiseRepository,
+    private val recruitingEconomyRepository: RecruitingEconomyRepository,
+    private val nilAnnualPoolRepository: NilAnnualPoolRepository,
 ) {
+    private suspend fun softCommitInputs(dynasty: LoadedDynasty): SigningDaySoftCommitInputs {
+        val school = nilAnnualPoolRepository.userSchoolRecruitingContext(dynasty)
+            ?: SchoolRecruitingContext(
+                programPrestige = recruitingEconomyRepository.resolveUserProgramPrestige(dynasty),
+                schoolHomeState = "OH",
+                nilPoolAnnualUsd = NilAnnualPoolRepository.DEFAULT_FALLBACK_USD.toInt(),
+            )
+        return SigningDaySoftCommitInputs(
+            userSchool = school,
+            userProgramId = "user-${dynasty.dynastyId}",
+            recommended = BalanceRecruitingRecommendedParser.parse(dynasty.balanceRuleset.recruiting),
+            spendDeltaByProspect = recruitingEconomyRepository.loadInterestSpendDeltaByProspect(dynasty),
+        )
+    }
     suspend fun loadProgress(dynastyId: String, cycleSeasonIndex: Int): SigningDayProgress {
         val raw = context.signingDayStore.data.first()[progressKey(dynastyId)] ?: return SigningDayProgress(cycleSeasonIndex)
         return decodeProgress(raw, cycleSeasonIndex)
@@ -65,30 +87,38 @@ class SigningDayRepository(
     }
 
     suspend fun loadIncomingClass(
-        dynastyId: String,
-        seasonIndex: Int,
+        dynasty: LoadedDynasty,
         reservations: List<RecruitingWeekReservation> = emptyList(),
     ): List<IncomingSignee> {
         val activeReservations =
-            reservations.ifEmpty { reservationRepository.loadActive(dynastyId) }
-        val pool = incomingClassSeedRepository.ensurePool(dynastyId, seasonIndex)
-        val base = SigningDaySoftCommitResolver.incomingFromOffers(pool, activeReservations)
-        val overrides = loadPositionOverrides(dynastyId)
+            reservations.ifEmpty { reservationRepository.loadActive(dynasty.dynastyId) }
+        val pool = incomingClassSeedRepository.ensurePool(dynasty.dynastyId, dynasty.metadata.seasonIndex)
+        val base = SigningDaySoftCommitResolver.incomingSoftCommits(
+            pool,
+            activeReservations,
+            softCommitInputs(dynasty),
+        )
+        val overrides = loadPositionOverrides(dynasty.dynastyId)
         return base.map { signee ->
             val override = overrides[signee.prospectId]
-            val nilSigned = nilBudgetRepository.offerUsd(dynastyId, seasonIndex, signee.prospectId).toInt()
+            val nilSigned = nilBudgetRepository.offerUsd(
+                dynasty.dynastyId,
+                dynasty.metadata.seasonIndex,
+                signee.prospectId,
+            ).toInt()
             val withNil = signee.copy(nilSignedUsd = nilSigned)
             if (override != null) withNil.copy(position = override) else withNil
         }
     }
 
     suspend fun hardSign(
-        dynastyId: String,
-        seasonIndex: Int,
+        dynasty: LoadedDynasty,
         poolAnnualUsd: Long,
     ): SigningDayHardSignResult {
+        val dynastyId = dynasty.dynastyId
+        val seasonIndex = dynasty.metadata.seasonIndex
         val progress = loadProgress(dynastyId, seasonIndex)
-        val signees = loadIncomingClass(dynastyId, seasonIndex)
+        val signees = loadIncomingClass(dynasty)
         val offerPromises = recruitOfferPromiseRepository.loadAll(dynastyId, seasonIndex)
         val result = SigningDayHardSignEngine.finalizeClass(progress, signees, offerPromises)
         val locked = signees.map { signee ->

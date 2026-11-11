@@ -275,6 +275,8 @@ class DynastyApplication : Application() {
             incomingClassSeedRepository,
             recruitOfferPromiseRepository,
             recruitLockedPromiseRepository,
+            recruitingEconomyRepository,
+            nilAnnualPoolRepository,
         )
         disciplineRepository = DisciplineRepository(applicationContext, database, balanceRulesetRepository)
         chemistryRepository = ChemistryRepository(applicationContext, balanceRulesetRepository)

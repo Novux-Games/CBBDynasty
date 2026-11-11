@@ -54,7 +54,7 @@
 | MEGA-RECR-026 | P1 | GAP | Interest weights in balance JSON | Weights live in `RecruitInterestConfig` hardcoded; ADR-002 `recruiting.interest.*` not in bundle. | `RecruitInterestWeights.kt`, `balance-2026.json` |
 | MEGA-RECR-027 | P1 | PASS | Point spend → interest meter | `interestDelta` in balance; persisted `spendDelta` per prospect; hub meter uses `liveInterest`. | `RecruitingInterestSpendRepository.kt` |
 | MEGA-RECR-028 | P2 | GAP | signLikelihood zero-spend | `SignLikelihoodEngine` uses baseline interest — PASS pattern; undermined by wrong pool/prestige inputs. | `SignLikelihoodBadge.kt` |
-| MEGA-RECR-029 | P1 | FAIL | Soft commit = influence #1 + closeness | `SigningDaySoftCommitResolver` treats **any scholarship offer reservation** as incoming signee; no influence rank/closeness thresholds. | `SigningDayIncomingSignee.kt` |
+| MEGA-RECR-029 | P1 | PASS | Soft commit = influence #1 + closeness | `RecruitSoftCommitPolicy` gates soft commits on rank #1, closeness ≥ 70, and scholarship offer. | `SigningDaySoftCommitResolver`, `RecruitSoftCommitPolicy` |
 | MEGA-RECR-030 | P2 | GAP | Influence board UI | Row shows rank/closeness from engine; board not updated by spends/commits league-wide. | `RecruitingHubScreen`, `InfluenceBoardEngine` |
 | MEGA-RECR-031 | P2 | PASS | Recommended default tab | Hub lands on Recommended; ~list cap from balance recommended parser. | `RecruitingHubScreen`, `RecommendedRecruitList` |
 | MEGA-RECR-032 | P1 | GAP | Elite hidden on Recommended | `SignLikelihoodEngine.hiddenOnRecommendedTab` exists — behavior depends on demo pool/stars distribution. | core tests |
@@ -212,7 +212,7 @@
 | MEGA-RECR-107 | P2 | GAP | Position editor depth | Positions tab **cycles enum** per signee — not bulk roster editor / flex validation from spec. | `SigningDayScreen` `onCyclePosition` |
 | MEGA-RECR-108 | P2 | GAP | Rankings task deep link | Dashboard opens Signing Day rankings tab — does not mirror **News → Recruits** full Top 60 context copy. | `DashboardOptionalTasksPanel` |
 | MEGA-RECR-109 | P1 | GAP | Roster scholarship attach | Hard sign engine finalizes class object; roster / 15-cap attach path not traced to `DynastyRosterRepository`. | `SigningDayRepository.hardSign` |
-| MEGA-RECR-110 | P1 | FAIL | Soft vs hard commit semantics | `SigningDaySoftCommitResolver` = any active **scholarship offer** reservation → signee; ignores influence #1 + closeness band. | `SigningDayIncomingSignee.kt` |
+| MEGA-RECR-110 | P1 | PASS | Soft vs hard commit semantics | Soft commits use `RecruitSoftCommitPolicy`; hard sign unchanged via `SigningDayHardSignEngine`. | `RecruitSoftCommitPolicy` |
 | MEGA-RECR-111 | P2 | PASS | Rankings tab uses seed when present | `SigningDayScreen` `loadPool` → `top60FromPool` — PASS when preseason task done. | `SigningDayScreen.kt` |
 | MEGA-RECR-112 | P2 | GAP | Prep before Signing Day | No **recruiting prep brief** / R1–R4 copy surface tying crunch multiplier to dashboard (offseason optional flavor only). | `OffseasonOptionalDashboardTasks` |
 | MEGA-RECR-113 | P2 | GAP | Signing close → hub read-only | `cycleClosed` set on hard sign; hub still navigable from shell — enforce read-only Committed-only not implemented. | `RecruitingCyclePolicy` |
