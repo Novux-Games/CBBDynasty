@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
+import dev.novux.dynasty.cbb.core.coach.contract.HeadCoachPerformanceGoalsEngine
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -27,6 +28,9 @@ fun CoachOverviewContractCard(
     modifier: Modifier = Modifier,
 ) {
     val money = remember { NumberFormat.getCurrencyInstance(Locale.US) }
+    val performanceGoals = remember(card.schoolDisplayName, programPrestige) {
+        HeadCoachPerformanceGoalsEngine.build(programPrestige, card.schoolDisplayName)
+    }
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
@@ -56,6 +60,14 @@ fun CoachOverviewContractCard(
                 stringResource(R.string.coach_contract_salary, money.format(card.annualSalaryUsd)),
                 style = MaterialTheme.typography.bodyMedium,
             )
+            Text(
+                stringResource(R.string.coach_contract_goals_title),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+            performanceGoals.displayLines().forEach { line ->
+                Text("• $line", style = MaterialTheme.typography.bodySmall)
+            }
         }
     }
 }

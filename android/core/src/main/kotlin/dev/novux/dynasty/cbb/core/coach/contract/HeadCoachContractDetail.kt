@@ -8,7 +8,7 @@ import kotlin.math.roundToLong
 data class HeadCoachContractDetail(
     val annualSalaryUsd: Long,
     val buyoutUsd: Long,
-    val performanceGoals: List<String>,
+    val performanceGoals: HeadCoachPerformanceGoals,
     val extensionLikely: Boolean,
     val firingRiskCopy: String?,
 )
@@ -17,15 +17,11 @@ object HeadCoachContractEngine {
     fun derive(
         card: HeadCoachCard,
         security: CoachSecuritySnapshot?,
-        @Suppress("UNUSED_PARAMETER") programPrestige: Int = 50,
+        programPrestige: Int = 50,
     ): HeadCoachContractDetail {
         val annualSalaryUsd = card.annualSalaryUsd
         val buyoutUsd = card.buyoutUsd
-        val goals = listOf(
-            "Reach the national postseason (Super 16 floor)",
-            "Finish at or above .500 in conference play",
-            "Win total meets program expectation for ${card.schoolDisplayName}",
-        )
+        val goals = HeadCoachPerformanceGoalsEngine.build(programPrestige, card.schoolDisplayName)
         val tier = security?.jobSecurity?.tier
         val trust = security?.adTrust?.score ?: 50
         val extensionLikely = trust >= 70 && tier == JobSecurityTier.Secure

@@ -52,7 +52,7 @@ fun HeadCoachContractTab(
             )
         },
         goalsBlock = {
-            CoachContractTabGoalsBlock(contractDetail.performanceGoals)
+            CoachContractTabGoalsBlock(contractDetail.performanceGoals.displayLines())
         },
         footer = {
             userCoachSecurity?.let {
