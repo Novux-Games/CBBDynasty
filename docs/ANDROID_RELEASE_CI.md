@@ -54,6 +54,14 @@ The workflow strips spaces and line breaks from the secret before decoding, but 
 
 Release builds use **target/compile SDK 36**, **R8** (`mapping.txt`), and **NDK symbol table** metadata where AGP produces it.
 
+**R8 minify (MEGA-QA-151):** `release` has `isMinifyEnabled` and `isShrinkResources` in `android/app/build.gradle.kts`. Verify locally or in CI:
+
+```bash
+bash scripts/verify_release_r8_minify.sh
+```
+
+See `ReleaseR8MinifyPath` in `:core` and `android/app/proguard-rules.pro`.
+
 ## Local release build (optional)
 
 Requires Android SDK (`sdk.dir` in `android/local.properties`). CI signs via env vars; locally, without those vars, Gradle falls back to the **debug** keystore so `:app:bundleRelease` still runs for smoke checks:
