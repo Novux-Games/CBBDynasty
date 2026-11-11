@@ -38,7 +38,7 @@
 | MEGA-GDD-015 | P0 | PASS | Identity · JSON/TXT + HTTPS URL atomic import | Pipeline validates atomically; repo wraps local/URL. | `IdentityPackImportPipeline.kt`, `PackRepository.kt`, `HttpPackRemoteFetcher.kt` |
 | MEGA-GDD-016 | P1 | PASS | Identity · import attestation + disclaimer UX | Settings → Import identity pack with disclaimer checkbox wired to `PackImportAttestation`. | `IdentityPackImportScreen.kt`, `SettingsStepContent.kt` |
 | MEGA-GDD-017 | P1 | PASS | Identity · URL allowlist + 5 MB cap | `PackUrlPolicy`, `PackPayloadPolicy`, hardening tests. | `PackUrlPolicy.kt`, `PackImportHardeningTest.kt` |
-| MEGA-GDD-018 | P1 | MISSING | Identity · optional pack manifest signature | GDD remaining decision; only version constant, no verifier. | `PackConstants.kt` (no signature field) |
+| MEGA-GDD-018 | P1 | PASS | Identity · optional pack manifest signature | Optional `manifestSignature` HMAC via `PackManifestSignatureVerifier` + `PackConstants.TRUSTED_MANIFEST_SIGNERS` | `PackConstants.kt`, `IdentityPackCodec.kt` |
 | MEGA-GDD-019 | P1 | GAP | Identity · swap never rewrites history; display cache rebuild | Overlay merge + save IDs; pack-year mismatch UI warning not found. | `IdentityPackOverlayMerger.kt`, `PackOverlaySession` (grep: no year-mismatch toast) |
 | MEGA-GDD-020 | P0 | PASS | World · rulesetYear + balance/sim pinned at create | ADR-002/003 bundles on dynasty metadata. | `BalanceRulesetRepository.kt`, `SimTuningRepository.kt`, `docs/ADR-002-*.md` |
 
@@ -159,7 +159,7 @@
 | MEGA-GDD-087 | P1 | GAP | New-game wizard · pack selection at create | Wizard picks school from active pack index; cannot swap pack before first save except post-hoc repo API. | `NewGameWizardScreen.kt`, `PackRepository.kt` |
 | MEGA-GDD-088 | P1 | PASS | Import · atomic reject on invalid pack | Pipeline returns `Rejected` without partial overlay apply. | `IdentityPackImportPipeline.kt`, `IdentityPackImportPipelineTest.kt` |
 | MEGA-GDD-089 | P1 | PASS | Import · TXT codec maps `standingsTiebreakers` | Parsed into conference model (still unused by standings engine). | `IdentityPackTxtCodec.kt`, `IdentityPackModels.kt` |
-| MEGA-GDD-090 | P1 | MISSING | Import · manifest signature verification | GDD engineering milestone open; not in codec/validator. | `PackConstants.kt`, `IdentityPackValidator.kt` |
+| MEGA-GDD-090 | P1 | PASS | Import · manifest signature verification | Same verifier on JSON/TXT import path (`IdentityPackCodec.parseAndValidate`) | `PackManifestSignatureVerifier.kt` |
 | MEGA-GDD-091 | P0 | PASS | Offline · dynasty play without network | Saves local; sim/batch on device; credits copy states offline play. | `DynastyDatabase.kt`, `strings.xml` `credits_offline_play` |
 | MEGA-GDD-092 | P1 | RISK | Offline · INTERNET permission | Manifest declares `INTERNET` for optional URL fetch only—acceptable if import is opt-in online. | `AndroidManifest.xml` |
 | MEGA-GDD-093 | P1 | PASS | Store listing · no implied NCAA endorsement | Tests assert disclaimer language. | `PlayStoreListingCopyTest.kt` |

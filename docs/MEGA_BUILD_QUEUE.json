@@ -1,26 +1,5 @@
 [
   {
-    "id": "MEGA-COACH-195",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-GDD-018",
-    "pri": "P1",
-    "status": "MISSING",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
-    "id": "MEGA-GDD-090",
-    "pri": "P1",
-    "status": "MISSING",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
     "id": "MEGA-GDD-119",
     "pri": "P1",
     "status": "FAIL",
@@ -4805,13 +4784,6 @@
     "id": "MEGA-WORLD-054",
     "pri": "P1",
     "status": "PARTIAL",
-    "shard": "league-world-pack.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
-  },
-  {
-    "id": "MEGA-WORLD-056",
-    "pri": "P1",
-    "status": "GAP",
     "shard": "league-world-pack.md",
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
   },

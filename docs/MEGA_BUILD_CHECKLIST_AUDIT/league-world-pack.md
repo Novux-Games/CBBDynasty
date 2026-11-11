@@ -124,7 +124,7 @@
 | ID | Status | Requirement | Code | Finding |
 |----|--------|-------------|------|---------|
 | MEGA-WORLD-055 | SHIP | JSON / TXT / URL import with attestation | `IdentityPackImportPipeline`, `PackUrlPolicy` | 5 MB + allowlist |
-| MEGA-WORLD-056 | GAP | Optional pack manifest **signature** verification | GDD remaining decision | Comment in `PackConstants.kt` only |
+| MEGA-WORLD-056 | PASS | Optional pack manifest **signature** verification | `PackManifestSignatureVerifier` + trusted signer map | `PackConstants.kt` |
 | MEGA-WORLD-057 | SHIP | Overlay merge preserves stable ids | `IdentityPackOverlayMerger` | Display patch without history rewrite |
 | MEGA-WORLD-058 | PARTIAL | Pack swap + year mismatch **non-blocking warning** | GDD post-swap UX | `PackRepository.swap*` works; warning UI not located |
 | MEGA-WORLD-059 | SHIP | Dynasty metadata stores `packId`; validator detects slot/pack mismatch | `DynastyMetadata`, `DynastySaveValidator` | |
