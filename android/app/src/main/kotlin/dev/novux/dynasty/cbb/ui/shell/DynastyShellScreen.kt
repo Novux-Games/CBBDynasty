@@ -60,6 +60,7 @@ import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceDialog
+import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceUiPerf
 import dev.novux.dynasty.cbb.ui.advance.applyWeekAdvanceResult
 import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
 import dev.novux.dynasty.cbb.core.discipline.PendingDisciplineIncident
@@ -794,7 +795,9 @@ fun DynastyShellScreen(
                             scope.launch {
                                 dialogAdvanceInProgress = true
                                 try {
-                                    val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)
+                                    val result = SimWeekAdvanceUiPerf.measure {
+                                        saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)
+                                    }
                                     applyWeekAdvanceResult(
                                         result,
                                         snackbarHostState,
@@ -833,7 +836,9 @@ fun DynastyShellScreen(
                                 if (confirmation != null && confirmation.needsDialog) {
                                     pendingAdvanceConfirmation = confirmation
                                 } else {
-                                    val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)
+                                    val result = SimWeekAdvanceUiPerf.measure {
+                                        saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)
+                                    }
                                     applyWeekAdvanceResult(
                                         result,
                                         snackbarHostState,

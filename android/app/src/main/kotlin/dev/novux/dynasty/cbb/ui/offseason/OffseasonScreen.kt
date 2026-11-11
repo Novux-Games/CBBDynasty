@@ -77,6 +77,7 @@ import dev.novux.dynasty.cbb.ui.offseason.leaving.DraftResultsWeekTwoPanel
 import dev.novux.dynasty.cbb.ui.offseason.leaving.PlayersLeavingPanel
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceDialog
+import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceUiPerf
 import dev.novux.dynasty.cbb.ui.advance.applyWeekAdvanceResult
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
@@ -358,7 +359,9 @@ fun OffseasonScreen(
                     scope.launch {
                         dialogAdvanceInProgress = true
                         try {
-                            val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)
+                            val result = SimWeekAdvanceUiPerf.measure {
+                                saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)
+                            }
                             applyWeekAdvanceResult(
                                 result,
                                 snackbarHostState,
@@ -435,7 +438,9 @@ fun OffseasonScreen(
                         if (confirmation != null && confirmation.needsDialog) {
                             pendingAdvanceConfirmation = confirmation
                         } else {
-                            val result = saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)
+                            val result = SimWeekAdvanceUiPerf.measure {
+                                saveSlotRepository.advanceDynastyWeek(loaded.slotIndex)
+                            }
                             applyWeekAdvanceResult(
                                 result,
                                 snackbarHostState,

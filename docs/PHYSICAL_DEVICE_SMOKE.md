@@ -21,6 +21,7 @@ Reference constants: `PhysicalDeviceSmokePath` in `:core`.
 | 2 | **New game** → wizard → **Sign** | Offseason/shell loads; slot saved |
 | 3 | Advance through signing/preseason → **Regular Season week 1** | In-season shell; header matches RS |
 | 4 | **Sim week** × **4** (confirm dialogs as shown) | No ANR/crash; week index increases by 4 |
+| 4b | On **RS week ≥ 5**, one sim week — check logcat `SimWeekAdvancePerf` | Perceived advance **≤ 2.5 s** ([MEGA-QA-128]) |
 | 5 | Background app 30s, return | UI phase/week still correct |
 | 6 | Force-stop → relaunch → **Continue** same slot | Loads; RS week ≥ 5; roster intact |
 

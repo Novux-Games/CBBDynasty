@@ -33,10 +33,13 @@ The test builds a **365-team** schedule, warms four prior weeks so NET/polls hav
 
 ## Android profiling (device)
 
-1. Build debug APK with a dynasty in regular season week ≥ 5.
-2. Enable **Android Studio Profiler → CPU**; trigger **Sim Week**.
-3. Filter by `dev.novux.dynasty.cbb.core.league` and `dev.novux.dynasty.cbb.core.resume`.
-4. Compare wall time to the **2.5 s** product band; file regressions if database or repository work dominates (move heavy I/O off main).
+**Gate:** [MEGA-QA-128](../MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md) — mid-season RS sim week perceived **≤ 2.5 s** on a retail Android 13+ device ([MEGA-QA-014] BOT baseline).
+
+1. Build debug APK with a dynasty in regular season week ≥ **`SimWeekAdvancePerceivedPerf.DEVICE_PROFILE_RS_WEEK_INDEX`** (5).
+2. Trigger **Sim Week**; spinner should cover all repository work (`Dispatchers.IO`).
+3. In logcat (debug builds), filter **`SimWeekAdvancePerf`** — warns when perceived advance exceeds **2.5 s** (`SimWeekAdvanceUiPerf` + `SimWeekAdvancePerceivedPerf`).
+4. Optionally enable **Android Studio Profiler → CPU**; filter `dev.novux.dynasty.cbb.core.league` and `dev.novux.dynasty.cbb.core.resume`.
+5. Compare wall time to the **2.5 s** product band; file regressions if database or repository work dominates (move heavy I/O off main).
 
 ## Code map
 
