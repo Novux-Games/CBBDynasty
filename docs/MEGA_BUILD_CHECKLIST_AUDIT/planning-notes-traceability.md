@@ -61,7 +61,7 @@
 | MEGA-NOTES-032 | P1 | PARTIAL | Injuries & medical redshirt **Done** | Injury weeks + auto lineup hook; medical redshirt sheet coverage partial. | `injuries.md` shard; `InjuryRepository.kt` |
 | MEGA-NOTES-033 | P1 | PARTIAL | Discipline (conduct + academic) **Done** | Discipline routes + dashboard hook; end-to-end required task sheet partial. | `MEGA-FRAME-032`; `DisciplineScreen.kt` |
 | MEGA-NOTES-034 | P1 | PARTIAL | Chemistry & fatigue **Done** | Chemistry/fatigue engines in core; player-facing indicators thin. | `news-shell-branding` / in-season shard; `ChemistryEngine.kt` |
-| MEGA-NOTES-035 | P0 | GAP | Player card tabs (companion Done: coach/player UI) | No Ratings/Stats/Games/History tabbed card per `player-cards.md`. | `MEGA-COACH-060`–`069`; `PlayerCardScreen.kt` |
+| MEGA-NOTES-035 | P0 | PASS | Player card tabs (companion Done: coach/player UI) | Full-screen `PlayerCardScreen` with Overview/Ratings/Stats/Games/History + preview → View more | `PlayerCardTabs.kt`, `PlayerCardScreen.kt`, `DynastyShellScreen.kt` |
 
 ---
 

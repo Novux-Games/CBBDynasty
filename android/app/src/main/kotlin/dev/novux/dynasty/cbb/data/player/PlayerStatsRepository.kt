@@ -10,6 +10,7 @@ import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogEntry
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogSynth
 import dev.novux.dynasty.cbb.core.player.stats.PlayerCountingStats
+import dev.novux.dynasty.cbb.core.player.history.PlayerPriorSeasonSnapshot
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsEngine
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSynth
@@ -44,6 +45,28 @@ data class DynastyPlayerStatsBlob(
 
 class PlayerStatsRepository(private val context: Context) {
     private val json = Json { ignoreUnknownKeys = true }
+
+    suspend fun priorSeasonsForPlayer(
+        dynastyId: String,
+        playerId: String,
+        currentSeasonIndex: Int,
+        schoolDisplayName: String? = null,
+    ): List<PlayerPriorSeasonSnapshot> {
+        val blob = loadBlob(dynastyId)
+        return blob.records
+            .asSequence()
+            .filter { it.playerId == playerId && it.seasonIndex < currentSeasonIndex && it.gamesPlayed > 0 }
+            .sortedByDescending { it.seasonIndex }
+            .map {
+                PlayerPriorSeasonSnapshot(
+                    seasonIndex = it.seasonIndex,
+                    gamesPlayed = it.gamesPlayed,
+                    totals = it.totals,
+                    schoolDisplayName = schoolDisplayName,
+                )
+            }
+            .toList()
+    }
 
     suspend fun gameLogFor(
         dynastyId: String,

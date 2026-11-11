@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
+import dev.novux.dynasty.cbb.core.player.history.PlayerPriorSeasonSnapshot
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogEntry
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
 import dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
@@ -110,7 +111,13 @@ fun PlayerCardScreen(
                     playerStatsRepository = playerStatsRepository,
                     onOpenBoxScore = { boxScoreEntry = it },
                 )
-                PlayerCardTab.History -> PlayerCardHistoryTab(player = player)
+                PlayerCardTab.History -> PlayerCardHistoryTab(
+                    player = player,
+                    dynastyId = player.dynastyId,
+                    seasonIndex = seasonIndex,
+                    schoolDisplayName = schoolDisplayName,
+                    playerStatsRepository = playerStatsRepository,
+                )
             }
         }
     }
@@ -267,7 +274,22 @@ private fun PlayerCardGamesTab(
 }
 
 @Composable
-private fun PlayerCardHistoryTab(player: DynastyPlayer) {
+private fun PlayerCardHistoryTab(
+    player: DynastyPlayer,
+    dynastyId: String,
+    seasonIndex: Int,
+    schoolDisplayName: String,
+    playerStatsRepository: PlayerStatsRepository,
+) {
+    var priorSeasons by remember(player.playerId) { mutableStateOf<List<PlayerPriorSeasonSnapshot>?>(null) }
+    LaunchedEffect(player.playerId, seasonIndex) {
+        priorSeasons = playerStatsRepository.priorSeasonsForPlayer(
+            dynastyId = dynastyId,
+            playerId = player.playerId,
+            currentSeasonIndex = seasonIndex,
+            schoolDisplayName = schoolDisplayName,
+        )
+    }
     Text(
         stringResource(R.string.player_card_history_tab),
         style = MaterialTheme.typography.titleMedium,
@@ -281,9 +303,19 @@ private fun PlayerCardHistoryTab(player: DynastyPlayer) {
         ),
         style = MaterialTheme.typography.bodyMedium,
     )
-    Text(
-        stringResource(R.string.player_card_history_pipeline),
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
+    when (val seasons = priorSeasons) {
+        null -> Text(
+            stringResource(R.string.player_card_stats_loading),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        else -> if (seasons.isEmpty()) {
+            Text(
+                stringResource(R.string.player_card_history_pipeline),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        } else {
+            PlayerPriorSeasonList(seasons = seasons)
+        }
+    }
 }
