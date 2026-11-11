@@ -1,6 +1,6 @@
 # Planning tracker
 
-Quick “is this decided?” pointers. **Full specs:** [`README.md`](README.md) · **GDD spine:** [`game-design.md`](game-design.md) · **Build order:** [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md)
+Quick “is this decided?” pointers. **Full specs:** [`README.md`](README.md) · **GDD spine:** [`game-design.md`](game-design.md) · **Ship truth:** [`MEGA_BUILD_CHECKLIST.md`](../docs/MEGA_BUILD_CHECKLIST.md) · **Phase order:** [`BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md)
 
 ---
 
@@ -12,7 +12,7 @@ Planning and player-facing copy describe **the game we are building**, not a sta
 
 ### Build checklist sync
 
-Every **Done** topic below must map to step(s) in [`BUILD_CHECKLIST.md#locked-specs--build-steps-index`](../docs/BUILD_CHECKLIST.md#locked-specs--build-steps-index). Update checklist in the **same commit** as the planning change.
+Every **Done** topic below must map to **`MEGA-*` rows** in [`MEGA_BUILD_CHECKLIST.md`](../docs/MEGA_BUILD_CHECKLIST.md) (all `DONE`/`PASS`) **and** the phase index in [`BUILD_CHECKLIST.md#locked-specs--build-steps-index`](../docs/BUILD_CHECKLIST.md#locked-specs--build-steps-index). Update planning, MEGA shard, and phase table in the **same commit** when a topic truly ships.
 
 ### App updates must not break saves
 
