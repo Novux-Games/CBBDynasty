@@ -30,6 +30,7 @@ import dev.novux.dynasty.cbb.core.academics.AcademicsRecruitingBudgetEngine
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingPrestigePool
 import dev.novux.dynasty.cbb.core.recruiting.RecruitInterestSpendDelta
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingWeekGrant
+import dev.novux.dynasty.cbb.core.recruiting.SigningDayPreseasonRecruitingTransition
 import dev.novux.dynasty.cbb.core.save.DynastySchema
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
@@ -259,12 +260,14 @@ class RecruitingEconomyRepository(
             pointsSpentThisWeek = pointsSpentThisWeek,
         )
         var next = granted
-        if (
-            pos.phase == CalendarPhase.Offseason &&
-            offseasonWeek != null &&
-            offseasonWeek > dev.novux.dynasty.cbb.core.signingday.SigningDayConstants.OFFSEASON_WEEK_INDEX
-        ) {
-            next = next.copy(cycleClosed = true, pointsAvailable = 0)
+        SigningDayPreseasonRecruitingTransition.reopenSeasonOneChasingAtWeekTwo(
+            pos,
+            dynasty.metadata.seasonIndex,
+            next,
+        )?.let { next = it }
+        next = SigningDayPreseasonRecruitingTransition.ledgerAfterSigningDayAdministrativeWeeks(pos, next)
+        if (SigningDayPreseasonRecruitingTransition.enteringPreseason(pos)) {
+            next = SigningDayPreseasonRecruitingTransition.ledgerForPreseasonEntry(next)
         }
         reservationRepository.closeWeekReservations(dynasty.dynastyId, ledger.cycleSeasonIndex)
         persist(dynasty.dynastyId, next)
@@ -333,6 +336,10 @@ class RecruitingEconomyRepository(
     }
 
     private fun ledgerKey(dynastyId: String) = stringPreferencesKey("ledger_$dynastyId")
+
+    suspend fun persistLedger(dynastyId: String, ledger: RecruitingCycleLedger) {
+        persist(dynastyId, ledger)
+    }
 
     suspend fun closeCycleAfterHardSign(dynastyId: String) {
         val prefs = context.recruitingEconomyStore.data.first()

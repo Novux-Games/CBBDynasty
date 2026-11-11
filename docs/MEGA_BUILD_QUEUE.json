@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-NOTES-065",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "planning-notes-traceability.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/planning-notes-traceability.md"
-  },
-  {
     "id": "MEGA-QA-008",
     "pri": "P1",
     "status": "FAIL",

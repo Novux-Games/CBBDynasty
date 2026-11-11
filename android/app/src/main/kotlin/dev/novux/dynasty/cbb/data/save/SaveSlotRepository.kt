@@ -51,6 +51,7 @@ import dev.novux.dynasty.cbb.data.news.NewsFeedRepository
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.SeasonOneRecruitingBootstrap
+import dev.novux.dynasty.cbb.core.recruiting.SigningDayPreseasonRecruitingTransition
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.recruiting.ai.AiRecruitingWeekRunner
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
@@ -518,7 +519,18 @@ class SaveSlotRepository(
         val teamId = draft.selectedTeamId ?: coach.userTeamId
         val session = packRepository.restorePack(loaded.summary.packId ?: DynastySchema.DEFAULT_PACK_ID)
         val team = session.index.team(teamId) ?: return
-        recruitingEconomyRepository.loadOrOpenCycle(loaded, programPrestigeOverride = team.programPrestige)
+        val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded, programPrestigeOverride = team.programPrestige)
+        val gated = if (
+            SigningDayPreseasonRecruitingTransition.seasonOneOffseasonWeekOne(
+                loaded.weekCheckpoint.activePosition,
+                loaded.metadata.seasonIndex,
+            )
+        ) {
+            SigningDayPreseasonRecruitingTransition.seasonOneOffseasonWeekOneLedger(ledger)
+        } else {
+            ledger
+        }
+        recruitingEconomyRepository.persistLedger(loaded.dynastyId, gated)
         nilAnnualPoolRepository.openCyclePoolUsd(
             dynastyId = loaded.dynastyId,
             balanceNil = loaded.balanceRuleset.nil,
@@ -732,6 +744,12 @@ class SaveSlotRepository(
         }
         recruitingEconomyRepository.onCalendarWeekAdvanced(afterAdvance, recruitingSpentClosingWeek)
         val pos = afterAdvance.weekCheckpoint.activePosition
+        if (SigningDayPreseasonRecruitingTransition.enteringPreseason(pos)) {
+            val nextPoolSeason = SigningDayPreseasonRecruitingTransition.nextEnrollingClassSeasonIndex(
+                afterAdvance.metadata.seasonIndex,
+            )
+            incomingClassSeedRepository.ensurePool(afterAdvance.dynastyId, nextPoolSeason)
+        }
         if (pos.phase == CalendarPhase.Offseason) {
             portalCycleRepository.onOffseasonWeekStarted(
                 afterAdvance.dynastyId,

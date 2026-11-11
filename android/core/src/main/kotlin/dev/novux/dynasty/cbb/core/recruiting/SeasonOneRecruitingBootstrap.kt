@@ -7,10 +7,13 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
  * is ready before exhibitions ([planning/recruiting-engine.md], MEGA-RECR-053).
  */
 object SeasonOneRecruitingBootstrap {
+    const val MEGA_RECR_053: String = "MEGA-RECR-053"
+
     fun appliesToMembershipYear(seasonIndex: Int): Boolean = seasonIndex == 1
 
     /** Persisted pool key matches [dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository]. */
-    fun poolStorageSeasonIndex(membershipSeasonIndex: Int): Int = membershipSeasonIndex
+    fun poolStorageSeasonIndex(membershipSeasonIndex: Int): Int =
+        SigningDayPreseasonRecruitingTransition.enrollingPoolSeasonIndex(membershipSeasonIndex)
 
     /**
      * Top 60 must be published before the user reaches exhibition play (preseason task or wizard bootstrap).

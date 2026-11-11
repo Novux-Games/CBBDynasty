@@ -126,7 +126,7 @@
 | ID | Pri | Status | Spec quote | Finding vs Android | Evidence |
 |----|-----|--------|------------|-------------------|----------|
 | MEGA-NOTES-064 | P1 | PARTIAL | Simulation engine possession sim (supports shell Done) | Smoke-tested possession sim; narration/clutch/watch depth gaps. | `sim-strategy-lineup-injuries.md` P0/P1 table |
-| MEGA-NOTES-065 | P1 | FAIL | Signing Day → preseason transition (recruiting Done) | Calendar/bootstrap mismatch season 1 recruit cycle vs offseason W1. | `MEGA-RECR-053`, `MEGA-FRAME-062` |
+| MEGA-NOTES-065 | P1 | PASS | Signing Day → preseason transition (recruiting Done) | `SigningDayPreseasonRecruitingTransition` gates S1 OS W1 ledger, reopens W2, closes + seeds next pool on preseason entry. | `SigningDayPreseasonRecruitingTransition.kt`, `SaveSlotRepository.kt` |
 | MEGA-NOTES-066 | P2 | PASS | Notifications — no OS push (README + notes Done) | Feed-only; no FCM/notification permission flow in manifest for dynasty feed. | `notifications.md`; `AndroidManifest.xml` |
 | MEGA-NOTES-067 | P1 | PARTIAL | In-season systems discipline/chemistry (Done) | Core sim hooks exist; dashboard surfacing uneven. | `MEGA-FRAME-032`, `037`; discipline/chemistry repos |
 | MEGA-NOTES-068 | P2 | SHIP | Balance JSON wins for numbers (README rule) | UI parsers load `balance-2026.json` for recruiting/discipline/NIL costs. | `ADR-002`; `BalanceJsonLoader.kt` |
