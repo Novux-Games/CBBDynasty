@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.coach.achievements.HeadCoachAchievements
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachRatings
 import dev.novux.dynasty.cbb.core.coach.contract.HeadCoachContractEngine
@@ -59,6 +60,7 @@ fun HeadCoachCardScreen(
     onOpenJobCenter: () -> Unit = {},
     schoolHubOverview: SchoolHubOverview? = null,
     onOpenSchoolHub: (() -> Unit)? = null,
+    coachAchievements: HeadCoachAchievements? = null,
     selectedTab: CoachCardTab = CoachCardTab.Overview,
     onSelectedTabChange: (CoachCardTab) -> Unit = {},
     modifier: Modifier = Modifier,
@@ -105,6 +107,7 @@ fun HeadCoachCardScreen(
                     programPrestige = programPrestige,
                     schoolHubOverview = schoolHubOverview,
                     onOpenSchoolHub = onOpenSchoolHub,
+                    coachAchievements = coachAchievements,
                     onSpendSkill = onSpendSkill,
                     onAutoSpendChanged = onAutoSpendChanged,
                 )
@@ -202,6 +205,7 @@ private fun HeadCoachOverviewTab(
     programPrestige: Int,
     schoolHubOverview: SchoolHubOverview?,
     onOpenSchoolHub: (() -> Unit)?,
+    coachAchievements: HeadCoachAchievements?,
     onSpendSkill: (CoachSkillBranch) -> Unit,
     onAutoSpendChanged: (Boolean) -> Unit,
 ) {
@@ -212,6 +216,7 @@ private fun HeadCoachOverviewTab(
         onOpenSchoolHub = onOpenSchoolHub,
     )
     CoachOverviewContractCard(card = card, programPrestige = programPrestige)
+    coachAchievements?.let { CoachOverviewAchievementsCard(achievements = it) }
     Text(
         stringResource(R.string.coach_card_role_head),
         style = MaterialTheme.typography.titleMedium,

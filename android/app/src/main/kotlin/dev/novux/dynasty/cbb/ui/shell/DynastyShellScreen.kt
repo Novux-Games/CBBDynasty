@@ -67,6 +67,7 @@ import dev.novux.dynasty.cbb.core.discipline.PendingDisciplineIncident
 import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
 import dev.novux.dynasty.cbb.core.injuries.MedicalRedshirtPolicy
 import dev.novux.dynasty.cbb.core.coach.card.AssistantCoachCard
+import dev.novux.dynasty.cbb.core.coach.achievements.HeadCoachAchievements
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.coach.staff.SchoolStaffRoster
@@ -208,6 +209,7 @@ fun DynastyShellScreen(
     var careerModal by remember { mutableStateOf<NotificationFeedItem?>(null) }
     var coachPreviewTarget by remember { mutableStateOf<CoachPreviewTarget?>(null) }
     var coachEmploymentStatus by remember { mutableStateOf(CoachEmploymentStatus.Employed) }
+    var coachAchievements by remember { mutableStateOf<HeadCoachAchievements?>(null) }
     var recruitingLedger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
     var recruitingDashContext by remember { mutableStateOf<InSeasonRecruitingDashboardContext?>(null) }
     val coachPreviewSheetState = rememberCoachPreviewSheetState()
@@ -303,6 +305,10 @@ fun DynastyShellScreen(
             schedulePlan,
         )
         staffRoster = staffRepository.loadStaffRoster(loaded.dynastyId)
+        coachAchievements = context.requireDynastyApplication().coachAchievementsRepository.snapshot(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        )
         userSchool = schoolHubRepository.loadUserSchoolOverview(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
@@ -541,6 +547,7 @@ fun DynastyShellScreen(
                     onOpenSchoolHub = userSchool?.let { overview ->
                         { coachView = ShellCoachView.School(overview) }
                     },
+                    coachAchievements = coachAchievements,
                     displayRatings = dev.novux.dynasty.cbb.core.coach.skill.HeadCoachSkillRatings.effective(
                         view.card.ratings,
                         coachSkillState,

@@ -61,6 +61,7 @@ import dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
 import dev.novux.dynasty.cbb.data.sim.UserLeagueGameSimFactory
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.core.coach.CoachArchetype
+import dev.novux.dynasty.cbb.data.coach.CoachAchievementsRepository
 import dev.novux.dynasty.cbb.data.coach.CoachSkillPointRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
@@ -110,6 +111,7 @@ class SaveSlotRepository(
     private val incomingClassSeedRepository: IncomingClassSeedRepository,
     private val newsFeedRepository: NewsFeedRepository,
     private val userLeagueGameSimFactory: UserLeagueGameSimFactory,
+    private val coachAchievementsRepository: CoachAchievementsRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -442,6 +444,7 @@ class SaveSlotRepository(
                 ),
             )
         }
+        coachAchievementsRepository.ensureEmpty(dynastyId)
 
         val weekCheckpoint = weekCheckpointRepository.loadOrBootstrap(metadata)
         val summary = SaveSlotSummary(
