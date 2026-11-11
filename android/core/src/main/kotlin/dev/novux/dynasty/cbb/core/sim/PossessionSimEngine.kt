@@ -39,18 +39,14 @@ object PossessionSimEngine {
         val label: String,
     )
 
-    internal fun pacedTripSeconds(tuning: SimTuning, random: Random, tripPaceScale: Double = 1.0): Int {
-        val raw = sampleTripSeconds(tuning, random)
-        val targetPerTeam = (tuning.possessionsPerGameTarget.min + tuning.possessionsPerGameTarget.max) / 2
-        val targetTrips = targetPerTeam * 2
-        val baselineAvg = 12.0
-        val scale = (GameSimClock.REGULATION_SECONDS.toDouble() / targetTrips) / baselineAvg
-        val adjusted = (raw * scale * tripPaceScale).toInt()
-        return adjusted.coerceIn(GameSimClock.MIN_TRIP_SECONDS, GameSimClock.MAX_TRIP_SECONDS)
-    }
+    internal data class TripSample(
+        val rawSeconds: Int,
+        val foulStoppage: Boolean,
+    )
 
-    internal fun sampleTripSeconds(tuning: SimTuning, random: Random): Int {
+    internal fun sampleTrip(tuning: SimTuning, random: Random): TripSample {
         val bucket = random.nextInt(3)
+        val foulStoppage = bucket == 2
         val range = when (bucket) {
             0 -> tuning.timeUsedSeconds.quickTurnover
             1 -> tuning.timeUsedSeconds.quickShot
@@ -59,8 +55,30 @@ object PossessionSimEngine {
         val lo = range.firstOrNull() ?: GameSimClock.MIN_TRIP_SECONDS
         val hi = range.lastOrNull() ?: GameSimClock.MAX_TRIP_SECONDS
         val raw = if (lo >= hi) lo else random.nextInt(lo, hi + 1)
-        return raw.coerceIn(GameSimClock.MIN_TRIP_SECONDS, GameSimClock.MAX_TRIP_SECONDS)
+        return TripSample(
+            rawSeconds = raw.coerceIn(GameSimClock.MIN_TRIP_SECONDS, GameSimClock.MAX_TRIP_SECONDS),
+            foulStoppage = foulStoppage,
+        )
     }
+
+    internal fun pacedTripSecondsFromRaw(
+        tuning: SimTuning,
+        rawSeconds: Int,
+        tripPaceScale: Double = 1.0,
+    ): Int {
+        val targetPerTeam = (tuning.possessionsPerGameTarget.min + tuning.possessionsPerGameTarget.max) / 2
+        val targetTrips = targetPerTeam * 2
+        val baselineAvg = 12.0
+        val scale = (GameSimClock.REGULATION_SECONDS.toDouble() / targetTrips) / baselineAvg
+        val adjusted = (rawSeconds * scale * tripPaceScale).toInt()
+        return adjusted.coerceIn(GameSimClock.MIN_TRIP_SECONDS, GameSimClock.MAX_TRIP_SECONDS)
+    }
+
+    internal fun pacedTripSeconds(tuning: SimTuning, random: Random, tripPaceScale: Double = 1.0): Int =
+        pacedTripSecondsFromRaw(tuning, sampleTrip(tuning, random).rawSeconds, tripPaceScale)
+
+    internal fun sampleTripSeconds(tuning: SimTuning, random: Random): Int =
+        sampleTrip(tuning, random).rawSeconds
 
     internal fun resolveShotClockViolation(offense: TeamBoxScore): PossessionResolveResult {
         val box = offense.copy(
@@ -149,6 +167,7 @@ object PossessionSimEngine {
         shotClockAfter: Int,
         change: PossessionChange,
         turnoverTerminal: TurnoverTerminal? = null,
+        foulNote: String? = null,
     ): String {
         val clock = formatClock(clockRemaining)
         val pointsScored = after.points - before.points
@@ -161,7 +180,8 @@ object PossessionSimEngine {
             after.fieldGoalsAttempted > before.fieldGoalsAttempted -> "miss"
             else -> "possession"
         }
-        return "$clock | $offense | ${used}s trip | SC $shotClockBefore→$shotClockAfter | $scoreLine"
+        val foulSuffix = foulNote?.let { " | $it" }.orEmpty()
+        return "$clock | $offense | ${used}s trip | SC $shotClockBefore→$shotClockAfter | $scoreLine$foulSuffix"
     }
 
     private fun formatClock(seconds: Int): String {

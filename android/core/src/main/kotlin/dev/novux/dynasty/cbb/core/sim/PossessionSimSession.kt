@@ -28,6 +28,8 @@ class PossessionSimSession(
     private var awayBox: TeamBoxScore = resume?.awayBox ?: TeamBoxScore(teamId = input.away.teamId)
     private val log: MutableList<String> = resume?.possessionLog?.toMutableList() ?: mutableListOf()
     private var totalPossessions: Int = resume?.totalPossessions ?: 0
+    private val homeFoulLedger = PersonalFoulLedger(resume?.homePersonalFoulsByPlayer.orEmpty())
+    private val awayFoulLedger = PersonalFoulLedger(resume?.awayPersonalFoulsByPlayer.orEmpty())
 
     fun hasNext(): Boolean = gameClock > 0
 
@@ -62,7 +64,12 @@ class PossessionSimSession(
             GameplanEffectsResolver.offenseTweaks(offGameplan, usagePeak),
             GameplanEffectsResolver.defenseTweaks(defGameplan, gameClock, defenseScore, offenseScore),
         )
-        val tripSeconds = PossessionSimEngine.pacedTripSeconds(input.tuning, random, effects.tripPaceScale)
+        val tripSample = PossessionSimEngine.sampleTrip(input.tuning, random)
+        val tripSeconds = PossessionSimEngine.pacedTripSecondsFromRaw(
+            input.tuning,
+            tripSample.rawSeconds,
+            effects.tripPaceScale,
+        )
         val shotClockBefore = shotClockSeconds
         val used = PossessionShotClock.secondsConsumed(tripSeconds, shotClockSeconds, gameClock)
         gameClock -= used
@@ -100,6 +107,7 @@ class PossessionSimSession(
                 shotClockSeconds = PossessionShotClock.resetAfterOffensiveRebound(input.tuning.shotClock)
             }
         }
+        val foulNote = recordPersonalFoulIfNeeded(tripSample.foulStoppage, offenseHome)
         val line = PossessionSimEngine.formatPossessionLog(
             used,
             gameClock,
@@ -110,10 +118,29 @@ class PossessionSimSession(
             shotClockAfter = shotClockAfterTrip,
             change = resolution.change,
             turnoverTerminal = resolution.turnoverTerminal,
+            foulNote = foulNote,
         )
         log += line
         val halftime = stopAtHalftime && gameClock <= GameSimClock.HALF_SECONDS
         return PossessionStep(line, haltedAtHalftime = halftime)
+    }
+
+    private fun recordPersonalFoulIfNeeded(foulStoppage: Boolean, offenseIsHome: Boolean): String? {
+        if (!foulStoppage) return null
+        val defendingRoster = (if (offenseIsHome) input.awayRoster else input.homeRoster) ?: return null
+        val ledger = if (offenseIsHome) awayFoulLedger else homeFoulLedger
+        val playerId = PersonalFoulAssignment.pickPlayer(defendingRoster, ledger, random) ?: return null
+        val record = ledger.record(playerId)
+        if (offenseIsHome) {
+            awayBox = awayBox.copy(personalFouls = awayBox.personalFouls + 1)
+        } else {
+            homeBox = homeBox.copy(personalFouls = homeBox.personalFouls + 1)
+        }
+        return if (record.disqualified) {
+            "PF $playerId (${record.foulCount}) DQ"
+        } else {
+            "PF $playerId (${record.foulCount})"
+        }
     }
 
     fun toMidGame(): MidGameState = MidGameState(
@@ -125,6 +152,8 @@ class PossessionSimSession(
         possessionLog = log.toList(),
         totalPossessions = totalPossessions,
         shotClockSecondsRemaining = shotClockSeconds,
+        homePersonalFoulsByPlayer = homeFoulLedger.snapshot(),
+        awayPersonalFoulsByPlayer = awayFoulLedger.snapshot(),
     )
 
     fun toResult(isComplete: Boolean): GameSimResult = GameSimResult(
@@ -136,5 +165,7 @@ class PossessionSimSession(
         possessionLog = log.toList(),
         isComplete = isComplete,
         midGame = if (isComplete) null else toMidGame(),
+        homePersonalFoulsByPlayer = homeFoulLedger.snapshot(),
+        awayPersonalFoulsByPlayer = awayFoulLedger.snapshot(),
     )
 }

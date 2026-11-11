@@ -62,6 +62,7 @@ data class TeamBoxScore(
     val threePointsAttempted: Int = 0,
     val turnovers: Int = 0,
     val possessions: Int = 0,
+    val personalFouls: Int = 0,
 )
 
 data class GameSimResult(
@@ -75,6 +76,8 @@ data class GameSimResult(
     val midGame: MidGameState? = null,
     val homeInjuries: List<GameSimInjuryEvent> = emptyList(),
     val awayInjuries: List<GameSimInjuryEvent> = emptyList(),
+    val homePersonalFoulsByPlayer: Map<String, Int> = emptyMap(),
+    val awayPersonalFoulsByPlayer: Map<String, Int> = emptyMap(),
 ) {
     fun userTeamInjuries(userTeamIsHome: Boolean): List<GameSimInjuryEvent> =
         if (userTeamIsHome) homeInjuries else awayInjuries
