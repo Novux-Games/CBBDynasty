@@ -85,5 +85,25 @@ data class HeadCoachAchievements(
             val pct = wins * 1000 / games
             return "${pct / 10}.${pct % 10}%"
         }
+
+        /** Fallback when ledger snapshot is unavailable — uses current season W–L label. */
+        fun fromSeasonRecordLabel(seasonRecordLabel: String): HeadCoachAchievements {
+            val (wins, losses) = parseSeasonRecord(seasonRecordLabel)
+            return fromLedger(
+                CoachAchievementLedger(
+                    dynastyId = "",
+                    careerWins = wins,
+                    careerLosses = losses,
+                ),
+            )
+        }
+
+        fun parseSeasonRecord(seasonRecordLabel: String): Pair<Int, Int> {
+            val parts = seasonRecordLabel.split("-", limit = 2)
+            if (parts.size != 2) return 0 to 0
+            val wins = parts[0].trim().toIntOrNull()?.coerceAtLeast(0) ?: 0
+            val losses = parts[1].trim().toIntOrNull()?.coerceAtLeast(0) ?: 0
+            return wins to losses
+        }
     }
 }

@@ -124,7 +124,8 @@
     "MEGA-COACH-111",
     "MEGA-COACH-115",
     "MEGA-COACH-120",
-    "MEGA-COACH-121"
+    "MEGA-COACH-121",
+    "MEGA-COACH-128"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

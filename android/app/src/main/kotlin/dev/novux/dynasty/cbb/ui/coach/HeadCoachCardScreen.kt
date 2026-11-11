@@ -220,7 +220,11 @@ private fun HeadCoachOverviewTab(
         onOpenSchoolHub = onOpenSchoolHub,
     )
     CoachOverviewContractCard(card = card, programPrestige = programPrestige)
-    coachAchievements?.let { CoachOverviewAchievementsCard(achievements = it) }
+    val overviewAchievements = coachAchievements
+        ?: remember(card.seasonRecordLabel) {
+            HeadCoachAchievements.fromSeasonRecordLabel(card.seasonRecordLabel)
+        }
+    CoachOverviewAchievementsCard(achievements = overviewAchievements)
     Text(
         stringResource(R.string.coach_card_role_head),
         style = MaterialTheme.typography.titleMedium,

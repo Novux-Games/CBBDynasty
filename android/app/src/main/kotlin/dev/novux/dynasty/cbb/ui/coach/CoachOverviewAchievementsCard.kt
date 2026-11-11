@@ -14,9 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.coach.achievements.CoachOverviewCareerRecordPolicy
 import dev.novux.dynasty.cbb.core.coach.achievements.HeadCoachAchievements
 
-/** Head-coach career achievements ([MEGA-COACH-036]). */
+/** Head-coach career achievements ([MEGA-COACH-036], career hero [MEGA-COACH-128]). */
 @Composable
 fun CoachOverviewAchievementsCard(
     achievements: HeadCoachAchievements,
@@ -35,12 +36,9 @@ fun CoachOverviewAchievementsCard(
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
             )
-            AchievementLine(
-                stringResource(
-                    R.string.coach_achievement_career_record,
-                    achievements.recordLabel,
-                    achievements.winPercentLabel,
-                ),
+            CoachOverviewCareerRecordHero(
+                recordLabel = achievements.recordLabel,
+                winPercentLabel = achievements.winPercentLabel,
             )
             AchievementLine(
                 stringResource(
@@ -69,6 +67,33 @@ fun CoachOverviewAchievementsCard(
                 ),
             )
         }
+    }
+}
+
+@Composable
+fun CoachOverviewCareerRecordHero(
+    recordLabel: String,
+    winPercentLabel: String,
+    modifier: Modifier = Modifier,
+) {
+    @Suppress("unused")
+    val qaId = CoachOverviewCareerRecordPolicy.MEGA_ID
+    Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Text(
+            stringResource(R.string.coach_overview_career_record_title),
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        Text(
+            stringResource(
+                R.string.coach_overview_career_record_value,
+                recordLabel,
+                winPercentLabel,
+            ),
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+        )
     }
 }
 

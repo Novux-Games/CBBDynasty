@@ -325,6 +325,8 @@
     <string name="coach_overview_contract_title">Contract overview</string>
     <string name="coach_overview_achievements_title">Achievements</string>
     <string name="coach_achievement_career_record">Career record %1$s · Win %2$s</string>
+    <string name="coach_overview_career_record_title">Career W–L</string>
+    <string name="coach_overview_career_record_value">%1$s · %2$s win</string>
     <string name="coach_achievement_ncba_tourney">NCBA tournament %1$s · Win %2$s</string>
     <string name="coach_achievement_national_titles">National titles %1$d</string>
     <string name="coach_achievement_final_fours">Final Fours %1$d</string>
