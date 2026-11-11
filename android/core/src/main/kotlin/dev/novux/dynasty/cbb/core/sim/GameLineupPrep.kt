@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.core.sim
 import dev.novux.dynasty.cbb.core.lineup.DefaultStarterAlgorithm
 import dev.novux.dynasty.cbb.core.lineup.LineupSlotPolicy
 import dev.novux.dynasty.cbb.core.lineup.RotationMinutesAllocator
+import dev.novux.dynasty.cbb.core.lineup.RotationMinutesBalancer
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 
@@ -38,10 +39,11 @@ object GameLineupPrep {
         teamId: String,
         players: List<RosterPlayer>,
         userStarters: Map<PlayerPosition, String>? = null,
+        userRotationMinutes: Map<String, Int>? = null,
     ): GameSimRosterInput {
         val eligible = players.filter { RotationMinutesAllocator.isLineupEligible(it) }
         val starters = resolveStarters(eligible, userStarters)
-        val minutes = RotationMinutesAllocator.allocate(eligible, starters)
+        val minutes = RotationMinutesBalancer.resolveForSim(players, starters, userRotationMinutes)
         val byId = eligible.associateBy { it.playerId }
         val starterSlotsPerPlayer = starters.entries.groupBy({ it.value }, { it.key })
         val participants = buildList {

@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.discipline.DisciplineResolver
 import dev.novux.dynasty.cbb.core.lineup.DefaultStarterAlgorithm
+import dev.novux.dynasty.cbb.core.lineup.RotationMinutesBalancer
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.sim.GameLineupPrep
@@ -60,6 +61,12 @@ fun StrategyScreen(
         .sortedBy { it.depthOrder }
     var gameplan by remember { mutableStateOf(GameplanInput()) }
     var halftimeGameplan by remember { mutableStateOf<GameplanInput?>(null) }
+    var rotationMinutes by remember { mutableStateOf<Map<String, Int>>(emptyMap()) }
+    LaunchedEffect(players, starters) {
+        if (players.isNotEmpty() && rotationMinutes.isEmpty()) {
+            rotationMinutes = RotationMinutesBalancer.baseline(players, starters)
+        }
+    }
     LaunchedEffect(starters.values) {
         if (gameplan.usageWeights.isEmpty() && starters.isNotEmpty()) {
             gameplan = gameplan.copy(
@@ -115,6 +122,14 @@ fun StrategyScreen(
                 player = player,
             )
         }
+        if (rotationMinutes.isNotEmpty()) {
+            StrategyRotationMinutesPanel(
+                players = players,
+                starters = starters,
+                minutesByPlayer = rotationMinutes,
+                onMinutesChange = { rotationMinutes = it },
+            )
+        }
         StrategyGameplanPanel(
             starters = starters,
             players = players,
@@ -130,8 +145,9 @@ fun StrategyScreen(
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.awayName = awayTeamLabel
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeRosterPlayers = players
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeStarters = starters
+                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.rotationMinutes = rotationMinutes
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeSimRoster =
-                    GameLineupPrep.build(dynastyId, players, starters)
+                    GameLineupPrep.build(dynastyId, players, starters, rotationMinutes)
                 onWatchScrimmage()
             },
             modifier = Modifier.fillMaxWidth(),

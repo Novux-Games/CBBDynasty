@@ -16,6 +16,7 @@ object GameWatchLaunch {
     var homeSimRoster: GameSimRosterInput? = null
     var homeRosterPlayers: List<RosterPlayer> = emptyList()
     var homeStarters: Map<PlayerPosition, String> = emptyMap()
+    var rotationMinutes: Map<String, Int> = emptyMap()
     var homeOffensiveScheme: OffensiveSchemePreset = OffensiveSchemePreset.Balanced
     var homeDefensiveScheme: DefensiveSchemePreset = DefensiveSchemePreset.ManToMan
     var injuryRoll: GameSimInjuryRollInput? = null

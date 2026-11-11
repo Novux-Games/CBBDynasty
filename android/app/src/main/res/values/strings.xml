@@ -629,6 +629,9 @@
     <string name="strategy_halftime_note">Halftime tweaks apply to the second half when you watch a game.</string>
     <string name="strategy_halftime_set">Copy gameplan for second half</string>
     <string name="strategy_halftime_clear">Clear second-half copy</string>
+    <string name="strategy_rotation_title">Rotation minutes</string>
+    <string name="strategy_rotation_total">Team total: %1$d / %2$d min</string>
+    <string name="strategy_rotation_minutes_value">%1$d min</string>
     <string name="strategy_watch_scrimmage">Watch scrimmage (2s pace)</string>
     <string name="game_watch_title">Live sim</string>
     <string name="game_watch_subtitle">%1$s vs %2$s</string>

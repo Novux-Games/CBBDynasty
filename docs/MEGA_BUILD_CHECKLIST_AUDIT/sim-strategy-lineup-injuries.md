@@ -248,7 +248,7 @@
 
 | ID | Pri | Status | Requirement (spec) | Code / test | Finding |
 |----|-----|--------|-------------------|-------------|---------|
-| MEGA-SIM-137 | P0 | FAIL | Edit **minutes bands** per rotation player (steppers/sliders) | `StrategyScreen` | Display-only bench cards |
+| MEGA-SIM-137 | P0 | PASS | Edit **minutes bands** per rotation player (steppers/sliders) | `StrategyRotationMinutesPanel`, `RotationMinutesBalancer` | ±1 steppers; 200-min rebalance; flows to `GameLineupPrep` |
 | MEGA-SIM-138 | P0 | FAIL | **200 minutes** budget meter with over/under warning | `RotationMinutesAllocator` | Allocator in core; no UI meter |
 | MEGA-SIM-139 | P1 | FAIL | **Drag-to-slot** starter assignment with eligibility guard | `positions-and-lineup.md` | Read-only starter cards |
 | MEGA-SIM-140 | P1 | FAIL | **Pick from eligible list** per slot (PG…C) | Empty slot prompt | `strategy_slot_empty` only |
