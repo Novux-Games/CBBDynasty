@@ -54,3 +54,7 @@ See [`PLAY_OPEN_TESTING_SMOKE.md`](PLAY_OPEN_TESTING_SMOKE.md#mega-qa-136--updat
 ## MEGA-QA-137 — Signed AAB / Play App Signing
 
 `verify_play_aab_signing.sh` after `bundleRelease` — `bundletool validate`, `jarsigner`, `apksigner` on universal APK.
+
+## MEGA-QA-146 — Open test 30-minute session
+
+Rostered tester Gmail → Play install → 30 min script in [`PLAY_OPEN_TESTING_SMOKE.md`](PLAY_OPEN_TESTING_SMOKE.md#mega-qa-146--open-test-30-minute-session).

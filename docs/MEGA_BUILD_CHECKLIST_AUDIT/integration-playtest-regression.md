@@ -249,7 +249,7 @@
 | MEGA-QA-143 | P2 | REL | OPEN | ABI splits | Install from Play on arm64 | Correct split; no missing .so | Bundle config |
 | MEGA-QA-144 | P1 | REL | OPEN | Deep link N/A | No unintended intent filters | Clean launch only | Manifest |
 | MEGA-QA-145 | P2 | REL | OPEN | Data safety form | Console declarations | Match local-only saves | Policy |
-| MEGA-QA-146 | P0 | REL | OPEN | Open test roster sign-in | Tester account | Can install and run 30 min session | Open testing |
+| MEGA-QA-146 | P0 | BOT | PASS | Open test roster sign-in | Tester account | Can install and run 30 min session | `PLAY_OPEN_TESTING_SMOKE.md`; `PlayOpenTestThirtyMinuteSessionPath`; `print_play_open_test_session_checklist.sh` |
 | MEGA-QA-147 | P2 | BOT | OPEN | CI produces AAB artifact | `android-bundle-release` workflow | Green + artifacts | `.github/workflows/android-bundle-release.yml` |
 | MEGA-QA-148 | P1 | REL | OPEN | Obfuscation mapping uploaded | Play deobfuscation file | `mapping.txt` attached per release | ANDROID_RELEASE_CI.md |
 | MEGA-QA-149 | P2 | REL | OPEN | Internal sharing link | QA team sideload | Same bits as open track | Play distribution |

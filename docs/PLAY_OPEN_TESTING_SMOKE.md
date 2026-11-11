@@ -64,6 +64,27 @@ Play Console: **App integrity → Play App Signing** enabled; upload key matches
 
 **Automation (BOT):** `verify_play_aab_signing.sh`; `PlaySignedAabIntegrityPath`.
 
+## MEGA-QA-146 — Open test 30-minute session
+
+**Who:** Gmail accounts on the **open testing** roster (not internal-only).
+
+**Goal:** Install from Play and run ~**30 minutes** of dynasty play **without** Google account sign-in (offline-first product).
+
+| Phase | Activity | Budget |
+|-------|----------|--------|
+| Roster | Tester email enrolled in Console | 2 min |
+| Install | Play Store open-track install/update | 3 min |
+| Launch | Past studio/splash → home | 5 min |
+| Dynasty | New game or Continue | 10 min |
+| Hubs | Recruiting / Rankings / News round-trip | 5 min |
+| Advance | ≥2 Sim Weeks | 5 min |
+
+Print script for QA lead: `bash scripts/print_play_open_test_session_checklist.sh`.
+
+Constants: `PlayOpenTestThirtyMinuteSessionPath`.
+
+**Automation (BOT):** session plan unit test; no Play API in CI — rostered human session still required for REL sign-off.
+
 ## Related
 
 - Sideload parity: [`RELEASE_SIDELOAD_SMOKE.md`](RELEASE_SIDELOAD_SMOKE.md) (MEGA-QA-134)
