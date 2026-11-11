@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.roster
 
+import dev.novux.dynasty.cbb.core.fatigue.FatigueEngine
 import dev.novux.dynasty.cbb.core.player.PlayerEligibility
 import dev.novux.dynasty.cbb.core.player.PlayerRatings
 
@@ -41,6 +42,7 @@ data class RosterPlayerSeed(
     val promiseStatusWire: String = "",
     val promiseLockedSeasonIndex: Int? = null,
     val promiseStayTopN: Int? = null,
+    val stamina: Int = FatigueEngine.FRESH,
 ) {
     fun toRatings(): PlayerRatings = PlayerRatings(
         ovr = ovr,
