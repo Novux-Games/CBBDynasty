@@ -54,7 +54,7 @@
 
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
-| MEGA-COACH-028 | P0 | FAIL | Tap staff → **preview sheet** → View more → full card | Direct navigation to full screen |
+| MEGA-COACH-028 | P0 | PASS | Tap staff → **preview sheet** → View more → full card | `CoachPreviewBottomSheet` on staff tap; View more → `ShellCoachView` full card | `CoachPreviewSheet.kt`, `DynastyShellScreen.kt` |
 | MEGA-COACH-029 | P1 | GAP | Full card: persistent Back / Name / Edit chrome | Single scroll column in overlay; no top chrome |
 | MEGA-COACH-030 | P1 | GAP | Identity strip: **school + role** (no portrait per product lock) | Text-only headline; school name present; role string on HC |
 | MEGA-COACH-031 | P0 | FAIL | Tab bar: Overview · Contract · History · HOF · Draft | No `TabRow` in coach UI |
@@ -325,7 +325,7 @@
 
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
-| MEGA-COACH-187 | P0 | FAIL | `CoachPreviewSheet` modal with quick ratings | Missing composable |
+| MEGA-COACH-187 | P0 | PASS | `CoachPreviewSheet` modal with quick ratings | Modal bottom sheet + headline ratings / job security chip | `CoachPreviewSheet.kt` |
 | MEGA-COACH-188 | P1 | FAIL | User HC preview shows job security tier chip | Meter only on full screen when security passed |
 | MEGA-COACH-189 | P1 | FAIL | **[View more]** → full coach card route | Direct full screen |
 | MEGA-COACH-190 | P2 | GAP | Preview: school + role + record one-liner | Full screen shows same — no lightweight sheet |

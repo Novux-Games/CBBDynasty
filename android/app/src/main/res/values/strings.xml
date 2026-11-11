@@ -292,6 +292,10 @@
     <string name="coach_card_age">Age %1$d</string>
     <string name="coach_assistant_tenure">%1$d years in role · %2$d at school</string>
     <string name="coach_card_back_staff">Back to staff</string>
+    <string name="coach_preview_title">Coach preview</string>
+    <string name="coach_preview_view_more">View more</string>
+    <string name="coach_preview_headline_ratings">Off %1$d · Def %2$d · Rec %3$d</string>
+    <string name="coach_preview_assistant_ratings">Rec %1$d · Dev %2$d · Scout %3$d</string>
     <string name="school_hub_title">School hub</string>
     <string name="school_hub_open">Your school hub</string>
     <string name="school_hub_view_opponent">View opponent school</string>

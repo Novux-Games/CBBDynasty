@@ -84,8 +84,12 @@ import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
 import dev.novux.dynasty.cbb.ui.player.PlayerLoyaltyChips
 import dev.novux.dynasty.cbb.ui.postgame.PostgameInjurySheet
 import dev.novux.dynasty.cbb.ui.coach.AssistantCoachCardScreen
+import dev.novux.dynasty.cbb.ui.coach.CoachPreviewBottomSheet
+import dev.novux.dynasty.cbb.ui.coach.CoachPreviewTarget
 import dev.novux.dynasty.cbb.ui.coach.HeadCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.SchoolStaffTabPanel
+import dev.novux.dynasty.cbb.ui.coach.rememberCoachPreviewSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import dev.novux.dynasty.cbb.ui.school.SchoolHubScreen
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
@@ -108,6 +112,7 @@ private sealed class ShellCoachView {
     data class Assistant(val card: AssistantCoachCard) : ShellCoachView()
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DynastyShellScreen(
     initial: LoadedDynasty,
@@ -159,6 +164,8 @@ fun DynastyShellScreen(
     }
     var notificationFeed by remember { mutableStateOf<List<NotificationFeedItem>>(emptyList()) }
     var careerModal by remember { mutableStateOf<NotificationFeedItem?>(null) }
+    var coachPreviewTarget by remember { mutableStateOf<CoachPreviewTarget?>(null) }
+    val coachPreviewSheetState = rememberCoachPreviewSheetState()
     val scope = rememberCoroutineScope()
     val medicalRules = remember { BalanceMedicalRedshirtRules() }
     val position = loaded.weekCheckpoint.activePosition
@@ -288,6 +295,19 @@ fun DynastyShellScreen(
         },
     )
 
+    val openHeadCoachPreview: (HeadCoachCard) -> Unit = { card ->
+        coachPreviewTarget = CoachPreviewTarget.HeadCoach(card)
+    }
+    val openAssistantPreview: (AssistantCoachCard) -> Unit = { card ->
+        coachPreviewTarget = CoachPreviewTarget.Assistant(card)
+    }
+
+    LaunchedEffect(coachPreviewTarget) {
+        if (coachPreviewTarget != null) {
+            coachPreviewSheetState.show()
+        }
+    }
+
     careerModal?.let { modal ->
         CareerBlockNotificationDialog(
             item = modal,
@@ -301,11 +321,25 @@ fun DynastyShellScreen(
                 when (modal.kind) {
                     dev.novux.dynasty.cbb.core.notification.NotificationEventKind.CareerFired ->
                         hubMenuCallbacks.onExitHome()
-                    else -> staffRoster?.headCoach?.let { coachView = ShellCoachView.HeadCoach(it) }
+                    else -> staffRoster?.headCoach?.let { openHeadCoachPreview(it) }
                 }
             },
         )
     }
+
+    CoachPreviewBottomSheet(
+        target = coachPreviewTarget,
+        userCoachSecurity = coachSecurity,
+        sheetState = coachPreviewSheetState,
+        onDismiss = { coachPreviewTarget = null },
+        onViewMore = {
+            when (val target = coachPreviewTarget) {
+                is CoachPreviewTarget.HeadCoach -> coachView = ShellCoachView.HeadCoach(target.card)
+                is CoachPreviewTarget.Assistant -> coachView = ShellCoachView.Assistant(target.card)
+                null -> Unit
+            }
+        },
+    )
 
     when (val view = coachView) {
         is ShellCoachView.School -> {
@@ -322,12 +356,10 @@ fun DynastyShellScreen(
                             SchoolStaffTabPanel(
                                 roster = staffRoster!!,
                                 adTrust = coachSecurity,
-                                onHeadCoachClick = {
-                                    coachView = ShellCoachView.HeadCoach(staffRoster!!.headCoach)
-                                },
+                                onHeadCoachClick = { openHeadCoachPreview(staffRoster!!.headCoach) },
                                 onAssistantClick = { id ->
                                     staffRoster!!.assistants.firstOrNull { it.staffId == id }?.let {
-                                        coachView = ShellCoachView.Assistant(it)
+                                        openAssistantPreview(it)
                                     }
                                 },
                             )
@@ -407,10 +439,10 @@ fun DynastyShellScreen(
                     SchoolStaffTabPanel(
                         roster = roster,
                         adTrust = coachSecurity,
-                        onHeadCoachClick = { coachView = ShellCoachView.HeadCoach(roster.headCoach) },
+                        onHeadCoachClick = { openHeadCoachPreview(roster.headCoach) },
                         onAssistantClick = { id ->
                             roster.assistants.firstOrNull { it.staffId == id }?.let {
-                                coachView = ShellCoachView.Assistant(it)
+                                openAssistantPreview(it)
                             }
                         },
                     )
@@ -495,9 +527,7 @@ fun DynastyShellScreen(
                         feed = notificationFeed,
                         onDeepLink = onOpenRecruitingTab,
                         onStrategyOpen = hubMenuCallbacks.onOpenStrategy,
-                        onCoachCardOpen = {
-                            staffRoster?.headCoach?.let { coachView = ShellCoachView.HeadCoach(it) }
-                        },
+                        onCoachCardOpen = { staffRoster?.headCoach?.let { openHeadCoachPreview(it) } },
                         onSigningDayOpen = { onOpenSigningDay(DashboardDeepLink.SigningDayRankings) },
                     )
                 }
@@ -512,9 +542,7 @@ fun DynastyShellScreen(
                     onDismiss = { dismissedInjuryTasks = dismissedInjuryTasks + it },
                     onDeepLink = onOpenRecruitingTab,
                     onStrategyOpen = hubMenuCallbacks.onOpenStrategy,
-                    onCoachCardOpen = {
-                        staffRoster?.headCoach?.let { coachView = ShellCoachView.HeadCoach(it) }
-                    },
+                    onCoachCardOpen = { staffRoster?.headCoach?.let { openHeadCoachPreview(it) } },
                 )
                 focus?.firstGame?.let { game ->
                     NextGameCard(
