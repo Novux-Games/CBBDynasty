@@ -638,7 +638,7 @@ class SaveSlotRepository(
         val pool = RecruitingClassSeed.demoPool(loaded.metadata.seasonIndex)
         val userSchool = nilAnnualPoolRepository.userSchoolRecruitingContext(loaded)
             ?: SchoolRecruitingContext(
-                programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
+                programPrestige = recruitingEconomyRepository.resolveUserProgramPrestige(loaded),
                 schoolHomeState = "OH",
                 pipelineStates = setOf("KY", "IN", "MI", "PA", "WV"),
                 nilPoolAnnualUsd = dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository.DEFAULT_FALLBACK_USD.toInt(),
@@ -722,7 +722,8 @@ class SaveSlotRepository(
             dynastyId = loaded.dynastyId,
             balance = loaded.balanceRuleset,
             nextSeasonIndex = meta.seasonIndex,
-            postRecapPrestige = team?.programPrestige ?: RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
+            postRecapPrestige = team?.programPrestige
+                ?: recruitingEconomyRepository.resolveUserProgramPrestige(loaded),
         )
         if (team != null) {
             nilAnnualPoolRepository.openCyclePoolUsd(

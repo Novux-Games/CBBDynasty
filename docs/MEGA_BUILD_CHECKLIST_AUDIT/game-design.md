@@ -195,7 +195,7 @@
 | MEGA-GDD-109 | P0 | PASS | Recruiting · HS pool 2k–4k uniform random per season | `resolveHsPoolSize` uniform draw in 2k–4k; default `seed()` uses per dynasty+season key. | `IncomingClassSeeder.kt` |
 | MEGA-GDD-110 | P1 | PASS | Recruiting · JUCO ~1.5k pool size constant | `JUCO_POOL_SIZE = 1_500` matches GDD order of magnitude. | `IncomingClassSeeder.kt` |
 | MEGA-GDD-111 | P0 | PASS | Recruiting · persisted class pool in hub/AI/signing | Hub, AI week runner, and signing load `IncomingClassSeedRepository.ensurePool` (2k–4k persisted seeder). | `RecruitingHubScreen.kt`, `AiRecruitingRepository.kt`, `SigningDayRepository.kt` |
-| MEGA-GDD-112 | P0 | FAIL | Economy · weekly points from **chosen** school prestige | `loadOrOpenCycle` defaults prestige **40** across hub, save sim-week, AI. | `RecruitingEconomyRepository.kt`, `SaveSlotRepository.kt` |
+| MEGA-GDD-112 | P0 | PASS | Economy · weekly points from **chosen** school prestige | `loadOrOpenCycle` resolves user team `programPrestige` from pack + coach row; realigns persisted ledger tier. | `RecruitingEconomyRepository.kt`, `SaveSlotRepository.kt` |
 | MEGA-GDD-113 | P1 | GAP | NIL UX · committed/reserved/remaining breakdown | GDD ledger fields; hub shows pool remaining strip without full three-field header everywhere. | `RecruitingHubScreen.kt`, `NilBudgetLedger.kt` |
 | MEGA-GDD-114 | P1 | GAP | NIL · School hub optional read-only cycle summary | Not on `SchoolHubOverviewCard` as GDD optional surface. | `SchoolHubOverviewCard.kt` |
 | MEGA-GDD-115 | P1 | GAP | Recruiting · 50% carryover + 1.5× crunch weeks 2–5 | Core grant math PASS in tests; undermined when hub uses demo pool (MEGA-GDD-111). | `RecruitingWeekGrant.kt`, `balance-2026.json` |

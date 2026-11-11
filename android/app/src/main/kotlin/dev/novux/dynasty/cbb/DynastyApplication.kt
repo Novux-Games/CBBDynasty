@@ -228,12 +228,6 @@ class DynastyApplication : Application() {
         )
         portalCycleRepository = PortalCycleRepository(applicationContext)
         incomingClassSeedRepository = IncomingClassSeedRepository(applicationContext)
-        aiRecruitingRepository = AiRecruitingRepository(
-            applicationContext,
-            nilAnnualPoolRepository,
-            dynastyAutomationRepository,
-            incomingClassSeedRepository,
-        )
         weekCheckpointRepository = WeekCheckpointRepository(database)
         val postgameInjuryQueue = dev.novux.dynasty.cbb.data.injuries.PostgameInjuryQueue()
         dynastyRosterRepository = DynastyRosterRepository(database, postgameInjuryQueue)
@@ -243,6 +237,15 @@ class DynastyApplication : Application() {
             recruitingReservationRepository,
             dynastyRosterRepository,
             offseasonWeekNineRepository,
+            database,
+            packRepository,
+        )
+        aiRecruitingRepository = AiRecruitingRepository(
+            applicationContext,
+            nilAnnualPoolRepository,
+            dynastyAutomationRepository,
+            incomingClassSeedRepository,
+            recruitingEconomyRepository,
         )
         signingDayRepository = SigningDayRepository(
             applicationContext,

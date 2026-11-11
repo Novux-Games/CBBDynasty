@@ -31,6 +31,7 @@ class AiRecruitingRepository(
     private val nilAnnualPoolRepository: dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository,
     private val dynastyAutomationRepository: dev.novux.dynasty.cbb.data.settings.DynastyAutomationRepository,
     private val incomingClassSeedRepository: IncomingClassSeedRepository,
+    private val recruitingEconomyRepository: RecruitingEconomyRepository,
 ) {
     suspend fun runLeagueWeekIfActive(
         dynasty: LoadedDynasty,
@@ -45,7 +46,7 @@ class AiRecruitingRepository(
         val userProgramId = userProgramId(dynasty.dynastyId)
         val userSchool = nilAnnualPoolRepository.userSchoolRecruitingContext(dynasty)
             ?: SchoolRecruitingContext(
-                programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
+                programPrestige = recruitingEconomyRepository.resolveUserProgramPrestige(dynasty),
                 schoolHomeState = "OH",
                 pipelineStates = setOf("KY", "IN", "MI", "PA", "WV"),
                 nilPoolAnnualUsd = dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository.DEFAULT_FALLBACK_USD.toInt(),

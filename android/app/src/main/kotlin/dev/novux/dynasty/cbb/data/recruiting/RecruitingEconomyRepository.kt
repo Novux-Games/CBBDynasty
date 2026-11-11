@@ -26,10 +26,14 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.offseason.weektwo.OffseasonScholarshipPolicy
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.academics.ProgramAcademicsGradeEngine
+import dev.novux.dynasty.cbb.core.academics.AcademicsRecruitingBudgetEngine
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingPrestigePool
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingWeekGrant
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
+import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
+import dev.novux.dynasty.cbb.database.DynastyDatabase
 import kotlinx.coroutines.flow.first
 
 private val Context.recruitingEconomyStore: DataStore<Preferences> by preferencesDataStore(
@@ -41,27 +45,62 @@ class RecruitingEconomyRepository(
     private val reservationRepository: RecruitingReservationRepository,
     private val dynastyRosterRepository: DynastyRosterRepository,
     private val offseasonWeekNineRepository: OffseasonWeekNineRepository,
+    private val database: DynastyDatabase,
+    private val packRepository: PackRepository,
 ) {
+    suspend fun resolveUserProgramPrestige(dynasty: LoadedDynasty): Int {
+        val coach = database.dynastyCoachDao().getByDynastyId(dynasty.dynastyId) ?: return DEFAULT_PROGRAM_PRESTIGE
+        val team = packRepository.activeSession().index.team(coach.userTeamId) ?: return DEFAULT_PROGRAM_PRESTIGE
+        return team.programPrestige
+    }
+
     suspend fun loadOrOpenCycle(
         dynasty: LoadedDynasty,
-        defaultPrestige: Int = DEFAULT_PROGRAM_PRESTIGE,
+        programPrestigeOverride: Int? = null,
     ): RecruitingCycleLedger {
         val economy = economyFrom(dynasty.balanceRuleset)
+        val programPrestige = programPrestigeOverride ?: resolveUserProgramPrestige(dynasty)
         val prefs = context.recruitingEconomyStore.data.first()
         val key = ledgerKey(dynasty.dynastyId)
         val raw = prefs[key]
         if (raw != null) {
-            return decode(raw)
+            val decoded = decode(raw)
+            if (decoded.cycleSeasonIndex != dynasty.metadata.seasonIndex) {
+                return decoded
+            }
+            return alignLedgerPrestige(dynasty, economy, decoded, programPrestige)
         }
         val academicsGrade = programAcademicsGrade(dynasty.dynastyId, dynasty.metadata.seasonIndex)
         val ledger = RecruitingWeekGrant.openCycle(
             economy,
             cycleSeasonIndex = dynasty.metadata.seasonIndex,
-            programPrestige = defaultPrestige,
+            programPrestige = programPrestige,
             programAcademicsGrade = academicsGrade,
         )
         persist(dynasty.dynastyId, ledger)
         return ledger
+    }
+
+    private suspend fun alignLedgerPrestige(
+        dynasty: LoadedDynasty,
+        economy: BalanceRecruitingEconomy,
+        ledger: RecruitingCycleLedger,
+        programPrestige: Int,
+    ): RecruitingCycleLedger {
+        if (ledger.programPrestige == programPrestige) return ledger
+        val academicsGrade = ledger.programAcademicsGrade
+            ?: programAcademicsGrade(dynasty.dynastyId, dynasty.metadata.seasonIndex)
+        val tierBase = RecruitingPrestigePool.weeklyPoolPoints(economy, programPrestige)
+        val weeklyPoolBase = AcademicsRecruitingBudgetEngine.effectiveWeeklyPool(tierBase, academicsGrade)
+        val multiplier = AcademicsRecruitingBudgetEngine.budgetMultiplier(academicsGrade)
+        val aligned = ledger.copy(
+            programPrestige = programPrestige,
+            weeklyPoolBase = weeklyPoolBase,
+            programAcademicsGrade = academicsGrade,
+            academicsBudgetMultiplier = multiplier,
+        )
+        persist(dynasty.dynastyId, aligned)
+        return aligned
     }
 
     suspend fun revokeRefundableReservation(

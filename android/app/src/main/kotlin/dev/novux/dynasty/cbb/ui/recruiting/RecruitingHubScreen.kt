@@ -118,7 +118,11 @@ fun RecruitingHubScreen(
         BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
     }
     var schoolContext by remember { mutableStateOf<SchoolRecruitingContext?>(null) }
+    var userProgramPrestige by remember {
+        mutableIntStateOf(RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE)
+    }
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, nilBoostUsd, facilityGrades) {
+        userProgramPrestige = recruitingEconomyRepository.resolveUserProgramPrestige(loaded)
         schoolContext = nilAnnualPoolRepository.userSchoolRecruitingContext(
             loaded,
             nilBoostUsd,
@@ -127,7 +131,7 @@ fun RecruitingHubScreen(
     }
     val offerSnapshot = nilOffers.mapValues { it.value.toInt() }
     val resolvedSchoolContext = schoolContext ?: SchoolRecruitingContext(
-        programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
+        programPrestige = userProgramPrestige,
         schoolHomeState = "OH",
         nilPoolAnnualUsd = (nilBasePoolUsd + nilBoostUsd).toInt(),
     )

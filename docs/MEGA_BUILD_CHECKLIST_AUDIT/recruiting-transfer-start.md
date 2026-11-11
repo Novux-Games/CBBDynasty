@@ -33,7 +33,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-015 | P0 | FAIL | Prestige tier weekly pool | `loadOrOpenCycle(loaded)` defaults **`DEFAULT_PROGRAM_PRESTIGE = 40`** for almost all calls; chosen school prestige not bound at dynasty create. | `RecruitingEconomyRepository.kt`, `RecruitingHubScreen.kt` |
+| MEGA-RECR-015 | P0 | PASS | Prestige tier weekly pool | `resolveUserProgramPrestige` + `loadOrOpenCycle` use chosen school's pack prestige. | `RecruitingEconomyRepository.kt` |
 | MEGA-RECR-016 | P1 | RISK | Academics multiplier on pool | `AcademicsRecruitingBudgetEngine` scales weekly pool ±15% from program grade — not in `recruiting-engine` tier table (may be intentional from game-design; document drift). | `RecruitingWeekGrant.openCycle` |
 | MEGA-RECR-017 | P1 | PASS | 50% carryover | `RecruitingWeekGrant.applyWeekAdvanceGrant` uses `weeklyCarryoverFraction`. | `RecruitingWeekGrant.kt` + tests |
 | MEGA-RECR-018 | P1 | PASS | Signing crunch 1.5× OS W2–5 | Balance `signingCrunchOffseasonWeeks: [2,3,4,5]`, multiplier 1.5. | `assets/balance/balance-2026.json` |
@@ -304,7 +304,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-153 | P1 | FAIL | User school prestige in AI week | `AiRecruitingRepository` falls back `DEFAULT_PROGRAM_PRESTIGE` when `userSchoolRecruitingContext` null; same bug as RECR-015/068. | `AiRecruitingRepository.kt` |
+| MEGA-RECR-153 | P1 | PASS | User school prestige in AI week | AI fallback prestige from `resolveUserProgramPrestige`. | `AiRecruitingRepository.kt` |
 | MEGA-RECR-154 | P1 | PASS | AI pool = persisted class | `runLeagueWeekIfActive` uses `ensurePool` for full national class. | `AiRecruitingRepository.kt` |
 | MEGA-RECR-155 | P2 | GAP | AI influence / commits headline | `AiRecruitingWeekRunner` processes programs; News commit headlines from AI not traced in audit paths. | core `ai` package |
 | MEGA-RECR-156 | P2 | GAP | AI portal slice | Runner HS/JUCO Recommended only — portal entrants excluded (RECR-067). | `AiRecruitingWeekRunner` |
