@@ -28,8 +28,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingActionBlockReason
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingProspectActionGates
+import android.widget.Toast
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -51,6 +53,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingPointAction
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingSpendFailure
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingRefundableAction
 import dev.novux.dynasty.cbb.core.recruiting.RecommendedProspectRow
 import dev.novux.dynasty.cbb.core.recruiting.RecommendedRecruitList
@@ -95,6 +98,8 @@ fun RecruitingHubScreen(
     }
     var gateRefresh by remember { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val insufficientPointsMessage = stringResource(R.string.recruiting_insufficient_points)
     val currency = remember { NumberFormat.getCurrencyInstance(Locale.US) }
 
     val nilRules = remember(loaded.balanceRuleset) {
@@ -368,7 +373,15 @@ fun RecruitingHubScreen(
                     },
                     onPointAction = { prospectId, action, bonusAmount ->
                         scope.launch {
-                            recruitingEconomyRepository.spendPointAction(loaded, prospectId, action, bonusAmount)
+                            val result = recruitingEconomyRepository.spendPointAction(
+                                loaded,
+                                prospectId,
+                                action,
+                                bonusAmount,
+                            )
+                            if (!result.success && result.failure == RecruitingSpendFailure.InsufficientPoints) {
+                                Toast.makeText(context, insufficientPointsMessage, Toast.LENGTH_SHORT).show()
+                            }
                             ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
                             gateRefresh++
                         }
@@ -471,7 +484,15 @@ fun RecruitingHubScreen(
                                 },
                                 onPointAction = { prospectId, action, bonusAmount ->
                                     scope.launch {
-                                        recruitingEconomyRepository.spendPointAction(loaded, prospectId, action, bonusAmount)
+                                        val result = recruitingEconomyRepository.spendPointAction(
+                                            loaded,
+                                            prospectId,
+                                            action,
+                                            bonusAmount,
+                                        )
+                                        if (!result.success && result.failure == RecruitingSpendFailure.InsufficientPoints) {
+                                            Toast.makeText(context, insufficientPointsMessage, Toast.LENGTH_SHORT).show()
+                                        }
                                         ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
                                         gateRefresh++
                                     }
@@ -587,9 +608,21 @@ private fun RecommendedTabBody(
                     onAssignNil(row.prospect.prospectId, row.prospect.nilAskUsd, row.prospect.nilAskUsd.toLong())
                 },
                 onClearNil = { onAssignNil(row.prospect.prospectId, row.prospect.nilAskUsd, 0L) },
-                onDm = { onPointAction(row.prospect.prospectId, RecruitingPointAction.Dm, null) },
-                onPhoneCall = { onPointAction(row.prospect.prospectId, RecruitingPointAction.PhoneCall, null) },
-                onSendTheHouse = { onPointAction(row.prospect.prospectId, RecruitingPointAction.SendTheHouse, null) },
+                onDm = {
+                    gates?.dm?.takeIf { it.allowed }?.let {
+                        onPointAction(row.prospect.prospectId, RecruitingPointAction.Dm, null)
+                    }
+                },
+                onPhoneCall = {
+                    gates?.phoneCall?.takeIf { it.allowed }?.let {
+                        onPointAction(row.prospect.prospectId, RecruitingPointAction.PhoneCall, null)
+                    }
+                },
+                onSendTheHouse = {
+                    gates?.sendTheHouse?.takeIf { it.allowed }?.let {
+                        onPointAction(row.prospect.prospectId, RecruitingPointAction.SendTheHouse, null)
+                    }
+                },
                 onBonusPoints = {
                     gates?.let { g ->
                         if (g.bonusPoints.allowed) {
@@ -782,15 +815,22 @@ private fun RecommendedProspectRow(
 
 @Composable
 private fun blockReasonHint(gates: RecruitingProspectActionGates): String? {
-    val scoutReason = gates.scoutTheirGame.blockReason
-    val visitReason = gates.officialVisit.blockReason
-    val reason = scoutReason ?: visitReason ?: return null
+    val reason = listOf(
+        gates.dm,
+        gates.phoneCall,
+        gates.sendTheHouse,
+        gates.bonusPoints,
+        gates.scholarshipOffer,
+        gates.scoutTheirGame,
+        gates.officialVisit,
+    ).firstNotNullOfOrNull { it.blockReason }
     return when (reason) {
         RecruitingActionBlockReason.WindowClosed -> stringResource(R.string.recruiting_window_closed)
         RecruitingActionBlockReason.AlreadyUsedThisSeason -> stringResource(R.string.recruiting_used_this_season)
         RecruitingActionBlockReason.ReservationActiveThisWeek ->
             stringResource(R.string.recruiting_reservation_active)
-        RecruitingActionBlockReason.InsufficientPoints -> null
+        RecruitingActionBlockReason.InsufficientPoints -> stringResource(R.string.recruiting_insufficient_points)
+        null -> null
     }
 }
 

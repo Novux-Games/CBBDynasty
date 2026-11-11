@@ -114,7 +114,7 @@
 
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
-| MEGA-QA-060 | P0 | DEV | FAIL | Spend at 0 points | DM at 0 pool | Blocked with `InsufficientPoints` | `RecruitingHubActionGateEvaluator` |
+| MEGA-QA-060 | P0 | DEV | PASS | Spend at 0 points | DM at 0 pool | Blocked with `InsufficientPoints` | `RecruitingHubContactActionGateTest`, hub UI gates |
 | MEGA-QA-061 | P0 | DEV | FAIL | Prestige tier pool | Dynasty at 5★ school vs 2★ | Weekly pool matches school tier — not default 40 | MEGA-RECR-015 |
 | MEGA-QA-062 | P1 | DEV | OPEN | Bonus spends exact remainder | Pool=7, bonus cost gate | Spends 7; ledger 0 | `bonusGate` |
 | MEGA-QA-063 | P1 | DEV | OPEN | Reservation refund on advance | Official visit reserve → advance week | Points refund per policy | `RecruitingReservationRefund` |

@@ -445,6 +445,7 @@
     <string name="recruiting_action_scout_game">Scout game (%1$d pts)</string>
     <string name="recruiting_action_official_visit">Official visit (%1$d pts)</string>
     <string name="recruiting_window_closed">Scout game and official visits are only available in their calendar windows.</string>
+    <string name="recruiting_insufficient_points">Not enough recruiting points for this action.</string>
     <string name="recruiting_used_this_season">You already used scout or visit on this recruit this season.</string>
     <string name="recruiting_reservation_active">This recruit has a pending refunded action this week.</string>
     <string name="offseason_signing_day_hint">Signing Day — finalize your incoming class before advancing.</string>
