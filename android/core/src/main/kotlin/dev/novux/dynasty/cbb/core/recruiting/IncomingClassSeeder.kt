@@ -69,8 +69,11 @@ object IncomingClassSeeder {
         jucoBias: Boolean,
     ): List<RecruitProspect> {
         val size = count.coerceAtLeast(1)
+        val hiddenByCreationOrder = (0 until count)
+            .map { rank -> RecruitHiddenRatingSampler.forPercentileRank(rank, size, random) }
+            .shuffled(random)
         val raw = List(count) { index ->
-            val hidden = random.nextInt(1, 100)
+            val hidden = hiddenByCreationOrder[index]
             val position = PlayerPosition.entries[random.nextInt(PlayerPosition.entries.size)]
             val state = states[random.nextInt(states.size)]
             val prospectId = "$idPrefix-$seasonIndex-$index"
