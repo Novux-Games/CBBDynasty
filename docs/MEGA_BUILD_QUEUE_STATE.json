@@ -101,7 +101,8 @@
     "MEGA-QA-137",
     "MEGA-QA-146",
     "MEGA-QA-151",
-    "MEGA-QA-152"
+    "MEGA-QA-152",
+    "MEGA-QA-153"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

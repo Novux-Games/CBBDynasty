@@ -64,6 +64,8 @@ See `ReleaseR8MinifyPath` in `:core` and `android/app/proguard-rules.pro`.
 
 **Serialization + R8 (MEGA-QA-152):** critical `@Serializable` types round-trip in `ReleaseSerializationR8SmokeTest`; CI runs `bash scripts/verify_release_serialization_smoke.sh` (tests + mapping spot-check). Manual: release build → new game + load dynasty without `SerializerNotFound`.
 
+**Room + R8 (MEGA-QA-153):** `ReleaseRoomR8SmokeTest` advances three RS weeks against in-memory Room; `bash scripts/verify_release_room_smoke.sh`. ProGuard keeps `@Entity` and `RoomDatabase` in `proguard-rules.pro`.
+
 ## Local release build (optional)
 
 Requires Android SDK (`sdk.dir` in `android/local.properties`). CI signs via env vars; locally, without those vars, Gradle falls back to the **debug** keystore so `:app:bundleRelease` still runs for smoke checks:

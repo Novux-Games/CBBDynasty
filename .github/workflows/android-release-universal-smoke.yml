@@ -56,6 +56,10 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: bash scripts/verify_release_serialization_smoke.sh
 
+      - name: Verify Room release smoke (MEGA-QA-153)
+        working-directory: ${{ github.workspace }}
+        run: bash scripts/verify_release_room_smoke.sh
+
       - name: Run Play update migration smoke tests
         working-directory: android
         run: |
