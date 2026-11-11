@@ -113,7 +113,7 @@
 | MEGA-COACH-063 | P1 | PASS | Overview team card → School hub | `CoachOverviewTeamCard` on `PlayerCardScreen` Overview; tap → School hub | `PlayerCardTeamHubPathTest` |
 | MEGA-COACH-064 | P1 | PASS | NIL valuation line on Overview | `PlayerNilValuationLine` on preview + full Overview via `PlayerCardOverviewContent` | `PlayerNilValuationPathTest` |
 | MEGA-COACH-065 | P1 | PASS | Projected draft #1–60 + tier label on Overview | `PlayerDraftProjectionLine` + `PlayerDraftProjectionEngine` on Overview |
-| MEGA-COACH-066 | P1 | FAIL | Ratings tab full attribute breakdown + potential | Only headline triplet + scout |
+| MEGA-COACH-066 | P1 | PASS | Ratings tab full attribute breakdown + potential | `PlayerCardRatingsTabContent` + `PlayerRatingAttributesPanel` on Ratings tab | `PlayerRatingsTabPathTest` |
 | MEGA-COACH-067 | P0 | PASS | Stats four cards (season avg/tot, career avg/tot) | `PlayerStatsEngine` + `PlayerStatsRepository` + `PlayerStatsFourCards` on Stats tab | `core/player/stats/*`, `PlayerStatsRepository.kt`, `PlayerStatsCards.kt`, `PlayerCardScreen.kt` |
 | MEGA-COACH-068 | P0 | PASS | Games tab game log + box score drill-in | `PlayerGameLogPanel` rows + `PlayerGameBoxScoreSheet`; `PlayerGameLogSynth` + `PlayerStatsRepository.gameLogFor` | `core/player/games/*`, `PlayerGameLogPanel.kt`, `PlayerGameBoxScoreSheet.kt` |
 | MEGA-COACH-069 | P1 | PASS | History tab prior seasons | `PlayerPriorSeasonList` + `PlayerStatsRepository.priorSeasonsForPlayer` | `PlayerCardHistoryPanel.kt`, `PlayerCardScreen.kt` |

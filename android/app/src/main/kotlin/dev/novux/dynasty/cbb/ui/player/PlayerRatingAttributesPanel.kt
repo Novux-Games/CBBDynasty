@@ -17,6 +17,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.player.PlayerRatings
 import dev.novux.dynasty.cbb.core.player.shootingOverall
 
+/** OVR/OFF/DEF, shooting subs, skills, and potential rows ([MEGA-COACH-066], [MEGA-COACH-142]). */
 @Composable
 fun PlayerRatingAttributesPanel(
     ratings: PlayerRatings,

@@ -34,7 +34,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
-import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
 import dev.novux.dynasty.cbb.core.player.history.PlayerPriorSeasonSnapshot
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogEntry
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
@@ -103,7 +102,7 @@ fun PlayerCardScreen(
                     schoolHubOverview = schoolHubOverview,
                     onOpenSchoolHub = onOpenSchoolHub,
                 )
-                PlayerCardTab.Ratings -> PlayerCardRatingsTab(player = player)
+                PlayerCardTab.Ratings -> PlayerCardRatingsTabContent(player = player)
                 PlayerCardTab.Stats -> PlayerCardStatsTab(
                     player = player,
                     dynastyId = player.dynastyId,
@@ -201,22 +200,6 @@ private fun PlayerCardOverviewTab(
         onOpenSchoolHub = onOpenSchoolHub,
     )
     PlayerCardOverviewContent(player = player)
-}
-
-@Composable
-private fun PlayerCardRatingsTab(player: DynastyPlayer) {
-    Text(
-        stringResource(R.string.player_card_ratings_tab),
-        style = MaterialTheme.typography.titleMedium,
-        fontWeight = FontWeight.SemiBold,
-    )
-    PlayerRatingAttributesPanel(ratings = player.ratings)
-    PlayerLoyaltyRatingsRow(player)
-    Text(
-        stringResource(R.string.player_card_scout_ovr, player.scoutReport(ScoutDepth.Full).overall),
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
 }
 
 @Composable
