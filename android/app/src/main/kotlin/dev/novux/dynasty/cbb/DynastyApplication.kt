@@ -278,6 +278,8 @@ class DynastyApplication : Application() {
             dynastyAutomationRepository,
             incomingClassSeedRepository,
             recruitingEconomyRepository,
+            packRepository,
+            database,
         )
         recruitingWatchlistRepository = RecruitingWatchlistRepository(applicationContext)
         recruitingLostProspectsRepository = RecruitingLostProspectsRepository(applicationContext)

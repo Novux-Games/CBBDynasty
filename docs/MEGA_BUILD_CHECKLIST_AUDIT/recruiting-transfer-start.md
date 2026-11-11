@@ -135,7 +135,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-068 | P1 | FAIL | Same rules as user | League AI uses per-program prestige for tier points — PASS; user school context uses **default 40** and demo pool. | `AiRecruitingWeekRunner`, repositories |
+| MEGA-RECR-068 | P1 | PASS | Same rules as user | Pack-backed `fromPackTeams` league + dynasty pack user `SchoolRecruitingContext` (prestige/NIL). | `AiRecruitingRepository`, `AiLeagueProgramGenerator` |
 | MEGA-RECR-069 | P2 | GAP | AI visibility off-screen | No rival board UI — PASS. | spec |
 | MEGA-RECR-070 | P2 | GAP | Auto-maintain on sim-week | Wired in `SaveSlotRepository` advance path when automation on — undermined by demo pool. | save repo |
 
