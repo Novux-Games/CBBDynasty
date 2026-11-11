@@ -44,6 +44,10 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: bash scripts/verify_play_update_version_bump.sh
 
+      - name: Verify Play AAB signing integrity (MEGA-QA-137)
+        working-directory: ${{ github.workspace }}
+        run: bash scripts/verify_play_aab_signing.sh
+
       - name: Run Play update migration smoke tests
         working-directory: android
         run: |

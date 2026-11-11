@@ -240,7 +240,7 @@
 |----|-----|------|--------|----------|-------|-----------|----------|
 | MEGA-QA-135 | P0 | BOT | PASS | Play install fresh | Open testing track install | Launches past studio/splash | `PLAY_OPEN_TESTING_SMOKE.md`; `verify_play_fresh_install_launch.sh`; `PlayOpenTestInstallPath` |
 | MEGA-QA-136 | P0 | BOT | PASS | Play update over prior | Update from previous open test | Migration OK; continue works | `play_open_test_baseline_version_code.txt`; `verify_play_update_version_bump.sh`; occupied-slot migration test; `PLAY_OPEN_TESTING_SMOKE.md` |
-| MEGA-QA-137 | P0 | REL | OPEN | Signed AAB integrity | Verify Play App Signing | No `INSTALL_PARSE_FAILED` | CI AAB workflow |
+| MEGA-QA-137 | P0 | BOT | PASS | Signed AAB integrity | Verify Play App Signing | No `INSTALL_PARSE_FAILED` | `verify_play_aab_signing.sh`; `PlaySignedAabIntegrityPath`; bundle + universal smoke CI |
 | MEGA-QA-138 | P1 | REL | OPEN | In-app splash version | Open test build splash | Version/build matches CI tag | Splash version shard |
 | MEGA-QA-139 | P1 | REL | OPEN | Adaptive icon display | Launcher icon | Correct layers; no crop bug | Adaptive icon PR |
 | MEGA-QA-140 | P2 | REL | OPEN | Play pre-launch report | Run pre-launch in Console | Zero P0 crashes on matrix | Google pre-launch |

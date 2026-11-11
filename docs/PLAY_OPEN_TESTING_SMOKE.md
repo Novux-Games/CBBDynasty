@@ -48,11 +48,21 @@ Workflow: [`.github/workflows/android-release-universal-smoke.yml`](../.github/w
 
 After each Play promote, bump `play_open_test_baseline_version_code.txt` to the **shipped** `versionCode`.
 
-**Automation (BOT):**
+**Automation (BOT):** `verify_play_update_version_bump.sh`; `:database:testDebugUnitTest` occupied-slot migration; `SaveLoadAfterUpdateFixtureTest`.
 
-- `scripts/verify_play_update_version_bump.sh`
-- `:database:testDebugUnitTest` — `DynastyDatabaseMigrationRobolectricTest.playUpdateOccupiedSlot_fullMigrationChain_preservesDynastyIdForContinue`
-- `:core:test` — `SaveLoadAfterUpdateFixtureTest`, `PlayUpdateOverPriorPathTest`
+## MEGA-QA-137 — Signed AAB integrity
+
+Before upload, confirm the release bundle is signed and structurally valid (avoids `INSTALL_PARSE_FAILED` on Play-distributed builds):
+
+```bash
+cd android && ./gradlew :app:bundleRelease
+bash ../scripts/build_release_universal_apk.sh   # optional, for apksigner pass
+bash ../scripts/verify_play_aab_signing.sh
+```
+
+Play Console: **App integrity → Play App Signing** enabled; upload key matches GitHub Actions secrets when using production signing.
+
+**Automation (BOT):** `verify_play_aab_signing.sh`; `PlaySignedAabIntegrityPath`.
 
 ## Related
 

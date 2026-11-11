@@ -77,6 +77,8 @@ Details: [`RELEASE_SIDELOAD_SMOKE.md`](RELEASE_SIDELOAD_SMOKE.md). CI: **Android
 
 **Play update gate (MEGA-QA-136):** every release must use `versionCode` strictly greater than `android/play_open_test_baseline_version_code.txt`; run `bash scripts/verify_play_update_version_bump.sh` before upload. Tester flow: [`PLAY_OPEN_TESTING_SMOKE.md`](PLAY_OPEN_TESTING_SMOKE.md#mega-qa-136--update-over-prior-open-test-build).
 
+**Signed AAB integrity (MEGA-QA-137):** after `bundleRelease`, run `bash scripts/verify_play_aab_signing.sh` (`bundletool validate`, `jarsigner -verify`, `apksigner verify` on universal APK). CI runs this in **Android release universal APK smoke** and the release bundle workflow.
+
 ## Related
 
 - Debug APK workflow: [`.github/workflows/android-assemble-debug.yml`](../.github/workflows/android-assemble-debug.yml)

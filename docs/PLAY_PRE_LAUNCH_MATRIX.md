@@ -50,3 +50,7 @@ See [`PLAY_OPEN_TESTING_SMOKE.md`](PLAY_OPEN_TESTING_SMOKE.md) — install from 
 See [`PLAY_OPEN_TESTING_SMOKE.md`](PLAY_OPEN_TESTING_SMOKE.md#mega-qa-136--update-over-prior-open-test-build) — version code bump + Continue after Room migration.
 
 **Automation (BOT):** `verify_play_update_version_bump.sh`; migration + `SaveLoadAfterUpdateFixtureTest`.
+
+## MEGA-QA-137 — Signed AAB / Play App Signing
+
+`verify_play_aab_signing.sh` after `bundleRelease` — `bundletool validate`, `jarsigner`, `apksigner` on universal APK.
