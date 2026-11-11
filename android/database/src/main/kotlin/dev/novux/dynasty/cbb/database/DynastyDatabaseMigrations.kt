@@ -4,6 +4,14 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.novux.dynasty.cbb.core.save.DynastySchema
 
+val MIGRATION_18_19 = object : Migration(18, 19) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "ALTER TABLE dynasty_roster_player ADD COLUMN nilDealRaisedThisSeason INTEGER NOT NULL DEFAULT 0",
+        )
+    }
+}
+
 val MIGRATION_17_18 = object : Migration(17, 18) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
@@ -309,7 +317,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 }
 
 /** Room user version after the latest migration in this chain. */
-const val DYNASTY_DB_VERSION: Int = 18
+const val DYNASTY_DB_VERSION: Int = 19
 
 /** Ordered migration chain registered on [DynastyDatabase]; used in CI migration tests. */
 val ALL_DYNASTY_MIGRATIONS: Array<Migration> =
@@ -331,4 +339,5 @@ val ALL_DYNASTY_MIGRATIONS: Array<Migration> =
         MIGRATION_15_16,
         MIGRATION_16_17,
         MIGRATION_17_18,
+        MIGRATION_18_19,
     )

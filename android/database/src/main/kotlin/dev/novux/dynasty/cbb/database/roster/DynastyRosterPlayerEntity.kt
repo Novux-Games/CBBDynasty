@@ -25,6 +25,7 @@ data class DynastyRosterPlayerEntity(
     val heightInches: Int = 76,
     val weightLbs: Int = 200,
     val nilUsdPerYear: Long = 0,
+    val nilDealRaisedThisSeason: Boolean = false,
     val ovr: Int = 60,
     val offRating: Int = 60,
     val defRating: Int = 60,

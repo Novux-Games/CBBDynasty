@@ -251,7 +251,7 @@
 | MEGA-COACH-145 | P2 | GAP | Scout depth gates attribute visibility | `ScoutDepth.Light` on sheet — full card should respect depth rules |
 | MEGA-COACH-146 | P2 | GAP | Opponent player card view-only (no Edit) | No full card — N/A until route exists |
 | MEGA-COACH-147 | P2 | FAIL | Experience row (eligibility used / remaining) | Not on sheet |
-| MEGA-COACH-148 | P1 | FAIL | NIL `↑` chip season deal changes | No NIL field on player model in UI path |
+| MEGA-COACH-148 | P1 | PASS | NIL `↑` chip season deal changes | `nilDealRaisedThisSeason` + `PlayerNilSeasonDealEngine` + Overview `↑` chip | `PlayerNilValuationLine.kt` |
 
 ---
 

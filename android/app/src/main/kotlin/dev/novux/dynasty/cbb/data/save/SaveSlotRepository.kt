@@ -862,6 +862,7 @@ class SaveSlotRepository(
         }
         coachingCarouselRepository.loadOrCreate(loaded.dynastyId, meta.seasonIndex)
         portalCycleRepository.loadOrSimulate(loaded.dynastyId, meta.seasonIndex)
+        dynastyRosterRepository.clearNilDealRaisedFlags(loaded.dynastyId)
         return loadSlot(slotIndex)
     }
 }

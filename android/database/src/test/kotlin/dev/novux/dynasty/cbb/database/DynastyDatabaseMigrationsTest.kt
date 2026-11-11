@@ -19,6 +19,12 @@ class DynastyDatabaseMigrationsTest {
     @Test
     fun migration_17_18_version_span() {
         assertEquals(17, MIGRATION_17_18.startVersion)
-        assertEquals(DYNASTY_DB_VERSION, MIGRATION_17_18.endVersion)
+        assertEquals(18, MIGRATION_17_18.endVersion)
+    }
+
+    @Test
+    fun migration_18_19_version_span() {
+        assertEquals(18, MIGRATION_18_19.startVersion)
+        assertEquals(DYNASTY_DB_VERSION, MIGRATION_18_19.endVersion)
     }
 }

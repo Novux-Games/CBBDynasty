@@ -563,6 +563,7 @@
     <string name="player_card_history_tab">History</string>
     <string name="player_card_team_record">%1$s · %2$s</string>
     <string name="player_card_nil_line">NIL valuation: $%1$,d / year</string>
+    <string name="player_nil_deal_raised_chip">↑</string>
     <string name="player_card_draft_projection_line">Projected draft: #%1$d (%2$s)</string>
     <string name="player_card_draft_projection_na">Projected draft: N/A</string>
     <string name="player_ratings_headline_title">Headline ratings</string>

@@ -19,6 +19,7 @@ import dev.novux.dynasty.cbb.core.offseason.weekone.WeekTwoDraftResults
 import dev.novux.dynasty.cbb.core.offseason.weektwo.NbaDraftResolution
 import dev.novux.dynasty.cbb.core.roster.PlayerClassYear
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
+import dev.novux.dynasty.cbb.core.player.nil.PlayerNilSeasonDealEngine
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.data.injuries.PostgameInjuryQueue
 import dev.novux.dynasty.cbb.database.DynastyDatabase
@@ -83,6 +84,21 @@ class DynastyRosterRepository(
 
     suspend fun upsertPlayer(player: RosterPlayer) {
         dao.upsert(player.toEntity())
+    }
+
+    suspend fun applyNilRetentionBump(dynastyId: String, playerId: String, newUsdPerYear: Long): List<RosterPlayer> {
+        val player = listPlayers(dynastyId).first { it.playerId == playerId }
+        val updated = PlayerNilSeasonDealEngine.applyRetentionBump(player, newUsdPerYear)
+        dao.upsert(updated.toEntity())
+        return listPlayers(dynastyId)
+    }
+
+    suspend fun clearNilDealRaisedFlags(dynastyId: String) {
+        listPlayers(dynastyId).forEach { player ->
+            if (player.nilDealRaisedThisSeason) {
+                dao.upsert(player.copy(nilDealRaisedThisSeason = false).toEntity())
+            }
+        }
     }
 
     suspend fun applyNbaDraftResolution(dynastyId: String, resolution: NbaDraftResolution) {
