@@ -40,16 +40,7 @@ fun CoachOverviewAchievementsCard(
                 recordLabel = achievements.recordLabel,
                 winPercentLabel = achievements.winPercentLabel,
             )
-            AchievementLine(
-                stringResource(
-                    R.string.coach_achievement_ncba_tourney,
-                    achievements.ncbaTourneyRecordLabel,
-                    achievements.ncbaTourneyWinPercentLabel,
-                ),
-            )
-            AchievementLine(stringResource(R.string.coach_achievement_national_titles, achievements.nationalTitles))
-            AchievementLine(stringResource(R.string.coach_achievement_final_fours, achievements.finalFours))
-            AchievementLine(stringResource(R.string.coach_achievement_ncba_appearances, achievements.ncbaAppearances))
+            CoachOverviewNcbaPostseasonBlock(achievements = achievements)
             AchievementLine(stringResource(R.string.coach_achievement_conf_reg, achievements.confRegTitles))
             AchievementLine(stringResource(R.string.coach_achievement_conf_tourney, achievements.confTourneyTitles))
             AchievementLine(

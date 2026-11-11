@@ -225,7 +225,7 @@
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-128 | P1 | PASS | Career W–L + win % on Overview achievements | `CoachOverviewCareerRecordHero`; ledger snapshot + season fallback |
-| MEGA-COACH-129 | P1 | FAIL | NCBA tournament record / win % / titles / Final Fours | No postseason coach rollup on card |
+| MEGA-COACH-129 | P1 | PASS | NCBA tournament record / win % / titles / Final Fours | `CoachOverviewNcbaPostseasonBlock` + `CoachNcbaPostseasonRollup` on Overview |
 | MEGA-COACH-130 | P2 | FAIL | Conference RS + tourney championship chips | Not on coach card |
 | MEGA-COACH-131 | P2 | FAIL | NCI secondary tournament metrics | `secondaryPostseason*` not on coach UI |
 | MEGA-COACH-132 | P3 | FAIL | Heritage Classic record / wins | Not on coach UI |
