@@ -36,7 +36,7 @@
 | MEGA-GDD-013 | P0 | PASS | World · required dashboard tasks gate advance | Advance gate + sim-week confirm for optional work. | `DashboardAdvanceGate.kt`, `DashboardTaskGate.kt`, `SimWeekAdvanceDialog.kt` |
 | MEGA-GDD-014 | P0 | PASS | Identity · default generic ship; opaque IDs; overlay | Embedded default + `IdentityPackIndex` display merge. | `PackRepository.kt`, `IdentityPackIndex.kt`, `embedded-default.json` |
 | MEGA-GDD-015 | P0 | PASS | Identity · JSON/TXT + HTTPS URL atomic import | Pipeline validates atomically; repo wraps local/URL. | `IdentityPackImportPipeline.kt`, `PackRepository.kt`, `HttpPackRemoteFetcher.kt` |
-| MEGA-GDD-016 | P1 | GAP | Identity · import attestation + disclaimer UX | Core enforces attestation; **no** primary import screen—wizard defers to Load stub copy. | `PackImportAttestation.kt`, `SettingsStepContent.kt`, `new_settings_import_stub` |
+| MEGA-GDD-016 | P1 | PASS | Identity · import attestation + disclaimer UX | Settings → Import identity pack with disclaimer checkbox wired to `PackImportAttestation`. | `IdentityPackImportScreen.kt`, `SettingsStepContent.kt` |
 | MEGA-GDD-017 | P1 | PASS | Identity · URL allowlist + 5 MB cap | `PackUrlPolicy`, `PackPayloadPolicy`, hardening tests. | `PackUrlPolicy.kt`, `PackImportHardeningTest.kt` |
 | MEGA-GDD-018 | P1 | MISSING | Identity · optional pack manifest signature | GDD remaining decision; only version constant, no verifier. | `PackConstants.kt` (no signature field) |
 | MEGA-GDD-019 | P1 | GAP | Identity · swap never rewrites history; display cache rebuild | Overlay merge + save IDs; pack-year mismatch UI warning not found. | `IdentityPackOverlayMerger.kt`, `PackOverlaySession` (grep: no year-mismatch toast) |
@@ -155,7 +155,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-GDD-086 | P0 | FAIL | Ship checklist · import screen with attestation | No Compose screen calls `PackRepository.importFromBytes` / URL with disclaimer UI. | `PackRepository.kt`, grep `import` under `android/app/.../ui/` |
+| MEGA-GDD-086 | P0 | PASS | Ship checklist · import screen with attestation | `IdentityPackImportScreen` attestation checkbox; paste/file/URL call `importPack` / `importPackFromBytes` / `importPackFromUrl`. | `IdentityPackImportScreen.kt`, `SettingsScreen.kt` |
 | MEGA-GDD-087 | P1 | GAP | New-game wizard · pack selection at create | Wizard picks school from active pack index; cannot swap pack before first save except post-hoc repo API. | `NewGameWizardScreen.kt`, `PackRepository.kt` |
 | MEGA-GDD-088 | P1 | PASS | Import · atomic reject on invalid pack | Pipeline returns `Rejected` without partial overlay apply. | `IdentityPackImportPipeline.kt`, `IdentityPackImportPipelineTest.kt` |
 | MEGA-GDD-089 | P1 | PASS | Import · TXT codec maps `standingsTiebreakers` | Parsed into conference model (still unused by standings engine). | `IdentityPackTxtCodec.kt`, `IdentityPackModels.kt` |

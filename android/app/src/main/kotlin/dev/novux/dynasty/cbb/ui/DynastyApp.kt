@@ -37,6 +37,7 @@ import dev.novux.dynasty.cbb.ui.shell.CreditsScreen
 import dev.novux.dynasty.cbb.ui.shell.HomeMenuScreen
 import dev.novux.dynasty.cbb.ui.shell.LoadGameScreen
 import dev.novux.dynasty.cbb.ui.shell.DynastyAutomationScreen
+import dev.novux.dynasty.cbb.ui.pack.IdentityPackImportScreen
 import dev.novux.dynasty.cbb.ui.shell.SettingsScreen
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
@@ -627,6 +628,15 @@ fun DynastyApp(
                 composable(AppRoute.Settings.route) {
                     SettingsScreen(
                         settingsRepository = settingsRepository,
+                        onBack = { navController.popBackStack() },
+                        onOpenPackImport = { navController.navigate(AppRoute.PackImport.route) },
+                    )
+                }
+                composable(AppRoute.PackImport.route) {
+                    val app = LocalContext.current.requireDynastyApplication()
+                    IdentityPackImportScreen(
+                        packRepository = app.packRepository,
+                        dynastyMembershipYear = null,
                         onBack = { navController.popBackStack() },
                     )
                 }
