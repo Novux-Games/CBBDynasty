@@ -6,6 +6,7 @@ package dev.novux.dynasty.cbb.core.strategy
 object LateGamePossessionPolicy {
     const val LATE_POSSESSION_WINDOW_SECONDS: Int = 4 * 60
     const val INTENTIONAL_FOUL_TRIP_RATE: Double = 0.38
+    @Deprecated("Use SimProtectLeadWeights.avoidFoulStoppageRate via ProtectLeadLateGamePolicy")
     const val PROTECT_LEAD_AVOID_FOUL_STOPPAGE_RATE: Double = 0.65
 
     enum class PossessionDecision {

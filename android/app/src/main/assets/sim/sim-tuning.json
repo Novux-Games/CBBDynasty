@@ -65,6 +65,13 @@
       "closeMakeRateBoost": 0.015,
       "closeThreePointNudge": 0.03,
       "trailingDefenseFoulNudge": 0.10
+    },
+    "protectLead": {
+      "paceTripScale": 1.12,
+      "avoidFoulStoppageRate": 0.65,
+      "threePointShootingFoulMultiplier": 0.42,
+      "twoPointShootingFoulMultiplier": 0.78,
+      "andOneFoulMultiplier": 0.70
     }
   },
   "homeNeutralModifiers": {

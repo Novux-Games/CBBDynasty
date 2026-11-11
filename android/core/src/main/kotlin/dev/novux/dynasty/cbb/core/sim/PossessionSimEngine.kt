@@ -73,7 +73,7 @@ object PossessionSimEngine {
             LateGamePossessionPolicy.PossessionDecision.ProtectLeadPace -> {
                 val base = sampleTrip(tuning, random, eventWeights)
                 if (base.foulStoppage &&
-                    random.nextDouble() < LateGamePossessionPolicy.PROTECT_LEAD_AVOID_FOUL_STOPPAGE_RATE
+                    ProtectLeadLateGamePolicy.shouldAvoidFoulStoppage(random, eventWeights.protectLead)
                 ) {
                     quickShotTripSample(tuning, random)
                 } else {
@@ -180,6 +180,7 @@ object PossessionSimEngine {
         random: Random,
         lateClockTrip: Boolean = false,
         eventWeights: SimEventWeights = SimEventWeightsResolver.DEFAULT,
+        protectLeadDefense: Boolean = false,
     ): PossessionResolveResult =
         PossessionSubPhaseEngine.resolve(
             offense,
@@ -189,6 +190,7 @@ object PossessionSimEngine {
             random,
             lateClockTrip,
             eventWeights,
+            protectLeadDefense,
         )
 
     /** Miss terminal → OReb or DReb change ([MEGA-SIM-090]). */

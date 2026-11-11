@@ -20,6 +20,7 @@ object PossessionSubPhaseEngine {
         random: Random,
         lateClockTrip: Boolean = false,
         eventWeights: SimEventWeights = SimEventWeightsResolver.DEFAULT,
+        protectLeadDefense: Boolean = false,
     ): PossessionResolveResult {
         val box = offense.copy(possessions = offense.possessions + 1)
         val chain = mutableListOf("drive")
@@ -35,7 +36,17 @@ object PossessionSubPhaseEngine {
             return turnoverResult(box, chain, flavor)
         }
         chain += "shot"
-        return resolveShotTerminal(box, offRating, defRating, effects, random, chain, lateClockTrip, eventWeights)
+        return resolveShotTerminal(
+            box,
+            offRating,
+            defRating,
+            effects,
+            random,
+            chain,
+            lateClockTrip,
+            eventWeights,
+            protectLeadDefense,
+        )
     }
 
     private fun turnoverResult(
@@ -60,6 +71,7 @@ object PossessionSubPhaseEngine {
         chain: List<String>,
         lateClockTrip: Boolean,
         eventWeights: SimEventWeights,
+        protectLeadDefense: Boolean,
     ): PossessionResolveResult {
         val edge = (offRating - defRating).coerceIn(-30, 30)
         val makeBias = (
@@ -80,7 +92,18 @@ object PossessionSubPhaseEngine {
                 points = next.points + pts,
                 threePointsMade = next.threePointsMade + if (three) 1 else 0,
             )
-            val andOne = PossessionShootingFoulPolicy.rollAndOne(lateClockTrip, random, eventWeights)
+            val andOneMultiplier = if (protectLeadDefense) {
+                eventWeights.protectLead.andOneFoulMultiplier *
+                    ProtectLeadLateGamePolicy.shootingFoulRateMultiplier(three, eventWeights.protectLead)
+            } else {
+                1.0
+            }
+            val andOne = PossessionShootingFoulPolicy.rollAndOne(
+                lateClockTrip,
+                random,
+                eventWeights,
+                andOneMultiplier,
+            )
             val ftAttempts = if (andOne) 1 else 0
             val suffix = if (andOne) {
                 PossessionShootingFoulPolicy.chainSuffix(andOne = true, attempts = ftAttempts)
@@ -107,7 +130,12 @@ object PossessionSubPhaseEngine {
                 foulOnBlock = block.foulOnBlock,
             )
         }
-        if (PossessionShootingFoulPolicy.rollMissShootingFoul(lateClockTrip, random, eventWeights)) {
+        val missFoulMultiplier = if (protectLeadDefense) {
+            ProtectLeadLateGamePolicy.shootingFoulRateMultiplier(three, eventWeights.protectLead)
+        } else {
+            1.0
+        }
+        if (PossessionShootingFoulPolicy.rollMissShootingFoul(lateClockTrip, random, eventWeights, missFoulMultiplier)) {
             val ftAttempts = PossessionShootingFoulPolicy.attemptsForMissFoul(three)
             return PossessionResolveResult(
                 box = next,

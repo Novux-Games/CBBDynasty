@@ -149,9 +149,14 @@ class PossessionSimSession(
             lateDecision,
             eventWeights,
         )
+        val rawTripSeconds = if (ProtectLeadLateGamePolicy.isActive(lateDecision)) {
+            ProtectLeadLateGamePolicy.adjustRawTripSeconds(tripSample.rawSeconds, eventWeights.protectLead)
+        } else {
+            tripSample.rawSeconds
+        }
         val tripSeconds = PossessionSimEngine.pacedTripSecondsFromRaw(
             input.tuning,
-            tripSample.rawSeconds,
+            rawTripSeconds,
             effects.tripPaceScale,
         )
         val shotClockBefore = shotClockSeconds
@@ -209,6 +214,7 @@ class PossessionSimSession(
                     random,
                     lateClockTrip = lateClockTrip,
                     eventWeights = eventWeights,
+                    protectLeadDefense = ProtectLeadLateGamePolicy.isActive(lateDecision),
                 )
         }
         var offenseBoxAfter = resolution.box
@@ -353,6 +359,7 @@ class PossessionSimSession(
         }
         val lateTags = listOfNotNull(
             ScoreDifferentialSituationPolicy.logTag(offenseSituation),
+            if (ProtectLeadLateGamePolicy.isActive(lateDecision)) ProtectLeadLateGamePolicy.logTag() else null,
             LateGamePossessionPolicy.logTag(lateDecision),
             if (lateClockTrip) "late-clock" else null,
             teamBonusLogTag,

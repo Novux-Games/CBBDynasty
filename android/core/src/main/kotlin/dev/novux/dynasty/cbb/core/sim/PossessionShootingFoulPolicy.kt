@@ -14,20 +14,22 @@ object PossessionShootingFoulPolicy {
         lateClock: Boolean,
         random: Random,
         eventWeights: SimEventWeights = SimEventWeightsResolver.DEFAULT,
+        rateMultiplier: Double = 1.0,
     ): Boolean {
         val sf = eventWeights.shootingFoul
         val rate = sf.andOneRate * if (lateClock) sf.lateClockMultiplier else 1.0
-        return random.nextDouble() < rate
+        return random.nextDouble() < rate * rateMultiplier
     }
 
     fun rollMissShootingFoul(
         lateClock: Boolean,
         random: Random,
         eventWeights: SimEventWeights = SimEventWeightsResolver.DEFAULT,
+        rateMultiplier: Double = 1.0,
     ): Boolean {
         val sf = eventWeights.shootingFoul
         val rate = sf.missFoulRate * if (lateClock) sf.lateClockMultiplier else 1.0
-        return random.nextDouble() < rate
+        return random.nextDouble() < rate * rateMultiplier
     }
 
     fun attemptsForMissFoul(threePointAttempt: Boolean): Int = if (threePointAttempt) 3 else 2
