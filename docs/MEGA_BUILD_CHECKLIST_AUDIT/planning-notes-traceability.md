@@ -70,7 +70,7 @@
 | ID | Pri | Status | Spec quote | Finding vs Android | Evidence |
 |----|-----|--------|------------|-------------------|----------|
 | MEGA-NOTES-036 | P0 | PASS | Recruiting engine **Done** | Hub, AI week, signing, and sim-week auto-maintain use `IncomingClassSeedRepository.ensurePool` (2k–4k seeder). | `MEGA-RECR-005` PASS; GDD-111 |
-| MEGA-NOTES-037 | P0 | FAIL | Recruit interest model **Done** — weights in JSON | `spendDelta` on point actions not applied to interest meter in live spend path. | `MEGA-RECR-027`; `RecruitingEconomyRepository.spendPointAction` |
+| MEGA-NOTES-037 | P0 | PASS | Recruit interest model **Done** — weights in JSON | Per-prospect `interestDelta` from balance applied on DM/call/house/bonus/offer/visit; hub shows `liveInterest`. | `RecruitingInterestSpendRepository`, `balance-2026.json` |
 | MEGA-NOTES-038 | P2 | PASS | Recruiting interest open questions **Resolved** | Resolved prose in `recruiting-engine.md`; Android implements subset (Recommended row, influence board partial). | `recruiting-engine.md` § Resolved decisions |
 | MEGA-NOTES-039 | P1 | PARTIAL | Recruiting point actions **Done** | Costs read from `balance-2026.json`; per-target spend attribution missing for DM/call/house. | `MEGA-RECR-022`; `BalanceRecruitingActionsParser` |
 | MEGA-NOTES-040 | P1 | GAP | Recruiting dashboard tasks **Done** (triggers) | In-season optional recruiting tasks not emitted from `DashboardTaskGate`. | `MEGA-RECR-042`; `DashboardTaskGate.inSeason` |

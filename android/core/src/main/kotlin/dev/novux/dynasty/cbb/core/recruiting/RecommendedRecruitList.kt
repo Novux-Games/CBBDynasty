@@ -11,6 +11,7 @@ object RecommendedRecruitList {
         recommended: BalanceRecruitingRecommended,
         nilOffersByProspect: Map<String, Int> = emptyMap(),
         nilRules: BalanceNilRules? = null,
+        spendDeltaByProspect: Map<String, Int> = emptyMap(),
     ): List<RecommendedProspectRow> {
         return pool
             .map { prospect ->
@@ -20,6 +21,7 @@ object RecommendedRecruitList {
                     recommended,
                     nilOfferUsd = nilOffersByProspect[prospect.prospectId],
                     nilRules = nilRules,
+                    spendDelta = spendDeltaByProspect[prospect.prospectId] ?: 0,
                 )
             }
             .filterNot { SignLikelihoodEngine.hiddenOnRecommendedTab(it, school, recommended) }

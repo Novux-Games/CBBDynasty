@@ -21,6 +21,7 @@ import dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
+import dev.novux.dynasty.cbb.data.recruiting.RecruitingInterestSpendRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingReservationRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonSummerWorkoutRepository
@@ -216,6 +217,7 @@ class DynastyApplication : Application() {
         simTuningRepository = SimTuningRepository(applicationContext)
         coachingCarouselRepository = CoachingCarouselRepository(applicationContext)
         val recruitingReservationRepository = RecruitingReservationRepository(applicationContext)
+        val recruitingInterestSpendRepository = RecruitingInterestSpendRepository(applicationContext)
         nilBudgetRepository = dev.novux.dynasty.cbb.data.nil.NilBudgetRepository(
             applicationContext,
             recruitingReservationRepository,
@@ -239,6 +241,7 @@ class DynastyApplication : Application() {
             offseasonWeekNineRepository,
             database,
             packRepository,
+            recruitingInterestSpendRepository,
         )
         aiRecruitingRepository = AiRecruitingRepository(
             applicationContext,

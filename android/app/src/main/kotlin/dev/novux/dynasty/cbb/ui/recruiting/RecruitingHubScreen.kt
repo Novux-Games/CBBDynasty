@@ -118,16 +118,18 @@ fun RecruitingHubScreen(
         BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
     }
     var schoolContext by remember { mutableStateOf<SchoolRecruitingContext?>(null) }
+    var interestSpendByProspect by remember { mutableStateOf<Map<String, Int>>(emptyMap()) }
     var userProgramPrestige by remember {
         mutableIntStateOf(RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE)
     }
-    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, nilBoostUsd, facilityGrades) {
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, nilBoostUsd, facilityGrades, gateRefresh) {
         userProgramPrestige = recruitingEconomyRepository.resolveUserProgramPrestige(loaded)
         schoolContext = nilAnnualPoolRepository.userSchoolRecruitingContext(
             loaded,
             nilBoostUsd,
             facilityGrades,
         )
+        interestSpendByProspect = recruitingEconomyRepository.loadInterestSpendDeltaByProspect(loaded)
     }
     val offerSnapshot = nilOffers.mapValues { it.value.toInt() }
     val resolvedSchoolContext = schoolContext ?: SchoolRecruitingContext(
@@ -177,6 +179,7 @@ fun RecruitingHubScreen(
         recommendedConfig,
         offerSnapshot,
         nilRules,
+        interestSpendByProspect,
     ) {
         val pool = recruitingPool ?: return@remember emptyList()
         val ctx = schoolContext ?: return@remember emptyList()
@@ -186,6 +189,7 @@ fun RecruitingHubScreen(
             recommendedConfig,
             nilOffersByProspect = offerSnapshot,
             nilRules = nilRules,
+            spendDeltaByProspect = interestSpendByProspect,
         )
     }
 
@@ -324,9 +328,9 @@ fun RecruitingHubScreen(
                             gateRefresh++
                         }
                     },
-                    onPointAction = { action, bonusAmount ->
+                    onPointAction = { prospectId, action, bonusAmount ->
                         scope.launch {
-                            recruitingEconomyRepository.spendPointAction(loaded, action, bonusAmount)
+                            recruitingEconomyRepository.spendPointAction(loaded, prospectId, action, bonusAmount)
                             ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
                             gateRefresh++
                         }
@@ -388,7 +392,7 @@ private fun RecommendedTabBody(
     onSpend: (ProspectSpendRequest) -> Unit,
     onScholarshipOffer: (String) -> Unit,
     onAssignNil: (prospectId: String, nilAskUsd: Int, offerUsd: Long) -> Unit,
-    onPointAction: (RecruitingPointAction, Int?) -> Unit,
+    onPointAction: (prospectId: String, RecruitingPointAction, Int?) -> Unit,
     onRevokeOffer: (String) -> Unit,
 ) {
     val currency = remember { NumberFormat.getCurrencyInstance(Locale.US) }
@@ -447,13 +451,17 @@ private fun RecommendedTabBody(
                     onAssignNil(row.prospect.prospectId, row.prospect.nilAskUsd, row.prospect.nilAskUsd.toLong())
                 },
                 onClearNil = { onAssignNil(row.prospect.prospectId, row.prospect.nilAskUsd, 0L) },
-                onDm = { onPointAction(RecruitingPointAction.Dm, null) },
-                onPhoneCall = { onPointAction(RecruitingPointAction.PhoneCall, null) },
-                onSendTheHouse = { onPointAction(RecruitingPointAction.SendTheHouse, null) },
+                onDm = { onPointAction(row.prospect.prospectId, RecruitingPointAction.Dm, null) },
+                onPhoneCall = { onPointAction(row.prospect.prospectId, RecruitingPointAction.PhoneCall, null) },
+                onSendTheHouse = { onPointAction(row.prospect.prospectId, RecruitingPointAction.SendTheHouse, null) },
                 onBonusPoints = {
                     gates?.let { g ->
                         if (g.bonusPoints.allowed) {
-                            onPointAction(RecruitingPointAction.BonusPoints, g.bonusPoints.pointCost)
+                            onPointAction(
+                                row.prospect.prospectId,
+                                RecruitingPointAction.BonusPoints,
+                                g.bonusPoints.pointCost,
+                            )
                         }
                     }
                 },
@@ -524,7 +532,7 @@ private fun RecommendedProspectRow(
                         R.string.recruiting_influence_row,
                         rank,
                         row.influenceBoard.closeness,
-                        row.baselineInterest,
+                        row.liveInterest,
                     ),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary,

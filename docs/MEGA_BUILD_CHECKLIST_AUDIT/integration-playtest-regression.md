@@ -128,7 +128,7 @@
 | MEGA-QA-071 | P1 | DEV | OPEN | Sim-week AI spend estimate | Advance with AI on; compare estimate line | Estimate within ±15% of actual | `buildSimWeekAdvanceInputSuspended` |
 | MEGA-QA-072 | P2 | DEV | OPEN | Cycle close week 6 | After hard sign | Pool zeroed; `cycleClosed` true | `closeCycleAfterHardSign` |
 | MEGA-QA-073 | P2 | DEV | OPEN | Next cycle open recap | Season review → new cycle | Fresh pool at recap prestige | `openNextCycleAfterSeasonReview` |
-| MEGA-QA-074 | P1 | DEV | FAIL | Spend → interest meter | DM spend on prospect | Interest bar moves — not static 0.5 | MEGA-RECR-027 |
+| MEGA-QA-074 | P1 | DEV | PASS | Spend → interest meter | DM spend on prospect | `liveInterest` increases per `interestDelta` | `RecruitInterestSpendDeltaTest` |
 | MEGA-QA-075 | P3 | EMU | OPEN | Rapid tap spend | Double-tap DM | Single debit | UI debounce |
 
 ---

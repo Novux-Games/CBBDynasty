@@ -28,6 +28,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.academics.ProgramAcademicsGradeEngine
 import dev.novux.dynasty.cbb.core.academics.AcademicsRecruitingBudgetEngine
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingPrestigePool
+import dev.novux.dynasty.cbb.core.recruiting.RecruitInterestSpendDelta
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingWeekGrant
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
@@ -47,7 +48,22 @@ class RecruitingEconomyRepository(
     private val offseasonWeekNineRepository: OffseasonWeekNineRepository,
     private val database: DynastyDatabase,
     private val packRepository: PackRepository,
+    private val interestSpendRepository: RecruitingInterestSpendRepository,
 ) {
+    suspend fun loadInterestSpendDeltaByProspect(dynasty: LoadedDynasty): Map<String, Int> {
+        val ledger = loadOrOpenCycle(dynasty)
+        return interestSpendRepository.loadSpendDeltaByProspect(dynasty.dynastyId, ledger.cycleSeasonIndex)
+    }
+
+    private suspend fun applyInterestSpendDelta(
+        dynasty: LoadedDynasty,
+        prospectId: String,
+        delta: Int,
+    ) {
+        if (delta <= 0) return
+        val ledger = loadOrOpenCycle(dynasty)
+        interestSpendRepository.addSpendDelta(dynasty.dynastyId, ledger.cycleSeasonIndex, prospectId, delta)
+    }
     suspend fun resolveUserProgramPrestige(dynasty: LoadedDynasty): Int {
         val coach = database.dynastyCoachDao().getByDynastyId(dynasty.dynastyId) ?: return DEFAULT_PROGRAM_PRESTIGE
         val team = packRepository.activeSession().index.team(coach.userTeamId) ?: return DEFAULT_PROGRAM_PRESTIGE
@@ -121,6 +137,7 @@ class RecruitingEconomyRepository(
 
     suspend fun spendPointAction(
         dynasty: LoadedDynasty,
+        prospectId: String,
         action: RecruitingPointAction,
         bonusAmount: Int? = null,
     ): RecruitingSpendResult {
@@ -134,6 +151,8 @@ class RecruitingEconomyRepository(
         )
         if (result.success) {
             persist(dynasty.dynastyId, ledger.withPointsAvailable(result.pointsRemaining))
+            val delta = RecruitInterestSpendDelta.forPointAction(action, actions, bonusAmount)
+            applyInterestSpendDelta(dynasty, prospectId, delta)
         }
         return result
     }
@@ -193,6 +212,16 @@ class RecruitingEconomyRepository(
         if (result.success && reservation != null) {
             persist(dynasty.dynastyId, ledger.withPointsAvailable(result.pointsRemaining))
             reservationRepository.addReservation(dynasty.dynastyId, reservation)
+            val delta = when {
+                offer -> RecruitInterestSpendDelta.forPointAction(
+                    RecruitingPointAction.ScholarshipOffer,
+                    actions,
+                    bonusAmount = null,
+                )
+                officialVisit -> RecruitInterestSpendDelta.forOfficialVisit(actions, visitDistance)
+                else -> 0
+            }
+            applyInterestSpendDelta(dynasty, prospectId, delta)
         }
         return result
     }

@@ -40,7 +40,7 @@
 | MEGA-RECR-019 | P1 | RISK | Fixed pool per cycle | Ledger stores `weeklyPoolBase` at open; mid-cycle prestige change not applied (spec: OK until EoS). Opening at wrong prestige (RECR-015) breaks the lock. | `RecruitingCycleLedger` |
 | MEGA-RECR-020 | P1 | PASS | Refunded offer/visit/scout | Reservation refund on week advance via `RecruitingReservationRefund`. | `RecruitingEconomyRepository.onCalendarWeekAdvanced` |
 | MEGA-RECR-021 | P2 | GAP | Week 6 no new drip | `closeCycleAfterHardSign` zeroes points and sets `cycleClosed` — aligns with Signing Day admin week. | `RecruitingEconomyRepository` |
-| MEGA-RECR-022 | P1 | FAIL | Action costs from balance | Hub reads `BalanceRecruitingActionsParser` — PASS — but **DM/call/house/bonus spend has no `prospectId`**; spend is global, not per-target. | `spendPointAction` |
+| MEGA-RECR-022 | P1 | PASS | Action costs from balance | Hub spends DM/call/house/bonus per `prospectId` with balance costs + interest deltas. | `RecruitingHubScreen.kt` |
 | MEGA-RECR-023 | P2 | GAP | Bonus points “remainder” | UI spends `g.bonusPoints.pointCost` gate max, not user-chosen partial remainder. | `RecruitingHubScreen` Recommended row |
 | MEGA-RECR-024 | P2 | PASS | Sim-week spend estimate | Auto-maintain estimate uses `ensurePool` + resolved prestige context. | `SaveSlotRepository.buildSimWeekAdvanceInputSuspended` |
 | MEGA-RECR-025 | P1 | GAP | Next cycle pool at EoS recap | `openNextCycleAfterSeasonReview` uses `postRecapPrestige` — PASS when called; first cycle still wrong until recap. | `SeasonReviewRepository` |
@@ -52,7 +52,7 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-026 | P1 | GAP | Interest weights in balance JSON | Weights live in `RecruitInterestConfig` hardcoded; ADR-002 `recruiting.interest.*` not in bundle. | `RecruitInterestWeights.kt`, `balance-2026.json` |
-| MEGA-RECR-027 | P1 | FAIL | Point spend → interest meter | `RecruitInterestEngine` baseline sets `coachRelationship = 0.5`; **`spendDelta` param unused in production UI**; DM/call/house do not move live meter. | `RecruitInterestEngine.kt`, hub spend |
+| MEGA-RECR-027 | P1 | PASS | Point spend → interest meter | `interestDelta` in balance; persisted `spendDelta` per prospect; hub meter uses `liveInterest`. | `RecruitingInterestSpendRepository.kt` |
 | MEGA-RECR-028 | P2 | GAP | signLikelihood zero-spend | `SignLikelihoodEngine` uses baseline interest — PASS pattern; undermined by wrong pool/prestige inputs. | `SignLikelihoodBadge.kt` |
 | MEGA-RECR-029 | P1 | FAIL | Soft commit = influence #1 + closeness | `SigningDaySoftCommitResolver` treats **any scholarship offer reservation** as incoming signee; no influence rank/closeness thresholds. | `SigningDayIncomingSignee.kt` |
 | MEGA-RECR-030 | P2 | GAP | Influence board UI | Row shows rank/closeness from engine; board not updated by spends/commits league-wide. | `RecruitingHubScreen`, `InfluenceBoardEngine` |
@@ -174,7 +174,7 @@
 | MEGA-RECR-083 | P1 | FAIL | Two surfaces (`baseline` vs `interest`) | Spec separates Recommended **`signLikelihood`** (zero spend) from sheet **meter** (includes spend). UI conflates influence line with baseline only. | `recruiting-engine.md#two-surfaces`, hub row |
 | MEGA-RECR-084 | P2 | GAP | Dedicated recruit sheet route | Actions live inline on Recommended list; no full-screen sheet with meter, factor chips, ranked rivals. | `RecruitingHubScreen.kt` |
 | MEGA-RECR-085 | P2 | GAP | Visual meter control | No `LinearProgressIndicator` / gauge for interest or closeness — text labels only. | Hub compose |
-| MEGA-RECR-086 | P1 | FAIL | Spend → meter feedback | `RecruitInterestEngine.baselineSnapshot` supports `spendDelta`; hub never loads persisted spend per prospect after `spendPointAction`. | `RecruitInterestEngine.kt`, RECR-027 |
+| MEGA-RECR-086 | P1 | PASS | Spend → meter feedback | Hub reloads spend map on `gateRefresh` after each action. | `RecruitingHubScreen.kt` |
 | MEGA-RECR-087 | P2 | GAP | Factor score debug | `factorScores` / `effectiveWeights` not exposed in UI or dev overlay. | `RecruitInterestSnapshot` |
 | MEGA-RECR-088 | P2 | FAIL | Influence closeness league sim | `InfluenceBoardEngine` ranks user school; **closeness** not advanced on league week advance / AI spend. | core recruiting influence |
 | MEGA-RECR-089 | P2 | GAP | Official visit → campus bump | Visit spend wired with `prospectId` — PASS reservation; no `campusLife` delta surfaced on meter. | `spendRefundableAction` |
@@ -276,7 +276,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-139 | P0 | FAIL | DM / call / house **not per recruit** | `onDm` / `onPhoneCall` / `onSendTheHouse` call `spendPointAction(loaded, action, null)` — no `prospectId`; global sink. | `RecruitingHubScreen.kt` |
+| MEGA-RECR-139 | P0 | PASS | DM / call / house **per recruit** | Point actions pass `prospectId` into `spendPointAction`. | `RecruitingHubScreen.kt` |
 | MEGA-RECR-140 | P1 | FAIL | Bonus points amount | `onBonusPoints` spends `g.bonusPoints.pointCost` max gate, not user-entered **remainder** partial dump. | RECR-023 |
 | MEGA-RECR-141 | P2 | PASS | Refundable per prospect | Scholarship / scout / visit use `spendRefundableAction` with `prospectId` — PASS. | hub `onSpend` |
 | MEGA-RECR-142 | P1 | RISK | Reservations without interest | Offer reservations persist; interest/influence not updated — soft commit resolver still offer-only. | RECR-029, RECR-088 |

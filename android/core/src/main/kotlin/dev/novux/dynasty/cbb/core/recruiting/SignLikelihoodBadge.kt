@@ -15,6 +15,7 @@ enum class SignLikelihoodBadge {
 data class RecommendedProspectRow(
     val prospect: RecruitProspect,
     val baselineInterest: Int,
+    val liveInterest: Int,
     val adjustedScore: Double,
     val badge: SignLikelihoodBadge,
     val inState: Boolean,
@@ -29,15 +30,18 @@ object SignLikelihoodEngine {
         recommended: BalanceRecruitingRecommended,
         nilOfferUsd: Int? = null,
         nilRules: BalanceNilRules? = null,
+        spendDelta: Int = 0,
     ): RecommendedProspectRow {
         val snapshot = RecruitInterestEngine.baselineSnapshot(
             prospect,
             school,
             recommended,
+            spendDelta = spendDelta,
             nilOfferUsd = nilOfferUsd,
             nilRules = nilRules,
         )
         val baseline = snapshot.baselineInterest
+        val live = snapshot.liveInterest
         var adjusted = baseline.toDouble()
         adjusted -= prestigeGapPenalty(prospect.stars, school.programPrestige, recommended)
         if (prospect.position in school.positionsNeed) {
@@ -57,6 +61,7 @@ object SignLikelihoodEngine {
         return RecommendedProspectRow(
             prospect = prospect,
             baselineInterest = baseline,
+            liveInterest = live,
             adjustedScore = adjusted,
             badge = badge,
             inState = inState,
