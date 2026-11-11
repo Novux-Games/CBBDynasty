@@ -131,6 +131,7 @@ fun PlayerCardOverviewContent(
             style = MaterialTheme.typography.bodyMedium,
         )
         PlayerNilValuationLine(player = player, compact = compact)
+        PlayerDraftProjectionLine(player = player, compact = compact)
         if (!compact) {
             HorizontalDivider()
             Text(
