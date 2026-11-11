@@ -38,3 +38,9 @@ See [`PHYSICAL_DEVICE_SMOKE.md`](PHYSICAL_DEVICE_SMOKE.md) for the retail device
 See [`RELEASE_SIDELOAD_SMOKE.md`](RELEASE_SIDELOAD_SMOKE.md) — `bundleRelease` → universal APK → repeat MEGA-QA-119 smoke on device.
 
 **Automation (BOT):** `android-release-universal-smoke.yml`; `ReleaseSideloadSmokePath`.
+
+## MEGA-QA-135 — Play open testing (fresh install)
+
+See [`PLAY_OPEN_TESTING_SMOKE.md`](PLAY_OPEN_TESTING_SMOKE.md) — install from **Open testing** track; launch past studio/splash.
+
+**Automation (BOT):** `verify_play_fresh_install_launch.sh` on release universal APK; `PlayOpenTestInstallPath`.

@@ -238,7 +238,7 @@
 
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
-| MEGA-QA-135 | P0 | REL | OPEN | Play install fresh | Open testing track install | Launches past studio/splash | Play Console |
+| MEGA-QA-135 | P0 | BOT | PASS | Play install fresh | Open testing track install | Launches past studio/splash | `PLAY_OPEN_TESTING_SMOKE.md`; `verify_play_fresh_install_launch.sh`; `PlayOpenTestInstallPath` |
 | MEGA-QA-136 | P0 | REL | OPEN | Play update over prior | Update from previous open test | Migration OK; continue works | Version code bump |
 | MEGA-QA-137 | P0 | REL | OPEN | Signed AAB integrity | Verify Play App Signing | No `INSTALL_PARSE_FAILED` | CI AAB workflow |
 | MEGA-QA-138 | P1 | REL | OPEN | In-app splash version | Open test build splash | Version/build matches CI tag | Splash version shard |

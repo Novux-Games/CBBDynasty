@@ -36,6 +36,10 @@ jobs:
           RELEASE_SIDELOAD_OUT: ${{ github.workspace }}/android/app/build/outputs/sideload/release
         run: bash scripts/build_release_universal_apk.sh
 
+      - name: Verify Play fresh-install launcher (MEGA-QA-135)
+        working-directory: ${{ github.workspace }}
+        run: bash scripts/verify_play_fresh_install_launch.sh
+
       - name: Upload universal APK artifact
         uses: actions/upload-artifact@v4
         with:
