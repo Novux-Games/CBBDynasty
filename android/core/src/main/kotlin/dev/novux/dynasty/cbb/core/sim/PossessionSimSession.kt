@@ -49,8 +49,27 @@ class PossessionSimSession(
     private val awayInjuredOut = (resume?.awayInjuredPlayerIds ?: emptySet()).toMutableSet()
     private val homeMidInjuries = (resume?.homeMidGameInjuries ?: emptyList()).toMutableList()
     private val awayMidInjuries = (resume?.awayMidGameInjuries ?: emptyList()).toMutableList()
+    private var inOvertime: Boolean = resume?.inOvertime ?: false
+    private var overtimePeriods: Int = resume?.overtimePeriods ?: 0
 
     fun hasNext(): Boolean = gameClock > 0
+
+    fun isTiedAtBuzz(): Boolean =
+        gameClock <= 0 && homeBox.points == awayBox.points
+
+    fun beginOvertimePeriod() {
+        check(isTiedAtBuzz()) { "Cannot start OT unless regulation/OT period ended tied" }
+        overtimePeriods += 1
+        inOvertime = true
+        gameClock = GameSimClock.OVERTIME_SECONDS
+        shotClockSeconds = PossessionShotClock.resetOnChangeOfPossession(input.tuning.shotClock)
+        offenseHome = random.nextBoolean()
+        log += "— OT$overtimePeriods (5:00) — ${homeBox.points}-${awayBox.points}"
+    }
+
+    fun periodsPlayedTotal(): Int = 1 + overtimePeriods
+
+    fun latestLogLine(): String = log.last()
 
     fun step(): PossessionStep {
         check(hasNext()) { "No possessions remaining" }
@@ -187,7 +206,7 @@ class PossessionSimSession(
         )
         log += line
         newInjuryLines.forEach { log += it }
-        val halftime = stopAtHalftime && gameClock <= GameSimClock.HALF_SECONDS
+        val halftime = stopAtHalftime && !inOvertime && gameClock <= GameSimClock.HALF_SECONDS
         return PossessionStep(line, haltedAtHalftime = halftime)
     }
 
@@ -336,6 +355,8 @@ class PossessionSimSession(
         awayInjuredPlayerIds = awayInjuredOut.toSet(),
         homeMidGameInjuries = homeMidInjuries.toList(),
         awayMidGameInjuries = awayMidInjuries.toList(),
+        inOvertime = inOvertime,
+        overtimePeriods = overtimePeriods,
     )
 
     fun toResult(isComplete: Boolean): GameSimResult {
@@ -357,6 +378,8 @@ class PossessionSimSession(
         awayPlayerBox = awayPlayerLedger.snapshot(),
         homeInjuries = homeMidInjuries.toList(),
         awayInjuries = awayMidInjuries.toList(),
+        periodsPlayed = periodsPlayedTotal(),
+        overtimePeriods = overtimePeriods,
         )
     }
 

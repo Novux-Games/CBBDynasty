@@ -49,6 +49,22 @@ object GameWatchPlayback {
                 resumedAfterHalftime = true
             }
         }
+        while (session.isTiedAtBuzz()) {
+            session.beginOvertimePeriod()
+            onLine(session.latestLogLine())
+            val otBannerDelay = onLineDelayMs?.invoke() ?: lineDelayMs(speedMultiplier)
+            if (otBannerDelay > 0) {
+                delay(otBannerDelay)
+            }
+            while (session.hasNext()) {
+                val step = session.step()
+                onLine(step.logLine)
+                val lineDelay = onLineDelayMs?.invoke() ?: lineDelayMs(speedMultiplier)
+                if (lineDelay > 0) {
+                    delay(lineDelay)
+                }
+            }
+        }
         var final = session.toResult(isComplete = true)
         require(resumedAfterHalftime || final.totalPossessions > 0)
         if (injuryRoll != null) {

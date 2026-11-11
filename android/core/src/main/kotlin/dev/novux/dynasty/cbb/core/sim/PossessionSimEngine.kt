@@ -30,6 +30,7 @@ object PossessionSimEngine {
                 return session.toResult(isComplete = false)
             }
         }
+        GameSimOvertime.playUntilWinner(session)
         var result = session.toResult(isComplete = true)
         BoxScoreCoherence.assertValid(result)
         if (injuryRoll != null) {

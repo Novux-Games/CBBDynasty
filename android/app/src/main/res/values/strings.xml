@@ -656,6 +656,7 @@
     <string name="game_watch_score_start">Tip-off</string>
     <string name="game_watch_score_half">Halftime — %1$d-%2$d</string>
     <string name="game_watch_score_final">Final — %1$d-%2$d</string>
+    <string name="game_watch_score_final_ot">Final (OT%3$d) — %1$d-%2$d</string>
     <string name="game_watch_halftime_title">Halftime</string>
     <string name="game_watch_halftime_score">Score %1$d-%2$d</string>
     <string name="game_watch_halftime_deny_on">Deny primary: On</string>

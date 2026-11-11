@@ -194,11 +194,20 @@ fun GameWatchScreen(
                 }
             },
         )
-        scoreLine = context.getString(
-            R.string.game_watch_score_final,
-            result.homeScore,
-            result.awayScore,
-        )
+        scoreLine = if (result.overtimePeriods > 0) {
+            context.getString(
+                R.string.game_watch_score_final_ot,
+                result.homeScore,
+                result.awayScore,
+                result.overtimePeriods,
+            )
+        } else {
+            context.getString(
+                R.string.game_watch_score_final,
+                result.homeScore,
+                result.awayScore,
+            )
+        }
         finalResult = result
         postgameArticle = PostgameReportGenerator.generate(
             userTeamName = homeName,

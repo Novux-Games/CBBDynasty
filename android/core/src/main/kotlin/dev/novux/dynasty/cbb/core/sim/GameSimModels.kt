@@ -10,6 +10,7 @@ import dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset
 object GameSimClock {
     const val REGULATION_SECONDS: Int = 40 * 60
     const val HALF_SECONDS: Int = 20 * 60
+    const val OVERTIME_SECONDS: Int = 5 * 60
     const val MIN_TRIP_SECONDS: Int = 3
     const val MAX_TRIP_SECONDS: Int = 30
 }
@@ -84,6 +85,9 @@ data class GameSimResult(
     val awayFloorSecondsByPlayer: Map<String, Int> = emptyMap(),
     val homePlayerBox: List<PlayerBoxScore> = emptyList(),
     val awayPlayerBox: List<PlayerBoxScore> = emptyList(),
+    /** Regulation counts as 1; each 5:00 OT period adds 1 — [planning/simulation-engine.md]. */
+    val periodsPlayed: Int = 1,
+    val overtimePeriods: Int = 0,
 ) {
     fun userTeamInjuries(userTeamIsHome: Boolean): List<GameSimInjuryEvent> =
         if (userTeamIsHome) homeInjuries else awayInjuries

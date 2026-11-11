@@ -41,7 +41,7 @@
 | MEGA-SIM-004 | GAP | Shot-clock **violation** turnover type | — | No violation branch in `resolvePossessionForSession` |
 | MEGA-SIM-005 | PARTIAL | Trip time bands: quick TO 3–6, quick shot 8–14, foul 12–18 | `SimTuning.timeUsedSeconds`, `sampleTripSeconds` | Bands loaded; pacing also scaled via `pacedTripSeconds` |
 | MEGA-SIM-006 | GAP | Late-clock (22–30s) contested shot / TO / foul bumps from tuning | — | No late-clock branch keyed on `used` |
-| MEGA-SIM-007 | GAP | **Overtime** 5:00 until winner | — | Loop ends at `gameClock == 0`; no OT |
+| MEGA-SIM-007 | PASS | **Overtime** 5:00 until winner | `GameSimOvertime`, `PossessionSimSession` | OT periods until score breaks tie |
 | MEGA-SIM-008 | PARTIAL | **~60–70** possessions per team | `possessionsPerGameTarget`, paced trips | Team possession counts often in band per tests; not enforced hard |
 | MEGA-SIM-009 | PARTIAL | Terminal events: TO, 2PT/3PT, FT chains, rebounds, blocks, steals text | `resolvePossessionForSession` | Only coarse TO / FGA / score; no FTs, rebounds, blocks, steals in box |
 | MEGA-SIM-010 | GAP | Possession log format `14:32 \| HOME \| #12 3PT miss \| …` | `formatPossessionLog` | Generic `clock \| side \| Ns trip \| TO/+PTS/miss` — no jersey numbers |
@@ -54,7 +54,7 @@
 | MEGA-SIM-017 | GAP | In-game **substitution** from rotation bands / fatigue | `RotationMinutesAllocator` (pre-game only) | Five-on-floor not rotated during sim |
 | MEGA-SIM-018 | GAP | Mid-game **injury** DNP from injury minute onward | `injuries.md` sim hook | Injuries only `GameSimInjuryRoll` post-game |
 | MEGA-SIM-019 | SHIP | `GameSimResult` includes `possessionLog`, `isComplete`, `midGame` | `GameSimModels.kt` | Present |
-| MEGA-SIM-020 | GAP | `periodsPlayed` (regulation + OT count) | — | Field not on result type |
+| MEGA-SIM-020 | PASS | `periodsPlayed` (regulation + OT count) | `GameSimResult.periodsPlayed` | `1 + overtimePeriods` |
 | MEGA-SIM-021 | GAP | Participant fields: `height`, `weight`, `shooting` struct | `GameSimParticipant` | Only ids, slots, OFF/DEF, targetMinutes |
 | MEGA-SIM-022 | PARTIAL | Slot-played ratings drive outcomes (84 PG at SG > 72 SG) | `GameLineupPrep`, `weightedOffensive` | Team rating is minutes-weighted; no per-possession player attribution |
 | MEGA-SIM-023 | GAP | Optional position-comfort nudge without flipping OVR order | — | Not in tuning consumption |
@@ -240,7 +240,7 @@
 | MEGA-SIM-133 | P1 | FAIL | Export / persist box on dynasty **game record** for schedule replay | Save model | Scrimmage-local |
 | MEGA-SIM-134 | P2 | FAIL | **Plus-minus** optional column (product) | — | Not required by planning; nice for depth |
 | MEGA-SIM-135 | P1 | FAIL | Coherence **retry loop** on release (cap N) per spec | `BoxScoreCoherence` | `require()` crash path |
-| MEGA-SIM-136 | P1 | FAIL | **`periodsPlayed`** on `GameSimResult` + OT display | MEGA-SIM-007/020 | Field missing; OT missing |
+| MEGA-SIM-136 | P1 | PASS | **`periodsPlayed`** on `GameSimResult` + OT display | `GameSimResult`, watch final string | `periodsPlayed` / OT log lines |
 
 ---
 
@@ -303,7 +303,7 @@
 | MEGA-SIM-168 | P2 | FAIL | **Position comfort** nudge from tuning without OVR order flip | `positions-and-lineup.md` | Not consumed |
 | MEGA-SIM-169 | P1 | FAIL | **Height/weight/shooting** struct on `GameSimParticipant` | MEGA-SIM-021 | Incomplete participant model |
 | MEGA-SIM-170 | P1 | FAIL | Apply **home venue modifiers** in `PossessionSimSession` | MEGA-SIM-024 | Loaded, not applied |
-| MEGA-SIM-171 | P0 | FAIL | **Overtime** loop until winner; `periodsPlayed` | MEGA-SIM-007 | Regulation-only |
+| MEGA-SIM-171 | P0 | PASS | **Overtime** loop until winner; `periodsPlayed` | `GameSimOvertime` watch + fast sim | `overtimePeriods`, watch final OT label |
 | MEGA-SIM-172 | P1 | FAIL | **Strategy lock** after week advance (design lock) | MEGA-SIM-051 | Edits still allowed |
 | MEGA-SIM-173 | P1 | FAIL | Calendar **user game** wires schemes, roster, injuries, tuning | MEGA-SIM-081 | Scrimmage path only complete |
 | MEGA-SIM-174 | P2 | FAIL | **WIN_SHARES** not in box (correct) — dynasty EoS job documented in sim README | MEGA-SIM-028 | PASS intent; document in UI |
