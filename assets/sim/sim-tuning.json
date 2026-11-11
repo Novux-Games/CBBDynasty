@@ -52,6 +52,19 @@
     "periodEnd": {
       "countMadeBasketAtPeriodEnd": true,
       "countFreeThrowsAtPeriodEnd": true
+    },
+    "situation": {
+      "lateWindowSeconds": 240,
+      "closeMarginPoints": 3,
+      "trailingThreePointBoost": 0.10,
+      "trailingTurnoverBoost": 0.02,
+      "trailingMakeRatePenalty": 0.02,
+      "leadingThreePointPenalty": 0.08,
+      "leadingTurnoverReduction": 0.015,
+      "leadingPaceScale": 0.97,
+      "closeMakeRateBoost": 0.015,
+      "closeThreePointNudge": 0.03,
+      "trailingDefenseFoulNudge": 0.10
     }
   },
   "homeNeutralModifiers": {

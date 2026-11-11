@@ -121,10 +121,21 @@ class PossessionSimSession(
         val usagePeak = GameplanUsageNormalizer.normalize(offGameplan?.usageWeights.orEmpty())
             .values
             .maxOrNull() ?: 0.2
-        val effects = GameplanEffectsResolver.mergeInto(
+        var effects = GameplanEffectsResolver.mergeInto(
             schemeEffects,
             GameplanEffectsResolver.offenseTweaks(offGameplan, usagePeak),
             GameplanEffectsResolver.defenseTweaks(defGameplan, gameClock, defenseScore, offenseScore),
+        )
+        val offenseSituation = ScoreDifferentialSituationPolicy.classify(
+            gameClock,
+            offenseScore,
+            defenseScore,
+            eventWeights.situation,
+        )
+        effects = ScoreDifferentialSituationPolicy.applyToEffects(
+            effects,
+            offenseSituation,
+            eventWeights.situation,
         )
         val lateDecision = LateGamePossessionPolicy.defenseDecision(
             strategy = defGameplan?.lateGameFoulStrategy ?: LateGameFoulStrategy.Standard,
@@ -167,6 +178,19 @@ class PossessionSimSession(
         val intentionalFoulTrip = tripSample.intentionalFoul
         var foulStoppage = tripSample.foulStoppage || intentionalFoulTrip
         if (lateClockTrip && !foulStoppage && random.nextDouble() < PossessionLateClockPolicy.EXTRA_FOUL_STOPPAGE_RATE) {
+            foulStoppage = true
+        }
+        val defenseSituationFoulNudge = ScoreDifferentialSituationPolicy.trailingDefenseFoulNudge(
+            gameClockSeconds = clockBeforeTrip,
+            defenseScore = defenseScore,
+            offenseScore = offenseScore,
+            weights = eventWeights.situation,
+        )
+        if (
+            !foulStoppage &&
+            defenseSituationFoulNudge > 0.0 &&
+            random.nextDouble() < defenseSituationFoulNudge
+        ) {
             foulStoppage = true
         }
         val offRating = teamOffensiveRating(offenseIsHome = offenseHome) + effects.offensiveRatingDelta
@@ -328,6 +352,7 @@ class PossessionSimSession(
             else -> null
         }
         val lateTags = listOfNotNull(
+            ScoreDifferentialSituationPolicy.logTag(offenseSituation),
             LateGamePossessionPolicy.logTag(lateDecision),
             if (lateClockTrip) "late-clock" else null,
             teamBonusLogTag,

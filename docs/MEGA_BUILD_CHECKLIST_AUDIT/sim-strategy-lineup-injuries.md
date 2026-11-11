@@ -201,7 +201,7 @@
 
 | ID | Pri | Status | Requirement (spec) | Code / test | Finding |
 |----|-----|--------|-------------------|-------------|---------|
-| MEGA-SIM-111 | P1 | FAIL | **Score differential** late (e.g. last 4:00) affects shot selection / fouling | Planning situation weights | Team ratings static regardless of score |
+| MEGA-SIM-111 | P1 | PASS | **Score differential** late (e.g. last 4:00) affects shot selection / fouling | `ScoreDifferentialSituationPolicy`, `SimSituationWeights` | Trailing → more 3PA/TO; leading → pace protect; defense foul nudge; log tags |
 | MEGA-SIM-112 | P0 | PASS | **Late-game foul strategy** changes possession decisions (foul to extend, protect) not only defense tweak scalar | `LateGamePossessionPolicy`, `sampleTripForLateGame` | Trailing foul-early → foul-stoppage trips; protect lead avoids foul stops |
 | MEGA-SIM-113 | P1 | FAIL | **Protect lead**: lower pace, avoid fouls on 3PT attempts tuning | `strategy-schemes.md` | Not possession-level |
 | MEGA-SIM-114 | P1 | FAIL | **Foul early** when trailing: hack-a / quick fouls on trip sample | — | — |
