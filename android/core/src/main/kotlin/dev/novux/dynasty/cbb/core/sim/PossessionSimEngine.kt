@@ -68,13 +68,16 @@ object PossessionSimEngine {
         defRating: Int,
         effects: ResolvedSchemeEffects,
         random: Random,
-    ): TeamBoxScore {
+    ): PossessionResolveResult {
         var box = offense.copy(possessions = offense.possessions + 1)
         val edge = (offRating - defRating).coerceIn(-30, 30)
         val makeBias = (0.42 + edge * 0.004 + effects.makeRateAdjust).coerceIn(0.25, 0.65)
         val roll = random.nextDouble()
         return when {
-            roll < effects.turnoverChance -> box.copy(turnovers = box.turnovers + 1)
+            roll < effects.turnoverChance -> PossessionResolveResult(
+                box.copy(turnovers = box.turnovers + 1),
+                PossessionChange.DefenseTakesBall,
+            )
             roll < effects.turnoverChance + 0.33 -> {
                 val three = random.nextDouble() < effects.threePointAttemptRate
                 val attempt = box.fieldGoalsAttempted + 1
@@ -90,13 +93,15 @@ object PossessionSimEngine {
                         points = next.points + pts,
                         threePointsMade = next.threePointsMade + if (three) 1 else 0,
                     )
+                    PossessionResolveResult(next, PossessionChange.DefenseTakesBall)
+                } else {
+                    offensiveReboundOrDefReb(next, random)
                 }
-                next
             }
             else -> {
                 val attempt = box.fieldGoalsAttempted + 1
                 val three = random.nextDouble() < effects.threePointAttemptRate * 0.92
-                if (three) {
+                val next = if (three) {
                     box.copy(
                         fieldGoalsAttempted = attempt,
                         threePointsAttempted = box.threePointsAttempted + 1,
@@ -104,7 +109,20 @@ object PossessionSimEngine {
                 } else {
                     box.copy(fieldGoalsAttempted = attempt)
                 }
+                offensiveReboundOrDefReb(next, random)
             }
+        }
+    }
+
+    private fun offensiveReboundOrDefReb(
+        afterMiss: TeamBoxScore,
+        random: Random,
+    ): PossessionResolveResult {
+        val oreb = random.nextDouble() < PossessionShotClock.DEFAULT_OFFENSIVE_REBOUND_KEEP_RATE
+        return if (oreb) {
+            PossessionResolveResult(afterMiss, PossessionChange.OffenseRetainsOffensiveRebound)
+        } else {
+            PossessionResolveResult(afterMiss, PossessionChange.DefenseTakesBall)
         }
     }
 
@@ -114,6 +132,9 @@ object PossessionSimEngine {
         offense: String,
         before: TeamBoxScore,
         after: TeamBoxScore,
+        shotClockBefore: Int,
+        shotClockAfter: Int,
+        change: PossessionChange,
     ): String {
         val clock = formatClock(clockRemaining)
         val pointsScored = after.points - before.points
@@ -121,10 +142,11 @@ object PossessionSimEngine {
         val scoreLine = when {
             pointsScored > 0 -> "+$pointsScored PTS"
             turnedOver -> "TO"
+            change == PossessionChange.OffenseRetainsOffensiveRebound -> "miss OReb"
             after.fieldGoalsAttempted > before.fieldGoalsAttempted -> "miss"
             else -> "possession"
         }
-        return "$clock | $offense | ${used}s trip | $scoreLine"
+        return "$clock | $offense | ${used}s trip | SC $shotClockBefore→$shotClockAfter | $scoreLine"
     }
 
     private fun formatClock(seconds: Int): String {

@@ -162,11 +162,11 @@
 
 | ID | Pri | Status | Requirement (spec) | Code / test | Finding |
 |----|-----|--------|-------------------|-------------|---------|
-| MEGA-SIM-086 | P0 | FAIL | Carry **shot-clock seconds remaining** per offensive trip; reset **30** on change, **20** after OReb | `SimTuning.shotClock`; no session field | Trip time sampled independent of shot-clock state; OReb never extends possession |
+| MEGA-SIM-086 | P0 | PASS | Carry **shot-clock seconds remaining** per offensive trip; reset **30** on change, **20** after OReb | `PossessionSimSession.shotClockSeconds`, `PossessionShotClock` | Trip capped by shot clock; log `SC 30→22`; OReb retains offense + 20s reset |
 | MEGA-SIM-087 | P0 | FAIL | **Shot-clock violation** terminal event + AST/TO stat + log line | `resolvePossessionForSession` | No violation branch; only generic turnover bucket |
 | MEGA-SIM-088 | P1 | FAIL | **Late-clock** tuning (22–30s): contested make↓, TO↑, foul↑ | `simulation-engine.md` §late clock | No `used` threshold branch |
 | MEGA-SIM-089 | P1 | FAIL | Sub-phases optional: drive → kick → shot within one trip | Planning event chains | Single roll → one terminal outcome |
-| MEGA-SIM-090 | P0 | FAIL | **Offensive rebound** → same team possession + 20s shot clock | — | Misses never create OReb sequence |
+| MEGA-SIM-090 | P0 | PARTIAL | **Offensive rebound** → same team possession + 20s shot clock | `PossessionChange.OffenseRetainsOffensiveRebound` | OReb path + SC 20 reset; no rebound stat line yet |
 | MEGA-SIM-091 | P1 | FAIL | **Defensive rebound** change of possession in log text | `formatPossessionLog` | No rebound vocabulary |
 | MEGA-SIM-092 | P1 | FAIL | **Steal / bad pass / travel / offensive foul** turnover flavors | `eventWeights` unused | All turnovers anonymous |
 | MEGA-SIM-093 | P1 | FAIL | **Block** on shot attempt + optional foul-on-block | — | No blocks in resolve path |

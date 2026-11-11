@@ -3,7 +3,6 @@ package dev.novux.dynasty.cbb.core.sim
 import dev.novux.dynasty.cbb.core.strategy.GameplanEffectsResolver
 import dev.novux.dynasty.cbb.core.strategy.GameplanUsageNormalizer
 import dev.novux.dynasty.cbb.core.strategy.SchemeMatchupResolver
-import kotlin.math.min
 import kotlin.random.Random
 
 data class PossessionStep(
@@ -22,6 +21,8 @@ class PossessionSimSession(
     private val input: GameSimInput = input
     private var random: Random = resume?.random ?: Random(input.seed)
     private var gameClock: Int = resume?.gameClockSeconds ?: GameSimClock.REGULATION_SECONDS
+    private var shotClockSeconds: Int = resume?.shotClockSecondsRemaining
+        ?: PossessionShotClock.resetOnChangeOfPossession(input.tuning.shotClock)
     private var offenseHome: Boolean = resume?.offenseHome ?: random.nextBoolean()
     private var homeBox: TeamBoxScore = resume?.homeBox ?: TeamBoxScore(teamId = input.home.teamId)
     private var awayBox: TeamBoxScore = resume?.awayBox ?: TeamBoxScore(teamId = input.away.teamId)
@@ -62,15 +63,17 @@ class PossessionSimSession(
             GameplanEffectsResolver.defenseTweaks(defGameplan, gameClock, defenseScore, offenseScore),
         )
         val tripSeconds = PossessionSimEngine.pacedTripSeconds(input.tuning, random, effects.tripPaceScale)
-        val used = min(tripSeconds, gameClock)
+        val shotClockBefore = shotClockSeconds
+        val used = PossessionShotClock.secondsConsumed(tripSeconds, shotClockSeconds, gameClock)
         gameClock -= used
+        val shotClockAfterTrip = PossessionShotClock.remainingAfterTrip(shotClockBefore, used)
         totalPossessions++
 
         val offRating = (if (offenseHome) input.homeOffensive() else input.awayOffensive()) +
             effects.offensiveRatingDelta
         val defRating = (if (offenseHome) input.awayDefensive() else input.homeDefensive()) +
             effects.defensiveRatingDelta
-        val after = PossessionSimEngine.resolvePossessionForSession(
+        val resolution = PossessionSimEngine.resolvePossessionForSession(
             sides.box,
             offRating,
             defRating,
@@ -78,13 +81,30 @@ class PossessionSimSession(
             random,
         )
         if (offenseHome) {
-            homeBox = after
+            homeBox = resolution.box
         } else {
-            awayBox = after
+            awayBox = resolution.box
         }
-        val line = PossessionSimEngine.formatPossessionLog(used, gameClock, sides.label, sides.box, after)
+        when (resolution.change) {
+            PossessionChange.DefenseTakesBall -> {
+                offenseHome = !offenseHome
+                shotClockSeconds = PossessionShotClock.resetOnChangeOfPossession(input.tuning.shotClock)
+            }
+            PossessionChange.OffenseRetainsOffensiveRebound -> {
+                shotClockSeconds = PossessionShotClock.resetAfterOffensiveRebound(input.tuning.shotClock)
+            }
+        }
+        val line = PossessionSimEngine.formatPossessionLog(
+            used,
+            gameClock,
+            sides.label,
+            sides.box,
+            resolution.box,
+            shotClockBefore = shotClockBefore,
+            shotClockAfter = shotClockAfterTrip,
+            change = resolution.change,
+        )
         log += line
-        offenseHome = !offenseHome
         val halftime = stopAtHalftime && gameClock <= GameSimClock.HALF_SECONDS
         return PossessionStep(line, haltedAtHalftime = halftime)
     }
@@ -97,6 +117,7 @@ class PossessionSimSession(
         awayBox = awayBox,
         possessionLog = log.toList(),
         totalPossessions = totalPossessions,
+        shotClockSecondsRemaining = shotClockSeconds,
     )
 
     fun toResult(isComplete: Boolean): GameSimResult = GameSimResult(

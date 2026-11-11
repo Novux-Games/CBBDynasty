@@ -55,7 +55,8 @@
     "MEGA-RECR-006",
     "MEGA-RECR-053",
     "MEGA-RECR-082",
-    "MEGA-RECR-100"
+    "MEGA-RECR-100",
+    "MEGA-SIM-086"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

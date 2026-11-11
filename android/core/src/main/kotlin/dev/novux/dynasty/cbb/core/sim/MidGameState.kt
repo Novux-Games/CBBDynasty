@@ -11,6 +11,8 @@ data class MidGameState(
     val awayBox: TeamBoxScore,
     val possessionLog: List<String>,
     val totalPossessions: Int,
+    /** Seconds left on the offensive shot clock for the current trip (MEGA-SIM-086). */
+    val shotClockSecondsRemaining: Int = 30,
 )
 
 data class SimulateOptions(
