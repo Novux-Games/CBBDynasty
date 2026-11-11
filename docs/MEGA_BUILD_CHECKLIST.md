@@ -23,8 +23,9 @@
 | [`MEGA_BUILD_CHECKLIST_AUDIT/postseason-awards-history.md`](MEGA_BUILD_CHECKLIST_AUDIT/postseason-awards-history.md) | `postseason.md`, `postseason-frame.md`, `selection-engine.md`, `awards.md`, `season-review.md`, `history-hub.md` | 106 |
 | [`MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md`](MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md) | `news-hub.md`, `notifications.md`, `in-season-systems.md`, `app-shell.md`, `branding.md` | 87 |
 | [`MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md`](MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md) | `league-branding.md`, `ncba-branding.md`, `2026-NCAA-Directory.md`, pack | 82 |
+| [`MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md`](MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md) | Playtest, perf, persistence, nav, release/R8 | 170 |
 
-**Total granular IDs:** **722** (`MEGA-*-NNN` across shards).  
+**Total granular IDs:** **722** feature audit (`MEGA-*-*-NNN` across planning shards) + **170** QA matrix (`MEGA-QA-*` in integration shard).  
 **Sub-agent audits:** Composer-backed deep reads (Sonnet quota exhausted during run; audits are static code + spec trace, not emulator QA).
 
 **How to use**
