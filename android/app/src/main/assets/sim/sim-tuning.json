@@ -71,6 +71,11 @@
       "closeMarginPoints": 5,
       "peakPlayerUsageMultiplier": 1.35
     },
+    "denyPrimary": {
+      "assignedSlotTurnoverBoost": 0.018,
+      "denyFoulOnPrimaryTouchRate": 0.085,
+      "denyFoulOnTurnoverRate": 0.065
+    },
     "foulEarly": {
       "intentionalFoulTripRate": 0.40,
       "hackaQuickFoulTripRate": 0.30,

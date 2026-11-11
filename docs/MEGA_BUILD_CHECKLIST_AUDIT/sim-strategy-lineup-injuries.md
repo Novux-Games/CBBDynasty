@@ -207,7 +207,7 @@
 | MEGA-SIM-114 | P1 | PASS | **Foul early** when trailing: hack-a / quick fouls on trip sample | `FoulEarlyLateGamePolicy`, `SimFoulEarlyWeights` | Tunable intentional + hack-a quick foul trips; clock-stop resolve + logs |
 | MEGA-SIM-115 | P1 | PASS | **Clutch** usage bump to gameplan peak usage player | `ClutchUsagePolicy`, `SimClutchUsageWeights` | Last 4:00 close → peak `usageWeights`×mult for stat attribution |
 | MEGA-SIM-116 | P2 | FAIL | **Timeout** not simulated (acceptable) but **last possession** log tag | Product clarity | No “CLUTCH” / score context on lines |
-| MEGA-SIM-117 | P1 | FAIL | **Deny primary** raises pressure on assigned defender slot with foul risk | `primaryScorerSlot` partial | Toggle without slot picker or per-possession defense |
+| MEGA-SIM-117 | P1 | PASS | **Deny primary** raises pressure on assigned defender slot with foul risk | `DenyPrimaryScorerPolicy`, `SimDenyPrimaryWeights` | Assigned slot turnover boost; deny foul on primary touch → targeted PF + logs |
 | MEGA-SIM-118 | P2 | FAIL | Home **crowd** nudge in final 2:00 when venue modifiers applied | `SimVenueModifiers` unwired | Venue loaded, not applied in session |
 
 ---

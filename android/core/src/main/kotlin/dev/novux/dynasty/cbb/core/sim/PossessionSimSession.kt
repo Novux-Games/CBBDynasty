@@ -198,6 +198,35 @@ class PossessionSimSession(
         ) {
             foulStoppage = true
         }
+        val homeFloorIdsEarly = floorPlayerIds(home = true)
+        val awayFloorIdsEarly = floorPlayerIds(home = false)
+        val offenseFloorEarly = fallbackFloor(
+            if (offenseHome) homeFloorIdsEarly else awayFloorIdsEarly,
+            if (offenseHome) input.homeRoster else input.awayRoster,
+            if (offenseHome) homeFoulLedger else awayFoulLedger,
+            if (offenseHome) homeDisqualifiedOut else awayDisqualifiedOut,
+        )
+        val defenseFloorEarly = fallbackFloor(
+            if (offenseHome) awayFloorIdsEarly else homeFloorIdsEarly,
+            if (offenseHome) input.awayRoster else input.homeRoster,
+            if (offenseHome) awayFoulLedger else homeFoulLedger,
+            if (offenseHome) awayDisqualifiedOut else homeDisqualifiedOut,
+        )
+        val denyPrimaryCtx = DenyPrimaryScorerPolicy.context(
+            defGameplan = defGameplan,
+            offenseRoster = if (offenseHome) input.homeRoster else input.awayRoster,
+            offenseFloor = offenseFloorEarly,
+            defenseFloor = defenseFloorEarly,
+            defenseRoster = if (offenseHome) input.awayRoster else input.homeRoster,
+        )
+        val denyTurnoverBoost = DenyPrimaryScorerPolicy.extraTurnoverChance(denyPrimaryCtx, eventWeights.denyPrimary)
+        val resolveEffectsForPossession = if (denyTurnoverBoost > 0.0) {
+            resolveEffects.copy(
+                turnoverChance = (resolveEffects.turnoverChance + denyTurnoverBoost).coerceIn(0.10, 0.40),
+            )
+        } else {
+            resolveEffects
+        }
         val offRating = teamOffensiveRating(offenseIsHome = offenseHome) + effects.offensiveRatingDelta
         val defRating = teamDefensiveRating(defenseIsHome = !offenseHome) + effects.defensiveRatingDelta
         val resolution = when {
@@ -210,13 +239,14 @@ class PossessionSimSession(
                     sides.box,
                     offRating,
                     defRating,
-                    resolveEffects,
+                    resolveEffectsForPossession,
                     random,
                     lateClockTrip = lateClockTrip,
                     eventWeights = eventWeights,
                     protectLeadDefense = ProtectLeadLateGamePolicy.isActive(lateDecision),
                 )
         }
+        val turnoversAdded = resolution.box.turnovers - sides.box.turnovers
         var offenseBoxAfter = resolution.box
         var subPhaseChain = resolution.subPhaseChain
         if (resolution.freeThrowAttempts > 0) {
@@ -283,8 +313,8 @@ class PossessionSimSession(
             inOvertime = inOvertime,
         )
         val periodEndLogTag = PossessionPeriodEndPolicy.logTag(periodEndCtx)
-        val homeFloorIds = floorPlayerIds(home = true, excludeInjured = false)
-        val awayFloorIds = floorPlayerIds(home = false, excludeInjured = false)
+        val homeFloorIds = homeFloorIdsEarly
+        val awayFloorIds = awayFloorIdsEarly
         val offenseFloor = fallbackFloor(
             if (offenseHome) homeFloorIds else awayFloorIds,
             if (offenseHome) input.homeRoster else input.awayRoster,
@@ -365,8 +395,27 @@ class PossessionSimSession(
         if (needsDefensiveFoulLog && defensiveFoulEvent == null) {
             defensiveFoulEvent = recordDefensivePersonalFoul(offenseHome)
         }
+        var denyPrimaryFoul = false
+        if (
+            defensiveFoulEvent == null &&
+            DenyPrimaryScorerPolicy.rollDenyFoulOnPrimaryTouch(
+                denyPrimaryCtx,
+                playerCredits,
+                turnoversAdded,
+                random,
+                eventWeights.denyPrimary,
+            )
+        ) {
+            defensiveFoulEvent = recordDefensivePersonalFoul(
+                offenseHome,
+                defendingPlayerId = denyPrimaryCtx.assignedDefenderId,
+            )
+            denyPrimaryFoul = defensiveFoulEvent != null
+        }
         val pfLog = defensiveFoulEvent?.personalFoulLog
         val foulNote = when {
+            denyPrimaryFoul ->
+                DenyPrimaryScorerPolicy.foulLogLabel(denyPrimaryCtx, pfLog)
             foulEarlyStopClock -> FoulEarlyLateGamePolicy.foulLogLabel(tripSample, pfLog)
             resolution.foulOnBlock -> pfLog?.let { "foul on block | $it" } ?: "foul on block"
             resolution.andOne -> pfLog?.let { "and-1 | $it" } ?: "and-1"
@@ -380,6 +429,7 @@ class PossessionSimSession(
             FoulEarlyLateGamePolicy.logTag(tripSample),
             LateGamePossessionPolicy.logTag(lateDecision),
             ClutchUsagePolicy.logTag(clutchActive, clutchPeakId),
+            DenyPrimaryScorerPolicy.logTag(denyPrimaryCtx),
             if (lateClockTrip) "late-clock" else null,
             teamBonusLogTag,
             periodEndLogTag,
@@ -572,10 +622,15 @@ class PossessionSimSession(
     private fun crossedRegulationHalfBoundary(before: Int, after: Int): Boolean =
         !inOvertime && before > GameSimClock.HALF_SECONDS && after <= GameSimClock.HALF_SECONDS
 
-    private fun recordDefensivePersonalFoul(offenseIsHome: Boolean): DefensiveFoulEvent? {
+    private fun recordDefensivePersonalFoul(
+        offenseIsHome: Boolean,
+        defendingPlayerId: String? = null,
+    ): DefensiveFoulEvent? {
         val defendingRoster = (if (offenseIsHome) input.awayRoster else input.homeRoster) ?: return null
         val ledger = if (offenseIsHome) awayFoulLedger else homeFoulLedger
-        val playerId = PersonalFoulAssignment.pickPlayer(defendingRoster, ledger, random) ?: return null
+        val playerId = defendingPlayerId?.takeIf { id ->
+            defendingRoster.participants.any { it.playerId == id }
+        } ?: PersonalFoulAssignment.pickPlayer(defendingRoster, ledger, random) ?: return null
         val record = ledger.record(playerId)
         val disqualifiedOut = if (offenseIsHome) awayDisqualifiedOut else homeDisqualifiedOut
         PersonalFoulDisqualificationPolicy.registerIfDisqualified(record, disqualifiedOut)

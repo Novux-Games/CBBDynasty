@@ -32,8 +32,10 @@ object PlayerPossessionStatRecorder {
         val ftAttempts = after.freeThrowsAttempted - before.freeThrowsAttempted
         val ftMade = after.freeThrowsMade - before.freeThrowsMade
 
+        var turnoverHandlerId: String? = null
         if (turnovers > 0) {
             val handler = pickWeighted(offenseFloor, usageWeights, random)
+            turnoverHandlerId = handler
             offenseLedger.addTurnover(handler)
             if (defenseFloor.isNotEmpty() &&
                 turnoverTerminal != TurnoverTerminal.ShotClockViolation &&
@@ -86,6 +88,7 @@ object PlayerPossessionStatRecorder {
             assistId = assistId,
             rebounderId = rebounderId,
             freeThrowShooterId = freeThrowShooterId,
+            turnoverHandlerId = turnoverHandlerId,
         )
     }
 

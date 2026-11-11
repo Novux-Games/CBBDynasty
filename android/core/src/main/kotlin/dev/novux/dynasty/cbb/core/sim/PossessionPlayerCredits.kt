@@ -6,4 +6,5 @@ data class PossessionPlayerCredits(
     val assistId: String? = null,
     val rebounderId: String? = null,
     val freeThrowShooterId: String? = null,
+    val turnoverHandlerId: String? = null,
 )
