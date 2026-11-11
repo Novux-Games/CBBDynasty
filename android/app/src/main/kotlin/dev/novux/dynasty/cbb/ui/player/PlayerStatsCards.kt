@@ -35,6 +35,20 @@ fun PlayerSeasonAveragesCard(
     }
 }
 
+/** Stats tab card 2 — season counting totals ([MEGA-COACH-151]). */
+@Composable
+fun PlayerSeasonTotalsCard(
+    totals: PlayerCountingStats,
+    modifier: Modifier = Modifier,
+) {
+    PlayerStatsCard(
+        modifier = modifier,
+        title = stringResource(R.string.player_card_stats_season_tot_title),
+    ) {
+        countingTotalLines(totals).forEach { StatLine(it) }
+    }
+}
+
 @Composable
 fun PlayerStatsFourCards(summary: PlayerStatsSummary, modifier: Modifier = Modifier) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -42,11 +56,7 @@ fun PlayerStatsFourCards(summary: PlayerStatsSummary, modifier: Modifier = Modif
             averages = summary.seasonAverages,
             gamesPlayedSeason = summary.gamesPlayedSeason,
         )
-        PlayerStatsCard(
-            title = stringResource(R.string.player_card_stats_season_tot_title),
-        ) {
-            countingTotalLines(summary.seasonTotals).forEach { StatLine(it) }
-        }
+        PlayerSeasonTotalsCard(totals = summary.seasonTotals)
         PlayerStatsCard(
             title = stringResource(R.string.player_card_stats_career_avg_title),
             subtitle = stringResource(

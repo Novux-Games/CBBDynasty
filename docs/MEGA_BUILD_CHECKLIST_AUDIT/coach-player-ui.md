@@ -261,7 +261,7 @@
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-149 | P0 | PASS | Season stats persistence (GP, counting stats) | Week advance GP + `PlayerStatsRepository` DataStore blob | `PlayerSeasonStatFinalizeGate`, `SaveSlotRepository` |
 | MEGA-COACH-150 | P0 | PASS | Stats tab card 1 season averages (PPG … FT%) | `PlayerSeasonAveragesCard` on Stats tab | `PlayerStatsCards.kt`, `PlayerCardScreen.kt` |
-| MEGA-COACH-151 | P0 | FAIL | Stats tab card 2 season totals | No UI |
+| MEGA-COACH-151 | P0 | PASS | Stats tab card 2 season totals | `PlayerSeasonTotalsCard` (PTS/AST/REB/STL/BLK/TO) | `PlayerStatsCards.kt` |
 | MEGA-COACH-152 | P1 | FAIL | Stats tab card 3 career averages (blended FG%) | No UI |
 | MEGA-COACH-153 | P1 | FAIL | Stats tab card 4 career totals | No UI |
 | MEGA-COACH-154 | P0 | FAIL | Games tab row: opponent, PTS/AST/…, W/L score | No game log table |
