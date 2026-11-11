@@ -171,7 +171,7 @@
 | MEGA-SIM-092 | P1 | PASS | **Steal / bad pass / travel / offensive foul** turnover flavors | `PossessionTurnoverFlavorPolicy` | Distinct `TurnoverTerminal` + log labels |
 | MEGA-SIM-093 | P1 | PASS | **Block** on shot attempt + optional foul-on-block | `PossessionBlockPolicy` | `miss | BLK` + player block stat |
 | MEGA-SIM-094 | P1 | PASS | **And-1** and shooting foul → FT chain (1–3 attempts) | `PossessionShootingFoulPolicy` | FTA/FTM on team box; log `and-1` / `shooting foul | FT n/m` |
-| MEGA-SIM-095 | P1 | FAIL | **Bonus / double bonus** team foul thresholds → automatic FT trips | NCAA foul table in tuning | Team fouls not tracked |
+| MEGA-SIM-095 | P1 | PASS | **Bonus / double bonus** team foul thresholds → automatic FT trips | `SimTeamFoulRules`, `TeamFoulBonusPolicy`, `TeamFoulHalfLedger` | Non-shooting fouls → FT when ≥7; double at 10; half/OT reset |
 | MEGA-SIM-096 | P2 | FAIL | **Jump ball / held ball** rare alternate possession | Planning rare events | Not in engine |
 | MEGA-SIM-097 | P1 | FAIL | Possession log: **jersey # + player name** on scorer/assister/rebounder | `formatPossessionLog` | Team label + aggregate trip seconds only |
 | MEGA-SIM-098 | P2 | FAIL | **Assists** attributed on made FGs from usage weights | — | No per-player stats |

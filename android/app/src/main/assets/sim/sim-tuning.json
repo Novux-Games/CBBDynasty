@@ -14,6 +14,11 @@
     "quickShot": [8, 14],
     "foulStoppage": [12, 18]
   },
+  "teamFoulRules": {
+    "bonusThreshold": 7,
+    "doubleBonusThreshold": 10,
+    "oneAndOneUntilDouble": true
+  },
   "eventWeights": {},
   "homeNeutralModifiers": {
     "home": 1.0,

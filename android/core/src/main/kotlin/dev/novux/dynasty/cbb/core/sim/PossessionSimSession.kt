@@ -51,6 +51,10 @@ class PossessionSimSession(
     private val awayMidInjuries = (resume?.awayMidGameInjuries ?: emptyList()).toMutableList()
     private var inOvertime: Boolean = resume?.inOvertime ?: false
     private var overtimePeriods: Int = resume?.overtimePeriods ?: 0
+    private val teamFoulLedger = TeamFoulHalfLedger(
+        initialHome = resume?.homeTeamFoulsInHalf ?: 0,
+        initialAway = resume?.awayTeamFoulsInHalf ?: 0,
+    )
 
     fun hasNext(): Boolean = gameClock > 0
 
@@ -64,6 +68,7 @@ class PossessionSimSession(
         gameClock = GameSimClock.OVERTIME_SECONDS
         shotClockSeconds = PossessionShotClock.resetOnChangeOfPossession(input.tuning.shotClock)
         offenseHome = random.nextBoolean()
+        teamFoulLedger.reset()
         log += "— OT$overtimePeriods (5:00) — ${homeBox.points}-${awayBox.points}"
     }
 
@@ -115,8 +120,12 @@ class PossessionSimSession(
             effects.tripPaceScale,
         )
         val shotClockBefore = shotClockSeconds
+        val clockBeforeTrip = gameClock
         val used = PossessionShotClock.secondsConsumed(tripSeconds, shotClockSeconds, gameClock)
         gameClock -= used
+        if (crossedRegulationHalfBoundary(clockBeforeTrip, gameClock)) {
+            teamFoulLedger.reset()
+        }
         val shotClockAfterTrip = PossessionShotClock.remainingAfterTrip(shotClockBefore, used)
         totalPossessions++
 
@@ -167,16 +176,37 @@ class PossessionSimSession(
             ).joinToString(" | ")
         }
         val offenseRosterPresent = if (offenseHome) input.homeRoster != null else input.awayRoster != null
+        var defensiveFoulEvent: DefensiveFoulEvent? = null
+        var teamBonusLogTag: String? = null
         if (
             offenseRosterPresent &&
             PlayerPossessionStatRecorder.shouldShootBonusFreeThrows(sides.box, offenseBoxAfter, foulStoppage)
         ) {
-            val (makes, attempts) = PlayerPossessionStatRecorder.sampleBonusFreeThrows(random)
-            offenseBoxAfter = offenseBoxAfter.copy(
-                points = offenseBoxAfter.points + makes,
-                freeThrowsMade = offenseBoxAfter.freeThrowsMade + makes,
-                freeThrowsAttempted = offenseBoxAfter.freeThrowsAttempted + attempts,
-            )
+            defensiveFoulEvent = recordDefensivePersonalFoul(offenseHome)
+            val foulsInHalf = defensiveFoulEvent?.teamFoulsInHalf
+            if (foulsInHalf != null) {
+                val bonusFt = TeamFoulBonusPolicy.sampleNonShootingFreeThrows(
+                    foulsInHalf,
+                    input.tuning.teamFoulRules,
+                    random,
+                )
+                if (bonusFt != null) {
+                    val (makes, attempts) = bonusFt
+                    offenseBoxAfter = offenseBoxAfter.copy(
+                        points = offenseBoxAfter.points + makes,
+                        freeThrowsMade = offenseBoxAfter.freeThrowsMade + makes,
+                        freeThrowsAttempted = offenseBoxAfter.freeThrowsAttempted + attempts,
+                    )
+                    teamBonusLogTag = TeamFoulBonusPolicy.logTag(
+                        TeamFoulBonusPolicy.stateAfterFoul(foulsInHalf, input.tuning.teamFoulRules),
+                    )
+                    subPhaseChain = listOfNotNull(
+                        subPhaseChain,
+                        teamBonusLogTag,
+                        "team foul FT $makes/$attempts",
+                    ).joinToString(" | ")
+                }
+            }
         }
         val homeFloorIds = floorPlayerIds(home = true, excludeInjured = false)
         val awayFloorIds = floorPlayerIds(home = false, excludeInjured = false)
@@ -223,16 +253,23 @@ class PossessionSimSession(
         }
         accrueFloorMinutes(used, offenseHome)
         val newInjuryLines = sampleMidGameInjuries(homeFloorIds, awayFloorIds)
+        val needsDefensiveFoulLog =
+            resolution.foulOnBlock || resolution.andOne || resolution.shootingFoul || foulStoppage
+        if (needsDefensiveFoulLog && defensiveFoulEvent == null) {
+            defensiveFoulEvent = recordDefensivePersonalFoul(offenseHome)
+        }
+        val pfLog = defensiveFoulEvent?.personalFoulLog
         val foulNote = when {
-            resolution.foulOnBlock -> "foul on block"
-            resolution.andOne -> recordPersonalFoulIfNeeded(true, offenseHome)?.let { "and-1 | $it" } ?: "and-1"
-            resolution.shootingFoul -> recordPersonalFoulIfNeeded(true, offenseHome)?.let { "shooting foul | $it" }
-                ?: "shooting foul"
-            else -> recordPersonalFoulIfNeeded(foulStoppage, offenseHome)
+            resolution.foulOnBlock -> pfLog?.let { "foul on block | $it" } ?: "foul on block"
+            resolution.andOne -> pfLog?.let { "and-1 | $it" } ?: "and-1"
+            resolution.shootingFoul -> pfLog?.let { "shooting foul | $it" } ?: "shooting foul"
+            foulStoppage -> pfLog
+            else -> null
         }
         val lateTags = listOfNotNull(
             LateGamePossessionPolicy.logTag(lateDecision),
             if (lateClockTrip) "late-clock" else null,
+            teamBonusLogTag,
         ).joinToString("; ").takeIf { it.isNotEmpty() }
         val line = PossessionSimEngine.formatPossessionLog(
             used,
@@ -365,8 +402,15 @@ class PossessionSimSession(
         }
     }
 
-    private fun recordPersonalFoulIfNeeded(foulStoppage: Boolean, offenseIsHome: Boolean): String? {
-        if (!foulStoppage) return null
+    private data class DefensiveFoulEvent(
+        val personalFoulLog: String,
+        val teamFoulsInHalf: Int,
+    )
+
+    private fun crossedRegulationHalfBoundary(before: Int, after: Int): Boolean =
+        !inOvertime && before > GameSimClock.HALF_SECONDS && after <= GameSimClock.HALF_SECONDS
+
+    private fun recordDefensivePersonalFoul(offenseIsHome: Boolean): DefensiveFoulEvent? {
         val defendingRoster = (if (offenseIsHome) input.awayRoster else input.homeRoster) ?: return null
         val ledger = if (offenseIsHome) awayFoulLedger else homeFoulLedger
         val playerId = PersonalFoulAssignment.pickPlayer(defendingRoster, ledger, random) ?: return null
@@ -376,11 +420,13 @@ class PossessionSimSession(
         } else {
             homeBox = homeBox.copy(personalFouls = homeBox.personalFouls + 1)
         }
-        return if (record.disqualified) {
+        val teamFouls = teamFoulLedger.recordDefensiveFoul(defenseIsHome = !offenseIsHome)
+        val pfLog = if (record.disqualified) {
             "PF $playerId (${record.foulCount}) DQ"
         } else {
             "PF $playerId (${record.foulCount})"
         }
+        return DefensiveFoulEvent(personalFoulLog = pfLog, teamFoulsInHalf = teamFouls)
     }
 
     fun toMidGame(): MidGameState = MidGameState(
@@ -404,6 +450,8 @@ class PossessionSimSession(
         awayMidGameInjuries = awayMidInjuries.toList(),
         inOvertime = inOvertime,
         overtimePeriods = overtimePeriods,
+        homeTeamFoulsInHalf = teamFoulLedger.homeFoulsInHalf,
+        awayTeamFoulsInHalf = teamFoulLedger.awayFoulsInHalf,
     )
 
     fun toResult(isComplete: Boolean): GameSimResult {

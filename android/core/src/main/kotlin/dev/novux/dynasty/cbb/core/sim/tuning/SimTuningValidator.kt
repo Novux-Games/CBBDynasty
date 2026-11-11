@@ -52,6 +52,20 @@ object SimTuningValidator {
             )
         }
 
+        val foulRules = tuning.teamFoulRules
+        if (foulRules.bonusThreshold <= 0 || foulRules.doubleBonusThreshold <= 0) {
+            return SimTuningValidationError.InvalidRange(
+                "teamFoulRules",
+                "bonus and doubleBonus thresholds must be positive",
+            )
+        }
+        if (foulRules.bonusThreshold > foulRules.doubleBonusThreshold) {
+            return SimTuningValidationError.InvalidRange(
+                "teamFoulRules",
+                "bonusThreshold must be <= doubleBonusThreshold",
+            )
+        }
+
         return null
     }
 

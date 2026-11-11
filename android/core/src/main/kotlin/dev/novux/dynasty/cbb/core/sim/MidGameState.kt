@@ -26,6 +26,8 @@ data class MidGameState(
     val awayMidGameInjuries: List<GameSimInjuryEvent> = emptyList(),
     val inOvertime: Boolean = false,
     val overtimePeriods: Int = 0,
+    val homeTeamFoulsInHalf: Int = 0,
+    val awayTeamFoulsInHalf: Int = 0,
 )
 
 data class SimulateOptions(
