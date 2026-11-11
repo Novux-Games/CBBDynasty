@@ -57,14 +57,34 @@ class RecruitingEconomyRepository(
         return interestSpendRepository.loadSpendDeltaByProspect(dynasty.dynastyId, ledger.cycleSeasonIndex)
     }
 
-    private suspend fun applyInterestSpendDelta(
+    suspend fun loadPointSpendByProspect(dynasty: LoadedDynasty): Map<String, Int> {
+        val ledger = loadOrOpenCycle(dynasty)
+        return interestSpendRepository.loadPointSpendByProspect(dynasty.dynastyId, ledger.cycleSeasonIndex)
+    }
+
+    private suspend fun recordProspectSpend(
         dynasty: LoadedDynasty,
         prospectId: String,
-        delta: Int,
+        pointsCharged: Int,
+        interestDelta: Int,
     ) {
-        if (delta <= 0) return
         val ledger = loadOrOpenCycle(dynasty)
-        interestSpendRepository.addSpendDelta(dynasty.dynastyId, ledger.cycleSeasonIndex, prospectId, delta)
+        if (pointsCharged > 0) {
+            interestSpendRepository.addPointSpend(
+                dynasty.dynastyId,
+                ledger.cycleSeasonIndex,
+                prospectId,
+                pointsCharged,
+            )
+        }
+        if (interestDelta > 0) {
+            interestSpendRepository.addSpendDelta(
+                dynasty.dynastyId,
+                ledger.cycleSeasonIndex,
+                prospectId,
+                interestDelta,
+            )
+        }
     }
     suspend fun resolveUserProgramPrestige(dynasty: LoadedDynasty): Int {
         val coach = database.dynastyCoachDao().getByDynastyId(dynasty.dynastyId) ?: return DEFAULT_PROGRAM_PRESTIGE
@@ -166,7 +186,7 @@ class RecruitingEconomyRepository(
         if (result.success) {
             persist(dynasty.dynastyId, ledger.withPointsAvailable(result.pointsRemaining))
             val delta = RecruitInterestSpendDelta.forPointAction(action, actions, bonusAmount)
-            applyInterestSpendDelta(dynasty, prospectId, delta)
+            recordProspectSpend(dynasty, prospectId, result.pointsCharged, delta)
         }
         return result
     }
@@ -235,7 +255,7 @@ class RecruitingEconomyRepository(
                 officialVisit -> RecruitInterestSpendDelta.forOfficialVisit(actions, visitDistance)
                 else -> 0
             }
-            applyInterestSpendDelta(dynasty, prospectId, delta)
+            recordProspectSpend(dynasty, prospectId, result.pointsCharged, delta)
         }
         return result
     }

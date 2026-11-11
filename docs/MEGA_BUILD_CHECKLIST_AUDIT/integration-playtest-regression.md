@@ -122,7 +122,7 @@
 | MEGA-QA-065 | P1 | DEV | OPEN | Already used this season | Second official visit same prospect | Blocked | `seasonScopedGate` |
 | MEGA-QA-066 | P2 | DEV | OPEN | Carryover 50% | End week with 40 unspent → advance | Next week pool includes carryover | `RecruitingWeekGrant` |
 | MEGA-QA-067 | P2 | DEV | OPEN | Signing crunch 1.5× | Offseason W3 pool display | 1.5× multiplier visible in math | `balance-2026.json` |
-| MEGA-QA-068 | P1 | DEV | FAIL | Per-prospect spend tracking | DM prospect A then B | Ledger distinguishes targets — not global only | MEGA-RECR-022 |
+| MEGA-QA-068 | P1 | DEV | PASS | Per-prospect spend tracking | DM prospect A then B | Ledger distinguishes targets — not global only | `RecruitingProspectPointSpendLedger`, `recordProspectSpend` |
 | MEGA-QA-069 | P2 | DEV | OPEN | NIL + points independence | Assign NIL + spend points same week | Both apply; no double charge | Hub NIL buttons |
 | MEGA-QA-070 | P2 | BOT | GUARD | Contact action gate tests | `:core:test` `RecruitingHubContactActionGateTest` | Green | core tests |
 | MEGA-QA-071 | P1 | DEV | OPEN | Sim-week AI spend estimate | Advance with AI on; compare estimate line | Estimate within ±15% of actual | `buildSimWeekAdvanceInputSuspended` |
