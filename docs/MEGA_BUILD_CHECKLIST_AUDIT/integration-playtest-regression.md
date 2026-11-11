@@ -138,7 +138,7 @@
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
 | MEGA-QA-076 | P0 | DEV | PASS | Persisted pool on hub | New dynasty; open Recommended | List from `IncomingClassSeedRepository`, not 120 demo | `signNewGameFromWizard` + `ensurePool` |
-| MEGA-QA-077 | P0 | DEV | OPEN | Empty recommended list | Force empty pool (test hook) | Empty state copy + CTA; no crash | `RecommendedTabBody` |
+| MEGA-QA-077 | P0 | BOT | PASS | Empty recommended list | Force empty pool (test hook) | Empty state copy + CTA; no crash | `RecommendedTabBody`; `RecruitingHubTestHooks`; `RecommendedRecruitListEmptyTest` |
 | MEGA-QA-078 | P1 | DEV | OPEN | Pool size band | Inspect seed count | 2000–4000 HS pool per spec | `IncomingClassSeeder` |
 | MEGA-QA-079 | P1 | DEV | OPEN | Top 60 national ranks | Sort by hidden rating | 60 rows max; ranks 1–60 | `NationalRecruitingRankings` |
 | MEGA-QA-080 | P2 | DEV | FAIL | Signing day rankings source | Signing Day rankings tab | Uses dynasty seed not `demoPool` | MEGA-RECR-008 |

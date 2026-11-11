@@ -54,6 +54,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitProspect
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTestHooks
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingPointAction
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingSpendFailure
@@ -223,6 +224,7 @@ fun RecruitingHubScreen(
         nilRules,
         interestSpendByProspect,
     ) {
+        if (RecruitingHubTestHooks.forceEmptyRecommendedPool) return@remember emptyList()
         val pool = recruitingPool ?: return@remember emptyList()
         val ctx = schoolContext ?: return@remember emptyList()
         RecommendedRecruitList.build(
@@ -345,6 +347,10 @@ fun RecruitingHubScreen(
                     nilOffers = nilOffers,
                     scholarshipOfferPointCost = recruitingActions.scholarshipOffer.cost,
                     gateRefresh = gateRefresh,
+                    poolLoaded = hsPoolReady,
+                    onBrowseHsJuco = {
+                        tabIndex = RecruitingHubDefaults.tabs.indexOf(RecruitingHubTab.HsJuco)
+                    },
                     onSpend = {
                         scope.launch {
                             recruitingEconomyRepository.spendRefundableAction(
@@ -570,6 +576,8 @@ private fun RecommendedTabBody(
     nilOffers: Map<String, Long>,
     scholarshipOfferPointCost: Int,
     gateRefresh: Int,
+    poolLoaded: Boolean = true,
+    onBrowseHsJuco: () -> Unit = {},
     modifier: Modifier = Modifier,
     onSpend: (ProspectSpendRequest) -> Unit,
     onScholarshipOffer: (String) -> Unit,
@@ -578,6 +586,37 @@ private fun RecommendedTabBody(
     onRevokeOffer: (String) -> Unit,
 ) {
     val currency = remember { NumberFormat.getCurrencyInstance(Locale.US) }
+    when {
+        !poolLoaded -> {
+            Text(
+                text = stringResource(R.string.recruiting_hs_juco_loading),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = modifier.fillMaxSize(),
+            )
+        }
+        rows.isEmpty() -> {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(
+                    text = stringResource(R.string.recruiting_recommended_empty_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = stringResource(R.string.recruiting_recommended_empty_body),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                OutlinedButton(onClick = onBrowseHsJuco, modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.recruiting_recommended_empty_cta))
+                }
+            }
+        }
+        else -> {
     val likelyCount = rows.count { it.badge == SignLikelihoodBadge.Likely || it.badge == SignLikelihoodBadge.Possible }
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -661,6 +700,8 @@ private fun RecommendedTabBody(
                 },
                 onRevokeOffer = { onRevokeOffer(row.prospect.prospectId) },
             )
+        }
+    }
         }
     }
 }

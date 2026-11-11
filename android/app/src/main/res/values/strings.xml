@@ -446,6 +446,9 @@
     <string name="recruiting_tab_hs_juco">HS / JUCO</string>
     <string name="recruiting_tab_portal">Transfer portal</string>
     <string name="recruiting_placeholder_recommended">Recommended prospects appear here — sorted by sign likelihood for your program.</string>
+    <string name="recruiting_recommended_empty_title">No recommended targets</string>
+    <string name="recruiting_recommended_empty_body">No recruits currently fit your program on this tab. Browse the full HS/JUCO class or spend recruiting points to build interest elsewhere.</string>
+    <string name="recruiting_recommended_empty_cta">Open HS/JUCO board</string>
     <string name="recruiting_placeholder_hs_juco">High school and junior college pools appear here.</string>
     <string name="recruiting_placeholder_portal">Transfer portal entrants appear here during the portal window.</string>
     <string name="recruiting_hs_juco_loading">Loading class pool…</string>
