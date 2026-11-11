@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
+import dev.novux.dynasty.cbb.ui.portrait.PlayerPortraitSlot
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

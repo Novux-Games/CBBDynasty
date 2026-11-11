@@ -50,6 +50,7 @@ class SchoolStaffRepository(
             defensiveScheme = defensive,
             almaMaterLabel = alma,
             seasonRecordLabel = seasonRecordLabel,
+            avatarPresetId = coach.avatarPresetId,
         )
         val rows = staffDao.listForDynasty(dynastyId)
         val assistants = rows.mapNotNull { it.toAssistant(schoolName, seasonRecordLabel) }

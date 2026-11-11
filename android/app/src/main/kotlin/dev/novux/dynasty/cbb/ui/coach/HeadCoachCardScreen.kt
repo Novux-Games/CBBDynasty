@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.ui.coach
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,6 +36,7 @@ import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillBranch
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointState
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillTreeEngine
+import dev.novux.dynasty.cbb.ui.portrait.CoachPortraitSlot
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -124,17 +126,25 @@ fun HeadCoachCardScreen(
 
 @Composable
 private fun CoachCardIdentityHeader(card: HeadCoachCard) {
-    Column(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(card.displayName, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-        Text(card.schoolDisplayName, style = MaterialTheme.typography.titleMedium)
-        Text(
-            stringResource(R.string.coach_card_record, card.seasonRecordLabel),
-            style = MaterialTheme.typography.bodyMedium,
+        CoachPortraitSlot(
+            displayName = card.displayName,
+            avatarPresetId = card.avatarPresetId,
         )
+        Column {
+            Text(card.displayName, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Text(card.schoolDisplayName, style = MaterialTheme.typography.titleMedium)
+            Text(
+                stringResource(R.string.coach_card_record, card.seasonRecordLabel),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
     }
 }
 

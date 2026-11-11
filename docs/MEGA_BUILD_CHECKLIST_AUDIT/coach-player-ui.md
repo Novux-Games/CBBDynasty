@@ -173,11 +173,11 @@
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-096 | P0 | PASS | Pack-driven **player** appearance preset table | `PlayerAppearance` + `PlayerAvatarPresets`; seed/DB/Roster/DynastyPlayer wired | `PlayerAppearance.kt`, `RosterPlayer*.kt`, migration 15→16, `PlayerBootstrapFactory` |
 | MEGA-COACH-097 | P0 | PASS | `avatarPresetId` on player save row | `dynasty_roster_player.avatarPresetId` + component columns | `DynastyRosterPlayerEntity`, `RosterMappers.kt` |
-| MEGA-COACH-098 | P0 | FAIL | Shared `PresetPortrait` / headshot composable | Zero matches for `Portrait`/`Headshot` in `android/app` |
-| MEGA-COACH-099 | P1 | FAIL | Deterministic render from preset id (repro across devices) | No renderer module |
-| MEGA-COACH-100 | P1 | FAIL | Player card identity strip hosts headshot | `PlayerCardSheet` text-only header |
+| MEGA-COACH-098 | P0 | PASS | Shared `PresetPortrait` / headshot composable | `PresetHeadshot`, `PortraitSlots` (player + coach) | `ui/portrait/PresetHeadshot.kt`, `PortraitSlots.kt` |
+| MEGA-COACH-099 | P1 | PASS | Deterministic render from preset id (repro across devices) | `PresetPortraitRenderer` + tests | `core/portrait/PresetPortraitRenderer.kt` |
+| MEGA-COACH-100 | P1 | PASS | Player card identity strip hosts headshot | `PlayerIdentityStrip` + `PlayerPortraitSlot` | `PlayerCardScreen.kt`, `PortraitSlots.kt` |
 | MEGA-COACH-101 | P2 | FAIL | Roster row optional thumbnail (density mode) | `DynastyShellRosterTab` — name + chips only |
-| MEGA-COACH-102 | P2 | GAP | Preview sheet shows headshot when renderer ships | Sheet has no image slot |
+| MEGA-COACH-102 | P2 | PASS | Preview sheet shows headshot when renderer ships | `PlayerCardPreviewSheet` + coach preview row | `PlayerCardSheet.kt`, `CoachPreviewSheet.kt` |
 | MEGA-COACH-103 | P2 | FAIL | Recruit / portal sheet headshot when on roster rules allow | Recruiting UI not audited here — no shared portrait |
 | MEGA-COACH-104 | P3 | GAP | Pack JSON avatar tables (not hardcoded coach-only) | `CoachAvatarPresets` hardcoded; no pack slice |
 | MEGA-COACH-105 | P2 | FAIL | Unit test: same preset id → same drawable key/hash | No renderer tests |

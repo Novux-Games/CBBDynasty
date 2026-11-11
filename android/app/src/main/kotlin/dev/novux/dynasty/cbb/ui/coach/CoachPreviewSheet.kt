@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb.ui.coach
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -20,6 +21,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.coach.card.AssistantCoachCard
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
+import dev.novux.dynasty.cbb.ui.portrait.CoachPortraitSlot
 
 sealed class CoachPreviewTarget {
     data class HeadCoach(
@@ -96,27 +98,35 @@ private fun HeadCoachPreviewBody(
     card: HeadCoachCard,
     userCoachSecurity: CoachSecuritySnapshot?,
 ) {
-    Text(card.displayName, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-    Text(
-        stringResource(R.string.coach_card_role_head),
-        style = MaterialTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.primary,
-    )
-    Text(card.schoolDisplayName, style = MaterialTheme.typography.titleLarge)
-    Text(
-        stringResource(R.string.coach_card_record, card.seasonRecordLabel),
-        style = MaterialTheme.typography.bodyLarge,
-    )
-    userCoachSecurity?.let { JobSecurityMeter(it) }
-    Text(
-        stringResource(
-            R.string.coach_preview_headline_ratings,
-            card.ratings.offensive,
-            card.ratings.defensive,
-            card.ratings.recruiting,
-        ),
-        style = MaterialTheme.typography.bodyMedium,
-    )
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        CoachPortraitSlot(
+            displayName = card.displayName,
+            avatarPresetId = card.avatarPresetId,
+        )
+        Column {
+            Text(card.displayName, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Text(
+                stringResource(R.string.coach_card_role_head),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Text(card.schoolDisplayName, style = MaterialTheme.typography.titleLarge)
+            Text(
+                stringResource(R.string.coach_card_record, card.seasonRecordLabel),
+                style = MaterialTheme.typography.bodyLarge,
+            )
+            userCoachSecurity?.let { JobSecurityMeter(it) }
+            Text(
+                stringResource(
+                    R.string.coach_preview_headline_ratings,
+                    card.ratings.offensive,
+                    card.ratings.defensive,
+                    card.ratings.recruiting,
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
+    }
 }
 
 @Composable

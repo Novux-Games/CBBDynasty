@@ -37,9 +37,8 @@ import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogEntry
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
-import dev.novux.dynasty.cbb.core.player.appearance.PlayerAppearanceResolver
 import dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
-import dev.novux.dynasty.cbb.ui.portrait.PresetPortrait
+import dev.novux.dynasty.cbb.ui.portrait.PlayerPortraitSlot
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -162,47 +161,6 @@ private fun PlayerIdentityStrip(player: DynastyPlayer) {
             )
             PlayerInjuryOverviewBlock(player.injury)
         }
-    }
-}
-
-@Composable
-fun PlayerPortraitSlot(
-    displayName: String,
-    modifier: Modifier = Modifier,
-    avatarPresetId: String? = null,
-    playerId: String? = null,
-) {
-    val presetId = remember(avatarPresetId, playerId) {
-        avatarPresetId?.takeIf { it.isNotBlank() }
-            ?: playerId?.let(PlayerAppearanceResolver::presetIdForPlayer)
-    }
-    if (presetId != null) {
-        PresetPortrait(
-            presetId = presetId,
-            modifier = modifier,
-            contentDescription = displayName,
-        )
-        return
-    }
-    val initials = remember(displayName) {
-        displayName.split(" ")
-            .filter { it.isNotBlank() }
-            .take(2)
-            .joinToString("") { it.first().uppercaseChar().toString() }
-    }
-    Box(
-        modifier = modifier
-            .size(56.dp)
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.primaryContainer),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = initials,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-        )
     }
 }
 

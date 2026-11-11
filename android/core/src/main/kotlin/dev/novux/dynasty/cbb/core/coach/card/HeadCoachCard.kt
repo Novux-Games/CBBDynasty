@@ -15,4 +15,5 @@ data class HeadCoachCard(
     val contractLengthYears: Int,
     val ratings: HeadCoachRatings,
     val almaMaterLabel: String?,
+    val avatarPresetId: String = "",
 )

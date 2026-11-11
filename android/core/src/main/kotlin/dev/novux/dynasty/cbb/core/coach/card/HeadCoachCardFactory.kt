@@ -26,6 +26,7 @@ object HeadCoachCardFactory {
         contractLengthYears: Int = 4,
         contractYearsLeft: Int = 4,
         seasonRecordLabel: String = "0-0",
+        avatarPresetId: String = "",
     ): HeadCoachCard = HeadCoachCard(
         dynastyId = dynastyId,
         displayName = displayName,
@@ -39,6 +40,7 @@ object HeadCoachCardFactory {
         contractLengthYears = contractLengthYears,
         ratings = ratingsFor(archetype),
         almaMaterLabel = almaMaterLabel,
+        avatarPresetId = avatarPresetId,
     )
 
     fun displayName(

@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-COACH-098",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
     "id": "MEGA-COACH-108",
     "pri": "P0",
     "status": "FAIL",
@@ -792,20 +785,6 @@
   },
   {
     "id": "MEGA-COACH-093",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-099",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-100",
     "pri": "P1",
     "status": "FAIL",
     "shard": "coach-player-ui.md",
@@ -7008,13 +6987,6 @@
   },
   {
     "id": "MEGA-COACH-091",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-102",
     "pri": "P2",
     "status": "GAP",
     "shard": "coach-player-ui.md",
