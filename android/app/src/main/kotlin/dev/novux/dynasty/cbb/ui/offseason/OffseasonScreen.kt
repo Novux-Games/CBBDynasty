@@ -76,6 +76,7 @@ import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import dev.novux.dynasty.cbb.ui.offseason.leaving.DraftResultsWeekTwoPanel
 import dev.novux.dynasty.cbb.ui.offseason.leaving.PlayersLeavingPanel
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
+import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceConfirmationUiPerf
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceDialog
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceUiPerf
 import dev.novux.dynasty.cbb.ui.advance.applyWeekAdvanceResult
@@ -432,10 +433,12 @@ fun OffseasonScreen(
                     weekAdvanceInProgress = true
                     try {
                         val unresolved = dashboardTasks.count { it.id !in dismissedTasks }
-                        val confirmation = saveSlotRepository.buildSimWeekAdvanceConfirmation(
-                            loaded.slotIndex,
-                            unresolvedOptionalTaskCount = unresolved,
-                        )
+                        val confirmation = SimWeekAdvanceConfirmationUiPerf.measure {
+                            saveSlotRepository.buildSimWeekAdvanceConfirmation(
+                                loaded.slotIndex,
+                                unresolvedOptionalTaskCount = unresolved,
+                            )
+                        }
                         if (confirmation != null && confirmation.needsDialog) {
                             pendingAdvanceConfirmation = confirmation
                         } else {

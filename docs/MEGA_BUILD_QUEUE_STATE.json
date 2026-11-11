@@ -148,7 +148,8 @@
     "MEGA-GDD-119",
     "MEGA-GDD-130",
     "MEGA-NOTES-047",
-    "MEGA-NOTES-065"
+    "MEGA-NOTES-065",
+    "MEGA-QA-008"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

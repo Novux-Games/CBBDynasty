@@ -173,7 +173,7 @@
 | MEGA-FRAME-090 | PASS | **Bug: recruiting between signing & preseason** | Hamburger **Recruiting** gated on `cycleClosed` — closed label + toast or `RecruitingCycleClosedBody` on route | `buildDynastyHubMenu`, `RecruitingCyclePolicy.hubNavigable` |
 | MEGA-FRAME-091 | PASS | Sim week advance loading UX | Advance button and confirm dialog show spinner + disable while suspend advance runs | `DynastyShellScreen.kt`, `OffseasonScreen.kt` |
 | MEGA-FRAME-092 | PASS | Sim week confirm loading UX | Dialog confirm shows spinner; dismiss blocked while advancing | `SimWeekAdvanceDialog.kt` |
-| MEGA-FRAME-093 | GAP | **Bug: sim week lag (pre-dialog)** | `buildSimWeekAdvanceConfirmation` loads ledger + builds AI estimate **synchronously** on first tap — perceived lag **before** dialog appears | `SaveSlotRepository.buildSimWeekAdvanceInputSuspended` |
+| MEGA-FRAME-093 | PASS | **Bug: sim week lag (pre-dialog)** | Confirmation path sets `preDialogOnly` — `loadPool` (no seed) and skips `buildFastSimBundle` until confirm ([MEGA-QA-008]) | `SaveSlotRepository`, `SimWeekAdvancePreDialogPath` |
 | MEGA-FRAME-094 | GAP | **Bug: tasks disappear (portal weeks)** | Offseason optional portal/recruiting cards only render for **`PORTAL_RECRUITING_WEEKS`** — advancing to Week 6+ **removes entire optional block** abruptly | `OffseasonScreen.kt` weeks 2–5 only |
 
 ---

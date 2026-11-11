@@ -34,7 +34,7 @@
 | MEGA-QA-005 | P1 | DEV | OPEN | Recommended tab scroll jank | 120 demo prospects → fling list | No sustained frame drops > 32 ms | Hub lazy list |
 | MEGA-QA-006 | P2 | DEV | OPEN | Roster tab cold open | In-season → Roster tab first visit | First frame < 500 ms after tab tap | Shell roster route |
 | MEGA-QA-007 | P2 | EMU | OPEN | News hub lazy load | Open News with 30+ items | Pagination smooth; no main-thread JSON parse stall | `NewsHubScreen` |
-| MEGA-QA-008 | P1 | DEV | FAIL | Pre-dialog lag on Advance | In-season RS W5 → Advance week once | Dialog appears < 500 ms; known: sync `buildSimWeekAdvanceInputSuspended` | `SaveSlotRepository`, MEGA-FRAME-093 |
+| MEGA-QA-008 | P1 | DEV | PASS | Pre-dialog lag on Advance | In-season RS W5 → Advance week once | Dialog appears < 500 ms; pre-dialog uses `loadPool` + defers `buildFastSimBundle` | `SaveSlotRepository.preDialogOnly`, `SimWeekAdvancePreDialogPath` |
 | MEGA-QA-009 | P2 | EMU | OPEN | Studio intro skip path | Settings skip intro ON → relaunch | No double black frame > 1 s | `DynastyApp.kt` `skipStudioIntro` |
 | MEGA-QA-010 | P2 | DEV | OPEN | Image decode on coach card | Open coach from roster | Bitmap decode not on main during scroll | Coach UI (see coach shard) |
 | MEGA-QA-011 | P1 | DEV | OPEN | Room migration upgrade | Install N-1 schema test build → upgrade to current | Migration completes; no ANR | Room DB version |

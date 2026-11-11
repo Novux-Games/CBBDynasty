@@ -59,6 +59,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
+import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceConfirmationUiPerf
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceDialog
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceUiPerf
 import dev.novux.dynasty.cbb.ui.advance.applyWeekAdvanceResult
@@ -993,10 +994,12 @@ fun DynastyShellScreen(
                             weekAdvanceInProgress = true
                             try {
                                 val unresolved = dashboardTasks.optional.count { it.id !in dismissedInjuryTasks }
-                                val confirmation = saveSlotRepository.buildSimWeekAdvanceConfirmation(
-                                    loaded.slotIndex,
-                                    unresolvedOptionalTaskCount = unresolved,
-                                )
+                                val confirmation = SimWeekAdvanceConfirmationUiPerf.measure {
+                                    saveSlotRepository.buildSimWeekAdvanceConfirmation(
+                                        loaded.slotIndex,
+                                        unresolvedOptionalTaskCount = unresolved,
+                                    )
+                                }
                                 if (confirmation != null && confirmation.needsDialog) {
                                     pendingAdvanceConfirmation = confirmation
                                 } else {

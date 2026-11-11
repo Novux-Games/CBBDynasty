@@ -574,6 +574,7 @@ class SaveSlotRepository(
             unresolvedOptionalTaskCount = unresolvedOptionalTaskCount,
             userManualRecruitingSpent = 0,
             dynastySeed = loaded.dynastyId.hashCode().toLong(),
+            preDialogOnly = true,
         )
         SimWeekAdvanceResolver.buildConfirmation(input)
     }
@@ -848,6 +849,8 @@ class SaveSlotRepository(
         unresolvedOptionalTaskCount: Int,
         userManualRecruitingSpent: Int,
         dynastySeed: Long,
+        /** When true, skip recruit seeding and fast-sim bundle assembly ([MEGA-QA-008]). */
+        preDialogOnly: Boolean = false,
     ): SimWeekAdvanceInput {
         val position = loaded.weekCheckpoint.activePosition
         val nextLabel = CalendarWeekLabel.display(PhaseWeekPolicy.nextPosition(position))
@@ -862,28 +865,37 @@ class SaveSlotRepository(
         val weekGames = InSeasonWeekGames.forPosition(position, plan, exhibitionCount)
         val hasScheduledGame = weekGames.isNotEmpty()
         val unplayed = UserWeekGameStatus.unplayedUserGames(loaded.weekCheckpoint, hasScheduledGame)
-        val economy = BalanceRecruitingParser.parse(loaded.balanceRuleset.recruiting)
-        val recommended = BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
-        val pool = incomingClassSeedRepository.ensurePool(loaded.dynastyId, loaded.metadata.seasonIndex)
-        val userSchool = nilAnnualPoolRepository.userSchoolRecruitingContext(loaded)
-            ?: SchoolRecruitingContext(
-                programPrestige = recruitingEconomyRepository.resolveUserProgramPrestige(loaded),
-                schoolHomeState = "OH",
-                pipelineStates = setOf("KY", "IN", "MI", "PA", "WV"),
-                nilPoolAnnualUsd = dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository.DEFAULT_FALLBACK_USD.toInt(),
-            )
-        val actionCosts = BalanceRecruitingActionsParser.parse(loaded.balanceRuleset.recruiting)
         val automation = dynastyAutomationRepository.load(loaded.dynastyId)
         val estimated = if (hubOpen && automation.recruitingAutoMaintain && userManualRecruitingSpent == 0) {
-            AiRecruitingWeekRunner.estimateUserAutoMaintainSpend(
-                prospectPool = pool,
-                economy = economy,
-                recommended = recommended,
-                userSchool = userSchool,
-                userProgramId = "user-${loaded.dynastyId}",
-                userPointsAvailable = ledger.pointsAvailable,
-                actionCosts = actionCosts,
-            )
+            val pool = if (preDialogOnly) {
+                incomingClassSeedRepository.loadPool(loaded.dynastyId, loaded.metadata.seasonIndex)
+            } else {
+                incomingClassSeedRepository.ensurePool(loaded.dynastyId, loaded.metadata.seasonIndex)
+            }
+            if (pool != null) {
+                val economy = BalanceRecruitingParser.parse(loaded.balanceRuleset.recruiting)
+                val recommended = BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
+                val userSchool = nilAnnualPoolRepository.userSchoolRecruitingContext(loaded)
+                    ?: SchoolRecruitingContext(
+                        programPrestige = recruitingEconomyRepository.resolveUserProgramPrestige(loaded),
+                        schoolHomeState = "OH",
+                        pipelineStates = setOf("KY", "IN", "MI", "PA", "WV"),
+                        nilPoolAnnualUsd =
+                            dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository.DEFAULT_FALLBACK_USD.toInt(),
+                    )
+                val actionCosts = BalanceRecruitingActionsParser.parse(loaded.balanceRuleset.recruiting)
+                AiRecruitingWeekRunner.estimateUserAutoMaintainSpend(
+                    prospectPool = pool,
+                    economy = economy,
+                    recommended = recommended,
+                    userSchool = userSchool,
+                    userProgramId = "user-${loaded.dynastyId}",
+                    userPointsAvailable = ledger.pointsAvailable,
+                    actionCosts = actionCosts,
+                )
+            } else {
+                0
+            }
         } else {
             0
         }
@@ -893,7 +905,7 @@ class SaveSlotRepository(
         } else {
             0
         }
-        val userLeagueFastSim: UserLeagueFastSimBundle? = if (unplayed > 0) {
+        val userLeagueFastSim: UserLeagueFastSimBundle? = if (!preDialogOnly && unplayed > 0) {
             userLeagueGameSimFactory.buildFastSimBundle(loaded, unplayed, dynastySeed)
         } else {
             null
