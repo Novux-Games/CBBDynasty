@@ -491,14 +491,20 @@ fun DynastyShellScreen(
     )
 
     val openHeadCoachFull: (HeadCoachCard) -> Unit = { card ->
-        coachView = ShellCoachView.HeadCoach(card, headCoachCardRoute)
+        coachView = ShellCoachView.HeadCoach(
+            card,
+            headCoachCardRoute.withTab(CoachCardTab.Overview),
+        )
     }
     val assistantRouteFor: (AssistantCoachCard) -> CoachCardRoute.Assistant = { card ->
         assistantCoachRoutes[card.staffId]
             ?: CoachCardRoute.Assistant(loaded.dynastyId, card.staffId)
     }
     val openAssistantFull: (AssistantCoachCard) -> Unit = { card ->
-        coachView = ShellCoachView.Assistant(card, assistantRouteFor(card))
+        coachView = ShellCoachView.Assistant(
+            card,
+            assistantRouteFor(card).withTab(CoachCardTab.Overview),
+        )
     }
     val openHeadCoachPreview: (HeadCoachCard) -> Unit = { card ->
         coachPreviewTarget = CoachPreviewTarget.HeadCoach(card)
@@ -537,11 +543,10 @@ fun DynastyShellScreen(
         userCoachSecurity = coachSecurity,
         sheetState = coachPreviewSheetState,
         onDismiss = { coachPreviewTarget = null },
-        onViewMore = {
-            when (val target = coachPreviewTarget) {
+        onViewMore = { target ->
+            when (target) {
                 is CoachPreviewTarget.HeadCoach -> openHeadCoachFull(target.card)
                 is CoachPreviewTarget.Assistant -> openAssistantFull(target.card)
-                null -> Unit
             }
         },
     )

@@ -31,6 +31,7 @@ import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 object CoachPreviewSheet {
     const val QA_ID: String = "MEGA-COACH-018"
     const val JOB_SECURITY_CHIP_QA: String = "MEGA-COACH-188"
+    const val VIEW_MORE_ROUTE_QA: String = "MEGA-COACH-189"
 }
 
 sealed class CoachPreviewTarget {
@@ -50,7 +51,7 @@ fun CoachPreviewBottomSheet(
     userCoachSecurity: CoachSecuritySnapshot?,
     sheetState: SheetState,
     onDismiss: () -> Unit,
-    onViewMore: () -> Unit,
+    onViewMore: (CoachPreviewTarget) -> Unit,
 ) {
     val current = target ?: return
     ModalBottomSheet(
@@ -60,9 +61,9 @@ fun CoachPreviewBottomSheet(
         CoachPreviewContent(
             target = current,
             userCoachSecurity = userCoachSecurity,
-            onViewMore = {
+            onViewMore = { preview ->
                 onDismiss()
-                onViewMore()
+                onViewMore(preview)
             },
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
         )
@@ -73,7 +74,7 @@ fun CoachPreviewBottomSheet(
 fun CoachPreviewContent(
     target: CoachPreviewTarget,
     userCoachSecurity: CoachSecuritySnapshot?,
-    onViewMore: () -> Unit,
+    onViewMore: (CoachPreviewTarget) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -93,7 +94,7 @@ fun CoachPreviewContent(
             is CoachPreviewTarget.Assistant -> AssistantCoachPreviewBody(card = target.card)
         }
         Button(
-            onClick = onViewMore,
+            onClick = { onViewMore(target) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp, bottom = 24.dp),
