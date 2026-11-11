@@ -34,6 +34,7 @@ import dev.novux.dynasty.cbb.core.signingday.IncomingSignee
 import dev.novux.dynasty.cbb.core.signingday.NationalRankRow
 import dev.novux.dynasty.cbb.core.signingday.NationalRecruitingRankings
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
+import dev.novux.dynasty.cbb.core.signingday.SigningDayUiPolicy
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
@@ -59,7 +60,10 @@ fun SigningDayScreen(
     onBack: () -> Unit,
 ) {
     var tabIndex by remember(initialTab) {
-        mutableIntStateOf(if (initialTab == SigningDayInitialTab.Positions) 1 else 0)
+        mutableIntStateOf(
+            if (initialTab == SigningDayInitialTab.Positions) 1
+            else SigningDayUiPolicy.DEFAULT_TAB_INDEX,
+        )
     }
     var progress by remember { mutableStateOf<SigningDayProgress?>(null) }
     var incoming by remember { mutableStateOf<List<IncomingSignee>>(emptyList()) }
@@ -163,6 +167,14 @@ private fun RankingsBody(rows: List<NationalRankRow>) {
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
+        item {
+            Text(
+                text = stringResource(R.string.signing_day_recruit_rankings_heading),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(bottom = 4.dp),
+            )
+        }
         items(rows, key = { it.prospect.prospectId }) { row ->
             Row(
                 modifier = Modifier.fillMaxWidth(),

@@ -194,7 +194,7 @@
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
 | MEGA-QA-111 | P0 | BOT | PASS | Rankings hub default tab | Menu → Rankings | Default is **team** NET/polls; label clear | `RankingsHubUiPolicy`; team scope copy; menu “Team rankings” |
-| MEGA-QA-112 | P0 | DEV | OPEN | Signing Day ≠ team rankings | Signing Day rankings tab | **Player/recruit** national ranks; title distinct | `SigningDayInitialTab.Rankings` |
+| MEGA-QA-112 | P0 | BOT | PASS | Signing Day ≠ team rankings | Signing Day rankings tab | **Player/recruit** national ranks; title distinct | `SigningDayUiPolicy`; recruit tab copy; `SigningDayUiPolicyTest` |
 | MEGA-QA-113 | P1 | DEV | OPEN | Preseason rankings task | Task “Review rankings” | Opens team rankings hub, not recruit list | Preseason task wiring |
 | MEGA-QA-114 | P1 | DEV | OPEN | News recruit headline tap | Tap recruit ranking news | Lands recruit context, not NET | News deep links |
 | MEGA-QA-115 | P2 | DEV | OPEN | Dashboard missing NET row | In-season dashboard | NET deep link exists or documented gap | MEGA-FRAME-035 |

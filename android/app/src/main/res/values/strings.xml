@@ -474,8 +474,9 @@
     <string name="recruiting_reservation_active">This recruit has a pending refunded action this week.</string>
     <string name="offseason_signing_day_hint">Signing Day — finalize your incoming class before advancing.</string>
     <string name="signing_day_title">Signing Day</string>
-    <string name="signing_day_subtitle">Review national rankings, set positions, then hard sign your commits.</string>
-    <string name="signing_day_tab_rankings">Rankings</string>
+    <string name="signing_day_subtitle">Review recruit national ranks (Top 60), set positions, then hard sign your class — not team NET or polls.</string>
+    <string name="signing_day_tab_rankings">Recruit rankings</string>
+    <string name="signing_day_recruit_rankings_heading">National recruiting Top 60 — players in this class</string>
     <string name="signing_day_tab_positions">Positions</string>
     <string name="signing_day_rank_line">#%1$d %2$s · %3$d★ %4$s</string>
     <string name="signing_day_no_commits">No scholarship offers on the board — hard sign is still available once tasks are complete.</string>
