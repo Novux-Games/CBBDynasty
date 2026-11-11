@@ -14,6 +14,7 @@ import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
@@ -50,6 +51,7 @@ import dev.novux.dynasty.cbb.core.recruiting.HsJucoBoard
 import dev.novux.dynasty.cbb.core.recruiting.HsJucoRecruitBoard
 import dev.novux.dynasty.cbb.core.recruiting.RecruitProspect
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingPointAction
@@ -231,9 +233,30 @@ fun RecruitingHubScreen(
         )
     }
 
-    if (ledger?.cycleClosed == true) {
-        RecruitingCycleClosedBody(onBack = onBack)
-        return
+    val activePosition = loaded.weekCheckpoint.activePosition
+    val hubOffseasonWeek = activePosition.weekIndex.takeIf { activePosition.phase == CalendarPhase.Offseason }
+    val ledgerCycleClosed = ledger?.cycleClosed == true
+    val hubNavigable = ledger != null &&
+        RecruitingCyclePolicy.hubNavigable(
+            activePosition.phase,
+            hubOffseasonWeek,
+            ledgerCycleClosed,
+        )
+    when {
+        ledger == null -> {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                CircularProgressIndicator()
+            }
+            return
+        }
+        !hubNavigable -> {
+            RecruitingCycleClosedBody(onBack = onBack)
+            return
+        }
     }
 
     Column(

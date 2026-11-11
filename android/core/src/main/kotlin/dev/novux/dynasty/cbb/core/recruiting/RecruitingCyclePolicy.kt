@@ -46,6 +46,20 @@ object RecruitingCyclePolicy {
     ): Boolean =
         hubAccessible(phase, offseasonWeekIndex) &&
             !effectiveCycleClosed(phase, offseasonWeekIndex, ledgerCycleClosed)
+
+    /**
+     * Hamburger / shell menus while the ledger is still loading: assume closed when the hub
+     * would be reachable, so preseason does not flash an open Recruiting item ([MEGA-FRAME-090]).
+     */
+    fun recruitingMenuTreatsCycleClosed(
+        phase: CalendarPhase,
+        offseasonWeekIndex: Int?,
+        ledger: RecruitingCycleLedger?,
+    ): Boolean =
+        when (ledger) {
+            null -> hubAccessible(phase, offseasonWeekIndex)
+            else -> effectiveCycleClosed(phase, offseasonWeekIndex, ledger.cycleClosed)
+        }
 }
 
 enum class RecruitingHubTab {

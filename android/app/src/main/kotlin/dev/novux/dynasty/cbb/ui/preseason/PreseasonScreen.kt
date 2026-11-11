@@ -114,13 +114,12 @@ fun PreseasonScreen(
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val phaseLabel = CalendarWeekLabel.display(position)
-    val recruitingCycleClosed = recruitingLedger?.let { ledger ->
-        RecruitingCyclePolicy.effectiveCycleClosed(
-            position.phase,
-            position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason },
-            ledger.cycleClosed,
-        )
-    } == true
+    val offseasonWeekForRecruiting = position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason }
+    val recruitingCycleClosed = RecruitingCyclePolicy.recruitingMenuTreatsCycleClosed(
+        position.phase,
+        offseasonWeekForRecruiting,
+        recruitingLedger,
+    )
     val menu = buildDynastyHubMenu(
         position = position,
         callbacks = hubMenuCallbacks,

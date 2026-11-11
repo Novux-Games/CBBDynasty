@@ -607,13 +607,12 @@ fun DynastyShellScreen(
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val phaseLabel = CalendarWeekLabel.display(position)
-    val recruitingCycleClosed = recruitingLedger?.let { ledger ->
-        RecruitingCyclePolicy.effectiveCycleClosed(
-            position.phase,
-            position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason },
-            ledger.cycleClosed,
-        )
-    } == true
+    val shellOffseasonWeek = position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason }
+    val recruitingCycleClosed = RecruitingCyclePolicy.recruitingMenuTreatsCycleClosed(
+        position.phase,
+        shellOffseasonWeek,
+        recruitingLedger,
+    )
     val shellMenu = buildDynastyHubMenu(
         position = position,
         callbacks = hubMenuCallbacks.copy(

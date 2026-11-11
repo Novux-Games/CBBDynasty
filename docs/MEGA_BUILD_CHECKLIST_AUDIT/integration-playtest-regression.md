@@ -177,7 +177,7 @@
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
 | MEGA-QA-101 | P0 | DEV | PASS | Hub open offseason W7–10 | After signing administration weeks | No “Open Recruiting” CTA when cycle closed | `RecruitingCyclePolicy.effectiveCycleClosed`, offseason closed copy |
-| MEGA-QA-102 | P0 | DEV | FAIL | Hamburger recruiting preseason gap | Hard sign complete → before preseason tasks | Recruiting menu gated or shows closed copy | MEGA-FRAME-090 |
+| MEGA-QA-102 | P0 | DEV | PASS | Hamburger recruiting preseason gap | Hard sign complete → before preseason tasks | Recruiting menu gated or shows closed copy | `recruitingMenuTreatsCycleClosed`, `RecruitingHubScreen` gate |
 | MEGA-QA-103 | P1 | DEV | OPEN | Signing Day screen rankings | W6 required → Signing Day | Rankings show signees; not team poll | `SigningDayScreen`, tab |
 | MEGA-QA-104 | P1 | DEV | OPEN | Advance W6 → W7 | Complete signing tasks → advance | Header week 7; recruiting CTAs consistent | `OffseasonScreen` |
 | MEGA-QA-105 | P1 | DEV | OPEN | Preseason recruiting task copy | Preseason checklist recruiting item | Points user to correct hub/tab post-cycle | `PreseasonRequiredDashboardTasks` |

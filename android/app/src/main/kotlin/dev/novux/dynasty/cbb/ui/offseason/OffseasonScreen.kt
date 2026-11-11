@@ -147,9 +147,11 @@ fun OffseasonScreen(
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val offseasonWeekForCycle = position.weekIndex.takeIf { inOffseason }
-    val recruitingCycleClosed = ledger?.let {
-        RecruitingCyclePolicy.effectiveCycleClosed(position.phase, offseasonWeekForCycle, it.cycleClosed)
-    } == true
+    val recruitingCycleClosed = RecruitingCyclePolicy.recruitingMenuTreatsCycleClosed(
+        position.phase,
+        offseasonWeekForCycle,
+        ledger,
+    )
     val menu = buildDynastyHubMenu(
         position = position,
         callbacks = hubMenuCallbacks,

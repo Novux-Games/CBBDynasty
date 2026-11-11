@@ -59,6 +59,30 @@ class RecruitingHubDefaultsTest {
     }
 
     @Test
+    fun recruitingMenuTreatsCycleClosed_preseasonUntilLedgerLoads() {
+        assertTrue(
+            RecruitingCyclePolicy.recruitingMenuTreatsCycleClosed(
+                CalendarPhase.Preseason,
+                offseasonWeekIndex = null,
+                ledger = null,
+            ),
+        )
+        assertTrue(
+            RecruitingCyclePolicy.recruitingMenuTreatsCycleClosed(
+                CalendarPhase.Preseason,
+                offseasonWeekIndex = null,
+                ledger = RecruitingCycleLedger(
+                    cycleSeasonIndex = 1,
+                    programPrestige = 50,
+                    weeklyPoolBase = 100,
+                    pointsAvailable = 0,
+                    cycleClosed = true,
+                ),
+            ),
+        )
+    }
+
+    @Test
     fun effectiveCycleClosed_administrationWeeksEvenWhenLedgerOpen() {
         assertTrue(
             RecruitingCyclePolicy.effectiveCycleClosed(
