@@ -46,8 +46,13 @@ The workflow strips spaces and line breaks from the secret before decoding, but 
 
 1. **Actions** → **Android release bundle (AAB)** → **Run workflow** (branch `main`),  
    **or** push a tag: `git tag v0.1.0 && git push origin v0.1.0`
-2. Open the completed run → **Artifacts** → **app-release-aab** → download `.aab`
-3. **Play Console** → your app → **Production** (or internal testing) → **Create new release** → upload the AAB
+2. Open the completed run → **Artifacts**:
+   - **app-release-aab** → upload to Play
+   - **play-mapping-txt** → `mapping.txt` for **Deobfuscation file** (R8)
+   - **play-native-debug-symbols** (if present) → **Native debug symbols**
+3. **Play Console** → your app → testing track → **Create new release** → upload the AAB, then attach mapping/symbols on the same release if Play prompts
+
+Release builds use **target/compile SDK 36**, **R8** (`mapping.txt`), and **NDK symbol table** metadata where AGP produces it.
 
 ## Local release build (optional)
 
