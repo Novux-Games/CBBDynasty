@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.novux.dynasty.cbb.BuildConfig
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.GameConstants
 import java.time.Year
@@ -138,6 +139,13 @@ fun SplashScreen(onTapToPlay: () -> Unit) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 8.dp),
+            )
+            Text(
+                text = stringResource(R.string.splash_version, BuildConfig.VERSION_NAME),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 6.dp),
             )
         }
     }
