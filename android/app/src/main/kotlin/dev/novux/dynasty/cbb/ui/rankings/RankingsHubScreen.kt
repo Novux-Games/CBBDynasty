@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,6 +36,7 @@ private enum class RankingsHubTab { Net, Media, Coaches, Conference }
 fun RankingsHubScreen(
     snapshot: RankingsHubSnapshot,
     onBack: () -> Unit,
+    onPublishPreseason: (() -> Unit)? = null,
 ) {
     var tabIndex by remember { mutableIntStateOf(0) }
     Column(modifier = Modifier.fillMaxSize()) {
@@ -43,11 +45,25 @@ fun RankingsHubScreen(
             Text(stringResource(R.string.dynasty_shell_back))
         }
         if (!snapshot.published) {
-            Text(
-                stringResource(R.string.school_hub_rankings_unpublished),
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.bodyMedium,
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(
+                    stringResource(R.string.rankings_hub_preseason_review),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                NationalRankList(snapshot.net.take(25))
+                Button(
+                    onClick = { onPublishPreseason?.invoke() },
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = onPublishPreseason != null,
+                ) {
+                    Text(stringResource(R.string.rankings_hub_preseason_continue))
+                }
+            }
             return
         }
         PrimaryTabRow(selectedTabIndex = tabIndex) {

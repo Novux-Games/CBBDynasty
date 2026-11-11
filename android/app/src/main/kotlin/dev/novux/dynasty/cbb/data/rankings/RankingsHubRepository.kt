@@ -20,4 +20,9 @@ class RankingsHubRepository(
             .isComplete(PreseasonTaskId.RankingsReview)
         return RankingsHubSnapshotFactory.build(index, standings, published)
     }
+
+    suspend fun publishPreseasonRankings(dynastyId: String, seasonIndex: Int): RankingsHubSnapshot {
+        preseasonProgressRepository.completeTask(dynastyId, seasonIndex, PreseasonTaskId.RankingsReview)
+        return load(dynastyId, seasonIndex)
+    }
 }

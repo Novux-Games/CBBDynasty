@@ -39,6 +39,7 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
 import dev.novux.dynasty.cbb.core.dashboard.DashboardAdvanceGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskGate
+import dev.novux.dynasty.cbb.core.preseason.PreseasonFeatureTaskCompletionPolicy
 import dev.novux.dynasty.cbb.core.preseason.PreseasonStartGate
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskId
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskProgress
@@ -97,7 +98,9 @@ fun PreseasonScreen(
     val scope = rememberCoroutineScope()
     val position = loaded.weekCheckpoint.activePosition
 
-    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
+    val coachSkillPointRepository = app.coachSkillPointRepository
+
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, selectedTab) {
         progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
         tournamentInvitesState = tournamentInvitesRepository.loadState(
             loaded.dynastyId,
@@ -278,6 +281,56 @@ fun PreseasonScreen(
                     )
                     return@items
                 }
+                if (taskId == PreseasonTaskId.PreseasonWorkouts && !taskProgress.isComplete(taskId)) {
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        PreseasonWorkoutsPanel(
+                            dynastyId = loaded.dynastyId,
+                            seasonIndex = loaded.metadata.seasonIndex,
+                            rosterRepository = rosterRepository,
+                            progressRepository = progressRepository,
+                            onComplete = {
+                                scope.launch {
+                                    progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                        )
+                    }
+                    return@items
+                }
+                if (taskId == PreseasonTaskId.CoachUpgrades && !taskProgress.isComplete(taskId)) {
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        PreseasonCoachUpgradesPanel(
+                            dynastyId = loaded.dynastyId,
+                            seasonIndex = loaded.metadata.seasonIndex,
+                            coachSkillPointRepository = coachSkillPointRepository,
+                            progressRepository = progressRepository,
+                            onOpenStrategy = hubMenuCallbacks.onOpenStrategy,
+                            onComplete = {
+                                scope.launch {
+                                    progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                        )
+                    }
+                    return@items
+                }
+                if (taskId == PreseasonTaskId.RankingsReview && !taskProgress.isComplete(taskId)) {
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        PreseasonRankingsReviewPanel(
+                            onOpenRankings = hubMenuCallbacks.onOpenRankings,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                        )
+                    }
+                    return@items
+                }
                 val done = taskProgress.isComplete(taskId)
                 val enabled = taskProgress.canComplete(taskId) && !done
                 Card(
@@ -332,7 +385,7 @@ fun PreseasonScreen(
                                 text = stringResource(R.string.preseason_task_done),
                                 color = MaterialTheme.colorScheme.primary,
                             )
-                        } else {
+                        } else if (PreseasonFeatureTaskCompletionPolicy.allowsGenericCompleteButton(taskId)) {
                             OutlinedButton(
                                 onClick = {
                                     scope.launch {

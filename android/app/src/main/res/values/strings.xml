@@ -242,6 +242,15 @@
     <string name="preseason_task_workouts">Preseason workouts</string>
     <string name="preseason_task_coach_upgrades">Coach upgrades</string>
     <string name="preseason_task_rankings">NET and poll review</string>
+    <string name="preseason_workouts_body">Review simulated tune-up gains on your returning roster, then confirm.</string>
+    <string name="preseason_workouts_confirm">Confirm workouts</string>
+    <string name="preseason_coach_upgrades_body">Unspent skill points in bank: %1$d. Spend in Strategy or bank them for the season.</string>
+    <string name="preseason_coach_open_strategy">Open Strategy</string>
+    <string name="preseason_coach_bank_season">Bank for season</string>
+    <string name="preseason_rankings_review_body">Open the rankings hub to review NET and polls, then publish with Continue.</string>
+    <string name="preseason_rankings_open_hub">Open rankings hub</string>
+    <string name="rankings_hub_preseason_review">Review projected NET before publishing to the league.</string>
+    <string name="rankings_hub_preseason_continue">Continue</string>
     <string name="preseason_task_report">View preseason report</string>
     <string name="preseason_task_tournament_invites">Tournament invites</string>
     <string name="preseason_task_exhibitions">Schedule exhibition games</string>
