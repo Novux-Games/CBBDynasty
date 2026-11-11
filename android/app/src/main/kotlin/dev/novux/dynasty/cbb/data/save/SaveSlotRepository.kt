@@ -487,12 +487,12 @@ class SaveSlotRepository(
     suspend fun buildSimWeekAdvanceConfirmation(
         slotIndex: Int,
         unresolvedOptionalTaskCount: Int = 0,
-    ): SimWeekConfirmation? {
+    ): SimWeekConfirmation? = withContext(Dispatchers.IO) {
         require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
         ensureInitialized()
         val loaded = when (val initial = loadSlot(slotIndex)) {
             is DynastyLoadResult.Success -> initial.loaded
-            else -> return null
+            else -> return@withContext null
         }
         val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
         val input = buildSimWeekAdvanceInputSuspended(
@@ -502,7 +502,7 @@ class SaveSlotRepository(
             userManualRecruitingSpent = 0,
             dynastySeed = loaded.dynastyId.hashCode().toLong(),
         )
-        return SimWeekAdvanceResolver.buildConfirmation(input)
+        SimWeekAdvanceResolver.buildConfirmation(input)
     }
 
     /**
@@ -548,15 +548,15 @@ class SaveSlotRepository(
     suspend fun advanceDynastyWeek(
         slotIndex: Int,
         userManualRecruitingSpent: Int = 0,
-    ): DynastyLoadResult {
+    ): DynastyLoadResult = withContext(Dispatchers.IO) {
         require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
         ensureInitialized()
         val loaded = when (val initial = loadSlot(slotIndex)) {
             is DynastyLoadResult.Success -> initial.loaded
-            else -> return initial
+            else -> return@withContext initial
         }
         if (disciplineRepository.hasPending(loaded.dynastyId, loaded.metadata.seasonIndex)) {
-            return loadSlot(slotIndex)
+            return@withContext loadSlot(slotIndex)
         }
         val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
         val dynastySeed = loaded.dynastyId.hashCode().toLong()
@@ -654,7 +654,7 @@ class SaveSlotRepository(
         }
         val afterAdvance = when (val again = loadSlot(slotIndex)) {
             is DynastyLoadResult.Success -> again.loaded
-            else -> return again
+            else -> return@withContext again
         }
         recruitingEconomyRepository.onCalendarWeekAdvanced(afterAdvance, recruitingSpentClosingWeek)
         val pos = afterAdvance.weekCheckpoint.activePosition
@@ -665,7 +665,7 @@ class SaveSlotRepository(
                 pos.weekIndex,
             )
         }
-        return loadSlot(slotIndex)
+        loadSlot(slotIndex)
     }
 
     private suspend fun applyFastSimInjuries(

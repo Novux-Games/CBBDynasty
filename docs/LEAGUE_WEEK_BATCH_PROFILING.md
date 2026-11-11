@@ -7,7 +7,7 @@
 | Surface | Budget | Notes |
 |---------|--------|--------|
 | **`:core` JVM (CI)** | **≤ 12 s** per RS week at **365** teams | `LeagueWeekBatchPerformanceBudget.MAX_CORE_REGULAR_SEASON_WEEK_MS`; enforced in `LeagueWeekBatchPerformanceTest` |
-| **Android UI thread (product)** | **≤ 2.5 s** typical mid-tier device | Measure on hardware; I/O (DataStore, news) is **outside** this budget |
+| **Android UI thread (product)** | **≤ 2.5 s** typical mid-tier device | `SaveSlotRepository.advanceDynastyWeek` / `buildSimWeekAdvanceConfirmation` run on **`Dispatchers.IO`**; UI shows spinners only ([MEGA-QA-014]) |
 | **Games per week** | ~180 unique RS matchups | 365 programs × ~32 RS weeks (see schedule generator) |
 
 Non-user batch sim uses **fast score** sim today (`LeagueFastSim` without `SimTuning`). When possession sim is wired for league batch, re-profile and tighten budgets.
