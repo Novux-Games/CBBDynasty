@@ -290,7 +290,7 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-145 | P0 | PASS | In-season drip nudge | `SpendRecruitingPoints` optional card when ledger `pointsAvailable > 0` in RS. | `InSeasonRecruitingOptionalDashboardTasks.kt` |
-| MEGA-RECR-146 | P1 | FAIL | Watchlist threshold tasks | No `DashboardTask` kinds for watchlist / re-engage / rival commit — spec table unimplemented. | `DashboardTask.kt` |
+| MEGA-RECR-146 | P1 | PASS | Watchlist threshold tasks | `DashboardTaskId` offer / re-engage / Top 60 / rival commit + `InSeasonRecruitingNudgeResolver`. | `DashboardTask.kt`, shell watchlist |
 | MEGA-RECR-147 | P1 | FAIL | Top 60 movement nudge | No trigger when board rank changes for user targets (no persisted watchlist). | `recruiting-engine#in-season-dashboard-tasks` |
 | MEGA-RECR-148 | P1 | GAP | Portal pipeline entrant task | `OffseasonOptionalDashboardTasks` has portal window flavor; **pipeline entrant** `{Name} in portal` trigger not built. | `transfer-portal.md` dashboard table |
 | MEGA-RECR-149 | P2 | PASS | Signing required trio | Rankings + positions + hard sign task ids emitted on OS W6 — PASS shell. | `SigningDayRequiredDashboardTasks` |

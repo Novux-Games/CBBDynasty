@@ -25,19 +25,8 @@ object InSeasonRecruitingOptionalDashboardTasks {
                     ),
                 )
             }
-            context.watchlistNudge?.let { nudge ->
-                add(
-                    DashboardTask(
-                        id = DashboardTaskId.RecruitingWatchlistNudge,
-                        kind = DashboardTaskKind.Optional,
-                        deepLink = DashboardDeepLink.RecruitingRecommended,
-                        formatArgs = listOf(
-                            nudge.nationalRank ?: 0,
-                            if (nudge.reEngage) 1 else 0,
-                        ),
-                        stringFormatArgs = listOf(nudge.prospectName),
-                    ),
-                )
+            context.recruitingNudges.forEach { nudge ->
+                add(nudge.toDashboardTask())
             }
         }
     }

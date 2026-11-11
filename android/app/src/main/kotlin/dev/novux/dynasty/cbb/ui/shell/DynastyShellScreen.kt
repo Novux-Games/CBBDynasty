@@ -282,7 +282,8 @@ fun DynastyShellScreen(
         val active = loaded.weekCheckpoint.activePosition
         val offseasonWeek = active.weekIndex.takeIf { active.phase == CalendarPhase.Offseason }
         val hubOpen = RecruitingCyclePolicy.hubNavigable(active.phase, offseasonWeek, ledger.cycleClosed)
-        val watchlistNudge = if (hubOpen) {
+        val recruitingNudges = if (hubOpen) {
+            val dynastyApp = context.requireDynastyApplication()
             val recommended = BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
             val pool = incomingClassSeedRepository.ensurePool(loaded.dynastyId, loaded.metadata.seasonIndex)
             val spendDelta = recruitingEconomyRepository.loadInterestSpendDeltaByProspect(loaded)
@@ -294,15 +295,26 @@ fun DynastyShellScreen(
                 nilPoolAnnualUsd = 0,
             )
             val top60 = NationalRecruitingRankings.top60FromPool(pool)
-            InSeasonRecruitingNudgeResolver.watchlistNudge(
+            val watchlistIds = dynastyApp.recruitingWatchlistRepository.load(
+                loaded.dynastyId,
+                loaded.metadata.seasonIndex,
+            )
+            val offerProspects = dynastyApp.recruitingReservationRepository.loadActive(loaded.dynastyId)
+                .filter { it.action == dev.novux.dynasty.cbb.core.recruiting.RecruitingRefundableAction.ScholarshipOffer }
+                .map { it.prospectId }
+                .toSet()
+            InSeasonRecruitingNudgeResolver.resolve(
                 pool = pool,
+                watchlistIds = watchlistIds,
                 school = school,
+                userProgramId = "user-${loaded.dynastyId}",
                 recommended = recommended,
                 spendDeltaByProspect = spendDelta,
                 top60 = top60,
+                scholarshipOfferProspectIds = offerProspects,
             )
         } else {
-            null
+            emptyList()
         }
         recruitingDashContext = InSeasonRecruitingDashboardContext(
             phase = active.phase,
@@ -313,7 +325,7 @@ fun DynastyShellScreen(
                 offseasonWeek,
                 ledger.cycleClosed,
             ),
-            watchlistNudge = watchlistNudge,
+            recruitingNudges = recruitingNudges,
         )
     }
 

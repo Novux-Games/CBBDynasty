@@ -32,15 +32,20 @@ class InSeasonRecruitingOptionalDashboardTasksTest {
     }
 
     @Test
-    fun watchlistNudge_whenProvided() {
+    fun watchlistOfferNudge_mapsToTaskId() {
         val tasks = InSeasonRecruitingOptionalDashboardTasks.build(
             InSeasonRecruitingDashboardContext(
                 phase = CalendarPhase.RegularSeason,
                 pointsAvailable = 0,
                 cycleClosed = false,
-                watchlistNudge = RecruitingWatchlistNudge("Alex Rivera", nationalRank = 12, reEngage = false),
+                recruitingNudges = listOf(
+                    RecruitingDashboardNudge(
+                        RecruitingDashboardNudgeKind.WatchlistOffer,
+                        prospectName = "Alex Rivera",
+                    ),
+                ),
             ),
         )
-        assertTrue(tasks.any { it.id == DashboardTaskId.RecruitingWatchlistNudge })
+        assertTrue(tasks.any { it.id == DashboardTaskId.RecruitingWatchlistOffer })
     }
 }

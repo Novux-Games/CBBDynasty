@@ -33,7 +33,10 @@ enum class DashboardTaskId {
     PreseasonRequired,
     PlayScheduledGame,
     CoachSundaySkillPoints,
-    RecruitingWatchlistNudge,
+    RecruitingWatchlistOffer,
+    RecruitingWatchlistReEngage,
+    RecruitingTop60Movement,
+    RecruitingRivalCommit,
     PromiseAtRisk,
 }
 

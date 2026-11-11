@@ -511,6 +511,7 @@
     <string name="dashboard_task_offer_recruit">Offer %1$s</string>
     <string name="dashboard_task_reengage_recruit">Re-engage %1$s</string>
     <string name="dashboard_task_review_top60_recruit">Review %1$s — #%2$d national</string>
+    <string name="dashboard_task_rival_commit_respond">Respond — %1$s trending to %2$s</string>
     <string name="dashboard_task_portal_window">Transfer Portal — Offseason Week %1$d</string>
     <string name="dashboard_task_portal_top40">Portal Top 40 published</string>
     <string name="dashboard_task_signing_crunch">Signing week R%1$d — 1.5× recruiting points</string>
