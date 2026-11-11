@@ -24,6 +24,9 @@ sealed class DynastyLoadFailure {
     data class InvalidSimTuning(val detail: String) : DynastyLoadFailure()
 
     data class DatabaseRead(val detail: String) : DynastyLoadFailure()
+
+    /** Wizard sign left coach/roster in a non-atomic state ([MEGA-QA-029]). */
+    data class IncompleteNewGameSign(val detail: String) : DynastyLoadFailure()
 }
 
 sealed class DynastyLoadResult {

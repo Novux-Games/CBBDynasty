@@ -118,6 +118,7 @@ class SaveSlotRepository(
     private val calendarDao = database.dynastyCalendarDao()
     private val initMutex = Mutex()
     private val advanceMutexBySlot = ConcurrentHashMap<Int, Mutex>()
+    private val newGameSignMutex = Mutex()
 
     suspend fun ensureInitialized() {
         initMutex.withLock {
@@ -187,6 +188,12 @@ class SaveSlotRepository(
                 )
             }
             DynastySaveValidator.validateBeforeLoad(slotSnap, metaSnap)?.let { failure ->
+                return@withContext DynastyLoadResult.Unreadable(slotIndex, failure)
+            }
+            val dynastyIdForCore = summary.dynastyId!!
+            val hasCoach = coachDao.getByDynastyId(dynastyIdForCore) != null
+            val rosterCount = rosterDao.listForDynasty(dynastyIdForCore).size
+            DynastySaveValidator.validateSignedDynastyCore(hasCoach, rosterCount)?.let { failure ->
                 return@withContext DynastyLoadResult.Unreadable(slotIndex, failure)
             }
             val meta = metadata
@@ -375,8 +382,9 @@ class SaveSlotRepository(
         schoolDisplayName: String,
         packId: String = DynastySchema.DEFAULT_PACK_ID,
     ): LoadedDynasty? = withContext(Dispatchers.IO) {
-        if (NewGameSignValidator.validate(draft) != null) return@withContext null
-        val slotIndex = firstEmptySlotIndex() ?: return@withContext null
+        newGameSignMutex.withLock {
+        if (NewGameSignValidator.validate(draft) != null) return@withLock null
+        val slotIndex = firstEmptySlotIndex() ?: return@withLock null
         val dynastyId = UUID.randomUUID().toString()
         val coachName = draft.coach.displayName()
         val shippedBalance = balanceRulesetRepository.ensureShippedDefaultLoaded()
@@ -394,6 +402,7 @@ class SaveSlotRepository(
         val rosterEntities =
             SeasonOneRosterGenerator.generate(dynastyId).toEntities()
 
+        // MEGA-QA-029: metadata/coach/roster/calendar commit before slot row becomes visible.
         database.withTransaction {
             metadataDao.upsert(metadata.toEntity())
             coachDao.upsert(draft.toCoachEntity(dynastyId))
@@ -444,6 +453,7 @@ class SaveSlotRepository(
         }
         bootstrapSeasonOneRecruitingAfterSign(loaded, draft)
         loaded
+        }
     }
 
     /**

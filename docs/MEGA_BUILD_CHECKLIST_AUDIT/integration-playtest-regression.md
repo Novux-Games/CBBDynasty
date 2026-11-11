@@ -69,7 +69,7 @@
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
 | MEGA-QA-028 | P0 | BOT | PASS | Kill during `advanceDynastyWeek` | Advance → home button kill mid-flight → relaunch | Checkpoint either previous or next week; no `Unreadable` | No intermediate persist; per-slot advance mutex; `WeekCheckpointAdvancePersistenceTest` |
-| MEGA-QA-029 | P0 | DEV | OPEN | Kill during new game sign | Sign dynasty → kill before shell | Slot empty or complete; no partial coach/roster | `SaveSlotRepository` transaction |
+| MEGA-QA-029 | P0 | BOT | PASS | Kill during new game sign | Sign dynasty → kill before shell | Slot empty or complete; no partial coach/roster | Single Room transaction (slot last); sign mutex; `validateSignedDynastyCore`; `NewGameSignTransactionRollbackTest` |
 | MEGA-QA-030 | P0 | DEV | OPEN | Load corrupt slot | Manually truncate DB file (dev) → load | `DynastyLoadResult.Unreadable`; offer delete not crash | `DynastyLoadFailure` |
 | MEGA-QA-031 | P1 | DEV | OPEN | All five slots filled | Create 5 dynasties; list load screen | Summaries accurate; continue picks latest | `SaveSlots.COUNT`, `observeSlots` |
 | MEGA-QA-032 | P1 | DEV | OPEN | Overwrite slot | New game into occupied slot | Old dynasty fully replaced | Slot upsert |
