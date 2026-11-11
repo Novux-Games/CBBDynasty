@@ -19,7 +19,6 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -63,20 +62,11 @@ fun PlayerCardScreen(
     val tabs = PlayerCardTab.ORDER
 
     Column(modifier = modifier.fillMaxSize()) {
-        TopAppBar(
-            title = { Text(player.identity.displayName, maxLines = 1) },
-            navigationIcon = {
-                TextButton(onClick = onBack) {
-                    Text(stringResource(R.string.player_card_back))
-                }
-            },
-            actions = {
-                if (allowEdit) {
-                    TextButton(onClick = { showEditHint = true }) {
-                        Text(stringResource(R.string.player_card_edit))
-                    }
-                }
-            },
+        PlayerCardPersistentHeader(
+            displayName = player.identity.displayName,
+            allowEdit = allowEdit,
+            onBack = onBack,
+            onEdit = { showEditHint = true },
         )
         PlayerIdentityStrip(player = player)
         PrimaryTabRow(selectedTabIndex = tabs.indexOf(selectedTab)) {

@@ -134,6 +134,7 @@ fun PreseasonScreen(
             cardPlayer = null
             fullScreenPlayer = player
         },
+        allowEdit = false,
     )
 
     fullScreenPlayer?.let { player ->

@@ -172,6 +172,7 @@ fun OffseasonScreen(
             cardPlayer = null
             fullScreenPlayer = player
         },
+        allowEdit = false,
     )
 
     fullScreenPlayer?.let { player ->

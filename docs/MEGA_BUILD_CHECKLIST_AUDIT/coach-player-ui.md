@@ -243,7 +243,7 @@
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-139 | P0 | PASS | `PlayerCardScreen` full-screen route + back stack | Shell overlay + Back dismisses to roster | `PlayerCardScreen.kt` |
-| MEGA-COACH-140 | P1 | FAIL | Persistent header Back / Name / Edit | Sheet uses drag dismiss only |
+| MEGA-COACH-140 | P1 | PASS | Persistent header Back / Name / Edit | `PlayerCardPersistentHeader` on full card + preview sheet | `PlayerCardPersistentHeader.kt`, `PlayerCardSheet.kt` |
 | MEGA-COACH-141 | P1 | FAIL | Identity strip: grade + position + injury `OUT` chip | Injury as text block, not strip chip |
 | MEGA-COACH-142 | P0 | PASS | Ratings tab attribute rows (shooting subs, handling, …) | `PlayerRatingAttributesPanel` grouped rows + nested shooting subs | `PlayerRatingAttributesPanel.kt` |
 | MEGA-COACH-143 | P1 | PASS | Potential + pro potential rows | Potential card on Ratings tab | `PlayerRatingAttributesPanel.kt` |
