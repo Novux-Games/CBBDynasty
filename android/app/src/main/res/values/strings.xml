@@ -222,6 +222,10 @@
     <string name="recruiting_action_bonus_points">Bonus points (spend %1$d pts)</string>
     <string name="recruiting_action_revoke_offer">Revoke scholarship offer (refund pts)</string>
     <string name="recruiting_action_scholarship_offer">Scholarship offer (%1$d pts)</string>
+    <string name="recruiting_promise_picker_title">Coach promise</string>
+    <string name="recruiting_promise_picker_subtitle">Pick exactly one binding promise for %1$s before sending the scholarship offer.</string>
+    <string name="recruiting_promise_picker_confirm">Send offer with promise</string>
+    <string name="recruiting_promise_offer_line">Promise: %1$s</string>
     <string name="conference_offers_title">Conference offers</string>
     <string name="conference_offers_subtitle">Review realignment invitations before preseason.</string>
     <string name="conference_offers_empty">No conference invitations this year.</string>

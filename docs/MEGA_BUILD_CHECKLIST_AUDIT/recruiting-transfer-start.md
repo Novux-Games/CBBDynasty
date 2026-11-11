@@ -59,7 +59,7 @@
 | MEGA-RECR-031 | P2 | PASS | Recommended default tab | Hub lands on Recommended; ~list cap from balance recommended parser. | `RecruitingHubScreen`, `RecommendedRecruitList` |
 | MEGA-RECR-032 | P1 | GAP | Elite hidden on Recommended | `SignLikelihoodEngine.hiddenOnRecommendedTab` exists — behavior depends on demo pool/stars distribution. | core tests |
 | MEGA-RECR-033 | P2 | GAP | NIL assign / 3× cap | Assign NIL from recommended row; uses `NilBudgetRepository` — partial; interest NIL factor uses offer map. | Hub NIL buttons |
-| MEGA-RECR-034 | P2 | GAP | Promises at offer | No promise picker wired on offer flow in hub UI. | recruiting UI search |
+| MEGA-RECR-034 | P2 | PASS | Promises at offer | `RecruitPromisePickerSheet` on scholarship offer in recruiting hub | `RecruitPromisePickerPathTest` |
 
 ---
 

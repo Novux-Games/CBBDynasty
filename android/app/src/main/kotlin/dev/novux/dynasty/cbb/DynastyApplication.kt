@@ -22,6 +22,7 @@ import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingInterestSpendRepository
+import dev.novux.dynasty.cbb.data.recruiting.RecruitOfferPromiseRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingReservationRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonSummerWorkoutRepository
@@ -90,6 +91,9 @@ class DynastyApplication : Application() {
         private set
 
     lateinit var recruitingEconomyRepository: RecruitingEconomyRepository
+        private set
+
+    lateinit var recruitOfferPromiseRepository: RecruitOfferPromiseRepository
         private set
 
     lateinit var portalCycleRepository: PortalCycleRepository
@@ -220,6 +224,7 @@ class DynastyApplication : Application() {
         simTuningRepository = SimTuningRepository(applicationContext)
         coachingCarouselRepository = CoachingCarouselRepository(applicationContext)
         val recruitingReservationRepository = RecruitingReservationRepository(applicationContext)
+        recruitOfferPromiseRepository = RecruitOfferPromiseRepository(applicationContext)
         val recruitingInterestSpendRepository = RecruitingInterestSpendRepository(applicationContext)
         nilBudgetRepository = dev.novux.dynasty.cbb.data.nil.NilBudgetRepository(
             applicationContext,

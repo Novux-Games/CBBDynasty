@@ -148,7 +148,7 @@
 | MEGA-COACH-084 | P2 | GAP | Overview loyalty + active promise chips | `PlayerLoyaltyChips` |
 | MEGA-COACH-085 | P2 | GAP | Ratings tab loyalty row | `PlayerLoyaltyRatingsRow` (in sheet, not tab) |
 | MEGA-COACH-086 | P1 | PASS | History tab locked promise + per-season Kept/Broken | `PlayerPromiseHistoryPanel` + `promiseHistoryWire` persistence | `PlayerPromiseHistoryPathTest` |
-| MEGA-COACH-087 | P1 | FAIL | Recruit sheet promise picker at offer | Recruiting UI gap (cross-ref `recruiting-transfer-start` MEGA-RECR-034) |
+| MEGA-COACH-087 | P1 | PASS | Recruit sheet promise picker at offer | `RecruitPromisePickerSheet` before scholarship offer + `RecruitOfferPromiseRepository` | `RecruitPromisePickerPathTest` |
 | MEGA-COACH-088 | P2 | GAP | Offseason Week 1 declare UI shows loyalty | `PlayersLeavingScreen` loyalty line |
 
 ---

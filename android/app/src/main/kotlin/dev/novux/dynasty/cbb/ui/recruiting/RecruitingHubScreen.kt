@@ -71,6 +71,9 @@ import dev.novux.dynasty.cbb.core.signingday.NationalRecruitingRankings
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
+import dev.novux.dynasty.cbb.core.player.loyalty.CoachPromiseType
+import dev.novux.dynasty.cbb.core.recruiting.RecruitOfferPromise
+import dev.novux.dynasty.cbb.data.recruiting.RecruitOfferPromiseRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import java.text.NumberFormat
 import java.util.Locale
@@ -81,6 +84,7 @@ import kotlinx.coroutines.launch
 fun RecruitingHubScreen(
     loaded: LoadedDynasty,
     recruitingEconomyRepository: RecruitingEconomyRepository,
+    recruitOfferPromiseRepository: RecruitOfferPromiseRepository,
     nilBudgetRepository: NilBudgetRepository,
     nilAnnualPoolRepository: NilAnnualPoolRepository,
     weekNineRepository: OffseasonWeekNineRepository? = null,
@@ -102,6 +106,10 @@ fun RecruitingHubScreen(
         mutableStateOf(dev.novux.dynasty.cbb.core.offseason.weeknine.FacilityGrades())
     }
     var gateRefresh by remember { mutableIntStateOf(0) }
+    var offerPromises by remember { mutableStateOf<Map<String, RecruitOfferPromise>>(emptyMap()) }
+    var promisePickerTarget by remember {
+        mutableStateOf<Pair<String, String>?>(null)
+    }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val insufficientPointsMessage = stringResource(R.string.recruiting_insufficient_points)
@@ -114,7 +122,44 @@ fun RecruitingHubScreen(
         BalanceRecruitingActionsParser.parse(loaded.balanceRuleset.recruiting)
     }
 
+    val submitScholarshipOffer: (String, CoachPromiseType) -> Unit = { prospectId, promiseType ->
+        scope.launch {
+            val stayTopN = if (promiseType == CoachPromiseType.StayPledgeTopN) {
+                dev.novux.dynasty.cbb.core.player.loyalty.CoachPromise.DEFAULT_STAY_TOP_N
+            } else {
+                null
+            }
+            recruitOfferPromiseRepository.save(
+                loaded.dynastyId,
+                loaded.metadata.seasonIndex,
+                RecruitOfferPromise(
+                    prospectId = prospectId,
+                    promiseType = promiseType,
+                    stayTopN = stayTopN,
+                ),
+            )
+            recruitingEconomyRepository.spendRefundableAction(
+                loaded,
+                prospectId = prospectId,
+                offer = true,
+                scout = false,
+                officialVisit = false,
+            )
+            offerPromises = recruitOfferPromiseRepository.loadAll(
+                loaded.dynastyId,
+                loaded.metadata.seasonIndex,
+            )
+            ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+            gateRefresh++
+            promisePickerTarget = null
+        }
+    }
+
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, gateRefresh) {
+        offerPromises = recruitOfferPromiseRepository.loadAll(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        )
         val loadedLedger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
         ledger = loadedLedger
         nilBoostUsd = weekNineRepository?.nilPoolBoostUsd(loaded.dynastyId, loaded.metadata.seasonIndex) ?: 0
@@ -347,6 +392,7 @@ fun RecruitingHubScreen(
                     nilOffers = nilOffers,
                     scholarshipOfferPointCost = recruitingActions.scholarshipOffer.cost,
                     gateRefresh = gateRefresh,
+                    offerPromises = offerPromises,
                     poolLoaded = hsPoolReady,
                     onBrowseHsJuco = {
                         tabIndex = RecruitingHubDefaults.tabs.indexOf(RecruitingHubTab.HsJuco)
@@ -368,18 +414,8 @@ fun RecruitingHubScreen(
                             gateRefresh++
                         }
                     },
-                    onScholarshipOffer = { prospectId ->
-                        scope.launch {
-                            recruitingEconomyRepository.spendRefundableAction(
-                                loaded,
-                                prospectId = prospectId,
-                                offer = true,
-                                scout = false,
-                                officialVisit = false,
-                            )
-                            ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
-                            gateRefresh++
-                        }
+                    onRequestScholarshipOffer = { prospectId, displayName ->
+                        promisePickerTarget = prospectId to displayName
                     },
                     onAssignNil = { prospectId, nilAskUsd, offerUsd ->
                         scope.launch {
@@ -419,10 +455,19 @@ fun RecruitingHubScreen(
                     },
                     onRevokeOffer = { prospectId ->
                         scope.launch {
+                            recruitOfferPromiseRepository.remove(
+                                loaded.dynastyId,
+                                loaded.metadata.seasonIndex,
+                                prospectId,
+                            )
                             recruitingEconomyRepository.revokeRefundableReservation(
                                 loaded,
                                 prospectId,
                                 RecruitingRefundableAction.ScholarshipOffer,
+                            )
+                            offerPromises = recruitOfferPromiseRepository.loadAll(
+                                loaded.dynastyId,
+                                loaded.metadata.seasonIndex,
                             )
                             ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
                             gateRefresh++
@@ -461,6 +506,7 @@ fun RecruitingHubScreen(
                                 nilOffers = nilOffers,
                                 scholarshipOfferPointCost = recruitingActions.scholarshipOffer.cost,
                                 gateRefresh = gateRefresh,
+                                offerPromises = offerPromises,
                                 modifier = Modifier.weight(1f),
                                 onSpend = {
                                     scope.launch {
@@ -479,18 +525,8 @@ fun RecruitingHubScreen(
                                         gateRefresh++
                                     }
                                 },
-                                onScholarshipOffer = { prospectId ->
-                                    scope.launch {
-                                        recruitingEconomyRepository.spendRefundableAction(
-                                            loaded,
-                                            prospectId = prospectId,
-                                            offer = true,
-                                            scout = false,
-                                            officialVisit = false,
-                                        )
-                                        ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
-                                        gateRefresh++
-                                    }
+                                onRequestScholarshipOffer = { prospectId, displayName ->
+                                    promisePickerTarget = prospectId to displayName
                                 },
                                 onAssignNil = { prospectId, nilAskUsd, offerUsd ->
                                     scope.launch {
@@ -530,10 +566,19 @@ fun RecruitingHubScreen(
                                 },
                                 onRevokeOffer = { prospectId ->
                                     scope.launch {
+                                        recruitOfferPromiseRepository.remove(
+                                            loaded.dynastyId,
+                                            loaded.metadata.seasonIndex,
+                                            prospectId,
+                                        )
                                         recruitingEconomyRepository.revokeRefundableReservation(
                                             loaded,
                                             prospectId,
                                             RecruitingRefundableAction.ScholarshipOffer,
+                                        )
+                                        offerPromises = recruitOfferPromiseRepository.loadAll(
+                                            loaded.dynastyId,
+                                            loaded.metadata.seasonIndex,
                                         )
                                         ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
                                         gateRefresh++
@@ -544,6 +589,13 @@ fun RecruitingHubScreen(
                     },
                 )
             }
+        }
+        promisePickerTarget?.let { (prospectId, displayName) ->
+            RecruitPromisePickerSheet(
+                prospectDisplayName = displayName,
+                onDismiss = { promisePickerTarget = null },
+                onConfirm = { promiseType -> submitScholarshipOffer(prospectId, promiseType) },
+            )
         }
         OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.settings_back))
@@ -576,11 +628,12 @@ private fun RecommendedTabBody(
     nilOffers: Map<String, Long>,
     scholarshipOfferPointCost: Int,
     gateRefresh: Int,
+    offerPromises: Map<String, RecruitOfferPromise>,
     poolLoaded: Boolean = true,
     onBrowseHsJuco: () -> Unit = {},
     modifier: Modifier = Modifier,
     onSpend: (ProspectSpendRequest) -> Unit,
-    onScholarshipOffer: (String) -> Unit,
+    onRequestScholarshipOffer: (prospectId: String, displayName: String) -> Unit,
     onAssignNil: (prospectId: String, nilAskUsd: Int, offerUsd: Long) -> Unit,
     onPointAction: (prospectId: String, RecruitingPointAction, Int?) -> Unit,
     onRevokeOffer: (String) -> Unit,
@@ -647,6 +700,7 @@ private fun RecommendedTabBody(
                 currency = currency,
                 nilOfferUsd = nilOffers[row.prospect.prospectId] ?: 0L,
                 scholarshipOfferPointCost = scholarshipOfferPointCost,
+                scholarshipOfferPromiseLabel = offerPromises[row.prospect.prospectId]?.displayLabel(),
                 onScout = {
                     onSpend(
                         ProspectSpendRequest(
@@ -667,7 +721,9 @@ private fun RecommendedTabBody(
                         ),
                     )
                 },
-                onScholarshipOffer = { onScholarshipOffer(row.prospect.prospectId) },
+                onScholarshipOffer = {
+                    onRequestScholarshipOffer(row.prospect.prospectId, row.prospect.displayName)
+                },
                 onMeetNilAsk = {
                     onAssignNil(row.prospect.prospectId, row.prospect.nilAskUsd, row.prospect.nilAskUsd.toLong())
                 },
@@ -714,6 +770,7 @@ private fun RecommendedProspectRow(
     currency: NumberFormat,
     nilOfferUsd: Long,
     scholarshipOfferPointCost: Int,
+    scholarshipOfferPromiseLabel: String? = null,
     onScout: () -> Unit,
     onOfficialVisit: () -> Unit,
     onScholarshipOffer: () -> Unit,
@@ -822,6 +879,13 @@ private fun RecommendedProspectRow(
                 Text(stringResource(R.string.recruiting_action_send_house, g.sendTheHouse.pointCost))
             }
             if (g.hasActiveScholarshipOffer) {
+                scholarshipOfferPromiseLabel?.let { promiseLabel ->
+                    Text(
+                        text = stringResource(R.string.recruiting_promise_offer_line, promiseLabel),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
                 OutlinedButton(onClick = onRevokeOffer, modifier = Modifier.fillMaxWidth()) {
                     Text(stringResource(R.string.recruiting_action_revoke_offer))
                 }

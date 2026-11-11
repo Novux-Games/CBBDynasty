@@ -705,6 +705,7 @@ fun DynastyApp(
                         RecruitingHubScreen(
                             loaded = active,
                             recruitingEconomyRepository = recruitingEconomyRepository,
+                            recruitOfferPromiseRepository = LocalContext.current.requireDynastyApplication().recruitOfferPromiseRepository,
                             nilBudgetRepository = LocalContext.current.requireDynastyApplication().nilBudgetRepository,
                             nilAnnualPoolRepository = LocalContext.current.requireDynastyApplication().nilAnnualPoolRepository,
                             weekNineRepository = offseasonWeekNineRepository,
