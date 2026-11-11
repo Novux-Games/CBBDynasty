@@ -34,6 +34,14 @@ class PossessionSimSession(
     private val awayFoulLedger = PersonalFoulLedger(resume?.awayPersonalFoulsByPlayer.orEmpty())
     private val homeMinutesLedger = SimFloorMinutesLedger(resume?.homeFloorSecondsByPlayer.orEmpty())
     private val awayMinutesLedger = SimFloorMinutesLedger(resume?.awayFloorSecondsByPlayer.orEmpty())
+    private val homePlayerLedger = PlayerBoxScoreLedger(
+        playerIds = input.homeRoster?.participants?.map { it.playerId }.orEmpty(),
+        initial = resume?.homePlayerBox.orEmpty(),
+    )
+    private val awayPlayerLedger = PlayerBoxScoreLedger(
+        playerIds = input.awayRoster?.participants?.map { it.playerId }.orEmpty(),
+        initial = resume?.awayPlayerBox.orEmpty(),
+    )
 
     fun hasNext(): Boolean = gameClock > 0
 
@@ -101,10 +109,49 @@ class PossessionSimSession(
                 random,
             )
         }
+        var offenseBoxAfter = resolution.box
+        val offenseRosterPresent = if (offenseHome) input.homeRoster != null else input.awayRoster != null
+        if (
+            offenseRosterPresent &&
+            PlayerPossessionStatRecorder.shouldShootBonusFreeThrows(sides.box, offenseBoxAfter, tripSample.foulStoppage)
+        ) {
+            val (makes, attempts) = PlayerPossessionStatRecorder.sampleBonusFreeThrows(random)
+            offenseBoxAfter = offenseBoxAfter.copy(
+                points = offenseBoxAfter.points + makes,
+                freeThrowsMade = offenseBoxAfter.freeThrowsMade + makes,
+                freeThrowsAttempted = offenseBoxAfter.freeThrowsAttempted + attempts,
+            )
+        }
+        val homeFloorIds = floorPlayerIds(home = true)
+        val awayFloorIds = floorPlayerIds(home = false)
+        val offenseFloor = fallbackFloor(
+            if (offenseHome) homeFloorIds else awayFloorIds,
+            if (offenseHome) input.homeRoster else input.awayRoster,
+        )
+        val defenseFloor = fallbackFloor(
+            if (offenseHome) awayFloorIds else homeFloorIds,
+            if (offenseHome) input.awayRoster else input.homeRoster,
+        )
+        val offenseLedger = if (offenseHome) homePlayerLedger else awayPlayerLedger
+        val defenseLedger = if (offenseHome) awayPlayerLedger else homePlayerLedger
+        val usageWeights = offGameplan?.usageWeights.orEmpty()
+        PlayerPossessionStatRecorder.record(
+            offenseLedger = offenseLedger,
+            defenseLedger = defenseLedger,
+            offenseFloor = offenseFloor,
+            defenseFloor = defenseFloor,
+            usageWeights = usageWeights,
+            before = sides.box,
+            after = offenseBoxAfter,
+            change = resolution.change,
+            turnoverTerminal = resolution.turnoverTerminal,
+            foulStoppage = tripSample.foulStoppage,
+            random = random,
+        )
         if (offenseHome) {
-            homeBox = resolution.box
+            homeBox = offenseBoxAfter
         } else {
-            awayBox = resolution.box
+            awayBox = offenseBoxAfter
         }
         when (resolution.change) {
             PossessionChange.DefenseTakesBall -> {
@@ -151,23 +198,39 @@ class PossessionSimSession(
             ?: if (defenseIsHome) input.homeDefensive() else input.awayDefensive()
     }
 
+    private fun fallbackFloor(ids: List<String>, roster: GameSimRosterInput?): List<String> =
+        ids.ifEmpty {
+            roster?.participants?.map { it.playerId }?.take(FoulTroubleRotationPolicy.FLOOR_PLAYERS).orEmpty()
+        }
+
+    private fun floorPlayerIds(home: Boolean): List<String> {
+        val roster = if (home) input.homeRoster else input.awayRoster
+        if (roster == null) return emptyList()
+        val foulLedger = if (home) homeFoulLedger else awayFoulLedger
+        val minutesLedger = if (home) homeMinutesLedger else awayMinutesLedger
+        return SimFloorRotationPolicy.floorParticipants(roster, foulLedger, minutesLedger, gameClock)
+            .map { it.playerId }
+    }
+
     private fun accrueFloorMinutes(usedSeconds: Int, offenseIsHome: Boolean) {
-        val homeRoster = input.homeRoster ?: return
-        val awayRoster = input.awayRoster ?: return
-        val homeFloor = SimFloorRotationPolicy.floorParticipants(
-            homeRoster,
-            homeFoulLedger,
-            homeMinutesLedger,
-            gameClock,
-        ).map { it.playerId }
-        val awayFloor = SimFloorRotationPolicy.floorParticipants(
-            awayRoster,
-            awayFoulLedger,
-            awayMinutesLedger,
-            gameClock,
-        ).map { it.playerId }
-        homeMinutesLedger.addFloorTime(homeFloor, usedSeconds)
-        awayMinutesLedger.addFloorTime(awayFloor, usedSeconds)
+        input.homeRoster?.let { homeRoster ->
+            val homeFloor = SimFloorRotationPolicy.floorParticipants(
+                homeRoster,
+                homeFoulLedger,
+                homeMinutesLedger,
+                gameClock,
+            ).map { it.playerId }
+            homeMinutesLedger.addFloorTime(homeFloor, usedSeconds)
+        }
+        input.awayRoster?.let { awayRoster ->
+            val awayFloor = SimFloorRotationPolicy.floorParticipants(
+                awayRoster,
+                awayFoulLedger,
+                awayMinutesLedger,
+                gameClock,
+            ).map { it.playerId }
+            awayMinutesLedger.addFloorTime(awayFloor, usedSeconds)
+        }
     }
 
     private fun recordPersonalFoulIfNeeded(foulStoppage: Boolean, offenseIsHome: Boolean): String? {
@@ -201,9 +264,13 @@ class PossessionSimSession(
         awayPersonalFoulsByPlayer = awayFoulLedger.snapshot(),
         homeFloorSecondsByPlayer = homeMinutesLedger.snapshot(),
         awayFloorSecondsByPlayer = awayMinutesLedger.snapshot(),
+        homePlayerBox = homePlayerLedger.snapshotMap(),
+        awayPlayerBox = awayPlayerLedger.snapshotMap(),
     )
 
-    fun toResult(isComplete: Boolean): GameSimResult = GameSimResult(
+    fun toResult(isComplete: Boolean): GameSimResult {
+        syncPlayerBoxAuxiliaryStats()
+        return GameSimResult(
         homeScore = homeBox.points,
         awayScore = awayBox.points,
         homeBox = homeBox,
@@ -216,5 +283,17 @@ class PossessionSimSession(
         awayPersonalFoulsByPlayer = awayFoulLedger.snapshot(),
         homeFloorSecondsByPlayer = homeMinutesLedger.snapshot(),
         awayFloorSecondsByPlayer = awayMinutesLedger.snapshot(),
-    )
+        homePlayerBox = homePlayerLedger.snapshot(),
+        awayPlayerBox = awayPlayerLedger.snapshot(),
+        )
+    }
+
+    private fun syncPlayerBoxAuxiliaryStats() {
+        homeFoulLedger.snapshot().forEach { (id, pf) -> homePlayerLedger.setPersonalFouls(id, pf) }
+        awayFoulLedger.snapshot().forEach { (id, pf) -> awayPlayerLedger.setPersonalFouls(id, pf) }
+        homeMinutesLedger.snapshot().forEach { (id, sec) -> homePlayerLedger.setMinutesSeconds(id, sec) }
+        awayMinutesLedger.snapshot().forEach { (id, sec) -> awayPlayerLedger.setMinutesSeconds(id, sec) }
+        PlayerBoxReconciler.reconcile(homeBox, homePlayerLedger)
+        PlayerBoxReconciler.reconcile(awayBox, awayPlayerLedger)
+    }
 }

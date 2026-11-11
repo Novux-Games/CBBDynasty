@@ -17,6 +17,8 @@ data class MidGameState(
     val awayPersonalFoulsByPlayer: Map<String, Int> = emptyMap(),
     val homeFloorSecondsByPlayer: Map<String, Int> = emptyMap(),
     val awayFloorSecondsByPlayer: Map<String, Int> = emptyMap(),
+    val homePlayerBox: Map<String, PlayerBoxScore> = emptyMap(),
+    val awayPlayerBox: Map<String, PlayerBoxScore> = emptyMap(),
 )
 
 data class SimulateOptions(

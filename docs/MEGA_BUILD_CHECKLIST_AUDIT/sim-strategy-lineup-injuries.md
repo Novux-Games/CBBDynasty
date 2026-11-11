@@ -46,7 +46,7 @@
 | MEGA-SIM-009 | PARTIAL | Terminal events: TO, 2PT/3PT, FT chains, rebounds, blocks, steals text | `resolvePossessionForSession` | Only coarse TO / FGA / score; no FTs, rebounds, blocks, steals in box |
 | MEGA-SIM-010 | GAP | Possession log format `14:32 \| HOME \| #12 3PT miss \| …` | `formatPossessionLog` | Generic `clock \| side \| Ns trip \| TO/+PTS/miss` — no jersey numbers |
 | MEGA-SIM-011 | SHIP | Running score + clock in output | `GameSimResult`, watch UI score strings | Score lines updated in `GameWatchScreen` |
-| MEGA-SIM-012 | PARTIAL | Full **player** box: MIN, PTS, FGM/A, … | `TeamBoxScore` only | Team-level aggregates; no per-player lines |
+| MEGA-SIM-012 | PASS | Full **player** box: MIN, PTS, FGM/A, … | `PlayerBoxScore`, `GameSimResult.homePlayerBox` | All standard columns + `BoxScoreCoherence` player sums |
 | MEGA-SIM-013 | SHIP | Team PTS = sum semantics / FGA bounds | `BoxScoreCoherence.assertValid` | Asserts scoreboard vs team box, FGM≤FGA, 3PM≤3PA |
 | MEGA-SIM-014 | GAP | **200** player-minutes per team regulation coherence | `RotationMinutesAllocator` in prep only | Prep targets 200; sim does not accumulate MIN or validate |
 | MEGA-SIM-015 | GAP | Release retry on coherence fail (cap N rolls) | `BoxScoreCoherence` | `require()` only — no retry loop |
@@ -233,7 +233,7 @@
 
 | ID | Pri | Status | Requirement (spec) | Code / test | Finding |
 |----|-----|--------|-------------------|-------------|---------|
-| MEGA-SIM-129 | P0 | FAIL | **Player box** all columns: MIN, PTS, FGM/A, 3PM/A, FTM/A, REB, AST, STL, BLK, TO, PF | `TeamBoxScore` | Team aggregates only |
+| MEGA-SIM-129 | P0 | PASS | **Player box** all columns: MIN, PTS, FGM/A, 3PM/A, FTM/A, REB, AST, STL, BLK, TO, PF | `PlayerBoxScore`, `PlayerPossessionStatRecorder` | Per-possession attribution + `BoxScoreCoherence` player sums |
 | MEGA-SIM-130 | P0 | FAIL | Postgame **box score screen** (not article-only) with team + player tabs | `PostgameReportGenerator`, `GameWatchScreen` | Narrative article only |
 | MEGA-SIM-131 | P1 | FAIL | **Team totals** shooting %, turnovers, fouls on box UI | Partial in `TeamBoxScore` | PF/ORB/DRB missing in engine |
 | MEGA-SIM-132 | P1 | FAIL | **DNP-INJ** / partial MIN when mid-game injury | `injuries.md` game log | Post-game injury only |
