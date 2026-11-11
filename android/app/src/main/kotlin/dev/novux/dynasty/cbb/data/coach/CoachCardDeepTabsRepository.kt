@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.data.coach
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.card.deep.CoachCardDeepTabsEngine
 import dev.novux.dynasty.cbb.core.coach.card.deep.CoachCardDeepTabsSnapshot
+import dev.novux.dynasty.cbb.core.coach.card.history.CoachCareerSeasonMergeEngine
 import dev.novux.dynasty.cbb.data.history.HistoryRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekTwoRepository
@@ -18,6 +19,7 @@ class CoachCardDeepTabsRepository(
     private val leagueWeekBatchRepository: LeagueWeekBatchRepository,
     private val offseasonWeekTwoRepository: OffseasonWeekTwoRepository,
     private val packRepository: PackRepository,
+    private val coachCareerSeasonRepository: CoachCareerSeasonRepository,
 ) {
     suspend fun loadHeadCoachDeepTabs(
         dynastyId: String,
@@ -57,7 +59,7 @@ class CoachCardDeepTabsRepository(
         val conferenceTeamIds = userConferenceId
             ?.let { confId -> packIndex.teamsInConference(confId).map { it.teamId }.toSet() }
             ?: emptySet()
-        CoachCardDeepTabsEngine.build(
+        val built = CoachCardDeepTabsEngine.build(
             dynastyId = dynastyId,
             userTeamId = userTeamId,
             schoolDisplayName = schoolDisplayName,
@@ -69,6 +71,14 @@ class CoachCardDeepTabsRepository(
             draftBySeason = draftBySeason,
             conferenceTeamIds = conferenceTeamIds,
             userConferenceId = userConferenceId,
+        )
+        val persisted = coachCareerSeasonRepository.listForDynasty(dynastyId)
+        built.copy(
+            seasonHistory = CoachCareerSeasonMergeEngine.merge(
+                persisted = persisted,
+                liveRows = built.seasonHistory,
+                currentSeasonIndex = seasonIndex,
+            ),
         )
     }
 }

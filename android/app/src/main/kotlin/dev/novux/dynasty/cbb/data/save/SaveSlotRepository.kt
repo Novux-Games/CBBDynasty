@@ -325,6 +325,7 @@ class SaveSlotRepository(
                     rosterDao.deleteForDynasty(dynastyId)
                     staffDao.deleteByDynastyId(dynastyId)
                     weekCheckpointRepository.deleteForDynasty(dynastyId)
+                    database.coachCareerSeasonDao().deleteForDynasty(dynastyId)
                 }
                 slotDao.clearSlot(slotIndex)
             }

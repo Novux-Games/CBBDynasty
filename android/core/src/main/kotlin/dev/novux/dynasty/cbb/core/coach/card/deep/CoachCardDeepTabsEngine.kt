@@ -72,47 +72,69 @@ object CoachCardDeepTabsEngine {
     ): List<CoachSeasonHistoryRow> {
         val seasons = (rolledSeasons + currentSeasonIndex).distinct().sortedDescending()
         return seasons.map { seasonIndex ->
-            val yearCard = yearCards.find { it.seasonIndex == seasonIndex }
-            val standings = standingsBySeason[seasonIndex]
-            val teamRecord = standings?.records?.get(userTeamId)
-            val recordLabel = when {
-                teamRecord != null -> "${teamRecord.wins}-${teamRecord.losses}"
-                seasonIndex == currentSeasonIndex -> currentRecordLabel
-                else -> "—"
-            }
-            val conferenceRecordLabel = CoachSeasonHistoryResolver.conferenceRecordLabel(
-                standings,
-                userTeamId,
-                conferenceTeamIds,
-            )
-            val highlights = buildList {
-                yearCard?.recordsNoted?.let { addAll(it) }
-                if (yearCard?.ncbaChampionSchool == schoolDisplayName) {
-                    add("NCBA champion")
-                }
-            }
-            val postseason = yearCard?.ncbaMvpLine
-                ?: yearCard?.recordsNoted?.firstOrNull()
-                ?: "—"
-            val detail = CoachSeasonHistoryDetail(
-                scheduleSummaryLine = CoachSeasonHistoryResolver.scheduleSummaryLine(standings, userTeamId),
-                tournamentPathLine = CoachSeasonHistoryResolver.tournamentPathLine(
-                    standings,
-                    userTeamId,
-                    userConferenceId,
-                ),
-                newsTagLines = CoachSeasonHistoryResolver.newsTagLines(yearCard),
-            )
-            CoachSeasonHistoryRow(
+            buildSeasonHistoryRow(
                 seasonIndex = seasonIndex,
                 schoolDisplayName = schoolDisplayName,
-                recordLabel = recordLabel,
-                conferenceRecordLabel = conferenceRecordLabel,
-                postseasonSummary = postseason,
-                highlightLabels = highlights,
-                detail = detail,
+                currentSeasonIndex = currentSeasonIndex,
+                currentRecordLabel = currentRecordLabel,
+                userTeamId = userTeamId,
+                yearCard = yearCards.find { it.seasonIndex == seasonIndex },
+                standings = standingsBySeason[seasonIndex],
+                conferenceTeamIds = conferenceTeamIds,
+                userConferenceId = userConferenceId,
             )
         }
+    }
+
+    fun buildSeasonHistoryRow(
+        seasonIndex: Int,
+        schoolDisplayName: String,
+        currentSeasonIndex: Int,
+        currentRecordLabel: String,
+        userTeamId: String,
+        yearCard: HistoryYearCard?,
+        standings: LeagueStandingsState?,
+        conferenceTeamIds: Set<String>,
+        userConferenceId: String?,
+    ): CoachSeasonHistoryRow {
+        val teamRecord = standings?.records?.get(userTeamId)
+        val recordLabel = when {
+            teamRecord != null -> "${teamRecord.wins}-${teamRecord.losses}"
+            seasonIndex == currentSeasonIndex -> currentRecordLabel
+            else -> "—"
+        }
+        val conferenceRecordLabel = CoachSeasonHistoryResolver.conferenceRecordLabel(
+            standings,
+            userTeamId,
+            conferenceTeamIds,
+        )
+        val highlights = buildList {
+            yearCard?.recordsNoted?.let { addAll(it) }
+            if (yearCard?.ncbaChampionSchool == schoolDisplayName) {
+                add("NCBA champion")
+            }
+        }
+        val postseason = yearCard?.ncbaMvpLine
+            ?: yearCard?.recordsNoted?.firstOrNull()
+            ?: "—"
+        val detail = CoachSeasonHistoryDetail(
+            scheduleSummaryLine = CoachSeasonHistoryResolver.scheduleSummaryLine(standings, userTeamId),
+            tournamentPathLine = CoachSeasonHistoryResolver.tournamentPathLine(
+                standings,
+                userTeamId,
+                userConferenceId,
+            ),
+            newsTagLines = CoachSeasonHistoryResolver.newsTagLines(yearCard),
+        )
+        return CoachSeasonHistoryRow(
+            seasonIndex = seasonIndex,
+            schoolDisplayName = schoolDisplayName,
+            recordLabel = recordLabel,
+            conferenceRecordLabel = conferenceRecordLabel,
+            postseasonSummary = postseason,
+            highlightLabels = highlights,
+            detail = detail,
+        )
     }
 
     fun hallOfFame(

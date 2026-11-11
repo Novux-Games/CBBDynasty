@@ -204,6 +204,7 @@ class DynastyApplication : Application() {
         private set
 
     lateinit var coachAchievementsRepository: dev.novux.dynasty.cbb.data.coach.CoachAchievementsRepository
+    lateinit var coachCareerSeasonRepository: dev.novux.dynasty.cbb.data.coach.CoachCareerSeasonRepository
         private set
 
     lateinit var coachCardDeepTabsRepository: dev.novux.dynasty.cbb.data.coach.CoachCardDeepTabsRepository
@@ -313,6 +314,10 @@ class DynastyApplication : Application() {
             applicationContext,
             database,
             leagueWeekBatchRepository,
+        )
+        coachCareerSeasonRepository = dev.novux.dynasty.cbb.data.coach.CoachCareerSeasonRepository(
+            database,
+            packRepository,
         )
         userCalendarRepository = UserCalendarRepository(
             preseasonScheduleRepository,
@@ -441,6 +446,7 @@ class DynastyApplication : Application() {
             balanceRulesetRepository,
             newsFeedRepository,
             coachAchievementsRepository,
+            coachCareerSeasonRepository,
         )
         coachCardDeepTabsRepository = dev.novux.dynasty.cbb.data.coach.CoachCardDeepTabsRepository(
             database,
@@ -449,6 +455,7 @@ class DynastyApplication : Application() {
             leagueWeekBatchRepository,
             offseasonWeekTwoRepository,
             packRepository,
+            coachCareerSeasonRepository,
         )
         yearlyAwardsRepository = dev.novux.dynasty.cbb.data.awards.YearlyAwardsRepository(
             applicationContext,

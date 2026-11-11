@@ -4,6 +4,32 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.novux.dynasty.cbb.core.save.DynastySchema
 
+val MIGRATION_19_20 = object : Migration(19, 20) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS coach_career_season (
+                dynastyId TEXT NOT NULL,
+                seasonIndex INTEGER NOT NULL,
+                schoolDisplayName TEXT NOT NULL,
+                recordLabel TEXT NOT NULL,
+                conferenceRecordLabel TEXT NOT NULL,
+                postseasonSummary TEXT NOT NULL,
+                highlightLabelsWire TEXT NOT NULL,
+                scheduleSummaryLine TEXT NOT NULL,
+                tournamentPathLine TEXT NOT NULL,
+                newsTagLinesWire TEXT NOT NULL,
+                archivedAtEpochMillis INTEGER NOT NULL,
+                PRIMARY KEY(dynastyId, seasonIndex)
+            )
+            """.trimIndent(),
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS index_coach_career_season_dynastyId ON coach_career_season(dynastyId)",
+        )
+    }
+}
+
 val MIGRATION_18_19 = object : Migration(18, 19) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
@@ -317,7 +343,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 }
 
 /** Room user version after the latest migration in this chain. */
-const val DYNASTY_DB_VERSION: Int = 19
+const val DYNASTY_DB_VERSION: Int = 20
 
 /** Ordered migration chain registered on [DynastyDatabase]; used in CI migration tests. */
 val ALL_DYNASTY_MIGRATIONS: Array<Migration> =
@@ -340,4 +366,5 @@ val ALL_DYNASTY_MIGRATIONS: Array<Migration> =
         MIGRATION_16_17,
         MIGRATION_17_18,
         MIGRATION_18_19,
+        MIGRATION_19_20,
     )

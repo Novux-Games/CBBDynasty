@@ -8,6 +8,8 @@ import dev.novux.dynasty.cbb.database.calendar.DynastyCalendarDao
 import dev.novux.dynasty.cbb.database.calendar.DynastyCalendarEntity
 import dev.novux.dynasty.cbb.database.calendar.ProvisionalGameDao
 import dev.novux.dynasty.cbb.database.calendar.ProvisionalGameEntity
+import dev.novux.dynasty.cbb.database.dynasty.CoachCareerSeasonDao
+import dev.novux.dynasty.cbb.database.dynasty.CoachCareerSeasonEntity
 import dev.novux.dynasty.cbb.database.dynasty.DynastyCoachDao
 import dev.novux.dynasty.cbb.database.dynasty.DynastyCoachEntity
 import dev.novux.dynasty.cbb.database.dynasty.DynastyMetadataDao
@@ -26,10 +28,11 @@ import dev.novux.dynasty.cbb.database.staff.DynastyStaffMemberEntity
         DynastyCalendarEntity::class,
         ProvisionalGameEntity::class,
         DynastyCoachEntity::class,
+        CoachCareerSeasonEntity::class,
         DynastyRosterPlayerEntity::class,
         DynastyStaffMemberEntity::class,
     ],
-    version = 19,
+    version = 20,
     exportSchema = false,
 )
 @androidx.room.TypeConverters(Converters::class)
@@ -39,6 +42,8 @@ abstract class DynastyDatabase : RoomDatabase() {
     abstract fun dynastyMetadataDao(): DynastyMetadataDao
 
     abstract fun dynastyCoachDao(): DynastyCoachDao
+
+    abstract fun coachCareerSeasonDao(): CoachCareerSeasonDao
 
     abstract fun dynastyRosterDao(): DynastyRosterDao
 

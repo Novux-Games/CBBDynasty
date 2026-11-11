@@ -338,7 +338,7 @@
 
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
-| MEGA-COACH-193 | P1 | FAIL | `CoachCareerSeasonEntity` or equivalent for History tab | Not found |
+| MEGA-COACH-193 | P1 | PASS | `CoachCareerSeasonEntity` or equivalent for History tab | Room `coach_career_season`; archive on `HistoryRepository.finalizeSeason`; merge in `CoachCardDeepTabsRepository` |
 | MEGA-COACH-194 | P2 | FAIL | Coach achievement counters on save | Not on `DynastyCoachEntity` |
 | MEGA-COACH-195 | P1 | FAIL | `PlayerSeasonStatsEntity` for Stats/Games tabs | Not found |
 | MEGA-COACH-196 | P2 | FAIL | `promiseHistory` persistence optional log | Single promise on player row only |
