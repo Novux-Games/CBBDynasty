@@ -3,7 +3,6 @@ package dev.novux.dynasty.cbb.ui.coach
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -38,7 +37,6 @@ import dev.novux.dynasty.cbb.core.coach.security.JobSecurityTier
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillBranch
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointState
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillTreeEngine
-import dev.novux.dynasty.cbb.ui.portrait.CoachPortraitSlot
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -71,7 +69,13 @@ fun HeadCoachCardScreen(
     val money = remember { NumberFormat.getCurrencyInstance(Locale.US) }
 
     Column(modifier = modifier.fillMaxSize()) {
-        CoachCardIdentityHeader(card = card)
+        CoachCardIdentityHeader(
+            displayName = card.displayName,
+            schoolDisplayName = card.schoolDisplayName,
+            seasonRecordLabel = card.seasonRecordLabel,
+            roleLabel = stringResource(R.string.coach_card_role_head),
+            avatarPresetId = card.avatarPresetId,
+        )
         PrimaryTabRow(selectedTabIndex = tabs.indexOf(selectedTab)) {
             tabs.forEach { tab ->
                 Tab(
@@ -180,39 +184,6 @@ fun HeadCoachCardScreen(
             },
         )
     }
-}
-
-@Composable
-private fun CoachCardIdentityHeader(card: HeadCoachCard) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        CoachPortraitSlot(
-            displayName = card.displayName,
-            avatarPresetId = card.avatarPresetId,
-        )
-        Column {
-            Text(card.displayName, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-            Text(card.schoolDisplayName, style = MaterialTheme.typography.titleMedium)
-            Text(
-                stringResource(R.string.coach_card_record, card.seasonRecordLabel),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        }
-    }
-}
-
-@Composable
-private fun coachTabLabel(tab: CoachCardTab): String = when (tab) {
-    CoachCardTab.Overview -> stringResource(R.string.coach_tab_overview)
-    CoachCardTab.Contract -> stringResource(R.string.coach_tab_contract)
-    CoachCardTab.History -> stringResource(R.string.coach_tab_history)
-    CoachCardTab.HallOfFame -> stringResource(R.string.coach_tab_hof)
-    CoachCardTab.Draft -> stringResource(R.string.coach_tab_draft)
 }
 
 @Composable
@@ -379,12 +350,6 @@ private fun HeadCoachHistoryTab(card: HeadCoachCard, seasonIndex: Int) {
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
-}
-
-@Composable
-private fun CoachCardPlaceholderTab(title: String, body: String) {
-    Text(title, style = MaterialTheme.typography.titleMedium)
-    Text(body, style = MaterialTheme.typography.bodyMedium)
 }
 
 @Composable

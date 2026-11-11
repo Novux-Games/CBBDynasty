@@ -55,7 +55,7 @@
 |----|-----|--------|------------|-------------------|----------|
 | MEGA-NOTES-027 | P1 | PARTIAL | O/D schemes + halftime **Done** | Strategy hub + halftime sheet exist; rotation minutes / gameplan depth gaps remain. | `MEGA-SIM-*`; `StrategyHubScreen.kt` |
 | MEGA-NOTES-028 | P1 | PARTIAL | Positions / default lineup **Done** | Lineup editor + positions wired; interchange UX vs spec partial. | `sim-strategy-lineup-injuries.md`; `LineupScreen.kt` |
-| MEGA-NOTES-029 | P0 | GAP | Coach card + School Staff **Done** | Coach card lacks tab shell (Overview · Contract · History · HOF · Draft) and portraits. | `MEGA-COACH-031`, `MEGA-COACH-016`–`017`; `CoachCardScreen.kt` |
+| MEGA-NOTES-029 | P0 | PASS | Coach card + School Staff **Done** | HC + assistant tab shells, staff preview flow, `CoachPortraitSlot` on card header and staff rows | `HeadCoachCardScreen.kt`, `AssistantCoachCardScreen.kt`, `SchoolStaffTabPanel.kt` |
 | MEGA-NOTES-030 | P1 | PARTIAL | Archetypes + draft #1–60 **Done** | Archetype tags in model/seeders; draft projection UI not fully tabbed on player card. | `coach-player-ui.md`; `PlayerArchetype.kt` |
 | MEGA-NOTES-031 | P1 | PARTIAL | Loyalty & promises **Done** | Promise/declare flows in core; portal bias + UI sheets partial. | `player-loyalty-promises` shard; `LoyaltyEngine.kt` |
 | MEGA-NOTES-032 | P1 | PARTIAL | Injuries & medical redshirt **Done** | Injury weeks + auto lineup hook; medical redshirt sheet coverage partial. | `injuries.md` shard; `InjuryRepository.kt` |
@@ -114,7 +114,7 @@
 | ID | Pri | Status | Spec quote | Finding vs Android | Evidence |
 |----|-----|--------|------------|-------------------|----------|
 | MEGA-NOTES-059 | P1 | PARTIAL | Pre-game: schemes, rotation, usage; halftime same knobs | Strategy hub + halftime; rotation minutes UX incomplete. | `strategy-schemes.md` shard; `HalftimeSheet.kt` |
-| MEGA-NOTES-060 | P1 | PARTIAL | Coach **default** schemes on coach card Overview | Defaults stored; coach card Overview tab shell missing. | `MEGA-COACH-031`; `CoachCardScreen.kt` |
+| MEGA-NOTES-060 | P1 | PASS | Coach **default** schemes on coach card Overview | Overview tab shows default O/D scheme labels on HC card | `HeadCoachCardScreen.kt` |
 | MEGA-NOTES-061 | P1 | PASS | Edit prep before sim + halftime; replay before week advance | Week advance blocked until games resolved via task gate / sim flows. | `MEGA-FRAME-020`; `SimWeekAdvanceDialog.kt` |
 | MEGA-NOTES-062 | P1 | PASS | After week advance, that week’s results final | `SaveSlotRepository` advances calendar monotonically; no re-open prior week UI. | `SaveSlotRepository.advanceWeek` |
 | MEGA-NOTES-063 | P2 | SHIP | Offseason/preseason define **tasks** gating Dashboard advance (not separate layouts) | `OffseasonScreen`/`PreseasonScreen` use same shell + dashboard gate pattern. | `planning-notes.md` § Gameplan; `MEGA-FRAME-001` |

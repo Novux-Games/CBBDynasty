@@ -568,7 +568,17 @@ fun DynastyShellScreen(
                     onClick = { coachView = ShellCoachView.Staff },
                     modifier = Modifier.padding(16.dp),
                 ) { Text(stringResource(R.string.coach_card_back_staff)) }
-                AssistantCoachCardScreen(card = view.card, modifier = Modifier.weight(1f))
+                AssistantCoachCardScreen(
+                    card = view.card,
+                    seasonIndex = loaded.metadata.seasonIndex,
+                    selectedTab = view.route.selectedTab,
+                    onSelectedTabChange = { tab ->
+                        val nextRoute = view.route.withTab(tab)
+                        assistantCoachRoutes = assistantCoachRoutes + (view.card.staffId to nextRoute)
+                        coachView = ShellCoachView.Assistant(view.card, nextRoute)
+                    },
+                    modifier = Modifier.weight(1f),
+                )
             }
             return
         }

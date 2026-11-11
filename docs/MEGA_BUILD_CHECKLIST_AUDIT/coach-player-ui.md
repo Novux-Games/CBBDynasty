@@ -90,7 +90,7 @@
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-049 | P2 | GAP | Assistant card Overview ratings Rec/Dev/Scout | `AssistantCoachCardScreen` |
-| MEGA-COACH-050 | P1 | FAIL | Assistant tabs History · Contract (HC conditional Achievements/HOF/Draft) | Single scroll, no tabs |
+| MEGA-COACH-050 | P1 | PASS | Assistant tabs History · Contract (HC conditional Achievements/HOF/Draft) | `PrimaryTabRow` on `AssistantCoachCardScreen` | `AssistantCoachCardScreen.kt`, `CoachCardTabs.kt` |
 | MEGA-COACH-051 | P1 | PASS | Support staff rows not tappable / no card | `SchoolStaffTabPanel` `clickable = false` |
 | MEGA-COACH-052 | P2 | PASS | Policy: coach-track eligible for card | `CoachCardPolicy`, test |
 | MEGA-COACH-053 | P2 | FAIL | Staff grade aggregate chip | No staff grade on staff panel |
@@ -198,7 +198,7 @@
 | MEGA-COACH-113 | P2 | FAIL | Draft tab coach résumé (players coached → NBA) | No coach-draft join UI |
 | MEGA-COACH-114 | P1 | GAP | Tab bar scrollable on small widths | Pattern exists elsewhere (`ScrollableTabRow` in hubs) — not reused |
 | MEGA-COACH-115 | P1 | FAIL | Overview → Contract deep-link from job security tap | `JobSecurityMeter` not clickable |
-| MEGA-COACH-116 | P2 | GAP | Assistant card tab subset (Overview/History/Contract) | `AssistantCoachCardScreen` single column |
+| MEGA-COACH-116 | P2 | PASS | Assistant card tab subset (Overview/History/Contract) | Tab shell matches `coach-card.md` assistant section | `AssistantCoachCardScreen.kt` |
 | MEGA-COACH-117 | P2 | FAIL | Conditional HC tabs on assistant when `hasHeadCoachCareer` | No career flag on assistant model |
 
 ---

@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.ui.coach
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -19,6 +20,7 @@ import dev.novux.dynasty.cbb.core.coach.card.CoachCardPolicy
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.coach.staff.SchoolStaffRoster
 import dev.novux.dynasty.cbb.core.coach.staff.StaffKind
+import dev.novux.dynasty.cbb.ui.portrait.CoachPortraitSlot
 
 @Composable
 fun SchoolStaffTabPanel(
@@ -44,6 +46,7 @@ fun SchoolStaffTabPanel(
             title = roster.headCoach.displayName,
             subtitle = stringResource(R.string.coach_card_role_head),
             meta = roster.headCoach.seasonRecordLabel,
+            avatarPresetId = roster.headCoach.avatarPresetId,
             clickable = true,
             onClick = onHeadCoachClick,
         )
@@ -60,6 +63,7 @@ fun SchoolStaffTabPanel(
                     R.string.staff_rating_chip,
                     assistant.ratings.recruiting,
                 ),
+                avatarPresetId = assistant.avatarPresetId,
                 clickable = CoachCardPolicy.eligibleForCoachCard(StaffKind.CoachTrack),
                 onClick = { onAssistantClick(assistant.staffId) },
             )
@@ -91,6 +95,7 @@ private fun StaffRow(
     title: String,
     subtitle: String,
     meta: String,
+    avatarPresetId: String = "",
     clickable: Boolean,
     onClick: () -> Unit,
 ) {
@@ -105,10 +110,18 @@ private fun StaffRow(
             .then(if (clickable) Modifier.clickable(onClick = onClick) else Modifier),
         colors = colors,
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Text(title, fontWeight = FontWeight.Medium)
-            Text(subtitle, style = MaterialTheme.typography.bodySmall)
-            Text(meta, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+        Row(
+            modifier = Modifier.padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            if (clickable) {
+                CoachPortraitSlot(displayName = title, avatarPresetId = avatarPresetId)
+            }
+            Column {
+                Text(title, fontWeight = FontWeight.Medium)
+                Text(subtitle, style = MaterialTheme.typography.bodySmall)
+                Text(meta, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+            }
         }
     }
 }

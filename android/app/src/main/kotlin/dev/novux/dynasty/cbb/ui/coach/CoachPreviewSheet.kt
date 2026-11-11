@@ -139,22 +139,27 @@ private fun HeadCoachPreviewBody(
 
 @Composable
 private fun AssistantCoachPreviewBody(card: AssistantCoachCard) {
-    Text(card.displayName, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-    Text(card.role.label, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-    Text(card.schoolDisplayName, style = MaterialTheme.typography.titleLarge)
-    Text(
-        stringResource(R.string.coach_card_record, card.seasonRecordLabel),
-        style = MaterialTheme.typography.bodyLarge,
-    )
-    Text(
-        stringResource(
-            R.string.coach_preview_assistant_ratings,
-            card.ratings.recruiting,
-            card.ratings.development,
-            card.ratings.scouting,
-        ),
-        style = MaterialTheme.typography.bodyMedium,
-    )
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        CoachPortraitSlot(displayName = card.displayName, avatarPresetId = card.avatarPresetId)
+        Column {
+            Text(card.displayName, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Text(card.role.label, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+            Text(card.schoolDisplayName, style = MaterialTheme.typography.titleLarge)
+            Text(
+                stringResource(R.string.coach_card_record, card.seasonRecordLabel),
+                style = MaterialTheme.typography.bodyLarge,
+            )
+            Text(
+                stringResource(
+                    R.string.coach_preview_assistant_ratings,
+                    card.ratings.recruiting,
+                    card.ratings.development,
+                    card.ratings.scouting,
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
