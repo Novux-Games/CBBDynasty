@@ -26,6 +26,11 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.coach.CoachCreateValidator
 import dev.novux.dynasty.cbb.core.pack.ConferenceDisplayOverlay
 import dev.novux.dynasty.cbb.core.pack.TeamDisplayOverlay
+import dev.novux.dynasty.cbb.core.balance.BalanceNilAnnualPoolParser
+import dev.novux.dynasty.cbb.core.balance.BalanceNilAnnualPoolTables
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingEconomy
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
+import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 
@@ -34,6 +39,7 @@ import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 fun NewGameWizardScreen(
     saveSlotRepository: SaveSlotRepository,
     packRepository: PackRepository,
+    balanceRulesetRepository: BalanceRulesetRepository,
     onExitWizard: () -> Unit,
     onNoEmptySlot: () -> Unit,
     onDynastyCreated: () -> Unit,
@@ -49,8 +55,13 @@ fun NewGameWizardScreen(
     var packId by remember { mutableStateOf(dev.novux.dynasty.cbb.core.save.DynastySchema.DEFAULT_PACK_ID) }
     var signError by remember { mutableStateOf<SignContractError?>(null) }
     var signing by remember { mutableStateOf(false) }
+    var wizardRecruitingEconomy by remember { mutableStateOf<BalanceRecruitingEconomy?>(null) }
+    var wizardNilTables by remember { mutableStateOf<BalanceNilAnnualPoolTables?>(null) }
 
     LaunchedEffect(Unit) {
+        val shipped = balanceRulesetRepository.ensureShippedDefaultLoaded()
+        wizardRecruitingEconomy = BalanceRecruitingParser.parse(shipped.recruiting)
+        wizardNilTables = BalanceNilAnnualPoolParser.parse(shipped.nil)
         saveSlotRepository.ensureInitialized()
         val hasSlot = saveSlotRepository.firstEmptySlotIndex() != null
         if (!hasSlot) {
@@ -145,21 +156,27 @@ fun NewGameWizardScreen(
                                         modifier = Modifier.padding(bottom = 8.dp),
                                     )
                                 }
-                                SchoolStepContent(
-                                    schools = schools,
-                                    conferences = conferences,
-                                    unlockAll = draft.unlockAllSchools,
-                                    onUnlockAllChange = {
-                                        draft = draft.copy(unlockAllSchools = it)
-                                    },
-                                    selectedTeamId = draft.selectedTeamId,
-                                    onSelectTeam = { draft = draft.copy(selectedTeamId = it) },
-                                    summaryAcknowledged = draft.schoolSummaryAcknowledged,
-                                    onSummaryAcknowledged = {
-                                        draft = draft.copy(schoolSummaryAcknowledged = true)
-                                    },
-                                    modifier = Modifier.fillMaxSize(),
-                                )
+                                val economy = wizardRecruitingEconomy
+                                val nilTables = wizardNilTables
+                                if (economy != null && nilTables != null) {
+                                    SchoolStepContent(
+                                        schools = schools,
+                                        conferences = conferences,
+                                        unlockAll = draft.unlockAllSchools,
+                                        onUnlockAllChange = {
+                                            draft = draft.copy(unlockAllSchools = it)
+                                        },
+                                        selectedTeamId = draft.selectedTeamId,
+                                        onSelectTeam = { draft = draft.copy(selectedTeamId = it) },
+                                        summaryAcknowledged = draft.schoolSummaryAcknowledged,
+                                        onSummaryAcknowledged = {
+                                            draft = draft.copy(schoolSummaryAcknowledged = true)
+                                        },
+                                        recruitingEconomy = economy,
+                                        nilPoolTables = nilTables,
+                                        modifier = Modifier.fillMaxSize(),
+                                    )
+                                }
                             }
                         }
                         NewGameStep.SignContract -> {

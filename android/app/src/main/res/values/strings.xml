@@ -120,6 +120,10 @@
     <string name="new_school_summary_prestige">Prestige</string>
     <string name="new_school_summary_conference">Conference</string>
     <string name="new_school_summary_location">Location</string>
+    <string name="new_school_summary_pipeline">Pipeline states</string>
+    <string name="new_school_summary_weekly_points">Weekly recruiting points (preview)</string>
+    <string name="new_school_summary_annual_nil">Annual NIL pool (preview)</string>
+    <string name="new_school_summary_recruiting_nil_hint">Recruiting and NIL values lock when you sign.</string>
     <string name="new_school_summary_contract_hint">Salary and contract length lock when you sign.</string>
     <string name="new_school_summary_confirm">Continue with this program</string>
     <string name="load_error_title">This save can\'t be opened</string>

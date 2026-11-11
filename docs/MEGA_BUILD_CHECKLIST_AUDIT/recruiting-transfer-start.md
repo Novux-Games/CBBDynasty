@@ -146,7 +146,7 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-071 | P1 | GAP | Wizard steps 1–6 | Implemented scaffold — PASS per `game-start.md` “implemented”. | `ui/newgame` |
-| MEGA-RECR-072 | P1 | FAIL | School summary recruiting/NIL preview | `SchoolSummarySheet` shows prestige/conference/location only — **no weekly points or annual NIL** preview. | `SchoolStepContent.kt` |
+| MEGA-RECR-072 | P1 | PASS | School summary recruiting/NIL preview | Sheet shows pipeline, weekly points, annual NIL from shipped balance tables. | `NewGameSchoolSummaryPreviewEngine`, `SchoolStepContent.kt` |
 | MEGA-RECR-073 | P2 | GAP | Pipeline states on summary | Not shown on school summary sheet. | `SchoolStepContent.kt` |
 | MEGA-RECR-074 | P2 | GAP | School demeanor on summary | Not shown. | `SchoolStepContent.kt` |
 | MEGA-RECR-075 | P1 | GAP | Prestige ≤40 default filter | School step should filter — verify `SchoolStepContent` (pack overlay) — present in list UI. | newgame school step |

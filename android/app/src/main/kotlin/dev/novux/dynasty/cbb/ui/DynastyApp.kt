@@ -680,6 +680,8 @@ fun DynastyApp(
                     NewGameWizardScreen(
                         saveSlotRepository = saveSlotRepository,
                         packRepository = LocalContext.current.requireDynastyApplication().packRepository,
+                        balanceRulesetRepository =
+                            LocalContext.current.requireDynastyApplication().balanceRulesetRepository,
                         onExitWizard = { navController.popBackStack() },
                         onDynastyCreated = {
                             scope.launch {
