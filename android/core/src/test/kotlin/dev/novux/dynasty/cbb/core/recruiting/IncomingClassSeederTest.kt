@@ -21,6 +21,7 @@ class IncomingClassSeederTest {
         val hsCount = pool.count { it.poolKind == RecruitPoolKind.HighSchool }
         assertTrue(hsCount in IncomingClassSeeder.HS_POOL_MIN..IncomingClassSeeder.HS_POOL_MAX)
         assertEquals(IncomingClassSeeder.JUCO_POOL_SIZE, pool.count { it.poolKind == RecruitPoolKind.Juco })
+        assertTrue(pool.size > 120)
     }
 
     @Test

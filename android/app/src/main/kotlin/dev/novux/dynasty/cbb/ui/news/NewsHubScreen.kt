@@ -68,8 +68,7 @@ fun NewsHubScreen(
 
     LaunchedEffect(dynastyId, seasonIndex, position) {
         stories = newsFeedRepository.storiesFeed(dynastyId, seasonIndex)
-        recruits = incomingClassSeedRepository.loadHeadline(dynastyId, seasonIndex)?.top60
-            ?: NationalRecruitingRankings.top60(seasonIndex)
+        recruits = incomingClassSeedRepository.loadHeadline(dynastyId, seasonIndex)?.top60.orEmpty()
         if (portalVisible) {
             portalState = portalCycleRepository.loadOrSimulate(dynastyId, seasonIndex)
         }

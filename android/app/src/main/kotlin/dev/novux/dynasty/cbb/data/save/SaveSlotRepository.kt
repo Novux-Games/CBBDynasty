@@ -426,6 +426,7 @@ class SaveSlotRepository(
         if (appDefaults.defaultCoachAutoSpend) {
             coachSkillPointRepository.setAutoSpend(dynastyId, true, CoachArchetype.Balanced)
         }
+        incomingClassSeedRepository.ensurePool(dynastyId, metadata.seasonIndex)
         return loaded
     }
 

@@ -72,12 +72,8 @@ fun SigningDayScreen(
     }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
-        val pool = incomingClassSeedRepository.loadPool(loaded.dynastyId, loaded.metadata.seasonIndex)
-        rankings = if (pool != null) {
-            NationalRecruitingRankings.top60FromPool(pool)
-        } else {
-            NationalRecruitingRankings.top60(loaded.metadata.seasonIndex)
-        }
+        val pool = incomingClassSeedRepository.ensurePool(loaded.dynastyId, loaded.metadata.seasonIndex)
+        rankings = NationalRecruitingRankings.top60FromPool(pool)
         refresh()
         if (tabIndex == 0) {
             signingDayRepository.markRankingsViewed(loaded.dynastyId, loaded.metadata.seasonIndex)

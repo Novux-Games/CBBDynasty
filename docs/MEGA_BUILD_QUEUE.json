@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-QA-076",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "integration-playtest-regression.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md"
-  },
-  {
     "id": "MEGA-QA-088",
     "pri": "P0",
     "status": "FAIL",
@@ -785,13 +778,6 @@
   },
   {
     "id": "MEGA-RECR-004",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-008",
     "pri": "P1",
     "status": "FAIL",
     "shard": "recruiting-transfer-start.md",

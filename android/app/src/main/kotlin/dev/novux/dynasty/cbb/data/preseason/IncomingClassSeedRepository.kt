@@ -41,7 +41,7 @@ class IncomingClassSeedRepository(private val context: Context) {
     }
 
     suspend fun loadHeadline(dynastyId: String, seasonIndex: Int): Top60NewsHeadline? {
-        val pool = loadPool(dynastyId, seasonIndex) ?: return null
+        val pool = ensurePool(dynastyId, seasonIndex)
         val headline = context.incomingClassSeedStore.data.first()[headlineKey(dynastyId, seasonIndex)]
             ?: Top60NewsPublisher.publish(seasonIndex, pool).headline
         return Top60NewsHeadline(
