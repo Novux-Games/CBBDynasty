@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.core.sim
 
+import dev.novux.dynasty.cbb.core.balance.BalanceFatigue
+
 /**
  * Auto-pull players in foul trouble so weighted team ratings reflect floor changes
  * ([planning/simulation-engine.md#rotation--fouls-in-sim], MEGA-SIM-102).
@@ -51,22 +53,51 @@ fun GameSimRosterInput.weightedOffensiveOnFloor(
     foulLedger: PersonalFoulLedger,
     minutesLedger: SimFloorMinutesLedger,
     gameClockSeconds: Int,
-): Int = weightedOnFloor(foulLedger, minutesLedger, gameClockSeconds, { it.offensiveRating }, ::weightedOffensive)
+    staminaLedger: SimStaminaLedger? = null,
+    fatigueTuning: BalanceFatigue = BalanceFatigue.DEFAULT,
+): Int = weightedOnFloor(
+    foulLedger,
+    minutesLedger,
+    gameClockSeconds,
+    staminaLedger,
+    fatigueTuning,
+    { it.offensiveRating },
+    ::weightedOffensive,
+)
 
 fun GameSimRosterInput.weightedDefensiveOnFloor(
     foulLedger: PersonalFoulLedger,
     minutesLedger: SimFloorMinutesLedger,
     gameClockSeconds: Int,
-): Int = weightedOnFloor(foulLedger, minutesLedger, gameClockSeconds, { it.defensiveRating }, ::weightedDefensive)
+    staminaLedger: SimStaminaLedger? = null,
+    fatigueTuning: BalanceFatigue = BalanceFatigue.DEFAULT,
+): Int = weightedOnFloor(
+    foulLedger,
+    minutesLedger,
+    gameClockSeconds,
+    staminaLedger,
+    fatigueTuning,
+    { it.defensiveRating },
+    ::weightedDefensive,
+)
 
 private fun GameSimRosterInput.weightedOnFloor(
     foulLedger: PersonalFoulLedger,
     minutesLedger: SimFloorMinutesLedger,
     gameClockSeconds: Int,
+    staminaLedger: SimStaminaLedger?,
+    fatigueTuning: BalanceFatigue,
     pick: (GameSimParticipant) -> Int,
     fallback: () -> Int,
 ): Int {
-    val floor = SimFloorRotationPolicy.floorParticipants(this, foulLedger, minutesLedger, gameClockSeconds)
+    val floor = SimFloorRotationPolicy.floorParticipants(
+        this,
+        foulLedger,
+        minutesLedger,
+        gameClockSeconds,
+        staminaLedger,
+        fatigueTuning,
+    )
     val totalMin = floor.sumOf { it.targetMinutes.coerceAtLeast(1) }
     if (totalMin <= 0) return fallback()
     val sum = floor.sumOf { pick(it) * it.targetMinutes.coerceAtLeast(1) }

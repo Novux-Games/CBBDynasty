@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.core.sim
 
+import dev.novux.dynasty.cbb.core.balance.BalanceFatigue
+
 /**
  * In-game subs when a player's floor minutes diverge from rotation targets
  * ([planning/simulation-engine.md], MEGA-SIM-103).
@@ -38,9 +40,15 @@ object RotationBandFloorPolicy {
         foulLedger: PersonalFoulLedger,
         minutesLedger: SimFloorMinutesLedger,
         gameClockRemaining: Int,
+        staminaLedger: SimStaminaLedger? = null,
+        fatigueTuning: BalanceFatigue = BalanceFatigue.DEFAULT,
     ): List<GameSimParticipant> {
         val floor = foulTroubleFloor
             .filterNot { shouldRotateOut(it, minutesLedger, gameClockRemaining) }
+            .filterNot { p ->
+                staminaLedger != null &&
+                    SimFatigueRotationPolicy.shouldPull(p, staminaLedger, fatigueTuning)
+            }
             .toMutableList()
         val onFloorIds = floor.map { it.playerId }.toMutableSet()
         while (floor.size < FoulTroubleRotationPolicy.FLOOR_PLAYERS) {
@@ -55,9 +63,15 @@ object RotationBandFloorPolicy {
                     )
                 }
                 .filter { !shouldRotateOut(it, minutesLedger, gameClockRemaining) }
+                .filter { p ->
+                    staminaLedger == null ||
+                        !SimFatigueRotationPolicy.shouldPull(p, staminaLedger, fatigueTuning)
+                }
                 .sortedWith(
                     compareByDescending<GameSimParticipant> {
                         shouldPrioritizeSubIn(it, minutesLedger, gameClockRemaining)
+                    }.thenByDescending { p ->
+                        staminaLedger?.let { SimFatigueRotationPolicy.staminaSortKey(p, it) } ?: 0
                     }.thenByDescending { it.targetMinutes },
                 )
                 .firstOrNull()
@@ -75,6 +89,8 @@ object SimFloorRotationPolicy {
         foulLedger: PersonalFoulLedger,
         minutesLedger: SimFloorMinutesLedger,
         gameClockSeconds: Int,
+        staminaLedger: SimStaminaLedger? = null,
+        fatigueTuning: BalanceFatigue = BalanceFatigue.DEFAULT,
     ): List<GameSimParticipant> {
         val foulFloor = FoulTroubleRotationPolicy.floorParticipants(roster, foulLedger, gameClockSeconds)
         return RotationBandFloorPolicy.applyMinuteBands(
@@ -83,6 +99,8 @@ object SimFloorRotationPolicy {
             foulLedger,
             minutesLedger,
             gameClockSeconds,
+            staminaLedger,
+            fatigueTuning,
         )
     }
 }

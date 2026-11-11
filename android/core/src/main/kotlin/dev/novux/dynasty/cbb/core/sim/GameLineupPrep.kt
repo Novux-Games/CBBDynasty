@@ -4,6 +4,7 @@ import dev.novux.dynasty.cbb.core.lineup.DefaultStarterAlgorithm
 import dev.novux.dynasty.cbb.core.lineup.LineupSlotPolicy
 import dev.novux.dynasty.cbb.core.lineup.RotationMinutesAllocator
 import dev.novux.dynasty.cbb.core.lineup.RotationMinutesBalancer
+import dev.novux.dynasty.cbb.core.fatigue.FatigueEngine
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 
@@ -16,6 +17,7 @@ data class GameSimParticipant(
     val targetMinutes: Int,
     val logDisplayName: String = "",
     val jerseyNumber: Int = 0,
+    val startingStamina: Int = FatigueEngine.FRESH,
 )
 
 data class GameSimRosterInput(
@@ -76,6 +78,7 @@ object GameLineupPrep {
                         targetMinutes = slotMinutes,
                         logDisplayName = player.displayLabel(),
                         jerseyNumber = SimJerseyNumber.fromPlayerId(id),
+                        startingStamina = player.stamina,
                     ),
                 )
             }
@@ -92,6 +95,7 @@ object GameLineupPrep {
                         targetMinutes = min,
                         logDisplayName = player.displayLabel(),
                         jerseyNumber = SimJerseyNumber.fromPlayerId(id),
+                        startingStamina = player.stamina,
                     ),
                 )
             }

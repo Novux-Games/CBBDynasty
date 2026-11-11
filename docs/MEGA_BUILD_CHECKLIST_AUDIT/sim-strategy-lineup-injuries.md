@@ -187,7 +187,7 @@
 | MEGA-SIM-101 | P0 | PASS | **Personal foul** counter per player; **5** = DQ | `PersonalFoulLedger`, foul-stoppage trips | Per-player map on `GameSimResult`; log `PF id (n)` / `DQ` |
 | MEGA-SIM-102 | P0 | PASS | **Foul trouble** auto-sub below target minutes band | `FoulTroubleRotationPolicy`, on-floor weighted ratings | 3 PF 1H / 4 PF 2H bench; reserves enter weighted ORtg/DRtg |
 | MEGA-SIM-103 | P0 | PASS | In-game **substitution** from rotation bands when floor MIN diverges from targets | `RotationBandFloorPolicy`, `SimFloorMinutesLedger` | Floor seconds vs target pace; band subs adjust on-floor ratings |
-| MEGA-SIM-104 | P1 | FAIL | **Fatigue** decay during sim affects sub priority | `FatigueEngine` exists | Injury path only; not in possession loop |
+| MEGA-SIM-104 | P1 | PASS | **Fatigue** decay during sim affects sub priority | `SimStaminaLedger`, `SimFatigueRotationPolicy` | Floor time drains stamina; tired players pulled per `BalanceFatigue` |
 | MEGA-SIM-105 | P1 | FAIL | Track **team fouls** per half for bonus logic | — | — |
 | MEGA-SIM-106 | P1 | FAIL | **Intentional foul** branch under late-game foul strategy | `LateGameFoulStrategy` tweaks team level | No possession-level foul choice |
 | MEGA-SIM-107 | P2 | FAIL | **Technical foul** rare event (optional tuning) | — | — |

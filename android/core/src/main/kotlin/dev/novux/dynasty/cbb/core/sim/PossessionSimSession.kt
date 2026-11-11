@@ -57,6 +57,14 @@ class PossessionSimSession(
         initialAway = resume?.awayTeamFoulsInHalf ?: 0,
     )
     private val eventWeights = SimEventWeightsResolver.resolve(input.tuning.eventWeights)
+    private val homeStaminaLedger = SimStaminaLedger(
+        roster = input.homeRoster,
+        initial = resume?.homeStaminaByPlayer.orEmpty(),
+    )
+    private val awayStaminaLedger = SimStaminaLedger(
+        roster = input.awayRoster,
+        initial = resume?.awayStaminaByPlayer.orEmpty(),
+    )
 
     fun hasNext(): Boolean = gameClock > 0
 
@@ -390,7 +398,14 @@ class PossessionSimSession(
         val roster = if (offenseIsHome) input.homeRoster else input.awayRoster
         val foulLedger = if (offenseIsHome) homeFoulLedger else awayFoulLedger
         val minutesLedger = if (offenseIsHome) homeMinutesLedger else awayMinutesLedger
-        return roster?.weightedOffensiveOnFloor(foulLedger, minutesLedger, gameClock)
+        val staminaLedger = if (offenseIsHome) homeStaminaLedger else awayStaminaLedger
+        return roster?.weightedOffensiveOnFloor(
+            foulLedger,
+            minutesLedger,
+            gameClock,
+            staminaLedger,
+            input.fatigueTuning,
+        )
             ?: if (offenseIsHome) input.homeOffensive() else input.awayOffensive()
     }
 
@@ -398,7 +413,14 @@ class PossessionSimSession(
         val roster = if (defenseIsHome) input.homeRoster else input.awayRoster
         val foulLedger = if (defenseIsHome) homeFoulLedger else awayFoulLedger
         val minutesLedger = if (defenseIsHome) homeMinutesLedger else awayMinutesLedger
-        return roster?.weightedDefensiveOnFloor(foulLedger, minutesLedger, gameClock)
+        val staminaLedger = if (defenseIsHome) homeStaminaLedger else awayStaminaLedger
+        return roster?.weightedDefensiveOnFloor(
+            foulLedger,
+            minutesLedger,
+            gameClock,
+            staminaLedger,
+            input.fatigueTuning,
+        )
             ?: if (defenseIsHome) input.homeDefensive() else input.awayDefensive()
     }
 
@@ -413,20 +435,32 @@ class PossessionSimSession(
         val foulLedger = if (home) homeFoulLedger else awayFoulLedger
         val minutesLedger = if (home) homeMinutesLedger else awayMinutesLedger
         val injured = if (home) homeInjuredOut else awayInjuredOut
-        return SimFloorRotationPolicy.floorParticipants(roster, foulLedger, minutesLedger, gameClock)
+        val staminaLedger = if (home) homeStaminaLedger else awayStaminaLedger
+        return SimFloorRotationPolicy.floorParticipants(
+            roster,
+            foulLedger,
+            minutesLedger,
+            gameClock,
+            staminaLedger,
+            input.fatigueTuning,
+        )
             .map { it.playerId }
             .filter { !excludeInjured || it !in injured }
     }
 
     private fun accrueFloorMinutes(usedSeconds: Int, offenseIsHome: Boolean) {
+        val tuning = input.fatigueTuning
         input.homeRoster?.let { homeRoster ->
             val homeFloor = SimFloorRotationPolicy.floorParticipants(
                 homeRoster,
                 homeFoulLedger,
                 homeMinutesLedger,
                 gameClock,
+                homeStaminaLedger,
+                tuning,
             ).map { it.playerId }.filter { it !in homeInjuredOut }
             homeMinutesLedger.addFloorTime(homeFloor, usedSeconds)
+            homeStaminaLedger.drainFloorTime(homeFloor, usedSeconds, tuning)
         }
         input.awayRoster?.let { awayRoster ->
             val awayFloor = SimFloorRotationPolicy.floorParticipants(
@@ -434,8 +468,11 @@ class PossessionSimSession(
                 awayFoulLedger,
                 awayMinutesLedger,
                 gameClock,
+                awayStaminaLedger,
+                tuning,
             ).map { it.playerId }.filter { it !in awayInjuredOut }
             awayMinutesLedger.addFloorTime(awayFloor, usedSeconds)
+            awayStaminaLedger.drainFloorTime(awayFloor, usedSeconds, tuning)
         }
     }
 
@@ -489,6 +526,8 @@ class PossessionSimSession(
         overtimePeriods = overtimePeriods,
         homeTeamFoulsInHalf = teamFoulLedger.homeFoulsInHalf,
         awayTeamFoulsInHalf = teamFoulLedger.awayFoulsInHalf,
+        homeStaminaByPlayer = homeStaminaLedger.snapshot(),
+        awayStaminaByPlayer = awayStaminaLedger.snapshot(),
     )
 
     fun toResult(isComplete: Boolean): GameSimResult {

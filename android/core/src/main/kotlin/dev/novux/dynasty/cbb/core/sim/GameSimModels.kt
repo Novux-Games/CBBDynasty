@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.sim
 
+import dev.novux.dynasty.cbb.core.balance.BalanceFatigue
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
 import dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset
 import dev.novux.dynasty.cbb.core.strategy.GameplanInput
@@ -34,6 +35,7 @@ data class GameSimInput(
     val awayGameplan: GameplanInput? = null,
     val homeHalftimeGameplan: GameplanInput? = null,
     val awayHalftimeGameplan: GameplanInput? = null,
+    val fatigueTuning: BalanceFatigue = BalanceFatigue.DEFAULT,
 ) {
     fun activeHomeGameplan(clockSeconds: Int): GameplanInput? =
         if (clockSeconds <= GameSimClock.HALF_SECONDS) {
