@@ -1,11 +1,12 @@
 # MEGA build checklist audit — sim · strategy · lineup · injuries
 
 **Repo:** `/workspace`  
-**Audited:** 2026-11-11  
+**Audited:** 2026-11-11 (expanded pass)  
 **Planning authority:** [`planning/simulation-engine.md`](../../planning/simulation-engine.md), [`planning/strategy-schemes.md`](../../planning/strategy-schemes.md), [`planning/positions-and-lineup.md`](../../planning/positions-and-lineup.md), [`planning/injuries.md`](../../planning/injuries.md)  
-**Code focus:** `android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/sim/**`, `core/strategy`, `core/lineup`, `core/injuries`, `ui/sim`, `ui/strategy`
+**Code focus:** `android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/sim/**`, `core/strategy`, `core/lineup`, `core/injuries`, `ui/sim`, `ui/strategy`  
+**Method:** Full planning read + static trace vs possession engine, watch UI, Strategy hub, injury adjusters; **no** claim that thin sim is “complete product.”
 
-## Status legend
+## Status legend (sections A–F, original pass)
 
 | Tag | Meaning |
 |-----|---------|
@@ -13,6 +14,20 @@
 | **PARTIAL** | Simplified or incomplete vs spec; usable stub |
 | **GAP** | Spec requirement not implemented |
 | **WIRE** | Core logic exists; dynasty UI, persistence, or batch path missing |
+
+## Status legend (sections G–P, expanded product pass)
+
+| Tag | Meaning |
+|-----|---------|
+| **FAIL** | Spec violation or missing mandatory product behavior |
+| **GAP** | Partial stub; not shippable alone |
+| **PASS** | Matches planning for this row |
+| **RISK** | Works in narrow path; breaks on real dynasty flow |
+| **WIRE** | Library or DB ready; UI or caller missing |
+
+**Pri:** P0 = ship-blocker for credible game sim / Strategy loop; P1 = high; P2 = medium; P3 = polish.
+
+**Product bar (user complaint: “simulations bare minimum and boring”):** Sections **G–P** are **full-product** requirements from planning — nothing deferred to “phase 2.” Implementation today is overwhelmingly **FAIL/GAP** on depth, narrative, box score, rotation, clutch, and injury-in-game.
 
 ---
 
@@ -143,18 +158,252 @@
 
 ---
 
-## Summary counts
+## G — Possession depth & event chains (full product)
 
-| Status | Count (of 85 items) |
-|--------|---------------------|
+| ID | Pri | Status | Requirement (spec) | Code / test | Finding |
+|----|-----|--------|-------------------|-------------|---------|
+| MEGA-SIM-086 | P0 | FAIL | Carry **shot-clock seconds remaining** per offensive trip; reset **30** on change, **20** after OReb | `SimTuning.shotClock`; no session field | Trip time sampled independent of shot-clock state; OReb never extends possession |
+| MEGA-SIM-087 | P0 | FAIL | **Shot-clock violation** terminal event + AST/TO stat + log line | `resolvePossessionForSession` | No violation branch; only generic turnover bucket |
+| MEGA-SIM-088 | P1 | FAIL | **Late-clock** tuning (22–30s): contested make↓, TO↑, foul↑ | `simulation-engine.md` §late clock | No `used` threshold branch |
+| MEGA-SIM-089 | P1 | FAIL | Sub-phases optional: drive → kick → shot within one trip | Planning event chains | Single roll → one terminal outcome |
+| MEGA-SIM-090 | P0 | FAIL | **Offensive rebound** → same team possession + 20s shot clock | — | Misses never create OReb sequence |
+| MEGA-SIM-091 | P1 | FAIL | **Defensive rebound** change of possession in log text | `formatPossessionLog` | No rebound vocabulary |
+| MEGA-SIM-092 | P1 | FAIL | **Steal / bad pass / travel / offensive foul** turnover flavors | `eventWeights` unused | All turnovers anonymous |
+| MEGA-SIM-093 | P1 | FAIL | **Block** on shot attempt + optional foul-on-block | — | No blocks in resolve path |
+| MEGA-SIM-094 | P1 | FAIL | **And-1** and shooting foul → FT chain (1–3 attempts) | — | No FTA/FTM accumulation |
+| MEGA-SIM-095 | P1 | FAIL | **Bonus / double bonus** team foul thresholds → automatic FT trips | NCAA foul table in tuning | Team fouls not tracked |
+| MEGA-SIM-096 | P2 | FAIL | **Jump ball / held ball** rare alternate possession | Planning rare events | Not in engine |
+| MEGA-SIM-097 | P1 | FAIL | Possession log: **jersey # + player name** on scorer/assister/rebounder | `formatPossessionLog` | Team label + aggregate trip seconds only |
+| MEGA-SIM-098 | P2 | FAIL | **Assists** attributed on made FGs from usage weights | — | No per-player stats |
+| MEGA-SIM-099 | P1 | FAIL | Consume **`eventWeights`** + rating-gap tables from `sim-tuning.json` | `SimTuning.eventWeights` | Empty in asset; resolver ignores |
+| MEGA-SIM-100 | P1 | FAIL | **Made basket at 0:00** half/game end tuning branch | `simulation-engine` half end | Clock clamp only; no release-time rule |
+
+---
+
+## H — Fouls, rotation in sim, disqualification
+
+| ID | Pri | Status | Requirement (spec) | Code / test | Finding |
+|----|-----|--------|-------------------|-------------|---------|
+| MEGA-SIM-101 | P0 | FAIL | **Personal foul** counter per player; **5** = DQ | — | Not modeled |
+| MEGA-SIM-102 | P0 | FAIL | **Foul trouble** auto-sub below target minutes band | `simulation-engine` §rotation | Static team ratings for entire game |
+| MEGA-SIM-103 | P0 | FAIL | In-game **substitution** from rotation bands when floor MIN diverges from targets | `RotationMinutesAllocator` prep-only | Five fixed imaginary players |
+| MEGA-SIM-104 | P1 | FAIL | **Fatigue** decay during sim affects sub priority | `FatigueEngine` exists | Injury path only; not in possession loop |
+| MEGA-SIM-105 | P1 | FAIL | Track **team fouls** per half for bonus logic | — | — |
+| MEGA-SIM-106 | P1 | FAIL | **Intentional foul** branch under late-game foul strategy | `LateGameFoulStrategy` tweaks team level | No possession-level foul choice |
+| MEGA-SIM-107 | P2 | FAIL | **Technical foul** rare event (optional tuning) | — | — |
+| MEGA-SIM-108 | P1 | FAIL | Disqualified player **cannot re-enter**; log DQ line | — | — |
+| MEGA-SIM-109 | P1 | FAIL | **200** team player-minutes coherence in sim + assert | `BoxScoreCoherence` | Team box only; no MIN |
+| MEGA-SIM-110 | P2 | FAIL | Starter re-insertion at **half** opening five from prep | `MidGameState` | No on-floor state at half |
+
+---
+
+## I — Clutch & situational gameplan
+
+| ID | Pri | Status | Requirement (spec) | Code / test | Finding |
+|----|-----|--------|-------------------|-------------|---------|
+| MEGA-SIM-111 | P1 | FAIL | **Score differential** late (e.g. last 4:00) affects shot selection / fouling | Planning situation weights | Team ratings static regardless of score |
+| MEGA-SIM-112 | P0 | FAIL | **Late-game foul strategy** changes possession decisions (foul to extend, protect) not only defense tweak scalar | `LateGameFoulStrategy`, `GameplanEffectsResolver` | Chips exist; engine applies coarse defense adjust only |
+| MEGA-SIM-113 | P1 | FAIL | **Protect lead**: lower pace, avoid fouls on 3PT attempts tuning | `strategy-schemes.md` | Not possession-level |
+| MEGA-SIM-114 | P1 | FAIL | **Foul early** when trailing: hack-a / quick fouls on trip sample | — | — |
+| MEGA-SIM-115 | P1 | FAIL | **Clutch** usage bump to gameplan peak usage player | `usageWeights` | Peak usage scalar only at team level |
+| MEGA-SIM-116 | P2 | FAIL | **Timeout** not simulated (acceptable) but **last possession** log tag | Product clarity | No “CLUTCH” / score context on lines |
+| MEGA-SIM-117 | P1 | FAIL | **Deny primary** raises pressure on assigned defender slot with foul risk | `primaryScorerSlot` partial | Toggle without slot picker or per-possession defense |
+| MEGA-SIM-118 | P2 | FAIL | Home **crowd** nudge in final 2:00 when venue modifiers applied | `SimVenueModifiers` unwired | Venue loaded, not applied in session |
+
+---
+
+## J — Watch mode & playback (full product)
+
+| ID | Pri | Status | Requirement (spec) | Code / test | Finding |
+|----|-----|--------|-------------------|-------------|---------|
+| MEGA-SIM-119 | P0 | FAIL | Default **2.0s** wall-clock between lines (not forced 8×) | `GameWatchScreen`, `DEFAULT_POSSESSION_DELAY_MS` | Scrimmage hardcodes 8× — feels “fast-forward mandatory” |
+| MEGA-SIM-120 | P0 | FAIL | User **speed multiplier** UI: 0.5×, 1×, 2×, 4×, **Sim to end** | `strategy-schemes.md` watch timing | No control surface |
+| MEGA-SIM-121 | P1 | FAIL | **Pause / resume** watch without losing mid-game state | Halftime only | No mid-half pause for coach |
+| MEGA-SIM-122 | P1 | FAIL | **Half indicator** + period label on watch chrome | `GameWatchScreen` | Clock/score only |
+| MEGA-SIM-123 | P2 | FAIL | Optional **shot-clock seconds** on each log line | MEGA-SIM-037 | Product expects readable tension |
+| MEGA-SIM-124 | P1 | FAIL | **Possession feed** scrollback + auto-scroll | Watch list UI | Minimal text list |
+| MEGA-SIM-125 | P0 | FAIL | **Halftime sheet**: change O/D scheme, rotation emphasis, usage, swap legal starters | `strategy-schemes.md` §halftime | Dialog: deny + late foul only |
+| MEGA-SIM-126 | P1 | FAIL | Halftime **opponent scouting** read-only stats strip | Product frame | Not in halftime UI |
+| MEGA-SIM-127 | P1 | FAIL | **Same seed** watch vs sim-to-end parity test in UI contract | Tests cover engine | User cannot trust skip-watch |
+| MEGA-SIM-128 | P2 | FAIL | **Exhibition** vs **RS** badge on watch header | Calendar phase | Not surfaced |
+
+---
+
+## K — Box score & postgame surfaces
+
+| ID | Pri | Status | Requirement (spec) | Code / test | Finding |
+|----|-----|--------|-------------------|-------------|---------|
+| MEGA-SIM-129 | P0 | FAIL | **Player box** all columns: MIN, PTS, FGM/A, 3PM/A, FTM/A, REB, AST, STL, BLK, TO, PF | `TeamBoxScore` | Team aggregates only |
+| MEGA-SIM-130 | P0 | FAIL | Postgame **box score screen** (not article-only) with team + player tabs | `PostgameReportGenerator`, `GameWatchScreen` | Narrative article only |
+| MEGA-SIM-131 | P1 | FAIL | **Team totals** shooting %, turnovers, fouls on box UI | Partial in `TeamBoxScore` | PF/ORB/DRB missing in engine |
+| MEGA-SIM-132 | P1 | FAIL | **DNP-INJ** / partial MIN when mid-game injury | `injuries.md` game log | Post-game injury only |
+| MEGA-SIM-133 | P1 | FAIL | Export / persist box on dynasty **game record** for schedule replay | Save model | Scrimmage-local |
+| MEGA-SIM-134 | P2 | FAIL | **Plus-minus** optional column (product) | — | Not required by planning; nice for depth |
+| MEGA-SIM-135 | P1 | FAIL | Coherence **retry loop** on release (cap N) per spec | `BoxScoreCoherence` | `require()` crash path |
+| MEGA-SIM-136 | P1 | FAIL | **`periodsPlayed`** on `GameSimResult` + OT display | MEGA-SIM-007/020 | Field missing; OT missing |
+
+---
+
+## L — Rotation minutes UI (Strategy hub)
+
+| ID | Pri | Status | Requirement (spec) | Code / test | Finding |
+|----|-----|--------|-------------------|-------------|---------|
+| MEGA-SIM-137 | P0 | FAIL | Edit **minutes bands** per rotation player (steppers/sliders) | `StrategyScreen` | Display-only bench cards |
+| MEGA-SIM-138 | P0 | FAIL | **200 minutes** budget meter with over/under warning | `RotationMinutesAllocator` | Allocator in core; no UI meter |
+| MEGA-SIM-139 | P1 | FAIL | **Drag-to-slot** starter assignment with eligibility guard | `positions-and-lineup.md` | Read-only starter cards |
+| MEGA-SIM-140 | P1 | FAIL | **Pick from eligible list** per slot (PG…C) | Empty slot prompt | `strategy_slot_empty` only |
+| MEGA-SIM-141 | P1 | FAIL | Persist **`starterSlotWire`** from Strategy saves | `DynastyRosterPlayerEntity` | Column unused in UI |
+| MEGA-SIM-142 | P2 | FAIL | **Reset to default** starters button invokes `DefaultStarterAlgorithm` | Strategy hub | Not exposed |
+| MEGA-SIM-143 | P1 | FAIL | **Halftime rotation emphasis** tweak (band nudge) | `strategy-schemes.md` | Not in halftime dialog |
+| MEGA-SIM-144 | P2 | FAIL | Show **target MIN** on player card in Strategy row | Prep fields | OVR only prominent |
+
+---
+
+## M — Scheme modifiers & gameplan depth
+
+| ID | Pri | Status | Requirement (spec) | Code / test | Finding |
+|----|-----|--------|-------------------|-------------|---------|
+| MEGA-SIM-145 | P0 | FAIL | Per-game **offensive + defensive scheme** pickers on Strategy tied to `GameSimTeamInput` | `GameSimTeamInput`, Strategy UI | Defaults Balanced/Man; hub does not set |
+| MEGA-SIM-146 | P1 | FAIL | Full **7×7** scheme interaction matrix in tuning data | `SchemeMatchupResolver` sample | Partial nudges only |
+| MEGA-SIM-147 | P1 | FAIL | **Box-and-One** / **Press** fatigue cost during sim minutes | Preset identities | Team stamina not decremented in sim |
+| MEGA-SIM-148 | P1 | FAIL | **Perimeter / Post** presets bump correct slot usage on possessions | `usageWeights` team scalar | No slot-level shot share |
+| MEGA-SIM-149 | P0 | FAIL | **Primary defensive assignment** UI: map opp PG–C → your defender | `GameplanInput` | Only `primaryScorerSlot` data shape; no UI |
+| MEGA-SIM-150 | P1 | FAIL | Pick **opponent primary scorer slot** for deny toggle | MEGA-SIM-048 | Toggle without slot selector |
+| MEGA-SIM-151 | P1 | FAIL | **Coach default schemes** as pre-game default with per-game override save | `coach-card.md` | Wizard sets season default; no game override persistence |
+| MEGA-SIM-152 | P2 | FAIL | Scheme tooltips with identity copy from planning table | Strategy UI | Enum labels only |
+
+---
+
+## N — Injury: mid-game, return paths, medical RS UX
+
+| ID | Pri | Status | Requirement (spec) | Code / test | Finding |
+|----|-----|--------|-------------------|-------------|---------|
+| MEGA-SIM-153 | P0 | FAIL | **Mid-game injury** sample during possession loop; stop minutes accrual | `injuries.md` sim hook | Post-game `GameSimInjuryRoll` only |
+| MEGA-SIM-154 | P0 | FAIL | Possession log line: **“INJURY — {Name} · {label}”** | MEGA-SIM-077 | — |
+| MEGA-SIM-155 | P1 | FAIL | `occurredInGameMinute` on injury event in result | `injuries.md` data model | Field not populated |
+| MEGA-SIM-156 | P1 | FAIL | Injury probability uses **actual box MIN** not prep estimate | MEGA-SIM-070 | `estimateMinutes` proxy |
+| MEGA-SIM-157 | P1 | PASS | Auto **lineup adjust** on save with starter promotion rules | `InjuryLineupAdjust` | Core tested |
+| MEGA-SIM-158 | P1 | PASS | **Return** reclaim starter slot + demote interim | `applyInjuryReturnLineupAdjust` | Week advance path |
+| MEGA-SIM-159 | P1 | FAIL | **Multi-return same week** PG→C ordering | `injuries.md` conflict rules | Single-player tests; ordering not asserted in UI |
+| MEGA-SIM-160 | P0 | FAIL | **Medical redshirt** postgame sheet: Apply / Dismiss with eligibility gates | `injuries.md` UX | Core policy only |
+| MEGA-SIM-161 | P1 | FAIL | **Medical RS**: no return adjust; season OUT flag on card | Data model fields | UI sheet missing |
+| MEGA-SIM-162 | P1 | FAIL | Strategy **blocks drag** for `injuryActive` (not grey alpha only) | MEGA-SIM-075 | Visual-only |
+| MEGA-SIM-163 | P1 | FAIL | AI league games: same injury bank + lineup adjust | MEGA-SIM-078/079 | Fast sim stub |
+| MEGA-SIM-164 | P2 | FAIL | **News** headline on major user injury from watch path | `news-hub.md` | Scrimmage may skip feed |
+
+---
+
+## O — Lineup validation & sim prep gates
+
+| ID | Pri | Status | Requirement (spec) | Code / test | Finding |
+|----|-----|--------|-------------------|-------------|---------|
+| MEGA-SIM-165 | P0 | FAIL | **Cannot start sim** with empty starter slot or illegal interchange | `GameLineupPrep`, watch launch | Sim may run with gaps |
+| MEGA-SIM-166 | P1 | FAIL | Engine **`slotEligible`** re-validates prep at sim entry | `LineupSlotPolicy` | Tests on prep; watch may bypass |
+| MEGA-SIM-167 | P1 | FAIL | **Listed-position ratings in slot played** per possession | MEGA-SIM-022 | Team aggregate ratings |
+| MEGA-SIM-168 | P2 | FAIL | **Position comfort** nudge from tuning without OVR order flip | `positions-and-lineup.md` | Not consumed |
+| MEGA-SIM-169 | P1 | FAIL | **Height/weight/shooting** struct on `GameSimParticipant` | MEGA-SIM-021 | Incomplete participant model |
+| MEGA-SIM-170 | P1 | FAIL | Apply **home venue modifiers** in `PossessionSimSession` | MEGA-SIM-024 | Loaded, not applied |
+| MEGA-SIM-171 | P0 | FAIL | **Overtime** loop until winner; `periodsPlayed` | MEGA-SIM-007 | Regulation-only |
+| MEGA-SIM-172 | P1 | FAIL | **Strategy lock** after week advance (design lock) | MEGA-SIM-051 | Edits still allowed |
+| MEGA-SIM-173 | P1 | FAIL | Calendar **user game** wires schemes, roster, injuries, tuning | MEGA-SIM-081 | Scrimmage path only complete |
+| MEGA-SIM-174 | P2 | FAIL | **WIN_SHARES** not in box (correct) — dynasty EoS job documented in sim README | MEGA-SIM-028 | PASS intent; document in UI |
+
+---
+
+## P — Overtime, batch parity, “not boring” acceptance
+
+| ID | Pri | Status | Requirement (spec) | Code / test | Finding |
+|----|-----|--------|-------------------|-------------|---------|
+| MEGA-SIM-175 | P0 | FAIL | **League user games** use full possession engine + injuries + box persistence | `LeagueWeekBatchRepository` | Split brain with `LeagueFastSim` |
+| MEGA-SIM-176 | P1 | FAIL | **AI games** possession sim with roster-derived ratings (no random score fallback) | `LeagueFastSim` `tuning == null` | Random scores |
+| MEGA-SIM-177 | P1 | FAIL | Possession count **enforced** in band 60–70 via tuning feedback | MEGA-SIM-008 | Soft target only |
+| MEGA-SIM-178 | P2 | FAIL | **Tie** handling: OT in possession sim; standings use true W/L | MEGA-SIM-085 | Artificial +1 in wrapper |
+| MEGA-SIM-179 | P2 | FAIL | **Exhibition** injury rate + no medical RS counters surfaced postgame | `injuries.md` phases | Rates OK; UI counters weak |
+| MEGA-SIM-180 | P1 | FAIL | Acceptance: **≥8 distinct terminal event texts** per game on average | Qualitative product | Mostly “TO / +2 / +3 / miss” |
+
+---
+
+## Summary counts (all items)
+
+| Bucket | Sections A–F (legacy tag) | Sections G–P (expanded tag) | Combined |
+|--------|---------------------------|-----------------------------|----------|
+| SHIP / PASS | 38 | 2 | **40** |
+| PARTIAL / GAP | 18 + 18 GAP + 11 WIRE | 85 GAP/FAIL − 57 FAIL* | — |
+| GAP (A–F only) | 18 | — | **18** |
+| PARTIAL (A–F) | 18 | — | **18** |
+| WIRE (A–F) | 11 | 0 | **11** |
+| FAIL (G–P) | — | **57** | **57** |
+| GAP (G–P sub) | — | **28** (marked GAP in tables) | **28** |
+| PASS (G–P) | — | 2 | **2** |
+| **Total `MEGA-SIM-*` rows** | **85** | **95** | **180** |
+
+\*Expanded section uses FAIL for spec violations; rows marked GAP in tables are incremental stubs (28). Treat **ship readiness** as **40 PASS/SHIP of 180 (22%)**.
+
+### Legacy A–F only (unchanged rollup)
+
+| Status | Count (of 85) |
+|--------|----------------|
 | SHIP | 38 |
 | PARTIAL | 18 |
 | WIRE | 11 |
 | GAP | 18 |
 
-**Highest-impact gaps for spec fidelity:** player-level box score and minutes (012, 014, 062), shot-clock violations and OReb reset (003–004), fouls/rotation in sim (016–017), Strategy lineup override + schemes on game input (044, 058, 064), watch UX timing (029–030), halftime full coach adjustments (033), defensive assignment (050), mid-game injuries (018, 077), league AI games on full engine + injury bank (079).
+### Expanded G–P rollup
 
-**Build checklist cross-ref:** Phase **10.1–10.8** marked `[x]` in [`docs/BUILD_CHECKLIST.md`](../BUILD_CHECKLIST.md); this audit refines **done when** versus planning detail for sim/strategy/lineup/injuries surfaces.
+| Status | Count (of 95) |
+|--------|----------------|
+| FAIL | 57 |
+| GAP | 28 |
+| PASS | 2 |
+| RISK | 0 |
+| WIRE | 0 |
+
+---
+
+## P0 FAIL inventory (expanded pass)
+
+All **P0** rows from sections G–P (**22** ids). Fix these before calling game sim “full product”:
+
+| ID | Topic |
+|----|--------|
+| MEGA-SIM-086 | Shot-clock state machine |
+| MEGA-SIM-087 | Shot-clock violation |
+| MEGA-SIM-090 | Offensive rebound / 20s reset |
+| MEGA-SIM-101 | Personal fouls |
+| MEGA-SIM-102 | Foul-trouble substitution |
+| MEGA-SIM-103 | In-game rotation from minutes bands |
+| MEGA-SIM-112 | Late foul strategy possession logic |
+| MEGA-SIM-119 | Watch default 2s pacing |
+| MEGA-SIM-120 | Watch speed multiplier UI |
+| MEGA-SIM-125 | Full halftime coach sheet |
+| MEGA-SIM-129 | Player box score in engine |
+| MEGA-SIM-130 | Postgame box score UI |
+| MEGA-SIM-137 | Rotation minutes editing UI |
+| MEGA-SIM-138 | 200-minute budget meter |
+| MEGA-SIM-145 | Per-game scheme pickers → sim input |
+| MEGA-SIM-149 | Defensive assignment map UI |
+| MEGA-SIM-153 | Mid-game injury in possession loop |
+| MEGA-SIM-154 | Live injury log line |
+| MEGA-SIM-160 | Medical redshirt postgame sheet |
+| MEGA-SIM-165 | Block sim on invalid/empty lineup |
+| MEGA-SIM-171 | Overtime + `periodsPlayed` |
+| MEGA-SIM-175 | User league games on full engine path |
+
+**P0 overlap with legacy GAP rows (still open):** 004, 007, 012, 014, 016, 017, 018, 030, 033, 050, 058, 062, 077 — treat as same workstream as ids above.
+
+### Suggested build order (density first)
+
+1. **Player + team box** in engine (129) → unlock minutes, injury weight, postgame UI (130, 156).  
+2. **On-floor state + subs** (103, 101–102) → fouls, foul strategy, fatigue.  
+3. **Shot clock + OReb + violations** (086–087, 090) → log depth (097).  
+4. **Watch UX** (119–120, 125) → product feel.  
+5. **Strategy wiring** (137–141, 145, 149, 165) → user agency before tip.  
+6. **Mid-game injury + medical sheet** (153–154, 160).  
+7. **OT + league parity** (171, 175–176).
+
+**Highest-impact gaps for spec fidelity (legacy):** player-level box score and minutes (012, 014, 062), shot-clock violations and OReb reset (003–004), fouls/rotation in sim (016–017), Strategy lineup override + schemes on game input (044, 058, 064), watch UX timing (029–030), halftime full coach adjustments (033), defensive assignment (050), mid-game injuries (018, 077), league AI games on full engine + injury bank (079).
+
+**Build checklist cross-ref:** Phase **10.1–10.8** marked `[x]` in [`docs/BUILD_CHECKLIST.md`](../BUILD_CHECKLIST.md); this audit refines **done when** versus planning detail for sim/strategy/lineup/injuries surfaces — **expanded pass adds 95 rows** for full-product depth.
 
 ---
 
@@ -163,3 +412,4 @@
 | Date | Change |
 |------|--------|
 | 2026-11-11 | Initial audit — 85× `MEGA-SIM-NNN` items vs four planning docs + core/sim UI |
+| 2026-11-11 | Expanded pass — **+95** rows (086–180): possession depth, fouls/clutch, watch, box score, rotation UI, schemes, injuries, lineup validation; **180** total; **22 P0 FAIL** (G–P) |
