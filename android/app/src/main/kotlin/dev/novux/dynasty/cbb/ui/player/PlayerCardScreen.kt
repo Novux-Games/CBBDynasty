@@ -238,7 +238,7 @@ private fun PlayerCardHistoryTab(
             dynastyId = dynastyId,
             playerId = player.playerId,
             currentSeasonIndex = seasonIndex,
-            schoolDisplayName = schoolDisplayName,
+            currentSchoolDisplayName = schoolDisplayName,
         )
     }
     Text(
@@ -267,7 +267,10 @@ private fun PlayerCardHistoryTab(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         } else {
-            PlayerPriorSeasonList(seasons = seasons)
+            PlayerPriorSeasonList(
+                seasons = seasons,
+                currentSchoolDisplayName = schoolDisplayName,
+            )
         }
     }
 }

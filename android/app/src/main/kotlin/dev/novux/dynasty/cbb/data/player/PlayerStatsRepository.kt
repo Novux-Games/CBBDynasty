@@ -31,6 +31,7 @@ data class PlayerSeasonStatRecord(
     val seasonIndex: Int,
     val gamesPlayed: Int,
     val totals: PlayerCountingStats,
+    val schoolDisplayName: String? = null,
 )
 
 @Serializable
@@ -54,7 +55,7 @@ class PlayerStatsRepository(private val context: Context) {
         dynastyId: String,
         playerId: String,
         currentSeasonIndex: Int,
-        schoolDisplayName: String? = null,
+        currentSchoolDisplayName: String? = null,
     ): List<PlayerPriorSeasonSnapshot> {
         val blob = loadBlob(dynastyId)
         return blob.records
@@ -66,7 +67,8 @@ class PlayerStatsRepository(private val context: Context) {
                     seasonIndex = it.seasonIndex,
                     gamesPlayed = it.gamesPlayed,
                     totals = it.totals,
-                    schoolDisplayName = schoolDisplayName,
+                    schoolDisplayName = it.schoolDisplayName?.takeIf { name -> name.isNotBlank() }
+                        ?: currentSchoolDisplayName,
                 )
             }
             .toList()
@@ -78,7 +80,7 @@ class PlayerStatsRepository(private val context: Context) {
         player: DynastyPlayer,
     ): List<PlayerGameLogEntry> {
         val gp = player.role.rsGamesPlayedSeason.coerceAtLeast(0)
-        ensureSeasonRecord(dynastyId, player, seasonIndex, gp)
+        ensureSeasonRecord(dynastyId, player, seasonIndex, gp, schoolDisplayName = null)
         ensureGameLogRecord(dynastyId, player, seasonIndex, gp)
         val blob = loadBlob(dynastyId)
         return blob.gameLogs.first {
@@ -117,10 +119,11 @@ class PlayerStatsRepository(private val context: Context) {
         dynastyId: String,
         seasonIndex: Int,
         players: List<DynastyPlayer>,
+        schoolDisplayName: String,
     ) {
         players.forEach { player ->
             val gp = player.role.rsGamesPlayedSeason.coerceAtLeast(0)
-            ensureSeasonRecord(dynastyId, player, seasonIndex, gp)
+            ensureSeasonRecord(dynastyId, player, seasonIndex, gp, schoolDisplayName)
         }
     }
 
@@ -140,7 +143,7 @@ class PlayerStatsRepository(private val context: Context) {
         player: DynastyPlayer,
     ): PlayerStatsSummary {
         val gp = player.role.rsGamesPlayedSeason.coerceAtLeast(0)
-        ensureSeasonRecord(dynastyId, player, seasonIndex, gp)
+        ensureSeasonRecord(dynastyId, player, seasonIndex, gp, schoolDisplayName = null)
         val blob = loadBlob(dynastyId)
         val currentTotals = blob.records.first {
             it.playerId == player.playerId && it.seasonIndex == seasonIndex
@@ -160,6 +163,7 @@ class PlayerStatsRepository(private val context: Context) {
         player: DynastyPlayer,
         seasonIndex: Int,
         gamesPlayed: Int,
+        schoolDisplayName: String?,
     ) {
         val blob = loadBlob(dynastyId)
         val existing = blob.records.firstOrNull {
@@ -170,11 +174,13 @@ class PlayerStatsRepository(private val context: Context) {
             gamesPlayed <= 0 -> PlayerCountingStats.ZERO
             else -> PlayerStatsSynth.totalsForSeason(player, gamesPlayed)
         }
+        val school = schoolDisplayName?.takeIf { it.isNotBlank() } ?: existing?.schoolDisplayName
         val record = PlayerSeasonStatRecord(
             playerId = player.playerId,
             seasonIndex = seasonIndex,
             gamesPlayed = gamesPlayed,
             totals = totals,
+            schoolDisplayName = school,
         )
         if (existing == record) return
         val next = blob.copy(

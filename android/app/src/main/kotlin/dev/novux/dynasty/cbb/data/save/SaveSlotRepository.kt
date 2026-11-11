@@ -669,6 +669,7 @@ class SaveSlotRepository(
                 dynastyId = loaded.dynastyId,
                 seasonIndex = loaded.metadata.seasonIndex,
                 players = dynastyRosterRepository.listDynastyPlayers(loaded.dynastyId),
+                schoolDisplayName = loaded.summary.schoolDisplayName.orEmpty(),
             )
         }
         val userWonGame = if (teamPlayedGame) {

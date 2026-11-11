@@ -267,7 +267,7 @@
 | MEGA-COACH-154 | P0 | PASS | Games tab row: opponent, PTS/AST/…, W/L score | `PlayerGameLogPanel` table header + aligned rows | `PlayerGameLogPanel.kt`, Games tab |
 | MEGA-COACH-155 | P1 | PASS | Games row tap → box score sheet | Sim `boxArchive` → game log → `PlayerGameBoxScoreSheet` | `PlayerGameLogArchiveEngine.kt`, week advance ingest |
 | MEGA-COACH-156 | P1 | PASS | Week-finalize gate on official stats | Persists on `advanceWeek` when games committed | `SaveSlotRepository.advanceDynastyWeek` |
-| MEGA-COACH-157 | P1 | FAIL | History tab prior season rows (school transfer) | No UI |
+| MEGA-COACH-157 | P1 | PASS | History tab prior season rows (school transfer) | `PlayerPriorSeasonList` school row + Transfer chip; per-season school on stat record | `PlayerCardHistoryPanel.kt` |
 | MEGA-COACH-158 | P2 | PASS | History promise audit per season Kept/Broken | Same as MEGA-COACH-086 — `PlayerPromiseHistoryPanel` |
 | MEGA-COACH-159 | P2 | GAP | History awards optional chips | Not implemented |
 | MEGA-COACH-160 | P2 | FAIL | Leaders / statistics hub tap → same card route | Leaders wiring not traced to sheet in this pass |
