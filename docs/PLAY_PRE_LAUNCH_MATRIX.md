@@ -44,3 +44,9 @@ See [`RELEASE_SIDELOAD_SMOKE.md`](RELEASE_SIDELOAD_SMOKE.md) — `bundleRelease`
 See [`PLAY_OPEN_TESTING_SMOKE.md`](PLAY_OPEN_TESTING_SMOKE.md) — install from **Open testing** track; launch past studio/splash.
 
 **Automation (BOT):** `verify_play_fresh_install_launch.sh` on release universal APK; `PlayOpenTestInstallPath`.
+
+## MEGA-QA-136 — Play update over prior build
+
+See [`PLAY_OPEN_TESTING_SMOKE.md`](PLAY_OPEN_TESTING_SMOKE.md#mega-qa-136--update-over-prior-open-test-build) — version code bump + Continue after Room migration.
+
+**Automation (BOT):** `verify_play_update_version_bump.sh`; migration + `SaveLoadAfterUpdateFixtureTest`.

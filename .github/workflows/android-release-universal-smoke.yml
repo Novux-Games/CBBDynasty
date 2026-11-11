@@ -40,6 +40,15 @@ jobs:
         working-directory: ${{ github.workspace }}
         run: bash scripts/verify_play_fresh_install_launch.sh
 
+      - name: Verify Play update versionCode bump (MEGA-QA-136)
+        working-directory: ${{ github.workspace }}
+        run: bash scripts/verify_play_update_version_bump.sh
+
+      - name: Run Play update migration smoke tests
+        working-directory: android
+        run: |
+          ./gradlew :database:testDebugUnitTest --tests dev.novux.dynasty.cbb.database.DynastyDatabaseMigrationRobolectricTest.playUpdateOccupiedSlot_fullMigrationChain_preservesDynastyIdForContinue :core:test --tests dev.novux.dynasty.cbb.core.save.SaveLoadAfterUpdateFixtureTest --no-daemon
+
       - name: Upload universal APK artifact
         uses: actions/upload-artifact@v4
         with:

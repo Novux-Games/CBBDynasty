@@ -29,6 +29,32 @@ class DynastyDatabaseMigrationRobolectricTest {
     }
 
     @Test
+    fun playUpdateOccupiedSlot_fullMigrationChain_preservesDynastyIdForContinue() {
+        openAtVersion1().use { db ->
+            db.execSQL(
+                """
+                INSERT INTO save_slots (
+                    slotIndex, dynastyId, lastPlayedAtEpochMillis,
+                    schoolDisplayName, coachDisplayName, seasonLabel,
+                    wins, losses, packId
+                ) VALUES (
+                    0, 'dynasty-play-update', 1700000000000,
+                    'Test U', 'Coach', 'Season 1',
+                    12, 3, 'default'
+                )
+                """.trimIndent(),
+            )
+            ALL_DYNASTY_MIGRATIONS.forEach { migration -> migration.migrate(db) }
+            db.query(
+                "SELECT dynastyId FROM save_slots WHERE slotIndex = 0 LIMIT 1",
+            ).use { cursor ->
+                assertTrue(cursor.moveToFirst())
+                assertEquals("dynasty-play-update", cursor.getString(0))
+            }
+        }
+    }
+
+    @Test
     fun migration16To17_preservesProvisionalGameRowAndAddsColumns() {
         openAtVersion1().use { db ->
             ALL_DYNASTY_MIGRATIONS

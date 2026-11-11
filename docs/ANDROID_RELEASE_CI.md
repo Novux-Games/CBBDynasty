@@ -75,6 +75,8 @@ adb install -r android/app/build/outputs/sideload/release/universal.apk
 
 Details: [`RELEASE_SIDELOAD_SMOKE.md`](RELEASE_SIDELOAD_SMOKE.md). CI: **Android release universal APK smoke** workflow.
 
+**Play update gate (MEGA-QA-136):** every release must use `versionCode` strictly greater than `android/play_open_test_baseline_version_code.txt`; run `bash scripts/verify_play_update_version_bump.sh` before upload. Tester flow: [`PLAY_OPEN_TESTING_SMOKE.md`](PLAY_OPEN_TESTING_SMOKE.md#mega-qa-136--update-over-prior-open-test-build).
+
 ## Related
 
 - Debug APK workflow: [`.github/workflows/android-assemble-debug.yml`](../.github/workflows/android-assemble-debug.yml)

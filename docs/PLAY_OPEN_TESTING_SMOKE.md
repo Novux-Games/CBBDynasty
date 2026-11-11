@@ -36,6 +36,24 @@ Checks: `launchable-activity` = `MainActivity`, package `com.dynasty.cbb`.
 
 Workflow: [`.github/workflows/android-release-universal-smoke.yml`](../.github/workflows/android-release-universal-smoke.yml).
 
+## MEGA-QA-136 — Update over prior open-test build
+
+| # | Step | Pass |
+|---|------|------|
+| 1 | Keep a dynasty in progress on **prior** open-test APK | Occupied slot |
+| 2 | Publish new AAB with **`versionCode` >** `android/play_open_test_baseline_version_code.txt` | Play accepts upload |
+| 3 | Play Store **Update** on tester device | Installs without parse/signing errors |
+| 4 | Launch → **Continue** | Same dynasty loads; no migration crash |
+| 5 | Sim week or open shell | Calendar/metadata coherent |
+
+After each Play promote, bump `play_open_test_baseline_version_code.txt` to the **shipped** `versionCode`.
+
+**Automation (BOT):**
+
+- `scripts/verify_play_update_version_bump.sh`
+- `:database:testDebugUnitTest` — `DynastyDatabaseMigrationRobolectricTest.playUpdateOccupiedSlot_fullMigrationChain_preservesDynastyIdForContinue`
+- `:core:test` — `SaveLoadAfterUpdateFixtureTest`, `PlayUpdateOverPriorPathTest`
+
 ## Related
 
 - Sideload parity: [`RELEASE_SIDELOAD_SMOKE.md`](RELEASE_SIDELOAD_SMOKE.md) (MEGA-QA-134)
