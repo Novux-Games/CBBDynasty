@@ -71,7 +71,7 @@
 | ID | Status | Requirement (spec) | Code / test | Finding |
 |----|--------|-------------------|-------------|---------|
 | MEGA-SIM-029 | PASS | Default **2s** wall-clock between possession lines | `GameWatchPlayback`, `GameWatchScreen` | `DEFAULT_WATCH_SPEED_MULTIPLIER` 1×; `lineDelayMs` test |
-| MEGA-SIM-030 | GAP | User **speed multiplier** control (0.5×, 2×, 4×) on watch screen | — | No UI slider; fixed 8× in scrimmage |
+| MEGA-SIM-030 | PASS | User **speed multiplier** control (0.5×, 2×, 4×) on watch screen | `GameWatchScreen`, `GameWatchSpeedPresets` | FilterChips 0.5–4× + Sim to end; live `onLineDelayMs` |
 | MEGA-SIM-031 | SHIP | **Sim to end** completes full loop | `GameWatchPlayback.simToEnd` | Used by batch fast path when tuning passed |
 | MEGA-SIM-032 | SHIP | Halftime pause on watched run; merge updated prep; resume second half | `GameWatchPlayback.watch`, `GameSimHalftimeTest` | MidGame + `homeHalftimeGameplan` |
 | MEGA-SIM-033 | PARTIAL | Halftime: change O/D scheme, rotation, usage, swap starters | `strategy-schemes.md` §halftime | Dialog only: deny-primary toggle + late-foul chips — no scheme/usage/lineup |
@@ -217,7 +217,7 @@
 | ID | Pri | Status | Requirement (spec) | Code / test | Finding |
 |----|-----|--------|-------------------|-------------|---------|
 | MEGA-SIM-119 | P0 | PASS | Default **2.0s** wall-clock between lines (not forced 8×) | `GameWatchScreen`, `GameWatchPlayback` | Watch uses `DEFAULT_WATCH_SPEED_MULTIPLIER` (1×) not 8× |
-| MEGA-SIM-120 | P0 | FAIL | User **speed multiplier** UI: 0.5×, 1×, 2×, 4×, **Sim to end** | `strategy-schemes.md` watch timing | No control surface |
+| MEGA-SIM-120 | P0 | PASS | User **speed multiplier** UI: 0.5×, 1×, 2×, 4×, **Sim to end** | `GameWatchScreen`, `GameWatchPlayback` | Speed chips + zero-delay “Sim to end” mid-watch |
 | MEGA-SIM-121 | P1 | FAIL | **Pause / resume** watch without losing mid-game state | Halftime only | No mid-half pause for coach |
 | MEGA-SIM-122 | P1 | FAIL | **Half indicator** + period label on watch chrome | `GameWatchScreen` | Clock/score only |
 | MEGA-SIM-123 | P2 | FAIL | Optional **shot-clock seconds** on each log line | MEGA-SIM-037 | Product expects readable tension |

@@ -22,16 +22,17 @@ object GameWatchPlayback {
         input: GameSimInput,
         speedMultiplier: Double = DEFAULT_WATCH_SPEED_MULTIPLIER,
         injuryRoll: GameSimInjuryRollInput? = null,
+        onLineDelayMs: (() -> Long)? = null,
         onLine: suspend (String) -> Unit,
         onHalftime: suspend (GameSimResult, MidGameState) -> GameSimInput,
     ): GameSimResult {
-        val lineDelay = lineDelayMs(speedMultiplier)
         var activeInput = input
         var session = PossessionSimSession(activeInput, stopAtHalftime = true)
         var resumedAfterHalftime = false
         while (session.hasNext()) {
             val step = session.step()
             onLine(step.logLine)
+            val lineDelay = onLineDelayMs?.invoke() ?: lineDelayMs(speedMultiplier)
             if (lineDelay > 0) {
                 delay(lineDelay)
             }

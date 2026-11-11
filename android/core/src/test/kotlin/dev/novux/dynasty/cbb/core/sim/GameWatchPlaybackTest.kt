@@ -32,6 +32,18 @@ class GameWatchPlaybackTest {
     }
 
     @Test
+    fun userSpeedPresetDelays() {
+        GameWatchSpeedPresets.SPEED_MULTIPLIERS.forEach { mult ->
+            assertTrue(GameWatchSpeedPresets.isUserMultiplier(mult))
+        }
+        assertEquals(4_000L, GameWatchPlayback.lineDelayMs(0.5))
+        assertEquals(2_000L, GameWatchPlayback.lineDelayMs(1.0))
+        assertEquals(1_000L, GameWatchPlayback.lineDelayMs(2.0))
+        assertEquals(500L, GameWatchPlayback.lineDelayMs(4.0))
+        assertEquals(0L, GameWatchPlayback.lineDelayMs(0.0))
+    }
+
+    @Test
     fun watchStreamsLinesAndMatchesSimToEnd() = runBlocking {
         val input = GameSimInput(
             home = GameSimTeamInput("h", 80, 78),

@@ -640,6 +640,12 @@
     <string name="game_watch_halftime_deny_on">Deny primary: On</string>
     <string name="game_watch_halftime_deny_off">Deny primary: Off</string>
     <string name="game_watch_halftime_resume">Resume second half</string>
+    <string name="game_watch_speed_label">Playback speed</string>
+    <string name="game_watch_speed_half">0.5×</string>
+    <string name="game_watch_speed_one">1×</string>
+    <string name="game_watch_speed_two">2×</string>
+    <string name="game_watch_speed_four">4×</string>
+    <string name="game_watch_speed_sim_to_end">Sim to end</string>
     <string name="game_watch_injury_log">INJURY — %1$s (%2$d wk)</string>
     <string name="game_watch_opponent_scrimmage">Scrimmage foe</string>
     <string name="game_preview_title">Game preview</string>

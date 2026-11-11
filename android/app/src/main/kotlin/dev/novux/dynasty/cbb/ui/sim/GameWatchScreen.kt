@@ -1,14 +1,18 @@
 package dev.novux.dynasty.cbb.ui.sim
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -33,6 +37,7 @@ import dev.novux.dynasty.cbb.core.sim.GameSimResult
 import dev.novux.dynasty.cbb.core.sim.GameSimRosterInput
 import dev.novux.dynasty.cbb.core.sim.GameSimTeamInput
 import dev.novux.dynasty.cbb.core.sim.GameWatchPlayback
+import dev.novux.dynasty.cbb.core.sim.GameWatchSpeedPresets
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
 import dev.novux.dynasty.cbb.core.reports.PostgameReportGenerator
 import dev.novux.dynasty.cbb.core.reports.ReportArticle
@@ -64,6 +69,11 @@ fun GameWatchScreen(
     var postgameArticle by remember { mutableStateOf<ReportArticle?>(null) }
     val listState = rememberLazyListState()
     val resumeGate = remember { mutableStateOf<((GameplanInput) -> Unit)?>(null) }
+    var selectedSpeedMultiplier by remember {
+        mutableStateOf(GameWatchPlayback.DEFAULT_WATCH_SPEED_MULTIPLIER)
+    }
+    var simToEnd by remember { mutableStateOf(false) }
+    var watchInProgress by remember { mutableStateOf(true) }
 
     val baseInput = remember(tuning, seed, homeGameplan, homeName, awayName, homeSimRoster) {
         GameSimInput(
@@ -80,8 +90,10 @@ fun GameWatchScreen(
         scoreLine = context.getString(R.string.game_watch_score_start)
         val result = GameWatchPlayback.watch(
             input = baseInput,
-            speedMultiplier = GameWatchPlayback.DEFAULT_WATCH_SPEED_MULTIPLIER,
             injuryRoll = injuryRoll,
+            onLineDelayMs = {
+                if (simToEnd) 0L else GameWatchPlayback.lineDelayMs(selectedSpeedMultiplier)
+            },
             onLine = { line ->
                 lines.add(line)
                 listState.animateScrollToItem(lines.lastIndex)
@@ -125,6 +137,7 @@ fun GameWatchScreen(
                 ),
             )
         }
+        watchInProgress = false
         onSimComplete(result)
     }
 
@@ -144,6 +157,16 @@ fun GameWatchScreen(
             style = MaterialTheme.typography.bodyMedium,
         )
         Text(text = scoreLine, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+        GameWatchSpeedControl(
+            selectedSpeedMultiplier = selectedSpeedMultiplier,
+            simToEnd = simToEnd,
+            enabled = watchInProgress,
+            onSelectMultiplier = { mult ->
+                simToEnd = false
+                selectedSpeedMultiplier = mult
+            },
+            onSimToEnd = { simToEnd = true },
+        )
         LazyColumn(
             state = listState,
             modifier = Modifier.weight(1f),
@@ -177,6 +200,54 @@ fun GameWatchScreen(
             onGameplanChange = { halftimePlan = it },
             onContinue = { resumeGate.value?.invoke(halftimePlan) },
         )
+    }
+}
+
+@Composable
+private fun GameWatchSpeedControl(
+    selectedSpeedMultiplier: Double,
+    simToEnd: Boolean,
+    enabled: Boolean,
+    onSelectMultiplier: (Double) -> Unit,
+    onSimToEnd: () -> Unit,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(
+            text = stringResource(R.string.game_watch_speed_label),
+            style = MaterialTheme.typography.labelLarge,
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            GameWatchSpeedPresets.SPEED_MULTIPLIERS.forEach { mult ->
+                val selected = !simToEnd && kotlin.math.abs(selectedSpeedMultiplier - mult) < 0.001
+                FilterChip(
+                    selected = selected,
+                    enabled = enabled,
+                    onClick = { onSelectMultiplier(mult) },
+                    label = {
+                        Text(
+                            when (mult) {
+                                0.5 -> stringResource(R.string.game_watch_speed_half)
+                                1.0 -> stringResource(R.string.game_watch_speed_one)
+                                2.0 -> stringResource(R.string.game_watch_speed_two)
+                                4.0 -> stringResource(R.string.game_watch_speed_four)
+                                else -> "${mult}×"
+                            },
+                        )
+                    },
+                )
+            }
+            FilterChip(
+                selected = simToEnd,
+                enabled = enabled,
+                onClick = onSimToEnd,
+                label = { Text(stringResource(R.string.game_watch_speed_sim_to_end)) },
+            )
+        }
     }
 }
 
