@@ -208,7 +208,7 @@
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-118 | P0 | PASS | Salary annual display | `HeadCoachCard.annualSalaryUsd` + overview/contract/preview | `HeadCoachContractSalary.kt`, `HeadCoachCard.kt` |
-| MEGA-COACH-119 | P0 | FAIL | Buyout field + leave/fired flows from Contract tab | `CoachEmploymentRepository` offers; no contract UI |
+| MEGA-COACH-119 | P0 | PASS | Buyout field + leave/fired flows from Contract tab | `buyoutUsd` on card; resign/termination → `enterUnemployed` + job center | `HeadCoachCardScreen.kt`, `CoachEmploymentRepository` |
 | MEGA-COACH-120 | P1 | FAIL | Performance goals list (win total, conf, postseason floor) | Not surfaced |
 | MEGA-COACH-121 | P1 | FAIL | Extension offer incoming UI | AD trust exists; no extension card on coach |
 | MEGA-COACH-122 | P2 | FAIL | Renegotiate / resign / retire actions | Not implemented on card |

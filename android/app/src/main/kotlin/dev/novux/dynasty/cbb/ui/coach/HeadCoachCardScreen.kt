@@ -32,7 +32,9 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachRatings
 import dev.novux.dynasty.cbb.core.coach.contract.HeadCoachContractEngine
+import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentStatus
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
+import dev.novux.dynasty.cbb.core.coach.security.JobSecurityTier
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillBranch
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointState
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillTreeEngine
@@ -53,6 +55,9 @@ fun HeadCoachCardScreen(
     onSpendSkill: (CoachSkillBranch) -> Unit = {},
     onAutoSpendChanged: (Boolean) -> Unit = {},
     onOpenStaffTab: () -> Unit = {},
+    employmentStatus: CoachEmploymentStatus = CoachEmploymentStatus.Employed,
+    onVoluntaryResign: () -> Unit = {},
+    onOpenJobCenter: () -> Unit = {},
     selectedTab: CoachCardTab = CoachCardTab.Overview,
     onSelectedTabChange: (CoachCardTab) -> Unit = {},
     modifier: Modifier = Modifier,
@@ -62,6 +67,8 @@ fun HeadCoachCardScreen(
         HeadCoachContractEngine.derive(card, userCoachSecurity, programPrestige)
     }
     var showResignConfirm by remember { mutableStateOf(false) }
+    var showTerminationConfirm by remember { mutableStateOf(false) }
+    val money = remember { NumberFormat.getCurrencyInstance(Locale.US) }
 
     Column(modifier = modifier.fillMaxSize()) {
         CoachCardIdentityHeader(card = card)
@@ -95,8 +102,11 @@ fun HeadCoachCardScreen(
                     card = card,
                     contractDetail = contractDetail,
                     userCoachSecurity = userCoachSecurity,
+                    employmentStatus = employmentStatus,
                     onViewAdTrustOnStaff = onOpenStaffTab,
                     onResignTap = { showResignConfirm = true },
+                    onTerminationTap = { showTerminationConfirm = true },
+                    onOpenJobCenter = onOpenJobCenter,
                 )
                 CoachCardTab.History -> HeadCoachHistoryTab(card = card, seasonIndex = seasonIndex)
                 CoachCardTab.HallOfFame -> CoachCardPlaceholderTab(
@@ -115,10 +125,57 @@ fun HeadCoachCardScreen(
         AlertDialog(
             onDismissRequest = { showResignConfirm = false },
             title = { Text(stringResource(R.string.coach_contract_resign_title)) },
-            text = { Text(stringResource(R.string.coach_contract_resign_body)) },
-            confirmButton = {
+            text = {
+                Text(
+                    stringResource(
+                        R.string.coach_contract_resign_body_buyout,
+                        money.format(card.buyoutUsd),
+                    ),
+                )
+            },
+            dismissButton = {
                 TextButton(onClick = { showResignConfirm = false }) {
-                    Text(stringResource(R.string.coach_contract_resign_ack))
+                    Text(stringResource(android.R.string.cancel))
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showResignConfirm = false
+                        onVoluntaryResign()
+                    },
+                ) {
+                    Text(stringResource(R.string.coach_contract_resign_confirm))
+                }
+            },
+        )
+    }
+
+    if (showTerminationConfirm) {
+        AlertDialog(
+            onDismissRequest = { showTerminationConfirm = false },
+            title = { Text(stringResource(R.string.coach_contract_termination_title)) },
+            text = {
+                Text(
+                    stringResource(
+                        R.string.coach_contract_termination_body,
+                        money.format(card.buyoutUsd),
+                    ),
+                )
+            },
+            dismissButton = {
+                TextButton(onClick = { showTerminationConfirm = false }) {
+                    Text(stringResource(android.R.string.cancel))
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showTerminationConfirm = false
+                        onVoluntaryResign()
+                    },
+                ) {
+                    Text(stringResource(R.string.coach_contract_termination_confirm))
                 }
             },
         )
@@ -235,10 +292,17 @@ private fun HeadCoachContractTab(
     card: HeadCoachCard,
     contractDetail: dev.novux.dynasty.cbb.core.coach.contract.HeadCoachContractDetail,
     userCoachSecurity: CoachSecuritySnapshot?,
+    employmentStatus: CoachEmploymentStatus,
     onViewAdTrustOnStaff: () -> Unit,
     onResignTap: () -> Unit,
+    onTerminationTap: () -> Unit,
+    onOpenJobCenter: () -> Unit,
 ) {
     val money = remember { NumberFormat.getCurrencyInstance(Locale.US) }
+    val firedRisk = userCoachSecurity?.jobSecurity?.tier in setOf(
+        JobSecurityTier.Critical,
+        JobSecurityTier.HotSeat,
+    )
     userCoachSecurity?.let { JobSecurityMeter(it) }
     contractDetail.firingRiskCopy?.let {
         Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
@@ -254,7 +318,7 @@ private fun HeadCoachContractTab(
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(stringResource(R.string.coach_contract_terms_title), fontWeight = FontWeight.SemiBold)
             Text(stringResource(R.string.coach_contract_salary, money.format(card.annualSalaryUsd)))
-            Text(stringResource(R.string.coach_contract_buyout, money.format(contractDetail.buyoutUsd)))
+            Text(stringResource(R.string.coach_contract_buyout, money.format(card.buyoutUsd)))
             Text(
                 stringResource(
                     R.string.coach_contract_length_detail,
@@ -278,8 +342,24 @@ private fun HeadCoachContractTab(
             Text(stringResource(R.string.coach_contract_view_staff_ad_trust))
         }
     }
-    OutlinedButton(onClick = onResignTap, modifier = Modifier.fillMaxWidth()) {
-        Text(stringResource(R.string.coach_contract_resign_cta))
+    if (employmentStatus == CoachEmploymentStatus.Unemployed) {
+        Text(
+            stringResource(R.string.coach_contract_unemployed_notice),
+            color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        OutlinedButton(onClick = onOpenJobCenter, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.coach_contract_open_job_center))
+        }
+    } else {
+        if (firedRisk) {
+            OutlinedButton(onClick = onTerminationTap, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.coach_contract_termination_cta))
+            }
+        }
+        OutlinedButton(onClick = onResignTap, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.coach_contract_resign_cta))
+        }
     }
 }
 

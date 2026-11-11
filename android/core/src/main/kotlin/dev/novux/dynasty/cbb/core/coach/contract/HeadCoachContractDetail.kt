@@ -20,7 +20,7 @@ object HeadCoachContractEngine {
         @Suppress("UNUSED_PARAMETER") programPrestige: Int = 50,
     ): HeadCoachContractDetail {
         val annualSalaryUsd = card.annualSalaryUsd
-        val buyoutUsd = (annualSalaryUsd * card.contractYearsLeft.coerceAtLeast(1) * 0.65).roundToLong()
+        val buyoutUsd = card.buyoutUsd
         val goals = listOf(
             "Reach the national postseason (Super 16 floor)",
             "Finish at or above .500 in conference play",

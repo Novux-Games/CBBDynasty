@@ -313,7 +313,15 @@
     <string name="coach_contract_resign_cta">Resign / retire</string>
     <string name="coach_contract_resign_title">Resign from program?</string>
     <string name="coach_contract_resign_body">Resigning enters the coaching carousel at the next eligible offseason window per league rules.</string>
+    <string name="coach_contract_resign_body_buyout">Resigning pays the buyout (%1$s) and sends you to the job center with open offers.</string>
+    <string name="coach_contract_resign_confirm">Resign and open job center</string>
     <string name="coach_contract_resign_ack">Understood</string>
+    <string name="coach_contract_termination_cta">Accept termination (buyout)</string>
+    <string name="coach_contract_termination_title">Leave before you are fired?</string>
+    <string name="coach_contract_termination_body">Accepting termination now pays the buyout (%1$s) and moves you into the job center.</string>
+    <string name="coach_contract_termination_confirm">Accept and open job center</string>
+    <string name="coach_contract_unemployed_notice">You are between jobs. Review offers in the job center.</string>
+    <string name="coach_contract_open_job_center">Open job center</string>
     <string name="coach_history_season_row">Season %1$d · %2$s</string>
     <string name="coach_history_accumulates">Prior seasons append here after each season review.</string>
     <string name="school_hub_title">School hub</string>

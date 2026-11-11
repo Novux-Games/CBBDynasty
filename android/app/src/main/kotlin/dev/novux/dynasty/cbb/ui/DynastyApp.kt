@@ -389,6 +389,18 @@ fun DynastyApp(
                                 navController.navigate(AppRoute.Discipline.route)
                             },
                             onOpenGamePreview = { navController.navigate(AppRoute.GamePreview.route) },
+                            onOpenJobCenter = {
+                                scope.launch {
+                                    val session = ActiveDynastySession.current ?: return@launch
+                                    coachEmploymentRepository.refreshOffersIfNeeded(
+                                        session.dynastyId,
+                                        session.metadata.seasonIndex,
+                                    )
+                                    navController.navigate(AppRoute.JobCenter.route) {
+                                        popUpTo(AppRoute.DynastyShell.route) { inclusive = true }
+                                    }
+                                }
+                            },
                         )
                     } else {
                         LaunchedEffect(Unit) {

@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.core.coach.contract
 import dev.novux.dynasty.cbb.core.coach.CoachArchetype
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachRatings
+import dev.novux.dynasty.cbb.core.coach.contract.HeadCoachContractBuyout
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -18,7 +19,7 @@ class HeadCoachContractEngineTest {
         assertTrue(low.annualSalaryUsd == lowSalary)
     }
 
-    private fun sampleCard(annualSalaryUsd: Long) = HeadCoachCard(
+    private fun sampleCard(annualSalaryUsd: Long, contractYearsLeft: Int = 3) = HeadCoachCard(
         dynastyId = "d1",
         displayName = "Test Coach",
         age = 45,
@@ -27,9 +28,10 @@ class HeadCoachContractEngineTest {
         archetype = CoachArchetype.Balanced,
         offensiveSchemeLabel = "Balanced",
         defensiveSchemeLabel = "Man",
-        contractYearsLeft = 3,
+        contractYearsLeft = contractYearsLeft,
         contractLengthYears = 4,
         annualSalaryUsd = annualSalaryUsd,
+        buyoutUsd = HeadCoachContractBuyout.usd(annualSalaryUsd, contractYearsLeft),
         ratings = HeadCoachRatings(80, 80, 80, 80),
         almaMaterLabel = null,
     )

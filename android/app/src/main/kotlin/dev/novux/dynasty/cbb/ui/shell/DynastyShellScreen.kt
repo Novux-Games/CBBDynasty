@@ -149,6 +149,7 @@ fun DynastyShellScreen(
     onOpenSigningDay: (dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink) -> Unit = {},
     onOpenRecruitingTab: (RecruitingHubTab) -> Unit = {},
     onOpenAutomation: () -> Unit = {},
+    onOpenJobCenter: () -> Unit = {},
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
@@ -184,6 +185,7 @@ fun DynastyShellScreen(
     var notificationFeed by remember { mutableStateOf<List<NotificationFeedItem>>(emptyList()) }
     var careerModal by remember { mutableStateOf<NotificationFeedItem?>(null) }
     var coachPreviewTarget by remember { mutableStateOf<CoachPreviewTarget?>(null) }
+    var coachEmploymentStatus by remember { mutableStateOf(CoachEmploymentStatus.Employed) }
     val coachPreviewSheetState = rememberCoachPreviewSheetState()
     val scope = rememberCoroutineScope()
     val medicalRules = remember { BalanceMedicalRedshirtRules() }
@@ -198,6 +200,10 @@ fun DynastyShellScreen(
         medicalRules = medicalRules,
         coachSkillPointBank = coachSkillPointBank,
     )
+
+    LaunchedEffect(loaded.dynastyId) {
+        coachEmploymentStatus = coachEmploymentRepository.loadState(loaded.dynastyId).status
+    }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint, showNotificationFeed) {
         teamChemistry = chemistryRepository.loadState(
@@ -443,6 +449,18 @@ fun DynastyShellScreen(
                         )
                     },
                     onOpenStaffTab = { coachView = ShellCoachView.Staff },
+                    employmentStatus = coachEmploymentStatus,
+                    onVoluntaryResign = {
+                        scope.launch {
+                            coachEmploymentRepository.enterUnemployed(
+                                loaded.dynastyId,
+                                loaded.metadata.seasonIndex,
+                            )
+                            coachEmploymentStatus = CoachEmploymentStatus.Unemployed
+                            onOpenJobCenter()
+                        }
+                    },
+                    onOpenJobCenter = onOpenJobCenter,
                     displayRatings = dev.novux.dynasty.cbb.core.coach.skill.HeadCoachSkillRatings.effective(
                         view.card.ratings,
                         coachSkillState,
