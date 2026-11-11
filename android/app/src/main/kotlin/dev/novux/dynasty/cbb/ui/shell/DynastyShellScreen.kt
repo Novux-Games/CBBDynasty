@@ -399,6 +399,13 @@ fun DynastyShellScreen(
             seasonIndex = loaded.metadata.seasonIndex,
             playerStatsRepository = context.requireDynastyApplication().playerStatsRepository,
             allowEdit = true,
+            schoolHubOverview = userSchool,
+            onOpenSchoolHub = userSchool?.let { overview ->
+                {
+                    fullScreenPlayer = null
+                    coachView = ShellCoachView.School(overview)
+                }
+            },
             onBack = { fullScreenPlayer = null },
         )
         return

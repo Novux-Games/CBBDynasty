@@ -110,7 +110,7 @@
 | MEGA-COACH-060 | P0 | PASS | Tabs Overview · Ratings · Stats · Games · History | `PrimaryTabRow` + per-tab bodies | `PlayerCardTabs.kt` |
 | MEGA-COACH-061 | P2 | GAP | Overview: archetype, hometown, measurements | `PlayerCardOverviewContent` |
 | MEGA-COACH-062 | P2 | GAP | Overview headline OVR/OFF/DEF | Shown; scout OVR letter also |
-| MEGA-COACH-063 | P1 | FAIL | Overview team card → School hub | No team card block |
+| MEGA-COACH-063 | P1 | PASS | Overview team card → School hub | `CoachOverviewTeamCard` on `PlayerCardScreen` Overview; tap → School hub | `PlayerCardTeamHubPathTest` |
 | MEGA-COACH-064 | P1 | FAIL | NIL valuation line on Overview | Not on `PlayerCardSheet` |
 | MEGA-COACH-065 | P1 | FAIL | Projected draft #1–60 + tier label on Overview | No draft projection UI on card |
 | MEGA-COACH-066 | P1 | FAIL | Ratings tab full attribute breakdown + potential | Only headline triplet + scout |

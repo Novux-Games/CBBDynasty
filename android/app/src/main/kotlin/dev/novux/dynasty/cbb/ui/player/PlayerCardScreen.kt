@@ -38,7 +38,9 @@ import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
 import dev.novux.dynasty.cbb.core.player.history.PlayerPriorSeasonSnapshot
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogEntry
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
+import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
 import dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
+import dev.novux.dynasty.cbb.ui.coach.CoachOverviewTeamCard
 import dev.novux.dynasty.cbb.ui.portrait.PlayerPortraitSlot
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +52,8 @@ fun PlayerCardScreen(
     seasonIndex: Int,
     playerStatsRepository: PlayerStatsRepository,
     allowEdit: Boolean,
+    schoolHubOverview: SchoolHubOverview? = null,
+    onOpenSchoolHub: (() -> Unit)? = null,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -96,6 +100,8 @@ fun PlayerCardScreen(
                     player = player,
                     schoolDisplayName = schoolDisplayName,
                     seasonRecordLabel = seasonRecordLabel,
+                    schoolHubOverview = schoolHubOverview,
+                    onOpenSchoolHub = onOpenSchoolHub,
                 )
                 PlayerCardTab.Ratings -> PlayerCardRatingsTab(player = player)
                 PlayerCardTab.Stats -> PlayerCardStatsTab(
@@ -185,10 +191,14 @@ private fun PlayerCardOverviewTab(
     player: DynastyPlayer,
     schoolDisplayName: String,
     seasonRecordLabel: String,
+    schoolHubOverview: SchoolHubOverview?,
+    onOpenSchoolHub: (() -> Unit)?,
 ) {
-    Text(
-        stringResource(R.string.player_card_team_record, schoolDisplayName, seasonRecordLabel),
-        style = MaterialTheme.typography.titleMedium,
+    CoachOverviewTeamCard(
+        schoolDisplayName = schoolDisplayName,
+        seasonRecordLabel = seasonRecordLabel,
+        schoolHubOverview = schoolHubOverview,
+        onOpenSchoolHub = onOpenSchoolHub,
     )
     PlayerCardOverviewContent(player = player)
     player.identity.nilUsdPerYear.takeIf { it > 0 }?.let { nil ->
