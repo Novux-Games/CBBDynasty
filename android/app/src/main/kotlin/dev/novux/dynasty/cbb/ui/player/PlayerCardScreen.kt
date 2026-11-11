@@ -194,25 +194,13 @@ private fun PlayerCardOverviewTab(
 
 @Composable
 private fun PlayerCardRatingsTab(player: DynastyPlayer) {
-    val r = player.ratings
-  val lines = listOf(
-        stringResource(R.string.player_rating_ovr, r.ovr),
-        stringResource(R.string.player_rating_off, r.off),
-        stringResource(R.string.player_rating_def, r.def),
-        stringResource(R.string.player_rating_inside, r.shootingInside),
-        stringResource(R.string.player_rating_mid, r.shootingMid),
-        stringResource(R.string.player_rating_three, r.shootingThree),
-        stringResource(R.string.player_rating_handling, r.handling),
-        stringResource(R.string.player_rating_passing, r.passing),
-        stringResource(R.string.player_rating_rebounding, r.rebounding),
-        stringResource(R.string.player_rating_perim_def, r.perimeterDefense),
-        stringResource(R.string.player_rating_interior_def, r.interiorDefense),
-        stringResource(R.string.player_rating_steal, r.stealing),
-        stringResource(R.string.player_rating_block, r.blocking),
-        stringResource(R.string.player_rating_potential, r.potentialOverall),
-        stringResource(R.string.player_rating_pro_potential, r.proPotential),
+    Text(
+        stringResource(R.string.player_card_ratings_tab),
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.SemiBold,
     )
-    lines.forEach { Text(it, style = MaterialTheme.typography.bodyMedium) }
+    PlayerRatingAttributesPanel(ratings = player.ratings)
+    PlayerLoyaltyRatingsRow(player)
     Text(
         stringResource(R.string.player_card_scout_ovr, player.scoutReport(ScoutDepth.Full).overall),
         style = MaterialTheme.typography.bodySmall,

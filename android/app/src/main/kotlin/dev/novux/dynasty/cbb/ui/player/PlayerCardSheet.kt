@@ -138,16 +138,18 @@ fun PlayerCardOverviewContent(
                 fontWeight = FontWeight.SemiBold,
             )
         }
-        Text(
-            text = stringResource(
-                R.string.player_card_headline_ratings,
-                player.ratings.ovr,
-                player.ratings.off,
-                player.ratings.def,
-            ),
-            style = MaterialTheme.typography.bodyLarge,
-        )
-        if (!compact) {
+        if (compact) {
+            Text(
+                text = stringResource(
+                    R.string.player_card_headline_ratings,
+                    player.ratings.ovr,
+                    player.ratings.off,
+                    player.ratings.def,
+                ),
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        } else {
+            PlayerRatingAttributesPanel(ratings = player.ratings)
             PlayerLoyaltyRatingsRow(player)
         }
         Text(

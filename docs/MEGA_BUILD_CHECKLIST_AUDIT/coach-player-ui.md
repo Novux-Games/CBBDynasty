@@ -245,9 +245,9 @@
 | MEGA-COACH-139 | P0 | PASS | `PlayerCardScreen` full-screen route + back stack | Shell overlay + Back dismisses to roster | `PlayerCardScreen.kt` |
 | MEGA-COACH-140 | P1 | FAIL | Persistent header Back / Name / Edit | Sheet uses drag dismiss only |
 | MEGA-COACH-141 | P1 | FAIL | Identity strip: grade + position + injury `OUT` chip | Injury as text block, not strip chip |
-| MEGA-COACH-142 | P0 | FAIL | Ratings tab attribute rows (shooting subs, handling, …) | `DynastyPlayer.ratings` has fields — UI does not enumerate |
-| MEGA-COACH-143 | P1 | FAIL | Potential + pro potential rows | Not in UI |
-| MEGA-COACH-144 | P2 | FAIL | **Perimeter** spelling in perimeter defense label | Verify strings when Ratings tab ships — no row yet |
+| MEGA-COACH-142 | P0 | PASS | Ratings tab attribute rows (shooting subs, handling, …) | `PlayerRatingAttributesPanel` grouped rows + nested shooting subs | `PlayerRatingAttributesPanel.kt` |
+| MEGA-COACH-143 | P1 | PASS | Potential + pro potential rows | Potential card on Ratings tab | `PlayerRatingAttributesPanel.kt` |
+| MEGA-COACH-144 | P2 | PASS | **Perimeter** spelling in perimeter defense label | `player_rating_perimeter_def_label` | `strings.xml` |
 | MEGA-COACH-145 | P2 | GAP | Scout depth gates attribute visibility | `ScoutDepth.Light` on sheet — full card should respect depth rules |
 | MEGA-COACH-146 | P2 | GAP | Opponent player card view-only (no Edit) | No full card — N/A until route exists |
 | MEGA-COACH-147 | P2 | FAIL | Experience row (eligibility used / remaining) | Not on sheet |
