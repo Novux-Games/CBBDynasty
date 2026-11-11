@@ -26,7 +26,9 @@ import dev.novux.dynasty.cbb.core.preseason.Top60NewsHeadline
 import dev.novux.dynasty.cbb.core.signingday.NationalRankRow
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonProgressRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun IncomingClassSeedPanel(
@@ -42,8 +44,8 @@ fun IncomingClassSeedPanel(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(dynastyId, seasonIndex) {
-        if (seedRepository.isSeeded(dynastyId, seasonIndex)) {
-            headline = seedRepository.loadHeadline(dynastyId, seasonIndex)
+        if (withContext(Dispatchers.IO) { seedRepository.isSeeded(dynastyId, seasonIndex) }) {
+            headline = withContext(Dispatchers.IO) { seedRepository.loadHeadline(dynastyId, seasonIndex) }
         }
     }
 
@@ -79,13 +81,19 @@ fun IncomingClassSeedPanel(
             onClick = {
                 scope.launch {
                     seeding = true
-                    if (headline == null) {
-                        val news = seedRepository.runSeed(dynastyId, seasonIndex)
-                        headline = news
+                    try {
+                        if (headline == null) {
+                            headline = withContext(Dispatchers.IO) {
+                                seedRepository.runSeed(dynastyId, seasonIndex)
+                            }
+                        }
+                        withContext(Dispatchers.IO) {
+                            progressRepository.completeTask(dynastyId, seasonIndex, PreseasonTaskId.IncomingClassSeed)
+                        }
+                        onSeeded()
+                    } finally {
+                        seeding = false
                     }
-                    progressRepository.completeTask(dynastyId, seasonIndex, PreseasonTaskId.IncomingClassSeed)
-                    seeding = false
-                    onSeeded()
                 }
             },
             enabled = !seeding,

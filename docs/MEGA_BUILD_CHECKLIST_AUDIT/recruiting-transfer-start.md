@@ -319,7 +319,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-161 | P0 | RISK | Preseason seed on UI thread | Same root as RECR-131 — blocks checklist until complete; no `withContext(Dispatchers.Default)`. | `IncomingClassSeedPanel` |
+| MEGA-RECR-161 | P0 | PASS | Preseason seed on UI thread | Same root as RECR-131 — blocks checklist until complete; no `withContext(Dispatchers.Default)`. | `IncomingClassSeedPanel` IO `withContext`; `IncomingClassSeedPanelIoPathTest` |
 | MEGA-RECR-162 | P1 | RISK | Recommended list at scale | When seed wired, building `RecommendedRecruitList` over **3.9k** rows each hub open without pagination. | `RecommendedRecruitList.build` |
 | MEGA-RECR-163 | P1 | RISK | LazyColumn only ~50 cap | Engine may still score full pool before cap — CPU each composition if demo pool replaced. | `BalanceRecruitingRecommendedParser` |
 | MEGA-RECR-164 | P2 | RISK | AI league week × demo pool | Doubles work on advance: batch sim 365 teams + AI recruiting loop — acceptable today; explodes if pool + persistence added without batching. | `SaveSlotRepository.advanceWeek` |

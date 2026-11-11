@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-RECR-131",
-    "pri": "P0",
-    "status": "RISK",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
     "id": "MEGA-RECR-161",
     "pri": "P0",
     "status": "RISK",
