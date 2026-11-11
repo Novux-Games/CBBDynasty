@@ -577,6 +577,9 @@
     <string name="signing_day_promise_line">Promise: %1$s</string>
     <string name="signing_day_promise_set">Set promise</string>
     <string name="signing_day_promise_missing_hint">Set a promise for every signee before hard sign.</string>
+    <string name="signing_day_gate_rankings">View recruit national rankings first (Rankings tab).</string>
+    <string name="signing_day_gate_positions">Confirm positions after reviewing your class.</string>
+    <string name="signing_day_gate_loading">Loading Signing Day progress…</string>
     <string name="player_loyalty_chip">Loyalty %1$d</string>
     <string name="player_promise_chip">%1$s · %2$s</string>
     <string name="player_promise_status_kept">Kept</string>

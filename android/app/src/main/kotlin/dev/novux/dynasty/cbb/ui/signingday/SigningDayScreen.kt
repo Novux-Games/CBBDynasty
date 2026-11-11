@@ -33,6 +33,8 @@ import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.signingday.IncomingSignee
 import dev.novux.dynasty.cbb.core.signingday.NationalRankRow
 import dev.novux.dynasty.cbb.core.signingday.NationalRecruitingRankings
+import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignBlockReason
+import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignUiGate
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
 import dev.novux.dynasty.cbb.core.signingday.SigningDayUiPolicy
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
@@ -204,6 +206,35 @@ fun SigningDayScreen(
 }
 
 @Composable
+private fun SigningDayGatingHints(
+    progress: SigningDayProgress?,
+    allPromisesSet: Boolean,
+) {
+    val reasons = SigningDayHardSignUiGate.blockingReasons(progress, allPromisesSet)
+    val actionable = reasons.filter {
+        it != SigningDayHardSignBlockReason.AlreadySigned &&
+            it != SigningDayHardSignBlockReason.PromisesMissing
+    }
+    if (progress?.hardSignComplete == true) return
+    actionable.forEach { reason ->
+        val text = when (reason) {
+            SigningDayHardSignBlockReason.ProgressLoading ->
+                stringResource(R.string.signing_day_gate_loading)
+            SigningDayHardSignBlockReason.RankingsNotViewed ->
+                stringResource(R.string.signing_day_gate_rankings)
+            SigningDayHardSignBlockReason.PositionsNotConfirmed ->
+                stringResource(R.string.signing_day_gate_positions)
+            else -> return@forEach
+        }
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.primary,
+        )
+    }
+}
+
+@Composable
 private fun RankingsBody(rows: List<NationalRankRow>) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -317,13 +348,16 @@ private fun PositionsBody(
                 }
             }
         }
-        val canHardSign = progress?.requiredTasksComplete() == true &&
-            progress.hardSignComplete.not() &&
-            allPromisesSet
+        val canConfirm = SigningDayHardSignUiGate.canConfirmPositions(progress)
+        val canHardSign = SigningDayHardSignUiGate.canHardSign(progress, allPromisesSet)
+        SigningDayGatingHints(
+            progress = progress,
+            allPromisesSet = allPromisesSet,
+        )
         Button(
             onClick = onConfirmPositions,
             modifier = Modifier.fillMaxWidth(),
-            enabled = progress?.positionsConfirmed != true,
+            enabled = canConfirm,
         ) {
             Text(stringResource(R.string.signing_day_confirm_positions))
         }

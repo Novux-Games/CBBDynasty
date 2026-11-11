@@ -205,7 +205,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-103 | P1 | FAIL | Required task gating | `SigningDayRequiredDashboardTasks` built from progress flags; **hard sign** button always on Positions tab — not blocked until rankings + positions tasks done in UI. | `SigningDayScreen.kt` |
+| MEGA-RECR-103 | P1 | PASS | Required task gating | `SigningDayHardSignUiGate` blocks confirm positions until rankings viewed; hard sign until both tasks + promises. | `SigningDayScreen.kt` |
 | MEGA-RECR-104 | P1 | GAP | Admin week — no new drip | Spec: week 6 **no chasing**; verify `RecruitingWeekGrant` skips grant when `cycleClosed` after hard sign — partial wiring via `closeCycleAfterHardSign`. | `RecruitingEconomyRepository` |
 | MEGA-RECR-105 | P2 | GAP | Walk-ons after close | No in-app feed / board after hard sign per `recruiting-engine#walk-ons`. | spec; no UI |
 | MEGA-RECR-106 | P1 | GAP | Unsigned targets sim elsewhere | Hard sign finalizes offer-based class only; no league AI “sign elsewhere” for open elite targets. | `SigningDayHardSignEngine` |
