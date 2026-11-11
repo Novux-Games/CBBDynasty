@@ -152,26 +152,28 @@ class PossessionSimSession(
         } else {
             effects
         }
-        var foulStoppage = tripSample.foulStoppage
+        val intentionalFoulTrip = tripSample.intentionalFoul
+        var foulStoppage = tripSample.foulStoppage || intentionalFoulTrip
         if (lateClockTrip && !foulStoppage && random.nextDouble() < PossessionLateClockPolicy.EXTRA_FOUL_STOPPAGE_RATE) {
             foulStoppage = true
         }
         val offRating = teamOffensiveRating(offenseIsHome = offenseHome) + effects.offensiveRatingDelta
         val defRating = teamDefensiveRating(defenseIsHome = !offenseHome) + effects.defensiveRatingDelta
-        val resolution = if (
-            PossessionShotClock.isShotClockViolation(shotClockBefore, used, tripSeconds)
-        ) {
-            PossessionSimEngine.resolveShotClockViolation(sides.box)
-        } else {
-            PossessionSimEngine.resolvePossessionForSession(
-                sides.box,
-                offRating,
-                defRating,
-                resolveEffects,
-                random,
-                lateClockTrip = lateClockTrip,
-                eventWeights = eventWeights,
-            )
+        val resolution = when {
+            intentionalFoulTrip ->
+                IntentionalFoulLateGamePolicy.resolvePossession(sides.box)
+            PossessionShotClock.isShotClockViolation(shotClockBefore, used, tripSeconds) ->
+                PossessionSimEngine.resolveShotClockViolation(sides.box)
+            else ->
+                PossessionSimEngine.resolvePossessionForSession(
+                    sides.box,
+                    offRating,
+                    defRating,
+                    resolveEffects,
+                    random,
+                    lateClockTrip = lateClockTrip,
+                    eventWeights = eventWeights,
+                )
         }
         var offenseBoxAfter = resolution.box
         var subPhaseChain = resolution.subPhaseChain
@@ -302,6 +304,7 @@ class PossessionSimSession(
         }
         val pfLog = defensiveFoulEvent?.personalFoulLog
         val foulNote = when {
+            intentionalFoulTrip -> IntentionalFoulLateGamePolicy.foulLogLabel(pfLog)
             resolution.foulOnBlock -> pfLog?.let { "foul on block | $it" } ?: "foul on block"
             resolution.andOne -> pfLog?.let { "and-1 | $it" } ?: "and-1"
             resolution.shootingFoul -> pfLog?.let { "shooting foul | $it" } ?: "shooting foul"
@@ -331,6 +334,7 @@ class PossessionSimSession(
             foulOnBlock = resolution.foulOnBlock,
             shootingFoul = resolution.shootingFoul,
             playerAttribution = playerAttribution,
+            intentionalFoul = intentionalFoulTrip,
         )
         log += line
         newInjuryLines.forEach { log += it }

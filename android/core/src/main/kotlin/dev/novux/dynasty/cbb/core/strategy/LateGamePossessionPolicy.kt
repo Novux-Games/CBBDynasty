@@ -39,7 +39,7 @@ object LateGamePossessionPolicy {
     }
 
     fun logTag(decision: PossessionDecision): String? = when (decision) {
-        PossessionDecision.IntentionalFoulTrip -> "late foul-early"
+        PossessionDecision.IntentionalFoulTrip -> "late foul-early; intentional foul branch"
         PossessionDecision.ProtectLeadPace -> "late protect"
         PossessionDecision.None -> null
     }

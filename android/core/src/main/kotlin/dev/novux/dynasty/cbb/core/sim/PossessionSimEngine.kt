@@ -52,6 +52,8 @@ object PossessionSimEngine {
     internal data class TripSample(
         val rawSeconds: Int,
         val foulStoppage: Boolean,
+        /** Defense commits intentional foul this trip (foul-early strategy). */
+        val intentionalFoul: Boolean = false,
     )
 
     internal fun sampleTripForLateGame(
@@ -63,7 +65,7 @@ object PossessionSimEngine {
         when (decision) {
             LateGamePossessionPolicy.PossessionDecision.IntentionalFoulTrip -> {
                 if (random.nextDouble() < LateGamePossessionPolicy.INTENTIONAL_FOUL_TRIP_RATE) {
-                    foulStoppageTripSample(tuning, random)
+                    foulStoppageTripSample(tuning, random).copy(intentionalFoul = true)
                 } else {
                     sampleTrip(tuning, random, eventWeights)
                 }
@@ -226,11 +228,13 @@ object PossessionSimEngine {
         foulOnBlock: Boolean = false,
         shootingFoul: Boolean = false,
         playerAttribution: String? = null,
+        intentionalFoul: Boolean = false,
     ): String {
         val clock = formatClock(clockRemaining)
         val pointsScored = after.points - before.points
         val turnedOver = after.turnovers > before.turnovers
         val scoreLine = when {
+            intentionalFoul -> "intentional foul stop"
             pointsScored > 0 -> "+$pointsScored PTS"
             turnedOver -> PossessionTurnoverFlavorPolicy.logLabel(turnoverTerminal)
             change == PossessionChange.OffenseRetainsOffensiveRebound ->

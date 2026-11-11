@@ -53,6 +53,10 @@ class LateGamePossessionPolicyTest {
                 LateGamePossessionPolicy.PossessionDecision.IntentionalFoulTrip,
             )
             if (trip.foulStoppage) sawFoulStoppage = true
+            if (trip.intentionalFoul) {
+                assertTrue(trip.foulStoppage)
+                sawFoulStoppage = true
+            }
         }
         assertTrue(sawFoulStoppage)
     }
