@@ -26,6 +26,9 @@ Non-user batch sim uses **fast score** sim today (`LeagueFastSim` without `SimTu
 
 ```bash
 cd android
+./scripts/verify_league_week_batch_core_budget.sh
+
+# Or:
 ./gradlew :core:test --tests dev.novux.dynasty.cbb.core.league.LeagueWeekBatchPerformanceTest
 ```
 

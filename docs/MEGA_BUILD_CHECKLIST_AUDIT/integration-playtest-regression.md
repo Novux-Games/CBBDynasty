@@ -48,7 +48,7 @@
 |----|-----|------|--------|----------|-------|-----------|----------|
 | MEGA-QA-013 | P0 | DEV | PASS | Advance week UI freeze | RS W8 → confirm sim week | Advance disabled + spinner during `buildSimWeekAdvanceConfirmation` / `advanceDynastyWeek` | `DynastyShellScreen.kt`, `OffseasonScreen.kt` |
 | MEGA-QA-014 | P0 | BOT | PASS | Sim week wall time RS | Profile CPU; Advance through 1 RS week with user game | Advance completes ≤ 2.5 s UI thread work per `LEAGUE_WEEK_BATCH_PROFILING.md` | `advanceDynastyWeek` on IO; `LeagueWeekBatchProductBudgetTest` |
-| MEGA-QA-015 | P0 | BOT | GUARD | Core league batch budget | `./gradlew :core:test --tests *LeagueWeekBatchPerformanceTest` | Median iter < 12 s @ 365 teams | `LeagueWeekBatchPerformanceTest` |
+| MEGA-QA-015 | P0 | BOT | PASS | Core league batch budget | `./gradlew :core:test --tests *LeagueWeekBatchPerformanceTest` | Median iter < 12 s @ 365 teams | `LeagueWeekBatchCoreCiPath`; `core-test.yml`; `verify_league_week_batch_core_budget.sh` |
 | MEGA-QA-016 | P1 | DEV | OPEN | Offseason advance chain | Offseason W2→W3 with portal optional tasks | No duplicate week index in header | `OffseasonScreen.kt` advance |
 | MEGA-QA-017 | P1 | DEV | OPEN | Sim week with user game unplayed | Week with scheduled game → Advance → Fast sim | Game simmed; standings update; calendar shows result | `SimWeekAdvanceResolver` |
 | MEGA-QA-018 | P1 | DEV | OPEN | Bye week advance | RS bye week → Advance | Allowed; injury tick line in dialog if applicable | `ByeWeekPolicy` |
