@@ -5,6 +5,8 @@ import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
 import dev.novux.dynasty.cbb.core.calendar.SeasonReviewGate
 import dev.novux.dynasty.cbb.core.calendar.SeasonYearAdvanceEngine
 import dev.novux.dynasty.cbb.core.save.DynastyBootstrap
+import dev.novux.dynasty.cbb.core.save.DynastyExportArchive
+import dev.novux.dynasty.cbb.core.save.DynastyExportEngine
 import dev.novux.dynasty.cbb.core.save.DynastyWizardBootstrapPolicy
 import dev.novux.dynasty.cbb.core.save.DynastyLoadFailure
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
@@ -290,6 +292,24 @@ class SaveSlotRepository(
             }
         } catch (_: Exception) {
             false
+        }
+    }
+
+    /** Portable export manifest for share/backup ([MEGA-COACH-183], ADR-001). */
+    suspend fun exportDynastyArchive(slotIndex: Int): DynastyExportArchive? = withContext(Dispatchers.IO) {
+        require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
+        try {
+            ensureInitialized()
+            val entity = slotDao.getByIndex(slotIndex) ?: return@withContext null
+            val summary = entity.toSummary()
+            if (summary.isEmpty) return@withContext null
+            val dynastyId = summary.dynastyId ?: return@withContext null
+            val meta = metadataDao.getById(dynastyId)?.toDomain() ?: return@withContext null
+            val checkpoint = weekCheckpointRepository.loadCheckpoint(dynastyId) ?: return@withContext null
+            val rosterCount = rosterDao.listForDynasty(dynastyId).size
+            DynastyExportEngine.build(slotIndex, summary, meta, checkpoint, rosterCount)
+        } catch (_: Exception) {
+            null
         }
     }
 

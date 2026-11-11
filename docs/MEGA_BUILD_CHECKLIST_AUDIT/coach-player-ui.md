@@ -314,7 +314,7 @@
 | MEGA-COACH-180 | P2 | GAP | Loyalty/promise chips on roster (density) | `PlayerLoyaltyChips` on every roster card — can crowd |
 | MEGA-COACH-181 | P2 | FAIL | Strategy lineup row density vs shell roster | `StrategyScreen` uses `PlayerInjuryRosterRow` — no OVR column |
 | MEGA-COACH-182 | P2 | FAIL | Statistics leaders row → preview with chips | Not wired in audit paths |
-| MEGA-COACH-183 | P1 | FAIL | Save slot **export** action + chip on Load screen | `game-start.md` ADR-001 export — **no export UI** in `LoadGameScreen` |
+| MEGA-COACH-183 | P1 | PASS | Save slot **export** action + chip on Load screen | `DynastyExportEngine` + `exportDynastyArchive`; Export chip + share JSON on `LoadGameScreen` |
 | MEGA-COACH-184 | P2 | FAIL | Import archive chip / flow on Load or Settings | Not found in UI grep |
 | MEGA-COACH-185 | P3 | GAP | Export metadata chips (school, season, record) on slot row | `SaveSlotSummary` fields shown — no export affordance |
 | MEGA-COACH-186 | P2 | GAP | Box score player name tap → player preview | Box score UI shallow vs spec |

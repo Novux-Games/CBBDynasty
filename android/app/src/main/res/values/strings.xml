@@ -127,6 +127,9 @@
     <string name="load_error_delete">Delete save</string>
     <string name="load_error_dismiss">Back</string>
     <string name="load_slot_cant_open">This save can\'t be opened</string>
+    <string name="load_slot_export_chip">Export</string>
+    <string name="load_slot_export_chooser">Share dynasty export</string>
+    <string name="load_slot_export_metadata_chip">%1$s · %2$s · %3$d–%4$d</string>
     <string name="season_review_title">End of Season</string>
     <string name="season_review_subtitle">Final rankings and program recap. No games this week.</string>
     <string name="season_review_placeholder">Full rankings, awards, and prestige recap land here in a later phase.</string>
