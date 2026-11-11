@@ -179,13 +179,15 @@ class PossessionSimSession(
         } else {
             awayBox = offenseBoxAfter
         }
-        when (resolution.change) {
+        val shotClockAfterLog = when (resolution.change) {
             PossessionChange.DefenseTakesBall -> {
                 offenseHome = !offenseHome
                 shotClockSeconds = PossessionShotClock.resetOnChangeOfPossession(input.tuning.shotClock)
+                shotClockSeconds
             }
             PossessionChange.OffenseRetainsOffensiveRebound -> {
                 shotClockSeconds = PossessionShotClock.resetAfterOffensiveRebound(input.tuning.shotClock)
+                shotClockSeconds
             }
         }
         accrueFloorMinutes(used, offenseHome)
@@ -198,7 +200,7 @@ class PossessionSimSession(
             sides.box,
             resolution.box,
             shotClockBefore = shotClockBefore,
-            shotClockAfter = shotClockAfterTrip,
+            shotClockAfter = shotClockAfterLog,
             change = resolution.change,
             turnoverTerminal = resolution.turnoverTerminal,
             foulNote = foulNote,

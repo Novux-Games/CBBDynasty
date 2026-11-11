@@ -200,6 +200,12 @@ object PossessionSimEngine {
         }
     }
 
+    /** Miss terminal → OReb or DReb change ([MEGA-SIM-090]). */
+    internal fun resolveMissRebound(
+        afterMiss: TeamBoxScore,
+        random: Random,
+    ): PossessionResolveResult = offensiveReboundOrDefReb(afterMiss, random)
+
     private fun offensiveReboundOrDefReb(
         afterMiss: TeamBoxScore,
         random: Random,
@@ -232,7 +238,8 @@ object PossessionSimEngine {
             pointsScored > 0 -> "+$pointsScored PTS"
             turnedOver && turnoverTerminal == TurnoverTerminal.ShotClockViolation -> "TO shot-clock"
             turnedOver -> "TO"
-            change == PossessionChange.OffenseRetainsOffensiveRebound -> "miss OReb"
+            change == PossessionChange.OffenseRetainsOffensiveRebound ->
+                "miss | OREB +1 | retain possession"
             after.fieldGoalsAttempted > before.fieldGoalsAttempted -> "miss"
             else -> "possession"
         }

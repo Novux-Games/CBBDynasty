@@ -166,7 +166,7 @@
 | MEGA-SIM-087 | P0 | PASS | **Shot-clock violation** terminal event + AST/TO stat + log line | `resolveShotClockViolation`, `isShotClockViolation` | TO++ with `TurnoverTerminal.ShotClockViolation`; log `TO shot-clock` |
 | MEGA-SIM-088 | P1 | FAIL | **Late-clock** tuning (22–30s): contested make↓, TO↑, foul↑ | `simulation-engine.md` §late clock | No `used` threshold branch |
 | MEGA-SIM-089 | P1 | FAIL | Sub-phases optional: drive → kick → shot within one trip | Planning event chains | Single roll → one terminal outcome |
-| MEGA-SIM-090 | P0 | PARTIAL | **Offensive rebound** → same team possession + 20s shot clock | `PossessionChange.OffenseRetainsOffensiveRebound` | OReb path + SC 20 reset; no rebound stat line yet |
+| MEGA-SIM-090 | P0 | PASS | **Offensive rebound** → same team possession + 20s shot clock | `PossessionChange.OffenseRetainsOffensiveRebound` | `resolveMissRebound`; log `OREB +1`; SC 7→20 in log; `OffensiveReboundPossessionTest`; player `offensiveRebounds` |
 | MEGA-SIM-091 | P1 | FAIL | **Defensive rebound** change of possession in log text | `formatPossessionLog` | No rebound vocabulary |
 | MEGA-SIM-092 | P1 | FAIL | **Steal / bad pass / travel / offensive foul** turnover flavors | `eventWeights` unused | All turnovers anonymous |
 | MEGA-SIM-093 | P1 | FAIL | **Block** on shot attempt + optional foul-on-block | — | No blocks in resolve path |
