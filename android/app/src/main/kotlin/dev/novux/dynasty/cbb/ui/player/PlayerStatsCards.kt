@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.player.stats.PlayerCareerAveragesPolicy
 import dev.novux.dynasty.cbb.core.player.stats.PlayerCountingStats
 import dev.novux.dynasty.cbb.core.player.stats.PlayerRateStats
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsEngine
@@ -32,6 +33,24 @@ fun PlayerSeasonAveragesCard(
         subtitle = stringResource(R.string.player_card_stats_gp_suffix, gamesPlayedSeason),
     ) {
         seasonAverageLines(averages).forEach { StatLine(it) }
+    }
+}
+
+/** Stats tab card 3 — career rate stats; shooting % blended over career makes/attempts ([MEGA-COACH-152]). */
+@Composable
+fun PlayerCareerAveragesCard(
+    averages: PlayerRateStats,
+    careerGamesPlayed: Int,
+    modifier: Modifier = Modifier,
+) {
+    @Suppress("unused")
+    val qaId = PlayerCareerAveragesPolicy.MEGA_ID
+    PlayerStatsCard(
+        modifier = modifier,
+        title = stringResource(R.string.player_card_stats_career_avg_title),
+        subtitle = stringResource(R.string.player_card_stats_gp_suffix, careerGamesPlayed),
+    ) {
+        careerAverageLines(averages).forEach { StatLine(it) }
     }
 }
 
@@ -57,15 +76,10 @@ fun PlayerStatsFourCards(summary: PlayerStatsSummary, modifier: Modifier = Modif
             gamesPlayedSeason = summary.gamesPlayedSeason,
         )
         PlayerSeasonTotalsCard(totals = summary.seasonTotals)
-        PlayerStatsCard(
-            title = stringResource(R.string.player_card_stats_career_avg_title),
-            subtitle = stringResource(
-                R.string.player_card_stats_gp_suffix,
-                summary.careerGamesPlayed,
-            ),
-        ) {
-            careerAverageLines(summary.careerAverages).forEach { StatLine(it) }
-        }
+        PlayerCareerAveragesCard(
+            averages = summary.careerAverages,
+            careerGamesPlayed = summary.careerGamesPlayed,
+        )
         PlayerStatsCard(
             title = stringResource(R.string.player_card_stats_career_tot_title),
         ) {
