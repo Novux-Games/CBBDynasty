@@ -37,6 +37,7 @@ import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.coach.security.JobSecurityTier
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillBranch
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointState
+import dev.novux.dynasty.cbb.core.coach.card.deep.CoachCardDeepTabsSnapshot
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillTreeEngine
 import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
 import java.text.NumberFormat
@@ -61,6 +62,7 @@ fun HeadCoachCardScreen(
     schoolHubOverview: SchoolHubOverview? = null,
     onOpenSchoolHub: (() -> Unit)? = null,
     coachAchievements: HeadCoachAchievements? = null,
+    coachDeepTabs: CoachCardDeepTabsSnapshot? = null,
     selectedTab: CoachCardTab = CoachCardTab.Overview,
     onSelectedTabChange: (CoachCardTab) -> Unit = {},
     modifier: Modifier = Modifier,
@@ -121,15 +123,9 @@ fun HeadCoachCardScreen(
                     onTerminationTap = { showTerminationConfirm = true },
                     onOpenJobCenter = onOpenJobCenter,
                 )
-                CoachCardTab.History -> HeadCoachHistoryTab(card = card, seasonIndex = seasonIndex)
-                CoachCardTab.HallOfFame -> CoachCardPlaceholderTab(
-                    title = stringResource(R.string.coach_tab_hof),
-                    body = stringResource(R.string.coach_tab_hof_body),
-                )
-                CoachCardTab.Draft -> CoachCardPlaceholderTab(
-                    title = stringResource(R.string.coach_tab_draft),
-                    body = stringResource(R.string.coach_tab_draft_body),
-                )
+                CoachCardTab.History -> CoachCardHistoryDeepTab(coachDeepTabs)
+                CoachCardTab.HallOfFame -> CoachCardHofDeepTab(coachDeepTabs)
+                CoachCardTab.Draft -> CoachCardDraftDeepTab(coachDeepTabs)
             }
         }
     }
@@ -339,24 +335,6 @@ private fun HeadCoachContractTab(
             Text(stringResource(R.string.coach_contract_resign_cta))
         }
     }
-}
-
-@Composable
-private fun HeadCoachHistoryTab(card: HeadCoachCard, seasonIndex: Int) {
-    Text(stringResource(R.string.coach_tab_history), style = MaterialTheme.typography.titleMedium)
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                stringResource(R.string.coach_history_season_row, seasonIndex, card.seasonRecordLabel),
-                style = MaterialTheme.typography.bodyLarge,
-            )
-        }
-    }
-    Text(
-        stringResource(R.string.coach_history_accumulates),
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
 }
 
 @Composable

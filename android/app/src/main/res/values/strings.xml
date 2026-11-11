@@ -382,6 +382,16 @@
     <string name="coach_history_season_row">Season %1$d · %2$s</string>
     <string name="coach_history_accumulates">Prior seasons append here after each season review.</string>
     <string name="coach_history_assistant_row">Season %1$d · %2$s · %3$s · %4$s</string>
+    <string name="coach_deep_history_row">Season %1$d · %2$s · %3$s</string>
+    <string name="coach_deep_history_postseason">Postseason: %1$s</string>
+    <string name="coach_deep_history_empty">No prior seasons yet — your current campaign shows here after standings update.</string>
+    <string name="coach_deep_hof_empty">No Hall of Fame honors yet for players you coached.</string>
+    <string name="coach_deep_hof_national">National HOF · %1$s · season %2$d</string>
+    <string name="coach_deep_hof_conference">Conference POTY · %1$s · season %2$d</string>
+    <string name="coach_deep_draft_empty">No published draft classes yet for your coached players.</string>
+    <string name="coach_deep_draft_picked">Draft %1$d · %2$s · from %3$s</string>
+    <string name="coach_deep_draft_picked_unknown">Draft %1$d · selected · from %2$s</string>
+    <string name="coach_deep_draft_undrafted">Draft %1$d · undrafted · from %2$s</string>
     <string name="coach_assistant_contract_note">Extend or release assistants from School → Staff Manage (coming soon).</string>
     <string name="coach_assistant_hof_body">Prior head-coach Hall of Fame résumé appears when this coach held an HC role elsewhere.</string>
     <string name="coach_assistant_draft_body">Draft picks from HC stops appear when career history is linked.</string>

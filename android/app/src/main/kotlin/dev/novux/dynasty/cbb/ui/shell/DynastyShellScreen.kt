@@ -215,6 +215,9 @@ fun DynastyShellScreen(
     var coachPreviewTarget by remember { mutableStateOf<CoachPreviewTarget?>(null) }
     var coachEmploymentStatus by remember { mutableStateOf(CoachEmploymentStatus.Employed) }
     var coachAchievements by remember { mutableStateOf<HeadCoachAchievements?>(null) }
+    var coachDeepTabs by remember {
+        mutableStateOf<dev.novux.dynasty.cbb.core.coach.card.deep.CoachCardDeepTabsSnapshot?>(null)
+    }
     var recruitingLedger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
     var recruitingDashContext by remember { mutableStateOf<InSeasonRecruitingDashboardContext?>(null) }
     val coachPreviewSheetState = rememberCoachPreviewSheetState()
@@ -332,6 +335,14 @@ fun DynastyShellScreen(
         userSchool = schoolHubRepository.loadUserSchoolOverview(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
+        )
+        coachDeepTabs = context.requireDynastyApplication().coachCardDeepTabsRepository.loadDeepTabs(
+            dynastyId = loaded.dynastyId,
+            seasonIndex = loaded.metadata.seasonIndex,
+            schoolDisplayName = userSchool?.displayName
+                ?: staffRoster?.headCoach?.schoolDisplayName
+                ?: "",
+            currentRecordLabel = staffRoster?.headCoach?.seasonRecordLabel ?: "0-0",
         )
         coachSecurity = coachSecurityRepository.loadForUserDynasty(loaded.dynastyId)
         rosterPlayers = rosterRepository.listPlayers(loaded.dynastyId)
@@ -639,6 +650,7 @@ fun DynastyShellScreen(
                         { coachView = ShellCoachView.School(overview) }
                     },
                     coachAchievements = coachAchievements,
+                    coachDeepTabs = coachDeepTabs,
                     displayRatings = dev.novux.dynasty.cbb.core.coach.skill.HeadCoachSkillRatings.effective(
                         view.card.ratings,
                         coachSkillState,
@@ -680,6 +692,7 @@ fun DynastyShellScreen(
                 AssistantCoachCardScreen(
                     card = view.card,
                     seasonIndex = loaded.metadata.seasonIndex,
+                    coachDeepTabs = if (view.card.hasHeadCoachCareer) coachDeepTabs else null,
                     selectedTab = view.route.selectedTab,
                     onSelectedTabChange = { tab ->
                         val nextRoute = view.route.withTab(tab)

@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.coach.card.AssistantCoachCard
+import dev.novux.dynasty.cbb.core.coach.card.deep.CoachCardDeepTabsSnapshot
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -29,6 +30,7 @@ import java.util.Locale
 fun AssistantCoachCardScreen(
     card: AssistantCoachCard,
     seasonIndex: Int = 1,
+    coachDeepTabs: CoachCardDeepTabsSnapshot? = null,
     selectedTab: CoachCardTab = CoachCardTab.Overview,
     onSelectedTabChange: (CoachCardTab) -> Unit = {},
     modifier: Modifier = Modifier,
@@ -64,16 +66,28 @@ fun AssistantCoachCardScreen(
         ) {
             when (selectedTab) {
                 CoachCardTab.Overview -> AssistantOverviewTab(card, money)
-                CoachCardTab.History -> AssistantHistoryTab(card, seasonIndex)
+                CoachCardTab.History -> if (card.hasHeadCoachCareer) {
+                    CoachCardHistoryDeepTab(coachDeepTabs)
+                } else {
+                    AssistantHistoryTab(card, seasonIndex)
+                }
                 CoachCardTab.Contract -> AssistantContractTab(card, money)
-                CoachCardTab.HallOfFame -> CoachCardPlaceholderTab(
-                    title = stringResource(R.string.coach_tab_hof),
-                    body = stringResource(R.string.coach_assistant_hof_body),
-                )
-                CoachCardTab.Draft -> CoachCardPlaceholderTab(
-                    title = stringResource(R.string.coach_tab_draft),
-                    body = stringResource(R.string.coach_assistant_draft_body),
-                )
+                CoachCardTab.HallOfFame -> if (card.hasHeadCoachCareer) {
+                    CoachCardHofDeepTab(coachDeepTabs)
+                } else {
+                    CoachCardPlaceholderTab(
+                        title = stringResource(R.string.coach_tab_hof),
+                        body = stringResource(R.string.coach_assistant_hof_body),
+                    )
+                }
+                CoachCardTab.Draft -> if (card.hasHeadCoachCareer) {
+                    CoachCardDraftDeepTab(coachDeepTabs)
+                } else {
+                    CoachCardPlaceholderTab(
+                        title = stringResource(R.string.coach_tab_draft),
+                        body = stringResource(R.string.coach_assistant_draft_body),
+                    )
+                }
             }
         }
     }
