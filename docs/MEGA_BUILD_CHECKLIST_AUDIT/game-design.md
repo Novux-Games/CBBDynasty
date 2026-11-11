@@ -54,7 +54,7 @@
 | MEGA-GDD-024 | P1 | GAP | Roster · portal, draft declare, coach promises | Core loyalty/chips; declare/pro-day/withdrawal UI thinner than spec. | `PlayerLoyaltyChips.kt`, `BalanceLoyaltyTuning`, `PortalWeekOnePartition.kt` |
 | MEGA-GDD-025 | P1 | GAP | Offseason · weeks 1–10 authoritative calendar | Code follows `offseason.md`; **game-design.md** summary table still mis-labels weeks 6–9. | `OffseasonScreen.kt`, `OffseasonWeekHeading.kt`, `planning/game-design.md` § Offseason summary |
 | MEGA-GDD-026 | P1 | GAP | Offseason · coaching carousel S2+ before week 1 | Engine + screen; league AI uses `stubUserApprovalCards()`. | `CoachingCarouselEngine.kt`, `CoachingCarouselScreen.kt` |
-| MEGA-GDD-027 | P0 | FAIL | Recruiting · year-long HS/JUCO + portal hub | Economy/AI in core; **HS/JUCO and portal tabs are placeholder strings only**. | `RecruitingHubScreen.kt`, `recruiting_placeholder_hs_juco`, `recruiting_placeholder_portal` |
+| MEGA-GDD-027 | P0 | PASS | Recruiting · year-long HS/JUCO + portal hub | HS/JUCO pool + Top 60; portal entrants when window open | `HsJucoRecruitBoard.kt`, `RecruitingHubTabBodies.kt`, `PortalRecruitingHub.kt` |
 | MEGA-GDD-028 | P1 | GAP | Recruiting · Signing Day OS week 6 hard sign | `SigningDayScreen` + repo; board/crunch UX mostly task-driven. | `SigningDayRepository.kt`, `SigningDayScreen.kt` |
 | MEGA-GDD-029 | P1 | GAP | Recruiting · portal OS weeks 2–5 only | `PortalCyclePolicy` + sim; portal **UI** tab placeholder. | `PortalSimulationEngine.kt`, `RecruitingHubScreen.kt` |
 | MEGA-GDD-030 | P1 | GAP | NIL · annual pool; ledger; 3× ask cap | Engines/repos wired; assign-NIL not on every recruit surface GDD lists. | `NilAnnualPoolEngine.kt`, `NilBudgetLedger.kt`, `NilBudgetRepository.kt` |

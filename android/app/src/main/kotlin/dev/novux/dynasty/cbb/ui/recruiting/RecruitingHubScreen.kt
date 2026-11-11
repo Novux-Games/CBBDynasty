@@ -38,6 +38,12 @@ import dev.novux.dynasty.cbb.core.balance.BalanceNilParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionsParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
 import dev.novux.dynasty.cbb.core.nil.NilBudgetLedger
+import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
+import dev.novux.dynasty.cbb.core.portal.PortalCycleState
+import dev.novux.dynasty.cbb.core.portal.PortalEntrant
+import dev.novux.dynasty.cbb.core.portal.PortalRecruitingHub
+import dev.novux.dynasty.cbb.core.recruiting.HsJucoBoard
+import dev.novux.dynasty.cbb.core.recruiting.HsJucoRecruitBoard
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingClassSeed
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
@@ -51,7 +57,11 @@ import dev.novux.dynasty.cbb.core.recruiting.SignLikelihoodBadge
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository
 import dev.novux.dynasty.cbb.data.nil.NilBudgetRepository
+import dev.novux.dynasty.cbb.core.signingday.NationalRankRow
+import dev.novux.dynasty.cbb.core.signingday.NationalRecruitingRankings
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
+import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
+import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import java.text.NumberFormat
 import java.util.Locale
@@ -65,6 +75,8 @@ fun RecruitingHubScreen(
     nilBudgetRepository: NilBudgetRepository,
     nilAnnualPoolRepository: NilAnnualPoolRepository,
     weekNineRepository: OffseasonWeekNineRepository? = null,
+    incomingClassSeedRepository: IncomingClassSeedRepository,
+    portalCycleRepository: PortalCycleRepository,
     initialTab: RecruitingHubTab = RecruitingHubDefaults.defaultTab,
     onBack: () -> Unit,
 ) {
@@ -119,6 +131,41 @@ fun RecruitingHubScreen(
         schoolHomeState = "OH",
         nilPoolAnnualUsd = (nilBasePoolUsd + nilBoostUsd).toInt(),
     )
+    var hsJucoBoard by remember { mutableStateOf<HsJucoBoard?>(null) }
+    var hsTop60 by remember { mutableStateOf<List<NationalRankRow>>(emptyList()) }
+    var hsPoolReady by remember { mutableStateOf(false) }
+    var portalEntrants by remember { mutableStateOf<List<PortalEntrant>>(emptyList()) }
+    val calendarPosition = loaded.weekCheckpoint.activePosition
+    val portalWindowOpen = PortalRecruitingHub.isRecruitingWindowOpen(
+        calendarPosition.phase,
+        calendarPosition.weekIndex.takeIf { calendarPosition.phase == CalendarPhase.Offseason },
+    )
+
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
+        hsPoolReady = false
+        val pool = incomingClassSeedRepository.loadPool(loaded.dynastyId, loaded.metadata.seasonIndex)
+            ?: RecruitingClassSeed.demoPool(loaded.metadata.seasonIndex)
+        hsJucoBoard = HsJucoRecruitBoard.partition(pool)
+        hsTop60 = NationalRecruitingRankings.top60FromPool(pool)
+        hsPoolReady = true
+    }
+
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, portalWindowOpen) {
+        if (!portalWindowOpen) {
+            portalEntrants = emptyList()
+            return@LaunchedEffect
+        }
+        val state: PortalCycleState = portalCycleRepository.loadOrSimulate(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        )
+        portalEntrants = if (state.top40Locked) {
+            state.entrants
+        } else {
+            state.onOffseasonWeekStarted(calendarPosition.weekIndex.coerceAtLeast(2)).entrants
+        }
+    }
+
     val recommendedRows = remember(loaded.metadata.seasonIndex, schoolContext, recommendedConfig, offerSnapshot, nilRules) {
         val ctx = schoolContext ?: return@remember emptyList()
         RecommendedRecruitList.build(
@@ -284,8 +331,15 @@ fun RecruitingHubScreen(
                         }
                     },
                 )
-                RecruitingHubTab.HsJuco -> PlaceholderBody(stringResource(R.string.recruiting_placeholder_hs_juco))
-                RecruitingHubTab.TransferPortal -> PlaceholderBody(stringResource(R.string.recruiting_placeholder_portal))
+                RecruitingHubTab.HsJuco -> HsJucoTabBody(
+                    board = hsJucoBoard,
+                    top60 = hsTop60,
+                    poolLoaded = hsPoolReady,
+                )
+                RecruitingHubTab.TransferPortal -> PortalRecruitingTabBody(
+                    windowOpen = portalWindowOpen,
+                    entrants = portalEntrants,
+                )
             }
         }
         OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {

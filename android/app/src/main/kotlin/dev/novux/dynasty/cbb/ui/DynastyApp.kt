@@ -601,6 +601,8 @@ fun DynastyApp(
                             nilBudgetRepository = LocalContext.current.requireDynastyApplication().nilBudgetRepository,
                             nilAnnualPoolRepository = LocalContext.current.requireDynastyApplication().nilAnnualPoolRepository,
                             weekNineRepository = offseasonWeekNineRepository,
+                            incomingClassSeedRepository = incomingClassSeedRepository,
+                            portalCycleRepository = portalCycleRepository,
                             initialTab = recruitingLaunchTab,
                             onBack = { navController.popBackStack() },
                         )
