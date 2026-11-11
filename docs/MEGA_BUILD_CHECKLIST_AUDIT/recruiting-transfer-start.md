@@ -12,7 +12,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-001 | P0 | FAIL | HS pool 2k–4k uniform random | `IncomingClassSeeder` uses fixed `HS_POOL_SIZE = 2400`; no per-season random draw. | `android/core/.../IncomingClassSeeder.kt` |
+| MEGA-RECR-001 | P0 | PASS | HS pool 2k–4k uniform random | `resolveHsPoolSize` draws uniform 2k–4k per enrolling class seed. | `IncomingClassSeeder.kt` |
 | MEGA-RECR-002 | P0 | FAIL | Star percentiles within pool | Stars assigned by **list index order**, not by sorting on `hiddenRating` percentiles. Top 60 order uses hidden rating, but star labels disagree with spec bands. | `IncomingClassSeeder.generatePool` |
 | MEGA-RECR-003 | P1 | FAIL | JUCO 5★ = top 2% | JUCO uses `jucoBias && pct < 0.01` (~1% 5★), not 2%. | `IncomingClassSeeder.starBand` |
 | MEGA-RECR-004 | P1 | FAIL | 3★ = 20–50% band | 3★ cutoff at `pct < 0.45` (30% band after 4★), not 50%. | `IncomingClassSeeder.starBand` |
@@ -263,7 +263,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-133 | P0 | FAIL | Uniform HS **2,000–4,000** | `IncomingClassSeeder.HS_POOL_SIZE = 2400` constant; `runSeed` never rolls random count per season. | `IncomingClassSeeder.kt` |
+| MEGA-RECR-133 | P0 | PASS | Uniform HS **2,000–4,000** | `runSeed` → `seed()` without override rolls `resolveHsPoolSize` from dynasty hash + season. | `IncomingClassSeeder.kt`, `IncomingClassSeedRepository.kt` |
 | MEGA-RECR-134 | P1 | RISK | **Lag:** DataStore blob size | ~3900-row `encodePool` single preference string — large read/write on every seed and load. | `IncomingClassSeedRepository` |
 | MEGA-RECR-135 | P2 | PASS | JUCO +1,500 fixed add-on | `JUCO_POOL_SIZE = 1_500` matches spec table. | `IncomingClassSeeder.kt` |
 | MEGA-RECR-136 | P1 | FAIL | Star assignment order bug | `starBand(index, count)` uses **creation index**, not **hiddenRating** percentile sort — stars decorrelated from talent (RECR-002). | `generatePool` + `starBand` |

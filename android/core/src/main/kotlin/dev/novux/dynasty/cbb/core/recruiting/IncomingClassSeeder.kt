@@ -7,9 +7,16 @@ import kotlin.random.Random
  * Preseason HS + JUCO pool generation ([planning/recruiting-engine.md#timeline--seeding]).
  */
 object IncomingClassSeeder {
-    const val HS_POOL_SIZE: Int = 2_400
+    const val HS_POOL_MIN: Int = 2_000
+    const val HS_POOL_MAX: Int = 4_000
     const val JUCO_POOL_SIZE: Int = 1_500
     const val TOP_NATIONAL_RANKS: Int = 60
+
+    /** Deterministic uniform draw in [HS_POOL_MIN, HS_POOL_MAX] per enrolling class ([planning/recruiting-engine.md]). */
+    fun resolveHsPoolSize(enrollingSeasonIndex: Int, seedKey: Long): Int {
+        val random = Random(seedKey xor (enrollingSeasonIndex.toLong() * 982_451_653))
+        return HS_POOL_MIN + random.nextInt(HS_POOL_MAX - HS_POOL_MIN + 1)
+    }
 
     private val firstNames = listOf(
         "Jordan", "Eli", "Marcus", "Tyler", "Cole", "Darius", "Liam", "Noah", "Jayden", "Kai",
@@ -21,14 +28,15 @@ object IncomingClassSeeder {
 
     fun seed(
         enrollingSeasonIndex: Int,
-        hsCount: Int = HS_POOL_SIZE,
+        hsCount: Int? = null,
         jucoCount: Int = JUCO_POOL_SIZE,
         seedKey: Long = enrollingSeasonIndex.toLong(),
     ): List<RecruitProspect> {
+        val resolvedHsCount = hsCount ?: resolveHsPoolSize(enrollingSeasonIndex, seedKey)
         val random = Random(seedKey xor (enrollingSeasonIndex.toLong() * 524_287))
         val hs = generatePool(
             enrollingSeasonIndex,
-            hsCount,
+            resolvedHsCount,
             RecruitPoolKind.HighSchool,
             "hs",
             random,

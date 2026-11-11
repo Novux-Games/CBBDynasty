@@ -33,7 +33,8 @@
     "MEGA-GDD-048",
     "MEGA-GDD-074",
     "MEGA-GDD-086",
-    "MEGA-GDD-099"
+    "MEGA-GDD-099",
+    "MEGA-GDD-109"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

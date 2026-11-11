@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-GDD-099",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
     "id": "MEGA-GDD-109",
     "pri": "P0",
     "status": "FAIL",

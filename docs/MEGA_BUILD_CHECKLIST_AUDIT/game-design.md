@@ -192,7 +192,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-GDD-109 | P0 | FAIL | Recruiting · HS pool 2k–4k uniform random per season | `IncomingClassSeeder.HS_POOL_SIZE = 2400` fixed—not random draw in band. | `IncomingClassSeeder.kt` |
+| MEGA-GDD-109 | P0 | PASS | Recruiting · HS pool 2k–4k uniform random per season | `resolveHsPoolSize` uniform draw in 2k–4k; default `seed()` uses per dynasty+season key. | `IncomingClassSeeder.kt` |
 | MEGA-GDD-110 | P1 | PASS | Recruiting · JUCO ~1.5k pool size constant | `JUCO_POOL_SIZE = 1_500` matches GDD order of magnitude. | `IncomingClassSeeder.kt` |
 | MEGA-GDD-111 | P0 | FAIL | Recruiting · persisted class pool in hub/AI/signing | Runtime paths use `RecruitingClassSeed.demoPool` (120), not `IncomingClassSeederRepository`. | `RecruitingHubScreen.kt`, `AiRecruitingRepository.kt`, `SigningDayRepository.kt` |
 | MEGA-GDD-112 | P0 | FAIL | Economy · weekly points from **chosen** school prestige | `loadOrOpenCycle` defaults prestige **40** across hub, save sim-week, AI. | `RecruitingEconomyRepository.kt`, `SaveSlotRepository.kt` |
