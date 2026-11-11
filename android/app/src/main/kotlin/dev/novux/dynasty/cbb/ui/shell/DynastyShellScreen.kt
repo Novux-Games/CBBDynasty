@@ -110,6 +110,10 @@ import dev.novux.dynasty.cbb.ui.coach.CoachCardRoute
 import dev.novux.dynasty.cbb.ui.coach.CoachCardTab
 import dev.novux.dynasty.cbb.ui.coach.HeadCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.SchoolStaffTabPanel
+import dev.novux.dynasty.cbb.ui.coach.StaffManageBottomSheet
+import dev.novux.dynasty.cbb.ui.coach.StaffManageTarget
+import dev.novux.dynasty.cbb.ui.coach.rememberStaffManageSheetState
+import dev.novux.dynasty.cbb.data.coach.StaffManageResult
 import dev.novux.dynasty.cbb.ui.coach.rememberCoachPreviewSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import dev.novux.dynasty.cbb.ui.school.SchoolHubScreen
@@ -213,7 +217,22 @@ fun DynastyShellScreen(
     var recruitingLedger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
     var recruitingDashContext by remember { mutableStateOf<InSeasonRecruitingDashboardContext?>(null) }
     val coachPreviewSheetState = rememberCoachPreviewSheetState()
+    var staffManageTarget by remember { mutableStateOf<StaffManageTarget?>(null) }
+    val staffManageSheetState = rememberStaffManageSheetState()
     val scope = rememberCoroutineScope()
+
+    val refreshStaffRoster: () -> Unit = {
+        scope.launch {
+            val record = staffRoster?.headCoach?.seasonRecordLabel ?: "0-0"
+            staffRoster = staffRepository.loadStaffRoster(loaded.dynastyId, record)
+        }
+    }
+
+    LaunchedEffect(staffManageTarget) {
+        if (staffManageTarget != null) {
+            staffManageSheetState.show()
+        }
+    }
     val recruitingEconomyRepository = context.requireDynastyApplication().recruitingEconomyRepository
     val medicalRules = remember { BalanceMedicalRedshirtRules() }
     val position = loaded.weekCheckpoint.activePosition
@@ -478,6 +497,54 @@ fun DynastyShellScreen(
         },
     )
 
+  StaffManageBottomSheet(
+        target = staffManageTarget,
+        sheetState = staffManageSheetState,
+        onDismiss = { staffManageTarget = null },
+        onFire = { target ->
+            scope.launch {
+                when (staffRepository.fireStaff(loaded.dynastyId, target.staffId)) {
+                    StaffManageResult.Success -> {
+                        snackbarHostState.showSnackbar(context.getString(R.string.staff_manage_done))
+                        refreshStaffRoster()
+                    }
+                    is StaffManageResult.Blocked -> {
+                        val msg = if (target.isAssistant) {
+                            context.getString(R.string.staff_manage_blocked_min_assistants)
+                        } else {
+                            context.getString(R.string.staff_manage_done)
+                        }
+                        snackbarHostState.showSnackbar(msg)
+                    }
+                }
+            }
+        },
+        onHireFromPool = { target ->
+            scope.launch {
+                val record = staffRoster?.headCoach?.seasonRecordLabel ?: "0-0"
+                when (staffRepository.hireFromPool(loaded.dynastyId, target.staffId, record)) {
+                    StaffManageResult.Success -> {
+                        snackbarHostState.showSnackbar(context.getString(R.string.staff_manage_done))
+                        refreshStaffRoster()
+                    }
+                    is StaffManageResult.Blocked -> Unit
+                }
+            }
+        },
+        onPoach = { target ->
+            scope.launch {
+                val record = staffRoster?.headCoach?.seasonRecordLabel ?: "0-0"
+                when (staffRepository.poachAssistant(loaded.dynastyId, target.staffId, record)) {
+                    StaffManageResult.Success -> {
+                        snackbarHostState.showSnackbar(context.getString(R.string.staff_manage_done))
+                        refreshStaffRoster()
+                    }
+                    is StaffManageResult.Blocked -> Unit
+                }
+            }
+        },
+    )
+
     when (val view = coachView) {
         is ShellCoachView.School -> {
             Column(modifier = Modifier.fillMaxSize()) {
@@ -499,6 +566,8 @@ fun DynastyShellScreen(
                                         openAssistantPreview(it)
                                     }
                                 },
+                                userCanManage = true,
+                                onManageStaff = { staffManageTarget = it },
                             )
                         }
                     } else {
@@ -620,6 +689,8 @@ fun DynastyShellScreen(
                                 openAssistantPreview(it)
                             }
                         },
+                        userCanManage = true,
+                        onManageStaff = { staffManageTarget = it },
                     )
                 }
             }

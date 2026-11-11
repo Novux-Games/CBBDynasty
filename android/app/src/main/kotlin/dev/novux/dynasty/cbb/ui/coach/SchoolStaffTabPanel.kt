@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,6 +29,8 @@ fun SchoolStaffTabPanel(
     adTrust: CoachSecuritySnapshot? = null,
     onHeadCoachClick: () -> Unit,
     onAssistantClick: (String) -> Unit,
+    userCanManage: Boolean = false,
+    onManageStaff: (StaffManageTarget) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -38,7 +41,9 @@ fun SchoolStaffTabPanel(
             fontWeight = FontWeight.SemiBold,
         )
         Text(
-            stringResource(R.string.staff_tab_hint),
+            stringResource(
+                if (userCanManage) R.string.staff_tab_hint_manage else R.string.staff_tab_hint,
+            ),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -66,6 +71,16 @@ fun SchoolStaffTabPanel(
                 avatarPresetId = assistant.avatarPresetId,
                 clickable = CoachCardPolicy.eligibleForCoachCard(StaffKind.CoachTrack),
                 onClick = { onAssistantClick(assistant.staffId) },
+                manageLabel = if (userCanManage) stringResource(R.string.staff_manage_cta) else null,
+                onManage = {
+                    onManageStaff(
+                        StaffManageTarget(
+                            staffId = assistant.staffId,
+                            displayName = assistant.displayName,
+                            isAssistant = true,
+                        ),
+                    )
+                },
             )
         }
         Text(
@@ -80,6 +95,16 @@ fun SchoolStaffTabPanel(
                 meta = stringResource(R.string.staff_rating_chip, member.contributionRating),
                 clickable = false,
                 onClick = {},
+                manageLabel = if (userCanManage) stringResource(R.string.staff_manage_cta) else null,
+                onManage = {
+                    onManageStaff(
+                        StaffManageTarget(
+                            staffId = member.staffId,
+                            displayName = member.displayName,
+                            isAssistant = false,
+                        ),
+                    )
+                },
             )
         }
         Text(
@@ -98,6 +123,8 @@ private fun StaffRow(
     avatarPresetId: String = "",
     clickable: Boolean,
     onClick: () -> Unit,
+    manageLabel: String? = null,
+    onManage: () -> Unit = {},
 ) {
     val colors = if (clickable) {
         CardDefaults.cardColors()
@@ -117,10 +144,15 @@ private fun StaffRow(
             if (clickable) {
                 CoachPortraitSlot(displayName = title, avatarPresetId = avatarPresetId)
             }
-            Column {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(title, fontWeight = FontWeight.Medium)
                 Text(subtitle, style = MaterialTheme.typography.bodySmall)
                 Text(meta, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+            }
+            manageLabel?.let { label ->
+                OutlinedButton(onClick = onManage) {
+                    Text(label)
+                }
             }
         }
     }

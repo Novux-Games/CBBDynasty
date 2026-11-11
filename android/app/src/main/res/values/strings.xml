@@ -301,6 +301,15 @@
     <string name="staff_open_tab">School staff</string>
     <string name="staff_tab_title">Staff</string>
     <string name="staff_tab_hint">Assistants open coach cards; support staff are list-only.</string>
+    <string name="staff_tab_hint_manage">Tap a coach card or Manage to hire, fire, or poach staff.</string>
+    <string name="staff_manage_cta">Manage</string>
+    <string name="staff_manage_title">Manage staff</string>
+    <string name="staff_manage_for">Actions for %1$s</string>
+    <string name="staff_manage_hire_pool">Hire from candidate pool</string>
+    <string name="staff_manage_poach">Poach assistant (buyout)</string>
+    <string name="staff_manage_fire">Release / fire</string>
+    <string name="staff_manage_blocked_min_assistants">You need at least two assistants on staff.</string>
+    <string name="staff_manage_done">Staff roster updated.</string>
     <string name="staff_assistants_header">Assistant coaches</string>
     <string name="staff_support_header">Support staff</string>
     <string name="staff_support_no_card">Support roles use Manage sheets — no coach card.</string>

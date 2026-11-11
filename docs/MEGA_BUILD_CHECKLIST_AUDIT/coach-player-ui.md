@@ -94,7 +94,7 @@
 | MEGA-COACH-051 | P1 | PASS | Support staff rows not tappable / no card | `SchoolStaffTabPanel` `clickable = false` |
 | MEGA-COACH-052 | P2 | PASS | Policy: coach-track eligible for card | `CoachCardPolicy`, test |
 | MEGA-COACH-053 | P2 | FAIL | Staff grade aggregate chip | No staff grade on staff panel |
-| MEGA-COACH-054 | P1 | FAIL | Staff Manage hire/fire/poach (user school) | Staff panel read-only list |
+| MEGA-COACH-054 | P1 | PASS | Staff Manage hire/fire/poach (user school) | `SchoolStaffTabPanel` Manage → `StaffManageBottomSheet`; `SchoolStaffRepository` hire/fire/poach | `StaffManagePanelPathTest`, `StaffCandidatePoolTest` |
 | MEGA-COACH-055 | P2 | GAP | Shell navigation Staff → HC / Assistant | `ShellCoachView` in `DynastyShellScreen` |
 | MEGA-COACH-056 | P2 | GAP | `HeadCoachCard` model career/contract depth | Data class lacks achievements, HOF list, season history DTOs |
 
