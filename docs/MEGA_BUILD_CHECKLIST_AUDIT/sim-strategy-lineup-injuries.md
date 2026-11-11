@@ -192,7 +192,7 @@
 | MEGA-SIM-106 | P1 | PASS | **Intentional foul** branch under late-game foul strategy | `IntentionalFoulLateGamePolicy`, `TripSample.intentionalFoul` | Foul-early decision → explicit foul trip (no FGA), bonus FTs + log |
 | MEGA-SIM-107 | P2 | FAIL | **Technical foul** rare event (optional tuning) | — | — |
 | MEGA-SIM-108 | P1 | PASS | Disqualified player **cannot re-enter**; log DQ line | `PersonalFoulDisqualificationPolicy`, DQ sets on result/mid-game | Banner log + floor filters; resume `*DisqualifiedPlayerIds` |
-| MEGA-SIM-109 | P1 | FAIL | **200** team player-minutes coherence in sim + assert | `BoxScoreCoherence` | Team box only; no MIN |
+| MEGA-SIM-109 | P1 | PASS | **200** team player-minutes coherence in sim + assert | `TeamPlayerMinutesCoherence`, `BoxScoreCoherence` | Floor ledger → MIN; reconcile to 5×40:00 (+ OT); assert on complete games |
 | MEGA-SIM-110 | P2 | FAIL | Starter re-insertion at **half** opening five from prep | `MidGameState` | No on-floor state at half |
 
 ---

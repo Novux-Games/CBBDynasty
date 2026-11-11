@@ -50,6 +50,11 @@ class PlayerBoxScoreLedger(
         mutate(id) { it.copy(minutesSeconds = seconds) }
     }
 
+    fun addMinutesSeconds(id: String, seconds: Int) {
+        if (seconds == 0) return
+        mutate(id) { it.copy(minutesSeconds = (it.minutesSeconds + seconds).coerceAtLeast(0)) }
+    }
+
     fun setPersonalFouls(id: String, fouls: Int) {
         mutate(id) { it.copy(personalFouls = fouls) }
     }

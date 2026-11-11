@@ -581,7 +581,7 @@ class PossessionSimSession(
     }
 
     fun toResult(isComplete: Boolean): GameSimResult {
-        syncPlayerBoxAuxiliaryStats()
+        syncPlayerBoxAuxiliaryStats(isComplete = isComplete)
         return GameSimResult(
         homeScore = homeBox.points,
         awayScore = awayBox.points,
@@ -607,11 +607,16 @@ class PossessionSimSession(
         )
     }
 
-    private fun syncPlayerBoxAuxiliaryStats() {
+    private fun syncPlayerBoxAuxiliaryStats(isComplete: Boolean) {
         homeFoulLedger.snapshot().forEach { (id, pf) -> homePlayerLedger.setPersonalFouls(id, pf) }
         awayFoulLedger.snapshot().forEach { (id, pf) -> awayPlayerLedger.setPersonalFouls(id, pf) }
         homeMinutesLedger.snapshot().forEach { (id, sec) -> homePlayerLedger.setMinutesSeconds(id, sec) }
         awayMinutesLedger.snapshot().forEach { (id, sec) -> awayPlayerLedger.setMinutesSeconds(id, sec) }
+        if (isComplete) {
+            val expectedSeconds = TeamPlayerMinutesCoherence.expectedTeamFloorSeconds(overtimePeriods)
+            TeamPlayerMinutesCoherence.reconcileFloorMinutes(homePlayerLedger, expectedSeconds)
+            TeamPlayerMinutesCoherence.reconcileFloorMinutes(awayPlayerLedger, expectedSeconds)
+        }
         PlayerBoxReconciler.reconcile(homeBox, homePlayerLedger)
         PlayerBoxReconciler.reconcile(awayBox, awayPlayerLedger)
     }

@@ -20,6 +20,7 @@ object BoxScoreCoherence {
         require(result.awayBox.freeThrowsMade <= result.awayBox.freeThrowsAttempted)
         assertPlayerSums(result.homeBox, result.homePlayerBox)
         assertPlayerSums(result.awayBox, result.awayPlayerBox)
+        TeamPlayerMinutesCoherence.assertTeamMinutes(result)
     }
 
     private fun assertPlayerSums(team: TeamBoxScore, players: List<PlayerBoxScore>) {
