@@ -162,7 +162,8 @@
     "MEGA-RECR-094",
     "MEGA-RECR-103",
     "MEGA-RECR-136",
-    "MEGA-RECR-137"
+    "MEGA-RECR-137",
+    "MEGA-RECR-140"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

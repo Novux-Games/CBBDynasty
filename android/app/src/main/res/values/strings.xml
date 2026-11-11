@@ -234,7 +234,13 @@
     <string name="recruiting_action_dm">DM (%1$d pts)</string>
     <string name="recruiting_action_phone">Call (%1$d pts)</string>
     <string name="recruiting_action_send_house">Send the house (%1$d pts)</string>
-    <string name="recruiting_action_bonus_points">Bonus points (spend %1$d pts)</string>
+    <string name="recruiting_action_bonus_points">Bonus points (up to %1$d pts)</string>
+    <string name="recruiting_bonus_picker_title">Bonus points</string>
+    <string name="recruiting_bonus_picker_subtitle">Spend part or all of your %2$d pt weekly remainder on %1$s.</string>
+    <string name="recruiting_bonus_picker_field_label">Points to spend</string>
+    <string name="recruiting_bonus_picker_spend_all">Spend full remainder (%1$d pts)</string>
+    <string name="recruiting_bonus_picker_confirm">Apply bonus points</string>
+    <string name="recruiting_bonus_invalid_amount">Enter between 1 and your available points.</string>
     <string name="recruiting_action_revoke_offer">Revoke scholarship offer (refund pts)</string>
     <string name="recruiting_action_scholarship_offer">Scholarship offer (%1$d pts)</string>
     <string name="recruiting_promise_picker_title">Coach promise</string>

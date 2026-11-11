@@ -118,6 +118,9 @@ fun RecruitingHubScreen(
     var promisePickerTarget by remember {
         mutableStateOf<Pair<String, String>?>(null)
     }
+    var bonusPickerTarget by remember {
+        mutableStateOf<BonusPointsPickerTarget?>(null)
+    }
     var watchlistIds by remember { mutableStateOf<Set<String>>(emptySet()) }
     var lostProspectIds by remember { mutableStateOf<Set<String>>(emptySet()) }
     var offerReservations by remember { mutableStateOf<List<RecruitingWeekReservation>>(emptyList()) }
@@ -468,6 +471,9 @@ fun RecruitingHubScreen(
                     onRequestScholarshipOffer = { prospectId, displayName ->
                         promisePickerTarget = prospectId to displayName
                     },
+                    onRequestBonusPoints = { prospectId, displayName, maxPoints ->
+                        bonusPickerTarget = BonusPointsPickerTarget(prospectId, displayName, maxPoints)
+                    },
                     onAssignNil = { prospectId, nilAskUsd, offerUsd ->
                         scope.launch {
                             val poolUsd = nilBasePoolUsd + nilBoostUsd
@@ -625,6 +631,9 @@ fun RecruitingHubScreen(
                                 onRequestScholarshipOffer = { prospectId, displayName ->
                                     promisePickerTarget = prospectId to displayName
                                 },
+                                onRequestBonusPoints = { prospectId, displayName, maxPoints ->
+                                    bonusPickerTarget = BonusPointsPickerTarget(prospectId, displayName, maxPoints)
+                                },
                                 onAssignNil = { prospectId, nilAskUsd, offerUsd ->
                                     scope.launch {
                                         val poolUsd = nilBasePoolUsd + nilBoostUsd
@@ -702,6 +711,39 @@ fun RecruitingHubScreen(
                 onConfirm = { promiseType -> submitScholarshipOffer(prospectId, promiseType) },
             )
         }
+        bonusPickerTarget?.let { target ->
+            RecruitBonusPointsPickerSheet(
+                prospectDisplayName = target.displayName,
+                pointsAvailable = target.pointsAvailable,
+                onDismiss = { bonusPickerTarget = null },
+                onConfirm = { amount ->
+                    scope.launch {
+                        val result = recruitingEconomyRepository.spendPointAction(
+                            loaded,
+                            target.prospectId,
+                            RecruitingPointAction.BonusPoints,
+                            amount,
+                        )
+                        if (!result.success) {
+                            when (result.failure) {
+                                RecruitingSpendFailure.InsufficientPoints ->
+                                    Toast.makeText(context, insufficientPointsMessage, Toast.LENGTH_SHORT).show()
+                                RecruitingSpendFailure.InvalidBonusAmount ->
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.recruiting_bonus_invalid_amount),
+                                        Toast.LENGTH_SHORT,
+                                    ).show()
+                                else -> Unit
+                            }
+                        }
+                        ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+                        gateRefresh++
+                        bonusPickerTarget = null
+                    }
+                },
+            )
+        }
         OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.settings_back))
         }
@@ -723,6 +765,12 @@ private data class ProspectSpendRequest(
     val officialVisit: Boolean,
 )
 
+private data class BonusPointsPickerTarget(
+    val prospectId: String,
+    val displayName: String,
+    val pointsAvailable: Int,
+)
+
 @Composable
 private fun RecommendedTabBody(
     loaded: LoadedDynasty,
@@ -739,6 +787,7 @@ private fun RecommendedTabBody(
     modifier: Modifier = Modifier,
     onSpend: (ProspectSpendRequest) -> Unit,
     onRequestScholarshipOffer: (prospectId: String, displayName: String) -> Unit,
+    onRequestBonusPoints: (prospectId: String, displayName: String, maxPoints: Int) -> Unit,
     onAssignNil: (prospectId: String, nilAskUsd: Int, offerUsd: Long) -> Unit,
     onPointAction: (prospectId: String, RecruitingPointAction, Int?) -> Unit,
     onRevokeOffer: (String) -> Unit,
@@ -848,15 +897,13 @@ private fun RecommendedTabBody(
                         onPointAction(row.prospect.prospectId, RecruitingPointAction.SendTheHouse, null)
                     }
                 },
-                onBonusPoints = {
-                    gates?.let { g ->
-                        if (g.bonusPoints.allowed) {
-                            onPointAction(
-                                row.prospect.prospectId,
-                                RecruitingPointAction.BonusPoints,
-                                g.bonusPoints.pointCost,
-                            )
-                        }
+                onRequestBonusPoints = {
+                    gates?.bonusPoints?.takeIf { it.allowed }?.let { gate ->
+                        onRequestBonusPoints(
+                            row.prospect.prospectId,
+                            row.prospect.displayName,
+                            gate.pointCost,
+                        )
                     }
                 },
                 onRevokeOffer = { onRevokeOffer(row.prospect.prospectId) },
@@ -884,7 +931,7 @@ private fun RecommendedProspectRow(
     onDm: () -> Unit,
     onPhoneCall: () -> Unit,
     onSendTheHouse: () -> Unit,
-    onBonusPoints: () -> Unit,
+    onRequestBonusPoints: () -> Unit,
     onRevokeOffer: () -> Unit,
 ) {
     Column(
@@ -1010,7 +1057,7 @@ private fun RecommendedProspectRow(
                 }
             }
             OutlinedButton(
-                onClick = onBonusPoints,
+                onClick = onRequestBonusPoints,
                 enabled = g.bonusPoints.allowed,
                 modifier = Modifier.fillMaxWidth(),
             ) {

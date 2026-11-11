@@ -41,7 +41,7 @@
 | MEGA-RECR-020 | P1 | PASS | Refunded offer/visit/scout | Reservation refund on week advance via `RecruitingReservationRefund`. | `RecruitingEconomyRepository.onCalendarWeekAdvanced` |
 | MEGA-RECR-021 | P2 | GAP | Week 6 no new drip | `closeCycleAfterHardSign` zeroes points and sets `cycleClosed` — aligns with Signing Day admin week. | `RecruitingEconomyRepository` |
 | MEGA-RECR-022 | P1 | PASS | Action costs from balance | Hub spends DM/call/house/bonus per `prospectId` with balance costs + interest deltas. | `RecruitingHubScreen.kt` |
-| MEGA-RECR-023 | P2 | GAP | Bonus points “remainder” | UI spends `g.bonusPoints.pointCost` gate max, not user-chosen partial remainder. | `RecruitingHubScreen` Recommended row |
+| MEGA-RECR-023 | P2 | PASS | Bonus points “remainder” | `RecruitBonusPointsPickerSheet` + user-entered partial spend. | `RecruitingHubScreen` Recommended row |
 | MEGA-RECR-024 | P2 | PASS | Sim-week spend estimate | Auto-maintain estimate uses `ensurePool` + resolved prestige context. | `SaveSlotRepository.buildSimWeekAdvanceInputSuspended` |
 | MEGA-RECR-025 | P1 | GAP | Next cycle pool at EoS recap | `openNextCycleAfterSeasonReview` uses `postRecapPrestige` — PASS when called; first cycle still wrong until recap. | `SeasonReviewRepository` |
 
@@ -277,7 +277,7 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-139 | P0 | PASS | DM / call / house **per recruit** | Point actions pass `prospectId` into `spendPointAction`. | `RecruitingHubScreen.kt` |
-| MEGA-RECR-140 | P1 | FAIL | Bonus points amount | `onBonusPoints` spends `g.bonusPoints.pointCost` max gate, not user-entered **remainder** partial dump. | RECR-023 |
+| MEGA-RECR-140 | P1 | PASS | Bonus points amount | Bonus picker passes user amount to `spendPointAction`; gate max is ceiling only. | `RecruitBonusPointsPickerSheet` |
 | MEGA-RECR-141 | P2 | PASS | Refundable per prospect | Scholarship / scout / visit use `spendRefundableAction` with `prospectId` — PASS. | hub `onSpend` |
 | MEGA-RECR-142 | P1 | RISK | Reservations without interest | Offer reservations persist; interest/influence not updated — soft commit resolver still offer-only. | RECR-029, RECR-088 |
 | MEGA-RECR-143 | P2 | GAP | Week advance refund batch | `onCalendarWeekAdvanced` refunds reservations — no test tying refund to **same** prospect offer set across hub reload. | `RecruitingEconomyRepository` |
