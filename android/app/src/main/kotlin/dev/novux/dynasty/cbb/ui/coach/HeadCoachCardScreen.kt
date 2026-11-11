@@ -108,7 +108,6 @@ fun HeadCoachCardScreen(
 }
 
 @Composable
-@Composable
 private fun SkillTreePanel(
     state: CoachSkillPointState,
     bank: Int,

@@ -39,7 +39,11 @@ class UserCalendarRepository(
         }
         val standings = leagueWeekBatchRepository.loadStandings(dynastyId, seasonIndex)
         val confContext = if (coach != null) {
-            buildConferenceCalendarContext(coach.userTeamId, standings?.records.orEmpty(), standings?.conferenceTournaments)
+            buildConferenceCalendarContext(
+                coach.userTeamId,
+                standings?.records.orEmpty(),
+                standings?.conferenceTournaments,
+            )
         } else {
             ConferenceCalendarContext()
         }
@@ -54,7 +58,7 @@ class UserCalendarRepository(
         )
     }
 
-    private fun buildConferenceCalendarContext(
+    private suspend fun buildConferenceCalendarContext(
         userTeamId: String,
         records: Map<String, LeagueTeamRecord>,
         season: dev.novux.dynasty.cbb.core.conference.ConferenceTournamentSeason?,

@@ -128,6 +128,10 @@ private fun taskMessage(task: DashboardTask): String = when (task.id) {
         task.formatArgs.firstOrNull() ?: 0,
     )
     DashboardTaskId.PreseasonRequired -> ""
+    DashboardTaskId.TeamDisciplinePending -> stringResource(
+        R.string.dashboard_task_team_discipline,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+    )
 }
 
 private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {
@@ -140,5 +144,6 @@ private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {
     DashboardDeepLink.SigningDayPositions,
     DashboardDeepLink.PreseasonChecklist,
     DashboardDeepLink.CoachCard,
+    DashboardDeepLink.DisciplineSheet,
     -> RecruitingHubTab.Recommended
 }

@@ -33,6 +33,7 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
 import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentStatus
 import dev.novux.dynasty.cbb.core.dashboard.DashboardAdvanceGate
+import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
 import dev.novux.dynasty.cbb.core.dashboard.InSeasonWeekGames
@@ -128,7 +129,7 @@ fun DynastyShellScreen(
     hubMenuCallbacks: DynastyHubMenuCallbacks,
     onOpenDiscipline: (PendingDisciplineIncident) -> Unit,
     onOpenGamePreview: () -> Unit = {},
-    onOpenSigningDay: () -> Unit = {},
+    onOpenSigningDay: (dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink) -> Unit = {},
     onOpenRecruitingTab: (RecruitingHubTab) -> Unit = {},
     onOpenAutomation: () -> Unit = {},
 ) {
@@ -420,7 +421,6 @@ fun DynastyShellScreen(
         ShellCoachView.Hub -> Unit
     }
 
-    val position = loaded.weekCheckpoint.activePosition
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val phaseLabel = CalendarWeekLabel.display(position)
     val shellMenu = buildDynastyHubMenu(
@@ -498,7 +498,7 @@ fun DynastyShellScreen(
                         onCoachCardOpen = {
                             staffRoster?.headCoach?.let { coachView = ShellCoachView.HeadCoach(it) }
                         },
-                        onSigningDayOpen = onOpenSigningDay,
+                        onSigningDayOpen = { onOpenSigningDay(DashboardDeepLink.SigningDayRankings) },
                     )
                 }
                 DashboardRequiredTasksPanel(

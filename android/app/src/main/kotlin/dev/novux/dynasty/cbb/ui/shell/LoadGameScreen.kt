@@ -182,12 +182,15 @@ private fun SaveSlotRow(
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(text = label, style = MaterialTheme.typography.bodyLarge)
-            if (!slot.isEmpty && slot.coachDisplayName != null) {
+            if (!slot.isEmpty) {
+                val coachName = slot.coachDisplayName
+                if (coachName != null) {
                 Text(
-                    text = slot.coachDisplayName,
+                    text = coachName,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+                }
             }
         }
         if (!slot.isEmpty) {

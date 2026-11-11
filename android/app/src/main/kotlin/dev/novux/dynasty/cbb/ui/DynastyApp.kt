@@ -23,6 +23,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Scaffold
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.awards.YearlyAwardsSeasonArchive
+import dev.novux.dynasty.cbb.core.balance.injuryTuning
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.settings.AppSettings
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
@@ -233,8 +234,10 @@ fun DynastyApp(
                         saveSlotRepository = saveSlotRepository,
                         onBack = { navController.popBackStack() },
                         onDynastyLoaded = { loaded ->
-                            onDynastyReady(loaded)
-                            navController.popBackStack()
+                            scope.launch {
+                                onDynastyReady(loaded)
+                                navController.popBackStack()
+                            }
                         },
                     )
                 }
@@ -254,7 +257,7 @@ fun DynastyApp(
                                     if (
                                         dev.novux.dynasty.cbb.core.coach.employment.CoachFiringEngine
                                             .shouldEnterUnemployed(
-                                                security.jobSecurity.score,
+                                                security?.jobSecurity?.score ?: 0,
                                                 updated.metadata.seasonIndex,
                                                 updated.dynastyId,
                                             )
@@ -373,7 +376,9 @@ fun DynastyApp(
                             dynastyAutomationRepository = LocalContext.current.requireDynastyApplication().dynastyAutomationRepository,
                             showNotificationFeed = appSettings.showDashboardNotificationFeed,
                             hubMenuCallbacks = hubMenuCallbacks,
-                            onOpenSigningDay = { navController.navigate(AppRoute.SigningDay.route) },
+                            onOpenSigningDay = { _ ->
+                                navController.navigate(AppRoute.SigningDay.route)
+                            },
                             onOpenRecruitingTab = { tab ->
                                 recruitingLaunchTab = tab
                                 navController.navigate(AppRoute.Recruiting.route)

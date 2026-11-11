@@ -61,10 +61,12 @@ class SigningDayRepository(
     suspend fun loadIncomingClass(
         dynastyId: String,
         seasonIndex: Int,
-        reservations: List<RecruitingWeekReservation> = reservationRepository.loadActive(dynastyId),
+        reservations: List<RecruitingWeekReservation> = emptyList(),
     ): List<IncomingSignee> {
+        val activeReservations =
+            reservations.ifEmpty { reservationRepository.loadActive(dynastyId) }
         val pool = RecruitingClassSeed.demoPool(seasonIndex)
-        val base = SigningDaySoftCommitResolver.incomingFromOffers(pool, reservations)
+        val base = SigningDaySoftCommitResolver.incomingFromOffers(pool, activeReservations)
         val overrides = loadPositionOverrides(dynastyId)
         return base.map { signee ->
             val override = overrides[signee.prospectId]
