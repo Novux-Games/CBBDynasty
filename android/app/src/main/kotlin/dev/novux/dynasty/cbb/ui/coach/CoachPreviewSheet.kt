@@ -25,11 +25,12 @@ import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 
 /**
- * Quick coach info sheet ([MEGA-COACH-018]): text-only preview before full card; no coach portrait ship.
+ * Quick coach info sheet ([MEGA-COACH-018], [MEGA-COACH-188]): text-only preview before full card; no coach portrait ship.
  * Shell entry: [dev.novux.dynasty.cbb.ui.shell.DynastyShellScreen] → [CoachPreviewBottomSheet] → View more.
  */
 object CoachPreviewSheet {
     const val QA_ID: String = "MEGA-COACH-018"
+    const val JOB_SECURITY_CHIP_QA: String = "MEGA-COACH-188"
 }
 
 sealed class CoachPreviewTarget {
@@ -134,7 +135,7 @@ private fun HeadCoachPreviewBody(
             stringResource(R.string.coach_contract_salary, money.format(card.annualSalaryUsd)),
             style = MaterialTheme.typography.bodyMedium,
         )
-        userCoachSecurity?.let { JobSecurityMeter(it) }
+        userCoachSecurity?.let { JobSecurityTierChip(it) }
         Text(
             stringResource(
                 R.string.coach_preview_headline_ratings,

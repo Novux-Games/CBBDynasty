@@ -326,7 +326,7 @@
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-187 | P0 | PASS | `CoachPreviewSheet` modal with quick ratings | Modal bottom sheet + headline ratings / job security chip | `CoachPreviewSheet.kt` |
-| MEGA-COACH-188 | P1 | FAIL | User HC preview shows job security tier chip | Meter only on full screen when security passed |
+| MEGA-COACH-188 | P1 | PASS | User HC preview shows job security tier chip | `JobSecurityTierChip` on `CoachPreviewSheet`; full `JobSecurityMeter` on card tabs |
 | MEGA-COACH-189 | P1 | FAIL | **[View more]** → full coach card route | Direct full screen |
 | MEGA-COACH-190 | P2 | GAP | Preview: school + role + record one-liner | Full screen shows same — no lightweight sheet |
 | MEGA-COACH-191 | P2 | FAIL | Poach / carousel entry uses preview first | `JobCenterScreen` → offer flow, not coach preview pattern |
