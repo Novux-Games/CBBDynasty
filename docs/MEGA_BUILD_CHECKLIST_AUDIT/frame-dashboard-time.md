@@ -192,7 +192,7 @@
 | MEGA-FRAME-102 | GAP | Week 1 required dashboard pattern | Declare / pro-day flows live on **Players Leaving** screen — no mirrored **required** dashboard cards per `dashboard-tasks.md#offseason` | `PlayersLeavingPanel` vs dashboard |
 | MEGA-FRAME-103 | SHIP | Required blocks advance core | `DashboardAdvanceGate.blocksWeekAdvance` used on shell, offseason, preseason | `DashboardAdvanceGate.kt` |
 | MEGA-FRAME-104 | GAP | Discipline task visibility | Pending discipline blocks advance in repository but task panel depends on `DisciplineRequiredDashboardTasks` wiring from load | `SaveSlotRepository.advanceDynastyWeek` early return |
-| MEGA-FRAME-105 | GAP | Signing Day panel null race | Week 6 required panel gated on `signingProgress?.let` — null progress hides **all** signing tasks until `LaunchedEffect` finishes | `OffseasonScreen.kt` |
+| MEGA-FRAME-105 | PASS | Signing Day panel null race | Week 6 shows `SigningDayRequiredTasksSkeleton` until `signingProgress` loads ([MEGA-QA-094]) | `OffseasonScreen.kt` |
 | MEGA-FRAME-106 | PARTIAL | In-season optional game task | Only **first** scheduled game becomes optional task when multiple user games same week | `InSeasonOptionalDashboardTasks.build` |
 
 ---

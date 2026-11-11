@@ -51,6 +51,7 @@ import dev.novux.dynasty.cbb.data.offseason.OffseasonSummerWorkoutRepository
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
 import dev.novux.dynasty.cbb.data.signingday.SigningDayRepository
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
+import dev.novux.dynasty.cbb.ui.dashboard.SigningDayRequiredTasksSkeleton
 import dev.novux.dynasty.cbb.core.portal.PortalConstants
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
@@ -307,8 +308,9 @@ fun OffseasonScreen(
         }
 
         if (inOffseason && position.weekIndex == SigningDayConstants.OFFSEASON_WEEK_INDEX) {
-            signingProgress?.let { progress ->
-                DashboardRequiredTasksPanel(
+            when (val progress = signingProgress) {
+                null -> SigningDayRequiredTasksSkeleton()
+                else -> DashboardRequiredTasksPanel(
                     tasks = SigningDayRequiredDashboardTasks.build(progress),
                     onOpenSigningDay = onOpenSigningDay,
                 )

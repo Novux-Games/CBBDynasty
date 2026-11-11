@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-QA-068",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "integration-playtest-regression.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md"
-  },
-  {
     "id": "MEGA-QA-094",
     "pri": "P1",
     "status": "FAIL",
@@ -1765,13 +1758,6 @@
   },
   {
     "id": "MEGA-NOTES-034",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "planning-notes-traceability.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/planning-notes-traceability.md"
-  },
-  {
-    "id": "MEGA-NOTES-039",
     "pri": "P1",
     "status": "PARTIAL",
     "shard": "planning-notes-traceability.md",

@@ -475,6 +475,7 @@
     <string name="dynasty_automation_coach_skills">Coach skill auto-spend</string>
     <string name="dynasty_automation_coach_skills_summary">Assign Sunday skill points using your archetype priority (also on Coach card).</string>
     <string name="dashboard_required_heading">Required tasks</string>
+    <string name="dashboard_signing_tasks_loading">Loading Signing Day tasks…</string>
     <string name="dashboard_task_signing_rankings">View recruiting rankings (Top 60)</string>
     <string name="dashboard_task_signing_positions">Change positions on your incoming class</string>
     <string name="dashboard_task_signing_hard_sign">Hard sign your class</string>

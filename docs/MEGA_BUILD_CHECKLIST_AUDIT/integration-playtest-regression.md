@@ -162,7 +162,7 @@
 | MEGA-QA-091 | P1 | DEV | OPEN | Optional does not block | Dismiss optional → Advance | Allowed when required clear | `DashboardTaskGate.inSeason` |
 | MEGA-QA-092 | P0 | DEV | PASS | In-season recruiting optional tasks | RS week recruiting window | Optional spend/watchlist tasks appear | `InSeasonRecruitingOptionalDashboardTasks`, shell ledger context |
 | MEGA-QA-093 | P1 | DEV | OPEN | Discipline required race | Discipline loads after shell paint | Required card appears within 1 frame cycle | `DisciplineRequiredDashboardTasks` |
-| MEGA-QA-094 | P1 | DEV | FAIL | Signing W6 null progress | Offseason W6 first paint | Signing tasks skeleton until load | MEGA-FRAME-105 |
+| MEGA-QA-094 | P1 | DEV | PASS | Signing W6 null progress | Offseason W6 first paint | Signing tasks skeleton until load | `SigningDayRequiredTasksSkeleton` |
 | MEGA-QA-095 | P2 | DEV | OPEN | Dual preseason lists | Complete via dashboard panel vs lazy row | Single source of truth | MEGA-FRAME-087 |
 | MEGA-QA-096 | P2 | BOT | GUARD | Task gate unit tests | `DashboardTaskGateTest` | Green | `DashboardTaskGateTest.kt` |
 | MEGA-QA-097 | P2 | DEV | OPEN | Coach Sunday optional | Bank > 0 Sunday | Optional task visible once | `CoachSundayOptionalDashboardTasks` |
