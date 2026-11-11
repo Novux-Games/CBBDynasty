@@ -96,9 +96,9 @@
 | MEGA-SIM-045 | SHIP | Coach default O/D on new dynasty | `NewGameWizardScreen`, `SchoolStaffRepository` | Wizard + coach card — not per-game override |
 | MEGA-SIM-046 | SHIP | Usage weights in gameplan | `GameplanInput.usageWeights`, `StrategyGameplanPanel` | Stepper per starter |
 | MEGA-SIM-047 | PARTIAL | Usage affects offense via normalized share | `GameplanEffectsResolver.offenseTweaks` | Peak usage only — not per-player on possession |
-| MEGA-SIM-048 | SHIP | **Deny primary scorer** toggle | Strategy panel + halftime dialog; test `denyPrimaryProducesMoreTurnovers` | `primaryScorerSlot` exists but **no UI** to pick opponent slot |
+| MEGA-SIM-048 | SHIP | **Deny primary scorer** toggle | Strategy panel + halftime dialog; test `denyPrimaryProducesMoreTurnovers` | Deny + primary slot chips in `StrategyDefensiveAssignmentPanel` |
 | MEGA-SIM-049 | SHIP | **Late-game foul** strategy Standard / Foul early / Protect | `LateGameFoulStrategy`, defense tweaks last 2:00 | Chips in strategy + halftime |
-| MEGA-SIM-050 | GAP | **Primary defensive assignment** map PG–C → defender | `GameplanInput.primaryScorerSlot` only | No matchup assignment UI or sim pressure on assigned slot |
+| MEGA-SIM-050 | PASS | **Primary defensive assignment** map PG–C → defender | `GameplanInput.defensiveAssignments`, `DefensiveAssignmentPolicy`, sim deny bonus | Strategy panel + `GameplanEffectsResolver` when deny + assignment on primary slot |
 | MEGA-SIM-051 | GAP | Strategy edits blocked after week advance | `strategy-schemes.md` design lock | Not enforced in `StrategyScreen` / save checkpoint hooks |
 | MEGA-SIM-052 | PARTIAL | Game preview win % / predicted score from ratings + RPI | `GamePreviewScreen` | Exists; not re-audited here — sim path separate |
 | MEGA-SIM-053 | WIRE | Halftime gameplan persisted on dynasty save for real games | `GameWatchLaunch` globals | Scrimmage-only launch params; schedule games need save fields |
@@ -267,8 +267,8 @@
 | MEGA-SIM-146 | P1 | FAIL | Full **7×7** scheme interaction matrix in tuning data | `SchemeMatchupResolver` sample | Partial nudges only |
 | MEGA-SIM-147 | P1 | FAIL | **Box-and-One** / **Press** fatigue cost during sim minutes | Preset identities | Team stamina not decremented in sim |
 | MEGA-SIM-148 | P1 | FAIL | **Perimeter / Post** presets bump correct slot usage on possessions | `usageWeights` team scalar | No slot-level shot share |
-| MEGA-SIM-149 | P0 | FAIL | **Primary defensive assignment** UI: map opp PG–C → your defender | `GameplanInput` | Only `primaryScorerSlot` data shape; no UI |
-| MEGA-SIM-150 | P1 | FAIL | Pick **opponent primary scorer slot** for deny toggle | MEGA-SIM-048 | Toggle without slot selector |
+| MEGA-SIM-149 | P0 | PASS | **Primary defensive assignment** UI: map opp PG–C → your defender | `StrategyDefensiveAssignmentPanel`, `DefensiveAssignmentPolicy` | Swap per opp slot; defaults from starters |
+| MEGA-SIM-150 | P1 | PASS | Pick **opponent primary scorer slot** for deny toggle | `StrategyDefensiveAssignmentPanel` primary chips | Wired to `GameplanInput.primaryScorerSlot` |
 | MEGA-SIM-151 | P1 | FAIL | **Coach default schemes** as pre-game default with per-game override save | `coach-card.md` | Wizard sets season default; no game override persistence |
 | MEGA-SIM-152 | P2 | FAIL | Scheme tooltips with identity copy from planning table | Strategy UI | Enum labels only |
 

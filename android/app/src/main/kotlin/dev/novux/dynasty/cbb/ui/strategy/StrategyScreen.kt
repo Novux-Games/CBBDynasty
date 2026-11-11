@@ -31,6 +31,7 @@ import dev.novux.dynasty.cbb.core.lineup.RotationMinutesBalancer
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.sim.GameLineupPrep
+import dev.novux.dynasty.cbb.core.strategy.DefensiveAssignmentPolicy
 import dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset
 import dev.novux.dynasty.cbb.core.strategy.GameplanInput
 import dev.novux.dynasty.cbb.core.strategy.GameplanUsageNormalizer
@@ -75,6 +76,11 @@ fun StrategyScreen(
         if (gameplan.usageWeights.isEmpty() && starters.isNotEmpty()) {
             gameplan = gameplan.copy(
                 usageWeights = GameplanUsageNormalizer.defaultForStarters(starters.values),
+            )
+        }
+        if (gameplan.defensiveAssignments.isEmpty() && starters.isNotEmpty()) {
+            gameplan = gameplan.copy(
+                defensiveAssignments = DefensiveAssignmentPolicy.defaultAssignments(starters),
             )
         }
     }

@@ -621,6 +621,12 @@
     <string name="strategy_gameplan_title">Gameplan</string>
     <string name="strategy_usage_label">Usage targets</string>
     <string name="strategy_usage_percent">%1$d%%</string>
+    <string name="strategy_defensive_assignments_title">Defensive assignments</string>
+    <string name="strategy_defensive_assignments_hint">Set who guards each opponent starter before the tip.</string>
+    <string name="strategy_primary_scorer_slot">Primary scorer (deny target)</string>
+    <string name="strategy_opp_slot_label">Opp %1$s</string>
+    <string name="strategy_defensive_assignment_row">Opp %1$s → %2$s</string>
+    <string name="strategy_defensive_assignment_swap">Swap</string>
     <string name="strategy_deny_primary">Deny primary scorer</string>
     <string name="strategy_late_fouls">Late-game fouls</string>
     <string name="strategy_late_foul_standard">Standard</string>
