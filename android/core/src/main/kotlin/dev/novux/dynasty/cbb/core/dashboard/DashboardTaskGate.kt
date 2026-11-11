@@ -44,6 +44,7 @@ object DashboardTaskGate {
                 ),
             )
             addAll(CoachSundayOptionalDashboardTasks.build(coachSkillPointBank))
+            addAll(PromiseAtRiskOptionalDashboardTasks.build(rosterPlayers))
         }
         return DashboardTaskSnapshot(required = required, optional = optional)
     }

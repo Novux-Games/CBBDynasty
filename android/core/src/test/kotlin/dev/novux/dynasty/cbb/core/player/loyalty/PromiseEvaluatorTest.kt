@@ -56,4 +56,10 @@ class PromiseEvaluatorTest {
         val status = PromiseEvaluator.evaluateSeasonWindow(player(starter = false), seasonMinutesPerGame = null)
         assertEquals(PromiseStatus.Broken, status)
     }
+
+    @Test
+    fun starterMinutes_grayMpg_isAtRisk() {
+        val eval = PromiseEvaluator.evaluateSeasonWindow(player(starter = true), seasonMinutesPerGame = 22.0)
+        assertEquals(PromiseStatus.AtRisk, eval)
+    }
 }

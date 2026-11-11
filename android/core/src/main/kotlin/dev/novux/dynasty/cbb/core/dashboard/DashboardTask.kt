@@ -34,6 +34,7 @@ enum class DashboardTaskId {
     PlayScheduledGame,
     CoachSundaySkillPoints,
     RecruitingWatchlistNudge,
+    PromiseAtRisk,
 }
 
 data class DashboardTask(

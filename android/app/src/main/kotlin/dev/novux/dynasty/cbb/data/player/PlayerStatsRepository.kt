@@ -17,6 +17,7 @@ import dev.novux.dynasty.cbb.core.player.stats.PlayerCountingStats
 import dev.novux.dynasty.cbb.core.player.history.PlayerPriorSeasonSnapshot
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsEngine
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
+import dev.novux.dynasty.cbb.core.player.loyalty.PlayerSeasonMinutesPerGameEstimator
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSynth
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
@@ -125,6 +126,21 @@ class PlayerStatsRepository(private val context: Context) {
             val gp = player.role.rsGamesPlayedSeason.coerceAtLeast(0)
             ensureSeasonRecord(dynastyId, player, seasonIndex, gp, schoolDisplayName)
         }
+    }
+
+    suspend fun seasonMinutesPerGame(
+        dynastyId: String,
+        seasonIndex: Int,
+        player: DynastyPlayer,
+    ): Double? {
+        val gp = player.role.rsGamesPlayedSeason.coerceAtLeast(0)
+        if (gp <= 0) return null
+        ensureGameLogRecord(dynastyId, player, seasonIndex, gp)
+        val blob = loadBlob(dynastyId)
+        val entries = blob.gameLogs.firstOrNull {
+            it.playerId == player.playerId && it.seasonIndex == seasonIndex
+        }?.entries.orEmpty()
+        return PlayerSeasonMinutesPerGameEstimator.average(entries, gp)
     }
 
     suspend fun seasonTotalsByPlayer(

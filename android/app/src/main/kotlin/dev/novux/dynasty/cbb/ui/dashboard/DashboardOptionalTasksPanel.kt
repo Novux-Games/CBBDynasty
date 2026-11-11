@@ -142,6 +142,11 @@ private fun taskMessage(task: DashboardTask): String = when (task.id) {
         R.string.dashboard_task_team_discipline,
         task.stringFormatArgs.firstOrNull().orEmpty(),
     )
+    DashboardTaskId.PromiseAtRisk -> stringResource(
+        R.string.dashboard_task_promise_at_risk,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+        task.stringFormatArgs.getOrNull(1).orEmpty(),
+    )
 }
 
 private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {

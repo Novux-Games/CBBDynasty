@@ -60,6 +60,7 @@ import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogArchiveEngine
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogEntry
+import dev.novux.dynasty.cbb.data.player.PlayerPromiseStatusRepository
 import dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
 import dev.novux.dynasty.cbb.data.sim.UserLeagueGameSimFactory
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
@@ -687,6 +688,8 @@ class SaveSlotRepository(
             teamPlayedGame,
             userWonGame,
         )
+        PlayerPromiseStatusRepository(dynastyRosterRepository, playerStatsRepository)
+            .refreshInSeasonAfterWeek(loaded.dynastyId, loaded.metadata.seasonIndex)
         coachSkillPointRepository.ensureSundayGrant(
             loaded.dynastyId,
             advanceResult.committedWeek,

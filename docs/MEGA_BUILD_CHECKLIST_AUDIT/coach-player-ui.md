@@ -294,7 +294,7 @@
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-169 | P2 | GAP | Promise chip shows type + band (Starter minutes, etc.) | `PlayerLoyaltyChips` shows status strings |
-| MEGA-COACH-170 | P1 | FAIL | At risk status surfaced before break | `PromiseStatus.AtRisk` in strings — evaluator path partial |
+| MEGA-COACH-170 | P1 | PASS | At risk status surfaced before break | `PlayerPromiseInSeasonRefreshEngine` + week persist; dashboard + `PlayerLoyaltyChips` | `PlayerPromiseStatusRepository.kt` |
 | MEGA-COACH-171 | P2 | GAP | Ratings tab loyalty isolated row (not mixed with OVR) | `PlayerLoyaltyRatingsRow` exists |
 | MEGA-COACH-172 | P1 | FAIL | Convince / retention UI shows promise + loyalty together | `PlayersLeavingScreen` partial |
 | MEGA-COACH-173 | P2 | FAIL | Broken promise → portal intent messaging on card | Portal partition in core; no card copy |
