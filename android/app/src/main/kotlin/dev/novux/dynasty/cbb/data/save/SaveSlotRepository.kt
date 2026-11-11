@@ -57,6 +57,9 @@ import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
 import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
+import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
+import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogArchiveEngine
+import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogEntry
 import dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
 import dev.novux.dynasty.cbb.data.sim.UserLeagueGameSimFactory
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
@@ -653,6 +656,11 @@ class SaveSlotRepository(
             balance.fatigue,
         )
         if (teamPlayedGame && advanceResult.gamesCommitted.isNotEmpty()) {
+            ingestPlayerGameLogsFromCommittedMarks(
+                loaded = loaded,
+                committedWeek = advanceResult.committedWeek,
+                marks = advanceResult.gamesCommitted,
+            )
             dynastyRosterRepository.recordGamesPlayedAfterCommittedWeek(
                 loaded.dynastyId,
                 teamPlayedGame = true,
@@ -707,6 +715,63 @@ class SaveSlotRepository(
         }
         loadSlot(slotIndex)
         }
+    }
+
+    private suspend fun ingestPlayerGameLogsFromCommittedMarks(
+        loaded: LoadedDynasty,
+        committedWeek: CalendarPosition,
+        marks: Map<String, ProvisionalGameMark>,
+    ) {
+        val marksWithBox = marks.values.filter { it.possessionEngine && it.boxArchive != null }
+        if (marksWithBox.isEmpty()) return
+        val coach = coachDao.getByDynastyId(loaded.dynastyId) ?: return
+        val userTeamId = coach.userTeamId
+        val ctx = resolveGameLogWeekContext(
+            dynastyId = loaded.dynastyId,
+            seasonIndex = loaded.metadata.seasonIndex,
+            userTeamId = userTeamId,
+            weekIndex = committedWeek.weekIndex,
+        ) ?: GameLogWeekContext(userTeamIsHome = true, opponentLabel = "Opponent")
+        val rosterIds = dynastyRosterRepository.listPlayers(loaded.dynastyId).map { it.playerId }.toSet()
+        val byPlayer = mutableMapOf<String, MutableList<PlayerGameLogEntry>>()
+        marksWithBox.forEach { mark ->
+            val entries = PlayerGameLogArchiveEngine.entriesForRosterPlayers(
+                mark = mark,
+                userTeamIsHome = ctx.userTeamIsHome,
+                opponentLabel = ctx.opponentLabel,
+                rsWeekIndex = committedWeek.weekIndex,
+                rosterPlayerIds = rosterIds,
+            )
+            entries.forEach { entry ->
+                val playerId = entry.gameKey.removePrefix("${mark.gameId}_")
+                byPlayer.getOrPut(playerId) { mutableListOf() }.add(entry)
+            }
+        }
+        if (byPlayer.isNotEmpty()) {
+            playerStatsRepository.ingestCommittedSimMarks(
+                dynastyId = loaded.dynastyId,
+                seasonIndex = loaded.metadata.seasonIndex,
+                entriesByPlayerId = byPlayer,
+            )
+        }
+    }
+
+    private data class GameLogWeekContext(
+        val userTeamIsHome: Boolean,
+        val opponentLabel: String,
+    )
+
+    private suspend fun resolveGameLogWeekContext(
+        dynastyId: String,
+        seasonIndex: Int,
+        userTeamId: String,
+        weekIndex: Int,
+    ): GameLogWeekContext? {
+        val plan = preseasonScheduleRepository.loadPlan(dynastyId, seasonIndex) ?: return null
+        val game = plan.regularSeason.firstOrNull { it.rsWeekIndex == weekIndex } ?: return null
+        val opponentId = game.opponentTeamId
+        val opponentLabel = packRepository.activeSession().index.team(opponentId)?.displayName ?: opponentId
+        return GameLogWeekContext(userTeamIsHome = game.homeGame, opponentLabel = opponentLabel)
     }
 
     private suspend fun applyFastSimInjuries(

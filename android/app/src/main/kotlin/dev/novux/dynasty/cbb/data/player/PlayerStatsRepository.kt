@@ -7,7 +7,11 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
+import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
+import dev.novux.dynasty.cbb.core.calendar.checkpoint.ProvisionalGameMark
+import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogArchiveEngine
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogEntry
+import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogMerge
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogSynth
 import dev.novux.dynasty.cbb.core.player.stats.PlayerCountingStats
 import dev.novux.dynasty.cbb.core.player.history.PlayerPriorSeasonSnapshot
@@ -83,6 +87,32 @@ class PlayerStatsRepository(private val context: Context) {
     }
 
     /** Persists GP and counting totals after week checkpoint commits official games ([MEGA-COACH-149]). */
+    suspend fun ingestCommittedSimMarks(
+        dynastyId: String,
+        seasonIndex: Int,
+        entriesByPlayerId: Map<String, List<PlayerGameLogEntry>>,
+    ) {
+        if (entriesByPlayerId.isEmpty()) return
+        val blob = loadBlob(dynastyId)
+        var gameLogs = blob.gameLogs
+        entriesByPlayerId.forEach { (playerId, incoming) ->
+            if (incoming.isEmpty()) return@forEach
+            val prior = gameLogs.firstOrNull { it.playerId == playerId && it.seasonIndex == seasonIndex }
+            val kept = prior?.entries?.filter { existing ->
+                incoming.none { it.gameKey == existing.gameKey }
+            }.orEmpty()
+            val combined = (kept + incoming).sortedByDescending { it.rsWeekIndex }
+            val record = PlayerGameLogRecord(
+                playerId = playerId,
+                seasonIndex = seasonIndex,
+                gamesPlayed = maxOf(prior?.gamesPlayed ?: 0, combined.size),
+                entries = combined,
+            )
+            gameLogs = gameLogs.filterNot { it.playerId == playerId && it.seasonIndex == seasonIndex } + record
+        }
+        persist(dynastyId, blob.copy(gameLogs = gameLogs))
+    }
+
     suspend fun persistSeasonStatsForRoster(
         dynastyId: String,
         seasonIndex: Int,
@@ -167,9 +197,25 @@ class PlayerStatsRepository(private val context: Context) {
         val existing = blob.gameLogs.firstOrNull {
             it.playerId == player.playerId && it.seasonIndex == seasonIndex
         }
+        val archived = existing?.entries.orEmpty()
         val entries = when {
-            existing != null && existing.gamesPlayed == gamesPlayed -> existing.entries
+            existing != null && existing.gamesPlayed == gamesPlayed && archived.isNotEmpty() ->
+                PlayerGameLogMerge.mergeForSeason(
+                    player = player,
+                    seasonIndex = seasonIndex,
+                    gamesPlayed = gamesPlayed,
+                    seasonTotals = totals,
+                    archived = archived,
+                )
             gamesPlayed <= 0 -> emptyList()
+            archived.any { it.fromSimArchive } ->
+                PlayerGameLogMerge.mergeForSeason(
+                    player = player,
+                    seasonIndex = seasonIndex,
+                    gamesPlayed = gamesPlayed,
+                    seasonTotals = totals,
+                    archived = archived,
+                )
             else -> PlayerGameLogSynth.buildLog(player, seasonIndex, gamesPlayed, totals)
         }
         val record = PlayerGameLogRecord(

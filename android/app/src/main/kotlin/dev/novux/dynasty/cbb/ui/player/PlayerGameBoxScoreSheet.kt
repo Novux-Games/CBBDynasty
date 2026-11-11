@@ -44,6 +44,13 @@ fun PlayerGameBoxScoreSheet(
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
             )
+            if (entry.fromSimArchive) {
+                Text(
+                    stringResource(R.string.player_box_score_sim_source),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
             Text(
                 stringResource(
                     R.string.player_box_score_matchup,

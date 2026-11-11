@@ -643,6 +643,7 @@
     <string name="player_box_score_team_score">Your team %1$d, %2$s %3$d (%4$s %5$s)</string>
     <string name="player_box_score_shooting">FG %1$d–%2$d · 3PT %3$d–%4$d · FT %5$d–%6$d</string>
     <string name="player_box_score_minutes">Minutes: %1$d</string>
+    <string name="player_box_score_sim_source">From sim box score</string>
     <string name="player_card_history_eligibility">Eligibility used %1$d · remaining %2$d</string>
     <string name="player_card_history_pipeline">Prior-season rows append after each season review.</string>
     <string name="player_card_history_season_line">%1$d GP · %.1f PPG · %.1f APG · %.1f RPG</string>

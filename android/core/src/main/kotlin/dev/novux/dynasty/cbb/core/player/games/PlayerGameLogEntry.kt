@@ -23,6 +23,7 @@ data class PlayerGameLogEntry(
     val freeThrowsMade: Int = 0,
     val freeThrowsAttempted: Int = 0,
     val minutes: Int = 0,
+    val fromSimArchive: Boolean = false,
 ) {
     val won: Boolean get() = teamScore > opponentScore
     val resultLabel: String get() = if (won) "W" else "L"

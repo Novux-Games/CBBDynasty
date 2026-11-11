@@ -17,6 +17,21 @@ data class PlayerCountingStats(
     val freeThrowsMade: Int = 0,
     val freeThrowsAttempted: Int = 0,
 ) {
+    fun minus(other: PlayerCountingStats): PlayerCountingStats = PlayerCountingStats(
+        points = (points - other.points).coerceAtLeast(0),
+        assists = (assists - other.assists).coerceAtLeast(0),
+        rebounds = (rebounds - other.rebounds).coerceAtLeast(0),
+        steals = (steals - other.steals).coerceAtLeast(0),
+        blocks = (blocks - other.blocks).coerceAtLeast(0),
+        turnovers = (turnovers - other.turnovers).coerceAtLeast(0),
+        fieldGoalsMade = (fieldGoalsMade - other.fieldGoalsMade).coerceAtLeast(0),
+        fieldGoalsAttempted = (fieldGoalsAttempted - other.fieldGoalsAttempted).coerceAtLeast(0),
+        threePointsMade = (threePointsMade - other.threePointsMade).coerceAtLeast(0),
+        threePointsAttempted = (threePointsAttempted - other.threePointsAttempted).coerceAtLeast(0),
+        freeThrowsMade = (freeThrowsMade - other.freeThrowsMade).coerceAtLeast(0),
+        freeThrowsAttempted = (freeThrowsAttempted - other.freeThrowsAttempted).coerceAtLeast(0),
+    )
+
     operator fun plus(other: PlayerCountingStats): PlayerCountingStats = PlayerCountingStats(
         points = points + other.points,
         assists = assists + other.assists,
