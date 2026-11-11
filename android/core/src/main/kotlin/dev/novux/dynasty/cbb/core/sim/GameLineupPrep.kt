@@ -14,6 +14,8 @@ data class GameSimParticipant(
     val offensiveRating: Int,
     val defensiveRating: Int,
     val targetMinutes: Int,
+    val logDisplayName: String = "",
+    val jerseyNumber: Int = 0,
 )
 
 data class GameSimRosterInput(
@@ -72,6 +74,8 @@ object GameLineupPrep {
                         offensiveRating = player.off,
                         defensiveRating = player.def,
                         targetMinutes = slotMinutes,
+                        logDisplayName = player.displayLabel(),
+                        jerseyNumber = SimJerseyNumber.fromPlayerId(id),
                     ),
                 )
             }
@@ -86,6 +90,8 @@ object GameLineupPrep {
                         offensiveRating = player.off,
                         defensiveRating = player.def,
                         targetMinutes = min,
+                        logDisplayName = player.displayLabel(),
+                        jerseyNumber = SimJerseyNumber.fromPlayerId(id),
                     ),
                 )
             }

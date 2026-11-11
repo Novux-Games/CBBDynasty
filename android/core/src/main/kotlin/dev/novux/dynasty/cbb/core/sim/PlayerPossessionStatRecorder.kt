@@ -17,8 +17,12 @@ object PlayerPossessionStatRecorder {
         foulStoppage: Boolean,
         blockedShot: Boolean = false,
         random: Random,
-    ) {
-        if (offenseFloor.isEmpty()) return
+    ): PossessionPlayerCredits {
+        if (offenseFloor.isEmpty()) return PossessionPlayerCredits()
+        var scorerId: String? = null
+        var assistId: String? = null
+        var rebounderId: String? = null
+        var freeThrowShooterId: String? = null
         val pts = after.points - before.points
         val fga = after.fieldGoalsAttempted - before.fieldGoalsAttempted
         val fgm = after.fieldGoalsMade - before.fieldGoalsMade
@@ -44,30 +48,45 @@ object PlayerPossessionStatRecorder {
 
         if (fga > 0) {
             val shooter = pickWeighted(offenseFloor, usageWeights, random)
+            scorerId = shooter
             val three = threeAtt > 0
             offenseLedger.addFieldGoalAttempt(shooter, three)
             if (fgm > 0) {
                 offenseLedger.addFieldGoalMake(shooter, pts, three)
                 val others = offenseFloor.filter { it != shooter }
                 if (others.isNotEmpty() && random.nextDouble() < 0.58) {
-                    offenseLedger.addAssist(pickWeighted(others, usageWeights, random))
+                    val assister = pickWeighted(others, usageWeights, random)
+                    assistId = assister
+                    offenseLedger.addAssist(assister)
                 }
             } else when {
                 blockedShot && defenseFloor.isNotEmpty() -> {
                     defenseLedger.addBlock(pickUniform(defenseFloor, random))
                 }
-                change == PossessionChange.OffenseRetainsOffensiveRebound ->
-                    offenseLedger.addOffensiveRebound(pickWeighted(offenseFloor, usageWeights, random))
+                change == PossessionChange.OffenseRetainsOffensiveRebound -> {
+                    val reb = pickWeighted(offenseFloor, usageWeights, random)
+                    rebounderId = reb
+                    offenseLedger.addOffensiveRebound(reb)
+                }
                 change == PossessionChange.DefenseTakesBall && defenseFloor.isNotEmpty() -> {
-                    defenseLedger.addDefensiveRebound(pickUniform(defenseFloor, random))
+                    val reb = pickUniform(defenseFloor, random)
+                    rebounderId = reb
+                    defenseLedger.addDefensiveRebound(reb)
                 }
             }
         }
 
         if (ftAttempts > 0) {
             val shooter = pickWeighted(offenseFloor, usageWeights, random)
+            freeThrowShooterId = shooter
             offenseLedger.addFreeThrows(shooter, ftMade, ftAttempts)
         }
+        return PossessionPlayerCredits(
+            scorerId = scorerId,
+            assistId = assistId,
+            rebounderId = rebounderId,
+            freeThrowShooterId = freeThrowShooterId,
+        )
     }
 
     private const val FREE_THROW_MAKE_RATE = 0.74

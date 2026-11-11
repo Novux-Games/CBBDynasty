@@ -191,6 +191,7 @@ object PossessionSimEngine {
         blockedShot: Boolean = false,
         foulOnBlock: Boolean = false,
         shootingFoul: Boolean = false,
+        playerAttribution: String? = null,
     ): String {
         val clock = formatClock(clockRemaining)
         val pointsScored = after.points - before.points
@@ -215,7 +216,8 @@ object PossessionSimEngine {
         val foulSuffix = foulNote?.let { " | $it" }.orEmpty()
         val lateSuffix = lateGameTag?.let { " | $it" }.orEmpty()
         val phaseSuffix = subPhaseChain?.let { " | $it" }.orEmpty()
-        return "$clock | $offense | ${used}s trip | SC $shotClockBefore→$shotClockAfter | $scoreLine$foulSuffix$lateSuffix$phaseSuffix"
+        val playerSuffix = playerAttribution?.let { " | $it" }.orEmpty()
+        return "$clock | $offense | ${used}s trip | SC $shotClockBefore→$shotClockAfter | $scoreLine$playerSuffix$foulSuffix$lateSuffix$phaseSuffix"
     }
 
     private fun formatClock(seconds: Int): String {

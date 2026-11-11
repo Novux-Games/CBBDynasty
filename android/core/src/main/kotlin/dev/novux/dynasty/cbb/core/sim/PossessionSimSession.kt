@@ -221,7 +221,7 @@ class PossessionSimSession(
         val offenseLedger = if (offenseHome) homePlayerLedger else awayPlayerLedger
         val defenseLedger = if (offenseHome) awayPlayerLedger else homePlayerLedger
         val usageWeights = offGameplan?.usageWeights.orEmpty()
-        PlayerPossessionStatRecorder.record(
+        val playerCredits = PlayerPossessionStatRecorder.record(
             offenseLedger = offenseLedger,
             defenseLedger = defenseLedger,
             offenseFloor = offenseFloor,
@@ -234,6 +234,17 @@ class PossessionSimSession(
             foulStoppage = foulStoppage || resolution.foulOnBlock,
             blockedShot = resolution.blockedShot,
             random = random,
+        )
+        val offenseRoster = if (offenseHome) input.homeRoster else input.awayRoster
+        val defenseRoster = if (offenseHome) input.awayRoster else input.homeRoster
+        val playerAttribution = PossessionLogPlayerLabel.format(
+            credits = playerCredits,
+            offenseRoster = offenseRoster,
+            defenseRoster = defenseRoster,
+            before = sides.box,
+            after = offenseBoxAfter,
+            change = resolution.change,
+            blockedShot = resolution.blockedShot,
         )
         if (offenseHome) {
             homeBox = offenseBoxAfter
@@ -287,6 +298,7 @@ class PossessionSimSession(
             blockedShot = resolution.blockedShot,
             foulOnBlock = resolution.foulOnBlock,
             shootingFoul = resolution.shootingFoul,
+            playerAttribution = playerAttribution,
         )
         log += line
         newInjuryLines.forEach { log += it }

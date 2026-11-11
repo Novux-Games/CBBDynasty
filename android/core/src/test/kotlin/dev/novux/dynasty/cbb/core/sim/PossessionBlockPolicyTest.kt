@@ -64,7 +64,7 @@ class PossessionBlockPolicyTest {
         val defenseLedger = PlayerBoxScoreLedger(listOf("d1"))
         val before = TeamBoxScore(teamId = "home")
         val after = before.copy(fieldGoalsAttempted = 1)
-        PlayerPossessionStatRecorder.record(
+        val _credits = PlayerPossessionStatRecorder.record(
             offenseLedger = offenseLedger,
             defenseLedger = defenseLedger,
             offenseFloor = listOf("o1"),
