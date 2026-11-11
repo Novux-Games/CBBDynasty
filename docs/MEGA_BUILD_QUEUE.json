@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-GDD-109",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
     "id": "MEGA-GDD-111",
     "pri": "P0",
     "status": "FAIL",
@@ -119,13 +112,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md"
   },
   {
-    "id": "MEGA-RECR-001",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
     "id": "MEGA-RECR-002",
     "pri": "P0",
     "status": "FAIL",
@@ -190,13 +176,6 @@
   },
   {
     "id": "MEGA-RECR-100",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-133",
     "pri": "P0",
     "status": "FAIL",
     "shard": "recruiting-transfer-start.md",

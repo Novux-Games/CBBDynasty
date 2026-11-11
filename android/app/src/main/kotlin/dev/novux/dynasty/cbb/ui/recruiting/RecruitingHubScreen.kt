@@ -44,7 +44,7 @@ import dev.novux.dynasty.cbb.core.portal.PortalEntrant
 import dev.novux.dynasty.cbb.core.portal.PortalRecruitingHub
 import dev.novux.dynasty.cbb.core.recruiting.HsJucoBoard
 import dev.novux.dynasty.cbb.core.recruiting.HsJucoRecruitBoard
-import dev.novux.dynasty.cbb.core.recruiting.RecruitingClassSeed
+import dev.novux.dynasty.cbb.core.recruiting.RecruitProspect
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
@@ -131,6 +131,7 @@ fun RecruitingHubScreen(
         schoolHomeState = "OH",
         nilPoolAnnualUsd = (nilBasePoolUsd + nilBoostUsd).toInt(),
     )
+    var recruitingPool by remember { mutableStateOf<List<RecruitProspect>?>(null) }
     var hsJucoBoard by remember { mutableStateOf<HsJucoBoard?>(null) }
     var hsTop60 by remember { mutableStateOf<List<NationalRankRow>>(emptyList()) }
     var hsPoolReady by remember { mutableStateOf(false) }
@@ -143,8 +144,8 @@ fun RecruitingHubScreen(
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
         hsPoolReady = false
-        val pool = incomingClassSeedRepository.loadPool(loaded.dynastyId, loaded.metadata.seasonIndex)
-            ?: RecruitingClassSeed.demoPool(loaded.metadata.seasonIndex)
+        val pool = incomingClassSeedRepository.ensurePool(loaded.dynastyId, loaded.metadata.seasonIndex)
+        recruitingPool = pool
         hsJucoBoard = HsJucoRecruitBoard.partition(pool)
         hsTop60 = NationalRecruitingRankings.top60FromPool(pool)
         hsPoolReady = true
@@ -166,10 +167,17 @@ fun RecruitingHubScreen(
         }
     }
 
-    val recommendedRows = remember(loaded.metadata.seasonIndex, schoolContext, recommendedConfig, offerSnapshot, nilRules) {
+    val recommendedRows = remember(
+        recruitingPool,
+        schoolContext,
+        recommendedConfig,
+        offerSnapshot,
+        nilRules,
+    ) {
+        val pool = recruitingPool ?: return@remember emptyList()
         val ctx = schoolContext ?: return@remember emptyList()
         RecommendedRecruitList.build(
-            RecruitingClassSeed.demoPool(loaded.metadata.seasonIndex),
+            pool,
             ctx,
             recommendedConfig,
             nilOffersByProspect = offerSnapshot,

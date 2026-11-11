@@ -15,7 +15,9 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitPriority
 import dev.novux.dynasty.cbb.core.recruiting.RecruitProspect
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.signingday.NationalRecruitingRankings
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 
 private val Context.incomingClassSeedStore: DataStore<Preferences> by preferencesDataStore(
     name = "incoming_class_seed",
@@ -31,6 +33,13 @@ class IncomingClassSeedRepository(private val context: Context) {
         return decodePool(raw)
     }
 
+    /** Loads the persisted enrolling class or generates and persists it when missing. */
+    suspend fun ensurePool(dynastyId: String, seasonIndex: Int): List<RecruitProspect> {
+        loadPool(dynastyId, seasonIndex)?.let { return it }
+        runSeed(dynastyId, seasonIndex)
+        return checkNotNull(loadPool(dynastyId, seasonIndex))
+    }
+
     suspend fun loadHeadline(dynastyId: String, seasonIndex: Int): Top60NewsHeadline? {
         val pool = loadPool(dynastyId, seasonIndex) ?: return null
         val headline = context.incomingClassSeedStore.data.first()[headlineKey(dynastyId, seasonIndex)]
@@ -43,10 +52,12 @@ class IncomingClassSeedRepository(private val context: Context) {
     }
 
     suspend fun runSeed(dynastyId: String, seasonIndex: Int): Top60NewsHeadline {
-        val pool = IncomingClassSeeder.seed(
-            enrollingSeasonIndex = seasonIndex,
-            seedKey = dynastyId.hashCode().toLong(),
-        )
+        val pool = withContext(Dispatchers.Default) {
+            IncomingClassSeeder.seed(
+                enrollingSeasonIndex = seasonIndex,
+                seedKey = dynastyId.hashCode().toLong(),
+            )
+        }
         val news = Top60NewsPublisher.publish(seasonIndex, pool)
         context.incomingClassSeedStore.edit { prefs ->
             prefs[seededKey(dynastyId, seasonIndex)] = true

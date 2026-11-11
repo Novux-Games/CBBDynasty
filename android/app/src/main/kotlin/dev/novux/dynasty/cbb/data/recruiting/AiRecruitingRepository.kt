@@ -12,7 +12,7 @@ import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingEconomy
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
-import dev.novux.dynasty.cbb.core.recruiting.RecruitingClassSeed
+import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
@@ -30,6 +30,7 @@ class AiRecruitingRepository(
     private val context: Context,
     private val nilAnnualPoolRepository: dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository,
     private val dynastyAutomationRepository: dev.novux.dynasty.cbb.data.settings.DynastyAutomationRepository,
+    private val incomingClassSeedRepository: IncomingClassSeedRepository,
 ) {
     suspend fun runLeagueWeekIfActive(
         dynasty: LoadedDynasty,
@@ -40,7 +41,7 @@ class AiRecruitingRepository(
         if (position.phase == CalendarPhase.SeasonReview) return null
         val economy = economyFrom(dynasty)
         val recommended = BalanceRecruitingRecommendedParser.parse(dynasty.balanceRuleset.recruiting)
-        val pool = RecruitingClassSeed.demoPool(dynasty.metadata.seasonIndex)
+        val pool = incomingClassSeedRepository.ensurePool(dynasty.dynastyId, dynasty.metadata.seasonIndex)
         val userProgramId = userProgramId(dynasty.dynastyId)
         val userSchool = nilAnnualPoolRepository.userSchoolRecruitingContext(dynasty)
             ?: SchoolRecruitingContext(

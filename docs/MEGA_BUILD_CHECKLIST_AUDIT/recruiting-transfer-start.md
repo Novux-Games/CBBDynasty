@@ -16,7 +16,7 @@
 | MEGA-RECR-002 | P0 | FAIL | Star percentiles within pool | Stars assigned by **list index order**, not by sorting on `hiddenRating` percentiles. Top 60 order uses hidden rating, but star labels disagree with spec bands. | `IncomingClassSeeder.generatePool` |
 | MEGA-RECR-003 | P1 | FAIL | JUCO 5★ = top 2% | JUCO uses `jucoBias && pct < 0.01` (~1% 5★), not 2%. | `IncomingClassSeeder.starBand` |
 | MEGA-RECR-004 | P1 | FAIL | 3★ = 20–50% band | 3★ cutoff at `pct < 0.45` (30% band after 4★), not 50%. | `IncomingClassSeeder.starBand` |
-| MEGA-RECR-005 | P0 | FAIL | Single persisted class pool | Runtime hub, AI, sim-week, signing load **`RecruitingClassSeed.demoPool` (120)** instead of `IncomingClassSeedRepository.loadPool`. | `RecruitingHubScreen.kt`, `AiRecruitingRepository.kt`, `SaveSlotRepository.buildSimWeekAdvanceInputSuspended`, `SigningDayRepository.kt` |
+| MEGA-RECR-005 | P0 | PARTIAL | Single persisted class pool | Hub, AI, signing use `ensurePool`; sim-week estimate still `demoPool`. | `IncomingClassSeedRepository.kt`, `SaveSlotRepository.kt` |
 | MEGA-RECR-006 | P0 | FAIL | Top 60 fixed at seed | `demoPool` sets `nationalHsRank` from index (`index < 60`), not hidden-rating national order across HS+JUCO. | `RecruitingClassSeed.kt` |
 | MEGA-RECR-007 | P1 | GAP | Top 60 HS+JUCO combined | Seeder ranks combined pool correctly when used; most UI paths never load that persisted pool. | `IncomingClassSeedRepository` vs hub |
 | MEGA-RECR-008 | P1 | FAIL | News / signing fallback | `NationalRecruitingRankings.top60(season)` always builds from `demoPool`, not dynasty seed. | `NationalRecruitingRankings.kt` |
@@ -95,7 +95,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-049 | P1 | FAIL | Signing rankings data source | `SigningDayScreen` uses seeded pool when `loadPool` succeeds, but **`SigningDayRepository.loadIncomingClass` uses demoPool** for hard sign class — split brain. | `SigningDayScreen.kt` vs `SigningDayRepository.kt` |
+| MEGA-RECR-049 | P1 | PASS | Signing rankings data source | Screen rankings and `loadIncomingClass` both use persisted `ensurePool`. | `SigningDayRepository.kt` |
 | MEGA-RECR-050 | P1 | GAP | Position editor Signing Day | Tab exists; bulk position edit engine partial — verify against `SigningDayScreen` positions tab. | `ui/signingday` |
 | MEGA-RECR-051 | P1 | GAP | Cycle close after hard sign | `closeCycleAfterHardSign` on confirm — wired from screen; ensure advance from OS W6 respects closed hub. | `SigningDayScreen` |
 | MEGA-RECR-052 | P1 | GAP | Preseason Incoming Class Seed | Manual panel seeds 3900-player pool — PASS when user completes task; **not auto** on new dynasty before season. | `IncomingClassSeedPanel` |
@@ -305,7 +305,7 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-153 | P1 | FAIL | User school prestige in AI week | `AiRecruitingRepository` falls back `DEFAULT_PROGRAM_PRESTIGE` when `userSchoolRecruitingContext` null; same bug as RECR-015/068. | `AiRecruitingRepository.kt` |
-| MEGA-RECR-154 | P1 | FAIL | AI pool = demo 120 | `runLeagueWeekIfActive` passes `RecruitingClassSeed.demoPool` — league Recommended not on national scale. | `AiRecruitingRepository.kt` |
+| MEGA-RECR-154 | P1 | PASS | AI pool = persisted class | `runLeagueWeekIfActive` uses `ensurePool` for full national class. | `AiRecruitingRepository.kt` |
 | MEGA-RECR-155 | P2 | GAP | AI influence / commits headline | `AiRecruitingWeekRunner` processes programs; News commit headlines from AI not traced in audit paths. | core `ai` package |
 | MEGA-RECR-156 | P2 | GAP | AI portal slice | Runner HS/JUCO Recommended only — portal entrants excluded (RECR-067). | `AiRecruitingWeekRunner` |
 | MEGA-RECR-157 | P2 | PASS | Auto-maintain flag | Respects `automation.recruitingAutoMaintain` when hub open — PASS. | `AiRecruitingRepository` |

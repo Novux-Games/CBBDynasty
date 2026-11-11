@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import dev.novux.dynasty.cbb.core.recruiting.RecruitingClassSeed
+import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingWeekReservation
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.signingday.IncomingSignee
@@ -24,6 +24,7 @@ class SigningDayRepository(
     private val context: Context,
     private val reservationRepository: RecruitingReservationRepository,
     private val nilBudgetRepository: NilBudgetRepository,
+    private val incomingClassSeedRepository: IncomingClassSeedRepository,
 ) {
     suspend fun loadProgress(dynastyId: String, cycleSeasonIndex: Int): SigningDayProgress {
         val raw = context.signingDayStore.data.first()[progressKey(dynastyId)] ?: return SigningDayProgress(cycleSeasonIndex)
@@ -65,7 +66,7 @@ class SigningDayRepository(
     ): List<IncomingSignee> {
         val activeReservations =
             reservations.ifEmpty { reservationRepository.loadActive(dynastyId) }
-        val pool = RecruitingClassSeed.demoPool(seasonIndex)
+        val pool = incomingClassSeedRepository.ensurePool(dynastyId, seasonIndex)
         val base = SigningDaySoftCommitResolver.incomingFromOffers(pool, activeReservations)
         val overrides = loadPositionOverrides(dynastyId)
         return base.map { signee ->
