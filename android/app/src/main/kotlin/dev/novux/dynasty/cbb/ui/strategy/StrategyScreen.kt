@@ -31,6 +31,7 @@ import dev.novux.dynasty.cbb.core.lineup.RotationMinutesBalancer
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.sim.GameLineupPrep
+import dev.novux.dynasty.cbb.core.sim.GameLineupPrepValidator
 import dev.novux.dynasty.cbb.core.strategy.DefensiveAssignmentPolicy
 import dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset
 import dev.novux.dynasty.cbb.core.strategy.GameplanInput
@@ -72,6 +73,10 @@ fun StrategyScreen(
             rotationMinutes = RotationMinutesBalancer.baseline(players, starters)
         }
     }
+    val lineupValidation = remember(players, starters) {
+        GameLineupPrepValidator.validate(players, starters)
+    }
+
     LaunchedEffect(starters.values) {
         if (gameplan.usageWeights.isEmpty() && starters.isNotEmpty()) {
             gameplan = gameplan.copy(
@@ -154,7 +159,15 @@ fun StrategyScreen(
             halftimeGameplan = halftimeGameplan,
             onHalftimeChange = { halftimeGameplan = it },
         )
+        if (!lineupValidation.canStartSim) {
+            Text(
+                text = stringResource(R.string.strategy_lineup_sim_blocked),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.error,
+            )
+        }
         Button(
+            enabled = lineupValidation.canStartSim,
             onClick = {
                 val normalizedRotation = RotationMinutesBalancer.normalize(rotationMinutes)
                 rotationMinutes = normalizedRotation

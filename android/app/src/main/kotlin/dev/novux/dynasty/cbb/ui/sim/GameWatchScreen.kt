@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.sim.GameLineupPrep
+import dev.novux.dynasty.cbb.core.sim.GameLineupPrepValidator
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.sim.GameSimInput
@@ -129,6 +130,14 @@ fun GameWatchScreen(
     }
 
     LaunchedEffect(baseInput) {
+        if (homeRosterPlayers.isNotEmpty()) {
+            val validation = GameLineupPrepValidator.validate(homeRosterPlayers, homeStarters)
+            if (!validation.canStartSim) {
+                watchInProgress = false
+                scoreLine = context.getString(R.string.strategy_lineup_sim_blocked)
+                return@LaunchedEffect
+            }
+        }
         scoreLine = context.getString(R.string.game_watch_score_start)
         val result = GameWatchPlayback.watch(
             input = baseInput,

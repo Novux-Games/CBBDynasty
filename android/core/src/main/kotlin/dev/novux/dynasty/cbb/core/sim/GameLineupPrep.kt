@@ -41,6 +41,10 @@ object GameLineupPrep {
         userStarters: Map<PlayerPosition, String>? = null,
         userRotationMinutes: Map<String, Int>? = null,
     ): GameSimRosterInput {
+        val validation = GameLineupPrepValidator.validate(players, userStarters)
+        require(validation.canStartSim) {
+            "Cannot build sim roster: missing=${validation.missingSlots}, illegal=${validation.illegalAssignments}"
+        }
         val eligible = players.filter { RotationMinutesAllocator.isLineupEligible(it) }
         val starters = resolveStarters(eligible, userStarters)
         val minutes = RotationMinutesBalancer.resolveForSim(players, starters, userRotationMinutes)

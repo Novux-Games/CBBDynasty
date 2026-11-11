@@ -297,8 +297,8 @@
 
 | ID | Pri | Status | Requirement (spec) | Code / test | Finding |
 |----|-----|--------|-------------------|-------------|---------|
-| MEGA-SIM-165 | P0 | FAIL | **Cannot start sim** with empty starter slot or illegal interchange | `GameLineupPrep`, watch launch | Sim may run with gaps |
-| MEGA-SIM-166 | P1 | FAIL | Engine **`slotEligible`** re-validates prep at sim entry | `LineupSlotPolicy` | Tests on prep; watch may bypass |
+| MEGA-SIM-165 | P0 | PASS | **Cannot start sim** with empty starter slot or illegal interchange | `GameLineupPrepValidator`, Strategy + watch gate | `build` requires valid five; watch blocked |
+| MEGA-SIM-166 | P1 | PASS | Engine **`slotEligible`** re-validates prep at sim entry | `GameLineupPrepValidator` + `LineupSlotPolicy` | Validated before `build` and on watch launch |
 | MEGA-SIM-167 | P1 | FAIL | **Listed-position ratings in slot played** per possession | MEGA-SIM-022 | Team aggregate ratings |
 | MEGA-SIM-168 | P2 | FAIL | **Position comfort** nudge from tuning without OVR order flip | `positions-and-lineup.md` | Not consumed |
 | MEGA-SIM-169 | P1 | FAIL | **Height/weight/shooting** struct on `GameSimParticipant` | MEGA-SIM-021 | Incomplete participant model |

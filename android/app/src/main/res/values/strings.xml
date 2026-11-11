@@ -650,6 +650,7 @@
     <string name="strategy_rotation_budget_over">%1$d minutes over the cap — trim rotation or balance.</string>
     <string name="strategy_rotation_balance_action">Balance to 200 minutes</string>
     <string name="strategy_watch_scrimmage">Watch scrimmage (2s pace)</string>
+    <string name="strategy_lineup_sim_blocked">Set a legal starting five before simming. Fill every slot (PG–C) with eligible players and valid position swaps.</string>
     <string name="game_watch_title">Live sim</string>
     <string name="game_watch_subtitle">%1$s vs %2$s</string>
     <string name="game_watch_score_start">Tip-off</string>
