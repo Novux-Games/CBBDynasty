@@ -22,4 +22,31 @@ class RecruitingHubDefaultsTest {
         assertTrue(RecruitingCyclePolicy.hubAccessible(CalendarPhase.Offseason, offseasonWeekIndex = 2))
         assertEquals(false, RecruitingCyclePolicy.hubAccessible(CalendarPhase.Offseason, offseasonWeekIndex = 1))
     }
+
+    @Test
+    fun hubNavigable_blocksWhenCycleClosed() {
+        assertTrue(
+            RecruitingCyclePolicy.hubNavigable(
+                CalendarPhase.Offseason,
+                offseasonWeekIndex = 7,
+                cycleClosed = false,
+            ),
+        )
+        assertEquals(
+            false,
+            RecruitingCyclePolicy.hubNavigable(
+                CalendarPhase.Offseason,
+                offseasonWeekIndex = 7,
+                cycleClosed = true,
+            ),
+        )
+        assertEquals(
+            false,
+            RecruitingCyclePolicy.hubNavigable(
+                CalendarPhase.Preseason,
+                offseasonWeekIndex = null,
+                cycleClosed = true,
+            ),
+        )
+    }
 }

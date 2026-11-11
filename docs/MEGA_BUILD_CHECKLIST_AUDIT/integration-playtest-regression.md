@@ -99,7 +99,7 @@
 | MEGA-QA-049 | P2 | DEV | OPEN | Game watch back stack | Calendar game → Watch → back | Calendar tab selected | `GameWatchScreen` |
 | MEGA-QA-050 | P1 | DEV | OPEN | Discipline overlay route | Pending discipline intercept | Decision screen; back blocked until resolved | `DisciplineDecisionScreen` |
 | MEGA-QA-051 | P2 | DEV | OPEN | Rankings hub from menu | Hamburger → Rankings | `RankingsHubRouteScreen`; back to prior | `AppRoute.RankingsHub` |
-| MEGA-QA-052 | P0 | DEV | FAIL | Recruiting after cycle closed | Offseason W7+ hamburger Recruiting | Hidden or “cycle closed” — not placeholder hub | MEGA-FRAME-090 |
+| MEGA-QA-052 | P0 | DEV | PASS | Recruiting after cycle closed | Offseason W7+ hamburger Recruiting | Hidden or “cycle closed” — not placeholder hub | `buildDynastyHubMenu`, `RecruitingCycleClosedBody` |
 | MEGA-QA-053 | P2 | DEV | OPEN | School hub stack | School hub → staff drilldown → back | Single pop per level | `SchoolHubRouteScreen` |
 | MEGA-QA-054 | P2 | DEV | OPEN | Exit dynasty home | Hub menu Exit | `popBackStack(Home)`; session cleared | `onExitHome` |
 | MEGA-QA-055 | P1 | DEV | OPEN | Preseason as separate route | Complete offseason → preseason | `PreseasonScreen` route; not trapped in offseason composable | `DynastyApp.kt` |

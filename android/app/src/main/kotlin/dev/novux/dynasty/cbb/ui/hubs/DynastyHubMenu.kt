@@ -1,8 +1,10 @@
 package dev.novux.dynasty.cbb.ui.hubs
 
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.hubs.DynastyHubMenuPolicy
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
 
 data class DynastyHubMenuCallbacks(
@@ -22,12 +24,25 @@ data class DynastyHubMenuCallbacks(
 fun buildDynastyHubMenu(
     position: CalendarPosition,
     callbacks: DynastyHubMenuCallbacks,
+    recruitingCycleClosed: Boolean = false,
+    onRecruitingCycleClosed: () -> Unit = {},
     leadingExtras: List<DynastyShellMenuAction> = emptyList(),
     trailingExtras: List<DynastyShellMenuAction> = emptyList(),
 ): List<DynastyShellMenuAction> {
+    val offseasonWeek = position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason }
     val core = buildList {
         add(DynastyShellMenuAction(R.string.school_hub_open, callbacks.onOpenSchool))
-        add(DynastyShellMenuAction(R.string.shell_menu_recruiting_hub, callbacks.onOpenRecruiting))
+        when {
+            RecruitingCyclePolicy.hubNavigable(position.phase, offseasonWeek, recruitingCycleClosed) ->
+                add(DynastyShellMenuAction(R.string.shell_menu_recruiting_hub, callbacks.onOpenRecruiting))
+            recruitingCycleClosed &&
+                RecruitingCyclePolicy.hubAccessible(position.phase, offseasonWeek) ->
+                add(
+                    DynastyShellMenuAction(R.string.shell_menu_recruiting_closed) {
+                        onRecruitingCycleClosed()
+                    },
+                )
+        }
         add(DynastyShellMenuAction(R.string.dynasty_shell_open_strategy, callbacks.onOpenStrategy))
         add(DynastyShellMenuAction(R.string.shell_menu_statistics_hub, callbacks.onOpenStatistics))
         add(DynastyShellMenuAction(R.string.shell_menu_rankings_hub, callbacks.onOpenRankings))

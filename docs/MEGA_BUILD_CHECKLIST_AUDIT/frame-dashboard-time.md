@@ -170,7 +170,7 @@
 | MEGA-FRAME-087 | GAP | **Bug: tasks disappear (dual list)** | Same incomplete preseason tasks render in **both** `DashboardRequiredTasksPanel` and `LazyColumn`; completing one surface removes required cards but lazy rows remain — inconsistent | `PreseasonScreen.kt` |
 | MEGA-FRAME-088 | GAP | **Bug: tasks disappear (spurious complete)** | Generic **Complete** on preseason rows calls `completeTask` without opening rankings / coach tree / workouts — task vanishes from required set with no wired action | `PreseasonScreen.kt` `OutlinedButton` + `PreseasonProgressRepository` |
 | MEGA-FRAME-089 | GAP | **Bug: recruiting UI after Signing Day** | Offseason **Weeks 7–10** still show **Open Recruiting hub** CTA when `hubAccessible` (week ≥ 2); spec Week 6 **closes cycle** — administration weeks feel like portal crunch | `OffseasonScreen.kt`, `RecruitingCyclePolicy.hubAccessible` |
-| MEGA-FRAME-090 | GAP | **Bug: recruiting between signing & preseason** | Hamburger **Recruiting** not gated on `RecruitingCycleLedger.cycleClosed`; user routed to hub/placeholder between hard sign and preseason | `buildDynastyHubMenu`, `DynastyHubMenuCallbacks` |
+| MEGA-FRAME-090 | PASS | **Bug: recruiting between signing & preseason** | Hamburger **Recruiting** gated on `cycleClosed` — closed label + toast or `RecruitingCycleClosedBody` on route | `buildDynastyHubMenu`, `RecruitingCyclePolicy.hubNavigable` |
 | MEGA-FRAME-091 | PASS | Sim week advance loading UX | Advance button and confirm dialog show spinner + disable while suspend advance runs | `DynastyShellScreen.kt`, `OffseasonScreen.kt` |
 | MEGA-FRAME-092 | PASS | Sim week confirm loading UX | Dialog confirm shows spinner; dismiss blocked while advancing | `SimWeekAdvanceDialog.kt` |
 | MEGA-FRAME-093 | GAP | **Bug: sim week lag (pre-dialog)** | `buildSimWeekAdvanceConfirmation` loads ledger + builds AI estimate **synchronously** on first tap — perceived lag **before** dialog appears | `SaveSlotRepository.buildSimWeekAdvanceInputSuspended` |
@@ -285,7 +285,7 @@
 |----|--------|--------------|---------|--------------|
 | MEGA-FRAME-154 | GAP | Offseason/preseason notification feed | `DashboardNotificationFeedPanel` **in-season only** — offseason/preseason miss in-app injury/commit nudges on home tab | `DynastyShellScreen.kt` vs phase routes |
 | MEGA-FRAME-155 | PARTIAL | Session refresh after advance | `ActiveDynastySession.set` on success — child tabs may stale until manual recomposition triggers | Shell `loaded` state |
-| MEGA-FRAME-156 | GAP | Hub Recruiting when cycle closed | Menu item still listed — should gray out or explain **Signing Day administration** | `DynastyHubMenuPolicy`, economy `cycleClosed` |
+| MEGA-FRAME-156 | PASS | Hub Recruiting when cycle closed | Menu shows **Recruiting (cycle closed)** with explanation toast when ledger `cycleClosed` | `buildDynastyHubMenu`, `notifyRecruitingCycleClosed` |
 | MEGA-FRAME-157 | SHIP | No Advance day control | Reconfirmed — no day-advance UI anywhere in shell/offseason/preseason | repo grep |
 | MEGA-FRAME-158 | GAP | Checkpoint transparency | Week advance commits save — **no** “Week saved” / sync indicator after long advance | UX gap tied to MEGA-FRAME-091 |
 

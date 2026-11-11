@@ -57,8 +57,10 @@ import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
 import dev.novux.dynasty.cbb.ui.hubs.buildDynastyHubMenu
+import dev.novux.dynasty.cbb.ui.hubs.notifyRecruitingCycleClosed
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
@@ -88,8 +90,11 @@ fun PreseasonScreen(
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     var fullScreenPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
+    var recruitingLedger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
     val context = LocalContext.current
-    val playerStatsRepository = context.requireDynastyApplication().playerStatsRepository
+    val app = context.requireDynastyApplication()
+    val playerStatsRepository = app.playerStatsRepository
+    val recruitingEconomyRepository = app.recruitingEconomyRepository
     val scope = rememberCoroutineScope()
     val position = loaded.weekCheckpoint.activePosition
 
@@ -100,11 +105,18 @@ fun PreseasonScreen(
             loaded.metadata.seasonIndex,
         )
         fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
+        recruitingLedger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
     }
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val phaseLabel = CalendarWeekLabel.display(position)
-    val menu = buildDynastyHubMenu(position, hubMenuCallbacks)
+    val recruitingCycleClosed = recruitingLedger?.cycleClosed == true
+    val menu = buildDynastyHubMenu(
+        position = position,
+        callbacks = hubMenuCallbacks,
+        recruitingCycleClosed = recruitingCycleClosed,
+        onRecruitingCycleClosed = { notifyRecruitingCycleClosed(context) },
+    )
 
     PlayerCardPreviewSheet(
         player = cardPlayer,

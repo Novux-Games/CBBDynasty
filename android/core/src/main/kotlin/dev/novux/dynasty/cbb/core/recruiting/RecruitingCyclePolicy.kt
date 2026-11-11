@@ -20,6 +20,13 @@ object RecruitingCyclePolicy {
             in inSeasonPhases -> true
             else -> false
         }
+
+    /** Full recruiting hub (chasing/spend) — blocked after hard sign closes the cycle ([MEGA-FRAME-090]). */
+    fun hubNavigable(
+        phase: CalendarPhase,
+        offseasonWeekIndex: Int? = null,
+        cycleClosed: Boolean,
+    ): Boolean = hubAccessible(phase, offseasonWeekIndex) && !cycleClosed
 }
 
 enum class RecruitingHubTab {

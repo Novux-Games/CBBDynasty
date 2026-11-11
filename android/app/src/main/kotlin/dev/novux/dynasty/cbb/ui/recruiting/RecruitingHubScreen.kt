@@ -105,7 +105,8 @@ fun RecruitingHubScreen(
     }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, gateRefresh) {
-        ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+        val loadedLedger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+        ledger = loadedLedger
         nilBoostUsd = weekNineRepository?.nilPoolBoostUsd(loaded.dynastyId, loaded.metadata.seasonIndex) ?: 0
         nilBasePoolUsd = nilAnnualPoolRepository.cycleBasePoolUsd(loaded)
         val poolUsd = nilBasePoolUsd + nilBoostUsd
@@ -223,6 +224,11 @@ fun RecruitingHubScreen(
             nilRules = nilRules,
             spendDeltaByProspect = interestSpendByProspect,
         )
+    }
+
+    if (ledger?.cycleClosed == true) {
+        RecruitingCycleClosedBody(onBack = onBack)
+        return
     }
 
     Column(

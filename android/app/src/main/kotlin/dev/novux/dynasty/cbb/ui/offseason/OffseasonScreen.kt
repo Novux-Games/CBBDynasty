@@ -65,6 +65,7 @@ import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
 import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
 import dev.novux.dynasty.cbb.ui.hubs.buildDynastyHubMenu
+import dev.novux.dynasty.cbb.ui.hubs.notifyRecruitingCycleClosed
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
@@ -145,7 +146,13 @@ fun OffseasonScreen(
     }
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
-    val menu = buildDynastyHubMenu(position, hubMenuCallbacks)
+    val recruitingCycleClosed = ledger?.cycleClosed == true
+    val menu = buildDynastyHubMenu(
+        position = position,
+        callbacks = hubMenuCallbacks,
+        recruitingCycleClosed = recruitingCycleClosed,
+        onRecruitingCycleClosed = { notifyRecruitingCycleClosed(context) },
+    )
 
     PlayerCardPreviewSheet(
         player = cardPlayer,
@@ -294,7 +301,8 @@ fun OffseasonScreen(
             }
         }
 
-        if (RecruitingCyclePolicy.hubAccessible(position.phase, position.weekIndex.takeIf { inOffseason })) {
+        val offseasonWeek = position.weekIndex.takeIf { inOffseason }
+        if (RecruitingCyclePolicy.hubNavigable(position.phase, offseasonWeek, recruitingCycleClosed)) {
             OutlinedButton(
                 onClick = { onOpenRecruiting(RecruitingHubTab.Recommended) },
                 modifier = Modifier.fillMaxWidth(),

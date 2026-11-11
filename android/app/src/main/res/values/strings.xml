@@ -686,6 +686,8 @@
     <string name="news_hub_draft_empty">Draft results publish in offseason week 2 after the pro day.</string>
     <string name="news_hub_draft_row">%1$s · %2$s — %3$s</string>
     <string name="shell_menu_recruiting_hub">Recruiting</string>
+    <string name="shell_menu_recruiting_closed">Recruiting (cycle closed)</string>
+    <string name="recruiting_cycle_closed_body">Recruiting is closed for this cycle after Signing Day. Finish offseason administration and preseason setup; the next class opens in the next offseason.</string>
     <string name="shell_menu_statistics_hub">Statistics</string>
     <string name="shell_menu_rankings_hub">Rankings</string>
     <string name="shell_menu_history_hub">History</string>

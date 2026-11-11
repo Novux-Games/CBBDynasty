@@ -102,8 +102,10 @@ import dev.novux.dynasty.cbb.ui.school.SchoolHubScreen
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
 import dev.novux.dynasty.cbb.ui.hubs.buildDynastyHubMenu
+import dev.novux.dynasty.cbb.ui.hubs.notifyRecruitingCycleClosed
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTab
@@ -191,8 +193,10 @@ fun DynastyShellScreen(
     var careerModal by remember { mutableStateOf<NotificationFeedItem?>(null) }
     var coachPreviewTarget by remember { mutableStateOf<CoachPreviewTarget?>(null) }
     var coachEmploymentStatus by remember { mutableStateOf(CoachEmploymentStatus.Employed) }
+    var recruitingLedger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
     val coachPreviewSheetState = rememberCoachPreviewSheetState()
     val scope = rememberCoroutineScope()
+    val recruitingEconomyRepository = context.requireDynastyApplication().recruitingEconomyRepository
     val medicalRules = remember { BalanceMedicalRedshirtRules() }
     val position = loaded.weekCheckpoint.activePosition
     val dashboardTasks = DashboardTaskGate.inSeason(
@@ -208,6 +212,10 @@ fun DynastyShellScreen(
 
     LaunchedEffect(loaded.dynastyId) {
         coachEmploymentStatus = coachEmploymentRepository.loadState(loaded.dynastyId).status
+    }
+
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint) {
+        recruitingLedger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
     }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint, showNotificationFeed) {
@@ -538,11 +546,14 @@ fun DynastyShellScreen(
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val phaseLabel = CalendarWeekLabel.display(position)
+    val recruitingCycleClosed = recruitingLedger?.cycleClosed == true
     val shellMenu = buildDynastyHubMenu(
         position = position,
         callbacks = hubMenuCallbacks.copy(
             onOpenSchool = { userSchool?.let { coachView = ShellCoachView.School(it) } },
         ),
+        recruitingCycleClosed = recruitingCycleClosed,
+        onRecruitingCycleClosed = { notifyRecruitingCycleClosed(context) },
         leadingExtras = listOf(
             DynastyShellMenuAction(R.string.staff_open_tab) { coachView = ShellCoachView.Staff },
             DynastyShellMenuAction(R.string.shell_menu_automation, onOpenAutomation),
