@@ -42,7 +42,11 @@ jobs:
             echo "::error::Missing repository secrets: ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS. See docs/ANDROID_RELEASE_CI.md"
             exit 1
           fi
-          echo "$KEYSTORE_BASE64" | base64 --decode > app/upload.keystore
+          cleaned=$(printf '%s' "$KEYSTORE_BASE64" | tr -d ' \n\r\t')
+          if ! printf '%s' "$cleaned" | base64 --decode > app/upload.keystore; then
+            echo "::error::ANDROID_KEYSTORE_BASE64 is not valid base64 (paste one line, no quotes)."
+            exit 1
+          fi
           chmod 600 app/upload.keystore
 
       - name: Bundle release AAB

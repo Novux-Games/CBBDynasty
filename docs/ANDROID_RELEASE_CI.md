@@ -40,6 +40,8 @@ base64 -w0 upload-keystore.jks   # Linux
 base64 -i upload-keystore.jks    # macOS (paste output as one line)
 ```
 
+The workflow strips spaces and line breaks from the secret before decoding, but the value must still be valid base64 of the `.jks` / `.keystore` file.
+
 ## Run a build
 
 1. **Actions** → **Android release bundle (AAB)** → **Run workflow** (branch `main`),  
