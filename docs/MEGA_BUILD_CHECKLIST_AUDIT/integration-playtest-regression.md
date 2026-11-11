@@ -75,7 +75,7 @@
 | MEGA-QA-032 | P1 | DEV | OPEN | Overwrite slot | New game into occupied slot | Old dynasty fully replaced | Slot upsert |
 | MEGA-QA-033 | P1 | DEV | OPEN | Recruiting ledger round-trip | Spend → advance → force stop → reload | Points + reservations match pre-kill | `RecruitingEconomyRepository` |
 | MEGA-QA-034 | P1 | DEV | OPEN | Preseason progress DataStore | Complete 4 preseason tasks → kill → reload | Progress restored; tasks not re-hidden incorrectly | `PreseasonProgressRepository` |
-| MEGA-QA-035 | P0 | DEV | FAIL | Preseason null progress blank shell | Open preseason before DataStore emits | Skeleton/shimmer, not empty shell | `PreseasonScreen.kt` MEGA-FRAME-086 |
+| MEGA-QA-035 | P0 | DEV | PASS | Preseason null progress blank shell | Open preseason before DataStore emits | Shell stays up; dashboard shows loading skeleton | `PreseasonDashboardLoadingBody` |
 | MEGA-QA-036 | P2 | DEV | OPEN | Week checkpoint committedThrough | Advance 3 weeks; inspect DB | `committedThrough` monotonic | `WeekCheckpointRepository` |
 | MEGA-QA-037 | P2 | DEV | OPEN | Incoming class seed persistence | New dynasty; verify seed file/entity exists | Pool != demo-only when seeder wired | `IncomingClassSeedRepository` |
 | MEGA-QA-038 | P1 | DEV | OPEN | Portal cycle ledger | Portal week spend → reload | Portal state intact | `PortalCycleRepository` |

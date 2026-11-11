@@ -5,12 +5,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -98,9 +102,6 @@ fun PreseasonScreen(
         fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
     }
 
-    val taskProgress = progress ?: return
-    val preseasonDashboard = DashboardTaskGate.preseason(taskProgress)
-
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val phaseLabel = CalendarWeekLabel.display(position)
     val menu = buildDynastyHubMenu(position, hubMenuCallbacks)
@@ -148,7 +149,16 @@ fun PreseasonScreen(
                 contentPadding = padding,
             )
             DynastyShellTab.News -> DynastyShellNewsTabPlaceholder(padding)
-            DynastyShellTab.Dashboard -> Column(
+            DynastyShellTab.Dashboard -> {
+                val taskProgress = progress
+                if (taskProgress == null) {
+                    PreseasonDashboardLoadingBody(
+                        contentPadding = padding,
+                        seasonIndex = loaded.metadata.seasonIndex,
+                    )
+                } else {
+                    val preseasonDashboard = DashboardTaskGate.preseason(taskProgress)
+                    Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
@@ -354,6 +364,55 @@ fun PreseasonScreen(
         ) {
             Text(stringResource(R.string.preseason_start_season))
         }
+            }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PreseasonDashboardLoadingBody(
+    contentPadding: androidx.compose.foundation.layout.PaddingValues,
+    seasonIndex: Int,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(contentPadding)
+            .padding(horizontal = 28.dp, vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        Text(
+            text = SeasonMembershipYear.label(seasonIndex),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            CircularProgressIndicator(modifier = Modifier.size(28.dp), strokeWidth = 3.dp)
+            Text(
+                text = stringResource(R.string.preseason_loading_checklist),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        repeat(4) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(72.dp)
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth(0.55f))
+                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth(0.35f))
+                }
             }
         }
     }

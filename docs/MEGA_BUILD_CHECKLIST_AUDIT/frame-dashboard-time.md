@@ -166,7 +166,7 @@
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
 | MEGA-FRAME-085 | GAP | **Bug: tasks disappear (preseason)** | `PreseasonRequiredDashboardTasks` omits completed tasks from the required panel — checklist **shrinks** as user progresses instead of showing done + remaining | `PreseasonRequiredDashboardTasks.kt`, `DashboardRequiredTasksPanel` |
-| MEGA-FRAME-086 | GAP | **Bug: tasks disappear (preseason load)** | `PreseasonScreen` **`return`s composable** while `progress == null` — entire shell blank until DataStore load; looks like tasks vanished | `PreseasonScreen.kt` `val taskProgress = progress ?: return` |
+| MEGA-FRAME-086 | PASS | Preseason progress loading UX | Dashboard shows skeleton while `PreseasonTaskProgress` loads; shell chrome remains visible | `PreseasonScreen.kt` |
 | MEGA-FRAME-087 | GAP | **Bug: tasks disappear (dual list)** | Same incomplete preseason tasks render in **both** `DashboardRequiredTasksPanel` and `LazyColumn`; completing one surface removes required cards but lazy rows remain — inconsistent | `PreseasonScreen.kt` |
 | MEGA-FRAME-088 | GAP | **Bug: tasks disappear (spurious complete)** | Generic **Complete** on preseason rows calls `completeTask` without opening rankings / coach tree / workouts — task vanishes from required set with no wired action | `PreseasonScreen.kt` `OutlinedButton` + `PreseasonProgressRepository` |
 | MEGA-FRAME-089 | GAP | **Bug: recruiting UI after Signing Day** | Offseason **Weeks 7–10** still show **Open Recruiting hub** CTA when `hubAccessible` (week ≥ 2); spec Week 6 **closes cycle** — administration weeks feel like portal crunch | `OffseasonScreen.kt`, `RecruitingCyclePolicy.hubAccessible` |
