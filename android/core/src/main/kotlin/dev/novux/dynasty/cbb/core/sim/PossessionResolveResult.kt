@@ -9,6 +9,10 @@ enum class PossessionChange {
 enum class TurnoverTerminal {
     Generic,
     ShotClockViolation,
+    Steal,
+    BadPass,
+    Travel,
+    OffensiveFoul,
 }
 
 data class PossessionResolveResult(

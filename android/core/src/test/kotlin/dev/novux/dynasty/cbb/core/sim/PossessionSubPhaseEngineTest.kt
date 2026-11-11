@@ -57,12 +57,12 @@ class PossessionSubPhaseEngineTest {
         effects = effects,
         random = kotlin.random.Random(seed.toLong()),
       )
-      if (result.subPhaseChain?.contains("TO drive") == true) {
+      if (result.subPhaseChain?.startsWith("drive→TO") == true) {
         driveToChain = result.subPhaseChain
         break
       }
     }
     assertNotNull(driveToChain)
-    assertTrue(driveToChain!!.startsWith("drive→TO drive"))
+    assertTrue(driveToChain!!.startsWith("drive→TO"))
   }
 }

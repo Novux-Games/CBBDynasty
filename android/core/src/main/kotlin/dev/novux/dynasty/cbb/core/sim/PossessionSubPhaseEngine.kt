@@ -25,11 +25,13 @@ object PossessionSubPhaseEngine {
         val chain = mutableListOf("drive")
         val baseTo = effects.turnoverChance.coerceIn(0.05, 0.40)
         if (random.nextDouble() < baseTo * DRIVE_TO_SHARE) {
-            return turnoverResult(box, chain, TurnoverTerminal.Generic, "TO drive")
+            val flavor = PossessionTurnoverFlavorPolicy.sampleForDrivePhase(random)
+            return turnoverResult(box, chain, flavor)
         }
         chain += "kick"
         if (random.nextDouble() < baseTo * KICK_TO_SHARE) {
-            return turnoverResult(box, chain, TurnoverTerminal.Generic, "TO kick")
+            val flavor = PossessionTurnoverFlavorPolicy.sampleForKickPhase(random)
+            return turnoverResult(box, chain, flavor)
         }
         chain += "shot"
         return resolveShotTerminal(box, offRating, defRating, effects, random, chain)
@@ -39,13 +41,13 @@ object PossessionSubPhaseEngine {
         box: TeamBoxScore,
         chain: List<String>,
         terminal: TurnoverTerminal,
-        logHint: String,
     ): PossessionResolveResult =
         PossessionResolveResult(
             box = box.copy(turnovers = box.turnovers + 1),
             change = PossessionChange.DefenseTakesBall,
             turnoverTerminal = terminal,
-            subPhaseChain = chain.joinToString("→") + "→$logHint",
+            subPhaseChain = chain.joinToString("→") +
+                "→${PossessionTurnoverFlavorPolicy.chainSuffix(terminal)}",
         )
 
     private fun resolveShotTerminal(

@@ -168,7 +168,7 @@
 | MEGA-SIM-089 | P1 | PASS | Sub-phases optional: drive → kick → shot within one trip | `PossessionSubPhaseEngine` | Log chain before terminal make/miss/TO |
 | MEGA-SIM-090 | P0 | PASS | **Offensive rebound** → same team possession + 20s shot clock | `PossessionChange.OffenseRetainsOffensiveRebound` | `resolveMissRebound`; log `OREB +1`; SC 7→20 in log; `OffensiveReboundPossessionTest`; player `offensiveRebounds` |
 | MEGA-SIM-091 | P1 | PASS | **Defensive rebound** change of possession in log text | `formatPossessionLog` | `miss | DREB | change possession` |
-| MEGA-SIM-092 | P1 | FAIL | **Steal / bad pass / travel / offensive foul** turnover flavors | `eventWeights` unused | All turnovers anonymous |
+| MEGA-SIM-092 | P1 | PASS | **Steal / bad pass / travel / offensive foul** turnover flavors | `PossessionTurnoverFlavorPolicy` | Distinct `TurnoverTerminal` + log labels |
 | MEGA-SIM-093 | P1 | FAIL | **Block** on shot attempt + optional foul-on-block | — | No blocks in resolve path |
 | MEGA-SIM-094 | P1 | FAIL | **And-1** and shooting foul → FT chain (1–3 attempts) | — | No FTA/FTM accumulation |
 | MEGA-SIM-095 | P1 | FAIL | **Bonus / double bonus** team foul thresholds → automatic FT trips | NCAA foul table in tuning | Team fouls not tracked |

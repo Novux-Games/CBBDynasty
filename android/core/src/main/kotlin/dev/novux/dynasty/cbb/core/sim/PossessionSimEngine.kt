@@ -193,8 +193,7 @@ object PossessionSimEngine {
         val turnedOver = after.turnovers > before.turnovers
         val scoreLine = when {
             pointsScored > 0 -> "+$pointsScored PTS"
-            turnedOver && turnoverTerminal == TurnoverTerminal.ShotClockViolation -> "TO shot-clock"
-            turnedOver -> "TO"
+            turnedOver -> PossessionTurnoverFlavorPolicy.logLabel(turnoverTerminal)
             change == PossessionChange.OffenseRetainsOffensiveRebound ->
                 "miss | OREB +1 | retain possession"
             after.fieldGoalsAttempted > before.fieldGoalsAttempted &&

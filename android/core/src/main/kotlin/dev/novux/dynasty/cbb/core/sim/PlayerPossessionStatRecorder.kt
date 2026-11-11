@@ -32,7 +32,10 @@ object PlayerPossessionStatRecorder {
             offenseLedger.addTurnover(handler)
             if (defenseFloor.isNotEmpty() &&
                 turnoverTerminal != TurnoverTerminal.ShotClockViolation &&
-                random.nextDouble() < 0.38
+                (
+                    turnoverTerminal == TurnoverTerminal.Steal ||
+                        random.nextDouble() < 0.38
+                    )
             ) {
                 defenseLedger.addSteal(pickUniform(defenseFloor, random))
             }
