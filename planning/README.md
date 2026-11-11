@@ -1,6 +1,6 @@
 # Planning index
 
-Authoritative design for **Dynasty: College Basketball**. Implementation order lives in [`docs/BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md) (every **Done** topic must map to build steps there).
+Authoritative design for **Dynasty: College Basketball**. **Granular ship truth:** [`docs/MEGA_BUILD_CHECKLIST.md`](../docs/MEGA_BUILD_CHECKLIST.md) (every locked decision → `MEGA-*` item). Phase order: [`docs/BUILD_CHECKLIST.md`](../docs/BUILD_CHECKLIST.md).
 
 | If you want… | Start here |
 |--------------|------------|

@@ -1,10 +1,12 @@
-# Build checklist — implementation order
+# Build checklist — implementation order (phase map)
 
 **Product:** Dynasty: College Basketball · **Studio:** Novux Games  
-**Planning:** [`planning/`](../planning/) is authoritative for behavior — map of all specs: [`planning/README.md`](../planning/README.md). This doc is **execution order**.  
+**Planning:** [`planning/`](../planning/) is authoritative for behavior — map of all specs: [`planning/README.md`](../planning/README.md).  
 **Code:** [`docs/ARCHITECTURE.md`](ARCHITECTURE.md) · Android project: [`android/`](../android/)
 
-Use phases **in order**. Do not skip persistence or calendar kernel before dynasty UI. Mark items `[x]` in your tracker as you ship.
+> **Honest ship tracking:** Use **[`MEGA_BUILD_CHECKLIST.md`](MEGA_BUILD_CHECKLIST.md)** ( **722** granular items, no deferrals) before trusting `[x]` rows below. The phase table was a **delivery order** guide; many steps were marked complete while specs are still `PARTIAL`/`STUB` in code — see audit shards under [`MEGA_BUILD_CHECKLIST_AUDIT/`](MEGA_BUILD_CHECKLIST_AUDIT/).
+
+Use phases **in order** for greenfield sequencing. Mark `[x]` here only when the matching **MEGA** IDs for that topic are actually `DONE`/`PASS` on device.
 
 **Planning sync:** Every **Done** topic in [`planning-notes.md`](../planning/planning-notes.md) must map to step(s) below ([index](#locked-specs--build-steps-index)). Update **Build**, **Done when**, and the index in the **same commit** as the planning change — no orphan specs.
 
