@@ -16,4 +16,14 @@ object PossessionShotClock {
 
     fun remainingAfterTrip(shotClockBefore: Int, used: Int): Int =
         (shotClockBefore - used).coerceAtLeast(0)
+
+    /**
+     * Clock exhausted on this trip before a normal terminal event — shot-clock violation turnover
+     * ([planning/simulation-engine.md], MEGA-SIM-087).
+     */
+    fun isShotClockViolation(shotClockBefore: Int, used: Int, sampledTrip: Int): Boolean =
+        shotClockBefore > 0 &&
+            used >= shotClockBefore &&
+            sampledTrip > shotClockBefore &&
+            remainingAfterTrip(shotClockBefore, used) == 0
 }

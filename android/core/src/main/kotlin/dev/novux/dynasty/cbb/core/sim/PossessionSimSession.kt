@@ -73,13 +73,19 @@ class PossessionSimSession(
             effects.offensiveRatingDelta
         val defRating = (if (offenseHome) input.awayDefensive() else input.homeDefensive()) +
             effects.defensiveRatingDelta
-        val resolution = PossessionSimEngine.resolvePossessionForSession(
-            sides.box,
-            offRating,
-            defRating,
-            effects,
-            random,
-        )
+        val resolution = if (
+            PossessionShotClock.isShotClockViolation(shotClockBefore, used, tripSeconds)
+        ) {
+            PossessionSimEngine.resolveShotClockViolation(sides.box)
+        } else {
+            PossessionSimEngine.resolvePossessionForSession(
+                sides.box,
+                offRating,
+                defRating,
+                effects,
+                random,
+            )
+        }
         if (offenseHome) {
             homeBox = resolution.box
         } else {
@@ -103,6 +109,7 @@ class PossessionSimSession(
             shotClockBefore = shotClockBefore,
             shotClockAfter = shotClockAfterTrip,
             change = resolution.change,
+            turnoverTerminal = resolution.turnoverTerminal,
         )
         log += line
         val halftime = stopAtHalftime && gameClock <= GameSimClock.HALF_SECONDS

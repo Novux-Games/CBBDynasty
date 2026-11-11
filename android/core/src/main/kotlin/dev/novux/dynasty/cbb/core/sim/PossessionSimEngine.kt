@@ -62,6 +62,18 @@ object PossessionSimEngine {
         return raw.coerceIn(GameSimClock.MIN_TRIP_SECONDS, GameSimClock.MAX_TRIP_SECONDS)
     }
 
+    internal fun resolveShotClockViolation(offense: TeamBoxScore): PossessionResolveResult {
+        val box = offense.copy(
+            possessions = offense.possessions + 1,
+            turnovers = offense.turnovers + 1,
+        )
+        return PossessionResolveResult(
+            box,
+            PossessionChange.DefenseTakesBall,
+            turnoverTerminal = TurnoverTerminal.ShotClockViolation,
+        )
+    }
+
     internal fun resolvePossessionForSession(
         offense: TeamBoxScore,
         offRating: Int,
@@ -77,6 +89,7 @@ object PossessionSimEngine {
             roll < effects.turnoverChance -> PossessionResolveResult(
                 box.copy(turnovers = box.turnovers + 1),
                 PossessionChange.DefenseTakesBall,
+                turnoverTerminal = TurnoverTerminal.Generic,
             )
             roll < effects.turnoverChance + 0.33 -> {
                 val three = random.nextDouble() < effects.threePointAttemptRate
@@ -135,12 +148,14 @@ object PossessionSimEngine {
         shotClockBefore: Int,
         shotClockAfter: Int,
         change: PossessionChange,
+        turnoverTerminal: TurnoverTerminal? = null,
     ): String {
         val clock = formatClock(clockRemaining)
         val pointsScored = after.points - before.points
         val turnedOver = after.turnovers > before.turnovers
         val scoreLine = when {
             pointsScored > 0 -> "+$pointsScored PTS"
+            turnedOver && turnoverTerminal == TurnoverTerminal.ShotClockViolation -> "TO shot-clock"
             turnedOver -> "TO"
             change == PossessionChange.OffenseRetainsOffensiveRebound -> "miss OReb"
             after.fieldGoalsAttempted > before.fieldGoalsAttempted -> "miss"
