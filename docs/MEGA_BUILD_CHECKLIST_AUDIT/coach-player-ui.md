@@ -111,7 +111,7 @@
 | MEGA-COACH-061 | P2 | GAP | Overview: archetype, hometown, measurements | `PlayerCardOverviewContent` |
 | MEGA-COACH-062 | P2 | GAP | Overview headline OVR/OFF/DEF | Shown; scout OVR letter also |
 | MEGA-COACH-063 | P1 | PASS | Overview team card → School hub | `CoachOverviewTeamCard` on `PlayerCardScreen` Overview; tap → School hub | `PlayerCardTeamHubPathTest` |
-| MEGA-COACH-064 | P1 | FAIL | NIL valuation line on Overview | Not on `PlayerCardSheet` |
+| MEGA-COACH-064 | P1 | PASS | NIL valuation line on Overview | `PlayerNilValuationLine` on preview + full Overview via `PlayerCardOverviewContent` | `PlayerNilValuationPathTest` |
 | MEGA-COACH-065 | P1 | FAIL | Projected draft #1–60 + tier label on Overview | No draft projection UI on card |
 | MEGA-COACH-066 | P1 | FAIL | Ratings tab full attribute breakdown + potential | Only headline triplet + scout |
 | MEGA-COACH-067 | P0 | PASS | Stats four cards (season avg/tot, career avg/tot) | `PlayerStatsEngine` + `PlayerStatsRepository` + `PlayerStatsFourCards` on Stats tab | `core/player/stats/*`, `PlayerStatsRepository.kt`, `PlayerStatsCards.kt`, `PlayerCardScreen.kt` |

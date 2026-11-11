@@ -201,12 +201,6 @@ private fun PlayerCardOverviewTab(
         onOpenSchoolHub = onOpenSchoolHub,
     )
     PlayerCardOverviewContent(player = player)
-    player.identity.nilUsdPerYear.takeIf { it > 0 }?.let { nil ->
-        Text(
-            stringResource(R.string.player_card_nil_line, nil),
-            style = MaterialTheme.typography.bodyMedium,
-        )
-    }
 }
 
 @Composable
