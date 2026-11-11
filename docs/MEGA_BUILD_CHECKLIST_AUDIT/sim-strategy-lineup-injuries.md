@@ -176,7 +176,7 @@
 | MEGA-SIM-097 | P1 | PASS | Possession log: **jersey # + player name** on scorer/assister/rebounder | `PossessionLogPlayerLabel`, `PossessionPlayerCredits` | Log `| #12 Name 2PT make (ast #5 …)` / `rebound #…` |
 | MEGA-SIM-098 | P2 | FAIL | **Assists** attributed on made FGs from usage weights | — | No per-player stats |
 | MEGA-SIM-099 | P1 | PASS | Consume **`eventWeights`** + rating-gap tables from `sim-tuning.json` | `SimEventWeightsResolver`, wired possession policies | Full tables in asset; session resolves per game |
-| MEGA-SIM-100 | P1 | FAIL | **Made basket at 0:00** half/game end tuning branch | `simulation-engine` half end | Clock clamp only; no release-time rule |
+| MEGA-SIM-100 | P1 | PASS | **Made basket at 0:00** half/game end tuning branch | `PossessionPeriodEndPolicy`, `periodEnd` tuning | Release-time make/FT counts or voided; log `0:00 release` |
 
 ---
 

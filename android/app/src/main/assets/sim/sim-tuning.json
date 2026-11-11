@@ -48,6 +48,10 @@
     "turnoverSubPhase": {
       "driveShare": 0.28,
       "kickShare": 0.22
+    },
+    "periodEnd": {
+      "countMadeBasketAtPeriodEnd": true,
+      "countFreeThrowsAtPeriodEnd": true
     }
   },
   "homeNeutralModifiers": {

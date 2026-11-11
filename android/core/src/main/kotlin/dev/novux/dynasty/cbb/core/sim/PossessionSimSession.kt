@@ -216,6 +216,22 @@ class PossessionSimSession(
                 }
             }
         }
+        offenseBoxAfter = PossessionPeriodEndPolicy.applyScoringRules(
+            before = sides.box,
+            after = offenseBoxAfter,
+            rules = eventWeights.periodEnd,
+            clockBeforeTrip = clockBeforeTrip,
+            clockAfterTrip = gameClock,
+            inOvertime = inOvertime,
+        )
+        val periodEndCtx = PossessionPeriodEndPolicy.context(
+            before = sides.box,
+            after = offenseBoxAfter,
+            clockBeforeTrip = clockBeforeTrip,
+            clockAfterTrip = gameClock,
+            inOvertime = inOvertime,
+        )
+        val periodEndLogTag = PossessionPeriodEndPolicy.logTag(periodEndCtx)
         val homeFloorIds = floorPlayerIds(home = true, excludeInjured = false)
         val awayFloorIds = floorPlayerIds(home = false, excludeInjured = false)
         val offenseFloor = fallbackFloor(
@@ -289,6 +305,7 @@ class PossessionSimSession(
             LateGamePossessionPolicy.logTag(lateDecision),
             if (lateClockTrip) "late-clock" else null,
             teamBonusLogTag,
+            periodEndLogTag,
         ).joinToString("; ").takeIf { it.isNotEmpty() }
         val line = PossessionSimEngine.formatPossessionLog(
             used,
