@@ -383,6 +383,9 @@ fun DynastyShellScreen(
                     userCoachSecurity = coachSecurity,
                     skillPointBank = coachSkillPointBank,
                     skillState = coachSkillState,
+                    programPrestige = userSchool?.programPrestige ?: 50,
+                    seasonIndex = loaded.metadata.seasonIndex,
+                    onOpenStaffTab = { coachView = ShellCoachView.Staff },
                     displayRatings = dev.novux.dynasty.cbb.core.coach.skill.HeadCoachSkillRatings.effective(
                         view.card.ratings,
                         coachSkillState,

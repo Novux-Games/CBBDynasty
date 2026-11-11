@@ -57,7 +57,7 @@
 | MEGA-COACH-028 | P0 | PASS | Tap staff → **preview sheet** → View more → full card | `CoachPreviewBottomSheet` on staff tap; View more → `ShellCoachView` full card | `CoachPreviewSheet.kt`, `DynastyShellScreen.kt` |
 | MEGA-COACH-029 | P1 | GAP | Full card: persistent Back / Name / Edit chrome | Single scroll column in overlay; no top chrome |
 | MEGA-COACH-030 | P1 | GAP | Identity strip: **school + role** (no portrait per product lock) | Text-only headline; school name present; role string on HC |
-| MEGA-COACH-031 | P0 | FAIL | Tab bar: Overview · Contract · History · HOF · Draft | No `TabRow` in coach UI |
+| MEGA-COACH-031 | P0 | PASS | Tab bar: Overview · Contract · History · HOF · Draft | `PrimaryTabRow` on `HeadCoachCardScreen` | `HeadCoachCardScreen.kt`, `CoachCardTabs.kt` |
 | MEGA-COACH-032 | P2 | GAP | Overview: school + season record | `seasonRecordLabel`, school name on `HeadCoachCardScreen` |
 | MEGA-COACH-033 | P1 | FAIL | Overview team card tap → School hub | No clickable team card on coach screen |
 | MEGA-COACH-034 | P2 | GAP | Overview information: age, alma mater | Age + alma on HC; **no** career/school experience seasons |
@@ -79,7 +79,7 @@
 | MEGA-COACH-043 | P1 | PASS | Core evaluator + tiers | `CoachSecurityEvaluator`, `JobSecurityTier` tests |
 | MEGA-COACH-044 | P2 | GAP | Job security on Contract tab + AD trust summary link | Meter on HC overview only; AD on staff tab |
 | MEGA-COACH-045 | P2 | GAP | AD trust meter on School Staff tab (user school) | `AdTrustMeter` in `SchoolStaffTabPanel` |
-| MEGA-COACH-046 | P0 | FAIL | Contract tab deep fields (salary, buyout, goals, extension, resign) | No contract tab UI |
+| MEGA-COACH-046 | P0 | PASS | Contract tab deep fields (salary, buyout, goals, extension, resign) | Salary/buyout/goals, AD trust link, resign CTA | `HeadCoachContractEngine.kt`, Contract tab |
 | MEGA-COACH-047 | P2 | GAP | Job Center carousel offers UI | `JobCenterScreen` list + accept (no coach card contract tie-in) |
 | MEGA-COACH-048 | P2 | RISK | Balance bundle `coach.jobSecurityWeights` in runtime | Weights in evaluator — JSON load path not verified in this pass |
 

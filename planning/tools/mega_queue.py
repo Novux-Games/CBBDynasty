@@ -269,6 +269,18 @@ def cmd_current(_: argparse.Namespace) -> int:
     return 0
 
 
+def align_index_to_first_open(state: dict, queue: list[dict], rows: dict[str, MegaRow]) -> None:
+    """Ensure index points at the first still-open queue item (handles out-of-order complete)."""
+    for i, item in enumerate(queue):
+        live = rows.get(item["id"])
+        if live and live.status not in DONE_STATUSES:
+            state["index"] = i
+            save_state(state)
+            return
+    state["index"] = len(queue)
+    save_state(state)
+
+
 def sync_index_with_shard(state: dict, queue: list[dict]) -> bool:
     """Advance index while current items are already DONE in markdown."""
     rows = parse_shards()
@@ -330,7 +342,9 @@ def cmd_resync(_: argparse.Namespace) -> int:
     cmd_build(argparse.Namespace())
     queue = load_queue()
     state = load_state()
+    rows = parse_shards()
     sync_index_with_shard(state, queue)
+    align_index_to_first_open(state, queue, rows)
     return cmd_current(_)
 
 
