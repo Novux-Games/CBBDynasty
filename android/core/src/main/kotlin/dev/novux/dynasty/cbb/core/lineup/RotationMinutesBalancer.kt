@@ -34,19 +34,30 @@ object RotationMinutesBalancer {
         return rebalance(merged, RotationMinutesAllocator.TEAM_MINUTES_REGULATION)
     }
 
+    /** Single-player edit without auto-rebalance (shows on budget meter). */
+    fun tweak(
+        minutes: Map<String, Int>,
+        playerId: String,
+        delta: Int,
+    ): Map<String, Int> {
+        if (playerId !in minutes) return minutes
+        val next = (minutes[playerId] ?: 0) + delta
+        if (next !in PLAYER_MIN..PLAYER_MAX) return minutes
+        return minutes + (playerId to next)
+    }
+
+    fun normalize(
+        minutes: Map<String, Int>,
+        cap: Int = RotationMinutesAllocator.TEAM_MINUTES_REGULATION,
+    ): Map<String, Int> = rebalance(minutes.toMutableMap(), cap)
+
+    @Deprecated("Use tweak + normalize", ReplaceWith("tweak(minutes, playerId, delta)"))
     fun adjust(
         minutes: Map<String, Int>,
         playerId: String,
         delta: Int,
         cap: Int = RotationMinutesAllocator.TEAM_MINUTES_REGULATION,
-    ): Map<String, Int> {
-        if (playerId !in minutes) return minutes
-        val next = (minutes[playerId] ?: 0) + delta
-        if (next !in PLAYER_MIN..PLAYER_MAX) return minutes
-        val mutable = minutes.toMutableMap()
-        mutable[playerId] = next
-        return rebalance(mutable, cap)
-    }
+    ): Map<String, Int> = normalize(tweak(minutes, playerId, delta), cap)
 
     fun rebalance(
         minutes: MutableMap<String, Int>,

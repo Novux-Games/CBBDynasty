@@ -45,14 +45,13 @@ fun StrategyRotationMinutesPanel(
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
         )
-        Text(
-            text = stringResource(
-                R.string.strategy_rotation_total,
-                total,
-                RotationMinutesAllocator.TEAM_MINUTES_REGULATION,
-            ),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        RotationMinutesBudgetMeter(
+            totalMinutes = total,
+            onBalanceToCap = {
+                onMinutesChange(
+                    RotationMinutesBalancer.normalize(minutesByPlayer),
+                )
+            },
         )
         ordered.forEach { player ->
             val minutes = minutesByPlayer[player.playerId] ?: 0
@@ -62,12 +61,12 @@ fun StrategyRotationMinutesPanel(
                 minutes = minutes,
                 onDecrease = {
                     onMinutesChange(
-                        RotationMinutesBalancer.adjust(minutesByPlayer, player.playerId, -1),
+                        RotationMinutesBalancer.tweak(minutesByPlayer, player.playerId, -1),
                     )
                 },
                 onIncrease = {
                     onMinutesChange(
-                        RotationMinutesBalancer.adjust(minutesByPlayer, player.playerId, +1),
+                        RotationMinutesBalancer.tweak(minutesByPlayer, player.playerId, +1),
                     )
                 },
             )

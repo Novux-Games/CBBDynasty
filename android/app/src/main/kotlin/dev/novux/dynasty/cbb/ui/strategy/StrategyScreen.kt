@@ -140,14 +140,16 @@ fun StrategyScreen(
         )
         Button(
             onClick = {
+                val normalizedRotation = RotationMinutesBalancer.normalize(rotationMinutes)
+                rotationMinutes = normalizedRotation
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeGameplan = halftimeGameplan ?: gameplan
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeName = homeTeamLabel
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.awayName = awayTeamLabel
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeRosterPlayers = players
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeStarters = starters
-                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.rotationMinutes = rotationMinutes
+                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.rotationMinutes = normalizedRotation
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeSimRoster =
-                    GameLineupPrep.build(dynastyId, players, starters, rotationMinutes)
+                    GameLineupPrep.build(dynastyId, players, starters, normalizedRotation)
                 onWatchScrimmage()
             },
             modifier = Modifier.fillMaxWidth(),
