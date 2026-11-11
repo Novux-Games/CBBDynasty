@@ -16,6 +16,23 @@ android {
         versionName = "0.1.0"
     }
 
+    signingConfigs {
+        create("release") {
+            val keystorePath = System.getenv("ANDROID_KEYSTORE_PATH")?.trim().orEmpty()
+            if (keystorePath.isNotEmpty()) {
+                val keystoreFile = file(keystorePath)
+                if (keystoreFile.exists()) {
+                    storeFile = keystoreFile
+                    storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                    keyAlias = System.getenv("ANDROID_KEY_ALIAS")
+                    keyPassword =
+                        System.getenv("ANDROID_KEY_PASSWORD")
+                            ?: System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                }
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -23,6 +40,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            val releaseConfig = signingConfigs.getByName("release")
+            signingConfig =
+                if (releaseConfig.storeFile?.exists() == true) {
+                    releaseConfig
+                } else {
+                    signingConfigs.getByName("debug")
+                }
         }
     }
 

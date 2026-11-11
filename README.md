@@ -16,6 +16,8 @@ cd android && ./gradlew :core:test
 
 Open `android/` in Android Studio for emulator builds (`:app:assembleDebug`).
 
+**Play Store AAB (CI):** [`docs/ANDROID_RELEASE_CI.md`](docs/ANDROID_RELEASE_CI.md) — GitHub Actions `bundleRelease` after upload-keystore secrets are set.
+
 **Implementation order:** [`docs/BUILD_CHECKLIST.md`](docs/BUILD_CHECKLIST.md)
 
 ## License
