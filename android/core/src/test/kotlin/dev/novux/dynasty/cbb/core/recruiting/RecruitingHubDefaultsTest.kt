@@ -18,9 +18,9 @@ class RecruitingHubDefaultsTest {
     }
 
     @Test
-    fun hubAccessible_offseasonFromWeekTwo() {
+    fun hubAccessible_offseasonFromWeekOne() {
+        assertTrue(RecruitingCyclePolicy.hubAccessible(CalendarPhase.Offseason, offseasonWeekIndex = 1))
         assertTrue(RecruitingCyclePolicy.hubAccessible(CalendarPhase.Offseason, offseasonWeekIndex = 2))
-        assertEquals(false, RecruitingCyclePolicy.hubAccessible(CalendarPhase.Offseason, offseasonWeekIndex = 1))
     }
 
     @Test

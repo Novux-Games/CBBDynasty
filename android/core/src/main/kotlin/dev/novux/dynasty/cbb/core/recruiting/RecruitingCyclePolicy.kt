@@ -17,7 +17,8 @@ object RecruitingCyclePolicy {
 
     fun hubAccessible(phase: CalendarPhase, offseasonWeekIndex: Int? = null): Boolean =
         when (phase) {
-            CalendarPhase.Offseason -> (offseasonWeekIndex ?: 1) >= 2
+            // Year-long HS/JUCO hub — open retention week 1 ([planning/recruiting-engine.md], [MEGA-RECR-038]).
+            CalendarPhase.Offseason -> (offseasonWeekIndex ?: 1) >= 1
             in inSeasonPhases -> true
             else -> false
         }

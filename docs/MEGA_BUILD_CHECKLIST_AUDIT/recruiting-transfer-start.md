@@ -70,7 +70,7 @@
 | MEGA-RECR-035 | P0 | PASS | HS + JUCO tab content | Full pool partitions + Top 60 + HS/JUCO lists. | `HsJucoTabBody.kt` |
 | MEGA-RECR-036 | P0 | PASS | Transfer Portal sub-tab | Top 40 + portal Recommended with full spend/NIL surface. | `RecruitingHubTabBodies.kt` |
 | MEGA-RECR-037 | P1 | PASS | Tab set vs spec | Eight hub tabs: Recommended, All/HS/JUCO, Portal, Board, Committed, Lost. | `RecruitingHubTab`, `RecruitingHubTabPolicy` |
-| MEGA-RECR-038 | P1 | FAIL | Hub open offseason week 1 | `RecruitingCyclePolicy.hubAccessible(Offseason)` requires `week >= 2`; spec: year-long HS/JUCO cycle includes retention week (points economy shared). | `RecruitingCyclePolicy.kt` |
+| MEGA-RECR-038 | P1 | PASS | Hub open offseason week 1 | `hubAccessible(Offseason)` from week 1 (retention week; shared points economy). | `RecruitingCyclePolicy.kt` |
 | MEGA-RECR-039 | P1 | GAP | NIL budget strip | Pool remaining shown — PASS; drill-down committed/reserved breakdown not implemented. | Hub header |
 | MEGA-RECR-040 | P2 | GAP | Official visit window RS→R4 | Gating in `RecruitingRefundableActionSpend` / gates — exists in core; full calendar integration untested in UI. | core recruiting gates |
 | MEGA-RECR-041 | P2 | GAP | Walk-ons after Signing Day | Not implemented in UI/data. | spec `recruiting-engine#walk-ons` |
