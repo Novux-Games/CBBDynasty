@@ -13,6 +13,8 @@ data class HeadCoachCard(
     val defensiveSchemeLabel: String,
     val contractYearsLeft: Int,
     val contractLengthYears: Int,
+    /** Annual base salary in USD for contract UI and staff surfaces. */
+    val annualSalaryUsd: Long,
     val ratings: HeadCoachRatings,
     val almaMaterLabel: String?,
     val avatarPresetId: String = "",

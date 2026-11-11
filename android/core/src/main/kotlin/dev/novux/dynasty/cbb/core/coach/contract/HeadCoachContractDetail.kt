@@ -14,21 +14,12 @@ data class HeadCoachContractDetail(
 )
 
 object HeadCoachContractEngine {
-    private const val BASE_SALARY = 450_000L
-
     fun derive(
         card: HeadCoachCard,
         security: CoachSecuritySnapshot?,
-        programPrestige: Int = 50,
+        @Suppress("UNUSED_PARAMETER") programPrestige: Int = 50,
     ): HeadCoachContractDetail {
-        val prestigeMultiplier = 0.6 + (programPrestige.coerceIn(1, 99) / 99.0) * 1.4
-        val archetypeBonus = when (card.archetype.name) {
-            "Recruiter" -> 1.05
-            "SchemeManager" -> 1.08
-            "ProgramBuilder" -> 1.1
-            else -> 1.0
-        }
-        val annualSalaryUsd = (BASE_SALARY * prestigeMultiplier * archetypeBonus).roundToLong()
+        val annualSalaryUsd = card.annualSalaryUsd
         val buyoutUsd = (annualSalaryUsd * card.contractYearsLeft.coerceAtLeast(1) * 0.65).roundToLong()
         val goals = listOf(
             "Reach the national postseason (Super 16 floor)",

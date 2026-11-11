@@ -214,6 +214,12 @@ private fun HeadCoachOverviewTab(
         ),
         style = MaterialTheme.typography.bodyMedium,
     )
+    val money = remember { NumberFormat.getCurrencyInstance(Locale.US) }
+    Text(
+        stringResource(R.string.coach_contract_salary, money.format(card.annualSalaryUsd)),
+        style = MaterialTheme.typography.bodyMedium,
+        fontWeight = FontWeight.SemiBold,
+    )
     card.almaMaterLabel?.let {
         Text(stringResource(R.string.coach_alma_mater, it), style = MaterialTheme.typography.bodyMedium)
     }
@@ -247,7 +253,7 @@ private fun HeadCoachContractTab(
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(stringResource(R.string.coach_contract_terms_title), fontWeight = FontWeight.SemiBold)
-            Text(stringResource(R.string.coach_contract_salary, money.format(contractDetail.annualSalaryUsd)))
+            Text(stringResource(R.string.coach_contract_salary, money.format(card.annualSalaryUsd)))
             Text(stringResource(R.string.coach_contract_buyout, money.format(contractDetail.buyoutUsd)))
             Text(
                 stringResource(

@@ -8,15 +8,17 @@ import org.junit.Test
 
 class HeadCoachContractEngineTest {
     @Test
-    fun deriveSalaryScalesWithPrestige() {
-        val card = sampleCard()
-        val low = HeadCoachContractEngine.derive(card, null, programPrestige = 20)
-        val high = HeadCoachContractEngine.derive(card, null, programPrestige = 90)
+    fun deriveSalaryFromCardModel() {
+        val lowSalary = HeadCoachContractSalary.annualUsd(CoachArchetype.Balanced, programPrestige = 20)
+        val highSalary = HeadCoachContractSalary.annualUsd(CoachArchetype.Balanced, programPrestige = 90)
+        val low = HeadCoachContractEngine.derive(sampleCard(lowSalary), null)
+        val high = HeadCoachContractEngine.derive(sampleCard(highSalary), null)
         assertTrue(high.annualSalaryUsd > low.annualSalaryUsd)
         assertTrue(high.buyoutUsd > low.buyoutUsd)
+        assertTrue(low.annualSalaryUsd == lowSalary)
     }
 
-    private fun sampleCard() = HeadCoachCard(
+    private fun sampleCard(annualSalaryUsd: Long) = HeadCoachCard(
         dynastyId = "d1",
         displayName = "Test Coach",
         age = 45,
@@ -27,6 +29,7 @@ class HeadCoachContractEngineTest {
         defensiveSchemeLabel = "Man",
         contractYearsLeft = 3,
         contractLengthYears = 4,
+        annualSalaryUsd = annualSalaryUsd,
         ratings = HeadCoachRatings(80, 80, 80, 80),
         almaMaterLabel = null,
     )

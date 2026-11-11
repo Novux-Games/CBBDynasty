@@ -40,6 +40,7 @@ class SchoolStaffRepository(
         val offensive = OffensiveSchemePreset.fromWire(coach.offensiveSchemeWire) ?: OffensiveSchemePreset.Balanced
         val defensive = DefensiveSchemePreset.fromWire(coach.defensiveSchemeWire) ?: DefensiveSchemePreset.ManToMan
         val alma = coach.almaMaterTeamId?.let { packRepository.activeSession().index.team(it)?.displayName }
+        val programPrestige = team?.programPrestige ?: 50
         val head = HeadCoachCardFactory.build(
             dynastyId = dynastyId,
             displayName = HeadCoachCardFactory.displayName(coach.firstName, coach.lastName, coach.nameSuffixWire),
@@ -51,6 +52,7 @@ class SchoolStaffRepository(
             almaMaterLabel = alma,
             seasonRecordLabel = seasonRecordLabel,
             avatarPresetId = coach.avatarPresetId,
+            programPrestige = programPrestige,
         )
         val rows = staffDao.listForDynasty(dynastyId)
         val assistants = rows.mapNotNull { it.toAssistant(schoolName, seasonRecordLabel) }

@@ -13,6 +13,9 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import java.text.NumberFormat
+import java.util.Locale
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -114,6 +117,11 @@ private fun HeadCoachPreviewBody(
             Text(
                 stringResource(R.string.coach_card_record, card.seasonRecordLabel),
                 style = MaterialTheme.typography.bodyLarge,
+            )
+            val money = remember { NumberFormat.getCurrencyInstance(Locale.US) }
+            Text(
+                stringResource(R.string.coach_contract_salary, money.format(card.annualSalaryUsd)),
+                style = MaterialTheme.typography.bodyMedium,
             )
             userCoachSecurity?.let { JobSecurityMeter(it) }
             Text(
