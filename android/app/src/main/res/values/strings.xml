@@ -640,6 +640,14 @@
     <string name="game_watch_halftime_deny_on">Deny primary: On</string>
     <string name="game_watch_halftime_deny_off">Deny primary: Off</string>
     <string name="game_watch_halftime_resume">Resume second half</string>
+    <string name="game_watch_halftime_schemes">Offense / defense</string>
+    <string name="game_watch_halftime_rotation">Rotation emphasis</string>
+    <string name="game_watch_halftime_rotation_starters">Ride starters</string>
+    <string name="game_watch_halftime_rotation_neutral">Balanced</string>
+    <string name="game_watch_halftime_rotation_bench">Go deeper</string>
+    <string name="game_watch_halftime_starters">Second-half starters</string>
+    <string name="game_watch_halftime_starter_row">%1$s — %2$s</string>
+    <string name="game_watch_halftime_swap">Swap</string>
     <string name="game_watch_speed_label">Playback speed</string>
     <string name="game_watch_speed_half">0.5×</string>
     <string name="game_watch_speed_one">1×</string>

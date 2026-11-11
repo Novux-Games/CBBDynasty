@@ -129,8 +129,9 @@ fun StrategyScreen(
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeName = homeTeamLabel
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.awayName = awayTeamLabel
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeRosterPlayers = players
+                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeStarters = starters
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeSimRoster =
-                    GameLineupPrep.build(dynastyId, players)
+                    GameLineupPrep.build(dynastyId, players, starters)
                 onWatchScrimmage()
             },
             modifier = Modifier.fillMaxWidth(),

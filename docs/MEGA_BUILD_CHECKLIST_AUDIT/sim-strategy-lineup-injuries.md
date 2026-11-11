@@ -74,7 +74,7 @@
 | MEGA-SIM-030 | PASS | User **speed multiplier** control (0.5×, 2×, 4×) on watch screen | `GameWatchScreen`, `GameWatchSpeedPresets` | FilterChips 0.5–4× + Sim to end; live `onLineDelayMs` |
 | MEGA-SIM-031 | SHIP | **Sim to end** completes full loop | `GameWatchPlayback.simToEnd` | Used by batch fast path when tuning passed |
 | MEGA-SIM-032 | SHIP | Halftime pause on watched run; merge updated prep; resume second half | `GameWatchPlayback.watch`, `GameSimHalftimeTest` | MidGame + `homeHalftimeGameplan` |
-| MEGA-SIM-033 | PARTIAL | Halftime: change O/D scheme, rotation, usage, swap starters | `strategy-schemes.md` §halftime | Dialog only: deny-primary toggle + late-foul chips — no scheme/usage/lineup |
+| MEGA-SIM-033 | PASS | Halftime: change O/D scheme, rotation, usage, swap starters | `HalftimeCoachSheet`, `HalftimeRosterAdjust` | Full sheet: schemes, rotation chips, usage, legal starter swaps |
 | MEGA-SIM-034 | SHIP | First-half stats/score fixed after halftime | `MidGameState` carry box scores | Scores accumulate from mid state |
 | MEGA-SIM-035 | PARTIAL | `activeHomeGameplan(clock)` uses halftime plan in 2nd half | `GameSimInput.activeHomeGameplan` | `clock <= HALF_SECONDS` selects halftime plan (correct for countdown clock) |
 | MEGA-SIM-036 | WIRE | Strategy **halftime preset** separate from pregame | `StrategyGameplanPanel` Set/Clear halftime | Stored in `halftimeGameplan` but watch passes `homeHalftimeGameplan` only when user sets preset — scrimmage button uses `halftimeGameplan ?: gameplan` as **pregame** only on `GameWatchLaunch` |
@@ -222,7 +222,7 @@
 | MEGA-SIM-122 | P1 | FAIL | **Half indicator** + period label on watch chrome | `GameWatchScreen` | Clock/score only |
 | MEGA-SIM-123 | P2 | FAIL | Optional **shot-clock seconds** on each log line | MEGA-SIM-037 | Product expects readable tension |
 | MEGA-SIM-124 | P1 | FAIL | **Possession feed** scrollback + auto-scroll | Watch list UI | Minimal text list |
-| MEGA-SIM-125 | P0 | FAIL | **Halftime sheet**: change O/D scheme, rotation emphasis, usage, swap legal starters | `strategy-schemes.md` §halftime | Dialog: deny + late foul only |
+| MEGA-SIM-125 | P0 | PASS | **Halftime sheet**: change O/D scheme, rotation emphasis, usage, swap legal starters | `HalftimeCoachSheet`, `GameWatchScreen` | Resumes with updated schemes, roster, gameplan |
 | MEGA-SIM-126 | P1 | FAIL | Halftime **opponent scouting** read-only stats strip | Product frame | Not in halftime UI |
 | MEGA-SIM-127 | P1 | FAIL | **Same seed** watch vs sim-to-end parity test in UI contract | Tests cover engine | User cannot trust skip-watch |
 | MEGA-SIM-128 | P2 | FAIL | **Exhibition** vs **RS** badge on watch header | Calendar phase | Not surfaced |

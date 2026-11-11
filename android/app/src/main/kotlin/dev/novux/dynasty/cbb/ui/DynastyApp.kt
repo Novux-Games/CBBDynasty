@@ -511,9 +511,18 @@ fun DynastyApp(
                             homeName = GameWatchLaunch.homeName,
                             awayName = GameWatchLaunch.awayName,
                             homeGameplan = GameWatchLaunch.homeGameplan,
+                            homeOffensiveScheme = GameWatchLaunch.homeOffensiveScheme,
+                            homeDefensiveScheme = GameWatchLaunch.homeDefensiveScheme,
+                            homeRosterPlayers = GameWatchLaunch.homeRosterPlayers,
+                            homeStarters = GameWatchLaunch.homeStarters,
                             homeSimRoster = GameWatchLaunch.homeSimRoster,
                             injuryRoll = GameWatchLaunch.injuryRoll,
-                            onHomeHalftimeGameplan = { GameWatchLaunch.homeGameplan = it },
+                            onHomeHalftimeAdjustments = { adj ->
+                                GameWatchLaunch.homeGameplan = adj.gameplan
+                                GameWatchLaunch.homeOffensiveScheme = adj.offensiveScheme
+                                GameWatchLaunch.homeDefensiveScheme = adj.defensiveScheme
+                                GameWatchLaunch.homeStarters = adj.starters
+                            },
                             onSimComplete = { result ->
                                 scope.launch {
                                     val session = ActiveDynastySession.current ?: return@launch

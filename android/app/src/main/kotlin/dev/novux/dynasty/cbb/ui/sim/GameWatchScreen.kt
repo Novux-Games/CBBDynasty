@@ -11,12 +11,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,6 +29,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.sim.GameLineupPrep
+import dev.novux.dynasty.cbb.core.roster.PlayerPosition
+import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.sim.GameSimInput
 import dev.novux.dynasty.cbb.core.sim.GameSimInjuryRollInput
 import dev.novux.dynasty.cbb.core.sim.GameSimResult
@@ -38,11 +39,14 @@ import dev.novux.dynasty.cbb.core.sim.GameSimRosterInput
 import dev.novux.dynasty.cbb.core.sim.GameSimTeamInput
 import dev.novux.dynasty.cbb.core.sim.GameWatchPlayback
 import dev.novux.dynasty.cbb.core.sim.GameWatchSpeedPresets
+import dev.novux.dynasty.cbb.core.sim.HalftimeCoachAdjustments
+import dev.novux.dynasty.cbb.core.sim.HalftimeRosterAdjust
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
 import dev.novux.dynasty.cbb.core.reports.PostgameReportGenerator
 import dev.novux.dynasty.cbb.core.reports.ReportArticle
+import dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset
 import dev.novux.dynasty.cbb.core.strategy.GameplanInput
-import dev.novux.dynasty.cbb.core.strategy.LateGameFoulStrategy
+import dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset
 import dev.novux.dynasty.cbb.ui.reports.ReportArticleView
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -53,7 +57,11 @@ fun GameWatchScreen(
     homeName: String,
     awayName: String,
     homeGameplan: GameplanInput,
-    onHomeHalftimeGameplan: (GameplanInput) -> Unit,
+    homeOffensiveScheme: OffensiveSchemePreset = OffensiveSchemePreset.Balanced,
+    homeDefensiveScheme: DefensiveSchemePreset = DefensiveSchemePreset.ManToMan,
+    homeRosterPlayers: List<RosterPlayer> = emptyList(),
+    homeStarters: Map<PlayerPosition, String> = emptyMap(),
+    onHomeHalftimeAdjustments: (HalftimeCoachAdjustments) -> Unit = {},
     homeSimRoster: GameSimRosterInput? = null,
     injuryRoll: GameSimInjuryRollInput? = null,
     onSimComplete: (GameSimResult) -> Unit = {},
@@ -65,19 +73,43 @@ fun GameWatchScreen(
     var scoreLine by remember { mutableStateOf("") }
     var halftimeOpen by remember { mutableStateOf(false) }
     var halftimeScore by remember { mutableStateOf("") }
-    var halftimePlan by remember { mutableStateOf(homeGameplan) }
+    var halftimeAdjustments by remember {
+        mutableStateOf(
+            HalftimeCoachAdjustments(
+                gameplan = homeGameplan,
+                offensiveScheme = homeOffensiveScheme,
+                defensiveScheme = homeDefensiveScheme,
+                starters = homeStarters,
+            ),
+        )
+    }
     var postgameArticle by remember { mutableStateOf<ReportArticle?>(null) }
     val listState = rememberLazyListState()
-    val resumeGate = remember { mutableStateOf<((GameplanInput) -> Unit)?>(null) }
+    val resumeGate = remember { mutableStateOf<((HalftimeCoachAdjustments) -> Unit)?>(null) }
     var selectedSpeedMultiplier by remember {
         mutableStateOf(GameWatchPlayback.DEFAULT_WATCH_SPEED_MULTIPLIER)
     }
     var simToEnd by remember { mutableStateOf(false) }
     var watchInProgress by remember { mutableStateOf(true) }
 
-    val baseInput = remember(tuning, seed, homeGameplan, homeName, awayName, homeSimRoster) {
+    val baseInput = remember(
+        tuning,
+        seed,
+        homeGameplan,
+        homeName,
+        awayName,
+        homeSimRoster,
+        homeOffensiveScheme,
+        homeDefensiveScheme,
+    ) {
         GameSimInput(
-            home = GameSimTeamInput(homeName, 78, 74),
+            home = GameSimTeamInput(
+                homeName,
+                78,
+                74,
+                offensiveScheme = homeOffensiveScheme,
+                defensiveScheme = homeDefensiveScheme,
+            ),
             away = GameSimTeamInput(awayName, 76, 75),
             tuning = tuning,
             seed = seed,
@@ -104,14 +136,40 @@ fun GameWatchScreen(
                     partial.homeScore,
                     partial.awayScore,
                 )
-                halftimePlan = homeGameplan
+                val resolvedStarters = if (homeStarters.isNotEmpty()) {
+                    homeStarters
+                } else {
+                    GameLineupPrep.resolveStarters(homeRosterPlayers, null)
+                }
+                halftimeAdjustments = HalftimeCoachAdjustments(
+                    gameplan = homeGameplan,
+                    offensiveScheme = homeOffensiveScheme,
+                    defensiveScheme = homeDefensiveScheme,
+                    starters = resolvedStarters,
+                )
                 halftimeOpen = true
                 scoreLine = halftimeScore
                 suspendCancellableCoroutine { cont ->
-                    resumeGate.value = { plan ->
-                        onHomeHalftimeGameplan(plan)
+                    resumeGate.value = { adj ->
+                        val teamId = homeSimRoster?.teamId ?: homeName
+                        val newRoster = if (homeRosterPlayers.isNotEmpty()) {
+                            val built = GameLineupPrep.build(teamId, homeRosterPlayers, adj.starters)
+                            HalftimeRosterAdjust.applyRotationEmphasis(built, adj.rotationEmphasis)
+                        } else {
+                            homeSimRoster
+                        }
+                        onHomeHalftimeAdjustments(adj)
                         halftimeOpen = false
-                        cont.resume(baseInput.copy(homeHalftimeGameplan = plan))
+                        cont.resume(
+                            baseInput.copy(
+                                home = baseInput.home.copy(
+                                    offensiveScheme = adj.offensiveScheme,
+                                    defensiveScheme = adj.defensiveScheme,
+                                ),
+                                homeHalftimeGameplan = adj.gameplan,
+                                homeRoster = newRoster,
+                            ),
+                        )
                         resumeGate.value = null
                     }
                 }
@@ -194,11 +252,12 @@ fun GameWatchScreen(
     }
 
     if (halftimeOpen) {
-        HalftimeAdjustDialog(
+        HalftimeCoachSheet(
             scoreLine = halftimeScore,
-            gameplan = halftimePlan,
-            onGameplanChange = { halftimePlan = it },
-            onContinue = { resumeGate.value?.invoke(halftimePlan) },
+            players = homeRosterPlayers,
+            state = halftimeAdjustments,
+            onStateChange = { halftimeAdjustments = it },
+            onContinue = { resumeGate.value?.invoke(halftimeAdjustments) },
         )
     }
 }
@@ -251,56 +310,3 @@ private fun GameWatchSpeedControl(
     }
 }
 
-@Composable
-private fun HalftimeAdjustDialog(
-    scoreLine: String,
-    gameplan: GameplanInput,
-    onGameplanChange: (GameplanInput) -> Unit,
-    onContinue: () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = {},
-        title = { Text(stringResource(R.string.game_watch_halftime_title)) },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(scoreLine)
-                Text(stringResource(R.string.strategy_deny_primary))
-                TextButton(
-                    onClick = {
-                        onGameplanChange(gameplan.copy(denyPrimaryScorer = !gameplan.denyPrimaryScorer))
-                    },
-                ) {
-                    Text(
-                        if (gameplan.denyPrimaryScorer) {
-                            stringResource(R.string.game_watch_halftime_deny_on)
-                        } else {
-                            stringResource(R.string.game_watch_halftime_deny_off)
-                        },
-                    )
-                }
-                Text(stringResource(R.string.strategy_late_fouls))
-                LateGameFoulStrategy.entries.forEach { strategy ->
-                    TextButton(
-                        onClick = { onGameplanChange(gameplan.copy(lateGameFoulStrategy = strategy)) },
-                    ) {
-                        Text(
-                            when (strategy) {
-                                LateGameFoulStrategy.Standard ->
-                                    stringResource(R.string.strategy_late_foul_standard)
-                                LateGameFoulStrategy.FoulEarly ->
-                                    stringResource(R.string.strategy_late_foul_foul_early)
-                                LateGameFoulStrategy.ProtectLead ->
-                                    stringResource(R.string.strategy_late_foul_protect)
-                            },
-                        )
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = onContinue) {
-                Text(stringResource(R.string.game_watch_halftime_resume))
-            }
-        },
-    )
-}
