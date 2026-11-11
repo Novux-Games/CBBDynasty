@@ -47,6 +47,8 @@ import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
+import dev.novux.dynasty.cbb.ui.navigation.navigateToRecruitingHub
+import dev.novux.dynasty.cbb.ui.navigation.popBackToInShellDashboard
 import dev.novux.dynasty.cbb.ui.shell.DynastyShellScreen
 import dev.novux.dynasty.cbb.ui.strategy.StrategyScreen
 import dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch
@@ -173,7 +175,7 @@ fun DynastyApp(
                 onOpenSchool = { navController.navigate(AppRoute.SchoolHub.route) },
                 onOpenRecruiting = {
                     recruitingLaunchTab = RecruitingHubTab.Recommended
-                    navController.navigate(AppRoute.Recruiting.route)
+                    navController.navigateToRecruitingHub()
                 },
                 onOpenStrategy = { navController.navigate(AppRoute.Strategy.route) },
                 onOpenStatistics = { navController.navigate(AppRoute.StatisticsHub.route) },
@@ -413,7 +415,7 @@ fun DynastyApp(
                             },
                             onOpenRecruitingTab = { tab ->
                                 recruitingLaunchTab = tab
-                                navController.navigate(AppRoute.Recruiting.route)
+                                navController.navigateToRecruitingHub()
                             },
                             onOpenAutomation = { navController.navigate(AppRoute.DynastyAutomation.route) },
                             onOpenDiscipline = { incident ->
@@ -656,7 +658,7 @@ fun DynastyApp(
                             hubMenuCallbacks = hubMenuCallbacks,
                             onOpenRecruiting = { tab ->
                                 recruitingLaunchTab = tab
-                                navController.navigate(AppRoute.Recruiting.route)
+                                navController.navigateToRecruitingHub()
                             },
                             onOpenSigningDay = { link ->
                                 signingDayInitialTab = when (link) {
@@ -709,8 +711,12 @@ fun DynastyApp(
                             incomingClassSeedRepository = incomingClassSeedRepository,
                             portalCycleRepository = portalCycleRepository,
                             initialTab = recruitingLaunchTab,
-                            onBack = { navController.popBackStack() },
+                            onBack = { navController.popBackToInShellDashboard() },
                         )
+                    } else {
+                        LaunchedEffect(Unit) {
+                            navController.popBackToInShellDashboard()
+                        }
                     }
                 }
                 composable(AppRoute.SigningDay.route) {

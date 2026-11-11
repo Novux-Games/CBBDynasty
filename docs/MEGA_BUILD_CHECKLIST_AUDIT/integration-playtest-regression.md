@@ -93,7 +93,7 @@
 
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
-| MEGA-QA-046 | P0 | DEV | OPEN | Hub back to shell | Shell → Recruiting → system back | Returns in-shell dashboard; not home menu | `DynastyApp.kt` `AppRoute.Recruiting` |
+| MEGA-QA-046 | P0 | BOT | PASS | Hub back to shell | Shell → Recruiting → system back | Returns in-shell dashboard; not home menu | `popBackToInShellDashboard`; `BackHandler` on `RecruitingHubScreen`; `navigateToRecruitingHub` |
 | MEGA-QA-047 | P1 | DEV | OPEN | Signing Day deep route | Offseason W6 → Signing Day screen → back | Lands offseason shell correct week | `SigningDayScreen`, routes |
 | MEGA-QA-048 | P1 | DEV | OPEN | Carousel not in shell stack | Carousel → Exit | Pops to offseason; bottom nav restored | `CoachingCarouselScreen` |
 | MEGA-QA-049 | P2 | DEV | OPEN | Game watch back stack | Calendar game → Watch → back | Calendar tab selected | `GameWatchScreen` |

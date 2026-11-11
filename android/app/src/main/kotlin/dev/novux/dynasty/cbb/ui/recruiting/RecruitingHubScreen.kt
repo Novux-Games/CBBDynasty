@@ -19,6 +19,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
@@ -87,6 +88,7 @@ fun RecruitingHubScreen(
     initialTab: RecruitingHubTab = RecruitingHubDefaults.defaultTab,
     onBack: () -> Unit,
 ) {
+    BackHandler(onBack = onBack)
     var tabIndex by remember(initialTab) {
         mutableIntStateOf(RecruitingHubDefaults.tabs.indexOf(initialTab))
     }
