@@ -230,7 +230,7 @@
 | MEGA-QA-131 | P2 | DEV | OPEN | Foldable if available | Unfold mid-shell | Layout adapts | Responsive |
 | MEGA-QA-132 | P1 | DEV | OPEN | Storage permission N/A | Install from Play/internal | No legacy storage prompt crash | Scoped storage |
 | MEGA-QA-133 | P2 | DEV | OPEN | Haptics / vibration off | System setting | No assumed vibration for gates | UX |
-| MEGA-QA-134 | P0 | DEV | OPEN | Release AAB sideload | Install `bundleRelease` universal APK | Parity with debug smoke | Release build |
+| MEGA-QA-134 | P0 | BOT | PASS | Release AAB sideload | Install `bundleRelease` universal APK | Parity with debug smoke | `RELEASE_SIDELOAD_SMOKE.md`; `build_release_universal_apk.sh`; `android-release-universal-smoke.yml` |
 
 ---
 

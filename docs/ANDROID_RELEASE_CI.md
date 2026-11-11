@@ -64,6 +64,17 @@ cd android && ./gradlew :app:bundleRelease
 
 For a Play-equivalent local bundle, export the same env vars and point `ANDROID_KEYSTORE_PATH` at your `.jks` file (see `android/app/build.gradle.kts`).
 
+## Sideload smoke (MEGA-QA-134)
+
+Before promoting a track, install the **universal APK** from the release bundle and repeat the debug pre-launch path:
+
+```bash
+bash scripts/build_release_universal_apk.sh
+adb install -r android/app/build/outputs/sideload/release/universal.apk
+```
+
+Details: [`RELEASE_SIDELOAD_SMOKE.md`](RELEASE_SIDELOAD_SMOKE.md). CI: **Android release universal APK smoke** workflow.
+
 ## Related
 
 - Debug APK workflow: [`.github/workflows/android-assemble-debug.yml`](../.github/workflows/android-assemble-debug.yml)

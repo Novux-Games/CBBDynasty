@@ -32,3 +32,9 @@ cd android && ./gradlew :app:assembleDebug
 See [`PHYSICAL_DEVICE_SMOKE.md`](PHYSICAL_DEVICE_SMOKE.md) for the retail device script (new game → four RS sim weeks).
 
 **Automation (BOT):** `FourRegularSeasonWeeksDeviceSmokeTest` mirrors league sim + week checkpoint for four RS weeks.
+
+## MEGA-QA-134 — Release sideload parity
+
+See [`RELEASE_SIDELOAD_SMOKE.md`](RELEASE_SIDELOAD_SMOKE.md) — `bundleRelease` → universal APK → repeat MEGA-QA-119 smoke on device.
+
+**Automation (BOT):** `android-release-universal-smoke.yml`; `ReleaseSideloadSmokePath`.
