@@ -59,6 +59,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingPointAction
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingSpendFailure
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingRefundableAction
+import dev.novux.dynasty.cbb.core.recruiting.RecruitScoutLetterEngine
 import dev.novux.dynasty.cbb.core.recruiting.RecommendedProspectRow
 import dev.novux.dynasty.cbb.core.recruiting.RecommendedRecruitList
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
@@ -836,6 +837,7 @@ private fun RecommendedProspectRow(
         }
         SignLikelihoodChip(row.badge)
         }
+        RecruitScoutLetterSheet(letters = RecruitScoutLetterEngine.fromProspect(row.prospect))
         Text(
             text = stringResource(R.string.recruiting_nil_ask_line, currency.format(row.prospect.nilAskUsd)),
             style = MaterialTheme.typography.bodySmall,

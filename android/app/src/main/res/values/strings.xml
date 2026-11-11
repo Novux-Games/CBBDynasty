@@ -449,6 +449,14 @@
     <string name="recruiting_academics_multiplier">Program academics %1$d — weekly pool ×%2$.2f</string>
     <string name="recruiting_recommended_summary">%1$d targets look realistic for your program · showing %2$d on Recommended</string>
     <string name="recruiting_row_meta">%1$d★ %2$s · %3$s · Grade %4$s</string>
+    <string name="recruiting_scout_sheet_heading">Scout sheet</string>
+    <string name="recruiting_scout_cat_overall">Overall</string>
+    <string name="recruiting_scout_cat_offense">Offense</string>
+    <string name="recruiting_scout_cat_defense">Defense</string>
+    <string name="recruiting_scout_cat_shooting">Shooting</string>
+    <string name="recruiting_scout_cat_handling">Handling</string>
+    <string name="recruiting_scout_cat_athleticism">Athleticism</string>
+    <string name="recruiting_scout_cat_potential">Potential</string>
     <string name="recruiting_influence_row">Your rank #%1$d · closeness %2$d</string>
     <string name="recruiting_interest_meter">Interest %1$d / 100</string>
     <string name="recruiting_interest_meter_with_gain">Interest %1$d / 100 (+%2$d from spend)</string>

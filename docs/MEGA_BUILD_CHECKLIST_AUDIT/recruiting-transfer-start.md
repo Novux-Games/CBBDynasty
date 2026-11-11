@@ -24,7 +24,7 @@
 | MEGA-RECR-010 | P2 | PASS | Top 60 cap 60 rows | `top60FromPool` filters `nationalHsRank` and caps at 60 in tests. | `NationalRecruitingRankingsTest` |
 | MEGA-RECR-011 | P1 | GAP | Priority roll 1–2 at create | `RecruitPriorityRoll` used in seeder; demo pool also rolls priorities — OK when seeder used. | `IncomingClassSeederTest` |
 | MEGA-RECR-012 | P2 | GAP | Geography national pool | Only 11 stub states; no pack-driven pipeline breadth. | `IncomingClassSeeder.states` |
-| MEGA-RECR-013 | P1 | FAIL | Scout letter categories | Only `scoutLetterOverall`; no per-category A–F rows on sheet. | `RecruitProspect`, hub UI |
+| MEGA-RECR-013 | P1 | PASS | Scout letter categories | `RecruitScoutLetterSheet` shows Overall/Offense/Defense/Shooting/Handling/Athleticism/Potential A–F rows. | `RecruitScoutLetterEngine`, hub UI |
 | MEGA-RECR-014 | P2 | RISK | Hidden 0–99 not in UI | Overall letter shown; hidden ratings exist in save encoding — aligns with “no public 0–99”. | Seeder + prospect model |
 
 ---

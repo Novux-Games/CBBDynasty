@@ -22,6 +22,8 @@ import dev.novux.dynasty.cbb.core.portal.PortalEntrant
 import dev.novux.dynasty.cbb.core.portal.PortalRecruitingHub
 import dev.novux.dynasty.cbb.core.recruiting.HsJucoBoard
 import dev.novux.dynasty.cbb.core.recruiting.RecruitProspect
+import dev.novux.dynasty.cbb.core.recruiting.RecruitScoutLetterEngine
+import dev.novux.dynasty.cbb.ui.recruiting.RecruitScoutLetterSheet
 import dev.novux.dynasty.cbb.core.signingday.NationalRankRow
 import dev.novux.dynasty.cbb.core.signingday.NationalRecruitingRankings
 
@@ -143,6 +145,7 @@ private fun HsJucoProspectRow(
                 }
             }
         }
+        RecruitScoutLetterSheet(letters = RecruitScoutLetterEngine.fromProspect(prospect))
     }
 }
 

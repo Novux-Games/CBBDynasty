@@ -1,6 +1,8 @@
 package dev.novux.dynasty.cbb.core.portal
 
+import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
 import dev.novux.dynasty.cbb.core.recruiting.RecruitPoolKind
+import dev.novux.dynasty.cbb.core.recruiting.RecruitScoutLetterEngine
 import dev.novux.dynasty.cbb.core.recruiting.RecruitPriorityRoll
 import dev.novux.dynasty.cbb.core.recruiting.RecruitProspect
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
@@ -15,7 +17,7 @@ object PortalRecruitProspectMapper {
         val stars = entrant.stars ?: starsFromHidden(entrant.hiddenRating)
         val position = PlayerPosition.entries[abs(entrant.entrantId.hashCode()) % PlayerPosition.entries.size]
         val homeState = stateFromProgram(entrant.priorProgramId)
-        return RecruitProspect(
+        val draft = RecruitProspect(
             prospectId = entrant.entrantId,
             displayName = "Portal — $priorSchoolLabel",
             stars = stars,
@@ -24,10 +26,12 @@ object PortalRecruitProspectMapper {
             topPriorities = RecruitPriorityRoll.roll(entrant.entrantId),
             nationalHsRank = entrant.nationalTop40Rank,
             nilAskUsd = nilAskForStars(stars),
-            scoutLetterOverall = scoutLetter(entrant.hiddenRating),
+            scoutLetterOverall = "C",
             poolKind = RecruitPoolKind.Portal,
             hiddenRating = entrant.hiddenRating,
         )
+        val letters = RecruitScoutLetterEngine.fromProspect(draft, ScoutDepth.Light)
+        return draft.copy(scoutLetterOverall = letters.overall)
     }
 
     private fun starsFromHidden(hidden: Int): Int = when {
@@ -42,13 +46,6 @@ object PortalRecruitProspectMapper {
         4 -> 95_000
         3 -> 45_000
         else -> 18_000
-    }
-
-    private fun scoutLetter(hidden: Int): String = when {
-        hidden >= 90 -> "A"
-        hidden >= 80 -> "B"
-        hidden >= 68 -> "C"
-        else -> "D"
     }
 
     private fun stateFromProgram(programId: String): String {

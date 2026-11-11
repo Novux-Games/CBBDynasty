@@ -151,7 +151,8 @@
     "MEGA-NOTES-065",
     "MEGA-QA-008",
     "MEGA-QA-068",
-    "MEGA-QA-094"
+    "MEGA-QA-094",
+    "MEGA-RECR-013"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
