@@ -5,6 +5,6 @@
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
   "baseBranch": "main",
-  "pullRequestNumber": null,
-  "pullRequestUrl": null
+  "pullRequestNumber": 30,
+  "pullRequestUrl": "https://github.com/Novux-Games/CBBDynasty/pull/30"
 }
