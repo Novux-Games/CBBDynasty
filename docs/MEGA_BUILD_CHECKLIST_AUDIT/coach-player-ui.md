@@ -30,7 +30,7 @@
 | MEGA-COACH-015 | P1 | PASS | Invalid avatar ids rejected at wizard Next | `CoachCreateValidationError.InvalidAvatar` |
 | MEGA-COACH-016 | — | N/A | Coach **portrait renderer** from preset id | **Explicitly excluded** — no `Portrait` for coaches |
 | MEGA-COACH-017 | — | N/A | Coach card identity strip shows portrait | **Product: no coach avatars** — strip is text-only per lock |
-| MEGA-COACH-018 | P1 | FAIL | Coach **preview sheet** quick info (no portrait required) | No `CoachPreviewSheet`; `DynastyShellScreen` → `HeadCoachCardScreen` direct |
+| MEGA-COACH-018 | P1 | PASS | Coach **preview sheet** quick info (no portrait required) | `CoachPreviewSheet` / `CoachPreviewBottomSheet`; staff tap → preview → View more → `HeadCoachCardScreen`; text-only quick info | `CoachPreviewSheetPathTest` |
 | MEGA-COACH-019 | P2 | GAP | Shared appearance **ids** with player pipeline | Coach presets in core; player appearance ids **not** in wizard/UI |
 | MEGA-COACH-020 | P2 | PASS | Unit test coach create validation | `CoachCreateValidatorTest` (name/suffix; not full avatar matrix) |
 

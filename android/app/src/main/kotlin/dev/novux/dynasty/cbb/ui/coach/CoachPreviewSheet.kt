@@ -2,7 +2,6 @@ package dev.novux.dynasty.cbb.ui.coach
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -24,7 +23,14 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.coach.card.AssistantCoachCard
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
-import dev.novux.dynasty.cbb.ui.portrait.CoachPortraitSlot
+
+/**
+ * Quick coach info sheet ([MEGA-COACH-018]): text-only preview before full card; no coach portrait ship.
+ * Shell entry: [dev.novux.dynasty.cbb.ui.shell.DynastyShellScreen] → [CoachPreviewBottomSheet] → View more.
+ */
+object CoachPreviewSheet {
+    const val QA_ID: String = "MEGA-COACH-018"
+}
 
 sealed class CoachPreviewTarget {
     data class HeadCoach(
@@ -101,64 +107,65 @@ private fun HeadCoachPreviewBody(
     card: HeadCoachCard,
     userCoachSecurity: CoachSecuritySnapshot?,
 ) {
-    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        CoachPortraitSlot(
-            displayName = card.displayName,
-            avatarPresetId = card.avatarPresetId,
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(card.displayName, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text(
+            stringResource(R.string.coach_card_role_head),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary,
         )
-        Column {
-            Text(card.displayName, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text(card.schoolDisplayName, style = MaterialTheme.typography.titleLarge)
+        Text(
+            stringResource(R.string.coach_card_age, card.age),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        card.almaMaterLabel?.takeIf { it.isNotBlank() }?.let { alma ->
             Text(
-                stringResource(R.string.coach_card_role_head),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            Text(card.schoolDisplayName, style = MaterialTheme.typography.titleLarge)
-            Text(
-                stringResource(R.string.coach_card_record, card.seasonRecordLabel),
-                style = MaterialTheme.typography.bodyLarge,
-            )
-            val money = remember { NumberFormat.getCurrencyInstance(Locale.US) }
-            Text(
-                stringResource(R.string.coach_contract_salary, money.format(card.annualSalaryUsd)),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            userCoachSecurity?.let { JobSecurityMeter(it) }
-            Text(
-                stringResource(
-                    R.string.coach_preview_headline_ratings,
-                    card.ratings.offensive,
-                    card.ratings.defensive,
-                    card.ratings.recruiting,
-                ),
+                stringResource(R.string.coach_alma_mater, alma),
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
+        Text(
+            stringResource(R.string.coach_card_record, card.seasonRecordLabel),
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        val money = remember { NumberFormat.getCurrencyInstance(Locale.US) }
+        Text(
+            stringResource(R.string.coach_contract_salary, money.format(card.annualSalaryUsd)),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        userCoachSecurity?.let { JobSecurityMeter(it) }
+        Text(
+            stringResource(
+                R.string.coach_preview_headline_ratings,
+                card.ratings.offensive,
+                card.ratings.defensive,
+                card.ratings.recruiting,
+            ),
+            style = MaterialTheme.typography.bodyMedium,
+        )
     }
 }
 
 @Composable
 private fun AssistantCoachPreviewBody(card: AssistantCoachCard) {
-    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        CoachPortraitSlot(displayName = card.displayName, avatarPresetId = card.avatarPresetId)
-        Column {
-            Text(card.displayName, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-            Text(card.role.label, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-            Text(card.schoolDisplayName, style = MaterialTheme.typography.titleLarge)
-            Text(
-                stringResource(R.string.coach_card_record, card.seasonRecordLabel),
-                style = MaterialTheme.typography.bodyLarge,
-            )
-            Text(
-                stringResource(
-                    R.string.coach_preview_assistant_ratings,
-                    card.ratings.recruiting,
-                    card.ratings.development,
-                    card.ratings.scouting,
-                ),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        }
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(card.displayName, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Text(card.role.label, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+        Text(card.schoolDisplayName, style = MaterialTheme.typography.titleLarge)
+        Text(
+            stringResource(R.string.coach_card_record, card.seasonRecordLabel),
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        Text(
+            stringResource(
+                R.string.coach_preview_assistant_ratings,
+                card.ratings.recruiting,
+                card.ratings.development,
+                card.ratings.scouting,
+            ),
+            style = MaterialTheme.typography.bodyMedium,
+        )
     }
 }
 

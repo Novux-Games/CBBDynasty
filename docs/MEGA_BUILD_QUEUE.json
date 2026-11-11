@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-QA-015",
-    "pri": "P0",
-    "status": "GUARD",
-    "shard": "integration-playtest-regression.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md"
-  },
-  {
     "id": "MEGA-COACH-018",
     "pri": "P1",
     "status": "FAIL",
