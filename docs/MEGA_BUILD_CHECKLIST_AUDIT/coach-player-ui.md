@@ -296,7 +296,7 @@
 | MEGA-COACH-169 | P2 | GAP | Promise chip shows type + band (Starter minutes, etc.) | `PlayerLoyaltyChips` shows status strings |
 | MEGA-COACH-170 | P1 | PASS | At risk status surfaced before break | `PlayerPromiseInSeasonRefreshEngine` + week persist; dashboard + `PlayerLoyaltyChips` | `PlayerPromiseStatusRepository.kt` |
 | MEGA-COACH-171 | P2 | GAP | Ratings tab loyalty isolated row (not mixed with OVR) | `PlayerLoyaltyRatingsRow` exists |
-| MEGA-COACH-172 | P1 | FAIL | Convince / retention UI shows promise + loyalty together | `PlayersLeavingScreen` partial |
+| MEGA-COACH-172 | P1 | PASS | Convince / retention UI shows promise + loyalty together | `PlayerLeavingRetentionSummary` on Week 1 roster/transfer tabs | `PlayersLeavingScreen.kt` |
 | MEGA-COACH-173 | P2 | FAIL | Broken promise → portal intent messaging on card | Portal partition in core; no card copy |
 | MEGA-COACH-174 | P2 | GAP | Stay pledge params visible (top-N lottery) | Promise params not shown in chips |
 | MEGA-COACH-175 | P1 | FAIL | One promise locked at commit — no amend UI | Correct by spec; recruit picker still missing |

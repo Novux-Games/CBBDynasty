@@ -662,6 +662,8 @@
     <string name="player_card_history_promise_season_row">%1$s — %2$s</string>
     <string name="dynasty_shell_roster">Roster preview</string>
     <string name="leaving_loyalty_line">Loyalty %1$d · %2$s</string>
+    <string name="leaving_loyalty_only">Loyalty %1$d</string>
+    <string name="leaving_retention_promise_loyalty">Loyalty %1$d · Promise: %2$s — %3$s</string>
     <string name="injury_roster_out_chip">OUT</string>
     <string name="injury_roster_weeks_suffix">%1$s · %2$dw</string>
     <string name="player_card_injury_detail">%1$s (%2$s) · %3$d weeks remaining</string>
