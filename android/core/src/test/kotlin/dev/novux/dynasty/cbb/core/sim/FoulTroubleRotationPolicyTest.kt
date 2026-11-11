@@ -48,7 +48,7 @@ class FoulTroubleRotationPolicyTest {
     fun weightedDefenseReflectsFloorSwap() {
         val ledger = PersonalFoulLedger(mapOf("s2" to 3))
         val static = roster.weightedDefensive()
-        val onFloor = roster.weightedDefensiveOnFloor(ledger, GameSimClock.REGULATION_SECONDS)
+        val onFloor = roster.weightedDefensiveOnFloor(ledger, SimFloorMinutesLedger(), GameSimClock.REGULATION_SECONDS)
         assertTrue(onFloor < static)
     }
 }

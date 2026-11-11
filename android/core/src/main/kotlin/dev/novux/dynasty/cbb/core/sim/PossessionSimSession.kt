@@ -30,6 +30,8 @@ class PossessionSimSession(
     private var totalPossessions: Int = resume?.totalPossessions ?: 0
     private val homeFoulLedger = PersonalFoulLedger(resume?.homePersonalFoulsByPlayer.orEmpty())
     private val awayFoulLedger = PersonalFoulLedger(resume?.awayPersonalFoulsByPlayer.orEmpty())
+    private val homeMinutesLedger = SimFloorMinutesLedger(resume?.homeFloorSecondsByPlayer.orEmpty())
+    private val awayMinutesLedger = SimFloorMinutesLedger(resume?.awayFloorSecondsByPlayer.orEmpty())
 
     fun hasNext(): Boolean = gameClock > 0
 
@@ -105,6 +107,7 @@ class PossessionSimSession(
                 shotClockSeconds = PossessionShotClock.resetAfterOffensiveRebound(input.tuning.shotClock)
             }
         }
+        accrueFloorMinutes(used, offenseHome)
         val foulNote = recordPersonalFoulIfNeeded(tripSample.foulStoppage, offenseHome)
         val line = PossessionSimEngine.formatPossessionLog(
             used,
@@ -125,16 +128,37 @@ class PossessionSimSession(
 
     private fun teamOffensiveRating(offenseIsHome: Boolean): Int {
         val roster = if (offenseIsHome) input.homeRoster else input.awayRoster
-        val ledger = if (offenseIsHome) homeFoulLedger else awayFoulLedger
-        return roster?.weightedOffensiveOnFloor(ledger, gameClock)
+        val foulLedger = if (offenseIsHome) homeFoulLedger else awayFoulLedger
+        val minutesLedger = if (offenseIsHome) homeMinutesLedger else awayMinutesLedger
+        return roster?.weightedOffensiveOnFloor(foulLedger, minutesLedger, gameClock)
             ?: if (offenseIsHome) input.homeOffensive() else input.awayOffensive()
     }
 
     private fun teamDefensiveRating(defenseIsHome: Boolean): Int {
         val roster = if (defenseIsHome) input.homeRoster else input.awayRoster
-        val ledger = if (defenseIsHome) homeFoulLedger else awayFoulLedger
-        return roster?.weightedDefensiveOnFloor(ledger, gameClock)
+        val foulLedger = if (defenseIsHome) homeFoulLedger else awayFoulLedger
+        val minutesLedger = if (defenseIsHome) homeMinutesLedger else awayMinutesLedger
+        return roster?.weightedDefensiveOnFloor(foulLedger, minutesLedger, gameClock)
             ?: if (defenseIsHome) input.homeDefensive() else input.awayDefensive()
+    }
+
+    private fun accrueFloorMinutes(usedSeconds: Int, offenseIsHome: Boolean) {
+        val homeRoster = input.homeRoster ?: return
+        val awayRoster = input.awayRoster ?: return
+        val homeFloor = SimFloorRotationPolicy.floorParticipants(
+            homeRoster,
+            homeFoulLedger,
+            homeMinutesLedger,
+            gameClock,
+        ).map { it.playerId }
+        val awayFloor = SimFloorRotationPolicy.floorParticipants(
+            awayRoster,
+            awayFoulLedger,
+            awayMinutesLedger,
+            gameClock,
+        ).map { it.playerId }
+        homeMinutesLedger.addFloorTime(homeFloor, usedSeconds)
+        awayMinutesLedger.addFloorTime(awayFloor, usedSeconds)
     }
 
     private fun recordPersonalFoulIfNeeded(foulStoppage: Boolean, offenseIsHome: Boolean): String? {
@@ -166,6 +190,8 @@ class PossessionSimSession(
         shotClockSecondsRemaining = shotClockSeconds,
         homePersonalFoulsByPlayer = homeFoulLedger.snapshot(),
         awayPersonalFoulsByPlayer = awayFoulLedger.snapshot(),
+        homeFloorSecondsByPlayer = homeMinutesLedger.snapshot(),
+        awayFloorSecondsByPlayer = awayMinutesLedger.snapshot(),
     )
 
     fun toResult(isComplete: Boolean): GameSimResult = GameSimResult(
@@ -179,5 +205,7 @@ class PossessionSimSession(
         midGame = if (isComplete) null else toMidGame(),
         homePersonalFoulsByPlayer = homeFoulLedger.snapshot(),
         awayPersonalFoulsByPlayer = awayFoulLedger.snapshot(),
+        homeFloorSecondsByPlayer = homeMinutesLedger.snapshot(),
+        awayFloorSecondsByPlayer = awayMinutesLedger.snapshot(),
     )
 }

@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-SIM-102",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
     "id": "MEGA-SIM-103",
     "pri": "P0",
     "status": "FAIL",

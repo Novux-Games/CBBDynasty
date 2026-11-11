@@ -78,6 +78,8 @@ data class GameSimResult(
     val awayInjuries: List<GameSimInjuryEvent> = emptyList(),
     val homePersonalFoulsByPlayer: Map<String, Int> = emptyMap(),
     val awayPersonalFoulsByPlayer: Map<String, Int> = emptyMap(),
+    val homeFloorSecondsByPlayer: Map<String, Int> = emptyMap(),
+    val awayFloorSecondsByPlayer: Map<String, Int> = emptyMap(),
 ) {
     fun userTeamInjuries(userTeamIsHome: Boolean): List<GameSimInjuryEvent> =
         if (userTeamIsHome) homeInjuries else awayInjuries

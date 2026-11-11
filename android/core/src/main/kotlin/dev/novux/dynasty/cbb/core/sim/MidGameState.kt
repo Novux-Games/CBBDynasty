@@ -15,6 +15,8 @@ data class MidGameState(
     val shotClockSecondsRemaining: Int = 30,
     val homePersonalFoulsByPlayer: Map<String, Int> = emptyMap(),
     val awayPersonalFoulsByPlayer: Map<String, Int> = emptyMap(),
+    val homeFloorSecondsByPlayer: Map<String, Int> = emptyMap(),
+    val awayFloorSecondsByPlayer: Map<String, Int> = emptyMap(),
 )
 
 data class SimulateOptions(

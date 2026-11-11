@@ -48,22 +48,25 @@ object FoulTroubleRotationPolicy {
 }
 
 fun GameSimRosterInput.weightedOffensiveOnFloor(
-    ledger: PersonalFoulLedger,
+    foulLedger: PersonalFoulLedger,
+    minutesLedger: SimFloorMinutesLedger,
     gameClockSeconds: Int,
-): Int = weightedOnFloor(ledger, gameClockSeconds, { it.offensiveRating }, ::weightedOffensive)
+): Int = weightedOnFloor(foulLedger, minutesLedger, gameClockSeconds, { it.offensiveRating }, ::weightedOffensive)
 
 fun GameSimRosterInput.weightedDefensiveOnFloor(
-    ledger: PersonalFoulLedger,
+    foulLedger: PersonalFoulLedger,
+    minutesLedger: SimFloorMinutesLedger,
     gameClockSeconds: Int,
-): Int = weightedOnFloor(ledger, gameClockSeconds, { it.defensiveRating }, ::weightedDefensive)
+): Int = weightedOnFloor(foulLedger, minutesLedger, gameClockSeconds, { it.defensiveRating }, ::weightedDefensive)
 
 private fun GameSimRosterInput.weightedOnFloor(
-    ledger: PersonalFoulLedger,
+    foulLedger: PersonalFoulLedger,
+    minutesLedger: SimFloorMinutesLedger,
     gameClockSeconds: Int,
     pick: (GameSimParticipant) -> Int,
     fallback: () -> Int,
 ): Int {
-    val floor = FoulTroubleRotationPolicy.floorParticipants(this, ledger, gameClockSeconds)
+    val floor = SimFloorRotationPolicy.floorParticipants(this, foulLedger, minutesLedger, gameClockSeconds)
     val totalMin = floor.sumOf { it.targetMinutes.coerceAtLeast(1) }
     if (totalMin <= 0) return fallback()
     val sum = floor.sumOf { pick(it) * it.targetMinutes.coerceAtLeast(1) }
