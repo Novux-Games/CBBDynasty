@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-RECR-083",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
     "id": "MEGA-RECR-094",
     "pri": "P1",
     "status": "FAIL",

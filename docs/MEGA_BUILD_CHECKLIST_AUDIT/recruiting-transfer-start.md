@@ -71,7 +71,7 @@
 | MEGA-RECR-036 | P0 | PASS | Transfer Portal sub-tab | Top 40 + portal Recommended with full spend/NIL surface. | `RecruitingHubTabBodies.kt` |
 | MEGA-RECR-037 | P1 | PASS | Tab set vs spec | Eight hub tabs: Recommended, All/HS/JUCO, Portal, Board, Committed, Lost. | `RecruitingHubTab`, `RecruitingHubTabPolicy` |
 | MEGA-RECR-038 | P1 | PASS | Hub open offseason week 1 | `hubAccessible(Offseason)` from week 1 (retention week; shared points economy). | `RecruitingCyclePolicy.kt` |
-| MEGA-RECR-039 | P1 | GAP | NIL budget strip | Pool remaining shown — PASS; drill-down committed/reserved breakdown not implemented. | Hub header |
+| MEGA-RECR-039 | P1 | PASS | NIL budget strip | Strip + tap sheet committed/reserved by prospect. | `RecruitingNilBudgetDrillDownSheet` |
 | MEGA-RECR-040 | P2 | GAP | Official visit window RS→R4 | Gating in `RecruitingRefundableActionSpend` / gates — exists in core; full calendar integration untested in UI. | core recruiting gates |
 | MEGA-RECR-041 | P2 | GAP | Walk-ons after Signing Day | Not implemented in UI/data. | spec `recruiting-engine#walk-ons` |
 
@@ -189,7 +189,7 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-093 | P1 | GAP | Assign NIL partial offers | Buttons **Meet ask** / **Clear** only — no slider for partial $ between 0 and **3× ask**. | `RecruitingHubScreen` NIL row |
-| MEGA-RECR-094 | P1 | FAIL | NIL drill-down sheet | Strip shows remaining / annual total — spec **committed / reserved** breakdown sheet missing. | `recruiting-engine.md#nil-budget-strip` |
+| MEGA-RECR-094 | P1 | PASS | NIL drill-down sheet | Bottom sheet: committed + reserved lines from ledger and open scholarship NIL offers. | `NilBudgetDrillDownEngine` |
 | MEGA-RECR-095 | P2 | GAP | Reserved vs committed copy | `NilBudgetLedger` tracks buckets in core; hub shows aggregate remaining only. | `NilBudgetRepository` |
 | MEGA-RECR-096 | P2 | GAP | 3× cap affordance | `NilOfferEngine.validateAssign` enforces cap; UI does not show max assignable for this recruit. | core nil tests |
 | MEGA-RECR-097 | P1 | GAP | Interest NIL tops at ask | `NilInterestScoring` tested; assign path does not refresh row **badge** / meter when offer changes. | hub `gateRefresh` |

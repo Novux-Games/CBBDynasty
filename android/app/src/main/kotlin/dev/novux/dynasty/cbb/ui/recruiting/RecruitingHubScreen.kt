@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.ui.recruiting
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -41,6 +42,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.balance.BalanceNilParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionsParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
+import dev.novux.dynasty.cbb.core.nil.NilBudgetDrillDown
 import dev.novux.dynasty.cbb.core.nil.NilBudgetLedger
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.portal.PortalCycleState
@@ -104,6 +106,7 @@ fun RecruitingHubScreen(
     }
     var ledger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
     var nilLedger by remember { mutableStateOf<NilBudgetLedger?>(null) }
+    var nilDrillDown by remember { mutableStateOf<NilBudgetDrillDown?>(null) }
     var nilOffers by remember { mutableStateOf<Map<String, Long>>(emptyMap()) }
     var nilBoostUsd by remember { mutableIntStateOf(0) }
     var nilBasePoolUsd by remember { mutableStateOf(0L) }
@@ -377,14 +380,40 @@ fun RecruitingHubScreen(
             }
         }
         nilLedger?.let { nilRow ->
-            Text(
-                text = stringResource(
-                    R.string.recruiting_nil_budget,
-                    currency.format(nilRow.nilRemainingUsd),
-                    currency.format(nilRow.nilPoolAnnualUsd),
-                ),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
+            Column(
+                modifier = Modifier.clickable {
+                    scope.launch {
+                        val poolUsd = nilBasePoolUsd + nilBoostUsd
+                        val namesById = fullPool.associate { it.prospectId to it.displayName }
+                        nilDrillDown = nilBudgetRepository.loadDrillDown(
+                            loaded.dynastyId,
+                            loaded.metadata.seasonIndex,
+                            poolUsd,
+                        ) { id -> namesById[id] ?: id }
+                    }
+                },
+            ) {
+                Text(
+                    text = stringResource(
+                        R.string.recruiting_nil_budget,
+                        currency.format(nilRow.nilRemainingUsd),
+                        currency.format(nilRow.nilPoolAnnualUsd),
+                    ),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = stringResource(R.string.recruiting_nil_budget_tap_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+        nilDrillDown?.let { drill ->
+            RecruitingNilBudgetDrillDownSheet(
+                drillDown = drill,
+                currency = currency,
+                onDismiss = { nilDrillDown = null },
             )
         }
         if (nilBoostUsd > 0) {

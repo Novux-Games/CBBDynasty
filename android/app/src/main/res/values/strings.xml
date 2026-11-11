@@ -220,6 +220,13 @@
     <string name="fundraising_upgrade_cost">Upgrade %1$s</string>
     <string name="recruiting_nil_boost_line">Week 9 NIL boost applied: +%1$s to annual pool</string>
     <string name="recruiting_nil_budget">NIL Budget: %1$s remaining of %2$s</string>
+    <string name="recruiting_nil_budget_tap_hint">Tap for committed / reserved breakdown</string>
+    <string name="recruiting_nil_drilldown_title">NIL budget breakdown</string>
+    <string name="recruiting_nil_drilldown_committed_header">Committed (signed)</string>
+    <string name="recruiting_nil_drilldown_reserved_header">Reserved (open offers)</string>
+    <string name="recruiting_nil_drilldown_committed_total">Total committed</string>
+    <string name="recruiting_nil_drilldown_reserved_total">Total reserved</string>
+    <string name="recruiting_nil_drilldown_empty">None</string>
     <string name="recruiting_nil_ask_line">NIL ask: %1$s</string>
     <string name="recruiting_nil_offer_line">Your NIL offer: %1$s</string>
     <string name="recruiting_nil_assign_meet_ask">Assign NIL (meet ask)</string>
