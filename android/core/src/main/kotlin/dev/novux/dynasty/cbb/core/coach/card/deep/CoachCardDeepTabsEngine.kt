@@ -1,5 +1,8 @@
 package dev.novux.dynasty.cbb.core.coach.card.deep
 
+import dev.novux.dynasty.cbb.core.coach.card.history.CoachSeasonHistoryDetail
+import dev.novux.dynasty.cbb.core.coach.card.history.CoachSeasonHistoryResolver
+import dev.novux.dynasty.cbb.core.coach.card.history.CoachSeasonHistoryRow
 import dev.novux.dynasty.cbb.core.history.DynastyHistoryArchive
 import dev.novux.dynasty.cbb.core.history.HistoryYearCard
 import dev.novux.dynasty.cbb.core.league.LeagueStandingsState
@@ -26,6 +29,8 @@ object CoachCardDeepTabsEngine {
         archive: DynastyHistoryArchive,
         standingsBySeason: Map<Int, LeagueStandingsState?>,
         draftBySeason: Map<Int, List<NbaDraftResultLine>>,
+        conferenceTeamIds: Set<String> = emptySet(),
+        userConferenceId: String? = null,
     ): CoachCardDeepTabsSnapshot {
         val coached = coachedPlayerIds(archive, userTeamId)
         return CoachCardDeepTabsSnapshot(
@@ -38,6 +43,8 @@ object CoachCardDeepTabsEngine {
                 userTeamId = userTeamId,
                 yearCards = archive.yearCards,
                 standingsBySeason = standingsBySeason,
+                conferenceTeamIds = conferenceTeamIds,
+                userConferenceId = userConferenceId,
             ),
             hallOfFame = hallOfFame(
                 coachedPlayerIds = coached,
@@ -60,16 +67,24 @@ object CoachCardDeepTabsEngine {
         userTeamId: String,
         yearCards: List<HistoryYearCard>,
         standingsBySeason: Map<Int, LeagueStandingsState?>,
+        conferenceTeamIds: Set<String>,
+        userConferenceId: String?,
     ): List<CoachSeasonHistoryRow> {
         val seasons = (rolledSeasons + currentSeasonIndex).distinct().sortedDescending()
         return seasons.map { seasonIndex ->
             val yearCard = yearCards.find { it.seasonIndex == seasonIndex }
-            val teamRecord = standingsBySeason[seasonIndex]?.records?.get(userTeamId)
+            val standings = standingsBySeason[seasonIndex]
+            val teamRecord = standings?.records?.get(userTeamId)
             val recordLabel = when {
                 teamRecord != null -> "${teamRecord.wins}-${teamRecord.losses}"
                 seasonIndex == currentSeasonIndex -> currentRecordLabel
                 else -> "—"
             }
+            val conferenceRecordLabel = CoachSeasonHistoryResolver.conferenceRecordLabel(
+                standings,
+                userTeamId,
+                conferenceTeamIds,
+            )
             val highlights = buildList {
                 yearCard?.recordsNoted?.let { addAll(it) }
                 if (yearCard?.ncbaChampionSchool == schoolDisplayName) {
@@ -79,12 +94,23 @@ object CoachCardDeepTabsEngine {
             val postseason = yearCard?.ncbaMvpLine
                 ?: yearCard?.recordsNoted?.firstOrNull()
                 ?: "—"
+            val detail = CoachSeasonHistoryDetail(
+                scheduleSummaryLine = CoachSeasonHistoryResolver.scheduleSummaryLine(standings, userTeamId),
+                tournamentPathLine = CoachSeasonHistoryResolver.tournamentPathLine(
+                    standings,
+                    userTeamId,
+                    userConferenceId,
+                ),
+                newsTagLines = CoachSeasonHistoryResolver.newsTagLines(yearCard),
+            )
             CoachSeasonHistoryRow(
                 seasonIndex = seasonIndex,
                 schoolDisplayName = schoolDisplayName,
                 recordLabel = recordLabel,
+                conferenceRecordLabel = conferenceRecordLabel,
                 postseasonSummary = postseason,
                 highlightLabels = highlights,
+                detail = detail,
             )
         }
     }

@@ -6,6 +6,7 @@ import dev.novux.dynasty.cbb.core.coach.card.deep.CoachCardDeepTabsSnapshot
 import dev.novux.dynasty.cbb.data.history.HistoryRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekTwoRepository
+import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,6 +17,7 @@ class CoachCardDeepTabsRepository(
     private val coachAchievementsRepository: CoachAchievementsRepository,
     private val leagueWeekBatchRepository: LeagueWeekBatchRepository,
     private val offseasonWeekTwoRepository: OffseasonWeekTwoRepository,
+    private val packRepository: PackRepository,
 ) {
     suspend fun loadHeadCoachDeepTabs(
         dynastyId: String,
@@ -50,6 +52,11 @@ class CoachCardDeepTabsRepository(
                 offseasonWeekTwoRepository.loadPublishedResults(dynastyId, s)
             }
         }
+        val packIndex = packRepository.activeSession().index
+        val userConferenceId = packIndex.team(userTeamId)?.conferenceId
+        val conferenceTeamIds = userConferenceId
+            ?.let { confId -> packIndex.teamsInConference(confId).map { it.teamId }.toSet() }
+            ?: emptySet()
         CoachCardDeepTabsEngine.build(
             dynastyId = dynastyId,
             userTeamId = userTeamId,
@@ -60,6 +67,8 @@ class CoachCardDeepTabsRepository(
             archive = archive,
             standingsBySeason = standingsBySeason,
             draftBySeason = draftBySeason,
+            conferenceTeamIds = conferenceTeamIds,
+            userConferenceId = userConferenceId,
         )
     }
 }

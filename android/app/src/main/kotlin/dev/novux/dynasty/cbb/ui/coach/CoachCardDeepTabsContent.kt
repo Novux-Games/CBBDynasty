@@ -2,8 +2,6 @@ package dev.novux.dynasty.cbb.ui.coach
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -18,8 +16,6 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.coach.card.deep.CoachCardDeepTabsSnapshot
 import dev.novux.dynasty.cbb.core.coach.card.deep.CoachDraftResumeEntry
 import dev.novux.dynasty.cbb.core.coach.card.deep.CoachHofResumeEntry
-import dev.novux.dynasty.cbb.core.coach.card.deep.CoachSeasonHistoryRow
-
 @Composable
 fun CoachCardHistoryDeepTab(snapshot: CoachCardDeepTabsSnapshot?) {
     Text(stringResource(R.string.coach_tab_history), style = MaterialTheme.typography.titleMedium)
@@ -37,49 +33,7 @@ fun CoachCardHistoryDeepTab(snapshot: CoachCardDeepTabsSnapshot?) {
         )
         return
     }
-    rows.forEach { row -> CoachSeasonHistoryCard(row) }
-}
-
-@Composable
-private fun CoachSeasonHistoryCard(row: CoachSeasonHistoryRow) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(
-                stringResource(
-                    R.string.coach_deep_history_row,
-                    row.seasonIndex,
-                    row.schoolDisplayName,
-                    row.recordLabel,
-                ),
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.SemiBold,
-            )
-            Text(
-                stringResource(R.string.coach_deep_history_postseason, row.postseasonSummary),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            if (row.highlightLabels.isNotEmpty()) {
-                CoachHighlightChips(row.highlightLabels)
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun CoachHighlightChips(labels: List<String>) {
-    FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-    ) {
-        labels.forEach { label ->
-            Text(
-                label,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.primary,
-            )
-        }
-    }
+    CoachSeasonHistoryList(seasons = rows)
 }
 
 @Composable

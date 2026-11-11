@@ -432,6 +432,7 @@ class DynastyApplication : Application() {
             coachAchievementsRepository,
             leagueWeekBatchRepository,
             offseasonWeekTwoRepository,
+            packRepository,
         )
         yearlyAwardsRepository = dev.novux.dynasty.cbb.data.awards.YearlyAwardsRepository(
             applicationContext,

@@ -1,13 +1,6 @@
 package dev.novux.dynasty.cbb.core.coach.card.deep
 
-/** Season-by-season head-coach résumé row ([MEGA-COACH-093]). */
-data class CoachSeasonHistoryRow(
-    val seasonIndex: Int,
-    val schoolDisplayName: String,
-    val recordLabel: String,
-    val postseasonSummary: String,
-    val highlightLabels: List<String> = emptyList(),
-)
+import dev.novux.dynasty.cbb.core.coach.card.history.CoachSeasonHistoryRow
 
 /** Player coached into national or conference hall recognition. */
 data class CoachHofResumeEntry(

@@ -392,6 +392,11 @@
     <string name="coach_deep_draft_picked">Draft %1$d · %2$s · from %3$s</string>
     <string name="coach_deep_draft_picked_unknown">Draft %1$d · selected · from %2$s</string>
     <string name="coach_deep_draft_undrafted">Draft %1$d · undrafted · from %2$s</string>
+    <string name="coach_season_history_conf_record">Conference: %1$s</string>
+    <string name="coach_season_history_tap_expand">Tap for season detail</string>
+    <string name="coach_season_history_schedule">Schedule: %1$s</string>
+    <string name="coach_season_history_tourney">Tourney path: %1$s</string>
+    <string name="coach_season_history_news">Headlines &amp; notes</string>
     <string name="coach_assistant_contract_note">Extend or release assistants from School → Staff Manage (coming soon).</string>
     <string name="coach_assistant_hof_body">Prior head-coach Hall of Fame résumé appears when this coach held an HC role elsewhere.</string>
     <string name="coach_assistant_draft_body">Draft picks from HC stops appear when career history is linked.</string>
