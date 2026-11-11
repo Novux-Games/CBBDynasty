@@ -82,7 +82,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-GDD-041 | P0 | FAIL | Scheduling · pack `standingsTiebreakers` stack | Pack schema populated; conference tables sort **W-L only**—no tiebreaker engine. | `embedded-default.json` `standingsTiebreakers`, `RankingsHubSnapshotFactory.conferenceTables` |
+| MEGA-GDD-041 | P0 | PASS | Scheduling · pack `standingsTiebreakers` stack | `ConferenceStandingsTiebreakerEngine` applies pack stack on conf W-L; wired in `RankingsHubSnapshotFactory`. | `ConferenceStandingsTiebreakerEngine.kt`, `RankingsHubSnapshotFactory.kt` |
 | MEGA-GDD-042 | P0 | PASS | Time · exhibition W1–3; RS W1–32; 7 national PS weeks | `ByeWeekPolicy`, `PostseasonCalendar`, phase tests. | `android/core/.../calendar/` |
 | MEGA-GDD-043 | P0 | PASS | Season · injuries, discipline, chemistry, fatigue | Engines + repos tick on advance. | `InjuryOccurrenceEngine.kt`, `DisciplineRepository.kt`, `ChemistryRepository.kt` |
 | MEGA-GDD-044 | P0 | PASS | Selection · NET 365; polls; selection uses NET | `NcbaNetRankingEngine`, `HumanPollRankingEngine`, `SelectionSundayEngine`. | `android/core/.../selection/`, `resume/` |
@@ -176,7 +176,7 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-GDD-099 | P0 | FAIL | Tiebreakers · head-to-head module | No `ConferenceStandingsTiebreakerEngine` or h2h mini-league sort. | grep `Tiebreaker` in `android/` (pack only) |
-| MEGA-GDD-100 | P0 | FAIL | Tiebreakers · ordered stack (PD, vs top N, coin flip) | Conference UI sorts wins desc, losses asc, name—ignores pack array order entirely. | `RankingsHubSnapshotFactory.kt` lines 73–77 |
+| MEGA-GDD-100 | P0 | PASS | Tiebreakers · ordered stack (PD, vs top N, coin flip) | Pack-ordered stack (`h2h`, `h2h-point-diff`, `record-vs-top-teams`, …) applied when conf W-L tied. | `ConferenceStandingsTiebreakerEngine.kt` |
 | MEGA-GDD-101 | P1 | GAP | NCBA seeding · conf champ auto bid + résumé at-large | Selection engines exist; tie order for conf standings does not feed auto-bid seed slot quality when teams tied. | `SelectionSundayEngine.kt`, MEGA-GDD-041 |
 | MEGA-GDD-102 | P1 | RISK | Schedule symmetry · 365-team generator | `ScratchAuditTest` logs asymmetric stubs. | `ScratchAuditTest.kt` |
 | MEGA-GDD-103 | P1 | PASS | RS cap · exhibitions excluded from 32 | `ScheduleGameKind.Exhibition` vs RS in calendar builder tests. | `UserCalendarTabBuilderTest.kt` |
