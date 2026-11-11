@@ -26,6 +26,7 @@ import dev.novux.dynasty.cbb.data.recruiting.RecruitOfferPromiseRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingLostProspectsRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingReservationRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingWatchlistRepository
+import dev.novux.dynasty.cbb.data.recruiting.RecruitingWatchlistTop60RankRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonSummerWorkoutRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekEightRepository
@@ -110,6 +111,9 @@ class DynastyApplication : Application() {
         private set
 
     lateinit var recruitingWatchlistRepository: RecruitingWatchlistRepository
+        private set
+
+    lateinit var recruitingWatchlistTop60RankRepository: RecruitingWatchlistTop60RankRepository
         private set
 
     lateinit var recruitingLostProspectsRepository: RecruitingLostProspectsRepository
@@ -282,6 +286,7 @@ class DynastyApplication : Application() {
             database,
         )
         recruitingWatchlistRepository = RecruitingWatchlistRepository(applicationContext)
+        recruitingWatchlistTop60RankRepository = RecruitingWatchlistTop60RankRepository(applicationContext)
         recruitingLostProspectsRepository = RecruitingLostProspectsRepository(applicationContext)
         signingDayRepository = SigningDayRepository(
             applicationContext,

@@ -59,6 +59,7 @@ class InSeasonRecruitingNudgeResolverTest {
             recommended = recommended,
             spendDeltaByProspect = mapOf("w1" to 200),
             top60 = listOf(NationalRankRow(rank = 3, prospect = pool[0])),
+            previousTop60Ranks = emptyMap(),
         )
         assertTrue(nudges.isNotEmpty())
         assertTrue(nudges.none { it.prospectName == "Not Board" })

@@ -20,6 +20,7 @@ object InSeasonRecruitingNudgeResolver {
         spendDeltaByProspect: Map<String, Int>,
         top60: List<NationalRankRow>,
         scholarshipOfferProspectIds: Set<String> = emptySet(),
+        previousTop60Ranks: Map<String, Int> = emptyMap(),
     ): List<RecruitingDashboardNudge> {
         if (pool.isEmpty() || watchlistIds.isEmpty()) return emptyList()
         val rankById = top60.associate { it.prospect.prospectId to it.rank }
@@ -51,13 +52,18 @@ object InSeasonRecruitingNudgeResolver {
                     ),
                 )
             }
-            rows.firstOrNull { rankById[it.prospect.prospectId] != null }?.let { row ->
-                val rank = rankById[row.prospect.prospectId] ?: return@let
+            val movement = RecruitingTop60MovementPolicy.detectMovements(
+                watchlistIds = watchlistIds,
+                prospectsById = pool.associateBy { it.prospectId },
+                previousRankByProspect = previousTop60Ranks,
+                currentRankByProspect = rankById,
+            ).firstOrNull()
+            movement?.let {
                 add(
                     RecruitingDashboardNudge(
                         kind = RecruitingDashboardNudgeKind.Top60Movement,
-                        prospectName = row.prospect.displayName,
-                        nationalRank = rank,
+                        prospectName = it.prospectName,
+                        nationalRank = it.rank,
                     ),
                 )
             }

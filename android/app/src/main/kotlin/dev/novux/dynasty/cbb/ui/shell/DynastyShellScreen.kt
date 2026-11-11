@@ -49,6 +49,7 @@ import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
 import dev.novux.dynasty.cbb.core.dashboard.InSeasonRecruitingDashboardContext
 import dev.novux.dynasty.cbb.core.dashboard.InSeasonRecruitingNudgeResolver
+import dev.novux.dynasty.cbb.core.dashboard.RecruitingTop60MovementPolicy
 import dev.novux.dynasty.cbb.core.dashboard.InSeasonWeekGames
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
@@ -299,11 +300,16 @@ fun DynastyShellScreen(
                 loaded.dynastyId,
                 loaded.metadata.seasonIndex,
             )
+            val previousTop60Ranks = dynastyApp.recruitingWatchlistTop60RankRepository.load(
+                loaded.dynastyId,
+                loaded.metadata.seasonIndex,
+            )
+            val currentRankById = top60.associate { it.prospect.prospectId to it.rank }
             val offerProspects = dynastyApp.recruitingReservationRepository.loadActive(loaded.dynastyId)
                 .filter { it.action == dev.novux.dynasty.cbb.core.recruiting.RecruitingRefundableAction.ScholarshipOffer }
                 .map { it.prospectId }
                 .toSet()
-            InSeasonRecruitingNudgeResolver.resolve(
+            val nudges = InSeasonRecruitingNudgeResolver.resolve(
                 pool = pool,
                 watchlistIds = watchlistIds,
                 school = school,
@@ -312,7 +318,14 @@ fun DynastyShellScreen(
                 spendDeltaByProspect = spendDelta,
                 top60 = top60,
                 scholarshipOfferProspectIds = offerProspects,
+                previousTop60Ranks = previousTop60Ranks,
             )
+            dynastyApp.recruitingWatchlistTop60RankRepository.save(
+                loaded.dynastyId,
+                loaded.metadata.seasonIndex,
+                RecruitingTop60MovementPolicy.snapshotAfterObserve(watchlistIds, currentRankById),
+            )
+            nudges
         } else {
             emptyList()
         }
