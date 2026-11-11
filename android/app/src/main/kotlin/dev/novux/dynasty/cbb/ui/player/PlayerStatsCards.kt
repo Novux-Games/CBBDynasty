@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.player.stats.PlayerCareerAveragesPolicy
+import dev.novux.dynasty.cbb.core.player.stats.PlayerCareerTotalsPolicy
 import dev.novux.dynasty.cbb.core.player.stats.PlayerCountingStats
 import dev.novux.dynasty.cbb.core.player.stats.PlayerRateStats
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsEngine
@@ -68,6 +69,22 @@ fun PlayerSeasonTotalsCard(
     }
 }
 
+/** Stats tab card 4 — career counting totals across all seasons ([MEGA-COACH-153]). */
+@Composable
+fun PlayerCareerTotalsCard(
+    totals: PlayerCountingStats,
+    modifier: Modifier = Modifier,
+) {
+    @Suppress("unused")
+    val qaId = PlayerCareerTotalsPolicy.MEGA_ID
+    PlayerStatsCard(
+        modifier = modifier,
+        title = stringResource(R.string.player_card_stats_career_tot_title),
+    ) {
+        countingTotalLines(totals).forEach { StatLine(it) }
+    }
+}
+
 @Composable
 fun PlayerStatsFourCards(summary: PlayerStatsSummary, modifier: Modifier = Modifier) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -80,11 +97,7 @@ fun PlayerStatsFourCards(summary: PlayerStatsSummary, modifier: Modifier = Modif
             averages = summary.careerAverages,
             careerGamesPlayed = summary.careerGamesPlayed,
         )
-        PlayerStatsCard(
-            title = stringResource(R.string.player_card_stats_career_tot_title),
-        ) {
-            countingTotalLines(summary.careerTotals).forEach { StatLine(it) }
-        }
+        PlayerCareerTotalsCard(totals = summary.careerTotals)
     }
 }
 

@@ -33,6 +33,11 @@ class PlayerStatsEngineTest {
         )
         assertEquals(20, summary.careerGamesPlayed)
         assertEquals(250, summary.careerTotals.points)
+        assertEquals(50, summary.careerTotals.assists)
+        assertEquals(70, summary.careerTotals.rebounds)
+        assertEquals(13, summary.careerTotals.steals)
+        assertEquals(5, summary.careerTotals.blocks)
+        assertEquals(35, summary.careerTotals.turnovers)
         assertEquals(12.5, summary.careerAverages.pointsPerGame, 0.01)
     }
 
