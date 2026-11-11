@@ -254,7 +254,7 @@
 | MEGA-RECR-128 | P2 | GAP | Walk-on window calendar | Spec places walk-ons after Signing Day; calendar phase after OS W6 advance not wired to walk-on feed. | `recruiting-engine#walk-ons` |
 | MEGA-RECR-129 | P1 | GAP | Preseason without re-seed | Re-entering preseason year 2+ must run **new** 2k–4k draw; no guard preventing duplicate `runSeed` on same key. | `IncomingClassSeedPanel` `enabled = headline == null` |
 | MEGA-RECR-130 | P2 | PASS | Hub open RS + OS W2+ | `RecruitingCyclePolicy` year-long access in RS — PASS in tests. | `RecruitingHubDefaultsTest` |
-| MEGA-RECR-131 | P0 | RISK | **Lag:** main-thread seed | `runSeed` on UI button coroutine generates **3900** prospects + `encodePool` string in DataStore on device thread — frame drops / ANR risk. | `IncomingClassSeedRepository.runSeed` |
+| MEGA-RECR-131 | P0 | PASS | **Lag:** main-thread seed | `runSeed` on UI button coroutine generates **3900** prospects + `encodePool` string in DataStore on device thread — frame drops / ANR risk. | `IncomingClassSeedIoPolicy`; all repository entry points `Dispatchers.IO`; seed/encode/decode `Default`; `IncomingClassSeederPerformanceTest` |
 | MEGA-RECR-132 | P1 | RISK | **Lag:** load full pool | `loadPool` decodes entire newline blob when hub/AI wired to seed — **O(n)** parse per screen open. | `IncomingClassSeedRepository.decodePool` |
 
 ---

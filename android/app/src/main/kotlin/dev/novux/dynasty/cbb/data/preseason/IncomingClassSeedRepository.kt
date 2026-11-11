@@ -24,52 +24,72 @@ private val Context.incomingClassSeedStore: DataStore<Preferences> by preference
 )
 
 class IncomingClassSeedRepository(private val context: Context) {
-    suspend fun isSeeded(dynastyId: String, seasonIndex: Int): Boolean =
+    suspend fun isSeeded(dynastyId: String, seasonIndex: Int): Boolean = withContext(Dispatchers.IO) {
         context.incomingClassSeedStore.data.first()[seededKey(dynastyId, seasonIndex)] == true
-
-    suspend fun loadPool(dynastyId: String, seasonIndex: Int): List<RecruitProspect>? {
-        if (!isSeeded(dynastyId, seasonIndex)) return null
-        val raw = context.incomingClassSeedStore.data.first()[poolKey(dynastyId, seasonIndex)] ?: return null
-        return decodePool(raw)
     }
+
+    suspend fun loadPool(dynastyId: String, seasonIndex: Int): List<RecruitProspect>? =
+        withContext(Dispatchers.IO) {
+            if (!isSeededOnStore(dynastyId, seasonIndex)) return@withContext null
+            val raw = context.incomingClassSeedStore.data.first()[poolKey(dynastyId, seasonIndex)]
+                ?: return@withContext null
+            withContext(Dispatchers.Default) { decodePool(raw) }
+        }
 
     /** Loads the persisted enrolling class or generates and persists it when missing. */
-    suspend fun ensurePool(dynastyId: String, seasonIndex: Int): List<RecruitProspect> {
-        loadPool(dynastyId, seasonIndex)?.let { return it }
-        runSeed(dynastyId, seasonIndex)
-        return checkNotNull(loadPool(dynastyId, seasonIndex))
-    }
+    suspend fun ensurePool(dynastyId: String, seasonIndex: Int): List<RecruitProspect> =
+        withContext(Dispatchers.IO) {
+            loadPoolOnIo(dynastyId, seasonIndex)?.let { return@withContext it }
+            runSeedOnIo(dynastyId, seasonIndex)
+            checkNotNull(loadPoolOnIo(dynastyId, seasonIndex))
+        }
 
-    suspend fun loadHeadline(dynastyId: String, seasonIndex: Int): Top60NewsHeadline? {
-        val pool = ensurePool(dynastyId, seasonIndex)
-        val headline = context.incomingClassSeedStore.data.first()[headlineKey(dynastyId, seasonIndex)]
-            ?: Top60NewsPublisher.publish(seasonIndex, pool).headline
-        return Top60NewsHeadline(
-            seasonIndex = seasonIndex,
-            headline = headline,
-            top60 = NationalRecruitingRankings.top60FromPool(pool),
-        )
-    }
+    suspend fun loadHeadline(dynastyId: String, seasonIndex: Int): Top60NewsHeadline? =
+        withContext(Dispatchers.IO) {
+            val pool = ensurePool(dynastyId, seasonIndex)
+            val headline = context.incomingClassSeedStore.data.first()[headlineKey(dynastyId, seasonIndex)]
+                ?: withContext(Dispatchers.Default) {
+                    Top60NewsPublisher.publish(seasonIndex, pool).headline
+                }
+            Top60NewsHeadline(
+                seasonIndex = seasonIndex,
+                headline = headline,
+                top60 = NationalRecruitingRankings.top60FromPool(pool),
+            )
+        }
 
     suspend fun runSeed(dynastyId: String, seasonIndex: Int): Top60NewsHeadline =
         withContext(Dispatchers.IO) {
-            val pool = withContext(Dispatchers.Default) {
-                IncomingClassSeeder.seed(
-                    enrollingSeasonIndex = seasonIndex,
-                    seedKey = dynastyId.hashCode().toLong(),
-                )
-            }
-            val news = withContext(Dispatchers.Default) {
-                Top60NewsPublisher.publish(seasonIndex, pool)
-            }
-            val encoded = withContext(Dispatchers.Default) { encodePool(pool) }
-            context.incomingClassSeedStore.edit { prefs ->
-                prefs[seededKey(dynastyId, seasonIndex)] = true
-                prefs[poolKey(dynastyId, seasonIndex)] = encoded
-                prefs[headlineKey(dynastyId, seasonIndex)] = news.headline
-            }
-            news
+            runSeedOnIo(dynastyId, seasonIndex)
         }
+
+    private suspend fun runSeedOnIo(dynastyId: String, seasonIndex: Int): Top60NewsHeadline {
+        val pool = withContext(Dispatchers.Default) {
+            IncomingClassSeeder.seed(
+                enrollingSeasonIndex = seasonIndex,
+                seedKey = dynastyId.hashCode().toLong(),
+            )
+        }
+        val news = withContext(Dispatchers.Default) {
+            Top60NewsPublisher.publish(seasonIndex, pool)
+        }
+        val encoded = withContext(Dispatchers.Default) { encodePool(pool) }
+        context.incomingClassSeedStore.edit { prefs ->
+            prefs[seededKey(dynastyId, seasonIndex)] = true
+            prefs[poolKey(dynastyId, seasonIndex)] = encoded
+            prefs[headlineKey(dynastyId, seasonIndex)] = news.headline
+        }
+        return news
+    }
+
+    private suspend fun isSeededOnStore(dynastyId: String, seasonIndex: Int): Boolean =
+        context.incomingClassSeedStore.data.first()[seededKey(dynastyId, seasonIndex)] == true
+
+    private suspend fun loadPoolOnIo(dynastyId: String, seasonIndex: Int): List<RecruitProspect>? {
+        if (!isSeededOnStore(dynastyId, seasonIndex)) return null
+        val raw = context.incomingClassSeedStore.data.first()[poolKey(dynastyId, seasonIndex)] ?: return null
+        return withContext(Dispatchers.Default) { decodePool(raw) }
+    }
 
     private fun seededKey(dynastyId: String, seasonIndex: Int) =
         booleanPreferencesKey("seeded_${dynastyId}_$seasonIndex")

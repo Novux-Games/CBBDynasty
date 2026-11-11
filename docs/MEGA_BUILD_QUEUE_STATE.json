@@ -103,7 +103,8 @@
     "MEGA-QA-151",
     "MEGA-QA-152",
     "MEGA-QA-153",
-    "MEGA-SIM-090"
+    "MEGA-SIM-090",
+    "MEGA-RECR-131"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
