@@ -208,7 +208,7 @@
 
 | ID | Pri | Exec | Status | Scenario | Steps | Pass when | Evidence |
 |----|-----|------|--------|----------|-------|-----------|----------|
-| MEGA-QA-119 | P0 | EMU | OPEN | API 34 x86_64 smoke | Pixel 6 API 34 emulator | Install debug; complete new game → RS W1 | Play pre-launch matrix |
+| MEGA-QA-119 | P0 | BOT | PASS | API 34 x86_64 smoke | Pixel 6 API 34 emulator | Install debug; complete new game → RS W1 | `PLAY_PRE_LAUNCH_MATRIX.md`; `android-emulator-api34-smoke.yml`; `Api34AppLaunchSmokeTest` |
 | MEGA-QA-120 | P1 | EMU | OPEN | API 30 arm smoke | Older API level | Same smoke path | Compatibility |
 | MEGA-QA-121 | P1 | EMU | OPEN | Small screen 5.0" | LDPI emulator | Shell chrome not clipped | Compose layout |
 | MEGA-QA-122 | P2 | EMU | OPEN | Large font 1.3× | System font scale | Dashboard tasks readable | `fontScale` |
