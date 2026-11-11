@@ -84,6 +84,7 @@ fun GameWatchScreen(
         )
     }
     var postgameArticle by remember { mutableStateOf<ReportArticle?>(null) }
+    var finalResult by remember { mutableStateOf<GameSimResult?>(null) }
     val listState = rememberLazyListState()
     val resumeGate = remember { mutableStateOf<((HalftimeCoachAdjustments) -> Unit)?>(null) }
     var selectedSpeedMultiplier by remember {
@@ -180,6 +181,7 @@ fun GameWatchScreen(
             result.homeScore,
             result.awayScore,
         )
+        finalResult = result
         postgameArticle = PostgameReportGenerator.generate(
             userTeamName = homeName,
             opponentName = awayName,
@@ -237,6 +239,14 @@ fun GameWatchScreen(
                     fontFamily = FontFamily.Monospace,
                 )
             }
+        }
+        finalResult?.let { result ->
+            PostgameBoxScorePanel(
+                result = result,
+                homeName = homeName,
+                awayName = awayName,
+                homeRosterPlayers = homeRosterPlayers,
+            )
         }
         postgameArticle?.let { article ->
             Text(

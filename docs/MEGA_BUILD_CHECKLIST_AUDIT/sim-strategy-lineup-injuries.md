@@ -79,7 +79,7 @@
 | MEGA-SIM-035 | PARTIAL | `activeHomeGameplan(clock)` uses halftime plan in 2nd half | `GameSimInput.activeHomeGameplan` | `clock <= HALF_SECONDS` selects halftime plan (correct for countdown clock) |
 | MEGA-SIM-036 | WIRE | Strategy **halftime preset** separate from pregame | `StrategyGameplanPanel` Set/Clear halftime | Stored in `halftimeGameplan` but watch passes `homeHalftimeGameplan` only when user sets preset — scrimmage button uses `halftimeGameplan ?: gameplan` as **pregame** only on `GameWatchLaunch` |
 | MEGA-SIM-037 | GAP | In-sim shot clock display on lines (optional product) | — | Not shown |
-| MEGA-SIM-038 | PARTIAL | Postgame report after sim | `PostgameReportGenerator` in `GameWatchScreen` | Article only; no full box UI |
+| MEGA-SIM-038 | PASS | Postgame report after sim | `PostgameBoxScorePanel`, `PostgameReportGenerator` | Box score tabs + narrative article |
 
 ---
 
@@ -234,7 +234,7 @@
 | ID | Pri | Status | Requirement (spec) | Code / test | Finding |
 |----|-----|--------|-------------------|-------------|---------|
 | MEGA-SIM-129 | P0 | PASS | **Player box** all columns: MIN, PTS, FGM/A, 3PM/A, FTM/A, REB, AST, STL, BLK, TO, PF | `PlayerBoxScore`, `PlayerPossessionStatRecorder` | Per-possession attribution + `BoxScoreCoherence` player sums |
-| MEGA-SIM-130 | P0 | FAIL | Postgame **box score screen** (not article-only) with team + player tabs | `PostgameReportGenerator`, `GameWatchScreen` | Narrative article only |
+| MEGA-SIM-130 | P0 | PASS | Postgame **box score screen** (not article-only) with team + player tabs | `PostgameBoxScorePanel`, `GameWatchScreen` | Team cards + player stat table tabs after final |
 | MEGA-SIM-131 | P1 | FAIL | **Team totals** shooting %, turnovers, fouls on box UI | Partial in `TeamBoxScore` | PF/ORB/DRB missing in engine |
 | MEGA-SIM-132 | P1 | FAIL | **DNP-INJ** / partial MIN when mid-game injury | `injuries.md` game log | Post-game injury only |
 | MEGA-SIM-133 | P1 | FAIL | Export / persist box on dynasty **game record** for schedule replay | Save model | Scrimmage-local |

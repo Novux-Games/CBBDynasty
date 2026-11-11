@@ -654,6 +654,14 @@
     <string name="game_watch_speed_two">2×</string>
     <string name="game_watch_speed_four">4×</string>
     <string name="game_watch_speed_sim_to_end">Sim to end</string>
+    <string name="game_watch_postgame_box_title">Box score</string>
+    <string name="game_watch_box_tab_team">Team</string>
+    <string name="game_watch_box_tab_players">Players</string>
+    <string name="game_watch_box_team_score">PTS %1$d</string>
+    <string name="game_watch_box_team_shooting">FG %1$d–%2$d · 3PT %3$d–%4$d · FT %5$d–%6$d</string>
+    <string name="game_watch_box_team_misc">TO %1$d · PF %2$d · Poss %3$d</string>
+    <string name="game_watch_box_player_header">Player       MIN PTS   FG  3PT  FT REB AST STL BLK  TO PF</string>
+    <string name="game_watch_box_players_unavailable">Player lines appear when roster prep is loaded for this game.</string>
     <string name="game_watch_injury_log">INJURY — %1$s (%2$d wk)</string>
     <string name="game_watch_opponent_scrimmage">Scrimmage foe</string>
     <string name="game_preview_title">Game preview</string>
