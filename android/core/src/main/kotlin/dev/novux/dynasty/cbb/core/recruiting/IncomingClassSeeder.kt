@@ -67,10 +67,10 @@ object IncomingClassSeeder {
         idPrefix: String,
         random: Random,
         jucoBias: Boolean,
-    ): List<RecruitProspect> =
-        List(count) { index ->
-            val stars = starBand(index, count, jucoBias)
-            val hidden = hiddenRatingForStars(stars, random)
+    ): List<RecruitProspect> {
+        val size = count.coerceAtLeast(1)
+        val raw = List(count) { index ->
+            val hidden = random.nextInt(1, 100)
             val position = PlayerPosition.entries[random.nextInt(PlayerPosition.entries.size)]
             val state = states[random.nextInt(states.size)]
             val prospectId = "$idPrefix-$seasonIndex-$index"
@@ -78,36 +78,34 @@ object IncomingClassSeeder {
                 prospectId = prospectId,
                 displayName = "${firstNames[random.nextInt(firstNames.size)]} " +
                     "${lastNames[random.nextInt(lastNames.size)]}",
-                stars = stars,
+                stars = 2,
                 position = position,
                 homeState = state,
-                nilAskUsd = nilAskForStars(stars, jucoBias),
-                scoutLetterOverall = letterForStars(stars, random),
+                nilAskUsd = 0,
+                scoutLetterOverall = "C",
                 topPriorities = RecruitPriorityRoll.roll(prospectId),
                 poolKind = kind,
                 hiddenRating = hidden,
             )
         }
-
-    private fun starBand(index: Int, size: Int, jucoBias: Boolean): Int {
-        val pct = index.toDouble() / size.coerceAtLeast(1)
-        return when {
-            jucoBias && pct < 0.01 -> 5
-            !jucoBias && pct < 0.02 -> 5
-            pct < 0.18 -> 4
-            pct < 0.45 -> 3
-            else -> 2
-        }
+        return raw
+            .sortedByDescending { it.hiddenRating }
+            .mapIndexed { rank, prospect ->
+                val stars = starBandForPercentile(rank.toDouble() / size)
+                prospect.copy(
+                    stars = stars,
+                    nilAskUsd = nilAskForStars(stars, jucoBias),
+                    scoutLetterOverall = letterForStars(stars, random),
+                )
+            }
     }
 
-    private fun hiddenRatingForStars(stars: Int, random: Random): Int {
-        val base = when (stars) {
-            5 -> 88
-            4 -> 76
-            3 -> 62
-            else -> 48
-        }
-        return (base + random.nextInt(12) - 3).coerceIn(1, 99)
+    /** Percentile bands per pool ([planning/recruiting-engine.md#star-distribution]). */
+    internal fun starBandForPercentile(percentile: Double): Int = when {
+        percentile < 0.02 -> 5
+        percentile < 0.20 -> 4
+        percentile < 0.50 -> 3
+        else -> 2
     }
 
     private fun nilAskForStars(stars: Int, jucoBias: Boolean): Int {

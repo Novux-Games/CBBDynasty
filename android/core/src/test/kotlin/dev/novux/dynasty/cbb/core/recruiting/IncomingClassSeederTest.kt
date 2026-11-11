@@ -43,4 +43,31 @@ class IncomingClassSeederTest {
             assertTrue(prospect.topPriorities.size <= 2)
         }
     }
+
+    @Test
+    fun starsFollowHiddenRatingPercentilesWithinEachPool() {
+        val hsCount = 200
+        val jucoCount = 100
+        val pool = IncomingClassSeeder.seed(
+            enrollingSeasonIndex = 1,
+            hsCount = hsCount,
+            jucoCount = jucoCount,
+            seedKey = 99,
+        )
+        assertStarBandsMatchHiddenOrder(pool.filter { it.poolKind == RecruitPoolKind.HighSchool })
+        assertStarBandsMatchHiddenOrder(pool.filter { it.poolKind == RecruitPoolKind.Juco })
+    }
+
+    private fun assertStarBandsMatchHiddenOrder(prospects: List<RecruitProspect>) {
+        val sorted = prospects.sortedByDescending { it.hiddenRating }
+        val size = sorted.size
+        sorted.forEachIndexed { rank, prospect ->
+            val expected = IncomingClassSeeder.starBandForPercentile(rank.toDouble() / size)
+            assertEquals(
+                "rank $rank hidden=${prospect.hiddenRating}",
+                expected,
+                prospect.stars,
+            )
+        }
+    }
 }

@@ -13,9 +13,9 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-001 | P0 | PASS | HS pool 2k–4k uniform random | `resolveHsPoolSize` draws uniform 2k–4k per enrolling class seed. | `IncomingClassSeeder.kt` |
-| MEGA-RECR-002 | P0 | FAIL | Star percentiles within pool | Stars assigned by **list index order**, not by sorting on `hiddenRating` percentiles. Top 60 order uses hidden rating, but star labels disagree with spec bands. | `IncomingClassSeeder.generatePool` |
-| MEGA-RECR-003 | P1 | FAIL | JUCO 5★ = top 2% | JUCO uses `jucoBias && pct < 0.01` (~1% 5★), not 2%. | `IncomingClassSeeder.starBand` |
-| MEGA-RECR-004 | P1 | FAIL | 3★ = 20–50% band | 3★ cutoff at `pct < 0.45` (30% band after 4★), not 50%. | `IncomingClassSeeder.starBand` |
+| MEGA-RECR-002 | P0 | PASS | Star percentiles within pool | Stars assigned from hidden-rating sort percentiles per pool (`starBandForPercentile`). | `IncomingClassSeeder.generatePool` |
+| MEGA-RECR-003 | P1 | PASS | JUCO 5★ = top 2% | HS and JUCO share 2% / 20% / 50% bands. | `IncomingClassSeeder.starBandForPercentile` |
+| MEGA-RECR-004 | P1 | PASS | 3★ = 20–50% band | 3★ band ends at 50th percentile. | `IncomingClassSeeder.starBandForPercentile` |
 | MEGA-RECR-005 | P0 | PASS | Single persisted class pool | Hub, AI, signing, sim-week advance use `ensurePool`. | `IncomingClassSeedRepository.kt`, `SaveSlotRepository.kt` |
 | MEGA-RECR-006 | P0 | FAIL | Top 60 fixed at seed | `demoPool` sets `nationalHsRank` from index (`index < 60`), not hidden-rating national order across HS+JUCO. | `RecruitingClassSeed.kt` |
 | MEGA-RECR-007 | P1 | GAP | Top 60 HS+JUCO combined | Seeder ranks combined pool correctly when used; most UI paths never load that persisted pool. | `IncomingClassSeedRepository` vs hub |
