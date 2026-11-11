@@ -187,6 +187,8 @@ object PossessionSimEngine {
         foulNote: String? = null,
         lateGameTag: String? = null,
         subPhaseChain: String? = null,
+        blockedShot: Boolean = false,
+        foulOnBlock: Boolean = false,
     ): String {
         val clock = formatClock(clockRemaining)
         val pointsScored = after.points - before.points
@@ -196,6 +198,10 @@ object PossessionSimEngine {
             turnedOver -> PossessionTurnoverFlavorPolicy.logLabel(turnoverTerminal)
             change == PossessionChange.OffenseRetainsOffensiveRebound ->
                 "miss | OREB +1 | retain possession"
+            blockedShot && foulOnBlock ->
+                "miss | BLK | foul on block | change possession"
+            blockedShot ->
+                "miss | BLK | change possession"
             after.fieldGoalsAttempted > before.fieldGoalsAttempted &&
                 change == PossessionChange.DefenseTakesBall ->
                 "miss | DREB | change possession"

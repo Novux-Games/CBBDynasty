@@ -21,4 +21,6 @@ data class PossessionResolveResult(
     val turnoverTerminal: TurnoverTerminal? = null,
     /** drive→kick→shot chain text for possession log (MEGA-SIM-089). */
     val subPhaseChain: String? = null,
+    val blockedShot: Boolean = false,
+    val foulOnBlock: Boolean = false,
 )

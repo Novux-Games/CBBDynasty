@@ -83,6 +83,16 @@ object PossessionSubPhaseEngine {
                 subPhaseChain = "$chainLabel | make",
             )
         }
+        val block = PossessionBlockPolicy.rollOnMiss(defRating, offRating, random)
+        if (block.blocked) {
+            return PossessionResolveResult(
+                box = next,
+                change = PossessionChange.DefenseTakesBall,
+                subPhaseChain = "$chainLabel | miss | BLK",
+                blockedShot = true,
+                foulOnBlock = block.foulOnBlock,
+            )
+        }
         val reb = PossessionSimEngine.resolveMissRebound(next, random)
         return reb.copy(subPhaseChain = "$chainLabel | miss")
     }

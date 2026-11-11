@@ -184,7 +184,8 @@ class PossessionSimSession(
             after = offenseBoxAfter,
             change = resolution.change,
             turnoverTerminal = resolution.turnoverTerminal,
-            foulStoppage = foulStoppage,
+            foulStoppage = foulStoppage || resolution.foulOnBlock,
+            blockedShot = resolution.blockedShot,
             random = random,
         )
         if (offenseHome) {
@@ -205,7 +206,10 @@ class PossessionSimSession(
         }
         accrueFloorMinutes(used, offenseHome)
         val newInjuryLines = sampleMidGameInjuries(homeFloorIds, awayFloorIds)
-        val foulNote = recordPersonalFoulIfNeeded(foulStoppage, offenseHome)
+        val foulNote = when {
+            resolution.foulOnBlock -> "foul on block"
+            else -> recordPersonalFoulIfNeeded(foulStoppage, offenseHome)
+        }
         val lateTags = listOfNotNull(
             LateGamePossessionPolicy.logTag(lateDecision),
             if (lateClockTrip) "late-clock" else null,
@@ -223,6 +227,8 @@ class PossessionSimSession(
             foulNote = foulNote,
             lateGameTag = lateTags,
             subPhaseChain = resolution.subPhaseChain,
+            blockedShot = resolution.blockedShot,
+            foulOnBlock = resolution.foulOnBlock,
         )
         log += line
         newInjuryLines.forEach { log += it }

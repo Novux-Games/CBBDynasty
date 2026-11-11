@@ -15,6 +15,7 @@ object PlayerPossessionStatRecorder {
         change: PossessionChange,
         turnoverTerminal: TurnoverTerminal?,
         foulStoppage: Boolean,
+        blockedShot: Boolean = false,
         random: Random,
     ) {
         if (offenseFloor.isEmpty()) return
@@ -51,18 +52,14 @@ object PlayerPossessionStatRecorder {
                 if (others.isNotEmpty() && random.nextDouble() < 0.58) {
                     offenseLedger.addAssist(pickWeighted(others, usageWeights, random))
                 }
-            } else {
-                when (change) {
-                    PossessionChange.OffenseRetainsOffensiveRebound ->
-                        offenseLedger.addOffensiveRebound(pickWeighted(offenseFloor, usageWeights, random))
-                    PossessionChange.DefenseTakesBall -> {
-                        if (defenseFloor.isNotEmpty()) {
-                            defenseLedger.addDefensiveRebound(pickUniform(defenseFloor, random))
-                            if (random.nextDouble() < 0.12) {
-                                defenseLedger.addBlock(pickUniform(defenseFloor, random))
-                            }
-                        }
-                    }
+            } else when {
+                blockedShot && defenseFloor.isNotEmpty() -> {
+                    defenseLedger.addBlock(pickUniform(defenseFloor, random))
+                }
+                change == PossessionChange.OffenseRetainsOffensiveRebound ->
+                    offenseLedger.addOffensiveRebound(pickWeighted(offenseFloor, usageWeights, random))
+                change == PossessionChange.DefenseTakesBall && defenseFloor.isNotEmpty() -> {
+                    defenseLedger.addDefensiveRebound(pickUniform(defenseFloor, random))
                 }
             }
         }
