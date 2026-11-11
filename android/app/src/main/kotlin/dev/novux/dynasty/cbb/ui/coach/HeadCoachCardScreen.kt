@@ -111,6 +111,7 @@ fun HeadCoachCardScreen(
                     coachAchievements = coachAchievements,
                     onSpendSkill = onSpendSkill,
                     onAutoSpendChanged = onAutoSpendChanged,
+                    onOpenContractTab = { onSelectedTabChange(CoachCardTab.Contract) },
                 )
                 CoachCardTab.Contract -> HeadCoachContractTab(
                     card = card,
@@ -203,6 +204,7 @@ private fun HeadCoachOverviewTab(
     coachAchievements: HeadCoachAchievements?,
     onSpendSkill: (CoachSkillBranch) -> Unit,
     onAutoSpendChanged: (Boolean) -> Unit,
+    onOpenContractTab: () -> Unit,
 ) {
     CoachOverviewTeamCard(
         schoolDisplayName = card.schoolDisplayName,
@@ -217,7 +219,13 @@ private fun HeadCoachOverviewTab(
         style = MaterialTheme.typography.titleMedium,
         color = MaterialTheme.colorScheme.primary,
     )
-    userCoachSecurity?.let { JobSecurityMeter(it) }
+    userCoachSecurity?.let { security ->
+        JobSecurityMeter(
+            snapshot = security,
+            showFactorDetails = false,
+            onNavigateToContract = onOpenContractTab,
+        )
+    }
     skillPointBank?.takeIf { it > 0 }?.let { bank ->
         Text(
             stringResource(R.string.coach_skill_point_bank, bank),

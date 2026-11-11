@@ -423,6 +423,7 @@
     <string name="job_security_helping">helping</string>
     <string name="job_security_hurting">hurting</string>
     <string name="job_security_neutral">neutral</string>
+    <string name="job_security_open_contract">Tap for contract &amp; factor breakdown</string>
     <string name="ad_trust_title">AD trust</string>
     <string name="ad_trust_meter">%1$d · %2$s</string>
     <string name="ad_trust_staff_hint">AD trust meter lives on the Staff tab for your program.</string>

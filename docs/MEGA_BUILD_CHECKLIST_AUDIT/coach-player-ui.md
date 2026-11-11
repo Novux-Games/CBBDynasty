@@ -197,7 +197,7 @@
 | MEGA-COACH-112 | P2 | FAIL | HOF tab list (national + conference pools) | No coach-attributed HOF query |
 | MEGA-COACH-113 | P2 | FAIL | Draft tab coach résumé (players coached → NBA) | No coach-draft join UI |
 | MEGA-COACH-114 | P1 | GAP | Tab bar scrollable on small widths | Pattern exists elsewhere (`ScrollableTabRow` in hubs) — not reused |
-| MEGA-COACH-115 | P1 | FAIL | Overview → Contract deep-link from job security tap | `JobSecurityMeter` not clickable |
+| MEGA-COACH-115 | P1 | PASS | Overview → Contract deep-link from job security tap | Overview `JobSecurityMeter` tap → `CoachCardTab.Contract`; factors on Contract tab |
 | MEGA-COACH-116 | P2 | PASS | Assistant card tab subset (Overview/History/Contract) | Tab shell matches `coach-card.md` assistant section | `AssistantCoachCardScreen.kt` |
 | MEGA-COACH-117 | P2 | FAIL | Conditional HC tabs on assistant when `hasHeadCoachCareer` | No career flag on assistant model |
 
