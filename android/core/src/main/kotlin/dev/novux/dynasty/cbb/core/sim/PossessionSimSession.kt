@@ -76,10 +76,8 @@ class PossessionSimSession(
         val shotClockAfterTrip = PossessionShotClock.remainingAfterTrip(shotClockBefore, used)
         totalPossessions++
 
-        val offRating = (if (offenseHome) input.homeOffensive() else input.awayOffensive()) +
-            effects.offensiveRatingDelta
-        val defRating = (if (offenseHome) input.awayDefensive() else input.homeDefensive()) +
-            effects.defensiveRatingDelta
+        val offRating = teamOffensiveRating(offenseIsHome = offenseHome) + effects.offensiveRatingDelta
+        val defRating = teamDefensiveRating(defenseIsHome = !offenseHome) + effects.defensiveRatingDelta
         val resolution = if (
             PossessionShotClock.isShotClockViolation(shotClockBefore, used, tripSeconds)
         ) {
@@ -123,6 +121,20 @@ class PossessionSimSession(
         log += line
         val halftime = stopAtHalftime && gameClock <= GameSimClock.HALF_SECONDS
         return PossessionStep(line, haltedAtHalftime = halftime)
+    }
+
+    private fun teamOffensiveRating(offenseIsHome: Boolean): Int {
+        val roster = if (offenseIsHome) input.homeRoster else input.awayRoster
+        val ledger = if (offenseIsHome) homeFoulLedger else awayFoulLedger
+        return roster?.weightedOffensiveOnFloor(ledger, gameClock)
+            ?: if (offenseIsHome) input.homeOffensive() else input.awayOffensive()
+    }
+
+    private fun teamDefensiveRating(defenseIsHome: Boolean): Int {
+        val roster = if (defenseIsHome) input.homeRoster else input.awayRoster
+        val ledger = if (defenseIsHome) homeFoulLedger else awayFoulLedger
+        return roster?.weightedDefensiveOnFloor(ledger, gameClock)
+            ?: if (defenseIsHome) input.homeDefensive() else input.awayDefensive()
     }
 
     private fun recordPersonalFoulIfNeeded(foulStoppage: Boolean, offenseIsHome: Boolean): String? {

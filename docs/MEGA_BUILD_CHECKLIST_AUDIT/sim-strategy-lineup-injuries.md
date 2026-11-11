@@ -185,7 +185,7 @@
 | ID | Pri | Status | Requirement (spec) | Code / test | Finding |
 |----|-----|--------|-------------------|-------------|---------|
 | MEGA-SIM-101 | P0 | PASS | **Personal foul** counter per player; **5** = DQ | `PersonalFoulLedger`, foul-stoppage trips | Per-player map on `GameSimResult`; log `PF id (n)` / `DQ` |
-| MEGA-SIM-102 | P0 | FAIL | **Foul trouble** auto-sub below target minutes band | `simulation-engine` §rotation | Static team ratings for entire game |
+| MEGA-SIM-102 | P0 | PASS | **Foul trouble** auto-sub below target minutes band | `FoulTroubleRotationPolicy`, on-floor weighted ratings | 3 PF 1H / 4 PF 2H bench; reserves enter weighted ORtg/DRtg |
 | MEGA-SIM-103 | P0 | FAIL | In-game **substitution** from rotation bands when floor MIN diverges from targets | `RotationMinutesAllocator` prep-only | Five fixed imaginary players |
 | MEGA-SIM-104 | P1 | FAIL | **Fatigue** decay during sim affects sub priority | `FatigueEngine` exists | Injury path only; not in possession loop |
 | MEGA-SIM-105 | P1 | FAIL | Track **team fouls** per half for bonus logic | — | — |

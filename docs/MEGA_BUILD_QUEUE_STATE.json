@@ -58,7 +58,8 @@
     "MEGA-RECR-100",
     "MEGA-SIM-086",
     "MEGA-SIM-087",
-    "MEGA-SIM-101"
+    "MEGA-SIM-101",
+    "MEGA-SIM-102"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
