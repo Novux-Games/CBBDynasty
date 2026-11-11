@@ -299,7 +299,24 @@ class PossessionSimSession(
         )
         val offenseLedger = if (offenseHome) homePlayerLedger else awayPlayerLedger
         val defenseLedger = if (offenseHome) awayPlayerLedger else homePlayerLedger
-        val usageWeights = offGameplan?.usageWeights.orEmpty()
+        val baseUsage = offGameplan?.usageWeights.orEmpty()
+        val clutchActive = ClutchUsagePolicy.isClutch(
+            gameClock,
+            offenseScore,
+            defenseScore,
+            eventWeights.clutchUsage,
+        )
+        val usageWeights = ClutchUsagePolicy.effectiveUsageWeights(
+            baseWeights = baseUsage,
+            offenseFloor = offenseFloor,
+            gameClockSeconds = gameClock,
+            offenseScore = offenseScore,
+            defenseScore = defenseScore,
+            tuning = eventWeights.clutchUsage,
+        )
+        val clutchPeakId = ClutchUsagePolicy.peakUsagePlayerId(
+            if (baseUsage.isEmpty()) offenseFloor.associateWith { 20 } else baseUsage,
+        )
         val playerCredits = PlayerPossessionStatRecorder.record(
             offenseLedger = offenseLedger,
             defenseLedger = defenseLedger,
@@ -362,6 +379,7 @@ class PossessionSimSession(
             if (ProtectLeadLateGamePolicy.isActive(lateDecision)) ProtectLeadLateGamePolicy.logTag() else null,
             FoulEarlyLateGamePolicy.logTag(tripSample),
             LateGamePossessionPolicy.logTag(lateDecision),
+            ClutchUsagePolicy.logTag(clutchActive, clutchPeakId),
             if (lateClockTrip) "late-clock" else null,
             teamBonusLogTag,
             periodEndLogTag,

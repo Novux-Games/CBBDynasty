@@ -43,6 +43,13 @@ data class SimTurnoverSubPhaseWeights(
 
 /** Made basket / FT at horn ([planning/simulation-engine.md#possession-loop--clock], MEGA-SIM-100). */
 @Serializable
+data class SimClutchUsageWeights(
+    val lateWindowSeconds: Int = 4 * 60,
+    val closeMarginPoints: Int = 5,
+    val peakPlayerUsageMultiplier: Double = 1.35,
+)
+
+@Serializable
 data class SimFoulEarlyWeights(
     val intentionalFoulTripRate: Double = 0.40,
     val hackaQuickFoulTripRate: Double = 0.30,
@@ -91,6 +98,7 @@ data class SimEventWeights(
     val situation: SimSituationWeights = SimSituationWeights(),
     val protectLead: SimProtectLeadWeights = SimProtectLeadWeights(),
     val foulEarly: SimFoulEarlyWeights = SimFoulEarlyWeights(),
+    val clutchUsage: SimClutchUsageWeights = SimClutchUsageWeights(),
 ) {
     fun makeRateForEdge(edge: Int): Double =
         (
