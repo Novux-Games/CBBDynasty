@@ -19,7 +19,37 @@
     "doubleBonusThreshold": 10,
     "oneAndOneUntilDouble": true
   },
-  "eventWeights": {},
+  "eventWeights": {
+    "tripBuckets": {
+      "quickTurnover": 0.34,
+      "quickShot": 0.33,
+      "foulStoppage": 0.33
+    },
+    "ratingGapMakeRate": {
+      "base": 0.42,
+      "perPointEdge": 0.004,
+      "min": 0.25,
+      "max": 0.65,
+      "kickLookBonus": 0.025
+    },
+    "ratingGapBlockOnMiss": {
+      "base": 0.08,
+      "perDefEdge": 0.002,
+      "min": 0.03,
+      "max": 0.18,
+      "foulOnBlock": 0.15
+    },
+    "offensiveReboundRate": 0.28,
+    "shootingFoul": {
+      "andOneRate": 0.045,
+      "missFoulRate": 0.062,
+      "lateClockMultiplier": 1.35
+    },
+    "turnoverSubPhase": {
+      "driveShare": 0.28,
+      "kickShare": 0.22
+    }
+  },
   "homeNeutralModifiers": {
     "home": 1.0,
     "neutral": 1.0,

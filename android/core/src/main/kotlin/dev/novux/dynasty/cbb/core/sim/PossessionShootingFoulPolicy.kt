@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.core.sim
 
+import dev.novux.dynasty.cbb.core.sim.tuning.SimEventWeights
+import dev.novux.dynasty.cbb.core.sim.tuning.SimEventWeightsResolver
 import kotlin.random.Random
 
 /**
@@ -8,17 +10,23 @@ import kotlin.random.Random
 object PossessionShootingFoulPolicy {
     const val QA_ID: String = "MEGA-SIM-094"
 
-    private const val AND_ONE_RATE = 0.045
-    private const val MISS_SHOOTING_FOUL_RATE = 0.062
-    private const val LATE_CLOCK_FOUL_MULT = 1.35
-
-    fun rollAndOne(lateClock: Boolean, random: Random): Boolean {
-        val rate = AND_ONE_RATE * if (lateClock) LATE_CLOCK_FOUL_MULT else 1.0
+    fun rollAndOne(
+        lateClock: Boolean,
+        random: Random,
+        eventWeights: SimEventWeights = SimEventWeightsResolver.DEFAULT,
+    ): Boolean {
+        val sf = eventWeights.shootingFoul
+        val rate = sf.andOneRate * if (lateClock) sf.lateClockMultiplier else 1.0
         return random.nextDouble() < rate
     }
 
-    fun rollMissShootingFoul(lateClock: Boolean, random: Random): Boolean {
-        val rate = MISS_SHOOTING_FOUL_RATE * if (lateClock) LATE_CLOCK_FOUL_MULT else 1.0
+    fun rollMissShootingFoul(
+        lateClock: Boolean,
+        random: Random,
+        eventWeights: SimEventWeights = SimEventWeightsResolver.DEFAULT,
+    ): Boolean {
+        val sf = eventWeights.shootingFoul
+        val rate = sf.missFoulRate * if (lateClock) sf.lateClockMultiplier else 1.0
         return random.nextDouble() < rate
     }
 

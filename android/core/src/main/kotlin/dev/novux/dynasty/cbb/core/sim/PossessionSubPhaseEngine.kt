@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.core.sim
 
+import dev.novux.dynasty.cbb.core.sim.tuning.SimEventWeights
+import dev.novux.dynasty.cbb.core.sim.tuning.SimEventWeightsResolver
 import dev.novux.dynasty.cbb.core.strategy.ResolvedSchemeEffects
 import kotlin.random.Random
 
@@ -10,10 +12,6 @@ import kotlin.random.Random
 object PossessionSubPhaseEngine {
     const val QA_ID: String = "MEGA-SIM-089"
 
-    private const val DRIVE_TO_SHARE = 0.28
-    private const val KICK_TO_SHARE = 0.22
-    private const val KICK_LOOK_MAKE_BONUS = 0.025
-
     fun resolve(
         offense: TeamBoxScore,
         offRating: Int,
@@ -21,21 +19,23 @@ object PossessionSubPhaseEngine {
         effects: ResolvedSchemeEffects,
         random: Random,
         lateClockTrip: Boolean = false,
+        eventWeights: SimEventWeights = SimEventWeightsResolver.DEFAULT,
     ): PossessionResolveResult {
         val box = offense.copy(possessions = offense.possessions + 1)
         val chain = mutableListOf("drive")
+        val sub = eventWeights.turnoverSubPhase
         val baseTo = effects.turnoverChance.coerceIn(0.05, 0.40)
-        if (random.nextDouble() < baseTo * DRIVE_TO_SHARE) {
+        if (random.nextDouble() < baseTo * sub.driveShare) {
             val flavor = PossessionTurnoverFlavorPolicy.sampleForDrivePhase(random)
             return turnoverResult(box, chain, flavor)
         }
         chain += "kick"
-        if (random.nextDouble() < baseTo * KICK_TO_SHARE) {
+        if (random.nextDouble() < baseTo * sub.kickShare) {
             val flavor = PossessionTurnoverFlavorPolicy.sampleForKickPhase(random)
             return turnoverResult(box, chain, flavor)
         }
         chain += "shot"
-        return resolveShotTerminal(box, offRating, defRating, effects, random, chain, lateClockTrip)
+        return resolveShotTerminal(box, offRating, defRating, effects, random, chain, lateClockTrip, eventWeights)
     }
 
     private fun turnoverResult(
@@ -59,11 +59,12 @@ object PossessionSubPhaseEngine {
         random: Random,
         chain: List<String>,
         lateClockTrip: Boolean,
+        eventWeights: SimEventWeights,
     ): PossessionResolveResult {
         val edge = (offRating - defRating).coerceIn(-30, 30)
         val makeBias = (
-            0.42 + edge * 0.004 + effects.makeRateAdjust + KICK_LOOK_MAKE_BONUS
-        ).coerceIn(0.25, 0.65)
+            eventWeights.makeRateForEdge(edge) + effects.makeRateAdjust + eventWeights.ratingGapMakeRate.kickLookBonus
+            ).coerceIn(eventWeights.ratingGapMakeRate.min, eventWeights.ratingGapMakeRate.max)
         val three = random.nextDouble() < effects.threePointAttemptRate
         val attempt = box.fieldGoalsAttempted + 1
         val made = random.nextDouble() < makeBias
@@ -79,7 +80,7 @@ object PossessionSubPhaseEngine {
                 points = next.points + pts,
                 threePointsMade = next.threePointsMade + if (three) 1 else 0,
             )
-            val andOne = PossessionShootingFoulPolicy.rollAndOne(lateClockTrip, random)
+            val andOne = PossessionShootingFoulPolicy.rollAndOne(lateClockTrip, random, eventWeights)
             val ftAttempts = if (andOne) 1 else 0
             val suffix = if (andOne) {
                 PossessionShootingFoulPolicy.chainSuffix(andOne = true, attempts = ftAttempts)
@@ -96,7 +97,7 @@ object PossessionSubPhaseEngine {
                 freeThrowAttempts = ftAttempts,
             )
         }
-        val block = PossessionBlockPolicy.rollOnMiss(defRating, offRating, random)
+        val block = PossessionBlockPolicy.rollOnMiss(defRating, offRating, random, eventWeights)
         if (block.blocked) {
             return PossessionResolveResult(
                 box = next,
@@ -106,7 +107,7 @@ object PossessionSubPhaseEngine {
                 foulOnBlock = block.foulOnBlock,
             )
         }
-        if (PossessionShootingFoulPolicy.rollMissShootingFoul(lateClockTrip, random)) {
+        if (PossessionShootingFoulPolicy.rollMissShootingFoul(lateClockTrip, random, eventWeights)) {
             val ftAttempts = PossessionShootingFoulPolicy.attemptsForMissFoul(three)
             return PossessionResolveResult(
                 box = next,
@@ -116,7 +117,7 @@ object PossessionSubPhaseEngine {
                 freeThrowAttempts = ftAttempts,
             )
         }
-        val reb = PossessionSimEngine.resolveMissRebound(next, random)
+        val reb = PossessionSimEngine.resolveMissRebound(next, random, eventWeights.offensiveReboundRate)
         return reb.copy(subPhaseChain = "$chainLabel | miss")
     }
 }

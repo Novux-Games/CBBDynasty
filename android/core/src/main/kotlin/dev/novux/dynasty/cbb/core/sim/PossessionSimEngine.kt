@@ -2,6 +2,9 @@ package dev.novux.dynasty.cbb.core.sim
 
 import dev.novux.dynasty.cbb.core.strategy.LateGamePossessionPolicy
 import dev.novux.dynasty.cbb.core.strategy.ResolvedSchemeEffects
+import dev.novux.dynasty.cbb.core.sim.tuning.SimEventWeights
+import dev.novux.dynasty.cbb.core.sim.tuning.SimEventWeightsResolver
+import dev.novux.dynasty.cbb.core.sim.tuning.SimTripBucketWeights
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
 import kotlin.math.max
 import kotlin.math.min
@@ -55,17 +58,18 @@ object PossessionSimEngine {
         tuning: SimTuning,
         random: Random,
         decision: LateGamePossessionPolicy.PossessionDecision,
+        eventWeights: SimEventWeights = SimEventWeightsResolver.DEFAULT,
     ): TripSample =
         when (decision) {
             LateGamePossessionPolicy.PossessionDecision.IntentionalFoulTrip -> {
                 if (random.nextDouble() < LateGamePossessionPolicy.INTENTIONAL_FOUL_TRIP_RATE) {
                     foulStoppageTripSample(tuning, random)
                 } else {
-                    sampleTrip(tuning, random)
+                    sampleTrip(tuning, random, eventWeights)
                 }
             }
             LateGamePossessionPolicy.PossessionDecision.ProtectLeadPace -> {
-                val base = sampleTrip(tuning, random)
+                val base = sampleTrip(tuning, random, eventWeights)
                 if (base.foulStoppage &&
                     random.nextDouble() < LateGamePossessionPolicy.PROTECT_LEAD_AVOID_FOUL_STOPPAGE_RATE
                 ) {
@@ -74,7 +78,7 @@ object PossessionSimEngine {
                     base
                 }
             }
-            LateGamePossessionPolicy.PossessionDecision.None -> sampleTrip(tuning, random)
+            LateGamePossessionPolicy.PossessionDecision.None -> sampleTrip(tuning, random, eventWeights)
         }
 
     private fun foulStoppageTripSample(tuning: SimTuning, random: Random): TripSample {
@@ -99,8 +103,12 @@ object PossessionSimEngine {
         )
     }
 
-    internal fun sampleTrip(tuning: SimTuning, random: Random): TripSample {
-        val bucket = random.nextInt(3)
+    internal fun sampleTrip(
+        tuning: SimTuning,
+        random: Random,
+        eventWeights: SimEventWeights = SimEventWeightsResolver.DEFAULT,
+    ): TripSample {
+        val bucket = pickTripBucket(eventWeights.tripBuckets, random)
         val foulStoppage = bucket == 2
         val range = when (bucket) {
             0 -> tuning.timeUsedSeconds.quickTurnover
@@ -132,8 +140,23 @@ object PossessionSimEngine {
     internal fun pacedTripSeconds(tuning: SimTuning, random: Random, tripPaceScale: Double = 1.0): Int =
         pacedTripSecondsFromRaw(tuning, sampleTrip(tuning, random).rawSeconds, tripPaceScale)
 
-    internal fun sampleTripSeconds(tuning: SimTuning, random: Random): Int =
-        sampleTrip(tuning, random).rawSeconds
+    internal fun sampleTripSeconds(
+        tuning: SimTuning,
+        random: Random,
+        eventWeights: SimEventWeights = SimEventWeightsResolver.DEFAULT,
+    ): Int = sampleTrip(tuning, random, eventWeights).rawSeconds
+
+    private fun pickTripBucket(weights: SimTripBucketWeights, random: Random): Int {
+        val ordered = listOf(weights.quickTurnover, weights.quickShot, weights.foulStoppage)
+        val total = ordered.sum()
+        if (total <= 0.0) return random.nextInt(3)
+        var roll = random.nextDouble() * total
+        ordered.forEachIndexed { index, weight ->
+            roll -= weight
+            if (roll < 0) return index
+        }
+        return 2
+    }
 
     internal fun resolveShotClockViolation(offense: TeamBoxScore): PossessionResolveResult {
         val box = offense.copy(
@@ -154,20 +177,31 @@ object PossessionSimEngine {
         effects: ResolvedSchemeEffects,
         random: Random,
         lateClockTrip: Boolean = false,
+        eventWeights: SimEventWeights = SimEventWeightsResolver.DEFAULT,
     ): PossessionResolveResult =
-        PossessionSubPhaseEngine.resolve(offense, offRating, defRating, effects, random, lateClockTrip)
+        PossessionSubPhaseEngine.resolve(
+            offense,
+            offRating,
+            defRating,
+            effects,
+            random,
+            lateClockTrip,
+            eventWeights,
+        )
 
     /** Miss terminal → OReb or DReb change ([MEGA-SIM-090]). */
     internal fun resolveMissRebound(
         afterMiss: TeamBoxScore,
         random: Random,
-    ): PossessionResolveResult = offensiveReboundOrDefReb(afterMiss, random)
+        offensiveReboundRate: Double = SimEventWeightsResolver.DEFAULT.offensiveReboundRate,
+    ): PossessionResolveResult = offensiveReboundOrDefReb(afterMiss, random, offensiveReboundRate)
 
     private fun offensiveReboundOrDefReb(
         afterMiss: TeamBoxScore,
         random: Random,
+        offensiveReboundRate: Double,
     ): PossessionResolveResult {
-        val oreb = random.nextDouble() < PossessionShotClock.DEFAULT_OFFENSIVE_REBOUND_KEEP_RATE
+        val oreb = random.nextDouble() < offensiveReboundRate.coerceIn(0.0, 1.0)
         return if (oreb) {
             PossessionResolveResult(afterMiss, PossessionChange.OffenseRetainsOffensiveRebound)
         } else {

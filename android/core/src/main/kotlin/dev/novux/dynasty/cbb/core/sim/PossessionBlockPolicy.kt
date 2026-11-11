@@ -1,13 +1,12 @@
 package dev.novux.dynasty.cbb.core.sim
 
+import dev.novux.dynasty.cbb.core.sim.tuning.SimEventWeights
+import dev.novux.dynasty.cbb.core.sim.tuning.SimEventWeightsResolver
 import kotlin.random.Random
 
 /** Blocked shot attempt on miss path ([planning/simulation-engine.md], MEGA-SIM-093). */
 object PossessionBlockPolicy {
     const val QA_ID: String = "MEGA-SIM-093"
-
-    private const val BASE_BLOCK_RATE = 0.08
-    private const val FOUL_ON_BLOCK_RATE = 0.15
 
     data class Outcome(
         val blocked: Boolean,
@@ -18,11 +17,17 @@ object PossessionBlockPolicy {
         }
     }
 
-    fun rollOnMiss(defRating: Int, offRating: Int, random: Random): Outcome {
+    fun rollOnMiss(
+        defRating: Int,
+        offRating: Int,
+        random: Random,
+        eventWeights: SimEventWeights = SimEventWeightsResolver.DEFAULT,
+    ): Outcome {
         val edge = (defRating - offRating).coerceIn(-20, 20)
-        val rate = (BASE_BLOCK_RATE + edge * 0.002).coerceIn(0.03, 0.18)
+        val block = eventWeights.ratingGapBlockOnMiss
+        val rate = eventWeights.blockRateForEdge(edge)
         if (random.nextDouble() >= rate) return Outcome.None
-        val foul = random.nextDouble() < FOUL_ON_BLOCK_RATE
+        val foul = random.nextDouble() < block.foulOnBlock
         return Outcome(blocked = true, foulOnBlock = foul)
     }
 }

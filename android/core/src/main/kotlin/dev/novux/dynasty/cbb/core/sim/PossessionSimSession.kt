@@ -6,6 +6,7 @@ import dev.novux.dynasty.cbb.core.strategy.GameplanEffectsResolver
 import dev.novux.dynasty.cbb.core.strategy.LateGameFoulStrategy
 import dev.novux.dynasty.cbb.core.strategy.LateGamePossessionPolicy
 import dev.novux.dynasty.cbb.core.strategy.GameplanUsageNormalizer
+import dev.novux.dynasty.cbb.core.sim.tuning.SimEventWeightsResolver
 import dev.novux.dynasty.cbb.core.strategy.SchemeMatchupResolver
 import kotlin.random.Random
 
@@ -55,6 +56,7 @@ class PossessionSimSession(
         initialHome = resume?.homeTeamFoulsInHalf ?: 0,
         initialAway = resume?.awayTeamFoulsInHalf ?: 0,
     )
+    private val eventWeights = SimEventWeightsResolver.resolve(input.tuning.eventWeights)
 
     fun hasNext(): Boolean = gameClock > 0
 
@@ -113,7 +115,12 @@ class PossessionSimSession(
             defenseScore = defenseScore,
             offenseScore = offenseScore,
         )
-        val tripSample = PossessionSimEngine.sampleTripForLateGame(input.tuning, random, lateDecision)
+        val tripSample = PossessionSimEngine.sampleTripForLateGame(
+            input.tuning,
+            random,
+            lateDecision,
+            eventWeights,
+        )
         val tripSeconds = PossessionSimEngine.pacedTripSecondsFromRaw(
             input.tuning,
             tripSample.rawSeconds,
@@ -156,6 +163,7 @@ class PossessionSimSession(
                 resolveEffects,
                 random,
                 lateClockTrip = lateClockTrip,
+                eventWeights = eventWeights,
             )
         }
         var offenseBoxAfter = resolution.box

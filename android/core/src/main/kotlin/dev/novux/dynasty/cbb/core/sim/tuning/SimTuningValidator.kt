@@ -41,6 +41,10 @@ object SimTuningValidator {
         if (tuning.eventWeights !is JsonObject) {
             return SimTuningValidationError.MissingSection("eventWeights")
         }
+        val resolvedWeights = SimEventWeightsResolver.resolve(tuning.eventWeights)
+        SimEventWeightsResolver.validate(resolvedWeights)?.let { msg ->
+            return SimTuningValidationError.InvalidRange("eventWeights", msg)
+        }
 
         if (tuning.homeNeutralModifiers.home <= 0.0 ||
             tuning.homeNeutralModifiers.neutral <= 0.0 ||

@@ -152,7 +152,7 @@
 |----|--------|-------------------|-------------|---------|
 | MEGA-SIM-081 | WIRE | User calendar game → Strategy prep → watch/sim commit | `DynastyShellScreen`, `GameWatchLaunch` | Scrimmage from Strategy hub; schedule card path may not pass schemes/roster |
 | MEGA-SIM-082 | PARTIAL | Batch week sim uses possession engine | `LeagueFastSim` with `SimTuning` | Fallback random scores when `tuning == null` |
-| MEGA-SIM-083 | GAP | `eventWeights` JSON consumed per possession | `SimTuning.eventWeights` | Empty object in asset; unused in engine |
+| MEGA-SIM-083 | PASS | `eventWeights` JSON consumed per possession | `SimEventWeightsResolver` | Trip buckets, rating-gap make/block, OReb, fouls from tuning |
 | MEGA-SIM-084 | SHIP | `:core:test` possession / lineup / injury / watch tests | `android/core/src/test/.../sim/*` | Green in CI per BUILD_CHECKLIST 0.3 |
 | MEGA-SIM-085 | PARTIAL | Tie games broken | `LeagueFastSim` +1 for standings | Possession sim can tie; batch nudges home +1 only in fast sim wrapper |
 
@@ -175,7 +175,7 @@
 | MEGA-SIM-096 | P2 | FAIL | **Jump ball / held ball** rare alternate possession | Planning rare events | Not in engine |
 | MEGA-SIM-097 | P1 | PASS | Possession log: **jersey # + player name** on scorer/assister/rebounder | `PossessionLogPlayerLabel`, `PossessionPlayerCredits` | Log `| #12 Name 2PT make (ast #5 …)` / `rebound #…` |
 | MEGA-SIM-098 | P2 | FAIL | **Assists** attributed on made FGs from usage weights | — | No per-player stats |
-| MEGA-SIM-099 | P1 | FAIL | Consume **`eventWeights`** + rating-gap tables from `sim-tuning.json` | `SimTuning.eventWeights` | Empty in asset; resolver ignores |
+| MEGA-SIM-099 | P1 | PASS | Consume **`eventWeights`** + rating-gap tables from `sim-tuning.json` | `SimEventWeightsResolver`, wired possession policies | Full tables in asset; session resolves per game |
 | MEGA-SIM-100 | P1 | FAIL | **Made basket at 0:00** half/game end tuning branch | `simulation-engine` half end | Clock clamp only; no release-time rule |
 
 ---
