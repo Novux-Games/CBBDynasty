@@ -125,17 +125,12 @@ fun PlayerCardOverviewContent(
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
         )
+        PlayerCardIdentityStripChips(player = player)
         Text(
-            text = stringResource(
-                R.string.player_card_identity,
-                player.position.label,
-                player.classYear.label,
-                player.archetype.displayName,
-            ),
-            style = MaterialTheme.typography.bodyMedium,
+            text = player.archetype.displayName,
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        PlayerInjuryOverviewBlock(player.injury)
         PlayerLoyaltyChips(player)
         HorizontalDivider()
         Text(

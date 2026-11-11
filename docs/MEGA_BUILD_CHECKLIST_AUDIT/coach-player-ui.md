@@ -244,7 +244,7 @@
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-139 | P0 | PASS | `PlayerCardScreen` full-screen route + back stack | Shell overlay + Back dismisses to roster | `PlayerCardScreen.kt` |
 | MEGA-COACH-140 | P1 | PASS | Persistent header Back / Name / Edit | `PlayerCardPersistentHeader` on full card + preview sheet | `PlayerCardPersistentHeader.kt`, `PlayerCardSheet.kt` |
-| MEGA-COACH-141 | P1 | FAIL | Identity strip: grade + position + injury `OUT` chip | Injury as text block, not strip chip |
+| MEGA-COACH-141 | P1 | PASS | Identity strip: grade + position + injury `OUT` chip | `PlayerCardIdentityStripChips` AssistChips on full card + preview | `PlayerCardIdentityStrip.kt` |
 | MEGA-COACH-142 | P0 | PASS | Ratings tab attribute rows (shooting subs, handling, …) | `PlayerRatingAttributesPanel` grouped rows + nested shooting subs | `PlayerRatingAttributesPanel.kt` |
 | MEGA-COACH-143 | P1 | PASS | Potential + pro potential rows | Potential card on Ratings tab | `PlayerRatingAttributesPanel.kt` |
 | MEGA-COACH-144 | P2 | PASS | **Perimeter** spelling in perimeter defense label | `player_rating_perimeter_def_label` | `strings.xml` |

@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -39,7 +37,6 @@ import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
 import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
 import dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
 import dev.novux.dynasty.cbb.ui.coach.CoachOverviewTeamCard
-import dev.novux.dynasty.cbb.ui.portrait.PlayerPortraitSlot
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,7 +65,7 @@ fun PlayerCardScreen(
             onBack = onBack,
             onEdit = { showEditHint = true },
         )
-        PlayerIdentityStrip(player = player)
+        PlayerCardIdentityStrip(player = player)
         PrimaryTabRow(selectedTabIndex = tabs.indexOf(selectedTab)) {
             tabs.forEach { tab ->
                 Tab(
@@ -136,35 +133,6 @@ fun PlayerCardScreen(
                 }
             },
         )
-    }
-}
-
-@Composable
-private fun PlayerIdentityStrip(player: DynastyPlayer) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        PlayerPortraitSlot(
-            displayName = player.identity.displayName,
-            avatarPresetId = player.appearance.avatarPresetId,
-            playerId = player.playerId,
-        )
-        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(
-                stringResource(
-                    R.string.player_card_identity,
-                    player.position.label,
-                    player.classYear.label,
-                    player.archetype.displayName,
-                ),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            PlayerInjuryOverviewBlock(player.injury)
-        }
     }
 }
 
