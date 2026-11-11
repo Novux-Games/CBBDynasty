@@ -23,6 +23,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import dev.novux.dynasty.cbb.requireDynastyApplication
+import dev.novux.dynasty.cbb.ui.player.PlayerCardPreviewSheet
+import dev.novux.dynasty.cbb.ui.player.PlayerCardScreen
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -78,6 +82,10 @@ fun PreseasonScreen(
     var tournamentInvitesState by remember { mutableStateOf<TournamentInvitesState?>(null) }
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
+    var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
+    var fullScreenPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
+    val context = LocalContext.current
+    val playerStatsRepository = context.requireDynastyApplication().playerStatsRepository
     val scope = rememberCoroutineScope()
     val position = loaded.weekCheckpoint.activePosition
 
@@ -97,6 +105,28 @@ fun PreseasonScreen(
     val phaseLabel = CalendarWeekLabel.display(position)
     val menu = buildDynastyHubMenu(position, hubMenuCallbacks)
 
+    PlayerCardPreviewSheet(
+        player = cardPlayer,
+        onDismiss = { cardPlayer = null },
+        onViewMore = { player ->
+            cardPlayer = null
+            fullScreenPlayer = player
+        },
+    )
+
+    fullScreenPlayer?.let { player ->
+        PlayerCardScreen(
+            player = player,
+            schoolDisplayName = schoolName,
+            seasonRecordLabel = "0-0",
+            seasonIndex = loaded.metadata.seasonIndex,
+            playerStatsRepository = playerStatsRepository,
+            allowEdit = false,
+            onBack = { fullScreenPlayer = null },
+        )
+        return
+    }
+
     DynastyShellChrome(
         schoolDisplayName = schoolName,
         phaseWeekLabel = phaseLabel,
@@ -108,7 +138,7 @@ fun PreseasonScreen(
             DynastyShellTab.Roster -> DynastyShellRosterTab(
                 players = fullRoster,
                 contentPadding = padding,
-                onPlayerClick = { },
+                onPlayerClick = { cardPlayer = it },
             )
             DynastyShellTab.Calendar -> DynastyShellCalendarTab(
                 dynastyId = loaded.dynastyId,

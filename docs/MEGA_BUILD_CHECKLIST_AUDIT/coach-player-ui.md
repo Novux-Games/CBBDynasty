@@ -158,7 +158,7 @@
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-089 | P2 | GAP | In-season roster tap → player sheet | `DynastyShellScreen` + `PlayerCardSheet` |
-| MEGA-COACH-090 | P0 | FAIL | Offseason/preseason roster tap (spec: tappable) | `onPlayerClick = { }` on `OffseasonScreen`, `PreseasonScreen` |
+| MEGA-COACH-090 | P0 | PASS | Offseason/preseason roster tap (spec: tappable) | Roster tab → `PlayerCardPreviewSheet` + full `PlayerCardScreen` on both shells | `OffseasonScreen.kt`, `PreseasonScreen.kt` |
 | MEGA-COACH-091 | P2 | GAP | HC skill tree Sunday points UI on card | `SkillTreePanel` when state passed |
 | MEGA-COACH-092 | P1 | PASS | HC sim ratings map to skill tree engine | `CoachSkillTreeEngine`, `HeadCoachSkillRatings` |
 | MEGA-COACH-093 | P1 | FAIL | Coach card deep History / HOF / Draft tabs | No entities or UI |

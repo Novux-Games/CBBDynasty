@@ -71,6 +71,10 @@ import dev.novux.dynasty.cbb.ui.offseason.leaving.PlayersLeavingPanel
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceDialog
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import dev.novux.dynasty.cbb.requireDynastyApplication
+import dev.novux.dynasty.cbb.ui.player.PlayerCardPreviewSheet
+import dev.novux.dynasty.cbb.ui.player.PlayerCardScreen
 import kotlinx.coroutines.launch
 
 private const val SCHOLARSHIP_LIMIT = 15
@@ -105,6 +109,10 @@ fun OffseasonScreen(
     var conferenceOffersResolved by remember { mutableStateOf(true) }
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
+    var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
+    var fullScreenPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
+    val context = LocalContext.current
+    val playerStatsRepository = context.requireDynastyApplication().playerStatsRepository
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(loaded.dynastyId, loaded.weekCheckpoint) {
@@ -134,6 +142,28 @@ fun OffseasonScreen(
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
     val menu = buildDynastyHubMenu(position, hubMenuCallbacks)
 
+    PlayerCardPreviewSheet(
+        player = cardPlayer,
+        onDismiss = { cardPlayer = null },
+        onViewMore = { player ->
+            cardPlayer = null
+            fullScreenPlayer = player
+        },
+    )
+
+    fullScreenPlayer?.let { player ->
+        PlayerCardScreen(
+            player = player,
+            schoolDisplayName = schoolName,
+            seasonRecordLabel = "0-0",
+            seasonIndex = loaded.metadata.seasonIndex,
+            playerStatsRepository = playerStatsRepository,
+            allowEdit = false,
+            onBack = { fullScreenPlayer = null },
+        )
+        return
+    }
+
     DynastyShellChrome(
         schoolDisplayName = schoolName,
         phaseWeekLabel = weekHeader,
@@ -145,7 +175,7 @@ fun OffseasonScreen(
             DynastyShellTab.Roster -> DynastyShellRosterTab(
                 players = fullRoster,
                 contentPadding = padding,
-                onPlayerClick = { },
+                onPlayerClick = { cardPlayer = it },
             )
             DynastyShellTab.Calendar -> DynastyShellCalendarTab(
                 dynastyId = loaded.dynastyId,
