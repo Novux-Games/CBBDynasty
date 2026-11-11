@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.core.sim
 
+import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
+import dev.novux.dynasty.cbb.core.injuries.MidGameInjurySampler
 import dev.novux.dynasty.cbb.core.strategy.GameplanEffectsResolver
 import dev.novux.dynasty.cbb.core.strategy.LateGameFoulStrategy
 import dev.novux.dynasty.cbb.core.strategy.LateGamePossessionPolicy
@@ -16,9 +18,10 @@ data class PossessionStep(
  * Steppable possession loop for watch playback and halftime resume.
  */
 class PossessionSimSession(
-  input: GameSimInput,
-  resume: MidGameState? = null,
-  private val stopAtHalftime: Boolean = false,
+    input: GameSimInput,
+    resume: MidGameState? = null,
+    private val stopAtHalftime: Boolean = false,
+    private val injuryRoll: GameSimInjuryRollInput? = null,
 ) {
     private val input: GameSimInput = input
     private var random: Random = resume?.random ?: Random(input.seed)
@@ -42,6 +45,10 @@ class PossessionSimSession(
         playerIds = input.awayRoster?.participants?.map { it.playerId }.orEmpty(),
         initial = resume?.awayPlayerBox.orEmpty(),
     )
+    private val homeInjuredOut = (resume?.homeInjuredPlayerIds ?: emptySet()).toMutableSet()
+    private val awayInjuredOut = (resume?.awayInjuredPlayerIds ?: emptySet()).toMutableSet()
+    private val homeMidInjuries = (resume?.homeMidGameInjuries ?: emptyList()).toMutableList()
+    private val awayMidInjuries = (resume?.awayMidGameInjuries ?: emptyList()).toMutableList()
 
     fun hasNext(): Boolean = gameClock > 0
 
@@ -122,8 +129,8 @@ class PossessionSimSession(
                 freeThrowsAttempted = offenseBoxAfter.freeThrowsAttempted + attempts,
             )
         }
-        val homeFloorIds = floorPlayerIds(home = true)
-        val awayFloorIds = floorPlayerIds(home = false)
+        val homeFloorIds = floorPlayerIds(home = true, excludeInjured = false)
+        val awayFloorIds = floorPlayerIds(home = false, excludeInjured = false)
         val offenseFloor = fallbackFloor(
             if (offenseHome) homeFloorIds else awayFloorIds,
             if (offenseHome) input.homeRoster else input.awayRoster,
@@ -163,6 +170,7 @@ class PossessionSimSession(
             }
         }
         accrueFloorMinutes(used, offenseHome)
+        val newInjuryLines = sampleMidGameInjuries(homeFloorIds, awayFloorIds)
         val foulNote = recordPersonalFoulIfNeeded(tripSample.foulStoppage, offenseHome)
         val line = PossessionSimEngine.formatPossessionLog(
             used,
@@ -178,8 +186,64 @@ class PossessionSimSession(
             lateGameTag = LateGamePossessionPolicy.logTag(lateDecision),
         )
         log += line
+        newInjuryLines.forEach { log += it }
         val halftime = stopAtHalftime && gameClock <= GameSimClock.HALF_SECONDS
         return PossessionStep(line, haltedAtHalftime = halftime)
+    }
+
+    private fun sampleMidGameInjuries(
+        homeFloorIds: List<String>,
+        awayFloorIds: List<String>,
+    ): List<String> {
+        val roll = injuryRoll ?: return emptyList()
+        val lines = mutableListOf<String>()
+        roll.homeRosterPlayers?.let { roster ->
+            MidGameInjurySampler.tryTeamPossession(
+                phase = roll.phase,
+                floorPlayerIds = homeFloorIds.filter { it !in homeInjuredOut },
+                minutesLedger = homeMinutesLedger,
+                roster = roster,
+                alreadyInjuredIds = homeInjuredOut,
+                injuriesThisTeam = homeMidInjuries.size,
+                bank = roll.bank,
+                tuning = roll.occurrence,
+                medicalStaffGrade = roll.medicalStaffGrade,
+                gameClockSeconds = gameClock,
+                possessionIndex = totalPossessions,
+                teamSeed = input.seed xor input.home.teamId.hashCode().toLong(),
+                random = random,
+            )?.let { event ->
+                homeMidInjuries += event
+                homeInjuredOut += event.playerId
+                val label = roster.firstOrNull { it.playerId == event.playerId }?.displayLabel()
+                    ?: event.playerId
+                lines += MidGameInjurySampler.formatLogLine(label, event.label)
+            }
+        }
+        roll.awayRosterPlayers?.let { roster ->
+            MidGameInjurySampler.tryTeamPossession(
+                phase = roll.phase,
+                floorPlayerIds = awayFloorIds.filter { it !in awayInjuredOut },
+                minutesLedger = awayMinutesLedger,
+                roster = roster,
+                alreadyInjuredIds = awayInjuredOut,
+                injuriesThisTeam = awayMidInjuries.size,
+                bank = roll.bank,
+                tuning = roll.occurrence,
+                medicalStaffGrade = roll.medicalStaffGrade,
+                gameClockSeconds = gameClock,
+                possessionIndex = totalPossessions,
+                teamSeed = input.seed xor input.away.teamId.hashCode().toLong(),
+                random = random,
+            )?.let { event ->
+                awayMidInjuries += event
+                awayInjuredOut += event.playerId
+                val label = roster.firstOrNull { it.playerId == event.playerId }?.displayLabel()
+                    ?: event.playerId
+                lines += MidGameInjurySampler.formatLogLine(label, event.label)
+            }
+        }
+        return lines
     }
 
     private fun teamOffensiveRating(offenseIsHome: Boolean): Int {
@@ -203,13 +267,15 @@ class PossessionSimSession(
             roster?.participants?.map { it.playerId }?.take(FoulTroubleRotationPolicy.FLOOR_PLAYERS).orEmpty()
         }
 
-    private fun floorPlayerIds(home: Boolean): List<String> {
+    private fun floorPlayerIds(home: Boolean, excludeInjured: Boolean = true): List<String> {
         val roster = if (home) input.homeRoster else input.awayRoster
         if (roster == null) return emptyList()
         val foulLedger = if (home) homeFoulLedger else awayFoulLedger
         val minutesLedger = if (home) homeMinutesLedger else awayMinutesLedger
+        val injured = if (home) homeInjuredOut else awayInjuredOut
         return SimFloorRotationPolicy.floorParticipants(roster, foulLedger, minutesLedger, gameClock)
             .map { it.playerId }
+            .filter { !excludeInjured || it !in injured }
     }
 
     private fun accrueFloorMinutes(usedSeconds: Int, offenseIsHome: Boolean) {
@@ -219,7 +285,7 @@ class PossessionSimSession(
                 homeFoulLedger,
                 homeMinutesLedger,
                 gameClock,
-            ).map { it.playerId }
+            ).map { it.playerId }.filter { it !in homeInjuredOut }
             homeMinutesLedger.addFloorTime(homeFloor, usedSeconds)
         }
         input.awayRoster?.let { awayRoster ->
@@ -228,7 +294,7 @@ class PossessionSimSession(
                 awayFoulLedger,
                 awayMinutesLedger,
                 gameClock,
-            ).map { it.playerId }
+            ).map { it.playerId }.filter { it !in awayInjuredOut }
             awayMinutesLedger.addFloorTime(awayFloor, usedSeconds)
         }
     }
@@ -266,6 +332,10 @@ class PossessionSimSession(
         awayFloorSecondsByPlayer = awayMinutesLedger.snapshot(),
         homePlayerBox = homePlayerLedger.snapshotMap(),
         awayPlayerBox = awayPlayerLedger.snapshotMap(),
+        homeInjuredPlayerIds = homeInjuredOut.toSet(),
+        awayInjuredPlayerIds = awayInjuredOut.toSet(),
+        homeMidGameInjuries = homeMidInjuries.toList(),
+        awayMidGameInjuries = awayMidInjuries.toList(),
     )
 
     fun toResult(isComplete: Boolean): GameSimResult {
@@ -285,6 +355,8 @@ class PossessionSimSession(
         awayFloorSecondsByPlayer = awayMinutesLedger.snapshot(),
         homePlayerBox = homePlayerLedger.snapshot(),
         awayPlayerBox = awayPlayerLedger.snapshot(),
+        homeInjuries = homeMidInjuries.toList(),
+        awayInjuries = awayMidInjuries.toList(),
         )
     }
 

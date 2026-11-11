@@ -139,7 +139,7 @@
 | MEGA-SIM-074 | SHIP | Auto-restore on `weeksRemaining → 0` | `applyInjuryReturnLineupAdjust`, week advance repos | Tested in injuries package |
 | MEGA-SIM-075 | PARTIAL | Strategy: injured greyed / cannot slot | `StrategyScreen` alpha + `PlayerInjuryRosterRow` | Visual only — no drag to block |
 | MEGA-SIM-076 | WIRE | Medical redshirt postgame sheet | `injuries.md` UX flow | Policy in core; sim UI lacks **Apply for medical redshirt** sheet after watch |
-| MEGA-SIM-077 | GAP | Injury line in **live** possession log when mid-game injury exists | Spec mid-game exit | Post-game only |
+| MEGA-SIM-077 | PASS | Injury line in **live** possession log when mid-game injury exists | `MidGameInjurySampler.formatLogLine`, `PossessionSimSession` | `INJURY — {name} · {label}` appended to log |
 | MEGA-SIM-078 | PARTIAL | AI league batch injury rolls | `AiLeagueWeekOps`, `LeagueWeekBatchSimEngine` | Count stub; full per-team bank roll not shown in fast sim path |
 | MEGA-SIM-079 | WIRE | Real RS game uses possession sim + injuries | `LeagueWeekBatchRepository` | User game sim path exists; AI games often `LeagueFastSim` without roster/tuning/injuries |
 | MEGA-SIM-080 | SHIP | Fatigue weight in injury probability | `FatigueEngine.fatigueInjuryWeight` | — |
@@ -278,9 +278,9 @@
 
 | ID | Pri | Status | Requirement (spec) | Code / test | Finding |
 |----|-----|--------|-------------------|-------------|---------|
-| MEGA-SIM-153 | P0 | FAIL | **Mid-game injury** sample during possession loop; stop minutes accrual | `injuries.md` sim hook | Post-game `GameSimInjuryRoll` only |
-| MEGA-SIM-154 | P0 | FAIL | Possession log line: **“INJURY — {Name} · {label}”** | MEGA-SIM-077 | — |
-| MEGA-SIM-155 | P1 | FAIL | `occurredInGameMinute` on injury event in result | `injuries.md` data model | Field not populated |
+| MEGA-SIM-153 | P0 | PASS | **Mid-game injury** sample during possession loop; stop minutes accrual | `MidGameInjurySampler`, `PossessionSimSession` + `injuryRoll` | Per-possession roll; injured pulled from floor/minutes ledger |
+| MEGA-SIM-154 | P0 | PASS | Possession log line: **“INJURY — {Name} · {label}”** | `MidGameInjurySampler.formatLogLine` | Wired in possession loop |
+| MEGA-SIM-155 | P1 | PASS | `occurredInGameMinute` on injury event in result | `GameSimInjuryEvent` on mid-game path | Set from game clock |
 | MEGA-SIM-156 | P1 | FAIL | Injury probability uses **actual box MIN** not prep estimate | MEGA-SIM-070 | `estimateMinutes` proxy |
 | MEGA-SIM-157 | P1 | PASS | Auto **lineup adjust** on save with starter promotion rules | `InjuryLineupAdjust` | Core tested |
 | MEGA-SIM-158 | P1 | PASS | **Return** reclaim starter slot + demote interim | `applyInjuryReturnLineupAdjust` | Week advance path |

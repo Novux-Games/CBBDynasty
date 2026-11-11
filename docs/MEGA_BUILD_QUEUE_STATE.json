@@ -70,7 +70,9 @@
     "MEGA-SIM-137",
     "MEGA-SIM-138",
     "MEGA-SIM-145",
-    "MEGA-SIM-149"
+    "MEGA-SIM-149",
+    "MEGA-SIM-153",
+    "MEGA-SIM-154"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

@@ -18,7 +18,12 @@ object PossessionSimEngine {
         options: SimulateOptions = SimulateOptions(),
         injuryRoll: GameSimInjuryRollInput? = null,
     ): GameSimResult {
-        val session = PossessionSimSession(input, options.resume, options.stopAtHalftime)
+        val session = PossessionSimSession(
+            input,
+            options.resume,
+            options.stopAtHalftime,
+            injuryRoll = injuryRoll,
+        )
         while (session.hasNext()) {
             val step = session.step()
             if (step.haltedAtHalftime) {

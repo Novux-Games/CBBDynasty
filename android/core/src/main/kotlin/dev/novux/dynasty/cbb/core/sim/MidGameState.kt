@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.sim
 
+import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
 import kotlin.random.Random
 
 /** Carried across halftime when watching a game. */
@@ -19,6 +20,10 @@ data class MidGameState(
     val awayFloorSecondsByPlayer: Map<String, Int> = emptyMap(),
     val homePlayerBox: Map<String, PlayerBoxScore> = emptyMap(),
     val awayPlayerBox: Map<String, PlayerBoxScore> = emptyMap(),
+    val homeInjuredPlayerIds: Set<String> = emptySet(),
+    val awayInjuredPlayerIds: Set<String> = emptySet(),
+    val homeMidGameInjuries: List<GameSimInjuryEvent> = emptyList(),
+    val awayMidGameInjuries: List<GameSimInjuryEvent> = emptyList(),
 )
 
 data class SimulateOptions(

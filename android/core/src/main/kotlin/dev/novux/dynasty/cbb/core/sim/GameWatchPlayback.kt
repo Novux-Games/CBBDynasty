@@ -27,7 +27,7 @@ object GameWatchPlayback {
         onHalftime: suspend (GameSimResult, MidGameState) -> GameSimInput,
     ): GameSimResult {
         var activeInput = input
-        var session = PossessionSimSession(activeInput, stopAtHalftime = true)
+        var session = PossessionSimSession(activeInput, stopAtHalftime = true, injuryRoll = injuryRoll)
         var resumedAfterHalftime = false
         while (session.hasNext()) {
             val step = session.step()
@@ -40,7 +40,12 @@ object GameWatchPlayback {
                 val partial = session.toResult(isComplete = false)
                 val mid = checkNotNull(partial.midGame)
                 activeInput = onHalftime(partial, mid)
-                session = PossessionSimSession(activeInput, resume = mid, stopAtHalftime = false)
+                session = PossessionSimSession(
+                    activeInput,
+                    resume = mid,
+                    stopAtHalftime = false,
+                    injuryRoll = injuryRoll,
+                )
                 resumedAfterHalftime = true
             }
         }
