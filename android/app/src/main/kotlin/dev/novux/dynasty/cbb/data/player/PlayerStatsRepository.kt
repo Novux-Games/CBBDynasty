@@ -7,19 +7,21 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
-import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
-import dev.novux.dynasty.cbb.core.calendar.checkpoint.ProvisionalGameMark
-import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogArchiveEngine
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogEntry
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogMerge
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogSynth
-import dev.novux.dynasty.cbb.core.player.stats.PlayerCountingStats
 import dev.novux.dynasty.cbb.core.player.history.PlayerPriorSeasonSnapshot
+import dev.novux.dynasty.cbb.core.player.loyalty.PlayerSeasonMinutesPerGameEstimator
+import dev.novux.dynasty.cbb.core.player.stats.PlayerCountingStats
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsEngine
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
-import dev.novux.dynasty.cbb.core.player.loyalty.PlayerSeasonMinutesPerGameEstimator
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSynth
+import dev.novux.dynasty.cbb.database.DynastyDatabase
+import dev.novux.dynasty.cbb.database.roster.PlayerSeasonStatsEntity
+import dev.novux.dynasty.cbb.database.roster.toTotals
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -49,8 +51,13 @@ data class DynastyPlayerStatsBlob(
     val gameLogs: List<PlayerGameLogRecord> = emptyList(),
 )
 
-class PlayerStatsRepository(private val context: Context) {
+/** Stats/Games tab persistence via Room `player_season_stats` ([MEGA-COACH-195]). */
+class PlayerStatsRepository(
+    private val context: Context,
+    private val database: DynastyDatabase,
+) {
     private val json = Json { ignoreUnknownKeys = true }
+    private val playerSeasonStatsDao = database.playerSeasonStatsDao()
 
     suspend fun priorSeasonsForPlayer(
         dynastyId: String,
@@ -174,6 +181,10 @@ class PlayerStatsRepository(private val context: Context) {
         )
     }
 
+    suspend fun deleteForDynasty(dynastyId: String) = withContext(Dispatchers.IO) {
+        playerSeasonStatsDao.deleteForDynasty(dynastyId)
+    }
+
     private suspend fun ensureSeasonRecord(
         dynastyId: String,
         player: DynastyPlayer,
@@ -255,6 +266,70 @@ class PlayerStatsRepository(private val context: Context) {
     }
 
     private suspend fun loadBlob(dynastyId: String): DynastyPlayerStatsBlob {
+        migrateLegacyDatastoreIfNeeded(dynastyId)
+        return blobFromRoom(dynastyId)
+    }
+
+    private suspend fun migrateLegacyDatastoreIfNeeded(dynastyId: String) = withContext(Dispatchers.IO) {
+        if (playerSeasonStatsDao.listForDynasty(dynastyId).isNotEmpty()) return@withContext
+        val legacy = loadDatastoreBlob(dynastyId)
+        if (legacy.records.isEmpty() && legacy.gameLogs.isEmpty()) return@withContext
+        persistToRoom(dynastyId, legacy)
+    }
+
+    private suspend fun blobFromRoom(dynastyId: String): DynastyPlayerStatsBlob = withContext(Dispatchers.IO) {
+        val rows = playerSeasonStatsDao.listForDynasty(dynastyId)
+        val records = rows.map { row ->
+            PlayerSeasonStatRecord(
+                playerId = row.playerId,
+                seasonIndex = row.seasonIndex,
+                gamesPlayed = row.gamesPlayed,
+                totals = row.toTotals(),
+                schoolDisplayName = row.schoolDisplayName,
+            )
+        }
+        val gameLogs = rows.map { row ->
+            PlayerGameLogRecord(
+                playerId = row.playerId,
+                seasonIndex = row.seasonIndex,
+                gamesPlayed = row.gamesPlayed,
+                entries = decodeGameLogJson(row.gameLogJson),
+            )
+        }
+        DynastyPlayerStatsBlob(records = records, gameLogs = gameLogs)
+    }
+
+    private suspend fun persist(dynastyId: String, blob: DynastyPlayerStatsBlob) {
+        persistToRoom(dynastyId, blob)
+    }
+
+    private suspend fun persistToRoom(dynastyId: String, blob: DynastyPlayerStatsBlob) = withContext(Dispatchers.IO) {
+        val logByKey = blob.gameLogs.associateBy { "${it.playerId}:${it.seasonIndex}" }
+        val keys = (blob.records.map { "${it.playerId}:${it.seasonIndex}" } +
+            blob.gameLogs.map { "${it.playerId}:${it.seasonIndex}" }).distinct()
+        val entities = keys.mapNotNull { key ->
+            val record = blob.records.firstOrNull { "${it.playerId}:${it.seasonIndex}" == key }
+            val log = logByKey[key]
+            val playerId = record?.playerId ?: log?.playerId ?: return@mapNotNull null
+            val seasonIndex = record?.seasonIndex ?: log?.seasonIndex ?: return@mapNotNull null
+            val gamesPlayed = maxOf(record?.gamesPlayed ?: 0, log?.gamesPlayed ?: 0)
+            val totals = record?.totals ?: PlayerCountingStats.ZERO
+            toEntity(
+                dynastyId = dynastyId,
+                playerId = playerId,
+                seasonIndex = seasonIndex,
+                gamesPlayed = gamesPlayed,
+                schoolDisplayName = record?.schoolDisplayName,
+                totals = totals,
+                gameLog = log?.entries.orEmpty(),
+            )
+        }
+        if (entities.isNotEmpty()) {
+            playerSeasonStatsDao.upsertAll(entities)
+        }
+    }
+
+    private suspend fun loadDatastoreBlob(dynastyId: String): DynastyPlayerStatsBlob {
         val key = blobKey(dynastyId)
         val prefs = context.playerStatsStore.data.first()
         val raw = prefs[key] ?: return DynastyPlayerStatsBlob()
@@ -262,12 +337,44 @@ class PlayerStatsRepository(private val context: Context) {
             .getOrElse { DynastyPlayerStatsBlob() }
     }
 
-    private suspend fun persist(dynastyId: String, blob: DynastyPlayerStatsBlob) {
-        val key = blobKey(dynastyId)
-        context.playerStatsStore.edit { prefs ->
-            prefs[key] = json.encodeToString(blob)
-        }
-    }
-
     private fun blobKey(dynastyId: String) = stringPreferencesKey("blob_$dynastyId")
+
+    private fun decodeGameLogJson(raw: String): List<PlayerGameLogEntry> =
+        if (raw.isBlank()) {
+            emptyList()
+        } else {
+            runCatching { json.decodeFromString<List<PlayerGameLogEntry>>(raw) }.getOrElse { emptyList() }
+        }
+
+    private fun encodeGameLogJson(entries: List<PlayerGameLogEntry>): String =
+        if (entries.isEmpty()) "" else json.encodeToString(entries)
+
+    private fun toEntity(
+        dynastyId: String,
+        playerId: String,
+        seasonIndex: Int,
+        gamesPlayed: Int,
+        schoolDisplayName: String?,
+        totals: PlayerCountingStats,
+        gameLog: List<PlayerGameLogEntry>,
+    ): PlayerSeasonStatsEntity = PlayerSeasonStatsEntity(
+        dynastyId = dynastyId,
+        playerId = playerId,
+        seasonIndex = seasonIndex,
+        gamesPlayed = gamesPlayed,
+        schoolDisplayName = schoolDisplayName,
+        points = totals.points,
+        assists = totals.assists,
+        rebounds = totals.rebounds,
+        steals = totals.steals,
+        blocks = totals.blocks,
+        turnovers = totals.turnovers,
+        fieldGoalsMade = totals.fieldGoalsMade,
+        fieldGoalsAttempted = totals.fieldGoalsAttempted,
+        threePointsMade = totals.threePointsMade,
+        threePointsAttempted = totals.threePointsAttempted,
+        freeThrowsMade = totals.freeThrowsMade,
+        freeThrowsAttempted = totals.freeThrowsAttempted,
+        gameLogJson = encodeGameLogJson(gameLog),
+    )
 }

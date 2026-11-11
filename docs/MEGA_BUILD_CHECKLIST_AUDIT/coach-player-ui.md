@@ -340,7 +340,7 @@
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-193 | P1 | PASS | `CoachCareerSeasonEntity` or equivalent for History tab | Room `coach_career_season`; archive on `HistoryRepository.finalizeSeason`; merge in `CoachCardDeepTabsRepository` |
 | MEGA-COACH-194 | P2 | FAIL | Coach achievement counters on save | Not on `DynastyCoachEntity` |
-| MEGA-COACH-195 | P1 | FAIL | `PlayerSeasonStatsEntity` for Stats/Games tabs | Not found |
+| MEGA-COACH-195 | P1 | PASS | `PlayerSeasonStatsEntity` for Stats/Games tabs | Room `player_season_stats` + `PlayerStatsRepository` (legacy DataStore migrate-on-read) |
 | MEGA-COACH-196 | P2 | FAIL | `promiseHistory` persistence optional log | Single promise on player row only |
 | MEGA-COACH-197 | P2 | GAP | UI screenshot / Compose tests for player card tabs | No `PlayerCard` androidTest |
 | MEGA-COACH-198 | P2 | GAP | UI tests for coach tab scaffold | None |

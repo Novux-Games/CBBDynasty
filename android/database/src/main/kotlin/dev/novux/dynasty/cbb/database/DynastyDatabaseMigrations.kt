@@ -4,6 +4,39 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.novux.dynasty.cbb.core.save.DynastySchema
 
+val MIGRATION_20_21 = object : Migration(20, 21) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS player_season_stats (
+                dynastyId TEXT NOT NULL,
+                playerId TEXT NOT NULL,
+                seasonIndex INTEGER NOT NULL,
+                gamesPlayed INTEGER NOT NULL,
+                schoolDisplayName TEXT,
+                points INTEGER NOT NULL,
+                assists INTEGER NOT NULL,
+                rebounds INTEGER NOT NULL,
+                steals INTEGER NOT NULL,
+                blocks INTEGER NOT NULL,
+                turnovers INTEGER NOT NULL,
+                fieldGoalsMade INTEGER NOT NULL,
+                fieldGoalsAttempted INTEGER NOT NULL,
+                threePointsMade INTEGER NOT NULL,
+                threePointsAttempted INTEGER NOT NULL,
+                freeThrowsMade INTEGER NOT NULL,
+                freeThrowsAttempted INTEGER NOT NULL,
+                gameLogJson TEXT NOT NULL,
+                PRIMARY KEY(dynastyId, playerId, seasonIndex)
+            )
+            """.trimIndent(),
+        )
+        db.execSQL(
+            "CREATE INDEX IF NOT EXISTS index_player_season_stats_dynastyId ON player_season_stats(dynastyId)",
+        )
+    }
+}
+
 val MIGRATION_19_20 = object : Migration(19, 20) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
@@ -343,7 +376,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 }
 
 /** Room user version after the latest migration in this chain. */
-const val DYNASTY_DB_VERSION: Int = 20
+const val DYNASTY_DB_VERSION: Int = 21
 
 /** Ordered migration chain registered on [DynastyDatabase]; used in CI migration tests. */
 val ALL_DYNASTY_MIGRATIONS: Array<Migration> =
@@ -367,4 +400,5 @@ val ALL_DYNASTY_MIGRATIONS: Array<Migration> =
         MIGRATION_17_18,
         MIGRATION_18_19,
         MIGRATION_19_20,
+        MIGRATION_20_21,
     )

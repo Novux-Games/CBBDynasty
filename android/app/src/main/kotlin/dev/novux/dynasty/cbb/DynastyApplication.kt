@@ -332,7 +332,10 @@ class DynastyApplication : Application() {
             incomingClassSeedRepository,
         )
         coachSkillPointRepository = CoachSkillPointRepository(applicationContext)
-        playerStatsRepository = dev.novux.dynasty.cbb.data.player.PlayerStatsRepository(applicationContext)
+        playerStatsRepository = dev.novux.dynasty.cbb.data.player.PlayerStatsRepository(
+            applicationContext,
+            database,
+        )
         val userLeagueGameSimFactory = dev.novux.dynasty.cbb.data.sim.UserLeagueGameSimFactory(
             database,
             packRepository,

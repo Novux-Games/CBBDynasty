@@ -8,7 +8,7 @@ import org.junit.Test
 class DynastyDatabaseMigrationChainTest {
     @Test
     fun allMigrations_formContinuousChain_toCurrentVersion() {
-        assertEquals(19, ALL_DYNASTY_MIGRATIONS.size)
+        assertEquals(20, ALL_DYNASTY_MIGRATIONS.size)
         var version = 1
         ALL_DYNASTY_MIGRATIONS.forEach { migration: Migration ->
             assertEquals(version, migration.startVersion)
@@ -19,7 +19,7 @@ class DynastyDatabaseMigrationChainTest {
 
     @Test
     fun registeredMigrations_endAtDynastyDatabaseVersion() {
-        assertSame(MIGRATION_19_20, ALL_DYNASTY_MIGRATIONS.last())
+        assertSame(MIGRATION_20_21, ALL_DYNASTY_MIGRATIONS.last())
         assertEquals(DYNASTY_DB_VERSION, ALL_DYNASTY_MIGRATIONS.last().endVersion)
     }
 }
