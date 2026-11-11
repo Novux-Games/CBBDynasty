@@ -157,6 +157,9 @@ class DynastyApplication : Application() {
     lateinit var rankingsHubRepository: dev.novux.dynasty.cbb.data.rankings.RankingsHubRepository
         private set
 
+    lateinit var statisticsHubRepository: dev.novux.dynasty.cbb.data.statistics.StatisticsHubRepository
+        private set
+
     lateinit var selectionSundayRepository: dev.novux.dynasty.cbb.data.selection.SelectionSundayRepository
         private set
 
@@ -333,6 +336,13 @@ class DynastyApplication : Application() {
             packRepository,
             leagueWeekBatchRepository,
             preseasonProgressRepository,
+        )
+        statisticsHubRepository = dev.novux.dynasty.cbb.data.statistics.StatisticsHubRepository(
+            packRepository,
+            leagueWeekBatchRepository,
+            dynastyRosterRepository,
+            playerStatsRepository,
+            database,
         )
         selectionSundayRepository = dev.novux.dynasty.cbb.data.selection.SelectionSundayRepository(
             packRepository,

@@ -71,6 +71,16 @@ class PlayerStatsRepository(private val context: Context) {
         }
     }
 
+    suspend fun seasonTotalsByPlayer(
+        dynastyId: String,
+        seasonIndex: Int,
+    ): Map<String, PlayerCountingStats> {
+        val blob = loadBlob(dynastyId)
+        return blob.records
+            .filter { it.seasonIndex == seasonIndex }
+            .associate { it.playerId to it.totals }
+    }
+
     suspend fun summaryFor(
         dynastyId: String,
         seasonIndex: Int,
