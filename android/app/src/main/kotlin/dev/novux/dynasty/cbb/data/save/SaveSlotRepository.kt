@@ -31,6 +31,7 @@ import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
 import dev.novux.dynasty.cbb.core.advance.UserWeekGameStatus
 import dev.novux.dynasty.cbb.core.injuries.InjuryCalendarPolicy
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionsParser
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
@@ -116,6 +117,7 @@ class SaveSlotRepository(
     private val staffDao = database.dynastyStaffDao()
     private val calendarDao = database.dynastyCalendarDao()
     private val initMutex = Mutex()
+    private val advanceMutexBySlot = ConcurrentHashMap<Int, Mutex>()
 
     suspend fun ensureInitialized() {
         initMutex.withLock {
@@ -550,6 +552,8 @@ class SaveSlotRepository(
         slotIndex: Int,
         userManualRecruitingSpent: Int = 0,
     ): DynastyLoadResult = withContext(Dispatchers.IO) {
+        val advanceMutex = advanceMutexBySlot.getOrPut(slotIndex) { Mutex() }
+        advanceMutex.withLock {
         require(slotIndex in SaveSlots.INDICES) { "slotIndex out of range" }
         ensureInitialized()
         val loaded = when (val initial = loadSlot(slotIndex)) {
@@ -584,7 +588,7 @@ class SaveSlotRepository(
                 weekIndex = loaded.weekCheckpoint.activePosition.weekIndex,
             )
         }
-        weekCheckpointRepository.persist(loaded.dynastyId, preAdvance.checkpointAfterPreAdvance)
+        // Skip intermediate persist so kill mid-advance leaves prior week or final week only (MEGA-QA-028).
         val checkpoint = preAdvance.checkpointAfterPreAdvance
         val aiWeek = aiRecruitingRepository.runLeagueWeekIfActive(loaded, ledger, userManualRecruitingSpent)
         val recruitingSpentClosingWeek = aiWeek?.userPointsSpent ?: 0
@@ -671,6 +675,7 @@ class SaveSlotRepository(
             )
         }
         loadSlot(slotIndex)
+        }
     }
 
     private suspend fun applyFastSimInjuries(
