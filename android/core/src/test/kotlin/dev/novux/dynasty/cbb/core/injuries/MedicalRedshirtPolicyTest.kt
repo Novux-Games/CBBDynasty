@@ -19,6 +19,14 @@ class MedicalRedshirtPolicyTest {
     }
 
     @Test
+    fun confirmationDetailIncludesGamesPlayedAndScheduleIndex() {
+        val player = injuredPlayer(severity = "major", rsGames = 8, gameIndex = 9)
+        val detail = MedicalRedshirtPolicy.confirmationDetail(player, rules)
+        assertTrue(detail.contains("8"))
+        assertTrue(detail.contains("9"))
+    }
+
+    @Test
     fun minorInjuryNotEligible() {
         val player = injuredPlayer(severity = "minor", rsGames = 5, gameIndex = 5)
         val result = MedicalRedshirtPolicy.evaluate(player, rsWeekIndex = 10, rules)

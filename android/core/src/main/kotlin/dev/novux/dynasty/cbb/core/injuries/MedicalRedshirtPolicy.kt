@@ -44,4 +44,21 @@ object MedicalRedshirtPolicy {
             isStarter = false,
             starterSlotWire = null,
         )
+
+    /** Copy for medical RS confirmation — [planning/injuries.md#ux-flow]. */
+    fun confirmationDetail(player: RosterPlayer, rules: BalanceMedicalRedshirtRules): String =
+        buildString {
+            append("RS games played: ")
+            append(player.rsGamesPlayedSeason)
+            append(" (cap ")
+            append(rules.maxGamesPlayed)
+            append(")")
+            if (player.injuryOccurredAtRsGameIndex > 0) {
+                append(" · Schedule game ")
+                append(player.injuryOccurredAtRsGameIndex)
+                append(" (max ")
+                append(rules.maxScheduleRsGameIndex)
+                append(")")
+            }
+        }
 }

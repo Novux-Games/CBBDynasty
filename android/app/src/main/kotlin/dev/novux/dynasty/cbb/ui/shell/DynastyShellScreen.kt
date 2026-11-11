@@ -95,7 +95,7 @@ import dev.novux.dynasty.cbb.ui.player.PlayerCardPreviewSheet
 import dev.novux.dynasty.cbb.ui.player.PlayerCardScreen
 import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
 import dev.novux.dynasty.cbb.ui.player.PlayerLoyaltyChips
-import dev.novux.dynasty.cbb.ui.postgame.PostgameInjurySheet
+import dev.novux.dynasty.cbb.ui.postgame.PostgameInjuryFlow
 import dev.novux.dynasty.cbb.ui.coach.AssistantCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.CoachPreviewBottomSheet
 import dev.novux.dynasty.cbb.ui.coach.CoachPreviewTarget
@@ -162,6 +162,7 @@ fun DynastyShellScreen(
     onOpenRecruitingTab: (RecruitingHubTab) -> Unit = {},
     onOpenAutomation: () -> Unit = {},
     onOpenJobCenter: () -> Unit = {},
+    postgameInjuryRefreshKey: Int = 0,
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
@@ -223,7 +224,7 @@ fun DynastyShellScreen(
         coachEmploymentStatus = coachEmploymentRepository.loadState(loaded.dynastyId).status
     }
 
-    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint) {
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint, postgameInjuryRefreshKey) {
         recruitingLedger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
     }
 
@@ -370,17 +371,11 @@ fun DynastyShellScreen(
         )
         return
     }
-    PostgameInjurySheet(
+    PostgameInjuryFlow(
         events = postgameEvents,
         players = rosterPlayers,
-        medicalEligible = { playerId ->
-            val player = rosterPlayers.firstOrNull { it.playerId == playerId } ?: return@PostgameInjurySheet false
-            MedicalRedshirtPolicy.evaluate(
-                player,
-                loaded.weekCheckpoint.activePosition.weekIndex,
-                medicalRules,
-            ).eligible
-        },
+        rsWeekIndex = loaded.weekCheckpoint.activePosition.weekIndex,
+        medicalRules = medicalRules,
         onDismiss = {
             scope.launch {
                 if (postgameEvents.isNotEmpty()) {

@@ -588,6 +588,11 @@
     <string name="postgame_injury_line">%1$s — %2$s · %3$d weeks</string>
     <string name="postgame_injury_dismiss">Continue</string>
     <string name="postgame_medical_redshirt_apply">Apply for medical redshirt</string>
+    <string name="postgame_medical_redshirt_confirm_title">Medical redshirt for %1$s?</string>
+    <string name="postgame_medical_redshirt_confirm_body">%1$s\n\nInjury: %2$s\n\nThey will be out for the rest of the season and remain on scholarship.</string>
+    <string name="postgame_medical_redshirt_confirm_apply">Apply</string>
+    <string name="postgame_medical_redshirt_confirm_cancel">Not now</string>
+    <string name="postgame_medical_redshirt_ineligible">Medical redshirt not available for this injury.</string>
     <string name="strategy_title">Strategy</string>
     <string name="strategy_starters">Starting five</string>
     <string name="strategy_bench">Rotation</string>

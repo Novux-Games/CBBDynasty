@@ -47,6 +47,9 @@ import dev.novux.dynasty.cbb.core.reports.ReportArticle
 import dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset
 import dev.novux.dynasty.cbb.core.strategy.GameplanInput
 import dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset
+import dev.novux.dynasty.cbb.core.balance.BalanceMedicalRedshirtRules
+import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
+import dev.novux.dynasty.cbb.ui.postgame.PostgameInjuryFlow
 import dev.novux.dynasty.cbb.ui.reports.ReportArticleView
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -64,6 +67,12 @@ fun GameWatchScreen(
     onHomeHalftimeAdjustments: (HalftimeCoachAdjustments) -> Unit = {},
     homeSimRoster: GameSimRosterInput? = null,
     injuryRoll: GameSimInjuryRollInput? = null,
+    postgameInjuryEvents: List<GameSimInjuryEvent> = emptyList(),
+    postgameInjuryRoster: List<RosterPlayer> = emptyList(),
+    rsWeekIndex: Int = 0,
+    medicalRules: BalanceMedicalRedshirtRules = BalanceMedicalRedshirtRules(),
+    onDismissPostgameInjuries: () -> Unit = {},
+    onApplyMedicalRedshirt: (String) -> Unit = {},
     onSimComplete: (GameSimResult) -> Unit = {},
     onBack: () -> Unit,
     seed: Long = 17L,
@@ -260,6 +269,15 @@ fun GameWatchScreen(
             Text(stringResource(R.string.settings_back))
         }
     }
+
+    PostgameInjuryFlow(
+        events = postgameInjuryEvents,
+        players = postgameInjuryRoster.ifEmpty { homeRosterPlayers },
+        rsWeekIndex = rsWeekIndex,
+        medicalRules = medicalRules,
+        onDismiss = onDismissPostgameInjuries,
+        onApplyMedicalRedshirt = onApplyMedicalRedshirt,
+    )
 
     if (halftimeOpen) {
         HalftimeCoachSheet(

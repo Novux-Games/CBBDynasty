@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -121,6 +122,13 @@ fun DynastyApp(
             var signingDayInitialTab by remember { mutableStateOf(SigningDayInitialTab.Rankings) }
             var disciplineIncident by remember {
                 mutableStateOf<dev.novux.dynasty.cbb.core.discipline.PendingDisciplineIncident?>(null)
+            }
+            var postgameInjuryRefreshKey by remember { mutableIntStateOf(0) }
+            var watchPostgameEvents by remember {
+                mutableStateOf<List<dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent>>(emptyList())
+            }
+            var watchPostgameRoster by remember {
+                mutableStateOf<List<dev.novux.dynasty.cbb.core.roster.RosterPlayer>>(emptyList())
             }
             val portalCycleRepository = LocalContext.current.requireDynastyApplication().portalCycleRepository
             val signingDayRepository = LocalContext.current.requireDynastyApplication().signingDayRepository
@@ -403,6 +411,7 @@ fun DynastyApp(
                                     }
                                 }
                             },
+                            postgameInjuryRefreshKey = postgameInjuryRefreshKey,
                         )
                     } else {
                         LaunchedEffect(Unit) {
@@ -483,8 +492,18 @@ fun DynastyApp(
                 composable(AppRoute.GameWatch.route) {
                     val app = LocalContext.current.requireDynastyApplication()
                     val scope = rememberCoroutineScope()
+                    LaunchedEffect(Unit) {
+                        watchPostgameEvents = emptyList()
+                        watchPostgameRoster = emptyList()
+                    }
                     var tuning by remember {
                         mutableStateOf<dev.novux.dynasty.cbb.core.sim.tuning.SimTuning?>(null)
+                    }
+                    var medicalRules by remember {
+                        mutableStateOf(dev.novux.dynasty.cbb.core.balance.BalanceMedicalRedshirtRules())
+                    }
+                    LaunchedEffect(Unit) {
+                        medicalRules = app.balanceRulesetRepository.activeRuleset().injuryTuning().medicalRedshirt
                     }
                     LaunchedEffect(Unit) {
                         tuning = app.simTuningRepository.activeTuning()
@@ -505,6 +524,8 @@ fun DynastyApp(
                         )
                     }
                     val ready = tuning
+                    val session = ActiveDynastySession.current
+                    val rsWeek = session?.weekCheckpoint?.activePosition?.weekIndex ?: 0
                     if (ready != null) {
                         GameWatchScreen(
                             tuning = ready,
@@ -517,6 +538,27 @@ fun DynastyApp(
                             homeStarters = GameWatchLaunch.homeStarters,
                             homeSimRoster = GameWatchLaunch.homeSimRoster,
                             injuryRoll = GameWatchLaunch.injuryRoll,
+                            postgameInjuryEvents = watchPostgameEvents,
+                            postgameInjuryRoster = watchPostgameRoster,
+                            rsWeekIndex = rsWeek,
+                            medicalRules = medicalRules,
+                            onDismissPostgameInjuries = {
+                                session?.let { app.dynastyRosterRepository.clearPostgameInjuries(it.dynastyId) }
+                                watchPostgameEvents = emptyList()
+                                postgameInjuryRefreshKey++
+                            },
+                            onApplyMedicalRedshirt = { playerId ->
+                                scope.launch {
+                                    val active = ActiveDynastySession.current ?: return@launch
+                                    watchPostgameRoster = app.dynastyRosterRepository.applyMedicalRedshirt(
+                                        active.dynastyId,
+                                        playerId,
+                                    )
+                                    app.dynastyRosterRepository.clearPostgameInjuries(active.dynastyId)
+                                    watchPostgameEvents = emptyList()
+                                    postgameInjuryRefreshKey++
+                                }
+                            },
                             onHomeHalftimeAdjustments = { adj ->
                                 GameWatchLaunch.homeGameplan = adj.gameplan
                                 GameWatchLaunch.homeOffensiveScheme = adj.offensiveScheme
@@ -525,22 +567,37 @@ fun DynastyApp(
                             },
                             onSimComplete = { result ->
                                 scope.launch {
-                                    val session = ActiveDynastySession.current ?: return@launch
+                                    val active = ActiveDynastySession.current ?: return@launch
                                     val events = result.userTeamInjuries(userTeamIsHome = true)
                                     if (events.isEmpty()) return@launch
-                                    val week = session.weekCheckpoint.activePosition.weekIndex
-                                    app.dynastyRosterRepository.applyGameInjuries(
-                                        session.dynastyId,
+                                    val week = active.weekCheckpoint.activePosition.weekIndex
+                                    val before = app.dynastyRosterRepository.listPlayers(active.dynastyId)
+                                    val rsGames = before.firstOrNull { it.playerId == events.first().playerId }
+                                        ?.rsGamesPlayedSeason ?: 0
+                                    val roster = app.dynastyRosterRepository.applyGameInjuries(
+                                        active.dynastyId,
                                         events,
                                         dev.novux.dynasty.cbb.core.injuries.InjuryApplyContext(
                                             rsWeekIndex = week,
-                                            rsGameIndex = week,
-                                            rsGamesPlayed = week.coerceAtLeast(0),
+                                            rsGameIndex = week.coerceAtLeast(1),
+                                            rsGamesPlayed = rsGames,
                                         ),
                                     )
+                                    watchPostgameEvents = events
+                                    watchPostgameRoster = roster
+                                    postgameInjuryRefreshKey++
                                 }
                             },
-                            onBack = { navController.popBackStack() },
+                            onBack = {
+                                if (watchPostgameEvents.isNotEmpty()) {
+                                    session?.let {
+                                        app.dynastyRosterRepository.clearPostgameInjuries(it.dynastyId)
+                                    }
+                                    watchPostgameEvents = emptyList()
+                                    postgameInjuryRefreshKey++
+                                }
+                                navController.popBackStack()
+                            },
                         )
                     }
                 }

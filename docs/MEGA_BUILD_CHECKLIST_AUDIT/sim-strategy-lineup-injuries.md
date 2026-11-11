@@ -138,7 +138,7 @@
 | MEGA-SIM-073 | SHIP | Auto-fill starters on injury (listed-position algorithm) | `InjuryLineupAdjustTest` | Snapshots `injuryWasStarterSlotWire` |
 | MEGA-SIM-074 | SHIP | Auto-restore on `weeksRemaining → 0` | `applyInjuryReturnLineupAdjust`, week advance repos | Tested in injuries package |
 | MEGA-SIM-075 | PARTIAL | Strategy: injured greyed / cannot slot | `StrategyScreen` alpha + `PlayerInjuryRosterRow` | Visual only — no drag to block |
-| MEGA-SIM-076 | WIRE | Medical redshirt postgame sheet | `injuries.md` UX flow | Policy in core; sim UI lacks **Apply for medical redshirt** sheet after watch |
+| MEGA-SIM-076 | PASS | Medical redshirt postgame sheet | `PostgameInjuryFlow`, `GameWatchScreen` | Apply/Dismiss after watch + shell refresh |
 | MEGA-SIM-077 | PASS | Injury line in **live** possession log when mid-game injury exists | `MidGameInjurySampler.formatLogLine`, `PossessionSimSession` | `INJURY — {name} · {label}` appended to log |
 | MEGA-SIM-078 | PARTIAL | AI league batch injury rolls | `AiLeagueWeekOps`, `LeagueWeekBatchSimEngine` | Count stub; full per-team bank roll not shown in fast sim path |
 | MEGA-SIM-079 | WIRE | Real RS game uses possession sim + injuries | `LeagueWeekBatchRepository` | User game sim path exists; AI games often `LeagueFastSim` without roster/tuning/injuries |
@@ -285,8 +285,8 @@
 | MEGA-SIM-157 | P1 | PASS | Auto **lineup adjust** on save with starter promotion rules | `InjuryLineupAdjust` | Core tested |
 | MEGA-SIM-158 | P1 | PASS | **Return** reclaim starter slot + demote interim | `applyInjuryReturnLineupAdjust` | Week advance path |
 | MEGA-SIM-159 | P1 | FAIL | **Multi-return same week** PG→C ordering | `injuries.md` conflict rules | Single-player tests; ordering not asserted in UI |
-| MEGA-SIM-160 | P0 | FAIL | **Medical redshirt** postgame sheet: Apply / Dismiss with eligibility gates | `injuries.md` UX | Core policy only |
-| MEGA-SIM-161 | P1 | FAIL | **Medical RS**: no return adjust; season OUT flag on card | Data model fields | UI sheet missing |
+| MEGA-SIM-160 | P0 | PASS | **Medical redshirt** postgame sheet: Apply / Dismiss with eligibility gates | `PostgameInjuryFlow`, `MedicalRedshirtConfirmDialog` | Gates via `MedicalRedshirtPolicy`; confirmation cites games + schedule index |
+| MEGA-SIM-161 | P1 | PASS | **Medical RS**: no return adjust; season OUT flag on card | `MedicalRedshirtPolicy.apply`, postgame flow | Apply sets `medicalRedshirtSeason`; clears injury weeks |
 | MEGA-SIM-162 | P1 | FAIL | Strategy **blocks drag** for `injuryActive` (not grey alpha only) | MEGA-SIM-075 | Visual-only |
 | MEGA-SIM-163 | P1 | FAIL | AI league games: same injury bank + lineup adjust | MEGA-SIM-078/079 | Fast sim stub |
 | MEGA-SIM-164 | P2 | FAIL | **News** headline on major user injury from watch path | `news-hub.md` | Scrimmage may skip feed |

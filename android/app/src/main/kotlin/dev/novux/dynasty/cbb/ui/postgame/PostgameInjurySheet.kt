@@ -65,6 +65,12 @@ fun PostgameInjurySheet(
                     ) {
                         Text(stringResource(R.string.postgame_medical_redshirt_apply))
                     }
+                } else {
+                    Text(
+                        text = stringResource(R.string.postgame_medical_redshirt_ineligible),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
             }
             Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) {
