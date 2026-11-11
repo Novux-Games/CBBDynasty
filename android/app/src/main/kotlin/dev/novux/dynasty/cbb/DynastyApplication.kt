@@ -23,7 +23,9 @@ import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingInterestSpendRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitOfferPromiseRepository
+import dev.novux.dynasty.cbb.data.recruiting.RecruitingLostProspectsRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingReservationRepository
+import dev.novux.dynasty.cbb.data.recruiting.RecruitingWatchlistRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonSummerWorkoutRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekEightRepository
@@ -105,6 +107,15 @@ class DynastyApplication : Application() {
         private set
 
     lateinit var signingDayRepository: SigningDayRepository
+        private set
+
+    lateinit var recruitingWatchlistRepository: RecruitingWatchlistRepository
+        private set
+
+    lateinit var recruitingLostProspectsRepository: RecruitingLostProspectsRepository
+        private set
+
+    lateinit var recruitingReservationRepository: RecruitingReservationRepository
         private set
 
     lateinit var nilBudgetRepository: dev.novux.dynasty.cbb.data.nil.NilBudgetRepository
@@ -231,7 +242,7 @@ class DynastyApplication : Application() {
         packRepository = PackRepository(applicationContext)
         balanceRulesetRepository = BalanceRulesetRepository(applicationContext)
         simTuningRepository = SimTuningRepository(applicationContext)
-        val recruitingReservationRepository = RecruitingReservationRepository(applicationContext)
+        recruitingReservationRepository = RecruitingReservationRepository(applicationContext)
         recruitOfferPromiseRepository = RecruitOfferPromiseRepository(applicationContext)
         recruitLockedPromiseRepository =
             dev.novux.dynasty.cbb.data.recruiting.RecruitLockedPromiseRepository(applicationContext)
@@ -268,6 +279,8 @@ class DynastyApplication : Application() {
             incomingClassSeedRepository,
             recruitingEconomyRepository,
         )
+        recruitingWatchlistRepository = RecruitingWatchlistRepository(applicationContext)
+        recruitingLostProspectsRepository = RecruitingLostProspectsRepository(applicationContext)
         signingDayRepository = SigningDayRepository(
             applicationContext,
             recruitingReservationRepository,

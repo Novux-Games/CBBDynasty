@@ -77,6 +77,6 @@ fun DashboardNotificationFeedPanel(
 private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {
     DashboardDeepLink.RecruitingRecommended -> RecruitingHubTab.Recommended
     DashboardDeepLink.RecruitingPortal -> RecruitingHubTab.TransferPortal
-    DashboardDeepLink.RecruitingHsJuco -> RecruitingHubTab.HsJuco
+    DashboardDeepLink.RecruitingHsJuco -> RecruitingHubTab.AllHsJuco
     else -> RecruitingHubTab.Recommended
 }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -107,11 +108,44 @@ fun HsJucoTabBody(
     }
 }
 
+@Composable
+fun RecruitPoolListTabBody(
+    prospects: List<RecruitProspect>,
+    emptyText: String,
+    watchlistIds: Set<String>,
+    onToggleBoard: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    if (prospects.isEmpty()) {
+        Text(
+            text = emptyText,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = modifier.fillMaxSize(),
+        )
+    } else {
+        LazyColumn(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            items(prospects, key = { it.prospectId }) { prospect ->
+                HsJucoProspectRow(
+                    prospect = prospect,
+                    onToggleBoard = onToggleBoard,
+                    onBoard = prospect.prospectId in watchlistIds,
+                )
+            }
+        }
+    }
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun HsJucoProspectRow(
     prospect: RecruitProspect,
     rankPrefix: String? = null,
+    onBoard: Boolean = false,
+    onToggleBoard: ((String) -> Unit)? = null,
 ) {
     Column(
         modifier = Modifier
@@ -146,6 +180,15 @@ private fun HsJucoProspectRow(
             }
         }
         RecruitScoutLetterSheet(letters = RecruitScoutLetterEngine.fromProspect(prospect))
+        onToggleBoard?.let { toggle ->
+            OutlinedButton(onClick = { toggle(prospect.prospectId) }, modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    stringResource(
+                        if (onBoard) R.string.recruiting_board_remove else R.string.recruiting_board_add,
+                    ),
+                )
+            }
+        }
     }
 }
 

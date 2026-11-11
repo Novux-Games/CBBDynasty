@@ -39,6 +39,8 @@ class SigningDayRepository(
     private val recruitingEconomyRepository: RecruitingEconomyRepository,
     private val nilAnnualPoolRepository: NilAnnualPoolRepository,
 ) {
+    suspend fun softCommitInputsFor(dynasty: LoadedDynasty): SigningDaySoftCommitInputs = softCommitInputs(dynasty)
+
     private suspend fun softCommitInputs(dynasty: LoadedDynasty): SigningDaySoftCommitInputs {
         val school = nilAnnualPoolRepository.userSchoolRecruitingContext(dynasty)
             ?: SchoolRecruitingContext(

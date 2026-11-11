@@ -16,7 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.activity.compose.BackHandler
@@ -54,8 +54,12 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitProspect
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubDefaults
-import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTestHooks
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTabPolicy
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTestHooks
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingWeekReservation
+import dev.novux.dynasty.cbb.core.signingday.SigningDaySoftCommitInputs
+import dev.novux.dynasty.cbb.requireDynastyApplication
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingPointAction
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingSpendFailure
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingRefundableAction
@@ -111,8 +115,13 @@ fun RecruitingHubScreen(
     var promisePickerTarget by remember {
         mutableStateOf<Pair<String, String>?>(null)
     }
+    var watchlistIds by remember { mutableStateOf<Set<String>>(emptySet()) }
+    var lostProspectIds by remember { mutableStateOf<Set<String>>(emptySet()) }
+    var offerReservations by remember { mutableStateOf<List<RecruitingWeekReservation>>(emptyList()) }
+    var softCommitInputs by remember { mutableStateOf<SigningDaySoftCommitInputs?>(null) }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val dynastyApp = context.requireDynastyApplication()
     val insufficientPointsMessage = stringResource(R.string.recruiting_insufficient_points)
     val currency = remember { NumberFormat.getCurrencyInstance(Locale.US) }
 
@@ -181,6 +190,14 @@ fun RecruitingHubScreen(
     var userProgramPrestige by remember {
         mutableIntStateOf(RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE)
     }
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, gateRefresh) {
+        val season = loaded.metadata.seasonIndex
+        watchlistIds = dynastyApp.recruitingWatchlistRepository.load(loaded.dynastyId, season)
+        lostProspectIds = dynastyApp.recruitingLostProspectsRepository.load(loaded.dynastyId, season)
+        offerReservations = dynastyApp.recruitingReservationRepository.loadActive(loaded.dynastyId)
+        softCommitInputs = dynastyApp.signingDayRepository.softCommitInputsFor(loaded)
+    }
+
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, nilBoostUsd, facilityGrades, gateRefresh) {
         userProgramPrestige = recruitingEconomyRepository.resolveUserProgramPrestige(loaded)
         schoolContext = nilAnnualPoolRepository.userSchoolRecruitingContext(
@@ -214,6 +231,18 @@ fun RecruitingHubScreen(
         hsJucoBoard = HsJucoRecruitBoard.partition(pool)
         hsTop60 = NationalRecruitingRankings.top60FromPool(pool)
         hsPoolReady = true
+    }
+
+    val fullPool = recruitingPool.orEmpty()
+    val toggleBoard: (String) -> Unit = { prospectId ->
+        scope.launch {
+            val season = loaded.metadata.seasonIndex
+            watchlistIds = if (prospectId in watchlistIds) {
+                dynastyApp.recruitingWatchlistRepository.remove(loaded.dynastyId, season, prospectId)
+            } else {
+                dynastyApp.recruitingWatchlistRepository.add(loaded.dynastyId, season, prospectId)
+            }
+        }
     }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, portalWindowOpen) {
@@ -365,22 +394,14 @@ fun RecruitingHubScreen(
                 color = MaterialTheme.colorScheme.primary,
             )
         }
-        PrimaryTabRow(selectedTabIndex = tabIndex) {
-            Tab(
-                selected = tabIndex == 0,
-                onClick = { tabIndex = 0 },
-                text = { Text(stringResource(R.string.recruiting_tab_recommended)) },
-            )
-            Tab(
-                selected = tabIndex == 1,
-                onClick = { tabIndex = 1 },
-                text = { Text(stringResource(R.string.recruiting_tab_hs_juco)) },
-            )
-            Tab(
-                selected = tabIndex == 2,
-                onClick = { tabIndex = 2 },
-                text = { Text(stringResource(R.string.recruiting_tab_portal)) },
-            )
+        ScrollableTabRow(selectedTabIndex = tabIndex) {
+            RecruitingHubDefaults.tabs.forEachIndexed { index, tab ->
+                Tab(
+                    selected = tabIndex == index,
+                    onClick = { tabIndex = index },
+                    text = { Text(recruitingHubTabLabel(tab)) },
+                )
+            }
         }
         Column(modifier = Modifier.weight(1f)) {
             when (RecruitingHubDefaults.tabs[tabIndex]) {
@@ -396,7 +417,7 @@ fun RecruitingHubScreen(
                     offerPromises = offerPromises,
                     poolLoaded = hsPoolReady,
                     onBrowseHsJuco = {
-                        tabIndex = RecruitingHubDefaults.tabs.indexOf(RecruitingHubTab.HsJuco)
+                        tabIndex = RecruitingHubDefaults.tabs.indexOf(RecruitingHubTab.AllHsJuco)
                     },
                     onSpend = {
                         scope.launch {
@@ -466,6 +487,12 @@ fun RecruitingHubScreen(
                                 prospectId,
                                 RecruitingRefundableAction.ScholarshipOffer,
                             )
+                            lostProspectIds = dynastyApp.recruitingLostProspectsRepository.record(
+                                loaded.dynastyId,
+                                loaded.metadata.seasonIndex,
+                                prospectId,
+                            )
+                            offerReservations = dynastyApp.recruitingReservationRepository.loadActive(loaded.dynastyId)
                             offerPromises = recruitOfferPromiseRepository.loadAll(
                                 loaded.dynastyId,
                                 loaded.metadata.seasonIndex,
@@ -475,10 +502,50 @@ fun RecruitingHubScreen(
                         }
                     },
                 )
-                RecruitingHubTab.HsJuco -> HsJucoTabBody(
+                RecruitingHubTab.AllHsJuco -> HsJucoTabBody(
                     board = hsJucoBoard,
                     top60 = hsTop60,
                     poolLoaded = hsPoolReady,
+                )
+                RecruitingHubTab.HighSchool -> RecruitPoolListTabBody(
+                    prospects = RecruitingHubTabPolicy.filterPool(fullPool, RecruitingHubTab.HighSchool),
+                    emptyText = stringResource(R.string.recruiting_pool_tab_empty),
+                    watchlistIds = watchlistIds,
+                    onToggleBoard = toggleBoard,
+                    modifier = Modifier.weight(1f),
+                )
+                RecruitingHubTab.JuniorCollege -> RecruitPoolListTabBody(
+                    prospects = RecruitingHubTabPolicy.filterPool(fullPool, RecruitingHubTab.JuniorCollege),
+                    emptyText = stringResource(R.string.recruiting_pool_tab_empty),
+                    watchlistIds = watchlistIds,
+                    onToggleBoard = toggleBoard,
+                    modifier = Modifier.weight(1f),
+                )
+                RecruitingHubTab.BoardTargets -> RecruitPoolListTabBody(
+                    prospects = RecruitingHubTabPolicy.boardTargets(fullPool, watchlistIds),
+                    emptyText = stringResource(R.string.recruiting_pool_tab_empty),
+                    watchlistIds = watchlistIds,
+                    onToggleBoard = toggleBoard,
+                    modifier = Modifier.weight(1f),
+                )
+                RecruitingHubTab.Committed -> {
+                    val committed = softCommitInputs?.let { inputs ->
+                        RecruitingHubTabPolicy.committed(fullPool, offerReservations, inputs)
+                    } ?: emptyList()
+                    RecruitPoolListTabBody(
+                        prospects = committed,
+                        emptyText = stringResource(R.string.recruiting_pool_tab_empty),
+                        watchlistIds = watchlistIds,
+                        onToggleBoard = toggleBoard,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                RecruitingHubTab.Lost -> RecruitPoolListTabBody(
+                    prospects = RecruitingHubTabPolicy.lost(fullPool, lostProspectIds),
+                    emptyText = stringResource(R.string.recruiting_pool_tab_empty),
+                    watchlistIds = watchlistIds,
+                    onToggleBoard = toggleBoard,
+                    modifier = Modifier.weight(1f),
                 )
                 RecruitingHubTab.TransferPortal -> PortalRecruitingTabBody(
                     windowOpen = portalWindowOpen,
@@ -576,6 +643,14 @@ fun RecruitingHubScreen(
                                             loaded,
                                             prospectId,
                                             RecruitingRefundableAction.ScholarshipOffer,
+                                        )
+                                        lostProspectIds = dynastyApp.recruitingLostProspectsRepository.record(
+                                            loaded.dynastyId,
+                                            loaded.metadata.seasonIndex,
+                                            prospectId,
+                                        )
+                                        offerReservations = dynastyApp.recruitingReservationRepository.loadActive(
+                                            loaded.dynastyId,
                                         )
                                         offerPromises = recruitOfferPromiseRepository.loadAll(
                                             loaded.dynastyId,
@@ -990,4 +1065,16 @@ private fun SignLikelihoodChip(badge: SignLikelihoodBadge) {
         )
     }
     AssistChip(onClick = {}, label = { Text(label) }, colors = colors)
+}
+
+@Composable
+private fun recruitingHubTabLabel(tab: RecruitingHubTab): String = when (tab) {
+    RecruitingHubTab.Recommended -> stringResource(R.string.recruiting_tab_recommended)
+    RecruitingHubTab.AllHsJuco -> stringResource(R.string.recruiting_tab_all_hs_juco)
+    RecruitingHubTab.HighSchool -> stringResource(R.string.recruiting_tab_high_school)
+    RecruitingHubTab.JuniorCollege -> stringResource(R.string.recruiting_tab_junior_college)
+    RecruitingHubTab.TransferPortal -> stringResource(R.string.recruiting_tab_portal)
+    RecruitingHubTab.BoardTargets -> stringResource(R.string.recruiting_tab_board)
+    RecruitingHubTab.Committed -> stringResource(R.string.recruiting_tab_committed)
+    RecruitingHubTab.Lost -> stringResource(R.string.recruiting_tab_lost)
 }

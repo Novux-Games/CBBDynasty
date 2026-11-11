@@ -64,15 +64,26 @@ object RecruitingCyclePolicy {
 
 enum class RecruitingHubTab {
     Recommended,
-    HsJuco,
+    AllHsJuco,
+    HighSchool,
+    JuniorCollege,
     TransferPortal,
+    BoardTargets,
+    Committed,
+    Lost,
 }
 
 object RecruitingHubDefaults {
+  // Spec tab order ([planning/recruiting-engine.md#tabs], [MEGA-RECR-037]).
     val tabs: List<RecruitingHubTab> = listOf(
         RecruitingHubTab.Recommended,
-        RecruitingHubTab.HsJuco,
+        RecruitingHubTab.AllHsJuco,
+        RecruitingHubTab.HighSchool,
+        RecruitingHubTab.JuniorCollege,
         RecruitingHubTab.TransferPortal,
+        RecruitingHubTab.BoardTargets,
+        RecruitingHubTab.Committed,
+        RecruitingHubTab.Lost,
     )
 
     val defaultTab: RecruitingHubTab = RecruitingHubTab.Recommended
