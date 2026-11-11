@@ -54,6 +54,8 @@ object PossessionSimEngine {
         val foulStoppage: Boolean,
         /** Defense commits intentional foul this trip (foul-early strategy). */
         val intentionalFoul: Boolean = false,
+        /** Short hack-a foul trip without normal FGA terminal. */
+        val foulEarlyHacka: Boolean = false,
     )
 
     internal fun sampleTripForLateGame(
@@ -63,13 +65,21 @@ object PossessionSimEngine {
         eventWeights: SimEventWeights = SimEventWeightsResolver.DEFAULT,
     ): TripSample =
         when (decision) {
-            LateGamePossessionPolicy.PossessionDecision.IntentionalFoulTrip -> {
-                if (random.nextDouble() < LateGamePossessionPolicy.INTENTIONAL_FOUL_TRIP_RATE) {
-                    foulStoppageTripSample(tuning, random).copy(intentionalFoul = true)
-                } else {
-                    sampleTrip(tuning, random, eventWeights)
+            LateGamePossessionPolicy.PossessionDecision.IntentionalFoulTrip ->
+                when (
+                    FoulEarlyLateGamePolicy.rollTripKind(random, eventWeights.foulEarly)
+                ) {
+                    FoulEarlyLateGamePolicy.TripKind.IntentionalFoul ->
+                        foulStoppageTripSample(tuning, random).copy(intentionalFoul = true)
+                    FoulEarlyLateGamePolicy.TripKind.HackaQuickFoul ->
+                        hackaQuickFoulTripSample(
+                            tuning,
+                            random,
+                            eventWeights.foulEarly.hackaTripMaxSeconds,
+                        ).copy(foulEarlyHacka = true)
+                    FoulEarlyLateGamePolicy.TripKind.Normal ->
+                        sampleTrip(tuning, random, eventWeights)
                 }
-            }
             LateGamePossessionPolicy.PossessionDecision.ProtectLeadPace -> {
                 val base = sampleTrip(tuning, random, eventWeights)
                 if (base.foulStoppage &&
@@ -90,6 +100,18 @@ object PossessionSimEngine {
         val raw = if (lo >= hi) lo else random.nextInt(lo, hi + 1)
         return TripSample(
             rawSeconds = raw.coerceIn(GameSimClock.MIN_TRIP_SECONDS, GameSimClock.MAX_TRIP_SECONDS),
+            foulStoppage = true,
+        )
+    }
+
+    private fun hackaQuickFoulTripSample(tuning: SimTuning, random: Random, maxSeconds: Int): TripSample {
+        val cap = maxSeconds.coerceIn(GameSimClock.MIN_TRIP_SECONDS, GameSimClock.MAX_TRIP_SECONDS)
+        val range = tuning.timeUsedSeconds.quickTurnover
+        val lo = range.firstOrNull() ?: GameSimClock.MIN_TRIP_SECONDS
+        val hi = minOf(range.lastOrNull() ?: cap, cap)
+        val raw = if (lo >= hi) lo else random.nextInt(lo, hi + 1)
+        return TripSample(
+            rawSeconds = raw.coerceIn(GameSimClock.MIN_TRIP_SECONDS, cap),
             foulStoppage = true,
         )
     }

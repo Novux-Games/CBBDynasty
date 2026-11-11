@@ -66,6 +66,11 @@
       "closeThreePointNudge": 0.03,
       "trailingDefenseFoulNudge": 0.10
     },
+    "foulEarly": {
+      "intentionalFoulTripRate": 0.40,
+      "hackaQuickFoulTripRate": 0.30,
+      "hackaTripMaxSeconds": 6
+    },
     "protectLead": {
       "paceTripScale": 1.12,
       "avoidFoulStoppageRate": 0.65,

@@ -180,8 +180,8 @@ class PossessionSimSession(
         } else {
             effects
         }
-        val intentionalFoulTrip = tripSample.intentionalFoul
-        var foulStoppage = tripSample.foulStoppage || intentionalFoulTrip
+        val foulEarlyStopClock = FoulEarlyLateGamePolicy.isFoulToStopClock(tripSample)
+        var foulStoppage = tripSample.foulStoppage || foulEarlyStopClock
         if (lateClockTrip && !foulStoppage && random.nextDouble() < PossessionLateClockPolicy.EXTRA_FOUL_STOPPAGE_RATE) {
             foulStoppage = true
         }
@@ -201,7 +201,7 @@ class PossessionSimSession(
         val offRating = teamOffensiveRating(offenseIsHome = offenseHome) + effects.offensiveRatingDelta
         val defRating = teamDefensiveRating(defenseIsHome = !offenseHome) + effects.defensiveRatingDelta
         val resolution = when {
-            intentionalFoulTrip ->
+            foulEarlyStopClock ->
                 IntentionalFoulLateGamePolicy.resolvePossession(sides.box)
             PossessionShotClock.isShotClockViolation(shotClockBefore, used, tripSeconds) ->
                 PossessionSimEngine.resolveShotClockViolation(sides.box)
@@ -350,7 +350,7 @@ class PossessionSimSession(
         }
         val pfLog = defensiveFoulEvent?.personalFoulLog
         val foulNote = when {
-            intentionalFoulTrip -> IntentionalFoulLateGamePolicy.foulLogLabel(pfLog)
+            foulEarlyStopClock -> FoulEarlyLateGamePolicy.foulLogLabel(tripSample, pfLog)
             resolution.foulOnBlock -> pfLog?.let { "foul on block | $it" } ?: "foul on block"
             resolution.andOne -> pfLog?.let { "and-1 | $it" } ?: "and-1"
             resolution.shootingFoul -> pfLog?.let { "shooting foul | $it" } ?: "shooting foul"
@@ -360,6 +360,7 @@ class PossessionSimSession(
         val lateTags = listOfNotNull(
             ScoreDifferentialSituationPolicy.logTag(offenseSituation),
             if (ProtectLeadLateGamePolicy.isActive(lateDecision)) ProtectLeadLateGamePolicy.logTag() else null,
+            FoulEarlyLateGamePolicy.logTag(tripSample),
             LateGamePossessionPolicy.logTag(lateDecision),
             if (lateClockTrip) "late-clock" else null,
             teamBonusLogTag,
@@ -382,7 +383,7 @@ class PossessionSimSession(
             foulOnBlock = resolution.foulOnBlock,
             shootingFoul = resolution.shootingFoul,
             playerAttribution = playerAttribution,
-            intentionalFoul = intentionalFoulTrip,
+            intentionalFoul = foulEarlyStopClock,
         )
         log += line
         newInjuryLines.forEach { log += it }

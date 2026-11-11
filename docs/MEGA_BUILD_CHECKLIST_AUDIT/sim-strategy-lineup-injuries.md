@@ -204,7 +204,7 @@
 | MEGA-SIM-111 | P1 | PASS | **Score differential** late (e.g. last 4:00) affects shot selection / fouling | `ScoreDifferentialSituationPolicy`, `SimSituationWeights` | Trailing → more 3PA/TO; leading → pace protect; defense foul nudge; log tags |
 | MEGA-SIM-112 | P0 | PASS | **Late-game foul strategy** changes possession decisions (foul to extend, protect) not only defense tweak scalar | `LateGamePossessionPolicy`, `sampleTripForLateGame` | Trailing foul-early → foul-stoppage trips; protect lead avoids foul stops |
 | MEGA-SIM-113 | P1 | PASS | **Protect lead**: lower pace, avoid fouls on 3PT attempts tuning | `ProtectLeadLateGamePolicy`, `SimProtectLeadWeights` | Longer trips; swap foul-stop trips; cut 3PT shooting-foul rates |
-| MEGA-SIM-114 | P1 | FAIL | **Foul early** when trailing: hack-a / quick fouls on trip sample | — | — |
+| MEGA-SIM-114 | P1 | PASS | **Foul early** when trailing: hack-a / quick fouls on trip sample | `FoulEarlyLateGamePolicy`, `SimFoulEarlyWeights` | Tunable intentional + hack-a quick foul trips; clock-stop resolve + logs |
 | MEGA-SIM-115 | P1 | FAIL | **Clutch** usage bump to gameplan peak usage player | `usageWeights` | Peak usage scalar only at team level |
 | MEGA-SIM-116 | P2 | FAIL | **Timeout** not simulated (acceptable) but **last possession** log tag | Product clarity | No “CLUTCH” / score context on lines |
 | MEGA-SIM-117 | P1 | FAIL | **Deny primary** raises pressure on assigned defender slot with foul risk | `primaryScorerSlot` partial | Toggle without slot picker or per-possession defense |
