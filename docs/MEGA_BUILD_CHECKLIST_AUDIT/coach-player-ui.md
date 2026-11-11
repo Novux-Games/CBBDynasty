@@ -105,9 +105,9 @@
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-057 | P1 | GAP | Entry: tap player → preview sheet | `PlayerCardSheet` ModalBottomSheet — **no View more** |
-| MEGA-COACH-058 | P0 | FAIL | View more → full-screen card with tabs | Sheet is overview-only; no `PlayerCardScreen` route |
-| MEGA-COACH-059 | P0 | FAIL | Chrome: Back, Name, Edit; identity strip grade/**headshot**/position/injury | Title + text lines only; no headshot slot |
-| MEGA-COACH-060 | P0 | FAIL | Tabs Overview · Ratings · Stats · Games · History | Ratings block inlined in sheet; no tab bar |
+| MEGA-COACH-058 | P0 | PASS | View more → full-screen card with tabs | `PlayerCardPreviewSheet` → `PlayerCardScreen` in shell | `PlayerCardSheet.kt`, `DynastyShellScreen.kt` |
+| MEGA-COACH-059 | P0 | PASS | Chrome: Back, Name, Edit; identity strip grade/**headshot**/position/injury | `TopAppBar` + `PlayerPortraitSlot` + injury block | `PlayerCardScreen.kt` |
+| MEGA-COACH-060 | P0 | PASS | Tabs Overview · Ratings · Stats · Games · History | `PrimaryTabRow` + per-tab bodies | `PlayerCardTabs.kt` |
 | MEGA-COACH-061 | P2 | GAP | Overview: archetype, hometown, measurements | `PlayerCardOverviewContent` |
 | MEGA-COACH-062 | P2 | GAP | Overview headline OVR/OFF/DEF | Shown; scout OVR letter also |
 | MEGA-COACH-063 | P1 | FAIL | Overview team card → School hub | No team card block |
@@ -242,7 +242,7 @@
 
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
-| MEGA-COACH-139 | P0 | FAIL | `PlayerCardScreen` full-screen route + back stack | Only bottom sheet |
+| MEGA-COACH-139 | P0 | PASS | `PlayerCardScreen` full-screen route + back stack | Shell overlay + Back dismisses to roster | `PlayerCardScreen.kt` |
 | MEGA-COACH-140 | P1 | FAIL | Persistent header Back / Name / Edit | Sheet uses drag dismiss only |
 | MEGA-COACH-141 | P1 | FAIL | Identity strip: grade + position + injury `OUT` chip | Injury as text block, not strip chip |
 | MEGA-COACH-142 | P0 | FAIL | Ratings tab attribute rows (shooting subs, handling, …) | `DynastyPlayer.ratings` has fields — UI does not enumerate |

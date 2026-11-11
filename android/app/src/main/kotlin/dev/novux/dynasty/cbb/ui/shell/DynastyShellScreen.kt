@@ -79,7 +79,8 @@ import dev.novux.dynasty.cbb.ui.dashboard.DashboardNotificationFeedPanel
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardOptionalTasksPanel
 import dev.novux.dynasty.cbb.data.coach.CoachEmploymentRepository
 import dev.novux.dynasty.cbb.data.notification.NotificationFeedRepository
-import dev.novux.dynasty.cbb.ui.player.PlayerCardSheet
+import dev.novux.dynasty.cbb.ui.player.PlayerCardPreviewSheet
+import dev.novux.dynasty.cbb.ui.player.PlayerCardScreen
 import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
 import dev.novux.dynasty.cbb.ui.player.PlayerLoyaltyChips
 import dev.novux.dynasty.cbb.ui.postgame.PostgameInjurySheet
@@ -147,6 +148,7 @@ fun DynastyShellScreen(
     var coachView by remember { mutableStateOf<ShellCoachView>(ShellCoachView.Hub) }
     var rosterPreview by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
+    var fullScreenPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     var rosterPlayers by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
     val context = LocalContext.current
     var postgameEvents by remember { mutableStateOf<List<GameSimInjuryEvent>>(emptyList()) }
@@ -250,7 +252,25 @@ fun DynastyShellScreen(
         }
     }
 
-    PlayerCardSheet(player = cardPlayer, onDismiss = { cardPlayer = null })
+    PlayerCardPreviewSheet(
+        player = cardPlayer,
+        onDismiss = { cardPlayer = null },
+        onViewMore = { player ->
+            cardPlayer = null
+            fullScreenPlayer = player
+        },
+    )
+
+    fullScreenPlayer?.let { player ->
+        PlayerCardScreen(
+            player = player,
+            schoolDisplayName = loaded.summary.schoolDisplayName.orEmpty(),
+            seasonRecordLabel = staffRoster?.headCoach?.seasonRecordLabel ?: "0-0",
+            allowEdit = true,
+            onBack = { fullScreenPlayer = null },
+        )
+        return
+    }
     PostgameInjurySheet(
         events = postgameEvents,
         players = rosterPlayers,

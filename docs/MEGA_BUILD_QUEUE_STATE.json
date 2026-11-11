@@ -4,7 +4,11 @@
   "completedIds": [
     "MEGA-COACH-028",
     "MEGA-COACH-031",
-    "MEGA-COACH-046"
+    "MEGA-COACH-046",
+    "MEGA-COACH-058",
+    "MEGA-COACH-059",
+    "MEGA-COACH-060",
+    "MEGA-COACH-139"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

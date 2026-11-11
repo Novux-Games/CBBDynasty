@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -23,19 +24,59 @@ import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlayerCardSheet(
+fun PlayerCardPreviewSheet(
     player: DynastyPlayer?,
     onDismiss: () -> Unit,
+    onViewMore: (DynastyPlayer) -> Unit,
 ) {
     if (player == null) return
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
-        PlayerCardOverviewContent(player = player, modifier = Modifier.padding(bottom = 24.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+        ) {
+            Text(
+                stringResource(R.string.player_card_preview_title),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            PlayerPortraitSlot(displayName = player.identity.displayName)
+            PlayerCardOverviewContent(
+                player = player,
+                modifier = Modifier.padding(bottom = 8.dp),
+                compact = true,
+            )
+            Button(
+                onClick = {
+                    onDismiss()
+                    onViewMore(player)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 24.dp),
+            ) {
+                Text(stringResource(R.string.coach_preview_view_more))
+            }
+        }
     }
 }
 
+/** @deprecated Use [PlayerCardPreviewSheet]; kept as alias for callers during migration. */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlayerCardOverviewContent(player: DynastyPlayer, modifier: Modifier = Modifier) {
+fun PlayerCardSheet(
+    player: DynastyPlayer?,
+    onDismiss: () -> Unit,
+) = PlayerCardPreviewSheet(player = player, onDismiss = onDismiss, onViewMore = { })
+
+@Composable
+fun PlayerCardOverviewContent(
+    player: DynastyPlayer,
+    modifier: Modifier = Modifier,
+    compact: Boolean = false,
+) {
     val report = player.scoutReport(ScoutDepth.Light)
     Column(
         modifier = modifier
@@ -84,12 +125,14 @@ fun PlayerCardOverviewContent(player: DynastyPlayer, modifier: Modifier = Modifi
             ),
             style = MaterialTheme.typography.bodyMedium,
         )
-        HorizontalDivider()
-        Text(
-            text = stringResource(R.string.player_card_ratings_tab),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-        )
+        if (!compact) {
+            HorizontalDivider()
+            Text(
+                text = stringResource(R.string.player_card_ratings_tab),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
         Text(
             text = stringResource(
                 R.string.player_card_headline_ratings,
@@ -99,7 +142,9 @@ fun PlayerCardOverviewContent(player: DynastyPlayer, modifier: Modifier = Modifi
             ),
             style = MaterialTheme.typography.bodyLarge,
         )
-        PlayerLoyaltyRatingsRow(player)
+        if (!compact) {
+            PlayerLoyaltyRatingsRow(player)
+        }
         Text(
             text = stringResource(R.string.player_card_scout_ovr, report.overall),
             style = MaterialTheme.typography.bodyMedium,

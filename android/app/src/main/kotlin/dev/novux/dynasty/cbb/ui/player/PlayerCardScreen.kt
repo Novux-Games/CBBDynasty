@@ -1,0 +1,269 @@
+package dev.novux.dynasty.cbb.ui.player
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.Tab
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.player.DynastyPlayer
+import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PlayerCardScreen(
+    player: DynastyPlayer,
+    schoolDisplayName: String,
+    seasonRecordLabel: String,
+    allowEdit: Boolean,
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var selectedTab by remember { mutableStateOf(PlayerCardTab.Overview) }
+    var showEditHint by remember { mutableStateOf(false) }
+    val tabs = PlayerCardTab.ORDER
+
+    Column(modifier = modifier.fillMaxSize()) {
+        TopAppBar(
+            title = { Text(player.identity.displayName, maxLines = 1) },
+            navigationIcon = {
+                TextButton(onClick = onBack) {
+                    Text(stringResource(R.string.player_card_back))
+                }
+            },
+            actions = {
+                if (allowEdit) {
+                    TextButton(onClick = { showEditHint = true }) {
+                        Text(stringResource(R.string.player_card_edit))
+                    }
+                }
+            },
+        )
+        PlayerIdentityStrip(player = player)
+        PrimaryTabRow(selectedTabIndex = tabs.indexOf(selectedTab)) {
+            tabs.forEach { tab ->
+                Tab(
+                    selected = tab == selectedTab,
+                    onClick = { selectedTab = tab },
+                    text = { Text(playerTabLabel(tab)) },
+                )
+            }
+        }
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            when (selectedTab) {
+                PlayerCardTab.Overview -> PlayerCardOverviewTab(
+                    player = player,
+                    schoolDisplayName = schoolDisplayName,
+                    seasonRecordLabel = seasonRecordLabel,
+                )
+                PlayerCardTab.Ratings -> PlayerCardRatingsTab(player = player)
+                PlayerCardTab.Stats -> PlayerCardStatsTab(player = player)
+                PlayerCardTab.Games -> PlayerCardGamesTab(player = player)
+                PlayerCardTab.History -> PlayerCardHistoryTab(player = player)
+            }
+        }
+    }
+
+    if (showEditHint) {
+        AlertDialog(
+            onDismissRequest = { showEditHint = false },
+            title = { Text(stringResource(R.string.player_card_edit)) },
+            text = { Text(stringResource(R.string.player_card_edit_hint)) },
+            confirmButton = {
+                TextButton(onClick = { showEditHint = false }) {
+                    Text(stringResource(R.string.player_card_edit_ack))
+                }
+            },
+        )
+    }
+}
+
+@Composable
+private fun PlayerIdentityStrip(player: DynastyPlayer) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        PlayerPortraitSlot(displayName = player.identity.displayName)
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                stringResource(
+                    R.string.player_card_identity,
+                    player.position.label,
+                    player.classYear.label,
+                    player.archetype.displayName,
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            PlayerInjuryOverviewBlock(player.injury)
+        }
+    }
+}
+
+@Composable
+fun PlayerPortraitSlot(displayName: String, modifier: Modifier = Modifier) {
+    val initials = remember(displayName) {
+        displayName.split(" ")
+            .filter { it.isNotBlank() }
+            .take(2)
+            .joinToString("") { it.first().uppercaseChar().toString() }
+    }
+    Box(
+        modifier = modifier
+            .size(56.dp)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.primaryContainer),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = initials,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
+    }
+}
+
+@Composable
+private fun playerTabLabel(tab: PlayerCardTab): String = when (tab) {
+    PlayerCardTab.Overview -> stringResource(R.string.player_card_overview)
+    PlayerCardTab.Ratings -> stringResource(R.string.player_card_ratings_tab)
+    PlayerCardTab.Stats -> stringResource(R.string.player_card_stats_tab)
+    PlayerCardTab.Games -> stringResource(R.string.player_card_games_tab)
+    PlayerCardTab.History -> stringResource(R.string.player_card_history_tab)
+}
+
+@Composable
+private fun PlayerCardOverviewTab(
+    player: DynastyPlayer,
+    schoolDisplayName: String,
+    seasonRecordLabel: String,
+) {
+    Text(
+        stringResource(R.string.player_card_team_record, schoolDisplayName, seasonRecordLabel),
+        style = MaterialTheme.typography.titleMedium,
+    )
+    PlayerCardOverviewContent(player = player)
+    player.identity.nilUsdPerYear.takeIf { it > 0 }?.let { nil ->
+        Text(
+            stringResource(R.string.player_card_nil_line, nil),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+    }
+}
+
+@Composable
+private fun PlayerCardRatingsTab(player: DynastyPlayer) {
+    val r = player.ratings
+  val lines = listOf(
+        stringResource(R.string.player_rating_ovr, r.ovr),
+        stringResource(R.string.player_rating_off, r.off),
+        stringResource(R.string.player_rating_def, r.def),
+        stringResource(R.string.player_rating_inside, r.shootingInside),
+        stringResource(R.string.player_rating_mid, r.shootingMid),
+        stringResource(R.string.player_rating_three, r.shootingThree),
+        stringResource(R.string.player_rating_handling, r.handling),
+        stringResource(R.string.player_rating_passing, r.passing),
+        stringResource(R.string.player_rating_rebounding, r.rebounding),
+        stringResource(R.string.player_rating_perim_def, r.perimeterDefense),
+        stringResource(R.string.player_rating_interior_def, r.interiorDefense),
+        stringResource(R.string.player_rating_steal, r.stealing),
+        stringResource(R.string.player_rating_block, r.blocking),
+        stringResource(R.string.player_rating_potential, r.potentialOverall),
+        stringResource(R.string.player_rating_pro_potential, r.proPotential),
+    )
+    lines.forEach { Text(it, style = MaterialTheme.typography.bodyMedium) }
+    Text(
+        stringResource(R.string.player_card_scout_ovr, player.scoutReport(ScoutDepth.Full).overall),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+}
+
+@Composable
+private fun PlayerCardStatsTab(player: DynastyPlayer) {
+    Text(
+        stringResource(R.string.player_card_stats_tab),
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.SemiBold,
+    )
+    Text(
+        stringResource(R.string.player_card_rs_games_played, player.role.rsGamesPlayedSeason),
+        style = MaterialTheme.typography.bodyLarge,
+    )
+    Text(
+        stringResource(R.string.player_card_stats_pipeline),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+}
+
+@Composable
+private fun PlayerCardGamesTab(player: DynastyPlayer) {
+    Text(
+        stringResource(R.string.player_card_games_tab),
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.SemiBold,
+    )
+    Text(
+        stringResource(R.string.player_card_games_empty),
+        style = MaterialTheme.typography.bodyMedium,
+    )
+}
+
+@Composable
+private fun PlayerCardHistoryTab(player: DynastyPlayer) {
+    Text(
+        stringResource(R.string.player_card_history_tab),
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.SemiBold,
+    )
+    Text(
+        stringResource(
+            R.string.player_card_history_eligibility,
+            player.eligibility.yearsUsed,
+            player.eligibility.yearsRemaining,
+        ),
+        style = MaterialTheme.typography.bodyMedium,
+    )
+    Text(
+        stringResource(R.string.player_card_history_pipeline),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+}
