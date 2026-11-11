@@ -48,6 +48,18 @@ class PossessionSimSession(
     )
     private val homeInjuredOut = (resume?.homeInjuredPlayerIds ?: emptySet()).toMutableSet()
     private val awayInjuredOut = (resume?.awayInjuredPlayerIds ?: emptySet()).toMutableSet()
+    private val homeDisqualifiedOut = (
+        resume?.homeDisqualifiedPlayerIds
+            ?: PersonalFoulDisqualificationPolicy.disqualifiedIdsFromSnapshot(
+                resume?.homePersonalFoulsByPlayer.orEmpty(),
+            )
+        ).toMutableSet()
+    private val awayDisqualifiedOut = (
+        resume?.awayDisqualifiedPlayerIds
+            ?: PersonalFoulDisqualificationPolicy.disqualifiedIdsFromSnapshot(
+                resume?.awayPersonalFoulsByPlayer.orEmpty(),
+            )
+        ).toMutableSet()
     private val homeMidInjuries = (resume?.homeMidGameInjuries ?: emptyList()).toMutableList()
     private val awayMidInjuries = (resume?.awayMidGameInjuries ?: emptyList()).toMutableList()
     private var inOvertime: Boolean = resume?.inOvertime ?: false
@@ -246,10 +258,14 @@ class PossessionSimSession(
         val offenseFloor = fallbackFloor(
             if (offenseHome) homeFloorIds else awayFloorIds,
             if (offenseHome) input.homeRoster else input.awayRoster,
+            if (offenseHome) homeFoulLedger else awayFoulLedger,
+            if (offenseHome) homeDisqualifiedOut else awayDisqualifiedOut,
         )
         val defenseFloor = fallbackFloor(
             if (offenseHome) awayFloorIds else homeFloorIds,
             if (offenseHome) input.awayRoster else input.homeRoster,
+            if (offenseHome) awayFoulLedger else homeFoulLedger,
+            if (offenseHome) awayDisqualifiedOut else homeDisqualifiedOut,
         )
         val offenseLedger = if (offenseHome) homePlayerLedger else awayPlayerLedger
         val defenseLedger = if (offenseHome) awayPlayerLedger else homePlayerLedger
@@ -427,10 +443,21 @@ class PossessionSimSession(
             ?: if (defenseIsHome) input.homeDefensive() else input.awayDefensive()
     }
 
-    private fun fallbackFloor(ids: List<String>, roster: GameSimRosterInput?): List<String> =
-        ids.ifEmpty {
-            roster?.participants?.map { it.playerId }?.take(FoulTroubleRotationPolicy.FLOOR_PLAYERS).orEmpty()
+    private fun fallbackFloor(
+        ids: List<String>,
+        roster: GameSimRosterInput?,
+        foulLedger: PersonalFoulLedger,
+        disqualifiedOut: Set<String>,
+    ): List<String> {
+        val eligible = PersonalFoulDisqualificationPolicy.filterEligibleOnFloor(
+            ids,
+            foulLedger,
+            disqualifiedOut,
+        )
+        return eligible.ifEmpty {
+            PersonalFoulDisqualificationPolicy.filterRosterFallback(roster, foulLedger, disqualifiedOut)
         }
+    }
 
     private fun floorPlayerIds(home: Boolean, excludeInjured: Boolean = true): List<String> {
         val roster = if (home) input.homeRoster else input.awayRoster
@@ -439,16 +466,21 @@ class PossessionSimSession(
         val minutesLedger = if (home) homeMinutesLedger else awayMinutesLedger
         val injured = if (home) homeInjuredOut else awayInjuredOut
         val staminaLedger = if (home) homeStaminaLedger else awayStaminaLedger
-        return SimFloorRotationPolicy.floorParticipants(
-            roster,
+        val disqualified = if (home) homeDisqualifiedOut else awayDisqualifiedOut
+        return PersonalFoulDisqualificationPolicy.filterEligibleOnFloor(
+            SimFloorRotationPolicy.floorParticipants(
+                roster,
+                foulLedger,
+                minutesLedger,
+                gameClock,
+                staminaLedger,
+                input.fatigueTuning,
+            )
+                .map { it.playerId }
+                .filter { !excludeInjured || it !in injured },
             foulLedger,
-            minutesLedger,
-            gameClock,
-            staminaLedger,
-            input.fatigueTuning,
+            disqualified,
         )
-            .map { it.playerId }
-            .filter { !excludeInjured || it !in injured }
     }
 
     private fun accrueFloorMinutes(usedSeconds: Int, offenseIsHome: Boolean) {
@@ -461,7 +493,8 @@ class PossessionSimSession(
                 gameClock,
                 homeStaminaLedger,
                 tuning,
-            ).map { it.playerId }.filter { it !in homeInjuredOut }
+            ).map { it.playerId }
+                .filter { it !in homeInjuredOut && it !in homeDisqualifiedOut }
             homeMinutesLedger.addFloorTime(homeFloor, usedSeconds)
             homeStaminaLedger.drainFloorTime(homeFloor, usedSeconds, tuning)
         }
@@ -473,7 +506,8 @@ class PossessionSimSession(
                 gameClock,
                 awayStaminaLedger,
                 tuning,
-            ).map { it.playerId }.filter { it !in awayInjuredOut }
+            ).map { it.playerId }
+                .filter { it !in awayInjuredOut && it !in awayDisqualifiedOut }
             awayMinutesLedger.addFloorTime(awayFloor, usedSeconds)
             awayStaminaLedger.drainFloorTime(awayFloor, usedSeconds, tuning)
         }
@@ -492,12 +526,18 @@ class PossessionSimSession(
         val ledger = if (offenseIsHome) awayFoulLedger else homeFoulLedger
         val playerId = PersonalFoulAssignment.pickPlayer(defendingRoster, ledger, random) ?: return null
         val record = ledger.record(playerId)
+        val disqualifiedOut = if (offenseIsHome) awayDisqualifiedOut else homeDisqualifiedOut
+        PersonalFoulDisqualificationPolicy.registerIfDisqualified(record, disqualifiedOut)
         if (offenseIsHome) {
             awayBox = awayBox.copy(personalFouls = awayBox.personalFouls + 1)
         } else {
             homeBox = homeBox.copy(personalFouls = homeBox.personalFouls + 1)
         }
         val teamFouls = teamFoulLedger.recordDefensiveFoul(defenseIsHome = !offenseIsHome)
+        if (record.disqualified) {
+            val teamLabel = if (offenseIsHome) "AWAY" else "HOME"
+            log += PersonalFoulDisqualificationPolicy.dqBannerLine(teamLabel, record)
+        }
         val pfLog = if (record.disqualified) {
             "PF $playerId (${record.foulCount}) DQ"
         } else {
@@ -525,6 +565,8 @@ class PossessionSimSession(
         awayPlayerBox = awayPlayerLedger.snapshotMap(),
         homeInjuredPlayerIds = homeInjuredOut.toSet(),
         awayInjuredPlayerIds = awayInjuredOut.toSet(),
+        homeDisqualifiedPlayerIds = homeDisqualifiedOut.toSet(),
+        awayDisqualifiedPlayerIds = awayDisqualifiedOut.toSet(),
         homeMidGameInjuries = homeMidInjuries.toList(),
         awayMidGameInjuries = awayMidInjuries.toList(),
         inOvertime = inOvertime,
@@ -560,6 +602,8 @@ class PossessionSimSession(
         periodsPlayed = periodsPlayedTotal(),
         overtimePeriods = overtimePeriods,
         teamFoulsByHalf = teamFoulLedger.summary(),
+        homeDisqualifiedPlayerIds = homeDisqualifiedOut.toSet(),
+        awayDisqualifiedPlayerIds = awayDisqualifiedOut.toSet(),
         )
     }
 

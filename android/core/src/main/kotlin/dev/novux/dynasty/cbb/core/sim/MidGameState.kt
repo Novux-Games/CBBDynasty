@@ -22,6 +22,8 @@ data class MidGameState(
     val awayPlayerBox: Map<String, PlayerBoxScore> = emptyMap(),
     val homeInjuredPlayerIds: Set<String> = emptySet(),
     val awayInjuredPlayerIds: Set<String> = emptySet(),
+    val homeDisqualifiedPlayerIds: Set<String> = emptySet(),
+    val awayDisqualifiedPlayerIds: Set<String> = emptySet(),
     val homeMidGameInjuries: List<GameSimInjuryEvent> = emptyList(),
     val awayMidGameInjuries: List<GameSimInjuryEvent> = emptyList(),
     val inOvertime: Boolean = false,

@@ -91,6 +91,8 @@ data class GameSimResult(
     val periodsPlayed: Int = 1,
     val overtimePeriods: Int = 0,
     val teamFoulsByHalf: TeamFoulHalfSummary = TeamFoulHalfSummary(),
+    val homeDisqualifiedPlayerIds: Set<String> = emptySet(),
+    val awayDisqualifiedPlayerIds: Set<String> = emptySet(),
 ) {
     fun userTeamInjuries(userTeamIsHome: Boolean): List<GameSimInjuryEvent> =
         if (userTeamIsHome) homeInjuries else awayInjuries

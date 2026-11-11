@@ -191,7 +191,7 @@
 | MEGA-SIM-105 | P1 | PASS | Track **team fouls** per half for bonus logic | `TeamFoulGameLedger`, `TeamFoulHalfSummary` on `GameSimResult` | Per-half seal at halftime; bonus uses live half count; log + mid-game resume |
 | MEGA-SIM-106 | P1 | PASS | **Intentional foul** branch under late-game foul strategy | `IntentionalFoulLateGamePolicy`, `TripSample.intentionalFoul` | Foul-early decision → explicit foul trip (no FGA), bonus FTs + log |
 | MEGA-SIM-107 | P2 | FAIL | **Technical foul** rare event (optional tuning) | — | — |
-| MEGA-SIM-108 | P1 | FAIL | Disqualified player **cannot re-enter**; log DQ line | — | — |
+| MEGA-SIM-108 | P1 | PASS | Disqualified player **cannot re-enter**; log DQ line | `PersonalFoulDisqualificationPolicy`, DQ sets on result/mid-game | Banner log + floor filters; resume `*DisqualifiedPlayerIds` |
 | MEGA-SIM-109 | P1 | FAIL | **200** team player-minutes coherence in sim + assert | `BoxScoreCoherence` | Team box only; no MIN |
 | MEGA-SIM-110 | P2 | FAIL | Starter re-insertion at **half** opening five from prep | `MidGameState` | No on-floor state at half |
 
