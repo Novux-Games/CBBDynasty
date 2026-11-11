@@ -59,6 +59,18 @@ class PlayerStatsRepository(private val context: Context) {
         }.entries
     }
 
+    /** Persists GP and counting totals after week checkpoint commits official games ([MEGA-COACH-149]). */
+    suspend fun persistSeasonStatsForRoster(
+        dynastyId: String,
+        seasonIndex: Int,
+        players: List<DynastyPlayer>,
+    ) {
+        players.forEach { player ->
+            val gp = player.role.rsGamesPlayedSeason.coerceAtLeast(0)
+            ensureSeasonRecord(dynastyId, player, seasonIndex, gp)
+        }
+    }
+
     suspend fun summaryFor(
         dynastyId: String,
         seasonIndex: Int,

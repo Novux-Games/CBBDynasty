@@ -259,14 +259,14 @@
 
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
-| MEGA-COACH-149 | P0 | FAIL | Season stats persistence (GP, counting stats) | Sim produces team box only — no per-player season store |
+| MEGA-COACH-149 | P0 | PASS | Season stats persistence (GP, counting stats) | Week advance GP + `PlayerStatsRepository` DataStore blob | `PlayerSeasonStatFinalizeGate`, `SaveSlotRepository` |
 | MEGA-COACH-150 | P0 | FAIL | Stats tab card 1 season averages (PPG … FT%) | No UI |
 | MEGA-COACH-151 | P0 | FAIL | Stats tab card 2 season totals | No UI |
 | MEGA-COACH-152 | P1 | FAIL | Stats tab card 3 career averages (blended FG%) | No UI |
 | MEGA-COACH-153 | P1 | FAIL | Stats tab card 4 career totals | No UI |
 | MEGA-COACH-154 | P0 | FAIL | Games tab row: opponent, PTS/AST/…, W/L score | No game log table |
 | MEGA-COACH-155 | P1 | FAIL | Games row tap → box score sheet | No per-player box in sim output |
-| MEGA-COACH-156 | P1 | FAIL | Week-finalize gate on official stats | Checkpoint exists globally — player stats not written |
+| MEGA-COACH-156 | P1 | PASS | Week-finalize gate on official stats | Persists on `advanceWeek` when games committed | `SaveSlotRepository.advanceDynastyWeek` |
 | MEGA-COACH-157 | P1 | FAIL | History tab prior season rows (school transfer) | No UI |
 | MEGA-COACH-158 | P2 | FAIL | History promise audit per season Kept/Broken | Core has status; no `promiseHistory` UI |
 | MEGA-COACH-159 | P2 | GAP | History awards optional chips | Not implemented |

@@ -6,6 +6,7 @@ import dev.novux.dynasty.cbb.core.fatigue.FatigueEngine
 import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
 import dev.novux.dynasty.cbb.core.injuries.InjuryApplyContext
 import dev.novux.dynasty.cbb.core.injuries.InjuryRosterOps
+import dev.novux.dynasty.cbb.core.player.stats.PlayerSeasonStatFinalizeGate
 import dev.novux.dynasty.cbb.core.injuries.MedicalRedshirtPolicy
 import dev.novux.dynasty.cbb.core.lineup.DefaultStarterAlgorithm
 import dev.novux.dynasty.cbb.core.offseason.weekone.DraftStockLine
@@ -154,6 +155,25 @@ class DynastyRosterRepository(
     fun peekPostgameInjuries(dynastyId: String) = postgameInjuryQueue.peek(dynastyId)
 
     fun clearPostgameInjuries(dynastyId: String) = postgameInjuryQueue.clear(dynastyId)
+
+    suspend fun recordGamesPlayedAfterCommittedWeek(
+        dynastyId: String,
+        teamPlayedGame: Boolean,
+    ): List<RosterPlayer> {
+        val players = listPlayers(dynastyId)
+        val recipients = PlayerSeasonStatFinalizeGate.playersReceivingGamePlayed(players, teamPlayedGame)
+        if (recipients.isEmpty()) return players
+        val recipientIds = recipients.map { it.playerId }.toSet()
+        val updated = players.map { player ->
+            if (player.playerId in recipientIds) {
+                player.copy(rsGamesPlayedSeason = player.rsGamesPlayedSeason + 1)
+            } else {
+                player
+            }
+        }
+        updated.filter { it.playerId in recipientIds }.forEach { dao.upsert(it.toEntity()) }
+        return updated
+    }
 
     suspend fun applyMedicalRedshirt(dynastyId: String, playerId: String): List<RosterPlayer> {
         val player = listPlayers(dynastyId).first { it.playerId == playerId }

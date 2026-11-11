@@ -48,6 +48,7 @@ import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
 import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
+import dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.core.coach.CoachArchetype
 import dev.novux.dynasty.cbb.data.coach.CoachSkillPointRepository
@@ -92,6 +93,7 @@ class SaveSlotRepository(
     private val nilAnnualPoolRepository: dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository,
     private val dynastyAutomationRepository: dev.novux.dynasty.cbb.data.settings.DynastyAutomationRepository,
     private val appSettingsRepository: dev.novux.dynasty.cbb.data.settings.AppSettingsRepository,
+    private val playerStatsRepository: PlayerStatsRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -556,6 +558,17 @@ class SaveSlotRepository(
             teamPlayedGame,
             balance.fatigue,
         )
+        if (teamPlayedGame && advanceResult.gamesCommitted.isNotEmpty()) {
+            dynastyRosterRepository.recordGamesPlayedAfterCommittedWeek(
+                loaded.dynastyId,
+                teamPlayedGame = true,
+            )
+            playerStatsRepository.persistSeasonStatsForRoster(
+                dynastyId = loaded.dynastyId,
+                seasonIndex = loaded.metadata.seasonIndex,
+                players = dynastyRosterRepository.listDynastyPlayers(loaded.dynastyId),
+            )
+        }
         val userWonGame = if (teamPlayedGame) {
             preAdvance.checkpointAfterPreAdvance.provisionalGames.values.lastOrNull()?.let { mark ->
                 mark.homeScore > mark.awayScore

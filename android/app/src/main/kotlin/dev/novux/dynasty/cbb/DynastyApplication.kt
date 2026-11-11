@@ -291,6 +291,7 @@ class DynastyApplication : Application() {
             incomingClassSeedRepository,
         )
         coachSkillPointRepository = CoachSkillPointRepository(applicationContext)
+        playerStatsRepository = dev.novux.dynasty.cbb.data.player.PlayerStatsRepository(applicationContext)
         saveSlotRepository = SaveSlotRepository(
             database,
             weekCheckpointRepository,
@@ -310,6 +311,7 @@ class DynastyApplication : Application() {
             nilAnnualPoolRepository,
             dynastyAutomationRepository,
             appSettingsRepository,
+            playerStatsRepository,
         )
         preseasonSeasonStartRepository = PreseasonSeasonStartRepository(
             saveSlotRepository,
@@ -396,7 +398,6 @@ class DynastyApplication : Application() {
             coachSecurityRepository,
             yearlyAwardsRepository,
         )
-        playerStatsRepository = dev.novux.dynasty.cbb.data.player.PlayerStatsRepository(applicationContext)
         applicationScope.launch {
             saveSlotRepository.ensureInitialized()
             packRepository.ensureEmbeddedLoaded()
