@@ -34,7 +34,6 @@ import dev.novux.dynasty.cbb.core.coach.card.HeadCoachRatings
 import dev.novux.dynasty.cbb.core.coach.contract.HeadCoachContractEngine
 import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentStatus
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
-import dev.novux.dynasty.cbb.core.coach.security.JobSecurityTier
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillBranch
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointState
 import dev.novux.dynasty.cbb.core.coach.card.deep.CoachCardDeepTabsSnapshot
@@ -259,82 +258,6 @@ private fun HeadCoachOverviewTab(
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
-}
-
-@Composable
-private fun HeadCoachContractTab(
-    card: HeadCoachCard,
-    contractDetail: dev.novux.dynasty.cbb.core.coach.contract.HeadCoachContractDetail,
-    userCoachSecurity: CoachSecuritySnapshot?,
-    employmentStatus: CoachEmploymentStatus,
-    onViewAdTrustOnStaff: () -> Unit,
-    onResignTap: () -> Unit,
-    onTerminationTap: () -> Unit,
-    onOpenJobCenter: () -> Unit,
-) {
-    val money = remember { NumberFormat.getCurrencyInstance(Locale.US) }
-    val firedRisk = userCoachSecurity?.jobSecurity?.tier in setOf(
-        JobSecurityTier.Critical,
-        JobSecurityTier.HotSeat,
-    )
-    userCoachSecurity?.let { JobSecurityMeter(it) }
-    contractDetail.firingRiskCopy?.let {
-        Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
-    }
-    if (contractDetail.extensionLikely) {
-        Text(
-            stringResource(R.string.coach_contract_extension_likely),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary,
-        )
-    }
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(stringResource(R.string.coach_contract_terms_title), fontWeight = FontWeight.SemiBold)
-            Text(stringResource(R.string.coach_contract_salary, money.format(card.annualSalaryUsd)))
-            Text(stringResource(R.string.coach_contract_buyout, money.format(card.buyoutUsd)))
-            Text(
-                stringResource(
-                    R.string.coach_contract_length_detail,
-                    card.contractLengthYears,
-                    card.contractYearsLeft,
-                ),
-            )
-        }
-    }
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(stringResource(R.string.coach_contract_goals_title), fontWeight = FontWeight.SemiBold)
-            contractDetail.performanceGoals.forEach { goal ->
-                Text("• $goal", style = MaterialTheme.typography.bodyMedium)
-            }
-        }
-    }
-    userCoachSecurity?.let {
-        AdTrustMeter(it)
-        OutlinedButton(onClick = onViewAdTrustOnStaff, modifier = Modifier.fillMaxWidth()) {
-            Text(stringResource(R.string.coach_contract_view_staff_ad_trust))
-        }
-    }
-    if (employmentStatus == CoachEmploymentStatus.Unemployed) {
-        Text(
-            stringResource(R.string.coach_contract_unemployed_notice),
-            color = MaterialTheme.colorScheme.error,
-            style = MaterialTheme.typography.bodyMedium,
-        )
-        OutlinedButton(onClick = onOpenJobCenter, modifier = Modifier.fillMaxWidth()) {
-            Text(stringResource(R.string.coach_contract_open_job_center))
-        }
-    } else {
-        if (firedRisk) {
-            OutlinedButton(onClick = onTerminationTap, modifier = Modifier.fillMaxWidth()) {
-                Text(stringResource(R.string.coach_contract_termination_cta))
-            }
-        }
-        OutlinedButton(onClick = onResignTap, modifier = Modifier.fillMaxWidth()) {
-            Text(stringResource(R.string.coach_contract_resign_cta))
-        }
-    }
 }
 
 @Composable

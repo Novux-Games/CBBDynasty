@@ -71,7 +71,7 @@ fun AssistantCoachCardScreen(
                 } else {
                     AssistantHistoryTab(card, seasonIndex)
                 }
-                CoachCardTab.Contract -> AssistantContractTab(card, money)
+                CoachCardTab.Contract -> AssistantCoachContractTab(card)
                 CoachCardTab.HallOfFame -> if (card.hasHeadCoachCareer) {
                     CoachCardHofDeepTab(coachDeepTabs)
                 } else {
@@ -159,31 +159,6 @@ private fun AssistantHistoryTab(card: AssistantCoachCard, seasonIndex: Int) {
     }
     Text(
         stringResource(R.string.coach_history_accumulates),
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
-}
-
-@Composable
-private fun AssistantContractTab(card: AssistantCoachCard, money: NumberFormat) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(stringResource(R.string.coach_contract_terms_title), fontWeight = FontWeight.SemiBold)
-            if (card.annualSalaryUsd > 0) {
-                Text(stringResource(R.string.coach_contract_salary, money.format(card.annualSalaryUsd)))
-                Text(stringResource(R.string.coach_contract_buyout, money.format(card.buyoutUsd)))
-            }
-            Text(
-                stringResource(
-                    R.string.coach_contract_length_detail,
-                    card.contractLengthYears,
-                    card.contractYearsLeft,
-                ),
-            )
-        }
-    }
-    Text(
-        stringResource(R.string.coach_assistant_contract_note),
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
