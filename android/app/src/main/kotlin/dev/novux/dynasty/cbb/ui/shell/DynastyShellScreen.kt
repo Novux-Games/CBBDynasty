@@ -537,6 +537,10 @@ fun DynastyShellScreen(
                         }
                     },
                     onOpenJobCenter = onOpenJobCenter,
+                    schoolHubOverview = userSchool,
+                    onOpenSchoolHub = userSchool?.let { overview ->
+                        { coachView = ShellCoachView.School(overview) }
+                    },
                     displayRatings = dev.novux.dynasty.cbb.core.coach.skill.HeadCoachSkillRatings.effective(
                         view.card.ratings,
                         coachSkillState,

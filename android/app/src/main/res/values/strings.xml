@@ -307,6 +307,8 @@
     <string name="staff_rating_chip">Rating %1$d</string>
     <string name="coach_card_role_head">Head coach</string>
     <string name="coach_card_record">Record %1$s</string>
+    <string name="coach_overview_team_card_title">Team</string>
+    <string name="coach_overview_open_school_hub">Tap to open school hub</string>
     <string name="coach_card_ratings_headline">Headline ratings</string>
     <string name="coach_card_ratings_assistant">Assistant ratings</string>
     <string name="coach_card_strategy">Default strategy</string>

@@ -37,6 +37,7 @@ import dev.novux.dynasty.cbb.core.coach.security.JobSecurityTier
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillBranch
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointState
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillTreeEngine
+import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -56,6 +57,8 @@ fun HeadCoachCardScreen(
     employmentStatus: CoachEmploymentStatus = CoachEmploymentStatus.Employed,
     onVoluntaryResign: () -> Unit = {},
     onOpenJobCenter: () -> Unit = {},
+    schoolHubOverview: SchoolHubOverview? = null,
+    onOpenSchoolHub: (() -> Unit)? = null,
     selectedTab: CoachCardTab = CoachCardTab.Overview,
     onSelectedTabChange: (CoachCardTab) -> Unit = {},
     modifier: Modifier = Modifier,
@@ -99,6 +102,8 @@ fun HeadCoachCardScreen(
                     skillPointBank = skillPointBank,
                     skillState = skillState,
                     displayRatings = displayRatings,
+                    schoolHubOverview = schoolHubOverview,
+                    onOpenSchoolHub = onOpenSchoolHub,
                     onSpendSkill = onSpendSkill,
                     onAutoSpendChanged = onAutoSpendChanged,
                 )
@@ -193,9 +198,17 @@ private fun HeadCoachOverviewTab(
     skillPointBank: Int?,
     skillState: CoachSkillPointState?,
     displayRatings: HeadCoachRatings,
+    schoolHubOverview: SchoolHubOverview?,
+    onOpenSchoolHub: (() -> Unit)?,
     onSpendSkill: (CoachSkillBranch) -> Unit,
     onAutoSpendChanged: (Boolean) -> Unit,
 ) {
+    CoachOverviewTeamCard(
+        schoolDisplayName = card.schoolDisplayName,
+        seasonRecordLabel = card.seasonRecordLabel,
+        schoolHubOverview = schoolHubOverview,
+        onOpenSchoolHub = onOpenSchoolHub,
+    )
     Text(
         stringResource(R.string.coach_card_role_head),
         style = MaterialTheme.typography.titleMedium,
