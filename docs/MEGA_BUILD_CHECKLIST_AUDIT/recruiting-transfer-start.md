@@ -17,7 +17,7 @@
 | MEGA-RECR-003 | P1 | PASS | JUCO 5★ = top 2% | HS and JUCO share 2% / 20% / 50% bands. | `IncomingClassSeeder.starBandForPercentile` |
 | MEGA-RECR-004 | P1 | PASS | 3★ = 20–50% band | 3★ band ends at 50th percentile. | `IncomingClassSeeder.starBandForPercentile` |
 | MEGA-RECR-005 | P0 | PASS | Single persisted class pool | Hub, AI, signing, sim-week advance use `ensurePool`. | `IncomingClassSeedRepository.kt`, `SaveSlotRepository.kt` |
-| MEGA-RECR-006 | P0 | FAIL | Top 60 fixed at seed | `demoPool` sets `nationalHsRank` from index (`index < 60`), not hidden-rating national order across HS+JUCO. | `RecruitingClassSeed.kt` |
+| MEGA-RECR-006 | P0 | PASS | Top 60 fixed at seed | `demoPool` delegates to `IncomingClassSeeder.seed`; national ranks from hidden-rating order (HS+JUCO). | `RecruitingClassSeed.kt`, `IncomingClassSeeder.kt` |
 | MEGA-RECR-007 | P1 | GAP | Top 60 HS+JUCO combined | Seeder ranks combined pool correctly when used; most UI paths never load that persisted pool. | `IncomingClassSeedRepository` vs hub |
 | MEGA-RECR-008 | P1 | PASS | News / signing fallback | Signing/news/hub use `ensurePool` + `top60FromPool`; demo `top60()` deprecated. | `SigningDayScreen.kt`, `NewsHubScreen.kt` |
 | MEGA-RECR-009 | P2 | GAP | Portal excluded from recruit Top 60 | No code path mixes portal into Top 60 (PASS intent), but portal tab is nonfunctional (see portal section). | — |
