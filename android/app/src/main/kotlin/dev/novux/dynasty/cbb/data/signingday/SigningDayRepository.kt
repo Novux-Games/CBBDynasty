@@ -15,6 +15,9 @@ import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignResult
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
 import dev.novux.dynasty.cbb.core.signingday.SigningDaySoftCommitResolver
 import dev.novux.dynasty.cbb.data.nil.NilBudgetRepository
+import dev.novux.dynasty.cbb.core.player.loyalty.RecruitCommitPromiseLockEngine
+import dev.novux.dynasty.cbb.data.recruiting.RecruitLockedPromiseRepository
+import dev.novux.dynasty.cbb.data.recruiting.RecruitOfferPromiseRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingReservationRepository
 import kotlinx.coroutines.flow.first
 
@@ -25,6 +28,8 @@ class SigningDayRepository(
     private val reservationRepository: RecruitingReservationRepository,
     private val nilBudgetRepository: NilBudgetRepository,
     private val incomingClassSeedRepository: IncomingClassSeedRepository,
+    private val recruitOfferPromiseRepository: RecruitOfferPromiseRepository,
+    private val recruitLockedPromiseRepository: RecruitLockedPromiseRepository,
 ) {
     suspend fun loadProgress(dynastyId: String, cycleSeasonIndex: Int): SigningDayProgress {
         val raw = context.signingDayStore.data.first()[progressKey(dynastyId)] ?: return SigningDayProgress(cycleSeasonIndex)
@@ -84,7 +89,15 @@ class SigningDayRepository(
     ): SigningDayHardSignResult {
         val progress = loadProgress(dynastyId, seasonIndex)
         val signees = loadIncomingClass(dynastyId, seasonIndex)
-        val result = SigningDayHardSignEngine.finalizeClass(progress, signees)
+        val offerPromises = recruitOfferPromiseRepository.loadAll(dynastyId, seasonIndex)
+        val result = SigningDayHardSignEngine.finalizeClass(progress, signees, offerPromises)
+        val locked = signees.map { signee ->
+            RecruitCommitPromiseLockEngine.lockFromOffer(
+                offerPromises.getValue(signee.prospectId),
+                lockedAtSeasonIndex = seasonIndex + 1,
+            )
+        }
+        recruitLockedPromiseRepository.saveAll(dynastyId, locked)
         val snapshots = nilBudgetRepository.signingSnapshots(
             dynastyId,
             seasonIndex,

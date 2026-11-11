@@ -538,6 +538,10 @@
     <string name="signing_day_confirm_positions">Confirm positions</string>
     <string name="signing_day_hard_sign">Hard sign class</string>
     <string name="signing_day_hard_sign_done">Class signed</string>
+    <string name="signing_day_promise_locked_note">Coach promises lock at hard sign and cannot be changed later.</string>
+    <string name="signing_day_promise_line">Promise: %1$s</string>
+    <string name="signing_day_promise_set">Set promise</string>
+    <string name="signing_day_promise_missing_hint">Set a promise for every signee before hard sign.</string>
     <string name="player_loyalty_chip">Loyalty %1$d</string>
     <string name="player_promise_chip">%1$s · %2$s</string>
     <string name="player_promise_status_kept">Kept</string>

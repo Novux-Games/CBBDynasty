@@ -38,8 +38,14 @@ import dev.novux.dynasty.cbb.core.signingday.SigningDayUiPolicy
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
+import dev.novux.dynasty.cbb.core.player.loyalty.CoachPromiseType
+import dev.novux.dynasty.cbb.core.player.loyalty.PlayerPromiseLockPolicy
+import dev.novux.dynasty.cbb.core.player.loyalty.RecruitCommitPromiseLockEngine
+import dev.novux.dynasty.cbb.core.recruiting.RecruitOfferPromise
+import dev.novux.dynasty.cbb.data.recruiting.RecruitOfferPromiseRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.signingday.SigningDayRepository
+import dev.novux.dynasty.cbb.ui.recruiting.RecruitPromisePickerSheet
 import kotlinx.coroutines.launch
 
 enum class SigningDayInitialTab {
@@ -47,6 +53,7 @@ enum class SigningDayInitialTab {
     Positions,
 }
 
+/** Signing Day — promises lock at hard sign, no amend ([MEGA-COACH-175]). */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SigningDayScreen(
@@ -56,6 +63,7 @@ fun SigningDayScreen(
     nilAnnualPoolRepository: NilAnnualPoolRepository,
     weekNineRepository: OffseasonWeekNineRepository? = null,
     incomingClassSeedRepository: IncomingClassSeedRepository,
+    recruitOfferPromiseRepository: RecruitOfferPromiseRepository,
     initialTab: SigningDayInitialTab = SigningDayInitialTab.Rankings,
     onBack: () -> Unit,
 ) {
@@ -68,11 +76,17 @@ fun SigningDayScreen(
     var progress by remember { mutableStateOf<SigningDayProgress?>(null) }
     var incoming by remember { mutableStateOf<List<IncomingSignee>>(emptyList()) }
     var rankings by remember { mutableStateOf<List<NationalRankRow>>(emptyList()) }
+    var offerPromises by remember { mutableStateOf<Map<String, RecruitOfferPromise>>(emptyMap()) }
+    var promisePickerTarget by remember { mutableStateOf<Pair<String, String>?>(null) }
     val scope = rememberCoroutineScope()
 
     suspend fun refresh() {
         progress = signingDayRepository.loadProgress(loaded.dynastyId, loaded.metadata.seasonIndex)
         incoming = signingDayRepository.loadIncomingClass(loaded.dynastyId, loaded.metadata.seasonIndex)
+        offerPromises = recruitOfferPromiseRepository.loadAll(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        )
     }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
@@ -125,6 +139,8 @@ fun SigningDayScreen(
                 else -> PositionsBody(
                 signees = incoming,
                 progress = progress,
+                offerPromises = offerPromises,
+                onSetPromise = { signee -> promisePickerTarget = signee.prospectId to signee.displayName },
                 onCyclePosition = { signee ->
                     scope.launch {
                         val next = PlayerPosition.entries[
@@ -154,6 +170,32 @@ fun SigningDayScreen(
                 },
                 )
             }
+        }
+        promisePickerTarget?.let { (prospectId, displayName) ->
+            RecruitPromisePickerSheet(
+                prospectDisplayName = displayName,
+                onDismiss = { promisePickerTarget = null },
+                onConfirm = { promiseType ->
+                    scope.launch {
+                        val stayTopN = if (promiseType == CoachPromiseType.StayPledgeTopN) {
+                            dev.novux.dynasty.cbb.core.player.loyalty.CoachPromise.DEFAULT_STAY_TOP_N
+                        } else {
+                            null
+                        }
+                        recruitOfferPromiseRepository.save(
+                            loaded.dynastyId,
+                            loaded.metadata.seasonIndex,
+                            RecruitOfferPromise(
+                                prospectId = prospectId,
+                                promiseType = promiseType,
+                                stayTopN = stayTopN,
+                            ),
+                        )
+                        refresh()
+                        promisePickerTarget = null
+                    }
+                },
+            )
         }
         OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.settings_back))
@@ -199,11 +241,31 @@ private fun RankingsBody(rows: List<NationalRankRow>) {
 private fun PositionsBody(
     signees: List<IncomingSignee>,
     progress: SigningDayProgress?,
+    offerPromises: Map<String, RecruitOfferPromise>,
+    onSetPromise: (IncomingSignee) -> Unit,
     onCyclePosition: (IncomingSignee) -> Unit,
     onConfirmPositions: () -> Unit,
     onHardSign: () -> Unit,
 ) {
+    @Suppress("unused")
+    val qaId = PlayerPromiseLockPolicy.MEGA_ID
+    val allPromisesSet = RecruitCommitPromiseLockEngine.allSigneesHaveOffer(
+        signees.map { it.prospectId },
+        offerPromises,
+    )
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = stringResource(R.string.signing_day_promise_locked_note),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        if (signees.isNotEmpty() && !allPromisesSet) {
+            Text(
+                text = stringResource(R.string.signing_day_promise_missing_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+            )
+        }
         if (signees.isEmpty()) {
             Text(
                 text = stringResource(R.string.signing_day_no_commits),
@@ -229,15 +291,35 @@ private fun PositionsBody(
                                 ),
                                 style = MaterialTheme.typography.bodySmall,
                             )
+                            val promise = offerPromises[signee.prospectId]
+                            if (promise != null) {
+                                Text(
+                                    stringResource(
+                                        R.string.signing_day_promise_line,
+                                        promise.displayLabel(),
+                                    ),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Medium,
+                                )
+                            }
                         }
-                        OutlinedButton(onClick = { onCyclePosition(signee) }) {
-                            Text(stringResource(R.string.signing_day_cycle_position))
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            if (offerPromises[signee.prospectId] == null) {
+                                OutlinedButton(onClick = { onSetPromise(signee) }) {
+                                    Text(stringResource(R.string.signing_day_promise_set))
+                                }
+                            }
+                            OutlinedButton(onClick = { onCyclePosition(signee) }) {
+                                Text(stringResource(R.string.signing_day_cycle_position))
+                            }
                         }
                     }
                 }
             }
         }
-        val canHardSign = progress?.requiredTasksComplete() == true && progress.hardSignComplete.not()
+        val canHardSign = progress?.requiredTasksComplete() == true &&
+            progress.hardSignComplete.not() &&
+            allPromisesSet
         Button(
             onClick = onConfirmPositions,
             modifier = Modifier.fillMaxWidth(),

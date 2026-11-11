@@ -94,6 +94,8 @@ class DynastyApplication : Application() {
         private set
 
     lateinit var recruitOfferPromiseRepository: RecruitOfferPromiseRepository
+
+    lateinit var recruitLockedPromiseRepository: dev.novux.dynasty.cbb.data.recruiting.RecruitLockedPromiseRepository
         private set
 
     lateinit var portalCycleRepository: PortalCycleRepository
@@ -231,6 +233,8 @@ class DynastyApplication : Application() {
         coachingCarouselRepository = CoachingCarouselRepository(applicationContext)
         val recruitingReservationRepository = RecruitingReservationRepository(applicationContext)
         recruitOfferPromiseRepository = RecruitOfferPromiseRepository(applicationContext)
+        recruitLockedPromiseRepository =
+            dev.novux.dynasty.cbb.data.recruiting.RecruitLockedPromiseRepository(applicationContext)
         val recruitingInterestSpendRepository = RecruitingInterestSpendRepository(applicationContext)
         nilBudgetRepository = dev.novux.dynasty.cbb.data.nil.NilBudgetRepository(
             applicationContext,
@@ -269,6 +273,8 @@ class DynastyApplication : Application() {
             recruitingReservationRepository,
             nilBudgetRepository,
             incomingClassSeedRepository,
+            recruitOfferPromiseRepository,
+            recruitLockedPromiseRepository,
         )
         disciplineRepository = DisciplineRepository(applicationContext, database, balanceRulesetRepository)
         chemistryRepository = ChemistryRepository(applicationContext, balanceRulesetRepository)

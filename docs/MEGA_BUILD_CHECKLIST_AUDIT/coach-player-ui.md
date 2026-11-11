@@ -299,7 +299,7 @@
 | MEGA-COACH-172 | P1 | PASS | Convince / retention UI shows promise + loyalty together | `PlayerLeavingRetentionSummary` on Week 1 roster/transfer tabs | `PlayersLeavingScreen.kt` |
 | MEGA-COACH-173 | P2 | FAIL | Broken promise → portal intent messaging on card | Portal partition in core; no card copy |
 | MEGA-COACH-174 | P2 | GAP | Stay pledge params visible (top-N lottery) | Promise params not shown in chips |
-| MEGA-COACH-175 | P1 | FAIL | One promise locked at commit — no amend UI | Correct by spec; recruit picker still missing |
+| MEGA-COACH-175 | P1 | PASS | One promise locked at commit — no amend UI | `RecruitCommitPromiseLockEngine` + Signing Day picker; `RecruitLockedPromiseRepository` | `SigningDayScreen.kt` |
 | MEGA-COACH-176 | P2 | PASS | Declare intent obeys loyalty tuning | `DeclareIntentRollTest`, `BalanceLoyaltyTuning.declareWeightLoyalty` |
 
 ---
