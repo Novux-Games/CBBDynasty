@@ -38,8 +38,10 @@ import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.PhaseWeekPolicy
 import dev.novux.dynasty.cbb.core.portal.PortalCyclePolicy
+import dev.novux.dynasty.cbb.data.news.NewsFeedRepository
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
+import dev.novux.dynasty.cbb.core.recruiting.SeasonOneRecruitingBootstrap
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.recruiting.ai.AiRecruitingWeekRunner
 import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
@@ -95,6 +97,7 @@ class SaveSlotRepository(
     private val appSettingsRepository: dev.novux.dynasty.cbb.data.settings.AppSettingsRepository,
     private val playerStatsRepository: PlayerStatsRepository,
     private val incomingClassSeedRepository: IncomingClassSeedRepository,
+    private val newsFeedRepository: NewsFeedRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -426,8 +429,31 @@ class SaveSlotRepository(
         if (appDefaults.defaultCoachAutoSpend) {
             coachSkillPointRepository.setAutoSpend(dynastyId, true, CoachArchetype.Balanced)
         }
-        incomingClassSeedRepository.ensurePool(dynastyId, metadata.seasonIndex)
+        bootstrapSeasonOneRecruitingAfterSign(loaded, draft)
         return loaded
+    }
+
+    /**
+     * Season 1: persist enrolling class at sign, bind prestige-led recruiting + NIL cycles, and queue Top 60 news
+     * so the class is live before exhibitions ([planning/recruiting-engine.md], MEGA-RECR-053).
+     */
+    private suspend fun bootstrapSeasonOneRecruitingAfterSign(loaded: LoadedDynasty, draft: NewGameDraft) {
+        if (!SeasonOneRecruitingBootstrap.appliesToMembershipYear(loaded.metadata.seasonIndex)) return
+        val seasonIndex = SeasonOneRecruitingBootstrap.poolStorageSeasonIndex(loaded.metadata.seasonIndex)
+        incomingClassSeedRepository.ensurePool(loaded.dynastyId, seasonIndex)
+        newsFeedRepository.publishRecruitingSpotlightWhenPoolReady(loaded.dynastyId, seasonIndex)
+        val coach = coachDao.getByDynastyId(loaded.dynastyId) ?: return
+        val teamId = draft.selectedTeamId ?: coach.userTeamId
+        val session = packRepository.restorePack(loaded.summary.packId ?: DynastySchema.DEFAULT_PACK_ID)
+        val team = session.index.team(teamId) ?: return
+        recruitingEconomyRepository.loadOrOpenCycle(loaded, programPrestigeOverride = team.programPrestige)
+        nilAnnualPoolRepository.openCyclePoolUsd(
+            dynastyId = loaded.dynastyId,
+            balanceNil = loaded.balanceRuleset.nil,
+            cycleSeasonIndex = loaded.metadata.seasonIndex,
+            conferenceId = team.conferenceId,
+            programPrestige = team.programPrestige,
+        )
     }
 
     suspend fun createEmptyDynastyInFirstOpenSlot(

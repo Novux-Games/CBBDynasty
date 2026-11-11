@@ -99,7 +99,7 @@
 | MEGA-RECR-050 | P1 | GAP | Position editor Signing Day | Tab exists; bulk position edit engine partial — verify against `SigningDayScreen` positions tab. | `ui/signingday` |
 | MEGA-RECR-051 | P1 | GAP | Cycle close after hard sign | `closeCycleAfterHardSign` on confirm — wired from screen; ensure advance from OS W6 respects closed hub. | `SigningDayScreen` |
 | MEGA-RECR-052 | P1 | GAP | Preseason Incoming Class Seed | Manual panel seeds 3900-player pool — PASS when user completes task; **not auto** on new dynasty before season. | `IncomingClassSeedPanel` |
-| MEGA-RECR-053 | P0 | FAIL | Season 1 Top 60 from tipoff | New save starts **Offseason W1** (`game-start.md`); recruit cycle + Top 60 not live until later preseason task — conflicts recruiting-engine “Season 1 preseason seed before exhibitions”. | `signNewGameFromWizard`, calendar bootstrap |
+| MEGA-RECR-053 | P0 | PASS | Season 1 Top 60 from tipoff | `bootstrapSeasonOneRecruitingAfterSign` persists class + Top 60 news + prestige-bound recruiting/NIL at wizard sign; preseason panel confirms pre-seeded class before exhibitions. | `SaveSlotRepository`, `SeasonOneRecruitingBootstrap` |
 | MEGA-RECR-054 | P2 | GAP | News Recruits vs Rankings hub | News shows Top 60 from seed when present; Rankings hub is **team** NET/Media/Coaches — correct separation, easy user confusion. | `NewsHubScreen`, `RankingsHubScreen` |
 
 ---

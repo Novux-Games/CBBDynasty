@@ -259,6 +259,7 @@
     <string name="incoming_seed_run">Run class seed</string>
     <string name="incoming_seed_running">Seeding class pools…</string>
     <string name="incoming_seed_done">Class seeded</string>
+    <string name="incoming_seed_confirm">Confirm Top 60 for season</string>
     <string name="incoming_seed_top60_heading">Top 60 national recruits</string>
     <string name="incoming_seed_top60_line">#%1$d %2$s · %3$d★ %4$s · %5$s</string>
     <string name="tournament_invites_title">Tournament invites</string>

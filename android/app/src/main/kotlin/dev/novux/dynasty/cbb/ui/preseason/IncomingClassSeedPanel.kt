@@ -79,21 +79,23 @@ fun IncomingClassSeedPanel(
             onClick = {
                 scope.launch {
                     seeding = true
-                    val news = seedRepository.runSeed(dynastyId, seasonIndex)
-                    headline = news
+                    if (headline == null) {
+                        val news = seedRepository.runSeed(dynastyId, seasonIndex)
+                        headline = news
+                    }
                     progressRepository.completeTask(dynastyId, seasonIndex, PreseasonTaskId.IncomingClassSeed)
                     seeding = false
                     onSeeded()
                 }
             },
-            enabled = !seeding && headline == null,
+            enabled = !seeding,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
                 if (seeding) {
                     stringResource(R.string.incoming_seed_running)
                 } else if (headline != null) {
-                    stringResource(R.string.incoming_seed_done)
+                    stringResource(R.string.incoming_seed_confirm)
                 } else {
                     stringResource(R.string.incoming_seed_run)
                 },

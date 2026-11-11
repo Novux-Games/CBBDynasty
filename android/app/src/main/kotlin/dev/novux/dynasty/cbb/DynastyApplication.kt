@@ -324,6 +324,7 @@ class DynastyApplication : Application() {
             appSettingsRepository,
             playerStatsRepository,
             incomingClassSeedRepository,
+            newsFeedRepository,
         )
         preseasonSeasonStartRepository = PreseasonSeasonStartRepository(
             saveSlotRepository,

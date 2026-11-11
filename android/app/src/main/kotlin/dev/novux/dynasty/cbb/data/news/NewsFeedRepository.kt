@@ -29,6 +29,11 @@ class NewsFeedRepository(
         return Json.decodeFromString(raw)
     }
 
+    /** Publishes the Top 60 spotlight when the enrolling class pool exists (MEGA-RECR-053). */
+    suspend fun publishRecruitingSpotlightWhenPoolReady(dynastyId: String, seasonIndex: Int) {
+        ensureRecruitingSpotlight(dynastyId, seasonIndex)
+    }
+
     suspend fun storiesFeed(dynastyId: String, seasonIndex: Int): List<NewsHeadline> {
         ensureRecruitingSpotlight(dynastyId, seasonIndex)
         return loadArchive(dynastyId, seasonIndex)
