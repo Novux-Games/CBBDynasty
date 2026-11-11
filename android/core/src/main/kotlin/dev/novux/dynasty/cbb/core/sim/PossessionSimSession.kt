@@ -52,10 +52,7 @@ class PossessionSimSession(
     private val awayMidInjuries = (resume?.awayMidGameInjuries ?: emptyList()).toMutableList()
     private var inOvertime: Boolean = resume?.inOvertime ?: false
     private var overtimePeriods: Int = resume?.overtimePeriods ?: 0
-    private val teamFoulLedger = TeamFoulHalfLedger(
-        initialHome = resume?.homeTeamFoulsInHalf ?: 0,
-        initialAway = resume?.awayTeamFoulsInHalf ?: 0,
-    )
+    private val teamFoulLedger = TeamFoulGameLedger(resume = resume)
     private val eventWeights = SimEventWeightsResolver.resolve(input.tuning.eventWeights)
     private val homeStaminaLedger = SimStaminaLedger(
         roster = input.homeRoster,
@@ -78,7 +75,7 @@ class PossessionSimSession(
         gameClock = GameSimClock.OVERTIME_SECONDS
         shotClockSeconds = PossessionShotClock.resetOnChangeOfPossession(input.tuning.shotClock)
         offenseHome = random.nextBoolean()
-        teamFoulLedger.reset()
+        teamFoulLedger.onOvertimePeriodStart()
         log += "— OT$overtimePeriods (5:00) — ${homeBox.points}-${awayBox.points}"
     }
 
@@ -139,7 +136,9 @@ class PossessionSimSession(
         val used = PossessionShotClock.secondsConsumed(tripSeconds, shotClockSeconds, gameClock)
         gameClock -= used
         if (crossedRegulationHalfBoundary(clockBeforeTrip, gameClock)) {
-            teamFoulLedger.reset()
+            teamFoulLedger.onRegulationHalfBoundaryCrossed()
+            val sealed = teamFoulLedger.summary()
+            log += "— Halftime team fouls — HOME ${sealed.homeFirstHalf} AWAY ${sealed.awayFirstHalf}"
         }
         val shotClockAfterTrip = PossessionShotClock.remainingAfterTrip(shotClockBefore, used)
         totalPossessions++
@@ -503,7 +502,9 @@ class PossessionSimSession(
         return DefensiveFoulEvent(personalFoulLog = pfLog, teamFoulsInHalf = teamFouls)
     }
 
-    fun toMidGame(): MidGameState = MidGameState(
+    fun toMidGame(): MidGameState {
+        val teamFoulFields = teamFoulLedger.restoreMidGameFields()
+        return MidGameState(
         random = random,
         gameClockSeconds = gameClock,
         offenseHome = offenseHome,
@@ -524,11 +525,14 @@ class PossessionSimSession(
         awayMidGameInjuries = awayMidInjuries.toList(),
         inOvertime = inOvertime,
         overtimePeriods = overtimePeriods,
-        homeTeamFoulsInHalf = teamFoulLedger.homeFoulsInHalf,
-        awayTeamFoulsInHalf = teamFoulLedger.awayFoulsInHalf,
+        homeTeamFoulsInHalf = teamFoulFields.homeTeamFoulsInHalf,
+        awayTeamFoulsInHalf = teamFoulFields.awayTeamFoulsInHalf,
+        homeTeamFoulsFirstHalf = teamFoulFields.homeTeamFoulsFirstHalf,
+        awayTeamFoulsFirstHalf = teamFoulFields.awayTeamFoulsFirstHalf,
         homeStaminaByPlayer = homeStaminaLedger.snapshot(),
         awayStaminaByPlayer = awayStaminaLedger.snapshot(),
     )
+    }
 
     fun toResult(isComplete: Boolean): GameSimResult {
         syncPlayerBoxAuxiliaryStats()
@@ -551,6 +555,7 @@ class PossessionSimSession(
         awayInjuries = awayMidInjuries.toList(),
         periodsPlayed = periodsPlayedTotal(),
         overtimePeriods = overtimePeriods,
+        teamFoulsByHalf = teamFoulLedger.summary(),
         )
     }
 

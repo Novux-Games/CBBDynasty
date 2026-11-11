@@ -28,6 +28,8 @@ data class MidGameState(
     val overtimePeriods: Int = 0,
     val homeTeamFoulsInHalf: Int = 0,
     val awayTeamFoulsInHalf: Int = 0,
+    val homeTeamFoulsFirstHalf: Int = 0,
+    val awayTeamFoulsFirstHalf: Int = 0,
     val homeStaminaByPlayer: Map<String, Int> = emptyMap(),
     val awayStaminaByPlayer: Map<String, Int> = emptyMap(),
 )

@@ -90,6 +90,7 @@ data class GameSimResult(
     /** Regulation counts as 1; each 5:00 OT period adds 1 — [planning/simulation-engine.md]. */
     val periodsPlayed: Int = 1,
     val overtimePeriods: Int = 0,
+    val teamFoulsByHalf: TeamFoulHalfSummary = TeamFoulHalfSummary(),
 ) {
     fun userTeamInjuries(userTeamIsHome: Boolean): List<GameSimInjuryEvent> =
         if (userTeamIsHome) homeInjuries else awayInjuries
