@@ -16,7 +16,12 @@ class PlayerDraftProjectionPathTest {
         val line = root.resolve("android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/player/PlayerDraftProjectionLine.kt")
             .readText()
         assertTrue(sheet.contains(PlayerDraftProjectionPolicy.OVERVIEW_COMPOSABLE))
-        assertTrue(line.contains(PlayerDraftProjectionPolicy.QA_ID))
         assertTrue(line.contains(PlayerDraftProjectionPolicy.ENGINE))
+        assertTrue(line.contains("nationalTop60RankByPlayerId"))
+        assertTrue(line.contains("PlayerDraftProjectionPolicy.NATIONAL_POOL"))
+        val shell = root.resolve("android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/shell/DynastyShellScreen.kt")
+            .readText()
+        assertTrue(shell.contains(PlayerDraftProjectionPolicy.NATIONAL_POOL))
+        assertTrue(shell.contains("nationalTop60RankByPlayerId"))
     }
 }

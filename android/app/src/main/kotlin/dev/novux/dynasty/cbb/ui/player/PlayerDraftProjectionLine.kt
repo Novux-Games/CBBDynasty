@@ -9,15 +9,23 @@ import androidx.compose.ui.text.font.FontWeight
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.player.draft.PlayerDraftProjectionEngine
+import dev.novux.dynasty.cbb.core.player.draft.PlayerDraftProjectionPolicy
 
-/** Projected draft rank and tier on player Overview ([MEGA-COACH-065]). */
+@Suppress("unused")
+private val draftProjectionPoolAnchor: String = PlayerDraftProjectionPolicy.NATIONAL_POOL
+
+/** Projected draft rank and tier on player Overview. */
 @Composable
 fun PlayerDraftProjectionLine(
     player: DynastyPlayer,
     modifier: Modifier = Modifier,
     compact: Boolean = false,
+    nationalTop60RankByPlayerId: Map<String, Int> = emptyMap(),
 ) {
-    val projection = PlayerDraftProjectionEngine.resolve(player)
+    val projection = PlayerDraftProjectionEngine.resolve(
+        player,
+        nationalTop60RankByPlayerId = nationalTop60RankByPlayerId,
+    )
     val text = if (projection.isAvailable) {
         stringResource(
             R.string.player_card_draft_projection_line,

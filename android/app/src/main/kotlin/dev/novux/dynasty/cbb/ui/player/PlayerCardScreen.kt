@@ -54,6 +54,7 @@ fun PlayerCardScreen(
     schoolHubOverview: SchoolHubOverview? = null,
     onOpenSchoolHub: (() -> Unit)? = null,
     onBack: () -> Unit,
+    nationalTop60RankByPlayerId: Map<String, Int> = emptyMap(),
     modifier: Modifier = Modifier,
 ) {
     var selectedTab by remember { mutableStateOf(PlayerCardTab.Overview) }
@@ -101,6 +102,7 @@ fun PlayerCardScreen(
                     seasonRecordLabel = seasonRecordLabel,
                     schoolHubOverview = schoolHubOverview,
                     onOpenSchoolHub = onOpenSchoolHub,
+                    nationalTop60RankByPlayerId = nationalTop60RankByPlayerId,
                 )
                 PlayerCardTab.Ratings -> PlayerCardRatingsTabContent(player = player)
                 PlayerCardTab.Stats -> PlayerCardStatsTab(
@@ -192,6 +194,7 @@ private fun PlayerCardOverviewTab(
     seasonRecordLabel: String,
     schoolHubOverview: SchoolHubOverview?,
     onOpenSchoolHub: (() -> Unit)?,
+    nationalTop60RankByPlayerId: Map<String, Int> = emptyMap(),
 ) {
     CoachOverviewTeamCard(
         schoolDisplayName = schoolDisplayName,
@@ -199,7 +202,10 @@ private fun PlayerCardOverviewTab(
         schoolHubOverview = schoolHubOverview,
         onOpenSchoolHub = onOpenSchoolHub,
     )
-    PlayerCardOverviewContent(player = player)
+    PlayerCardOverviewContent(
+        player = player,
+        nationalTop60RankByPlayerId = nationalTop60RankByPlayerId,
+    )
 }
 
 @Composable

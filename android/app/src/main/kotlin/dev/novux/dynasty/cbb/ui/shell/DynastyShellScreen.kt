@@ -80,6 +80,7 @@ import dev.novux.dynasty.cbb.core.preview.TeamPreviewSide
 import dev.novux.dynasty.cbb.ui.preview.GamePreviewLaunch
 import dev.novux.dynasty.cbb.core.preseason.PreseasonSeasonStartPolicy
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
+import dev.novux.dynasty.cbb.core.player.draft.NationalDraftTop60Pool
 import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
@@ -382,6 +383,18 @@ fun DynastyShellScreen(
         }
     }
 
+    val nationalTop60RankByPlayerId = remember(
+        fullRoster,
+        loaded.dynastyId,
+        loaded.metadata.seasonIndex,
+    ) {
+        NationalDraftTop60Pool.rankIndexForRoster(
+            fullRoster,
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        )
+    }
+
     PlayerCardPreviewSheet(
         player = cardPlayer,
         onDismiss = { cardPlayer = null },
@@ -389,6 +402,7 @@ fun DynastyShellScreen(
             cardPlayer = null
             fullScreenPlayer = player
         },
+        nationalTop60RankByPlayerId = nationalTop60RankByPlayerId,
     )
 
     fullScreenPlayer?.let { player ->
@@ -407,6 +421,7 @@ fun DynastyShellScreen(
                 }
             },
             onBack = { fullScreenPlayer = null },
+            nationalTop60RankByPlayerId = nationalTop60RankByPlayerId,
         )
         return
     }

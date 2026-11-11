@@ -29,6 +29,7 @@ fun PlayerCardPreviewSheet(
     player: DynastyPlayer?,
     onDismiss: () -> Unit,
     onViewMore: (DynastyPlayer) -> Unit,
+    nationalTop60RankByPlayerId: Map<String, Int> = emptyMap(),
 ) {
     if (player == null) return
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -52,6 +53,7 @@ fun PlayerCardPreviewSheet(
                 player = player,
                 modifier = Modifier.padding(bottom = 8.dp),
                 compact = true,
+                nationalTop60RankByPlayerId = nationalTop60RankByPlayerId,
             )
             Button(
                 onClick = {
@@ -81,6 +83,7 @@ fun PlayerCardOverviewContent(
     player: DynastyPlayer,
     modifier: Modifier = Modifier,
     compact: Boolean = false,
+    nationalTop60RankByPlayerId: Map<String, Int> = emptyMap(),
 ) {
     val report = player.scoutReport(ScoutDepth.Light)
     Column(
@@ -131,7 +134,11 @@ fun PlayerCardOverviewContent(
             style = MaterialTheme.typography.bodyMedium,
         )
         PlayerNilValuationLine(player = player, compact = compact)
-        PlayerDraftProjectionLine(player = player, compact = compact)
+        PlayerDraftProjectionLine(
+            player = player,
+            compact = compact,
+            nationalTop60RankByPlayerId = nationalTop60RankByPlayerId,
+        )
         if (!compact) {
             HorizontalDivider()
             Text(

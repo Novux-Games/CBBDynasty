@@ -6,6 +6,9 @@ import dev.novux.dynasty.cbb.core.roster.PlayerClassYear
 /**
  * Projected draft slot on player Overview ([MEGA-COACH-065], [planning/player-archetypes.md]).
  */
+/** National Top 60 draft slot when ranked on the player card ([planning/player-archetypes.md]). */
+typealias DraftProjection = PlayerDraftProjection
+
 data class PlayerDraftProjection(
     val rank: Int?,
     val tierLabel: String?,
@@ -20,12 +23,24 @@ data class PlayerDraftProjection(
 object PlayerDraftProjectionEngine {
     const val QA_ID: String = "MEGA-COACH-065"
 
-    private const val MIN_STOCK_FOR_TOP_60 = 40
+    const val MIN_STOCK_FOR_TOP_60_POOL: Int = 40
 
-    fun resolve(player: DynastyPlayer): PlayerDraftProjection {
+    /**
+     * Resolves [DraftProjection] from national Top 60 ranks when [nationalTop60RankByPlayerId] is
+     * supplied (player card path). Falls back to stock-derived mock slot only when the map is empty
+     * (legacy previews/tests).
+     */
+    fun resolve(
+        player: DynastyPlayer,
+        nationalTop60RankByPlayerId: Map<String, Int> = emptyMap(),
+    ): PlayerDraftProjection {
         if (!isDraftEligible(player)) return PlayerDraftProjection.NotAvailable
+        if (nationalTop60RankByPlayerId.isNotEmpty()) {
+            val poolRank = nationalTop60RankByPlayerId[player.playerId] ?: return PlayerDraftProjection.NotAvailable
+            return PlayerDraftProjection(rank = poolRank, tierLabel = tierForRank(poolRank))
+        }
         val stock = player.role.draftStockPoints
-        if (stock < MIN_STOCK_FOR_TOP_60) return PlayerDraftProjection.NotAvailable
+        if (stock < MIN_STOCK_FOR_TOP_60_POOL) return PlayerDraftProjection.NotAvailable
         val rank = stockToRank(stock)
         return PlayerDraftProjection(rank = rank, tierLabel = tierForRank(rank))
     }
@@ -36,14 +51,14 @@ object PlayerDraftProjectionEngine {
             player.classYear == PlayerClassYear.Senior ||
             (
                 player.classYear == PlayerClassYear.Junior &&
-                    player.role.draftStockPoints >= MIN_STOCK_FOR_TOP_60
+                    player.role.draftStockPoints >= MIN_STOCK_FOR_TOP_60_POOL
                 )
     }
 
     fun stockToRank(stockPoints: Int): Int {
-        val clamped = stockPoints.coerceIn(MIN_STOCK_FOR_TOP_60, 100)
-        val span = 100 - MIN_STOCK_FOR_TOP_60
-        val rank = 60 - ((clamped - MIN_STOCK_FOR_TOP_60) * 59 / span)
+        val clamped = stockPoints.coerceIn(MIN_STOCK_FOR_TOP_60_POOL, 100)
+        val span = 100 - MIN_STOCK_FOR_TOP_60_POOL
+        val rank = 60 - ((clamped - MIN_STOCK_FOR_TOP_60_POOL) * 59 / span)
         return rank.coerceIn(1, 60)
     }
 

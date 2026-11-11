@@ -131,9 +131,9 @@
 | MEGA-COACH-074 | P1 | PASS | Assignment from position + rating skew | `PlayerArchetypeAssigner`, tests |
 | MEGA-COACH-075 | P2 | PASS | Archetype on player card Overview information row | `player_card_identity` string |
 | MEGA-COACH-076 | P2 | FAIL | Ratings tab archetype flavor text | Not in `PlayerCardSheet` |
-| MEGA-COACH-077 | P1 | FAIL | Draft rank from national Top 60 when eligible | No `DraftProjection` on card path |
+| MEGA-COACH-077 | P1 | PASS | Draft rank from national Top 60 when eligible | `NationalDraftTop60Pool` + `DraftProjection` on card via `DynastyShellScreen` ranks | `NationalDraftTop60PoolTest` |
 | MEGA-COACH-078 | P2 | FAIL | Rank labels Lottery / First round / Early second / Late second | No UI |
-| MEGA-COACH-079 | P2 | GAP | Top 60 pool exists for recruits/news | `Top60NewsPublisher`, seeder — not wired to roster player card |
+| MEGA-COACH-079 | P2 | PASS | Top 60 pool exists for recruits/news | HS pool + `NationalDraftTop60Pool` on roster player card Overview |
 
 ---
 

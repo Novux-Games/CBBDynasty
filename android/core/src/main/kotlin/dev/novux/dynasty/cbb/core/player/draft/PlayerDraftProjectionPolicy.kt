@@ -9,4 +9,6 @@ object PlayerDraftProjectionPolicy {
     const val OVERVIEW_COMPOSABLE: String = "PlayerDraftProjectionLine"
 
     const val ENGINE: String = "PlayerDraftProjectionEngine"
+
+    const val NATIONAL_POOL: String = "NationalDraftTop60Pool"
 }
