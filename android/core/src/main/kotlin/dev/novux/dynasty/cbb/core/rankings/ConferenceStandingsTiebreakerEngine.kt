@@ -40,41 +40,120 @@ object ConferenceStandingsTiebreakerEngine {
             overallRecords = records,
             stack = stack,
         )
-        return rows.sortedWith { a, b ->
-            compareByRecord(a, b).takeIf { it != 0 } ?: run {
-                compareTiebreakStack(a, b, context).takeIf { it != 0 } ?: a.displayName.compareTo(b.displayName)
-            }
+        val grouped = rows.groupBy { it.wins to it.losses }
+        val recordKeys = grouped.keys.sortedWith(
+            compareByDescending<Pair<Int, Int>> { it.first }.thenBy { it.second },
+        )
+        return recordKeys.flatMap { key ->
+            sortTiedGroup(grouped[key].orEmpty(), context)
         }
+    }
+
+    private fun sortTiedGroup(
+        group: List<ConferenceTeamRecordRow>,
+        context: SortContext,
+    ): List<ConferenceTeamRecordRow> {
+        if (group.size <= 1) return group
+        var buckets = listOf(group)
+        for (key in context.stack) {
+            val next = mutableListOf<List<ConferenceTeamRecordRow>>()
+            for (bucket in buckets) {
+                if (bucket.size <= 1) {
+                    next.add(bucket)
+                    continue
+                }
+                next.addAll(splitByTiebreakerKey(bucket, key, context))
+            }
+            buckets = next
+            if (buckets.all { it.size == 1 }) break
+        }
+        return buckets.flatMap { bucket ->
+            if (bucket.size <= 1) bucket else bucket.sortedBy { it.displayName }
+        }
+    }
+
+    private fun splitByTiebreakerKey(
+        bucket: List<ConferenceTeamRecordRow>,
+        key: String,
+        context: SortContext,
+    ): List<List<ConferenceTeamRecordRow>> {
+        val normalized = key.trim().lowercase()
+        return when (normalized) {
+            "h2h" -> splitByMiniLeagueOrPairwise(bucket, context.confGames) { pool, teamId ->
+                ConferenceStandingsH2hMiniLeague.recordAmong(teamId, pool, context.confGames).let { rec ->
+                    Triple(rec.wins, rec.losses, rec.pointDifferential)
+                }
+            }
+            "h2h-point-diff" -> splitByMiniLeagueOrPairwise(bucket, context.confGames) { pool, teamId ->
+                val rec = ConferenceStandingsH2hMiniLeague.recordAmong(teamId, pool, context.confGames)
+                Triple(rec.pointDifferential, 0, 0)
+            }
+            "record-vs-top-teams" -> splitByMetric(bucket) { row ->
+                val top = topTeamsInConference(context)
+                winsAgainstSet(row.teamId, top, context.confGames)
+            }
+            "record-vs-common-opponents" -> splitByPairwiseCommon(bucket, context)
+            "point-differential" -> splitByMetric(bucket) { row ->
+                conferencePointDiff(row.teamId, context.confGames)
+            }
+            "coin-flip" -> splitByMetric(bucket) { row ->
+                abs((row.teamId + context.conferenceId).hashCode())
+            }
+            else -> listOf(bucket)
+        }
+    }
+
+    private fun splitByMetric(
+        bucket: List<ConferenceTeamRecordRow>,
+        metric: (ConferenceTeamRecordRow) -> Int,
+    ): List<List<ConferenceTeamRecordRow>> =
+        bucket.groupBy { metric(it) }
+            .entries
+            .sortedByDescending { it.key }
+            .map { it.value }
+
+    private fun splitByPairwiseCommon(
+        bucket: List<ConferenceTeamRecordRow>,
+        context: SortContext,
+    ): List<List<ConferenceTeamRecordRow>> {
+        if (bucket.size == 2) {
+            val a = bucket[0]
+            val b = bucket[1]
+            val cmp = compareCommonOpponents(a.teamId, b.teamId, context)
+            if (cmp == 0) return listOf(bucket)
+            return if (cmp < 0) listOf(listOf(a), listOf(b)) else listOf(listOf(b), listOf(a))
+        }
+        return splitByMetric(bucket) { row ->
+            val opps = opponentsPlayed(row.teamId, context.confGames)
+            val common = opps.intersect(bucket.map { it.teamId }.toSet())
+            winsAgainstSet(row.teamId, common, context.confGames)
+        }
+    }
+
+    private fun splitByMiniLeagueOrPairwise(
+        bucket: List<ConferenceTeamRecordRow>,
+        games: List<LeagueGameResult>,
+        miniKey: (Set<String>, String) -> Triple<Int, Int, Int>,
+    ): List<List<ConferenceTeamRecordRow>> {
+        if (bucket.size == 2) {
+            val a = bucket[0]
+            val b = bucket[1]
+            val cmp = compareH2H(a.teamId, b.teamId, games)
+            if (cmp == 0) return listOf(bucket)
+            return if (cmp < 0) listOf(listOf(a), listOf(b)) else listOf(listOf(b), listOf(a))
+        }
+        val pool = bucket.map { it.teamId }.toSet()
+        return bucket.groupBy { miniKey(pool, it.teamId) }
+            .entries
+            .sortedWith(
+                compareByDescending<Map.Entry<Triple<Int, Int, Int>, List<ConferenceTeamRecordRow>>> { it.key.first }
+                    .thenBy { it.key.second }
+                    .thenByDescending { it.key.third },
+            )
+            .map { it.value }
     }
 
     private val DEFAULT_STACK = listOf("h2h", "h2h-point-diff", "record-vs-top-teams", "coin-flip")
-
-    private fun compareByRecord(a: ConferenceTeamRecordRow, b: ConferenceTeamRecordRow): Int =
-        compareByDescending<ConferenceTeamRecordRow> { it.wins }
-            .thenBy { it.losses }
-            .compare(a, b)
-
-    private fun compareTiebreakStack(
-        a: ConferenceTeamRecordRow,
-        b: ConferenceTeamRecordRow,
-        context: SortContext,
-    ): Int {
-        if (a.wins != b.wins || a.losses != b.losses) return 0
-        for (key in context.stack) {
-            val cmp = when (key.trim().lowercase()) {
-                "h2h" -> compareH2H(a.teamId, b.teamId, context.confGames)
-                "h2h-point-diff" -> compareH2HPointDiff(a.teamId, b.teamId, context.confGames)
-                "conference-record" -> 0
-                "record-vs-top-teams" -> compareRecordVsTop(a.teamId, b.teamId, context)
-                "record-vs-common-opponents" -> compareCommonOpponents(a.teamId, b.teamId, context)
-                "point-differential" -> compareConfPointDiff(a.teamId, b.teamId, context.confGames)
-                "coin-flip" -> coinFlip(a.teamId, b.teamId, context.conferenceId)
-                else -> 0
-            }
-            if (cmp != 0) return cmp
-        }
-        return 0
-    }
 
     private fun conferenceRecord(teamId: String, confGames: List<LeagueGameResult>): Pair<Int, Int> {
         var wins = 0
@@ -97,25 +176,6 @@ object ConferenceStandingsTiebreakerEngine {
             (match.homeTeamId == team && match.awayTeamId == opponent && match.homeScore > match.awayScore) ||
                 (match.awayTeamId == team && match.homeTeamId == opponent && match.awayScore > match.homeScore)
         }
-
-    private fun compareH2HPointDiff(a: String, b: String, games: List<LeagueGameResult>): Int =
-        h2hPointDiff(b, a, games).compareTo(h2hPointDiff(a, b, games))
-
-    private fun h2hPointDiff(team: String, opponent: String, games: List<LeagueGameResult>): Int =
-        games.sumOf { game ->
-            when {
-                game.homeTeamId == team && game.awayTeamId == opponent -> game.homeScore - game.awayScore
-                game.awayTeamId == team && game.homeTeamId == opponent -> game.awayScore - game.homeScore
-                else -> 0
-            }
-        }
-
-    private fun compareRecordVsTop(a: String, b: String, context: SortContext): Int {
-        val top = topTeamsInConference(context)
-        val winsA = winsAgainstSet(a, top, context.confGames)
-        val winsB = winsAgainstSet(b, top, context.confGames)
-        return winsB.compareTo(winsA)
-    }
 
     private fun topTeamsInConference(context: SortContext): Set<String> {
         val ranked = context.teamIds
@@ -159,12 +219,6 @@ object ConferenceStandingsTiebreakerEngine {
             }
         }.toSet()
 
-    private fun compareConfPointDiff(a: String, b: String, games: List<LeagueGameResult>): Int {
-        val diffA = conferencePointDiff(a, games)
-        val diffB = conferencePointDiff(b, games)
-        return diffB.compareTo(diffA)
-    }
-
     private fun conferencePointDiff(team: String, games: List<LeagueGameResult>): Int =
         games.sumOf { game ->
             when (team) {
@@ -173,12 +227,6 @@ object ConferenceStandingsTiebreakerEngine {
                 else -> 0
             }
         }
-
-    private fun coinFlip(a: String, b: String, conferenceId: String): Int {
-        val rollA = abs((a + conferenceId).hashCode())
-        val rollB = abs((b + conferenceId).hashCode())
-        return rollB.compareTo(rollA)
-    }
 
     private data class SortContext(
         val conferenceId: String,

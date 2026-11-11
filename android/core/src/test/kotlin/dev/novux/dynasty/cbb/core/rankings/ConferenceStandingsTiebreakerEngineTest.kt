@@ -62,6 +62,23 @@ class ConferenceStandingsTiebreakerEngineTest {
     }
 
     @Test
+    fun miniLeagueRanksThreeTeamTieGroup() {
+        val games = listOf(
+            LeagueGameResult("a", "b", 70, 60, rsWeekIndex = 1),
+            LeagueGameResult("a", "c", 72, 65, rsWeekIndex = 2),
+            LeagueGameResult("b", "c", 68, 60, rsWeekIndex = 3),
+        )
+        val rows = ConferenceStandingsTiebreakerEngine.sortConferenceTeams(
+            conferenceId = "conf",
+            teams = listOf(teamA, teamB, teamC),
+            records = emptyMap(),
+            seasonResults = games,
+            tiebreakers = listOf("h2h"),
+        )
+        assertEquals(listOf("a", "b", "c"), rows.map { it.teamId })
+    }
+
+    @Test
     fun sortsByConferenceWinsBeforeTiebreakers() {
         val rows = ConferenceStandingsTiebreakerEngine.sortConferenceTeams(
             conferenceId = "conf",

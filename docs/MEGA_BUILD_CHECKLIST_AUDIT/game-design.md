@@ -175,7 +175,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-GDD-099 | P0 | FAIL | Tiebreakers · head-to-head module | No `ConferenceStandingsTiebreakerEngine` or h2h mini-league sort. | grep `Tiebreaker` in `android/` (pack only) |
+| MEGA-GDD-099 | P0 | PASS | Tiebreakers · head-to-head module | `ConferenceStandingsH2hMiniLeague` + bucketed `h2h` sort for 3+ team ties. | `ConferenceStandingsH2hMiniLeague.kt`, `ConferenceStandingsTiebreakerEngine.kt` |
 | MEGA-GDD-100 | P0 | PASS | Tiebreakers · ordered stack (PD, vs top N, coin flip) | Pack-ordered stack (`h2h`, `h2h-point-diff`, `record-vs-top-teams`, …) applied when conf W-L tied. | `ConferenceStandingsTiebreakerEngine.kt` |
 | MEGA-GDD-101 | P1 | GAP | NCBA seeding · conf champ auto bid + résumé at-large | Selection engines exist; tie order for conf standings does not feed auto-bid seed slot quality when teams tied. | `SelectionSundayEngine.kt`, MEGA-GDD-041 |
 | MEGA-GDD-102 | P1 | RISK | Schedule symmetry · 365-team generator | `ScratchAuditTest` logs asymmetric stubs. | `ScratchAuditTest.kt` |
