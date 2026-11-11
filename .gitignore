@@ -7,6 +7,9 @@ android/.kotlin/
 android/.gradle/
 android/**/build/
 android/local.properties
+android/app/upload.keystore
+*.jks
+upload-keystore.jks
 *.iml
 .idea/
 .DS_Store

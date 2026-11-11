@@ -1,6 +1,7 @@
 package dev.novux.dynasty.cbb.database.save
 
 import dev.novux.dynasty.cbb.core.save.SaveSlotSummary
+import dev.novux.dynasty.cbb.core.save.SaveSlots
 
 fun SaveSlotEntity.toSummary(): SaveSlotSummary {
     val occupied = !dynastyId.isNullOrBlank()
