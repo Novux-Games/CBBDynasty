@@ -25,6 +25,7 @@ sealed class StaffManageResult {
 class SchoolStaffRepository(
     private val database: DynastyDatabase,
     private val packRepository: PackRepository,
+    private val headCoachUserContractRepository: HeadCoachUserContractRepository,
 ) {
     private val staffDao = database.dynastyStaffDao()
     private val coachDao = database.dynastyCoachDao()
@@ -50,6 +51,8 @@ class SchoolStaffRepository(
         val defensive = DefensiveSchemePreset.fromWire(coach.defensiveSchemeWire) ?: DefensiveSchemePreset.ManToMan
         val alma = coach.almaMaterTeamId?.let { packRepository.activeSession().index.team(it)?.displayName }
         val programPrestige = team?.programPrestige ?: 50
+        headCoachUserContractRepository.ensureDefaults(dynastyId)
+        val contractState = headCoachUserContractRepository.load(dynastyId)
         val head = HeadCoachCardFactory.build(
             dynastyId = dynastyId,
             displayName = HeadCoachCardFactory.displayName(coach.firstName, coach.lastName, coach.nameSuffixWire),
@@ -62,6 +65,9 @@ class SchoolStaffRepository(
             seasonRecordLabel = seasonRecordLabel,
             avatarPresetId = coach.avatarPresetId,
             programPrestige = programPrestige,
+            contractLengthYears = contractState.contractLengthYears,
+            contractYearsLeft = contractState.contractYearsLeft,
+            annualSalaryUsd = contractState.annualSalaryUsd,
         )
         val rows = staffDao.listForDynasty(dynastyId)
         val assistants = rows.mapNotNull { it.toAssistant(schoolName, seasonRecordLabel) }

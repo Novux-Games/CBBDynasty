@@ -32,6 +32,7 @@ import dev.novux.dynasty.cbb.core.coach.achievements.HeadCoachAchievements
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachRatings
 import dev.novux.dynasty.cbb.core.coach.contract.HeadCoachContractEngine
+import dev.novux.dynasty.cbb.core.coach.contract.HeadCoachExtensionOffer
 import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentStatus
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillBranch
@@ -62,6 +63,9 @@ fun HeadCoachCardScreen(
     onOpenSchoolHub: (() -> Unit)? = null,
     coachAchievements: HeadCoachAchievements? = null,
     coachDeepTabs: CoachCardDeepTabsSnapshot? = null,
+    extensionOffer: HeadCoachExtensionOffer? = null,
+    onAcceptExtension: () -> Unit = {},
+    onDeclineExtension: () -> Unit = {},
     selectedTab: CoachCardTab = CoachCardTab.Overview,
     onSelectedTabChange: (CoachCardTab) -> Unit = {},
     modifier: Modifier = Modifier,
@@ -122,6 +126,9 @@ fun HeadCoachCardScreen(
                     onResignTap = { showResignConfirm = true },
                     onTerminationTap = { showTerminationConfirm = true },
                     onOpenJobCenter = onOpenJobCenter,
+                    extensionOffer = extensionOffer,
+                    onAcceptExtension = onAcceptExtension,
+                    onDeclineExtension = onDeclineExtension,
                 )
                 CoachCardTab.History -> CoachCardHistoryDeepTab(coachDeepTabs)
                 CoachCardTab.HallOfFame -> CoachCardHofDeepTab(coachDeepTabs)

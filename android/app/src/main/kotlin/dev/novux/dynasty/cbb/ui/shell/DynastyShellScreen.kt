@@ -218,6 +218,9 @@ fun DynastyShellScreen(
     var coachDeepTabs by remember {
         mutableStateOf<dev.novux.dynasty.cbb.core.coach.card.deep.CoachCardDeepTabsSnapshot?>(null)
     }
+    var headCoachExtensionOffer by remember {
+        mutableStateOf<dev.novux.dynasty.cbb.core.coach.contract.HeadCoachExtensionOffer?>(null)
+    }
     var recruitingLedger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
     var recruitingDashContext by remember { mutableStateOf<InSeasonRecruitingDashboardContext?>(null) }
     val coachPreviewSheetState = rememberCoachPreviewSheetState()
@@ -336,7 +339,9 @@ fun DynastyShellScreen(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
         )
-        coachDeepTabs = context.requireDynastyApplication().coachCardDeepTabsRepository.loadDeepTabs(
+        val app = context.requireDynastyApplication()
+        val contractState = app.headCoachUserContractRepository.load(loaded.dynastyId)
+        coachDeepTabs = app.coachCardDeepTabsRepository.loadDeepTabs(
             dynastyId = loaded.dynastyId,
             seasonIndex = loaded.metadata.seasonIndex,
             schoolDisplayName = userSchool?.displayName
@@ -345,6 +350,16 @@ fun DynastyShellScreen(
             currentRecordLabel = staffRoster?.headCoach?.seasonRecordLabel ?: "0-0",
         )
         coachSecurity = coachSecurityRepository.loadForUserDynasty(loaded.dynastyId)
+        headCoachExtensionOffer = staffRoster?.headCoach?.let { hc ->
+            coachSecurity?.let { security ->
+                dev.novux.dynasty.cbb.core.coach.contract.HeadCoachExtensionOfferEngine.incoming(
+                    card = hc,
+                    security = security,
+                    dismissedForSeasonIndex = contractState.declinedExtensionSeasonIndex,
+                    currentSeasonIndex = loaded.metadata.seasonIndex,
+                )
+            }
+        }
         rosterPlayers = rosterRepository.listPlayers(loaded.dynastyId)
         fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
         rosterPreview = fullRoster.take(6)
@@ -676,6 +691,32 @@ fun DynastyShellScreen(
                             )
                             coachSkillState = next
                             coachSkillPointBank = next.unspentBank
+                        }
+                    },
+                    extensionOffer = headCoachExtensionOffer,
+                    onAcceptExtension = {
+                        scope.launch {
+                            val offer = headCoachExtensionOffer ?: return@launch
+                            val appContext = context.requireDynastyApplication()
+                            appContext.headCoachUserContractRepository.acceptExtension(loaded.dynastyId, offer)
+                            headCoachExtensionOffer = null
+                            val record = staffRoster?.headCoach?.seasonRecordLabel ?: "0-0"
+                            staffRoster = staffRepository.loadStaffRoster(loaded.dynastyId, record)
+                            staffRoster?.headCoach?.let { updated ->
+                                coachView = ShellCoachView.HeadCoach(
+                                    updated,
+                                    headCoachCardRoute.withTab(view.route.selectedTab),
+                                )
+                            }
+                        }
+                    },
+                    onDeclineExtension = {
+                        scope.launch {
+                            context.requireDynastyApplication().headCoachUserContractRepository.declineExtension(
+                                loaded.dynastyId,
+                                loaded.metadata.seasonIndex,
+                            )
+                            headCoachExtensionOffer = null
                         }
                     },
                     modifier = Modifier.weight(1f),

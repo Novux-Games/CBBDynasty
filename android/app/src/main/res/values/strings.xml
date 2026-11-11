@@ -366,6 +366,10 @@
     <string name="coach_contract_length_detail">%1$d-year deal · %2$d year(s) remaining</string>
     <string name="coach_contract_goals_title">Performance goals</string>
     <string name="coach_contract_extension_likely">Extension likely — AD trust and job security are strong.</string>
+    <string name="coach_extension_offer_title">Incoming extension offer</string>
+    <string name="coach_extension_offer_body">+%1$d years on your deal (%2$d years remaining) · %3$s annual salary</string>
+    <string name="coach_extension_offer_accept">Accept extension</string>
+    <string name="coach_extension_offer_decline">Decline for now</string>
     <string name="coach_contract_view_staff_ad_trust">View AD trust on School → Staff</string>
     <string name="coach_contract_resign_cta">Resign / retire</string>
     <string name="coach_contract_resign_title">Resign from program?</string>

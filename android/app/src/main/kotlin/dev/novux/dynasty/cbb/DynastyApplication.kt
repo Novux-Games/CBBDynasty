@@ -207,6 +207,9 @@ class DynastyApplication : Application() {
     lateinit var coachCardDeepTabsRepository: dev.novux.dynasty.cbb.data.coach.CoachCardDeepTabsRepository
         private set
 
+    lateinit var headCoachUserContractRepository: dev.novux.dynasty.cbb.data.coach.HeadCoachUserContractRepository
+        private set
+
     lateinit var coachSkillPointRepository: CoachSkillPointRepository
         private set
 
@@ -359,7 +362,14 @@ class DynastyApplication : Application() {
             leagueScheduleRepository,
             earlySeasonBracketRepository,
         )
-        schoolStaffRepository = SchoolStaffRepository(database, packRepository)
+        headCoachUserContractRepository = dev.novux.dynasty.cbb.data.coach.HeadCoachUserContractRepository(
+            applicationContext,
+        )
+        schoolStaffRepository = SchoolStaffRepository(
+            database,
+            packRepository,
+            headCoachUserContractRepository,
+        )
         schoolHubRepository = SchoolHubRepository(
             database,
             packRepository,

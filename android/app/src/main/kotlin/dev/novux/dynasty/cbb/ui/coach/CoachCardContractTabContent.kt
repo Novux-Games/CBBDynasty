@@ -11,6 +11,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.coach.card.AssistantCoachCard
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.contract.HeadCoachContractDetail
+import dev.novux.dynasty.cbb.core.coach.contract.HeadCoachExtensionOffer
 import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentStatus
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.coach.security.JobSecurityTier
@@ -24,6 +25,9 @@ fun HeadCoachContractTab(
     onResignTap: () -> Unit,
     onTerminationTap: () -> Unit,
     onOpenJobCenter: () -> Unit,
+    extensionOffer: HeadCoachExtensionOffer? = null,
+    onAcceptExtension: () -> Unit = {},
+    onDeclineExtension: () -> Unit = {},
 ) {
     val firedRisk = userCoachSecurity?.jobSecurity?.tier in setOf(
         JobSecurityTier.Critical,
@@ -35,12 +39,19 @@ fun HeadCoachContractTab(
             contractDetail.firingRiskCopy?.let {
                 Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
             }
-            if (contractDetail.extensionLikely) {
-                Text(
-                    stringResource(R.string.coach_contract_extension_likely),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary,
+            when {
+                extensionOffer != null -> CoachContractExtensionOfferCard(
+                    offer = extensionOffer,
+                    onAccept = onAcceptExtension,
+                    onDecline = onDeclineExtension,
                 )
+                contractDetail.extensionLikely -> {
+                    Text(
+                        stringResource(R.string.coach_contract_extension_likely),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
             }
         },
         termsBlock = {
