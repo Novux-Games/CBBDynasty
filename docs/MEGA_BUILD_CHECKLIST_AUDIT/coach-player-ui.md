@@ -190,8 +190,8 @@
 
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
-| MEGA-COACH-108 | P0 | FAIL | `CoachCardRoute` with tab state save/restore | Overlay enum only; no Navigation tab back stack |
-| MEGA-COACH-109 | P0 | FAIL | Overview tab default selected | N/A — no tabs |
+| MEGA-COACH-108 | P0 | PASS | `CoachCardRoute` with tab state save/restore | `CoachCardRoute` + `rememberSaveable` head tab; shell lifts tab state | `CoachCardRoute.kt`, `DynastyShellScreen.kt`, `HeadCoachCardScreen.kt` |
+| MEGA-COACH-109 | P0 | PASS | Overview tab default selected | Default `CoachCardTab.Overview` on route | `CoachCardRoute.HeadCoach` |
 | MEGA-COACH-110 | P1 | FAIL | Contract tab hosts salary/buyout/goals blocks | No tab shell |
 | MEGA-COACH-111 | P1 | FAIL | History tab season list + expand | No `CoachSeasonHistory` UI |
 | MEGA-COACH-112 | P2 | FAIL | HOF tab list (national + conference pools) | No coach-attributed HOF query |

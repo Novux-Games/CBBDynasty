@@ -53,9 +53,10 @@ fun HeadCoachCardScreen(
     onSpendSkill: (CoachSkillBranch) -> Unit = {},
     onAutoSpendChanged: (Boolean) -> Unit = {},
     onOpenStaffTab: () -> Unit = {},
+    selectedTab: CoachCardTab = CoachCardTab.Overview,
+    onSelectedTabChange: (CoachCardTab) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
-    var selectedTab by remember { mutableStateOf(CoachCardTab.Overview) }
     val tabs = CoachCardTab.HEAD_COACH_ORDER
     val contractDetail = remember(card, userCoachSecurity, programPrestige) {
         HeadCoachContractEngine.derive(card, userCoachSecurity, programPrestige)
@@ -68,7 +69,7 @@ fun HeadCoachCardScreen(
             tabs.forEach { tab ->
                 Tab(
                     selected = tab == selectedTab,
-                    onClick = { selectedTab = tab },
+                    onClick = { onSelectedTabChange(tab) },
                     text = { Text(coachTabLabel(tab)) },
                 )
             }

@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -88,6 +89,8 @@ import dev.novux.dynasty.cbb.ui.postgame.PostgameInjurySheet
 import dev.novux.dynasty.cbb.ui.coach.AssistantCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.CoachPreviewBottomSheet
 import dev.novux.dynasty.cbb.ui.coach.CoachPreviewTarget
+import dev.novux.dynasty.cbb.ui.coach.CoachCardRoute
+import dev.novux.dynasty.cbb.ui.coach.CoachCardTab
 import dev.novux.dynasty.cbb.ui.coach.HeadCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.SchoolStaffTabPanel
 import dev.novux.dynasty.cbb.ui.coach.rememberCoachPreviewSheetState
@@ -110,8 +113,15 @@ private sealed class ShellCoachView {
     data object Hub : ShellCoachView()
     data object Staff : ShellCoachView()
     data class School(val overview: SchoolHubOverview) : ShellCoachView()
-    data class HeadCoach(val card: HeadCoachCard) : ShellCoachView()
-    data class Assistant(val card: AssistantCoachCard) : ShellCoachView()
+    data class HeadCoach(
+        val card: HeadCoachCard,
+        val route: CoachCardRoute.HeadCoach,
+    ) : ShellCoachView()
+
+    data class Assistant(
+        val card: AssistantCoachCard,
+        val route: CoachCardRoute.Assistant,
+    ) : ShellCoachView()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -147,6 +157,12 @@ fun DynastyShellScreen(
     var coachSecurity by remember { mutableStateOf<CoachSecuritySnapshot?>(null) }
     var userSchool by remember { mutableStateOf<SchoolHubOverview?>(null) }
     var coachView by remember { mutableStateOf<ShellCoachView>(ShellCoachView.Hub) }
+    var headCoachTabWire by rememberSaveable { mutableStateOf(CoachCardTab.Overview.wire) }
+    val headCoachCardRoute = CoachCardRoute.HeadCoach(
+        dynastyId = loaded.dynastyId,
+        selectedTabWire = headCoachTabWire,
+    )
+    var assistantCoachRoutes by remember { mutableStateOf(mapOf<String, CoachCardRoute.Assistant>()) }
     var rosterPreview by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     var fullScreenPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
@@ -318,6 +334,16 @@ fun DynastyShellScreen(
         },
     )
 
+    val openHeadCoachFull: (HeadCoachCard) -> Unit = { card ->
+        coachView = ShellCoachView.HeadCoach(card, headCoachCardRoute)
+    }
+    val assistantRouteFor: (AssistantCoachCard) -> CoachCardRoute.Assistant = { card ->
+        assistantCoachRoutes[card.staffId]
+            ?: CoachCardRoute.Assistant(loaded.dynastyId, card.staffId)
+    }
+    val openAssistantFull: (AssistantCoachCard) -> Unit = { card ->
+        coachView = ShellCoachView.Assistant(card, assistantRouteFor(card))
+    }
     val openHeadCoachPreview: (HeadCoachCard) -> Unit = { card ->
         coachPreviewTarget = CoachPreviewTarget.HeadCoach(card)
     }
@@ -357,8 +383,8 @@ fun DynastyShellScreen(
         onDismiss = { coachPreviewTarget = null },
         onViewMore = {
             when (val target = coachPreviewTarget) {
-                is CoachPreviewTarget.HeadCoach -> coachView = ShellCoachView.HeadCoach(target.card)
-                is CoachPreviewTarget.Assistant -> coachView = ShellCoachView.Assistant(target.card)
+                is CoachPreviewTarget.HeadCoach -> openHeadCoachFull(target.card)
+                is CoachPreviewTarget.Assistant -> openAssistantFull(target.card)
                 null -> Unit
             }
         },
@@ -408,6 +434,14 @@ fun DynastyShellScreen(
                     skillState = coachSkillState,
                     programPrestige = userSchool?.programPrestige ?: 50,
                     seasonIndex = loaded.metadata.seasonIndex,
+                    selectedTab = view.route.selectedTab,
+                    onSelectedTabChange = { tab ->
+                        headCoachTabWire = tab.wire
+                        coachView = ShellCoachView.HeadCoach(
+                            view.card,
+                            headCoachCardRoute.withTab(tab),
+                        )
+                    },
                     onOpenStaffTab = { coachView = ShellCoachView.Staff },
                     displayRatings = dev.novux.dynasty.cbb.core.coach.skill.HeadCoachSkillRatings.effective(
                         view.card.ratings,

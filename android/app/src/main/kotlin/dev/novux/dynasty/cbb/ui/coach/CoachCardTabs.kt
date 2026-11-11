@@ -10,5 +10,8 @@ enum class CoachCardTab(val wire: String) {
 
     companion object {
         val HEAD_COACH_ORDER = listOf(Overview, Contract, History, HallOfFame, Draft)
+
+        fun fromWire(wire: String): CoachCardTab? =
+            entries.firstOrNull { it.wire == wire }
     }
 }
