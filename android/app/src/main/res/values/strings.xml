@@ -760,7 +760,7 @@
     <string name="shell_menu_recruiting_closed">Recruiting (cycle closed)</string>
     <string name="recruiting_cycle_closed_body">Recruiting is closed for this cycle after Signing Day. Finish offseason administration and preseason setup; the next class opens in the next offseason.</string>
     <string name="shell_menu_statistics_hub">Statistics</string>
-    <string name="shell_menu_rankings_hub">Rankings</string>
+    <string name="shell_menu_rankings_hub">Team rankings</string>
     <string name="shell_menu_history_hub">History</string>
     <string name="shell_menu_conf_tourney">Conference tournament</string>
     <string name="shell_menu_march_mayhem">March Mayhem</string>
@@ -788,7 +788,8 @@
     <string name="statistics_hub_empty_season">Stat leaders update after your team completes a few regular-season games.</string>
     <string name="statistics_hub_no_qualifiers">No qualifiers yet.</string>
     <string name="statistics_hub_no_conference">Conference not found.</string>
-    <string name="rankings_hub_title">Rankings</string>
+    <string name="rankings_hub_title">Team rankings</string>
+    <string name="rankings_hub_scope">Programs — NCBA NET and polls. Not recruiting class ranks.</string>
     <string name="rankings_hub_placeholder">NCBA NET #1–#365, Media and Coaches polls, and conference standings will publish here soon.</string>
     <string name="rankings_tab_net">NCBA NET</string>
     <string name="rankings_tab_media">Media poll</string>

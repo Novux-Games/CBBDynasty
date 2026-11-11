@@ -28,6 +28,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.rankings.ConferenceStandingsGroup
 import dev.novux.dynasty.cbb.core.rankings.RankingsHubSnapshot
 import dev.novux.dynasty.cbb.core.rankings.RankingsHubTeamRow
+import dev.novux.dynasty.cbb.core.rankings.RankingsHubUiPolicy
 
 private enum class RankingsHubTab { Net, Media, Coaches, Conference }
 
@@ -38,9 +39,20 @@ fun RankingsHubScreen(
     onBack: () -> Unit,
     onPublishPreseason: (() -> Unit)? = null,
 ) {
-    var tabIndex by remember { mutableIntStateOf(0) }
+    var tabIndex by remember { mutableIntStateOf(RankingsHubUiPolicy.DEFAULT_TAB_INDEX) }
     Column(modifier = Modifier.fillMaxSize()) {
-        TopAppBar(title = { Text(stringResource(R.string.rankings_hub_title)) })
+        TopAppBar(
+            title = {
+                Column {
+                    Text(stringResource(R.string.rankings_hub_title))
+                    Text(
+                        text = stringResource(R.string.rankings_hub_scope),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            },
+        )
         OutlinedButton(onClick = onBack, modifier = Modifier.padding(horizontal = 16.dp)) {
             Text(stringResource(R.string.dynasty_shell_back))
         }
@@ -51,6 +63,11 @@ fun RankingsHubScreen(
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
+                Text(
+                    stringResource(R.string.rankings_hub_scope),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
                 Text(
                     stringResource(R.string.rankings_hub_preseason_review),
                     style = MaterialTheme.typography.bodyMedium,
