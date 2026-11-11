@@ -26,12 +26,12 @@
 | [`planning-notes-traceability.md`](MEGA_BUILD_CHECKLIST_AUDIT/planning-notes-traceability.md) | Every **Done** row in `planning-notes.md` + 33-file inventory | 115 |
 | [`integration-playtest-regression.md`](MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md) | Perf, persistence, nav, playtest, Play/R8 release | 170 |
 
-**Scale:** **~1,788** checklist table rows across **10** shards (**~1,650** unique `MEGA-*` IDs; summary tables may repeat hot P0 IDs).  
+**Scale:** **~1,650** unique `MEGA-*` mentions in shards (rollup text repeats some IDs). **`mega_queue.py`** ingests **~1,650** primary audit rows (both `| ID | P0 | FAIL |` and `| ID | GAP |` formats); **~710+ already SHIP/PASS/DONE** → **~950 open** in [`MEGA_BUILD_QUEUE.json`](MEGA_BUILD_QUEUE.json) (rebuild with `build`).  
 **Method:** Composer sub-agent spec↔code audits (static trace + grep; not a substitute for device QA — see **`MEGA-QA-*`** for executable acceptance).
 
 ## Autonomous queue (subscription)
 
-See **[`MEGA_BUILD_SUBSCRIPTION.md`](MEGA_BUILD_SUBSCRIPTION.md)** — Cloud Agent timer **`mega-build-queue`** implements **one open row per wake**, then re-subscribes until [`MEGA_BUILD_QUEUE.json`](MEGA_BUILD_QUEUE.json) is exhausted. CLI: [`planning/tools/mega_queue.py`](../planning/tools/mega_queue.py).
+See **[`MEGA_BUILD_SUBSCRIPTION.md`](MEGA_BUILD_SUBSCRIPTION.md)** — timer **`mega-build-queue`**: one row per wake; **all commits** go to **`cursor/mega-build-executor-cb09`** and **one integration PR** (`update_pr` only). CLI: [`planning/tools/mega_queue.py`](../planning/tools/mega_queue.py).
 
 **How to use (manual)**
 

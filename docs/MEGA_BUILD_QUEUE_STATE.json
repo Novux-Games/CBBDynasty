@@ -1,6 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "index": 0,
   "completedIds": [],
-  "subscriptionName": "mega-build-queue"
+  "subscriptionName": "mega-build-queue",
+  "integrationBranch": "cursor/mega-build-executor-cb09",
+  "baseBranch": "main",
+  "pullRequestNumber": null,
+  "pullRequestUrl": null
 }
