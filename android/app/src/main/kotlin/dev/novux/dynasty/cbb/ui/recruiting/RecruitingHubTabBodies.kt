@@ -149,36 +149,46 @@ private fun HsJucoProspectRow(
 @Composable
 fun PortalRecruitingTabBody(
     windowOpen: Boolean,
-    entrants: List<PortalEntrant>,
     modifier: Modifier = Modifier,
+    top40Content: @Composable () -> Unit = {},
+    recommendedContent: @Composable () -> Unit = {},
 ) {
     if (!windowOpen) {
         Text(
             stringResource(R.string.recruiting_portal_window_closed),
             style = MaterialTheme.typography.bodyLarge,
+            modifier = modifier,
         )
         return
     }
-    if (entrants.isEmpty()) {
-        Text(
-            stringResource(R.string.recruiting_portal_empty),
-            style = MaterialTheme.typography.bodyLarge,
-        )
-        return
+    Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        top40Content()
+        recommendedContent()
     }
+}
+
+@Composable
+fun PortalTop40Section(
+    entrants: List<PortalEntrant>,
+    modifier: Modifier = Modifier,
+) {
     val ranked = PortalRecruitingHub.rankedEntrants(entrants)
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        item {
-            Text(
-                stringResource(R.string.recruiting_portal_pool_summary, ranked.size),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-        items(ranked, key = { it.entrantId }) { entrant ->
+    if (ranked.isEmpty()) {
+        Text(
+            stringResource(R.string.recruiting_portal_top40_pending),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = modifier,
+        )
+        return
+    }
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text(
+            stringResource(R.string.recruiting_portal_top40_heading),
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.SemiBold,
+        )
+        ranked.forEach { entrant ->
             Text(
                 stringResource(
                     R.string.recruiting_portal_entrant_row,
@@ -187,7 +197,8 @@ fun PortalRecruitingTabBody(
                     entrant.classYear.name,
                     entrant.priorProgramId,
                 ),
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }

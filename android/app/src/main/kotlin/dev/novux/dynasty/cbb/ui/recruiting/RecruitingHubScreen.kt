@@ -41,7 +41,9 @@ import dev.novux.dynasty.cbb.core.nil.NilBudgetLedger
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.portal.PortalCycleState
 import dev.novux.dynasty.cbb.core.portal.PortalEntrant
+import dev.novux.dynasty.cbb.core.portal.PortalRecruitProspectMapper
 import dev.novux.dynasty.cbb.core.portal.PortalRecruitingHub
+import dev.novux.dynasty.cbb.core.portal.PortalStarBands
 import dev.novux.dynasty.cbb.core.recruiting.HsJucoBoard
 import dev.novux.dynasty.cbb.core.recruiting.HsJucoRecruitBoard
 import dev.novux.dynasty.cbb.core.recruiting.RecruitProspect
@@ -171,6 +173,36 @@ fun RecruitingHubScreen(
         } else {
             state.onOffseasonWeekStarted(calendarPosition.weekIndex.coerceAtLeast(2)).entrants
         }
+    }
+
+    val portalRecommendedRows = remember(
+        portalEntrants,
+        portalWindowOpen,
+        schoolContext,
+        recommendedConfig,
+        offerSnapshot,
+        nilRules,
+        interestSpendByProspect,
+    ) {
+        if (!portalWindowOpen) return@remember emptyList()
+        val ctx = schoolContext ?: return@remember emptyList()
+        val entrants = if (portalEntrants.any { it.stars == null }) {
+            PortalStarBands.applyToEntrants(portalEntrants)
+        } else {
+            portalEntrants
+        }
+        if (entrants.isEmpty()) return@remember emptyList()
+        val prospects = entrants.map { entrant ->
+            PortalRecruitProspectMapper.toRecruitProspect(entrant, entrant.priorProgramId)
+        }
+        RecommendedRecruitList.build(
+            prospects,
+            ctx,
+            recommendedConfig,
+            nilOffersByProspect = offerSnapshot,
+            nilRules = nilRules,
+            spendDeltaByProspect = interestSpendByProspect,
+        )
     }
 
     val recommendedRows = remember(
@@ -354,7 +386,104 @@ fun RecruitingHubScreen(
                 )
                 RecruitingHubTab.TransferPortal -> PortalRecruitingTabBody(
                     windowOpen = portalWindowOpen,
-                    entrants = portalEntrants,
+                    modifier = Modifier.weight(1f),
+                    top40Content = {
+                        PortalTop40Section(entrants = portalEntrants)
+                    },
+                    recommendedContent = {
+                        if (portalRecommendedRows.isEmpty()) {
+                            Text(
+                                stringResource(R.string.recruiting_portal_empty),
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                        } else {
+                            Text(
+                                stringResource(R.string.recruiting_portal_recommended_heading),
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                            RecommendedTabBody(
+                                loaded = loaded,
+                                rows = portalRecommendedRows,
+                                schoolContext = resolvedSchoolContext,
+                                recruitingEconomyRepository = recruitingEconomyRepository,
+                                nilRules = nilRules,
+                                nilOffers = nilOffers,
+                                scholarshipOfferPointCost = recruitingActions.scholarshipOffer.cost,
+                                gateRefresh = gateRefresh,
+                                modifier = Modifier.weight(1f),
+                                onSpend = {
+                                    scope.launch {
+                                        recruitingEconomyRepository.spendRefundableAction(
+                                            loaded,
+                                            prospectId = it.prospectId,
+                                            offer = false,
+                                            scout = it.scout,
+                                            officialVisit = it.officialVisit,
+                                            visitDistance = recruitingEconomyRepository.visitDistanceFor(
+                                                it.prospectHomeState,
+                                                resolvedSchoolContext,
+                                            ),
+                                        )
+                                        ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+                                        gateRefresh++
+                                    }
+                                },
+                                onScholarshipOffer = { prospectId ->
+                                    scope.launch {
+                                        recruitingEconomyRepository.spendRefundableAction(
+                                            loaded,
+                                            prospectId = prospectId,
+                                            offer = true,
+                                            scout = false,
+                                            officialVisit = false,
+                                        )
+                                        ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+                                        gateRefresh++
+                                    }
+                                },
+                                onAssignNil = { prospectId, nilAskUsd, offerUsd ->
+                                    scope.launch {
+                                        val poolUsd = nilBasePoolUsd + nilBoostUsd
+                                        nilBudgetRepository.assignOffer(
+                                            loaded.dynastyId,
+                                            loaded.metadata.seasonIndex,
+                                            prospectId,
+                                            nilAskUsd,
+                                            offerUsd,
+                                            nilRules,
+                                            poolUsd,
+                                        )
+                                        nilOffers = nilBudgetRepository.loadOffers(loaded.dynastyId, loaded.metadata.seasonIndex)
+                                        nilLedger = nilBudgetRepository.loadLedger(
+                                            loaded.dynastyId,
+                                            loaded.metadata.seasonIndex,
+                                            poolUsd,
+                                        )
+                                        gateRefresh++
+                                    }
+                                },
+                                onPointAction = { prospectId, action, bonusAmount ->
+                                    scope.launch {
+                                        recruitingEconomyRepository.spendPointAction(loaded, prospectId, action, bonusAmount)
+                                        ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+                                        gateRefresh++
+                                    }
+                                },
+                                onRevokeOffer = { prospectId ->
+                                    scope.launch {
+                                        recruitingEconomyRepository.revokeRefundableReservation(
+                                            loaded,
+                                            prospectId,
+                                            RecruitingRefundableAction.ScholarshipOffer,
+                                        )
+                                        ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+                                        gateRefresh++
+                                    }
+                                },
+                            )
+                        }
+                    },
                 )
             }
         }
@@ -389,6 +518,7 @@ private fun RecommendedTabBody(
     nilOffers: Map<String, Long>,
     scholarshipOfferPointCost: Int,
     gateRefresh: Int,
+    modifier: Modifier = Modifier,
     onSpend: (ProspectSpendRequest) -> Unit,
     onScholarshipOffer: (String) -> Unit,
     onAssignNil: (prospectId: String, nilAskUsd: Int, offerUsd: Long) -> Unit,
@@ -398,7 +528,7 @@ private fun RecommendedTabBody(
     val currency = remember { NumberFormat.getCurrencyInstance(Locale.US) }
     val likelyCount = rows.count { it.badge == SignLikelihoodBadge.Likely || it.badge == SignLikelihoodBadge.Possible }
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         item {

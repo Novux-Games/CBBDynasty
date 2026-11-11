@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-NOTES-037",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "planning-notes-traceability.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/planning-notes-traceability.md"
-  },
-  {
     "id": "MEGA-NOTES-042",
     "pri": "P0",
     "status": "FAIL",
@@ -141,13 +134,6 @@
   },
   {
     "id": "MEGA-RECR-100",
-    "pri": "P0",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-139",
     "pri": "P0",
     "status": "FAIL",
     "shard": "recruiting-transfer-start.md",
@@ -840,13 +826,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md"
   },
   {
-    "id": "MEGA-QA-074",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "integration-playtest-regression.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md"
-  },
-  {
     "id": "MEGA-QA-094",
     "pri": "P1",
     "status": "FAIL",
@@ -876,20 +855,6 @@
   },
   {
     "id": "MEGA-RECR-013",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-022",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-027",
     "pri": "P1",
     "status": "FAIL",
     "shard": "recruiting-transfer-start.md",
@@ -939,13 +904,6 @@
   },
   {
     "id": "MEGA-RECR-083",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-086",
     "pri": "P1",
     "status": "FAIL",
     "shard": "recruiting-transfer-start.md",

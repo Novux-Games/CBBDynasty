@@ -67,8 +67,8 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-035 | P0 | FAIL | HS + JUCO tab content | **Placeholder string** only (`recruiting_placeholder_hs_juco`). | `RecruitingHubScreen.kt` |
-| MEGA-RECR-036 | P0 | FAIL | Transfer Portal sub-tab | **Placeholder** (`recruiting_placeholder_portal`). | `RecruitingHubScreen.kt` |
+| MEGA-RECR-035 | P0 | PASS | HS + JUCO tab content | Full pool partitions + Top 60 + HS/JUCO lists. | `HsJucoTabBody.kt` |
+| MEGA-RECR-036 | P0 | PASS | Transfer Portal sub-tab | Top 40 + portal Recommended with full spend/NIL surface. | `RecruitingHubTabBodies.kt` |
 | MEGA-RECR-037 | P1 | FAIL | Tab set vs spec | Missing Board/Targets, Committed, Lost, separate HS vs JUCO filters. Only 3 tabs. | `RecruitingHubTab` |
 | MEGA-RECR-038 | P1 | FAIL | Hub open offseason week 1 | `RecruitingCyclePolicy.hubAccessible(Offseason)` requires `week >= 2`; spec: year-long HS/JUCO cycle includes retention week (points economy shared). | `RecruitingCyclePolicy.kt` |
 | MEGA-RECR-039 | P1 | GAP | NIL budget strip | Pool remaining shown — PASS; drill-down committed/reserved breakdown not implemented. | Hub header |
@@ -125,7 +125,7 @@
 | MEGA-RECR-062 | P1 | GAP | Considering pool 1k–1.4k | `PortalSimulationEngine.rollConsideringPoolSize` — PASS; **not surfaced** in Recruiting hub (placeholder). | `PortalSimulationEngine.kt` |
 | MEGA-RECR-063 | P1 | PASS | Portal Top 40 lock week 2 | `PortalCycleRepository.onOffseasonWeekStarted` + `shouldLockTop40AtWeekStart`. | data portal |
 | MEGA-RECR-064 | P1 | PASS | Week 1 Roster/Transfer mutual exclusion | `PortalWeekOnePartition`, `PlayersLeavingPanel`. | ui offseason leaving |
-| MEGA-RECR-065 | P2 | GAP | Shared points/NIL with HS/JUCO | Economy shared in code — PASS; portal spend UI missing. | hub placeholder |
+| MEGA-RECR-065 | P2 | PASS | Shared points/NIL with HS/JUCO | Portal Recommended reuses hub spend/NIL actions. | `RecruitingHubScreen.kt` |
 | MEGA-RECR-066 | P2 | GAP | Portal entrant stars on final pool | `PortalStarBands` in core; entrant list not shown in hub. | `PortalStarBands.kt` |
 | MEGA-RECR-067 | P2 | GAP | AI portal Recommended | AI runner HS/JUCO only in `AiRecruitingRepository`; portal slice not run. | data recruiting AI |
 
@@ -196,7 +196,7 @@
 | MEGA-RECR-098 | P1 | GAP | NIL at hard sign snapshot | `IncomingSignee.nilSignedUsd` defaults **0**; hard sign does not persist offer map into signee rows. | `SigningDayIncomingSignee.kt` |
 | MEGA-RECR-099 | P2 | PASS | Annual pool + week-9 boost | Hub loads `nilPoolBoostUsd` from facilities week — PASS wiring. | `RecruitingHubScreen` LaunchedEffect |
 | MEGA-RECR-100 | P0 | FAIL | Dynasty bootstrap NIL cycle | `signNewGameFromWizard` skips `NilAnnualPoolRepository.openCyclePoolUsd` for chosen school (RECR-076). | `SaveSlotRepository` |
-| MEGA-RECR-101 | P2 | GAP | Portal NIL same ledger | Economy shared in data layer; portal tab placeholder — cannot assign portal NIL in product. | RECR-036 |
+| MEGA-RECR-101 | P2 | PASS | Portal NIL same ledger | Portal targets use `assignOffer` by entrant id. | `NilBudgetRepository` |
 | MEGA-RECR-102 | P2 | RISK | NIL offers keyed demo ids | Offers stored by `prospectId`; if user recruits from **demoPool** but seed uses different ids, ledger orphans. | RECR-005 + `NilBudgetRepository` |
 
 ---

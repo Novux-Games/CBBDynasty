@@ -75,7 +75,7 @@
 | MEGA-NOTES-039 | P1 | PARTIAL | Recruiting point actions **Done** | Costs read from `balance-2026.json`; per-target spend attribution missing for DM/call/house. | `MEGA-RECR-022`; `BalanceRecruitingActionsParser` |
 | MEGA-NOTES-040 | P1 | GAP | Recruiting dashboard tasks **Done** (triggers) | In-season optional recruiting tasks not emitted from `DashboardTaskGate`. | `MEGA-RECR-042`; `DashboardTaskGate.inSeason` |
 | MEGA-NOTES-041 | P1 | PARTIAL | AI recruiting **Done** — parity; **hidden** from UI | AI uses same persisted class pool as user; parity vs user interest spend not fully audited. | `AiRecruitingRepository.kt` |
-| MEGA-NOTES-042 | P0 | FAIL | Transfer portal **Done** | Portal tab placeholder; offseason portal core exists but UI stub. | `MEGA-RECR-035`–`036`; `transfer_portal_placeholder` |
+| MEGA-NOTES-042 | P0 | PASS | Transfer portal **Done** | Portal tab: Top 40 strip + Recommended rows with shared points/NIL/actions (OS weeks 2–5). | `PortalRecruitProspectMapper`, `RecruitingHubScreen.kt` |
 | MEGA-NOTES-043 | P1 | PARTIAL | Portal dashboard tasks **Done** | Offseason portal tasks in spec; wiring partial vs recruiting signing handoff. | `recruiting-transfer-start.md` § Portal |
 | MEGA-NOTES-044 | P1 | PARTIAL | NIL annual pool **Done** | Collective pool in balance + game-design shard; program pool binding at dynasty create partial. | `MEGA-GDD-*` NIL rows; `balance-2026.json` |
 | MEGA-NOTES-045 | P1 | PARTIAL | NIL Budget / deal depth **Done** — **3× ask** cap | Budget workflow in core/docs; full deal depth UI partial. | `game-design.md` § NIL Budget; `NilBudgetRepository.kt` |

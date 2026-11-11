@@ -434,6 +434,9 @@
     <string name="recruiting_portal_window_closed">Transfer portal recruiting opens in offseason weeks 2–5. Spend HS/JUCO points year-round on the other tabs.</string>
     <string name="recruiting_portal_empty">No portal entrants in the national pool yet.</string>
     <string name="recruiting_portal_pool_summary">%1$d entrants — sorted by portal rank</string>
+    <string name="recruiting_portal_top40_heading">Portal Top 40</string>
+    <string name="recruiting_portal_top40_pending">Portal Top 40 publishes when offseason week 2 starts.</string>
+    <string name="recruiting_portal_recommended_heading">Recommended portal targets</string>
     <string name="recruiting_portal_entrant_row">%1$s · %2$d★ · %3$s · prior %4$s</string>
     <string name="recruiting_open_hub">Open recruiting hub</string>
     <string name="recruiting_action_scout_game">Scout game (%1$d pts)</string>
