@@ -146,9 +146,26 @@ class PossessionSimSession(
                 defRating,
                 resolveEffects,
                 random,
+                lateClockTrip = lateClockTrip,
             )
         }
         var offenseBoxAfter = resolution.box
+        var subPhaseChain = resolution.subPhaseChain
+        if (resolution.freeThrowAttempts > 0) {
+            val (makes, attempts) = PlayerPossessionStatRecorder.sampleFreeThrowChain(
+                resolution.freeThrowAttempts,
+                random,
+            )
+            offenseBoxAfter = offenseBoxAfter.copy(
+                points = offenseBoxAfter.points + makes,
+                freeThrowsMade = offenseBoxAfter.freeThrowsMade + makes,
+                freeThrowsAttempted = offenseBoxAfter.freeThrowsAttempted + attempts,
+            )
+            subPhaseChain = listOfNotNull(
+                subPhaseChain,
+                "FT $makes/$attempts",
+            ).joinToString(" | ")
+        }
         val offenseRosterPresent = if (offenseHome) input.homeRoster != null else input.awayRoster != null
         if (
             offenseRosterPresent &&
@@ -208,6 +225,9 @@ class PossessionSimSession(
         val newInjuryLines = sampleMidGameInjuries(homeFloorIds, awayFloorIds)
         val foulNote = when {
             resolution.foulOnBlock -> "foul on block"
+            resolution.andOne -> recordPersonalFoulIfNeeded(true, offenseHome)?.let { "and-1 | $it" } ?: "and-1"
+            resolution.shootingFoul -> recordPersonalFoulIfNeeded(true, offenseHome)?.let { "shooting foul | $it" }
+                ?: "shooting foul"
             else -> recordPersonalFoulIfNeeded(foulStoppage, offenseHome)
         }
         val lateTags = listOfNotNull(
@@ -226,9 +246,10 @@ class PossessionSimSession(
             turnoverTerminal = resolution.turnoverTerminal,
             foulNote = foulNote,
             lateGameTag = lateTags,
-            subPhaseChain = resolution.subPhaseChain,
+            subPhaseChain = subPhaseChain,
             blockedShot = resolution.blockedShot,
             foulOnBlock = resolution.foulOnBlock,
+            shootingFoul = resolution.shootingFoul,
         )
         log += line
         newInjuryLines.forEach { log += it }

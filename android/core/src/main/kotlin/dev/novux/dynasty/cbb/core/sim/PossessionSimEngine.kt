@@ -153,8 +153,9 @@ object PossessionSimEngine {
         defRating: Int,
         effects: ResolvedSchemeEffects,
         random: Random,
+        lateClockTrip: Boolean = false,
     ): PossessionResolveResult =
-        PossessionSubPhaseEngine.resolve(offense, offRating, defRating, effects, random)
+        PossessionSubPhaseEngine.resolve(offense, offRating, defRating, effects, random, lateClockTrip)
 
     /** Miss terminal → OReb or DReb change ([MEGA-SIM-090]). */
     internal fun resolveMissRebound(
@@ -189,6 +190,7 @@ object PossessionSimEngine {
         subPhaseChain: String? = null,
         blockedShot: Boolean = false,
         foulOnBlock: Boolean = false,
+        shootingFoul: Boolean = false,
     ): String {
         val clock = formatClock(clockRemaining)
         val pointsScored = after.points - before.points
@@ -202,6 +204,8 @@ object PossessionSimEngine {
                 "miss | BLK | foul on block | change possession"
             blockedShot ->
                 "miss | BLK | change possession"
+            shootingFoul && after.fieldGoalsAttempted > before.fieldGoalsAttempted ->
+                "miss | shooting foul"
             after.fieldGoalsAttempted > before.fieldGoalsAttempted &&
                 change == PossessionChange.DefenseTakesBall ->
                 "miss | DREB | change possession"

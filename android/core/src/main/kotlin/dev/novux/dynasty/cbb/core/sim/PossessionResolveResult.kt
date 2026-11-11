@@ -23,4 +23,8 @@ data class PossessionResolveResult(
     val subPhaseChain: String? = null,
     val blockedShot: Boolean = false,
     val foulOnBlock: Boolean = false,
+    val shootingFoul: Boolean = false,
+    val andOne: Boolean = false,
+    /** Scheduled FT attempts before session rolls makes (1 = and-1, 2/3 = miss foul). */
+    val freeThrowAttempts: Int = 0,
 )

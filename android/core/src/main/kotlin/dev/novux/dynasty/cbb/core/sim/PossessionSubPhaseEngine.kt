@@ -20,6 +20,7 @@ object PossessionSubPhaseEngine {
         defRating: Int,
         effects: ResolvedSchemeEffects,
         random: Random,
+        lateClockTrip: Boolean = false,
     ): PossessionResolveResult {
         val box = offense.copy(possessions = offense.possessions + 1)
         val chain = mutableListOf("drive")
@@ -34,7 +35,7 @@ object PossessionSubPhaseEngine {
             return turnoverResult(box, chain, flavor)
         }
         chain += "shot"
-        return resolveShotTerminal(box, offRating, defRating, effects, random, chain)
+        return resolveShotTerminal(box, offRating, defRating, effects, random, chain, lateClockTrip)
     }
 
     private fun turnoverResult(
@@ -57,6 +58,7 @@ object PossessionSubPhaseEngine {
         effects: ResolvedSchemeEffects,
         random: Random,
         chain: List<String>,
+        lateClockTrip: Boolean,
     ): PossessionResolveResult {
         val edge = (offRating - defRating).coerceIn(-30, 30)
         val makeBias = (
@@ -77,10 +79,21 @@ object PossessionSubPhaseEngine {
                 points = next.points + pts,
                 threePointsMade = next.threePointsMade + if (three) 1 else 0,
             )
+            val andOne = PossessionShootingFoulPolicy.rollAndOne(lateClockTrip, random)
+            val ftAttempts = if (andOne) 1 else 0
+            val suffix = if (andOne) {
+                PossessionShootingFoulPolicy.chainSuffix(andOne = true, attempts = ftAttempts)
+            } else {
+                ""
+            }
             return PossessionResolveResult(
                 next,
                 PossessionChange.DefenseTakesBall,
-                subPhaseChain = "$chainLabel | make",
+                subPhaseChain = listOfNotNull("$chainLabel | make", suffix.takeIf { it.isNotEmpty() })
+                    .joinToString(" | "),
+                shootingFoul = andOne,
+                andOne = andOne,
+                freeThrowAttempts = ftAttempts,
             )
         }
         val block = PossessionBlockPolicy.rollOnMiss(defRating, offRating, random)
@@ -91,6 +104,16 @@ object PossessionSubPhaseEngine {
                 subPhaseChain = "$chainLabel | miss | BLK",
                 blockedShot = true,
                 foulOnBlock = block.foulOnBlock,
+            )
+        }
+        if (PossessionShootingFoulPolicy.rollMissShootingFoul(lateClockTrip, random)) {
+            val ftAttempts = PossessionShootingFoulPolicy.attemptsForMissFoul(three)
+            return PossessionResolveResult(
+                box = next,
+                change = PossessionChange.DefenseTakesBall,
+                subPhaseChain = "$chainLabel | miss | ${PossessionShootingFoulPolicy.chainSuffix(andOne = false, attempts = ftAttempts)}",
+                shootingFoul = true,
+                freeThrowAttempts = ftAttempts,
             )
         }
         val reb = PossessionSimEngine.resolveMissRebound(next, random)

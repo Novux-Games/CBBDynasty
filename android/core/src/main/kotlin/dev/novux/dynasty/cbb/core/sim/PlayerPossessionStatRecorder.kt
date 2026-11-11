@@ -70,14 +70,19 @@ object PlayerPossessionStatRecorder {
         }
     }
 
-    fun sampleBonusFreeThrows(random: Random): Pair<Int, Int> {
-        val attempts = 2
+    private const val FREE_THROW_MAKE_RATE = 0.74
+
+    fun sampleFreeThrowChain(attempts: Int, random: Random): Pair<Int, Int> {
+        if (attempts <= 0) return 0 to 0
         var makes = 0
         repeat(attempts) {
-            if (random.nextDouble() < 0.74) makes++
+            if (random.nextDouble() < FREE_THROW_MAKE_RATE) makes++
         }
         return makes to attempts
     }
+
+    fun sampleBonusFreeThrows(random: Random): Pair<Int, Int> =
+        sampleFreeThrowChain(attempts = 2, random = random)
 
     fun shouldShootBonusFreeThrows(
         before: TeamBoxScore,
