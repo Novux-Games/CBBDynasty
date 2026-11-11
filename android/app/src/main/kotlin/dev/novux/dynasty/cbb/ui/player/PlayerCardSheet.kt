@@ -42,7 +42,10 @@ fun PlayerCardPreviewSheet(
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            PlayerPortraitSlot(displayName = player.identity.displayName)
+            PlayerPortraitSlot(
+                displayName = player.identity.displayName,
+                playerId = player.playerId,
+            )
             PlayerCardOverviewContent(
                 player = player,
                 modifier = Modifier.padding(bottom = 8.dp),

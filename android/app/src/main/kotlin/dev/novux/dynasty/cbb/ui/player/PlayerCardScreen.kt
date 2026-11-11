@@ -37,7 +37,9 @@ import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogEntry
 import dev.novux.dynasty.cbb.core.player.stats.PlayerStatsSummary
+import dev.novux.dynasty.cbb.core.player.appearance.PlayerAppearanceResolver
 import dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
+import dev.novux.dynasty.cbb.ui.portrait.PresetPortrait
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -143,7 +145,10 @@ private fun PlayerIdentityStrip(player: DynastyPlayer) {
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        PlayerPortraitSlot(displayName = player.identity.displayName)
+        PlayerPortraitSlot(
+            displayName = player.identity.displayName,
+            playerId = player.playerId,
+        )
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 stringResource(
@@ -160,7 +165,24 @@ private fun PlayerIdentityStrip(player: DynastyPlayer) {
 }
 
 @Composable
-fun PlayerPortraitSlot(displayName: String, modifier: Modifier = Modifier) {
+fun PlayerPortraitSlot(
+    displayName: String,
+    modifier: Modifier = Modifier,
+    avatarPresetId: String? = null,
+    playerId: String? = null,
+) {
+    val presetId = remember(avatarPresetId, playerId) {
+        avatarPresetId?.takeIf { it.isNotBlank() }
+            ?: playerId?.let(PlayerAppearanceResolver::presetIdForPlayer)
+    }
+    if (presetId != null) {
+        PresetPortrait(
+            presetId = presetId,
+            modifier = modifier,
+            contentDescription = displayName,
+        )
+        return
+    }
     val initials = remember(displayName) {
         displayName.split(" ")
             .filter { it.isNotBlank() }

@@ -163,7 +163,7 @@
 | MEGA-COACH-092 | P1 | PASS | HC sim ratings map to skill tree engine | `CoachSkillTreeEngine`, `HeadCoachSkillRatings` |
 | MEGA-COACH-093 | P1 | FAIL | Coach card deep History / HOF / Draft tabs | No entities or UI |
 | MEGA-COACH-094 | P3 | GAP | AI league coaches appearance ids at create | Avatar ids on user coach only in DB |
-| MEGA-COACH-095 | P0 | FAIL | **Player** headshot/avatar generated pack-safe | No player `Portrait` composable or renderer |
+| MEGA-COACH-095 | P0 | PASS | **Player** headshot/avatar generated pack-safe | `PresetPortrait` + `PresetPortraitRenderer`; `PlayerPortraitSlot` uses preset id | `ui/portrait/PresetPortrait.kt`, `core/portrait/PresetPortraitRenderer.kt`, `PlayerAppearanceResolver.kt` |
 
 ---
 
