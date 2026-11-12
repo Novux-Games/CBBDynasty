@@ -14,9 +14,16 @@ import kotlin.random.Random
  * Possession-based regulation sim — [planning/simulation-engine.md#possession-loop--clock].
  */
 object PossessionSimEngine {
-    fun simulate(input: GameSimInput): GameSimResult = simulate(input, SimulateOptions())
+    fun simulate(input: GameSimInput): GameSimResult =
+        BoxScoreCoherenceSim.simulateWithRetry(input, SimulateOptions(), injuryRoll = null)
 
     fun simulate(
+        input: GameSimInput,
+        options: SimulateOptions = SimulateOptions(),
+        injuryRoll: GameSimInjuryRollInput? = null,
+    ): GameSimResult = BoxScoreCoherenceSim.simulateWithRetry(input, options, injuryRoll)
+
+    internal fun simulateUnchecked(
         input: GameSimInput,
         options: SimulateOptions = SimulateOptions(),
         injuryRoll: GameSimInjuryRollInput? = null,
@@ -35,7 +42,6 @@ object PossessionSimEngine {
         }
         GameSimOvertime.playUntilWinner(session)
         var result = session.toResult(isComplete = true)
-        BoxScoreCoherence.assertValid(result)
         if (injuryRoll != null) {
             result = GameSimInjuryRoll.attach(input, result, injuryRoll)
         }

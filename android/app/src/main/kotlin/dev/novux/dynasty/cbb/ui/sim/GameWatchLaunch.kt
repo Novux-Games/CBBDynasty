@@ -20,4 +20,5 @@ object GameWatchLaunch {
     var homeOffensiveScheme: OffensiveSchemePreset = OffensiveSchemePreset.Balanced
     var homeDefensiveScheme: DefensiveSchemePreset = DefensiveSchemePreset.ManToMan
     var injuryRoll: GameSimInjuryRollInput? = null
+    var isScrimmage: Boolean = false
 }

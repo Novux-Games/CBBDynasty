@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.ui.strategy
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -27,6 +29,9 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.discipline.DisciplineResolver
 import dev.novux.dynasty.cbb.core.lineup.DefaultStarterAlgorithm
+import dev.novux.dynasty.cbb.core.lineup.LineupSlotPolicy
+import dev.novux.dynasty.cbb.core.lineup.RosterStarterWireResolver
+import dev.novux.dynasty.cbb.core.lineup.RotationMinutesAllocator
 import dev.novux.dynasty.cbb.core.lineup.RotationMinutesBalancer
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
@@ -39,6 +44,7 @@ import dev.novux.dynasty.cbb.core.strategy.GameplanUsageNormalizer
 import dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
+import kotlinx.coroutines.launch
 
 @Composable
 fun StrategyScreen(
@@ -52,14 +58,19 @@ fun StrategyScreen(
     homeTeamLabel: String = "Home",
     awayTeamLabel: String = "Away",
 ) {
+    val scope = rememberCoroutineScope()
     var players by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
+    var userStarters by remember { mutableStateOf<Map<PlayerPosition, String>>(emptyMap()) }
+    var assignTargetSlot by remember { mutableStateOf<PlayerPosition?>(null) }
     LaunchedEffect(dynastyId) {
         players = rosterRepository.listPlayers(dynastyId)
     }
-    val starters = DefaultStarterAlgorithm.pickStarters(
-        players,
-        starterBlockStamina = fatigueTuning.starterBlockThreshold,
-    )
+    LaunchedEffect(players, fatigueTuning.starterBlockThreshold) {
+        if (players.isNotEmpty() && userStarters.isEmpty()) {
+            userStarters = RosterStarterWireResolver.resolve(players, fatigueTuning.starterBlockThreshold)
+        }
+    }
+    val starters = userStarters
     val bench = players
         .filter { it.playerId !in starters.values }
         .sortedBy { it.depthOrder }
@@ -119,12 +130,40 @@ fun StrategyScreen(
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
         )
+        Text(
+            text = stringResource(R.string.strategy_tap_slot_to_assign),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         PlayerPosition.STARTER_ORDER.forEach { slot ->
             val player = starters[slot]?.let { id -> players.firstOrNull { it.playerId == id } }
             StrategyLineupCard(
                 title = slot.label,
                 player = player,
+                selected = assignTargetSlot == slot,
+                onSelect = {
+                    assignTargetSlot = if (assignTargetSlot == slot) null else slot
+                },
+                onCycle = {
+                    val options = eligibleForSlot(players, slot)
+                    val next = cycleStarter(options, starters[slot])
+                    if (next != null) {
+                        val cleaned = starters.filterValues { it != next }
+                        userStarters = cleaned + (slot to next)
+                    }
+                },
             )
+        }
+        OutlinedButton(
+            onClick = {
+                scope.launch {
+                    players = rosterRepository.applyStarterLineup(dynastyId, userStarters)
+                    userStarters = RosterStarterWireResolver.resolve(players, fatigueTuning.starterBlockThreshold)
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(stringResource(R.string.strategy_save_lineup))
         }
         Text(
             text = stringResource(R.string.strategy_bench),
@@ -135,6 +174,18 @@ fun StrategyScreen(
             StrategyLineupCard(
                 title = player.position.label,
                 player = player,
+                selected = false,
+                onSelect = {},
+                onCycle = {},
+                onAssign = {
+                    val slot = assignTargetSlot ?: return@StrategyLineupCard
+                    if (!LineupSlotPolicy.slotEligible(player.position, slot)) return@StrategyLineupCard
+                    if (!RotationMinutesAllocator.isLineupEligible(player)) return@StrategyLineupCard
+                    if (DisciplineResolver.isIneligibleForLineup(player)) return@StrategyLineupCard
+                    val cleaned = starters.filterValues { it != player.playerId }
+                    userStarters = cleaned + (slot to player.playerId)
+                    assignTargetSlot = null
+                },
             )
         }
         StrategyGameSchemePanel(
@@ -181,6 +232,7 @@ fun StrategyScreen(
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.rotationMinutes = normalizedRotation
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeSimRoster =
                     GameLineupPrep.build(dynastyId, players, starters, normalizedRotation)
+                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.isScrimmage = true
                 onWatchScrimmage()
             },
             modifier = Modifier.fillMaxWidth(),
@@ -194,9 +246,26 @@ fun StrategyScreen(
 }
 
 @Composable
+private fun eligibleForSlot(players: List<RosterPlayer>, slot: PlayerPosition): List<RosterPlayer> =
+    players
+        .filter { RotationMinutesAllocator.isLineupEligible(it) }
+        .filter { LineupSlotPolicy.slotEligible(it.position, slot) }
+        .filter { !DisciplineResolver.isIneligibleForLineup(it) }
+        .sortedBy { it.depthOrder }
+
+private fun cycleStarter(options: List<RosterPlayer>, currentId: String?): String? {
+    if (options.isEmpty()) return null
+    val index = options.indexOfFirst { it.playerId == currentId }.let { if (it < 0) 0 else (it + 1) % options.size }
+    return options[index].playerId
+}
+
 private fun StrategyLineupCard(
     title: String,
     player: RosterPlayer?,
+    selected: Boolean,
+    onSelect: () -> Unit,
+    onCycle: () -> Unit,
+    onAssign: (() -> Unit)? = null,
 ) {
     val injured = player != null && DisciplineResolver.isIneligibleForLineup(player)
     val exhausted = player != null && player.stamina < 20
@@ -204,12 +273,15 @@ private fun StrategyLineupCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .alpha(if (dimmed) 0.45f else 1f),
+            .alpha(if (dimmed) 0.45f else 1f)
+            .clickable(enabled = !dimmed) {
+                if (onAssign != null) onAssign() else onSelect()
+            },
         colors = CardDefaults.cardColors(
-            containerColor = if (dimmed) {
-                MaterialTheme.colorScheme.surfaceVariant
-            } else {
-                MaterialTheme.colorScheme.surface
+            containerColor = when {
+                selected -> MaterialTheme.colorScheme.primaryContainer
+                dimmed -> MaterialTheme.colorScheme.surfaceVariant
+                else -> MaterialTheme.colorScheme.surface
             },
         ),
     ) {
@@ -221,6 +293,9 @@ private fun StrategyLineupCard(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+                OutlinedButton(onClick = onCycle, modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.strategy_pick_starter))
+                }
             } else if (injured) {
                 PlayerInjuryRosterRow(player)
             } else {

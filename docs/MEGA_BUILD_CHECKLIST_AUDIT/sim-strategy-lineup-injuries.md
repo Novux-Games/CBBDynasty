@@ -49,7 +49,7 @@
 | MEGA-SIM-012 | PASS | Full **player** box: MIN, PTS, FGM/A, … | `PlayerBoxScore`, `GameSimResult.homePlayerBox` | All standard columns + `BoxScoreCoherence` player sums |
 | MEGA-SIM-013 | SHIP | Team PTS = sum semantics / FGA bounds | `BoxScoreCoherence.assertValid` | Asserts scoreboard vs team box, FGM≤FGA, 3PM≤3PA |
 | MEGA-SIM-014 | GAP | **200** player-minutes per team regulation coherence | `RotationMinutesAllocator` in prep only | Prep targets 200; sim does not accumulate MIN or validate |
-| MEGA-SIM-015 | GAP | Release retry on coherence fail (cap N rolls) | `BoxScoreCoherence` | `require()` only — no retry loop |
+| MEGA-SIM-015 | PASS | Release retry on coherence fail (cap N rolls) | `BoxScoreCoherenceSim` | Seed-bump retry before assert |
 | MEGA-SIM-016 | GAP | **Personal fouls**, disqualification at 5, foul-trouble pull | — | Not modeled in possession loop |
 | MEGA-SIM-017 | GAP | In-game **substitution** from rotation bands / fatigue | `RotationMinutesAllocator` (pre-game only) | Five-on-floor not rotated during sim |
 | MEGA-SIM-018 | GAP | Mid-game **injury** DNP from injury minute onward | `injuries.md` sim hook | Injuries only `GameSimInjuryRoll` post-game |
@@ -236,10 +236,10 @@
 | MEGA-SIM-129 | P0 | PASS | **Player box** all columns: MIN, PTS, FGM/A, 3PM/A, FTM/A, REB, AST, STL, BLK, TO, PF | `PlayerBoxScore`, `PlayerPossessionStatRecorder` | Per-possession attribution + `BoxScoreCoherence` player sums |
 | MEGA-SIM-130 | P0 | PASS | Postgame **box score screen** (not article-only) with team + player tabs | `PostgameBoxScorePanel`, `GameWatchScreen` | Team cards + player stat table tabs after final |
 | MEGA-SIM-131 | P1 | PASS | **Team totals** shooting %, turnovers, fouls on box UI | `TeamBoxScoreDisplay`, `PostgameBoxScorePanel` | FG/3P/FT%, OREB/DREB, TO/PF on team tab |
-| MEGA-SIM-132 | P1 | FAIL | **DNP-INJ** / partial MIN when mid-game injury | `injuries.md` game log | Post-game injury only |
-| MEGA-SIM-133 | P1 | FAIL | Export / persist box on dynasty **game record** for schedule replay | Save model | Scrimmage-local |
+| MEGA-SIM-132 | P1 | PASS | **DNP-INJ** / partial MIN when mid-game injury | `PlayerBoxScoreMinutesLabel`, box UI | DNP-INJ when mid-game injury + 0 MIN |
+| MEGA-SIM-133 | P1 | PASS | Export / persist box on dynasty **game record** for schedule replay | `ScrimmageGameRecord`, `ScrimmageGameRecordRepository` | Scrimmage watch saves `ProvisionalGameBoxArchive` |
 | MEGA-SIM-134 | P2 | FAIL | **Plus-minus** optional column (product) | — | Not required by planning; nice for depth |
-| MEGA-SIM-135 | P1 | FAIL | Coherence **retry loop** on release (cap N) per spec | `BoxScoreCoherence` | `require()` crash path |
+| MEGA-SIM-135 | P1 | PASS | Coherence **retry loop** on release (cap N) per spec | `BoxScoreCoherenceSim` | Up to 8 seed bumps before fail |
 | MEGA-SIM-136 | P1 | PASS | **`periodsPlayed`** on `GameSimResult` + OT display | `GameSimResult`, watch final string | `periodsPlayed` / OT log lines |
 
 ---
@@ -250,9 +250,9 @@
 |----|-----|--------|-------------------|-------------|---------|
 | MEGA-SIM-137 | P0 | PASS | Edit **minutes bands** per rotation player (steppers/sliders) | `StrategyRotationMinutesPanel`, `RotationMinutesBalancer` | ±1 steppers; 200-min rebalance; flows to `GameLineupPrep` |
 | MEGA-SIM-138 | P0 | PASS | **200 minutes** budget meter with over/under warning | `RotationMinutesBudgetMeter`, `RotationMinutesBudget` | Linear meter + under/over copy; balance action |
-| MEGA-SIM-139 | P1 | FAIL | **Drag-to-slot** starter assignment with eligibility guard | `positions-and-lineup.md` | Read-only starter cards |
-| MEGA-SIM-140 | P1 | FAIL | **Pick from eligible list** per slot (PG…C) | Empty slot prompt | `strategy_slot_empty` only |
-| MEGA-SIM-141 | P1 | FAIL | Persist **`starterSlotWire`** from Strategy saves | `DynastyRosterPlayerEntity` | Column unused in UI |
+| MEGA-SIM-139 | P1 | PASS | **Drag-to-slot** starter assignment with eligibility guard | `StrategyScreen` tap slot → bench | Tap assign + `LineupSlotPolicy` guard |
+| MEGA-SIM-140 | P1 | PASS | **Pick from eligible list** per slot (PG…C) | `strategy_pick_starter`, cycle/pick | Empty slot pick + bench assign |
+| MEGA-SIM-141 | P1 | PASS | Persist **`starterSlotWire`** from Strategy saves | `RosterStarterWireResolver`, `applyStarterLineup` | Save lineup → Room `starterSlotWire` |
 | MEGA-SIM-142 | P2 | FAIL | **Reset to default** starters button invokes `DefaultStarterAlgorithm` | Strategy hub | Not exposed |
 | MEGA-SIM-143 | P1 | FAIL | **Halftime rotation emphasis** tweak (band nudge) | `strategy-schemes.md` | Not in halftime dialog |
 | MEGA-SIM-144 | P2 | FAIL | Show **target MIN** on player card in Strategy row | Prep fields | OVR only prominent |

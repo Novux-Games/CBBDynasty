@@ -730,6 +730,9 @@
     <string name="strategy_bench">Rotation</string>
     <string name="strategy_injured_hint">Injured players are greyed out and cannot be added to the lineup.</string>
     <string name="strategy_slot_empty">Unfilled</string>
+    <string name="strategy_tap_slot_to_assign">Tap a starter slot, then tap a bench player to assign.</string>
+    <string name="strategy_save_lineup">Save starting lineup</string>
+    <string name="strategy_pick_starter">Pick player</string>
     <string name="dynasty_shell_open_strategy">Open strategy</string>
     <string name="dashboard_task_review_injury">Review injury — %1$s (%2$d weeks)</string>
     <string name="dashboard_task_medical_redshirt">Medical redshirt — %1$s?</string>

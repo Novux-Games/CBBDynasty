@@ -592,6 +592,15 @@ fun DynastyApp(
                             onSimComplete = { result ->
                                 scope.launch {
                                     val active = ActiveDynastySession.current ?: return@launch
+                                    if (GameWatchLaunch.isScrimmage) {
+                                        app.scrimmageGameRecordRepository.save(
+                                            active.dynastyId,
+                                            GameWatchLaunch.awayName,
+                                            result,
+                                        )
+                                        GameWatchLaunch.isScrimmage = false
+                                        return@launch
+                                    }
                                     val position = active.weekCheckpoint.activePosition
                                     val gameId = UserLeagueGameIds.forPosition(position)
                                     val priorGen = active.weekCheckpoint.provisionalGames[gameId]?.simGeneration

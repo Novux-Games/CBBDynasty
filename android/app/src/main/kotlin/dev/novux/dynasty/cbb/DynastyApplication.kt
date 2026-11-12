@@ -60,6 +60,9 @@ class DynastyApplication : Application() {
     lateinit var dynastyRosterRepository: DynastyRosterRepository
         private set
 
+    lateinit var scrimmageGameRecordRepository: dev.novux.dynasty.cbb.data.scrimmage.ScrimmageGameRecordRepository
+        private set
+
     lateinit var disciplineRepository: DisciplineRepository
         private set
 
@@ -266,6 +269,8 @@ class DynastyApplication : Application() {
         weekCheckpointRepository = WeekCheckpointRepository(database)
         val postgameInjuryQueue = dev.novux.dynasty.cbb.data.injuries.PostgameInjuryQueue()
         dynastyRosterRepository = DynastyRosterRepository(database, postgameInjuryQueue)
+        scrimmageGameRecordRepository =
+            dev.novux.dynasty.cbb.data.scrimmage.ScrimmageGameRecordRepository()
         offseasonWeekNineRepository = OffseasonWeekNineRepository(applicationContext)
         recruitingEconomyRepository = RecruitingEconomyRepository(
             applicationContext,

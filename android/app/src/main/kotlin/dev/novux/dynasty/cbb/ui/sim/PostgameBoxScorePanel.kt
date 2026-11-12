@@ -28,6 +28,8 @@ import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.sim.GameSimResult
 import dev.novux.dynasty.cbb.core.sim.PlayerBoxScore
 import dev.novux.dynasty.cbb.core.sim.TeamBoxScore
+import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
+import dev.novux.dynasty.cbb.core.sim.PlayerBoxScoreMinutesLabel
 import dev.novux.dynasty.cbb.core.sim.TeamBoxScoreDisplay
 
 @Composable
@@ -73,6 +75,8 @@ fun PostgameBoxScorePanel(
         awayName = awayName,
         homeLines = result.homePlayerBox,
         awayLines = result.awayPlayerBox,
+        homeInjuryIds = PlayerBoxScoreMinutesLabel.midGameInjuredIds(result.homeInjuries),
+        awayInjuryIds = PlayerBoxScoreMinutesLabel.midGameInjuredIds(result.awayInjuries),
         nameById = nameById,
       )
     }
@@ -168,14 +172,16 @@ private fun PlayerBoxScoreTab(
     awayName: String,
     homeLines: List<PlayerBoxScore>,
     awayLines: List<PlayerBoxScore>,
+    homeInjuryIds: Set<String>,
+    awayInjuryIds: Set<String>,
     nameById: Map<String, String>,
 ) {
   Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
     if (homeLines.isNotEmpty()) {
-      PlayerBoxTable(teamLabel = homeName, lines = homeLines, nameById = nameById)
+      PlayerBoxTable(teamLabel = homeName, lines = homeLines, injuryIds = homeInjuryIds, nameById = nameById)
     }
     if (awayLines.isNotEmpty()) {
-      PlayerBoxTable(teamLabel = awayName, lines = awayLines, nameById = nameById)
+      PlayerBoxTable(teamLabel = awayName, lines = awayLines, injuryIds = awayInjuryIds, nameById = nameById)
     }
     if (homeLines.isEmpty() && awayLines.isEmpty()) {
       Text(
@@ -191,6 +197,7 @@ private fun PlayerBoxScoreTab(
 private fun PlayerBoxTable(
     teamLabel: String,
     lines: List<PlayerBoxScore>,
+    injuryIds: Set<String>,
     nameById: Map<String, String>,
 ) {
   val scroll = rememberScrollState()
@@ -204,7 +211,11 @@ private fun PlayerBoxTable(
     )
     lines.sortedByDescending { it.points }.forEach { line ->
       Text(
-        text = formatPlayerLine(line, nameById[line.playerId] ?: line.playerId),
+        text = formatPlayerLine(
+          line,
+          nameById[line.playerId] ?: line.playerId,
+          injuryIds,
+        ),
         style = MaterialTheme.typography.bodySmall,
         fontFamily = FontFamily.Monospace,
         modifier = Modifier
@@ -215,9 +226,13 @@ private fun PlayerBoxTable(
   }
 }
 
-private fun formatPlayerLine(line: PlayerBoxScore, label: String): String {
-  val name = label.take(12).padEnd(12)
-  val min = line.minutesPlayed().toString().padStart(2)
+private fun formatPlayerLine(
+    line: PlayerBoxScore,
+    label: String,
+    midGameInjuryIds: Set<String>,
+): String {
+    val name = label.take(12).padEnd(12)
+  val min = PlayerBoxScoreMinutesLabel.format(line, midGameInjuryIds).padStart(2)
   val pts = line.points.toString().padStart(2)
   val fg = "${line.fieldGoalsMade}-${line.fieldGoalsAttempted}".padStart(5)
   val three = "${line.threePointsMade}-${line.threePointsAttempted}".padStart(5)

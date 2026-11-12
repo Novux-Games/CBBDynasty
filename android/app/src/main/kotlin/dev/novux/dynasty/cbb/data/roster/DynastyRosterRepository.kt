@@ -9,6 +9,8 @@ import dev.novux.dynasty.cbb.core.injuries.InjuryRosterOps
 import dev.novux.dynasty.cbb.core.player.stats.PlayerSeasonStatFinalizeGate
 import dev.novux.dynasty.cbb.core.injuries.MedicalRedshirtPolicy
 import dev.novux.dynasty.cbb.core.lineup.DefaultStarterAlgorithm
+import dev.novux.dynasty.cbb.core.lineup.RosterStarterWireResolver
+import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.offseason.weekone.DraftStockLine
 import dev.novux.dynasty.cbb.core.offseason.weekone.PortalWeekOnePartition
 import dev.novux.dynasty.cbb.core.offseason.weekone.ProDayEligibility
@@ -195,6 +197,12 @@ class DynastyRosterRepository(
         val player = listPlayers(dynastyId).first { it.playerId == playerId }
         val next = MedicalRedshirtPolicy.apply(player)
         dao.upsert(next.toEntity())
+        return listPlayers(dynastyId)
+    }
+
+    suspend fun applyStarterLineup(dynastyId: String, starters: Map<PlayerPosition, String>): List<RosterPlayer> {
+        val players = listPlayers(dynastyId)
+        RosterStarterWireResolver.applyToRoster(players, starters).forEach { dao.upsert(it.toEntity()) }
         return listPlayers(dynastyId)
     }
 }
