@@ -24,7 +24,7 @@ object GameWatchPlayback {
         injuryRoll: GameSimInjuryRollInput? = null,
         onLineDelayMs: (() -> Long)? = null,
         pauseGate: GameWatchPauseGate? = null,
-        onLine: suspend (String) -> Unit,
+        onLine: suspend (PossessionStep) -> Unit,
         onHalftime: suspend (GameSimResult, MidGameState) -> GameSimInput,
     ): GameSimResult {
         var activeInput = input
@@ -38,7 +38,7 @@ object GameWatchPlayback {
         }
         while (session.hasNext()) {
             val step = session.step()
-            onLine(step.logLine)
+            onLine(step)
             val lineDelay = onLineDelayMs?.invoke() ?: lineDelayMs(speedMultiplier)
             paceAfterLine(lineDelay)
             if (step.haltedAtHalftime) {
@@ -56,12 +56,18 @@ object GameWatchPlayback {
         }
         while (session.isTiedAtBuzz()) {
             session.beginOvertimePeriod()
-            onLine(session.latestLogLine())
+            onLine(
+                PossessionStep(
+                    logLine = session.latestLogLine(),
+                    haltedAtHalftime = false,
+                    chrome = session.currentWatchChrome(),
+                ),
+            )
             val otBannerDelay = onLineDelayMs?.invoke() ?: lineDelayMs(speedMultiplier)
             paceAfterLine(otBannerDelay)
             while (session.hasNext()) {
                 val step = session.step()
-                onLine(step.logLine)
+                onLine(step)
                 val lineDelay = onLineDelayMs?.invoke() ?: lineDelayMs(speedMultiplier)
                 paceAfterLine(lineDelay)
             }

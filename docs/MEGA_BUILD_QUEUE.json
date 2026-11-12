@@ -1,19 +1,5 @@
 [
   {
-    "id": "MEGA-SIM-121",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
-    "id": "MEGA-SIM-122",
-    "pri": "P1",
-    "status": "FAIL",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
     "id": "MEGA-SIM-124",
     "pri": "P1",
     "status": "FAIL",
@@ -4249,13 +4235,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
   },
   {
-    "id": "MEGA-SIM-037",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
     "id": "MEGA-SIM-047",
     "pri": "P1",
     "status": "PARTIAL",
@@ -5118,13 +5097,6 @@
   },
   {
     "id": "MEGA-SIM-118",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
-    "id": "MEGA-SIM-123",
     "pri": "P2",
     "status": "FAIL",
     "shard": "sim-strategy-lineup-injuries.md",

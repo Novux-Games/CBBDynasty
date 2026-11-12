@@ -58,7 +58,7 @@ class GameWatchPlaybackTest {
         val watched = GameWatchPlayback.watch(
             input = input,
             speedMultiplier = 0.0,
-            onLine = { lines += it },
+            onLine = { lines += it.logLine },
             onHalftime = { _, _ ->
                 halftimeCalls++
                 input
@@ -71,6 +71,31 @@ class GameWatchPlaybackTest {
         assertEquals(1, halftimeCalls)
         assertTrue(lines.isNotEmpty())
     }
+
+    @Test
+    fun watchStepsExposeChromeWithShotClock() = runBlocking {
+        val input = GameSimInput(
+            home = GameSimTeamInput("h", 80, 78),
+            away = GameSimTeamInput("a", 77, 76),
+            tuning = tuning,
+            seed = 9L,
+        )
+        var chrome: GameWatchChrome? = null
+        GameWatchPlayback.watch(
+            input = input,
+            speedMultiplier = 0.0,
+            onLine = {
+                chrome = it.chrome
+            },
+            onHalftime = { _, _ -> input },
+        )
+        assertEquals(true, chrome != null)
+        assertTrue(chrome!!.shotClockSeconds in 0..30)
+        assertTrue(linesContainScMarker(input))
+    }
+
+    private fun linesContainScMarker(input: GameSimInput): Boolean =
+        GameWatchPlayback.simToEnd(input).possessionLog.any { "| SC " in it }
 
     @Test
     fun watchPauseGatePreservesSessionUntilResume() = runBlocking {
@@ -88,7 +113,7 @@ class GameWatchPlaybackTest {
                 input = input,
                 speedMultiplier = 0.0,
                 pauseGate = gate,
-                onLine = { lines += it },
+                onLine = { lines += it.logLine },
                 onHalftime = { _, _ -> input },
             )
         }

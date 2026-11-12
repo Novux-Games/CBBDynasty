@@ -78,7 +78,7 @@
 | MEGA-SIM-034 | SHIP | First-half stats/score fixed after halftime | `MidGameState` carry box scores | Scores accumulate from mid state |
 | MEGA-SIM-035 | PARTIAL | `activeHomeGameplan(clock)` uses halftime plan in 2nd half | `GameSimInput.activeHomeGameplan` | `clock <= HALF_SECONDS` selects halftime plan (correct for countdown clock) |
 | MEGA-SIM-036 | WIRE | Strategy **halftime preset** separate from pregame | `StrategyGameplanPanel` Set/Clear halftime | Stored in `halftimeGameplan` but watch passes `homeHalftimeGameplan` only when user sets preset — scrimmage button uses `halftimeGameplan ?: gameplan` as **pregame** only on `GameWatchLaunch` |
-| MEGA-SIM-037 | GAP | In-sim shot clock display on lines (optional product) | — | Not shown |
+| MEGA-SIM-037 | PASS | In-sim shot clock display on lines (optional product) | `GameWatchScreen`, possession log `SC` | Chrome + per-line SC badge |
 | MEGA-SIM-038 | PASS | Postgame report after sim | `PostgameBoxScorePanel`, `PostgameReportGenerator` | Box score tabs + narrative article |
 
 ---
@@ -219,8 +219,8 @@
 | MEGA-SIM-119 | P0 | PASS | Default **2.0s** wall-clock between lines (not forced 8×) | `GameWatchScreen`, `GameWatchPlayback` | Watch uses `DEFAULT_WATCH_SPEED_MULTIPLIER` (1×) not 8× |
 | MEGA-SIM-120 | P0 | PASS | User **speed multiplier** UI: 0.5×, 1×, 2×, 4×, **Sim to end** | `GameWatchScreen`, `GameWatchPlayback` | Speed chips + zero-delay “Sim to end” mid-watch |
 | MEGA-SIM-121 | P1 | PASS | **Pause / resume** watch without losing mid-game state | `GameWatchPauseGate`, `GameWatchScreen` | Mid-half Pause/Resume holds session; resume matches `simToEnd` |
-| MEGA-SIM-122 | P1 | FAIL | **Half indicator** + period label on watch chrome | `GameWatchScreen` | Clock/score only |
-| MEGA-SIM-123 | P2 | FAIL | Optional **shot-clock seconds** on each log line | MEGA-SIM-037 | Product expects readable tension |
+| MEGA-SIM-122 | P1 | PASS | **Half indicator** + period label on watch chrome | `GameWatchChrome`, `GameWatchScreen` | Period + game clock chrome row |
+| MEGA-SIM-123 | P2 | PASS | Optional **shot-clock seconds** on each log line | `PossessionStep.chrome`, feed SC badge | Shot clock on log + line badge |
 | MEGA-SIM-124 | P1 | FAIL | **Possession feed** scrollback + auto-scroll | Watch list UI | Minimal text list |
 | MEGA-SIM-125 | P0 | PASS | **Halftime sheet**: change O/D scheme, rotation emphasis, usage, swap legal starters | `HalftimeCoachSheet`, `GameWatchScreen` | Resumes with updated schemes, roster, gameplan |
 | MEGA-SIM-126 | P1 | FAIL | Halftime **opponent scouting** read-only stats strip | Product frame | Not in halftime UI |

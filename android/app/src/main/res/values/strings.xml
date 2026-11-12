@@ -811,6 +811,11 @@
     <string name="game_watch_speed_sim_to_end">Sim to end</string>
     <string name="game_watch_pause">Pause</string>
     <string name="game_watch_resume">Resume</string>
+    <string name="game_watch_period_first">1st Half</string>
+    <string name="game_watch_period_second">2nd Half</string>
+    <string name="game_watch_period_ot">OT %1$d</string>
+    <string name="game_watch_chrome">%1$s · %2$s · SC %3$ds</string>
+    <string name="game_watch_feed_shot_clock">SC %1$ds</string>
     <string name="game_watch_postgame_box_title">Box score</string>
     <string name="game_watch_box_tab_team">Team</string>
     <string name="game_watch_box_tab_players">Players</string>

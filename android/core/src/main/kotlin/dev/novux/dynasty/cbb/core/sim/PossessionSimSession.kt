@@ -13,6 +13,7 @@ import kotlin.random.Random
 data class PossessionStep(
     val logLine: String,
     val haltedAtHalftime: Boolean,
+    val chrome: GameWatchChrome,
 )
 
 /**
@@ -94,6 +95,14 @@ class PossessionSimSession(
     fun periodsPlayedTotal(): Int = 1 + overtimePeriods
 
     fun latestLogLine(): String = log.last()
+
+    fun currentWatchChrome(shotClockSeconds: Int = this.shotClockSeconds): GameWatchChrome =
+        GameWatchChromeFactory.create(
+            gameClockSeconds = gameClock,
+            shotClockSeconds = shotClockSeconds,
+            inOvertime = inOvertime,
+            overtimePeriods = overtimePeriods,
+        )
 
     fun step(): PossessionStep {
         check(hasNext()) { "No possessions remaining" }
@@ -456,7 +465,13 @@ class PossessionSimSession(
         log += line
         newInjuryLines.forEach { log += it }
         val halftime = stopAtHalftime && !inOvertime && gameClock <= GameSimClock.HALF_SECONDS
-        return PossessionStep(line, haltedAtHalftime = halftime)
+        val chrome = GameWatchChromeFactory.create(
+            gameClockSeconds = gameClock,
+            shotClockSeconds = shotClockAfterLog,
+            inOvertime = inOvertime,
+            overtimePeriods = overtimePeriods,
+        )
+        return PossessionStep(line, haltedAtHalftime = halftime, chrome = chrome)
     }
 
     private fun sampleMidGameInjuries(

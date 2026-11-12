@@ -38,7 +38,9 @@ import dev.novux.dynasty.cbb.core.sim.GameSimInjuryRollInput
 import dev.novux.dynasty.cbb.core.sim.GameSimResult
 import dev.novux.dynasty.cbb.core.sim.GameSimRosterInput
 import dev.novux.dynasty.cbb.core.sim.GameSimTeamInput
+import dev.novux.dynasty.cbb.core.sim.GameWatchChrome
 import dev.novux.dynasty.cbb.core.sim.GameWatchPauseGate
+import dev.novux.dynasty.cbb.core.sim.GameWatchPeriod
 import dev.novux.dynasty.cbb.core.sim.GameWatchPlayback
 import dev.novux.dynasty.cbb.core.sim.GameWatchSpeedPresets
 import dev.novux.dynasty.cbb.core.sim.HalftimeCoachAdjustments
@@ -55,6 +57,11 @@ import dev.novux.dynasty.cbb.ui.postgame.PostgameInjuryFlow
 import dev.novux.dynasty.cbb.ui.reports.ReportArticleView
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
+
+private data class GameWatchFeedRow(
+    val logLine: String,
+    val shotClockSeconds: Int?,
+)
 
 @Composable
 fun GameWatchScreen(
@@ -80,7 +87,8 @@ fun GameWatchScreen(
     seed: Long = 17L,
 ) {
     val context = LocalContext.current
-    val lines = remember { mutableStateListOf<String>() }
+    val lines = remember { mutableStateListOf<GameWatchFeedRow>() }
+    var watchChrome by remember { mutableStateOf<GameWatchChrome?>(null) }
     var scoreLine by remember { mutableStateOf("") }
     var halftimeOpen by remember { mutableStateOf(false) }
     var halftimeScore by remember { mutableStateOf("") }
@@ -149,8 +157,14 @@ fun GameWatchScreen(
             onLineDelayMs = {
                 if (simToEnd) 0L else GameWatchPlayback.lineDelayMs(selectedSpeedMultiplier)
             },
-            onLine = { line ->
-                lines.add(line)
+            onLine = { step ->
+                watchChrome = step.chrome
+                lines.add(
+                    GameWatchFeedRow(
+                        logLine = step.logLine,
+                        shotClockSeconds = step.chrome.shotClockSeconds,
+                    ),
+                )
                 listState.animateScrollToItem(lines.lastIndex)
             },
             onHalftime = { partial, _ ->
@@ -221,10 +235,13 @@ fun GameWatchScreen(
         )
         result.homeInjuries.forEach { event ->
             lines.add(
-                context.getString(
-                    R.string.game_watch_injury_log,
-                    event.label,
-                    event.weeksRemaining,
+                GameWatchFeedRow(
+                    logLine = context.getString(
+                        R.string.game_watch_injury_log,
+                        event.label,
+                        event.weeksRemaining,
+                    ),
+                    shotClockSeconds = null,
                 ),
             )
         }
@@ -248,6 +265,18 @@ fun GameWatchScreen(
             style = MaterialTheme.typography.bodyMedium,
         )
         Text(text = scoreLine, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+        watchChrome?.let { chrome ->
+            Text(
+                text = stringResource(
+                    R.string.game_watch_chrome,
+                    periodLabel(chrome),
+                    chrome.gameClockDisplay,
+                    chrome.shotClockSeconds,
+                ),
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -287,12 +316,25 @@ fun GameWatchScreen(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            items(lines) { line ->
-                Text(
-                    text = line,
-                    style = MaterialTheme.typography.bodySmall,
-                    fontFamily = FontFamily.Monospace,
-                )
+            items(lines) { row ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Text(
+                        text = row.logLine,
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.bodySmall,
+                        fontFamily = FontFamily.Monospace,
+                    )
+                    row.shotClockSeconds?.let { sc ->
+                        Text(
+                            text = stringResource(R.string.game_watch_feed_shot_clock, sc),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Medium,
+                        )
+                    }
+                }
             }
         }
         finalResult?.let { result ->
@@ -334,6 +376,13 @@ fun GameWatchScreen(
             onContinue = { resumeGate.value?.invoke(halftimeAdjustments) },
         )
     }
+}
+
+@Composable
+private fun periodLabel(chrome: GameWatchChrome): String = when (chrome.period) {
+    GameWatchPeriod.FirstHalf -> stringResource(R.string.game_watch_period_first)
+    GameWatchPeriod.SecondHalf -> stringResource(R.string.game_watch_period_second)
+    GameWatchPeriod.Overtime -> stringResource(R.string.game_watch_period_ot, chrome.overtimeNumber)
 }
 
 @Composable

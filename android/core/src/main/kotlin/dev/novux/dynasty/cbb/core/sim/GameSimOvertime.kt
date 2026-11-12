@@ -12,6 +12,7 @@ object GameSimOvertime {
                 PossessionStep(
                     logLine = session.latestLogLine(),
                     haltedAtHalftime = false,
+                    chrome = session.currentWatchChrome(),
                 ),
             )
             while (session.hasNext()) {
