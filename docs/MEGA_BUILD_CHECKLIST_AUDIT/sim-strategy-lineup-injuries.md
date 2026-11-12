@@ -218,7 +218,7 @@
 |----|-----|--------|-------------------|-------------|---------|
 | MEGA-SIM-119 | P0 | PASS | Default **2.0s** wall-clock between lines (not forced 8×) | `GameWatchScreen`, `GameWatchPlayback` | Watch uses `DEFAULT_WATCH_SPEED_MULTIPLIER` (1×) not 8× |
 | MEGA-SIM-120 | P0 | PASS | User **speed multiplier** UI: 0.5×, 1×, 2×, 4×, **Sim to end** | `GameWatchScreen`, `GameWatchPlayback` | Speed chips + zero-delay “Sim to end” mid-watch |
-| MEGA-SIM-121 | P1 | FAIL | **Pause / resume** watch without losing mid-game state | Halftime only | No mid-half pause for coach |
+| MEGA-SIM-121 | P1 | PASS | **Pause / resume** watch without losing mid-game state | `GameWatchPauseGate`, `GameWatchScreen` | Mid-half Pause/Resume holds session; resume matches `simToEnd` |
 | MEGA-SIM-122 | P1 | FAIL | **Half indicator** + period label on watch chrome | `GameWatchScreen` | Clock/score only |
 | MEGA-SIM-123 | P2 | FAIL | Optional **shot-clock seconds** on each log line | MEGA-SIM-037 | Product expects readable tension |
 | MEGA-SIM-124 | P1 | FAIL | **Possession feed** scrollback + auto-scroll | Watch list UI | Minimal text list |

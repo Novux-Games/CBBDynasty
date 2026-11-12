@@ -5,6 +5,8 @@ import dev.novux.dynasty.cbb.core.sim.tuning.SimShotClock
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTimeUsedSeconds
 import dev.novux.dynasty.cbb.core.sim.tuning.SimVenueModifiers
 import dev.novux.dynasty.cbb.core.sim.tuning.IntMinMax
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.JsonObject
 import org.junit.Assert.assertEquals
@@ -65,8 +67,38 @@ class GameWatchPlaybackTest {
         val instant = GameWatchPlayback.simToEnd(input)
         assertEquals(instant.homeScore, watched.homeScore)
         assertEquals(instant.awayScore, watched.awayScore)
-        assertEquals(instant.possessionLog.size, lines.size)
+        assertEquals(instant.possessionLog.size, watched.possessionLog.size)
         assertEquals(1, halftimeCalls)
         assertTrue(lines.isNotEmpty())
+    }
+
+    @Test
+    fun watchPauseGatePreservesSessionUntilResume() = runBlocking {
+        val input = GameSimInput(
+            home = GameSimTeamInput("h", 80, 78),
+            away = GameSimTeamInput("a", 77, 76),
+            tuning = tuning,
+            seed = 44L,
+        )
+        val gate = GameWatchPauseGate()
+        gate.pause()
+        val lines = mutableListOf<String>()
+        val watchJob = async {
+            GameWatchPlayback.watch(
+                input = input,
+                speedMultiplier = 0.0,
+                pauseGate = gate,
+                onLine = { lines += it },
+                onHalftime = { _, _ -> input },
+            )
+        }
+        delay(50)
+        assertEquals(1, lines.size)
+        gate.resume()
+        val result = watchJob.await()
+        val instant = GameWatchPlayback.simToEnd(input)
+        assertEquals(instant.homeScore, result.homeScore)
+        assertEquals(instant.awayScore, result.awayScore)
+        assertTrue(lines.size > 1)
     }
 }

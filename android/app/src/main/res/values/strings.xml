@@ -260,7 +260,7 @@
     <string name="conference_offers_declined">Declined</string>
     <string name="preseason_shell_title">Preseason</string>
     <string name="preseason_checklist_hint">Complete every task to start the season.</string>
-    <string name="preseason_loading_checklist">Loading preseason checklist…</string>
+    <string name="preseason_loading_checklist">Loading preseason tasks…</string>
     <string name="preseason_task_complete">Complete</string>
     <string name="preseason_task_done">Done</string>
     <string name="preseason_task_locked_invites">Finish tournament invites first.</string>
@@ -809,6 +809,8 @@
     <string name="game_watch_speed_two">2×</string>
     <string name="game_watch_speed_four">4×</string>
     <string name="game_watch_speed_sim_to_end">Sim to end</string>
+    <string name="game_watch_pause">Pause</string>
+    <string name="game_watch_resume">Resume</string>
     <string name="game_watch_postgame_box_title">Box score</string>
     <string name="game_watch_box_tab_team">Team</string>
     <string name="game_watch_box_tab_players">Players</string>

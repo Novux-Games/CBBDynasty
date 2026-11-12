@@ -38,6 +38,7 @@ import dev.novux.dynasty.cbb.core.sim.GameSimInjuryRollInput
 import dev.novux.dynasty.cbb.core.sim.GameSimResult
 import dev.novux.dynasty.cbb.core.sim.GameSimRosterInput
 import dev.novux.dynasty.cbb.core.sim.GameSimTeamInput
+import dev.novux.dynasty.cbb.core.sim.GameWatchPauseGate
 import dev.novux.dynasty.cbb.core.sim.GameWatchPlayback
 import dev.novux.dynasty.cbb.core.sim.GameWatchSpeedPresets
 import dev.novux.dynasty.cbb.core.sim.HalftimeCoachAdjustments
@@ -102,6 +103,8 @@ fun GameWatchScreen(
     }
     var simToEnd by remember { mutableStateOf(false) }
     var watchInProgress by remember { mutableStateOf(true) }
+    val pauseGate = remember { GameWatchPauseGate() }
+    var watchPaused by remember { mutableStateOf(false) }
 
     val baseInput = remember(
         tuning,
@@ -142,6 +145,7 @@ fun GameWatchScreen(
         val result = GameWatchPlayback.watch(
             input = baseInput,
             injuryRoll = injuryRoll,
+            pauseGate = pauseGate,
             onLineDelayMs = {
                 if (simToEnd) 0L else GameWatchPlayback.lineDelayMs(selectedSpeedMultiplier)
             },
@@ -244,10 +248,34 @@ fun GameWatchScreen(
             style = MaterialTheme.typography.bodyMedium,
         )
         Text(text = scoreLine, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            OutlinedButton(
+                onClick = {
+                    if (watchPaused) {
+                        pauseGate.resume()
+                        watchPaused = false
+                    } else {
+                        pauseGate.pause()
+                        watchPaused = true
+                    }
+                },
+                enabled = watchInProgress && !halftimeOpen && !simToEnd,
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(
+                    stringResource(
+                        if (watchPaused) R.string.game_watch_resume else R.string.game_watch_pause,
+                    ),
+                )
+            }
+        }
         GameWatchSpeedControl(
             selectedSpeedMultiplier = selectedSpeedMultiplier,
             simToEnd = simToEnd,
-            enabled = watchInProgress,
+            enabled = watchInProgress && !watchPaused,
             onSelectMultiplier = { mult ->
                 simToEnd = false
                 selectedSpeedMultiplier = mult
