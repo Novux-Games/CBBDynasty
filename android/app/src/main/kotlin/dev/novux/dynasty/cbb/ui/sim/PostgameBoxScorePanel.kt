@@ -28,6 +28,7 @@ import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.sim.GameSimResult
 import dev.novux.dynasty.cbb.core.sim.PlayerBoxScore
 import dev.novux.dynasty.cbb.core.sim.TeamBoxScore
+import dev.novux.dynasty.cbb.core.sim.TeamBoxScoreDisplay
 
 @Composable
 fun PostgameBoxScorePanel(
@@ -62,8 +63,8 @@ fun PostgameBoxScorePanel(
       0 -> TeamBoxScoreTab(
         homeName = homeName,
         awayName = awayName,
-        home = result.homeBox,
-        away = result.awayBox,
+        home = TeamBoxScoreDisplay.from(result.homeBox, result.homePlayerBox),
+        away = TeamBoxScoreDisplay.from(result.awayBox, result.awayPlayerBox),
         homeScore = result.homeScore,
         awayScore = result.awayScore,
       )
@@ -82,8 +83,8 @@ fun PostgameBoxScorePanel(
 private fun TeamBoxScoreTab(
     homeName: String,
     awayName: String,
-    home: TeamBoxScore,
-    away: TeamBoxScore,
+    home: TeamBoxScoreDisplay,
+    away: TeamBoxScoreDisplay,
     homeScore: Int,
     awayScore: Int,
 ) {
@@ -95,13 +96,13 @@ private fun TeamBoxScoreTab(
       modifier = Modifier.weight(1f),
       teamName = homeName,
       score = homeScore,
-      box = home,
+      display = home,
     )
     TeamBoxCard(
       modifier = Modifier.weight(1f),
       teamName = awayName,
       score = awayScore,
-      box = away,
+      display = away,
     )
   }
 }
@@ -110,9 +111,10 @@ private fun TeamBoxScoreTab(
 private fun TeamBoxCard(
     teamName: String,
     score: Int,
-    box: TeamBoxScore,
+    display: TeamBoxScoreDisplay,
     modifier: Modifier = Modifier,
 ) {
+  val box = display.box
   Card(
     modifier = modifier,
     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
@@ -132,6 +134,23 @@ private fun TeamBoxCard(
           box.threePointsAttempted,
           box.freeThrowsMade,
           box.freeThrowsAttempted,
+        ),
+        style = MaterialTheme.typography.bodySmall,
+      )
+      Text(
+        stringResource(
+          R.string.game_watch_box_team_pct,
+          display.fieldGoalPct,
+          display.threePointPct,
+          display.freeThrowPct,
+        ),
+        style = MaterialTheme.typography.bodySmall,
+      )
+      Text(
+        stringResource(
+          R.string.game_watch_box_team_rebounds,
+          display.offensiveRebounds,
+          display.defensiveRebounds,
         ),
         style = MaterialTheme.typography.bodySmall,
       )

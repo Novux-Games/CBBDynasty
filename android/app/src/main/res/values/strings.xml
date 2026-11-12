@@ -816,6 +816,14 @@
     <string name="game_watch_period_ot">OT %1$d</string>
     <string name="game_watch_chrome">%1$s · %2$s · SC %3$ds</string>
     <string name="game_watch_feed_shot_clock">SC %1$ds</string>
+    <string name="game_watch_feed_follow_live">Back to live</string>
+    <string name="game_watch_halftime_scouting_title">Opponent scouting</string>
+    <string name="game_watch_halftime_scouting_matchup">You %1$d – %2$d %3$s</string>
+    <string name="game_watch_halftime_scouting_ratings">OVR %1$d · DEF %2$d</string>
+    <string name="game_watch_halftime_scouting_shooting">FG %1$d–%2$d (%3$d%%) · 3PT %4$d–%5$d (%6$d%%)</string>
+    <string name="game_watch_halftime_scouting_misc">TO %1$d · PF %2$d</string>
+    <string name="game_watch_box_team_pct">FG%1$d%% · 3P%2$d%% · FT%3$d%%</string>
+    <string name="game_watch_box_team_rebounds">OREB %1$d · DREB %2$d</string>
     <string name="game_watch_postgame_box_title">Box score</string>
     <string name="game_watch_box_tab_team">Team</string>
     <string name="game_watch_box_tab_players">Players</string>

@@ -24,6 +24,8 @@ import dev.novux.dynasty.cbb.core.lineup.RotationMinutesAllocator
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.sim.HalftimeCoachAdjustments
+import dev.novux.dynasty.cbb.core.sim.HalftimeScoutingSnapshot
+import dev.novux.dynasty.cbb.core.sim.TeamBoxScoreDisplay
 import dev.novux.dynasty.cbb.core.sim.HalftimeRotationEmphasis
 import dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset
 import dev.novux.dynasty.cbb.core.strategy.GameplanInput
@@ -35,6 +37,7 @@ import dev.novux.dynasty.cbb.ui.newgame.SchemesStepContent
 @Composable
 fun HalftimeCoachSheet(
     scoreLine: String,
+    scouting: HalftimeScoutingSnapshot? = null,
     players: List<RosterPlayer>,
     state: HalftimeCoachAdjustments,
     onStateChange: (HalftimeCoachAdjustments) -> Unit,
@@ -51,6 +54,7 @@ fun HalftimeCoachSheet(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 Text(scoreLine, fontWeight = FontWeight.SemiBold)
+                scouting?.let { HalftimeOpponentScoutingStrip(it) }
                 Text(
                     text = stringResource(R.string.game_watch_halftime_schemes),
                     style = MaterialTheme.typography.titleSmall,
@@ -175,6 +179,55 @@ fun HalftimeCoachSheet(
             }
         },
     )
+}
+
+@Composable
+@Composable
+private fun HalftimeOpponentScoutingStrip(scouting: HalftimeScoutingSnapshot) {
+    val display = TeamBoxScoreDisplay.from(scouting.opponentBox, emptyList())
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(
+            text = stringResource(R.string.game_watch_halftime_scouting_title),
+            style = MaterialTheme.typography.titleSmall,
+        )
+        Text(
+            text = stringResource(
+                R.string.game_watch_halftime_scouting_matchup,
+                scouting.userPoints,
+                scouting.opponentPoints,
+                scouting.opponentName,
+            ),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        Text(
+            text = stringResource(
+                R.string.game_watch_halftime_scouting_ratings,
+                scouting.opponentOffensiveRating,
+                scouting.opponentDefensiveRating,
+            ),
+            style = MaterialTheme.typography.bodySmall,
+        )
+        Text(
+            text = stringResource(
+                R.string.game_watch_halftime_scouting_shooting,
+                display.box.fieldGoalsMade,
+                display.box.fieldGoalsAttempted,
+                display.fieldGoalPct,
+                display.box.threePointsMade,
+                display.box.threePointsAttempted,
+                display.threePointPct,
+            ),
+            style = MaterialTheme.typography.bodySmall,
+        )
+        Text(
+            text = stringResource(
+                R.string.game_watch_halftime_scouting_misc,
+                display.box.turnovers,
+                display.box.personalFouls,
+            ),
+            style = MaterialTheme.typography.bodySmall,
+        )
+    }
 }
 
 @Composable

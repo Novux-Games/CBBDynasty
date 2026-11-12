@@ -17,6 +17,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +46,7 @@ import dev.novux.dynasty.cbb.core.sim.GameWatchPlayback
 import dev.novux.dynasty.cbb.core.sim.GameWatchSpeedPresets
 import dev.novux.dynasty.cbb.core.sim.HalftimeCoachAdjustments
 import dev.novux.dynasty.cbb.core.sim.HalftimeRosterAdjust
+import dev.novux.dynasty.cbb.core.sim.HalftimeScoutingSnapshot
 import dev.novux.dynasty.cbb.core.sim.tuning.SimTuning
 import dev.novux.dynasty.cbb.core.reports.PostgameReportGenerator
 import dev.novux.dynasty.cbb.core.reports.ReportArticle
@@ -92,6 +94,7 @@ fun GameWatchScreen(
     var scoreLine by remember { mutableStateOf("") }
     var halftimeOpen by remember { mutableStateOf(false) }
     var halftimeScore by remember { mutableStateOf("") }
+    var halftimeScouting by remember { mutableStateOf<HalftimeScoutingSnapshot?>(null) }
     var halftimeAdjustments by remember {
         mutableStateOf(
             HalftimeCoachAdjustments(
@@ -105,6 +108,32 @@ fun GameWatchScreen(
     var postgameArticle by remember { mutableStateOf<ReportArticle?>(null) }
     var finalResult by remember { mutableStateOf<GameSimResult?>(null) }
     val listState = rememberLazyListState()
+    var followLive by remember { mutableStateOf(true) }
+    val atLiveEdge by remember {
+        derivedStateOf {
+            if (lines.isEmpty()) true
+            else {
+                val info = listState.layoutInfo
+                val lastIndex = lines.lastIndex
+                info.visibleItemsInfo.any { it.index >= lastIndex }
+            }
+        }
+    }
+    LaunchedEffect(atLiveEdge) {
+        if (atLiveEdge) {
+            followLive = true
+        }
+    }
+    LaunchedEffect(listState.firstVisibleItemIndex, listState.firstVisibleItemScrollOffset, lines.size, watchInProgress) {
+        if (watchInProgress && lines.isNotEmpty() && !atLiveEdge) {
+            followLive = false
+        }
+    }
+    LaunchedEffect(lines.size, followLive) {
+        if (lines.isNotEmpty() && followLive) {
+            listState.animateScrollToItem(lines.lastIndex)
+        }
+    }
     val resumeGate = remember { mutableStateOf<((HalftimeCoachAdjustments) -> Unit)?>(null) }
     var selectedSpeedMultiplier by remember {
         mutableStateOf(GameWatchPlayback.DEFAULT_WATCH_SPEED_MULTIPLIER)
@@ -165,9 +194,16 @@ fun GameWatchScreen(
                         shotClockSeconds = step.chrome.shotClockSeconds,
                     ),
                 )
-                listState.animateScrollToItem(lines.lastIndex)
             },
             onHalftime = { partial, _ ->
+                halftimeScouting = HalftimeScoutingSnapshot.fromHalftimePartial(
+                    userIsHome = true,
+                    homeName = homeName,
+                    awayName = awayName,
+                    partial = partial,
+                    homeRating = baseInput.home,
+                    awayRating = baseInput.away,
+                )
                 halftimeScore = context.getString(
                     R.string.game_watch_score_half,
                     partial.homeScore,
@@ -301,6 +337,15 @@ fun GameWatchScreen(
                 )
             }
         }
+        if (watchInProgress && lines.isNotEmpty() && !atLiveEdge) {
+            FilterChip(
+                selected = false,
+                onClick = {
+                    followLive = true
+                },
+                label = { Text(stringResource(R.string.game_watch_feed_follow_live)) },
+            )
+        }
         GameWatchSpeedControl(
             selectedSpeedMultiplier = selectedSpeedMultiplier,
             simToEnd = simToEnd,
@@ -370,6 +415,7 @@ fun GameWatchScreen(
     if (halftimeOpen) {
         HalftimeCoachSheet(
             scoreLine = halftimeScore,
+            scouting = halftimeScouting,
             players = homeRosterPlayers,
             state = halftimeAdjustments,
             onStateChange = { halftimeAdjustments = it },

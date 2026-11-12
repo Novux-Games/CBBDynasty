@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "index": 1,
+  "index": 4,
   "completedIds": [
     "MEGA-COACH-028",
     "MEGA-COACH-031",
@@ -188,7 +188,11 @@
     "MEGA-SIM-117",
     "MEGA-SIM-121",
     "MEGA-SIM-122",
-    "MEGA-SIM-123"
+    "MEGA-SIM-123",
+    "MEGA-SIM-124",
+    "MEGA-SIM-126",
+    "MEGA-SIM-127",
+    "MEGA-SIM-131"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

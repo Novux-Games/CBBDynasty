@@ -221,10 +221,10 @@
 | MEGA-SIM-121 | P1 | PASS | **Pause / resume** watch without losing mid-game state | `GameWatchPauseGate`, `GameWatchScreen` | Mid-half Pause/Resume holds session; resume matches `simToEnd` |
 | MEGA-SIM-122 | P1 | PASS | **Half indicator** + period label on watch chrome | `GameWatchChrome`, `GameWatchScreen` | Period + game clock chrome row |
 | MEGA-SIM-123 | P2 | PASS | Optional **shot-clock seconds** on each log line | `PossessionStep.chrome`, feed SC badge | Shot clock on log + line badge |
-| MEGA-SIM-124 | P1 | FAIL | **Possession feed** scrollback + auto-scroll | Watch list UI | Minimal text list |
+| MEGA-SIM-124 | P1 | PASS | **Possession feed** scrollback + auto-scroll | `GameWatchScreen` LazyColumn | Scrollback + follow-live / Back to live |
 | MEGA-SIM-125 | P0 | PASS | **Halftime sheet**: change O/D scheme, rotation emphasis, usage, swap legal starters | `HalftimeCoachSheet`, `GameWatchScreen` | Resumes with updated schemes, roster, gameplan |
-| MEGA-SIM-126 | P1 | FAIL | Halftime **opponent scouting** read-only stats strip | Product frame | Not in halftime UI |
-| MEGA-SIM-127 | P1 | FAIL | **Same seed** watch vs sim-to-end parity test in UI contract | Tests cover engine | User cannot trust skip-watch |
+| MEGA-SIM-126 | P1 | PASS | Halftime **opponent scouting** read-only stats strip | `HalftimeScoutingSnapshot`, `HalftimeCoachSheet` | Opponent FG/TO/PF + ratings |
+| MEGA-SIM-127 | P1 | PASS | **Same seed** watch vs sim-to-end parity test in UI contract | `GameWatchUiParityContractTest` | Multi-seed log + score parity |
 | MEGA-SIM-128 | P2 | FAIL | **Exhibition** vs **RS** badge on watch header | Calendar phase | Not surfaced |
 
 ---
@@ -235,7 +235,7 @@
 |----|-----|--------|-------------------|-------------|---------|
 | MEGA-SIM-129 | P0 | PASS | **Player box** all columns: MIN, PTS, FGM/A, 3PM/A, FTM/A, REB, AST, STL, BLK, TO, PF | `PlayerBoxScore`, `PlayerPossessionStatRecorder` | Per-possession attribution + `BoxScoreCoherence` player sums |
 | MEGA-SIM-130 | P0 | PASS | Postgame **box score screen** (not article-only) with team + player tabs | `PostgameBoxScorePanel`, `GameWatchScreen` | Team cards + player stat table tabs after final |
-| MEGA-SIM-131 | P1 | FAIL | **Team totals** shooting %, turnovers, fouls on box UI | Partial in `TeamBoxScore` | PF/ORB/DRB missing in engine |
+| MEGA-SIM-131 | P1 | PASS | **Team totals** shooting %, turnovers, fouls on box UI | `TeamBoxScoreDisplay`, `PostgameBoxScorePanel` | FG/3P/FT%, OREB/DREB, TO/PF on team tab |
 | MEGA-SIM-132 | P1 | FAIL | **DNP-INJ** / partial MIN when mid-game injury | `injuries.md` game log | Post-game injury only |
 | MEGA-SIM-133 | P1 | FAIL | Export / persist box on dynasty **game record** for schedule replay | Save model | Scrimmage-local |
 | MEGA-SIM-134 | P2 | FAIL | **Plus-minus** optional column (product) | — | Not required by planning; nice for depth |
