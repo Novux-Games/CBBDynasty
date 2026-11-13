@@ -238,8 +238,13 @@ class PossessionSimSession(
         } else {
             resolveEffects
         }
-        val offRating = teamOffensiveRating(offenseIsHome = offenseHome) + effects.offensiveRatingDelta
-        val defRating = teamDefensiveRating(defenseIsHome = !offenseHome) + effects.defensiveRatingDelta
+        val venueMods = input.tuning.homeNeutralModifiers
+        val venueHome = input.homeVenue
+        var offRating = teamOffensiveRating(offenseIsHome = offenseHome) + effects.offensiveRatingDelta
+        var defRating = teamDefensiveRating(defenseIsHome = !offenseHome) + effects.defensiveRatingDelta
+        offRating = SimVenueRatingPolicy.offensiveRating(offRating, offenseHome, venueHome, venueMods) +
+            SimVenueRatingPolicy.lateGameHomeCrowdOffenseBoost(offenseHome, gameClock, venueHome)
+        defRating = SimVenueRatingPolicy.defensiveRating(defRating, !offenseHome, venueHome, venueMods)
         val resolution = when {
             foulEarlyStopClock ->
                 IntentionalFoulLateGamePolicy.resolvePossession(sides.box)

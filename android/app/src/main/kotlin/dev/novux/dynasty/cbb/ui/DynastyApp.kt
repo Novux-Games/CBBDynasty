@@ -28,6 +28,8 @@ import dev.novux.dynasty.cbb.core.balance.injuryTuning
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.settings.AppSettings
 import dev.novux.dynasty.cbb.core.advance.UserLeagueGameIds
+import dev.novux.dynasty.cbb.core.dashboard.InSeasonWeekGames
+import dev.novux.dynasty.cbb.core.strategy.StrategyEditLockPolicy
 import dev.novux.dynasty.cbb.core.calendar.checkpoint.ProvisionalGameMark
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
@@ -473,12 +475,31 @@ fun DynastyApp(
                         mutableStateOf(dev.novux.dynasty.cbb.core.balance.BalanceFatigue(0.35, 25, 15, 20, 35))
                     }
                     if (session != null) {
-                        LaunchedEffect(session.dynastyId, session.metadata.seasonIndex) {
+                        var prepEditable by remember { mutableStateOf(true) }
+                        LaunchedEffect(session.dynastyId, session.metadata.seasonIndex, session.weekCheckpoint) {
                             teamChem = app.chemistryRepository.loadState(
                                 session.dynastyId,
                                 session.metadata.seasonIndex,
                             ).teamChemistry
                             fatigueTuning = app.balanceRulesetRepository.activeRuleset().fatigue
+                            val plan = app.preseasonScheduleRepository.loadPlan(
+                                session.dynastyId,
+                                session.metadata.seasonIndex,
+                            )
+                            val exhibitionCount = app.preseasonScheduleRepository.loadExhibitionCount(
+                                session.dynastyId,
+                                session.metadata.seasonIndex,
+                            )
+                            val hasScheduled = InSeasonWeekGames.forPosition(
+                                session.weekCheckpoint.activePosition,
+                                plan,
+                                exhibitionCount,
+                            ).isNotEmpty()
+                            prepEditable = StrategyEditLockPolicy.prepEditable(
+                                checkpoint = session.weekCheckpoint,
+                                hasScheduledUserGame = hasScheduled,
+                                phase = session.weekCheckpoint.activePosition.phase,
+                            )
                         }
                         StrategyScreen(
                             dynastyId = session.dynastyId,
@@ -486,6 +507,7 @@ fun DynastyApp(
                             strategyPrepRepository = app.dynastyStrategyPrepRepository,
                             teamChemistry = teamChem,
                             fatigueTuning = fatigueTuning,
+                            prepEditable = prepEditable,
                             homeTeamLabel = session.summary.schoolDisplayName.orEmpty().ifBlank { "Home" },
                             awayTeamLabel = stringResource(R.string.game_watch_opponent_scrimmage),
                             onWatchScrimmage = { navController.navigate(AppRoute.GameWatch.route) },
@@ -499,6 +521,8 @@ fun DynastyApp(
                 }
                 composable(AppRoute.GamePreview.route) {
                     val preview = GamePreviewLaunch.result
+                    val app = LocalContext.current.requireDynastyApplication()
+                    val scope = rememberCoroutineScope()
                     if (preview != null) {
                         GamePreviewScreen(
                             matchupLabel = GamePreviewLaunch.matchupLabel,
@@ -508,6 +532,14 @@ fun DynastyApp(
                             venue = GamePreviewLaunch.venue,
                             preview = preview,
                             onOpenStrategy = { navController.navigate(AppRoute.Strategy.route) },
+                            onPlayGame = {
+                                scope.launch {
+                                    val session = ActiveDynastySession.current ?: return@launch
+                                    if (app.userCalendarGameWatchBootstrap.configure(session)) {
+                                        navController.navigate(AppRoute.GameWatch.route)
+                                    }
+                                }
+                            },
                             onBack = { navController.popBackStack() },
                         )
                     } else {
@@ -535,18 +567,20 @@ fun DynastyApp(
                     }
                     LaunchedEffect(Unit) {
                         val session = ActiveDynastySession.current ?: return@LaunchedEffect
-                        val ruleset = app.balanceRulesetRepository.activeRuleset()
-                        val injuryTuning = ruleset.injuryTuning()
-                        val bank = dev.novux.dynasty.cbb.core.injuries.InjuryOccurrenceEngine
-                            .bankFromBalance(ruleset.injuries.bank)
-                        GameWatchLaunch.injuryRoll = dev.novux.dynasty.cbb.core.sim.GameSimInjuryRollInput(
-                            phase = session.metadata.phase,
-                            bank = bank,
-                            occurrence = injuryTuning.occurrence,
-                            medicalStaffGrade = 70,
-                            homeRosterPlayers = GameWatchLaunch.homeRosterPlayers,
-                            awayRosterPlayers = null,
-                        )
+                        if (GameWatchLaunch.injuryRoll == null || GameWatchLaunch.isScrimmage) {
+                            val ruleset = app.balanceRulesetRepository.activeRuleset()
+                            val injuryTuning = ruleset.injuryTuning()
+                            val bank = dev.novux.dynasty.cbb.core.injuries.InjuryOccurrenceEngine
+                                .bankFromBalance(ruleset.injuries.bank)
+                            GameWatchLaunch.injuryRoll = dev.novux.dynasty.cbb.core.sim.GameSimInjuryRollInput(
+                                phase = session.metadata.phase,
+                                bank = bank,
+                                occurrence = injuryTuning.occurrence,
+                                medicalStaffGrade = 70,
+                                homeRosterPlayers = GameWatchLaunch.homeRosterPlayers,
+                                awayRosterPlayers = null,
+                            )
+                        }
                     }
                     val ready = tuning
                     val session = ActiveDynastySession.current
@@ -563,6 +597,13 @@ fun DynastyApp(
                             homeStarters = GameWatchLaunch.homeStarters,
                             homeSimRoster = GameWatchLaunch.homeSimRoster,
                             injuryRoll = GameWatchLaunch.injuryRoll,
+                            userTeamIsHome = GameWatchLaunch.userTeamIsHome,
+                            homeVenue = GameWatchLaunch.homeVenue,
+                            userOffensiveRating = GameWatchLaunch.userOffensiveRating,
+                            userDefensiveRating = GameWatchLaunch.userDefensiveRating,
+                            awayOffensiveRating = GameWatchLaunch.awayOffensiveRating,
+                            awayDefensiveRating = GameWatchLaunch.awayDefensiveRating,
+                            seed = GameWatchLaunch.simSeed ?: 17L,
                             postgameInjuryEvents = watchPostgameEvents,
                             postgameInjuryRoster = watchPostgameRoster,
                             rsWeekIndex = rsWeek,
@@ -603,12 +644,14 @@ fun DynastyApp(
                                         return@launch
                                     }
                                     val position = active.weekCheckpoint.activePosition
-                                    val gameId = UserLeagueGameIds.forPosition(position)
+                                    val gameId = GameWatchLaunch.activeGameId
+                                        ?: UserLeagueGameIds.forPosition(position)
+                                    val userHome = GameWatchLaunch.userTeamIsHome
                                     val priorGen = active.weekCheckpoint.provisionalGames[gameId]?.simGeneration
                                     val mark = ProvisionalGameMark.fromGameSim(
                                         gameId = gameId,
                                         result = result,
-                                        userTeamIsHome = true,
+                                        userTeamIsHome = userHome,
                                         previousGeneration = priorGen ?: 0,
                                     )
                                     val staged = app.weekCheckpointRepository.stageSim(
@@ -617,7 +660,8 @@ fun DynastyApp(
                                         mark,
                                     )
                                     ActiveDynastySession.set(active.copy(weekCheckpoint = staged))
-                                    val events = result.userTeamInjuries(userTeamIsHome = true)
+                                    val events = result.userTeamInjuries(userTeamIsHome = userHome)
+                                    GameWatchLaunch.activeGameId = null
                                     if (events.isEmpty()) return@launch
                                     val week = position.weekIndex
                                     val before = app.dynastyRosterRepository.listPlayers(active.dynastyId)

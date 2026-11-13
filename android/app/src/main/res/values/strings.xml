@@ -848,6 +848,8 @@
     <string name="game_preview_h2h_record">Series %1$d–%2$d</string>
     <string name="game_preview_h2h_meeting">%1$s: %2$d–%3$d</string>
     <string name="game_preview_open_strategy">Set lineup and gameplan</string>
+    <string name="game_preview_play_game">Play game</string>
+    <string name="strategy_prep_locked">Game week prep is locked. Advance the calendar or wait for your next scheduled game.</string>
     <string name="game_preview_neutral">Neutral court</string>
     <string name="dynasty_shell_game_preview">Game preview</string>
     <string name="game_preview_venue_phrase_home">home court</string>

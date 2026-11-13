@@ -59,7 +59,9 @@ fun StrategyScreen(
     onWatchScrimmage: () -> Unit = {},
     homeTeamLabel: String = "Home",
     awayTeamLabel: String = "Away",
+    prepEditable: Boolean = true,
 ) {
+    val editsEnabled = prepEditable
     val scope = rememberCoroutineScope()
     var players by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
     var userStarters by remember { mutableStateOf<Map<PlayerPosition, String>>(emptyMap()) }
@@ -129,6 +131,13 @@ fun StrategyScreen(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        if (!editsEnabled) {
+            Text(
+                text = stringResource(R.string.strategy_prep_locked),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.error,
+            )
+        }
         teamChemistry?.let { chem ->
             Text(
                 text = stringResource(R.string.strategy_chemistry, chem),
@@ -153,9 +162,11 @@ fun StrategyScreen(
                 player = player,
                 selected = assignTargetSlot == slot,
                 onSelect = {
+                    if (!editsEnabled) return@StrategyLineupCard
                     assignTargetSlot = if (assignTargetSlot == slot) null else slot
                 },
                 onCycle = {
+                    if (!editsEnabled) return@StrategyLineupCard
                     val options = eligibleForSlot(players, slot)
                     val next = cycleStarter(options, starters[slot])
                     if (next != null) {
@@ -166,6 +177,7 @@ fun StrategyScreen(
             )
         }
         OutlinedButton(
+            enabled = editsEnabled,
             onClick = {
                 scope.launch {
                     players = rosterRepository.applyStarterLineup(dynastyId, userStarters)
@@ -189,6 +201,7 @@ fun StrategyScreen(
                 onSelect = {},
                 onCycle = {},
                 onAssign = {
+                    if (!editsEnabled) return@StrategyLineupCard
                     val slot = assignTargetSlot ?: return@StrategyLineupCard
                     if (!LineupSlotPolicy.slotEligible(player.position, slot)) return@StrategyLineupCard
                     if (player.injuryActive) return@StrategyLineupCard
@@ -205,9 +218,10 @@ fun StrategyScreen(
             defensiveScheme = defensiveScheme,
             coachDefaultOffensive = coachDefaultOffensive,
             coachDefaultDefensive = coachDefaultDefensive,
-            onOffensiveChange = { offensiveScheme = it },
-            onDefensiveChange = { defensiveScheme = it },
+            onOffensiveChange = { if (editsEnabled) offensiveScheme = it },
+            onDefensiveChange = { if (editsEnabled) defensiveScheme = it },
             onSaveGamePrep = {
+                if (!editsEnabled) return@StrategyGameSchemePanel
                 scope.launch {
                     strategyPrepRepository.saveGamePrep(dynastyId, offensiveScheme, defensiveScheme)
                 }
@@ -237,7 +251,7 @@ fun StrategyScreen(
             )
         }
         Button(
-            enabled = lineupValidation.canStartSim,
+            enabled = lineupValidation.canStartSim && editsEnabled,
             onClick = {
                 val normalizedRotation = RotationMinutesBalancer.normalize(rotationMinutes)
                 rotationMinutes = normalizedRotation

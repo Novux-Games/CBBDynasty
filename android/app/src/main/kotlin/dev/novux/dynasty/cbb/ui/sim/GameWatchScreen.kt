@@ -35,6 +35,7 @@ import dev.novux.dynasty.cbb.core.sim.GameLineupPrepValidator
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.sim.GameSimInput
+import dev.novux.dynasty.cbb.core.sim.SimHomeVenueType
 import dev.novux.dynasty.cbb.core.sim.GameSimInjuryRollInput
 import dev.novux.dynasty.cbb.core.sim.GameSimResult
 import dev.novux.dynasty.cbb.core.sim.GameSimRosterInput
@@ -87,6 +88,12 @@ fun GameWatchScreen(
     onSimComplete: (GameSimResult) -> Unit = {},
     onBack: () -> Unit,
     seed: Long = 17L,
+    userTeamIsHome: Boolean = true,
+    homeVenue: SimHomeVenueType = SimHomeVenueType.Home,
+    userOffensiveRating: Int = 78,
+    userDefensiveRating: Int = 74,
+    awayOffensiveRating: Int = 76,
+    awayDefensiveRating: Int = 75,
 ) {
     val context = LocalContext.current
     val lines = remember { mutableStateListOf<GameWatchFeedRow>() }
@@ -152,21 +159,46 @@ fun GameWatchScreen(
         homeSimRoster,
         homeOffensiveScheme,
         homeDefensiveScheme,
+        userTeamIsHome,
+        homeVenue,
+        userOffensiveRating,
+        userDefensiveRating,
+        awayOffensiveRating,
+        awayDefensiveRating,
     ) {
-        GameSimInput(
-            home = GameSimTeamInput(
-                homeName,
-                78,
-                74,
-                offensiveScheme = homeOffensiveScheme,
-                defensiveScheme = homeDefensiveScheme,
-            ),
-            away = GameSimTeamInput(awayName, 76, 75),
-            tuning = tuning,
-            seed = seed,
-            homeGameplan = homeGameplan,
-            homeRoster = homeSimRoster,
-        )
+        if (userTeamIsHome) {
+            GameSimInput(
+                home = GameSimTeamInput(
+                    homeName,
+                    userOffensiveRating,
+                    userDefensiveRating,
+                    offensiveScheme = homeOffensiveScheme,
+                    defensiveScheme = homeDefensiveScheme,
+                ),
+                away = GameSimTeamInput(awayName, awayOffensiveRating, awayDefensiveRating),
+                tuning = tuning,
+                seed = seed,
+                homeGameplan = homeGameplan,
+                homeRoster = homeSimRoster,
+                homeVenue = homeVenue,
+            )
+        } else {
+            GameSimInput(
+                home = GameSimTeamInput(homeName, awayOffensiveRating, awayDefensiveRating),
+                away = GameSimTeamInput(
+                    awayName,
+                    userOffensiveRating,
+                    userDefensiveRating,
+                    offensiveScheme = homeOffensiveScheme,
+                    defensiveScheme = homeDefensiveScheme,
+                ),
+                tuning = tuning,
+                seed = seed,
+                awayGameplan = homeGameplan,
+                awayRoster = homeSimRoster,
+                homeVenue = SimHomeVenueType.Home,
+            )
+        }
     }
 
     LaunchedEffect(baseInput) {
@@ -197,7 +229,7 @@ fun GameWatchScreen(
             },
             onHalftime = { partial, _ ->
                 halftimeScouting = HalftimeScoutingSnapshot.fromHalftimePartial(
-                    userIsHome = true,
+                    userIsHome = userTeamIsHome,
                     homeName = homeName,
                     awayName = awayName,
                     partial = partial,
@@ -234,14 +266,25 @@ fun GameWatchScreen(
                         onHomeHalftimeAdjustments(adj)
                         halftimeOpen = false
                         cont.resume(
-                            baseInput.copy(
-                                home = baseInput.home.copy(
-                                    offensiveScheme = adj.offensiveScheme,
-                                    defensiveScheme = adj.defensiveScheme,
-                                ),
-                                homeHalftimeGameplan = adj.gameplan,
-                                homeRoster = newRoster,
-                            ),
+                            if (userTeamIsHome) {
+                                baseInput.copy(
+                                    home = baseInput.home.copy(
+                                        offensiveScheme = adj.offensiveScheme,
+                                        defensiveScheme = adj.defensiveScheme,
+                                    ),
+                                    homeHalftimeGameplan = adj.gameplan,
+                                    homeRoster = newRoster,
+                                )
+                            } else {
+                                baseInput.copy(
+                                    away = baseInput.away.copy(
+                                        offensiveScheme = adj.offensiveScheme,
+                                        defensiveScheme = adj.defensiveScheme,
+                                    ),
+                                    awayHalftimeGameplan = adj.gameplan,
+                                    awayRoster = newRoster,
+                                )
+                            },
                         )
                         resumeGate.value = null
                     }

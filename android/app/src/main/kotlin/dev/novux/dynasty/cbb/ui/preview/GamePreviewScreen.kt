@@ -31,6 +31,7 @@ fun GamePreviewScreen(
     venue: GamePreviewVenue,
     preview: GamePreviewResult,
     onOpenStrategy: () -> Unit,
+    onPlayGame: () -> Unit = {},
     onBack: () -> Unit,
 ) {
     val pregameArticle = remember(userTeamName, opponentName, venuePhrase, preview) {
@@ -108,6 +109,9 @@ fun GamePreviewScreen(
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
+        }
+        OutlinedButton(onClick = onPlayGame, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.game_preview_play_game))
         }
         OutlinedButton(onClick = onOpenStrategy, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.game_preview_open_strategy))

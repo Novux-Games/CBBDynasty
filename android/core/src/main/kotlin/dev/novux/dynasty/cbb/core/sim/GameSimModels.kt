@@ -36,6 +36,8 @@ data class GameSimInput(
     val homeHalftimeGameplan: GameplanInput? = null,
     val awayHalftimeGameplan: GameplanInput? = null,
     val fatigueTuning: BalanceFatigue = BalanceFatigue.DEFAULT,
+    /** Venue for the scheduled home team — applies `tuning.homeNeutralModifiers`. */
+    val homeVenue: SimHomeVenueType = SimHomeVenueType.Home,
 ) {
     fun activeHomeGameplan(clockSeconds: Int): GameplanInput? =
         if (clockSeconds <= GameSimClock.HALF_SECONDS) {
