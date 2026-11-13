@@ -26,6 +26,7 @@ import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.sim.HalftimeCoachAdjustments
 import dev.novux.dynasty.cbb.core.sim.HalftimeScoutingSnapshot
 import dev.novux.dynasty.cbb.core.sim.TeamBoxScoreDisplay
+import dev.novux.dynasty.cbb.core.sim.HalftimeRotationBandHint
 import dev.novux.dynasty.cbb.core.sim.HalftimeRotationEmphasis
 import dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset
 import dev.novux.dynasty.cbb.core.strategy.GameplanInput
@@ -89,6 +90,11 @@ fun HalftimeCoachSheet(
                         )
                     }
                 }
+                Text(
+                    text = HalftimeRotationBandHint.minuteBandSummary(state.rotationEmphasis),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
                 Text(
                     text = stringResource(R.string.game_watch_halftime_starters),
                     style = MaterialTheme.typography.titleSmall,

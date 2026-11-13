@@ -254,7 +254,7 @@
 | MEGA-SIM-140 | P1 | PASS | **Pick from eligible list** per slot (PG…C) | `strategy_pick_starter`, cycle/pick | Empty slot pick + bench assign |
 | MEGA-SIM-141 | P1 | PASS | Persist **`starterSlotWire`** from Strategy saves | `RosterStarterWireResolver`, `applyStarterLineup` | Save lineup → Room `starterSlotWire` |
 | MEGA-SIM-142 | P2 | FAIL | **Reset to default** starters button invokes `DefaultStarterAlgorithm` | Strategy hub | Not exposed |
-| MEGA-SIM-143 | P1 | FAIL | **Halftime rotation emphasis** tweak (band nudge) | `strategy-schemes.md` | Not in halftime dialog |
+| MEGA-SIM-143 | P1 | PASS | **Halftime rotation emphasis** tweak (band nudge) | `HalftimeCoachSheet`, `HalftimeRosterAdjust`, `HalftimeRotationBandHint` | Rotation chips + minute-band summary; second-half target MIN nudge |
 | MEGA-SIM-144 | P2 | FAIL | Show **target MIN** on player card in Strategy row | Prep fields | OVR only prominent |
 
 ---
@@ -264,9 +264,9 @@
 | ID | Pri | Status | Requirement (spec) | Code / test | Finding |
 |----|-----|--------|-------------------|-------------|---------|
 | MEGA-SIM-145 | P0 | PASS | Per-game **offensive + defensive scheme** pickers on Strategy tied to `GameSimTeamInput` | `StrategyGameSchemePanel`, `GameWatchScreen` | 7×7 chips → `GameWatchLaunch` → sim home team |
-| MEGA-SIM-146 | P1 | FAIL | Full **7×7** scheme interaction matrix in tuning data | `SchemeMatchupResolver` sample | Partial nudges only |
-| MEGA-SIM-147 | P1 | FAIL | **Box-and-One** / **Press** fatigue cost during sim minutes | Preset identities | Team stamina not decremented in sim |
-| MEGA-SIM-148 | P1 | FAIL | **Perimeter / Post** presets bump correct slot usage on possessions | `usageWeights` team scalar | No slot-level shot share |
+| MEGA-SIM-146 | P1 | PASS | Full **7×7** scheme interaction matrix in tuning data | `SchemeInteractionMatrix`, `assets/sim/scheme-interaction-matrix.json` | 49-cell default matrix + tuning JSON overrides |
+| MEGA-SIM-147 | P1 | PASS | **Box-and-One** / **Press** fatigue cost during sim minutes | `SchemeFatigueCost`, `PossessionSimSession.accrueFloorMinutes` | Extra stamina drain on defending unit per trip |
+| MEGA-SIM-148 | P1 | PASS | **Perimeter / Post** presets bump correct slot usage on possessions | `SchemeOffensiveSlotUsageBias` | Perimeter/post slots weighted before possession credits |
 | MEGA-SIM-149 | P0 | PASS | **Primary defensive assignment** UI: map opp PG–C → your defender | `StrategyDefensiveAssignmentPanel`, `DefensiveAssignmentPolicy` | Swap per opp slot; defaults from starters |
 | MEGA-SIM-150 | P1 | PASS | Pick **opponent primary scorer slot** for deny toggle | `StrategyDefensiveAssignmentPanel` primary chips | Wired to `GameplanInput.primaryScorerSlot` |
 | MEGA-SIM-151 | P1 | FAIL | **Coach default schemes** as pre-game default with per-game override save | `coach-card.md` | Wizard sets season default; no game override persistence |

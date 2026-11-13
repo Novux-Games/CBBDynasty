@@ -7,7 +7,9 @@ import dev.novux.dynasty.cbb.core.strategy.LateGameFoulStrategy
 import dev.novux.dynasty.cbb.core.strategy.LateGamePossessionPolicy
 import dev.novux.dynasty.cbb.core.strategy.GameplanUsageNormalizer
 import dev.novux.dynasty.cbb.core.sim.tuning.SimEventWeightsResolver
+import dev.novux.dynasty.cbb.core.strategy.SchemeFatigueCost
 import dev.novux.dynasty.cbb.core.strategy.SchemeMatchupResolver
+import dev.novux.dynasty.cbb.core.strategy.SchemeOffensiveSlotUsageBias
 import kotlin.random.Random
 
 data class PossessionStep(
@@ -339,6 +341,14 @@ class PossessionSimSession(
         val offenseLedger = if (offenseHome) homePlayerLedger else awayPlayerLedger
         val defenseLedger = if (offenseHome) awayPlayerLedger else homePlayerLedger
         val baseUsage = offGameplan?.usageWeights.orEmpty()
+        val offensiveScheme = if (offenseHome) input.home.offensiveScheme else input.away.offensiveScheme
+        val offenseRosterForUsage = if (offenseHome) input.homeRoster else input.awayRoster
+        val schemeBiasedUsage = SchemeOffensiveSlotUsageBias.apply(
+            scheme = offensiveScheme,
+            roster = offenseRosterForUsage,
+            offenseFloor = offenseFloor,
+            baseWeights = baseUsage,
+        )
         val clutchActive = ClutchUsagePolicy.isClutch(
             gameClock,
             offenseScore,
@@ -346,7 +356,7 @@ class PossessionSimSession(
             eventWeights.clutchUsage,
         )
         val usageWeights = ClutchUsagePolicy.effectiveUsageWeights(
-            baseWeights = baseUsage,
+            baseWeights = schemeBiasedUsage,
             offenseFloor = offenseFloor,
             gameClockSeconds = gameClock,
             offenseScore = offenseScore,
@@ -601,31 +611,23 @@ class PossessionSimSession(
 
     private fun accrueFloorMinutes(usedSeconds: Int, offenseIsHome: Boolean) {
         val tuning = input.fatigueTuning
-        input.homeRoster?.let { homeRoster ->
-            val homeFloor = SimFloorRotationPolicy.floorParticipants(
-                homeRoster,
-                homeFoulLedger,
-                homeMinutesLedger,
-                gameClock,
-                homeStaminaLedger,
-                tuning,
-            ).map { it.playerId }
-                .filter { it !in homeInjuredOut && it !in homeDisqualifiedOut }
+        val homeFloor = floorPlayerIds(home = true)
+        val awayFloor = floorPlayerIds(home = false)
+        if (input.homeRoster != null) {
             homeMinutesLedger.addFloorTime(homeFloor, usedSeconds)
             homeStaminaLedger.drainFloorTime(homeFloor, usedSeconds, tuning)
         }
-        input.awayRoster?.let { awayRoster ->
-            val awayFloor = SimFloorRotationPolicy.floorParticipants(
-                awayRoster,
-                awayFoulLedger,
-                awayMinutesLedger,
-                gameClock,
-                awayStaminaLedger,
-                tuning,
-            ).map { it.playerId }
-                .filter { it !in awayInjuredOut && it !in awayDisqualifiedOut }
+        if (input.awayRoster != null) {
             awayMinutesLedger.addFloorTime(awayFloor, usedSeconds)
             awayStaminaLedger.drainFloorTime(awayFloor, usedSeconds, tuning)
+        }
+        val defendingHome = !offenseIsHome
+        val defendingScheme = if (defendingHome) input.home.defensiveScheme else input.away.defensiveScheme
+        val extraDrain = SchemeFatigueCost.extraDefensiveDrainSeconds(defendingScheme, usedSeconds)
+        if (extraDrain > 0) {
+            val defenders = if (defendingHome) homeFloor else awayFloor
+            val ledger = if (defendingHome) homeStaminaLedger else awayStaminaLedger
+            ledger.drainFloorTime(defenders, extraDrain, tuning)
         }
     }
 
