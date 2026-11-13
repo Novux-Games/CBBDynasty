@@ -14,7 +14,7 @@
 
 | File | Role |
 |------|------|
-| [`MEGA_BUILD_QUEUE.json`](MEGA_BUILD_QUEUE.json) | Ordered **open** items (~1.3k; parses all shard table formats) |
+| [`MEGA_BUILD_QUEUE.json`](MEGA_BUILD_QUEUE.json) | Ordered **open implementation** items (excludes `MEGA-QA-*`, `MEGA-NOTES-*`; shards unchanged) |
 | [`MEGA_BUILD_QUEUE_STATE.json`](MEGA_BUILD_QUEUE_STATE.json) | Queue cursor + **integration branch / PR** |
 | [`planning/tools/mega_queue.py`](../planning/tools/mega_queue.py) | Build / current / complete / **`integration`** |
 | Timer name | `mega-build-queue` |

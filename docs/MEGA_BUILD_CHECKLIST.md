@@ -26,8 +26,8 @@
 | [`planning-notes-traceability.md`](MEGA_BUILD_CHECKLIST_AUDIT/planning-notes-traceability.md) | Every **Done** row in `planning-notes.md` + 33-file inventory | 115 |
 | [`integration-playtest-regression.md`](MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md) | Perf, persistence, nav, playtest, Play/R8 release | 170 |
 
-**Scale:** **~1,650** unique `MEGA-*` mentions in shards (rollup text repeats some IDs). **`mega_queue.py`** ingests **~1,650** primary audit rows (both `| ID | P0 | FAIL |` and `| ID | GAP |` formats); **~710+ already SHIP/PASS/DONE** → **~950 open** in [`MEGA_BUILD_QUEUE.json`](MEGA_BUILD_QUEUE.json) (rebuild with `build`).  
-**Method:** Composer sub-agent spec↔code audits (static trace + grep; not a substitute for device QA — see **`MEGA-QA-*`** for executable acceptance).
+**Scale:** **~1,650** unique `MEGA-*` mentions in shards (rollup text repeats some IDs). **`mega_queue.py`** ingests primary audit rows; **~710+ already SHIP/PASS/DONE** → implementation queue in [`MEGA_BUILD_QUEUE.json`](MEGA_BUILD_QUEUE.json) after `build` (excludes **`MEGA-QA-*`** — manual QA — and **`MEGA-NOTES-*`** traceability; all shard rows remain).  
+**Method:** Composer sub-agent spec↔code audits (static trace + grep). **`MEGA-QA-*`** lives only in [`integration-playtest-regression.md`](MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md) for manual/release checklists.
 
 ## Autonomous queue (subscription)
 

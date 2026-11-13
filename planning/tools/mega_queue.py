@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
-MEGA build queue — ordered work list from docs/MEGA_BUILD_CHECKLIST_AUDIT/*.md.
+MEGA build queue — ordered **implementation** work from docs/MEGA_BUILD_CHECKLIST_AUDIT/*.md.
+
+Excluded from this queue (audit rows remain): `MEGA-QA-*` (manual/device QA), `MEGA-NOTES-*` (planning traceability).
 
 Build:   python3 planning/tools/mega_queue.py build
 Current: python3 planning/tools/mega_queue.py current
@@ -65,6 +67,11 @@ ROW_STATUS_ONLY = re.compile(
 
 DONE_STATUSES = frozenset({"PASS", "SHIP", "DONE"})
 SKIP_STATUSES = frozenset({"N/A", "RULE", "META"})
+# Executor queue skips (shards unchanged — QA is manual; NOTES are traceability, not build rows).
+EXECUTOR_SKIP_PREFIXES = (
+    "MEGA-QA-",
+    "MEGA-NOTES-",
+)
 SKIP_ID_PREFIXES = ("MEGA-NOTES-META-",)
 OPEN_STATUSES = frozenset(
     {
@@ -175,11 +182,17 @@ def sort_key(row: MegaRow) -> tuple:
     )
 
 
+def executor_skips(item_id: str) -> bool:
+    return any(item_id.startswith(p) for p in EXECUTOR_SKIP_PREFIXES)
+
+
 def build_queue(rows: dict[str, MegaRow]) -> list[dict]:
     open_rows = [
         r
         for r in rows.values()
-        if r.status not in DONE_STATUSES and r.status not in SKIP_STATUSES
+        if r.status not in DONE_STATUSES
+        and r.status not in SKIP_STATUSES
+        and not executor_skips(r.item_id)
     ]
     open_rows.sort(key=sort_key)
     return [
