@@ -609,9 +609,34 @@ fun DynastyApp(
                             rsWeekIndex = rsWeek,
                             medicalRules = medicalRules,
                             onDismissPostgameInjuries = {
-                                session?.let { app.dynastyRosterRepository.clearPostgameInjuries(it.dynastyId) }
-                                watchPostgameEvents = emptyList()
-                                postgameInjuryRefreshKey++
+                                scope.launch {
+                                    val active = ActiveDynastySession.current
+                                    if (active != null && !GameWatchLaunch.isScrimmage && watchPostgameEvents.isNotEmpty()) {
+                                        val ruleset = app.balanceRulesetRepository.activeRuleset()
+                                        val minOvr = ruleset.injuryTuning().occurrence.headlineOverallMin
+                                        val newsworthy = dev.novux.dynasty.cbb.core.news.UserInjuryNewsGate
+                                            .newsworthy(
+                                                watchPostgameEvents,
+                                                watchPostgameRoster,
+                                                minOvr,
+                                            )
+                                        if (newsworthy.isNotEmpty()) {
+                                            val names = watchPostgameRoster.associate {
+                                                it.playerId to it.displayName
+                                            }
+                                            app.newsFeedRepository.appendUserInjuries(
+                                                active.dynastyId,
+                                                active.metadata.seasonIndex,
+                                                active.weekCheckpoint.activePosition.weekIndex,
+                                                names,
+                                                newsworthy,
+                                            )
+                                        }
+                                    }
+                                    active?.let { app.dynastyRosterRepository.clearPostgameInjuries(it.dynastyId) }
+                                    watchPostgameEvents = emptyList()
+                                    postgameInjuryRefreshKey++
+                                }
                             },
                             onApplyMedicalRedshirt = { playerId ->
                                 scope.launch {

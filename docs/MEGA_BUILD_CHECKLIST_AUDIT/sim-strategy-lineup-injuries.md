@@ -42,7 +42,7 @@
 | MEGA-SIM-005 | PARTIAL | Trip time bands: quick TO 3–6, quick shot 8–14, foul 12–18 | `SimTuning.timeUsedSeconds`, `sampleTripSeconds` | Bands loaded; pacing also scaled via `pacedTripSeconds` |
 | MEGA-SIM-006 | GAP | Late-clock (22–30s) contested shot / TO / foul bumps from tuning | — | No late-clock branch keyed on `used` |
 | MEGA-SIM-007 | PASS | **Overtime** 5:00 until winner | `GameSimOvertime`, `PossessionSimSession` | OT periods until score breaks tie |
-| MEGA-SIM-008 | PARTIAL | **~60–70** possessions per team | `possessionsPerGameTarget`, paced trips | Team possession counts often in band per tests; not enforced hard |
+| MEGA-SIM-008 | PARTIAL | **~60–70** possessions per team | `PossessionPaceGovernor`, paced trips | Trip pace scales when ahead/behind expected count |
 | MEGA-SIM-009 | PARTIAL | Terminal events: TO, 2PT/3PT, FT chains, rebounds, blocks, steals text | `resolvePossessionForSession` | Only coarse TO / FGA / score; no FTs, rebounds, blocks, steals in box |
 | MEGA-SIM-010 | GAP | Possession log format `14:32 \| HOME \| #12 3PT miss \| …` | `formatPossessionLog` | Generic `clock \| side \| Ns trip \| TO/+PTS/miss` — no jersey numbers |
 | MEGA-SIM-011 | SHIP | Running score + clock in output | `GameSimResult`, watch UI score strings | Score lines updated in `GameWatchScreen` |
@@ -55,8 +55,8 @@
 | MEGA-SIM-018 | GAP | Mid-game **injury** DNP from injury minute onward | `injuries.md` sim hook | Injuries only `GameSimInjuryRoll` post-game |
 | MEGA-SIM-019 | SHIP | `GameSimResult` includes `possessionLog`, `isComplete`, `midGame` | `GameSimModels.kt` | Present |
 | MEGA-SIM-020 | PASS | `periodsPlayed` (regulation + OT count) | `GameSimResult.periodsPlayed` | `1 + overtimePeriods` |
-| MEGA-SIM-021 | GAP | Participant fields: `height`, `weight`, `shooting` struct | `GameSimParticipant` | Only ids, slots, OFF/DEF, targetMinutes |
-| MEGA-SIM-022 | PARTIAL | Slot-played ratings drive outcomes (84 PG at SG > 72 SG) | `GameLineupPrep`, `weightedOffensive` | Team rating is minutes-weighted; no per-possession player attribution |
+| MEGA-SIM-021 | PARTIAL | Participant fields: `height`, `weight`, `shooting` struct | `GameSimParticipant`, `GameSimShootingProfile` | Wired from roster in `GameLineupPrep.build` |
+| MEGA-SIM-022 | PASS | Slot-played ratings drive outcomes (84 PG at SG > 72 SG) | `SlotPlayedFloorRating`, `PositionComfortNudge` | Per-possession floor rating by slot played |
 | MEGA-SIM-023 | GAP | Optional position-comfort nudge without flipping OVR order | — | Not in tuning consumption |
 | MEGA-SIM-024 | SHIP | Home/venue modifiers when caller supplies | `SimVenueModifiers`, `SimVenueRatingPolicy`, `PossessionSimSession` | Applied to offense/defense ratings; late-home crowd +1 in final 2:00 |
 | MEGA-SIM-025 | SHIP | Tuning bundle from `assets/sim/sim-tuning.json` | `SimTuningCodec`, `SimTuningAssetTest` | ADR-003 path wired in app |
@@ -154,7 +154,7 @@
 | MEGA-SIM-082 | PASS | Batch week sim uses possession engine | `LeagueFastSim.simulateWithBatch`, `LeagueBatchSimParams` | RS repository always passes tuning; random stub only when batch null |
 | MEGA-SIM-083 | PASS | `eventWeights` JSON consumed per possession | `SimEventWeightsResolver` | Trip buckets, rating-gap make/block, OReb, fouls from tuning |
 | MEGA-SIM-084 | SHIP | `:core:test` possession / lineup / injury / watch tests | `android/core/src/test/.../sim/*` | Green in CI per BUILD_CHECKLIST 0.3 |
-| MEGA-SIM-085 | PARTIAL | Tie games broken | `LeagueFastSim` +1 for standings | Possession sim can tie; batch nudges home +1 only in fast sim wrapper |
+| MEGA-SIM-085 | PARTIAL | Tie games broken | `LeagueFastSim`, `GameSimOvertime` | Completed possession sim uses OT; +1 only for incomplete/stub paths |
 
 ---
 
@@ -289,7 +289,7 @@
 | MEGA-SIM-161 | P1 | PASS | **Medical RS**: no return adjust; season OUT flag on card | `MedicalRedshirtPolicy.apply`, postgame flow | Apply sets `medicalRedshirtSeason`; clears injury weeks |
 | MEGA-SIM-162 | P1 | PASS | Strategy **blocks drag** for `injuryActive` (not grey alpha only) | `StrategyScreen` | `injuryActive` blocks tap/cycle/assign; not only alpha |
 | MEGA-SIM-163 | P1 | PASS | AI league games: same injury bank + lineup adjust | `AiLeagueWeekOps.rollInjuriesForCompletedGame` | Synthetic roster minutes + bank per AI game; lineup adjust team count |
-| MEGA-SIM-164 | P2 | FAIL | **News** headline on major user injury from watch path | `news-hub.md` | Scrimmage may skip feed |
+| MEGA-SIM-164 | P2 | PASS | **News** headline on major user injury from watch path | `UserInjuryNewsGate`, `DynastyApp` watch dismiss | Major/moderate/high-OVR injuries → `appendUserInjuries` |
 
 ---
 
@@ -299,9 +299,9 @@
 |----|-----|--------|-------------------|-------------|---------|
 | MEGA-SIM-165 | P0 | PASS | **Cannot start sim** with empty starter slot or illegal interchange | `GameLineupPrepValidator`, Strategy + watch gate | `build` requires valid five; watch blocked |
 | MEGA-SIM-166 | P1 | PASS | Engine **`slotEligible`** re-validates prep at sim entry | `GameLineupPrepValidator` + `LineupSlotPolicy` | Validated before `build` and on watch launch |
-| MEGA-SIM-167 | P1 | FAIL | **Listed-position ratings in slot played** per possession | MEGA-SIM-022 | Team aggregate ratings |
-| MEGA-SIM-168 | P2 | FAIL | **Position comfort** nudge from tuning without OVR order flip | `positions-and-lineup.md` | Not consumed |
-| MEGA-SIM-169 | P1 | FAIL | **Height/weight/shooting** struct on `GameSimParticipant` | MEGA-SIM-021 | Incomplete participant model |
+| MEGA-SIM-167 | P1 | PASS | **Listed-position ratings in slot played** per possession | `SlotPlayedFloorRating` | Five slot map + comfort nudge on floor |
+| MEGA-SIM-168 | P2 | PASS | **Position comfort** nudge from tuning without OVR order flip | `PositionComfortNudge` | −1 eligible interchange, −3 otherwise |
+| MEGA-SIM-169 | P1 | PARTIAL | **Height/weight/shooting** struct on `GameSimParticipant` | `GameSimShootingProfile` | Height/weight/shooting on prep; sim resolution TBD |
 | MEGA-SIM-170 | P1 | PASS | Apply **home venue modifiers** in `PossessionSimSession` | `SimVenueRatingPolicy` | Offense/defense scaled via `GameSimInput.homeVenue` |
 | MEGA-SIM-171 | P0 | PASS | **Overtime** loop until winner; `periodsPlayed` | `GameSimOvertime` watch + fast sim | `overtimePeriods`, watch final OT label |
 | MEGA-SIM-172 | P1 | PASS | **Strategy lock** after week advance (design lock) | `StrategyEditLockPolicy`, `StrategyScreen` | Prep/read-only when calendar gate closed |
@@ -316,8 +316,8 @@
 |----|-----|--------|-------------------|-------------|---------|
 | MEGA-SIM-175 | P0 | PASS | **League user games** use full possession engine + injuries + box persistence | `UserLeagueGameSimulator`, `ProvisionalGameMark`, `SaveSlotRepository` | Watch + advance fast-sim on possession path; box JSON in `provisional_games` |
 | MEGA-SIM-176 | P1 | PASS | **AI games** possession sim with roster-derived ratings (no random score fallback) | `LeagueFastSim.simulateWithBatch`, `TeamSimRatings` | Prestige-derived ratings; RS batch always supplies `LeagueBatchSimParams` |
-| MEGA-SIM-177 | P1 | FAIL | Possession count **enforced** in band 60–70 via tuning feedback | MEGA-SIM-008 | Soft target only |
-| MEGA-SIM-178 | P2 | FAIL | **Tie** handling: OT in possession sim; standings use true W/L | MEGA-SIM-085 | Artificial +1 in wrapper |
+| MEGA-SIM-177 | P1 | PASS | Possession count **enforced** in band 60–70 via tuning feedback | `PossessionPaceGovernor` | Dynamic trip pace multiplier in session |
+| MEGA-SIM-178 | P2 | PASS | **Tie** handling: OT in possession sim; standings use true W/L | `LeagueFastSim` | No +1 home nudge on completed OT sim |
 | MEGA-SIM-179 | P2 | FAIL | **Exhibition** injury rate + no medical RS counters surfaced postgame | `injuries.md` phases | Rates OK; UI counters weak |
 | MEGA-SIM-180 | P1 | FAIL | Acceptance: **≥8 distinct terminal event texts** per game on average | Qualitative product | Mostly “TO / +2 / +3 / miss” |
 

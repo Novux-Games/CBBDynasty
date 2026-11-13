@@ -18,6 +18,9 @@ data class GameSimParticipant(
     val logDisplayName: String = "",
     val jerseyNumber: Int = 0,
     val startingStamina: Int = FatigueEngine.FRESH,
+    val heightInches: Int = 76,
+    val weightLbs: Int = 200,
+    val shooting: GameSimShootingProfile = GameSimShootingProfile(),
 )
 
 data class GameSimRosterInput(
@@ -79,6 +82,11 @@ object GameLineupPrep {
                         logDisplayName = player.displayLabel(),
                         jerseyNumber = SimJerseyNumber.fromPlayerId(id),
                         startingStamina = player.stamina,
+                        heightInches = player.heightInches,
+                        weightLbs = player.weightLbs,
+                        shooting = GameSimShootingProfile(
+                            threePointTendency = player.off.coerceIn(1, 99),
+                        ),
                     ),
                 )
             }
@@ -96,6 +104,11 @@ object GameLineupPrep {
                         logDisplayName = player.displayLabel(),
                         jerseyNumber = SimJerseyNumber.fromPlayerId(id),
                         startingStamina = player.stamina,
+                        heightInches = player.heightInches,
+                        weightLbs = player.weightLbs,
+                        shooting = GameSimShootingProfile(
+                            threePointTendency = player.off.coerceIn(1, 99),
+                        ),
                     ),
                 )
             }

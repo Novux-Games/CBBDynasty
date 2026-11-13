@@ -52,7 +52,9 @@ object LeagueFastSim {
         )
         var home = sim.homeScore
         var away = sim.awayScore
-        if (home == away) home += 1
+        if (home == away && !sim.isComplete) {
+            home += 1
+        }
         return SimulatedMatchup(
             league = LeagueGameResult(
                 homeTeamId = matchup.homeTeamId,

@@ -61,8 +61,8 @@ fun GameSimRosterInput.weightedOffensiveOnFloor(
     gameClockSeconds,
     staminaLedger,
     fatigueTuning,
-    { it.offensiveRating },
-    ::weightedOffensive,
+    offensiveSide = true,
+    fallback = ::weightedOffensive,
 )
 
 fun GameSimRosterInput.weightedDefensiveOnFloor(
@@ -77,8 +77,8 @@ fun GameSimRosterInput.weightedDefensiveOnFloor(
     gameClockSeconds,
     staminaLedger,
     fatigueTuning,
-    { it.defensiveRating },
-    ::weightedDefensive,
+    offensiveSide = false,
+    fallback = ::weightedDefensive,
 )
 
 private fun GameSimRosterInput.weightedOnFloor(
@@ -87,7 +87,7 @@ private fun GameSimRosterInput.weightedOnFloor(
     gameClockSeconds: Int,
     staminaLedger: SimStaminaLedger?,
     fatigueTuning: BalanceFatigue,
-    pick: (GameSimParticipant) -> Int,
+    offensiveSide: Boolean,
     fallback: () -> Int,
 ): Int {
     val floor = SimFloorRotationPolicy.floorParticipants(
@@ -98,8 +98,10 @@ private fun GameSimRosterInput.weightedOnFloor(
         staminaLedger,
         fatigueTuning,
     )
-    val totalMin = floor.sumOf { it.targetMinutes.coerceAtLeast(1) }
-    if (totalMin <= 0) return fallback()
-    val sum = floor.sumOf { pick(it) * it.targetMinutes.coerceAtLeast(1) }
-    return (sum / totalMin).coerceIn(1, 99)
+    if (floor.isEmpty()) return fallback()
+    return if (offensiveSide) {
+        SlotPlayedFloorRating.offensiveFromFloor(floor, fallback())
+    } else {
+        SlotPlayedFloorRating.defensiveFromFloor(floor, fallback())
+    }
 }

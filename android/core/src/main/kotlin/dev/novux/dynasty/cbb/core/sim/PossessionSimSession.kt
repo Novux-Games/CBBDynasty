@@ -165,10 +165,15 @@ class PossessionSimSession(
         } else {
             tripSample.rawSeconds
         }
+        val paceGovernor = PossessionPaceGovernor.tripPaceMultiplier(
+            totalPossessionsSoFar = totalPossessions,
+            gameClockRemaining = gameClock,
+            tuning = input.tuning,
+        )
         val tripSeconds = PossessionSimEngine.pacedTripSecondsFromRaw(
             input.tuning,
             rawTripSeconds,
-            effects.tripPaceScale,
+            effects.tripPaceScale * paceGovernor,
         )
         val shotClockBefore = shotClockSeconds
         val clockBeforeTrip = gameClock
