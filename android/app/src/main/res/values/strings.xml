@@ -732,6 +732,8 @@
     <string name="strategy_slot_empty">Unfilled</string>
     <string name="strategy_tap_slot_to_assign">Tap a starter slot, then tap a bench player to assign.</string>
     <string name="strategy_save_lineup">Save starting lineup</string>
+    <string name="strategy_save_game_prep">Save game prep (schemes)</string>
+    <string name="strategy_coach_default_schemes">Coach defaults: %1$s offense · %2$s defense</string>
     <string name="strategy_pick_starter">Pick player</string>
     <string name="dynasty_shell_open_strategy">Open strategy</string>
     <string name="dashboard_task_review_injury">Review injury — %1$s (%2$d weeks)</string>

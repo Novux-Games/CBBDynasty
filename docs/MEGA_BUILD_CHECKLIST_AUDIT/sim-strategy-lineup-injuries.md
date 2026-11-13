@@ -132,7 +132,7 @@
 | MEGA-SIM-067 | SHIP | Phase multipliers (exhibition lower; no OS/preseason) | `InjuryOccurrenceEngine.rollAfterGame` | — |
 | MEGA-SIM-068 | SHIP | Bank catalog from `balance-2026.json` injuries.bank | `InjuryOccurrenceEngine.bankFromBalance` | App loads 40-row bank in watch path |
 | MEGA-SIM-069 | SHIP | Medical staff **−1 week** on minor | `InjuryOccurrenceEngine` | When grade ≥ baseline |
-| MEGA-SIM-070 | PARTIAL | Minutes weight for injury probability | `GameSimInjuryRoll.estimateMinutes` | Scales prep target minutes × poss/70 — not actual box MIN |
+| MEGA-SIM-070 | PASS | Minutes weight for injury probability | `GameSimInjuryRoll.floorMinutesFromResult` | Uses floor ledger seconds when present |
 | MEGA-SIM-071 | SHIP | `GameSimResult` home/away injury lists | `GameSimModels`, `GameSimInjuryRoll.attach` | Only when `isComplete` |
 | MEGA-SIM-072 | SHIP | Persist + `applyInjuryLineupAdjust` after user scrimmage | `DynastyApp` `onSimComplete`, `InjuryLineupAdjust` | Scrimmage path applies injuries |
 | MEGA-SIM-073 | SHIP | Auto-fill starters on injury (listed-position algorithm) | `InjuryLineupAdjustTest` | Snapshots `injuryWasStarterSlotWire` |
@@ -269,8 +269,8 @@
 | MEGA-SIM-148 | P1 | PASS | **Perimeter / Post** presets bump correct slot usage on possessions | `SchemeOffensiveSlotUsageBias` | Perimeter/post slots weighted before possession credits |
 | MEGA-SIM-149 | P0 | PASS | **Primary defensive assignment** UI: map opp PG–C → your defender | `StrategyDefensiveAssignmentPanel`, `DefensiveAssignmentPolicy` | Swap per opp slot; defaults from starters |
 | MEGA-SIM-150 | P1 | PASS | Pick **opponent primary scorer slot** for deny toggle | `StrategyDefensiveAssignmentPanel` primary chips | Wired to `GameplanInput.primaryScorerSlot` |
-| MEGA-SIM-151 | P1 | FAIL | **Coach default schemes** as pre-game default with per-game override save | `coach-card.md` | Wizard sets season default; no game override persistence |
-| MEGA-SIM-152 | P2 | FAIL | Scheme tooltips with identity copy from planning table | Strategy UI | Enum labels only |
+| MEGA-SIM-151 | P1 | PASS | **Coach default schemes** as pre-game default with per-game override save | `DynastyStrategyPrepRepository`, `StrategyScreen`, `UserLeagueGameSimFactory` | Coach O/D default; save game prep; league sim reads override |
+| MEGA-SIM-152 | P2 | PASS | Scheme tooltips with identity copy from planning table | `SchemePresetIdentityCopy`, `SchemesStepContent` | Identity line under O/D chips on Strategy + wizard |
 
 ---
 
@@ -281,13 +281,13 @@
 | MEGA-SIM-153 | P0 | PASS | **Mid-game injury** sample during possession loop; stop minutes accrual | `MidGameInjurySampler`, `PossessionSimSession` + `injuryRoll` | Per-possession roll; injured pulled from floor/minutes ledger |
 | MEGA-SIM-154 | P0 | PASS | Possession log line: **“INJURY — {Name} · {label}”** | `MidGameInjurySampler.formatLogLine` | Wired in possession loop |
 | MEGA-SIM-155 | P1 | PASS | `occurredInGameMinute` on injury event in result | `GameSimInjuryEvent` on mid-game path | Set from game clock |
-| MEGA-SIM-156 | P1 | FAIL | Injury probability uses **actual box MIN** not prep estimate | MEGA-SIM-070 | `estimateMinutes` proxy |
+| MEGA-SIM-156 | P1 | PASS | Injury probability uses **actual box MIN** not prep estimate | `GameSimInjuryRoll.floorMinutesFromResult` | Post-game roll weights `homeFloorSecondsByPlayer`; test vs prep estimate |
 | MEGA-SIM-157 | P1 | PASS | Auto **lineup adjust** on save with starter promotion rules | `InjuryLineupAdjust` | Core tested |
 | MEGA-SIM-158 | P1 | PASS | **Return** reclaim starter slot + demote interim | `applyInjuryReturnLineupAdjust` | Week advance path |
-| MEGA-SIM-159 | P1 | FAIL | **Multi-return same week** PG→C ordering | `injuries.md` conflict rules | Single-player tests; ordering not asserted in UI |
+| MEGA-SIM-159 | P1 | PASS | **Multi-return same week** PG→C ordering | `InjuryRosterOps.tickWeekAdvance` | Returns sorted PG→C before `applyInjuryReturnLineupAdjust` |
 | MEGA-SIM-160 | P0 | PASS | **Medical redshirt** postgame sheet: Apply / Dismiss with eligibility gates | `PostgameInjuryFlow`, `MedicalRedshirtConfirmDialog` | Gates via `MedicalRedshirtPolicy`; confirmation cites games + schedule index |
 | MEGA-SIM-161 | P1 | PASS | **Medical RS**: no return adjust; season OUT flag on card | `MedicalRedshirtPolicy.apply`, postgame flow | Apply sets `medicalRedshirtSeason`; clears injury weeks |
-| MEGA-SIM-162 | P1 | FAIL | Strategy **blocks drag** for `injuryActive` (not grey alpha only) | MEGA-SIM-075 | Visual-only |
+| MEGA-SIM-162 | P1 | PASS | Strategy **blocks drag** for `injuryActive` (not grey alpha only) | `StrategyScreen` | `injuryActive` blocks tap/cycle/assign; not only alpha |
 | MEGA-SIM-163 | P1 | FAIL | AI league games: same injury bank + lineup adjust | MEGA-SIM-078/079 | Fast sim stub |
 | MEGA-SIM-164 | P2 | FAIL | **News** headline on major user injury from watch path | `news-hub.md` | Scrimmage may skip feed |
 

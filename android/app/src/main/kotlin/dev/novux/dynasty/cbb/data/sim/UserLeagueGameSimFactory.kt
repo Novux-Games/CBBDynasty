@@ -21,6 +21,7 @@ import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
+import dev.novux.dynasty.cbb.data.strategy.DynastyStrategyPrepRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 
@@ -32,6 +33,7 @@ class UserLeagueGameSimFactory(
     private val simTuningRepository: SimTuningRepository,
     private val preseasonScheduleRepository: PreseasonScheduleRepository,
     private val dynastyRosterRepository: DynastyRosterRepository,
+    private val strategyPrepRepository: DynastyStrategyPrepRepository,
 ) {
     suspend fun buildFastSimBundle(
         loaded: LoadedDynasty,
@@ -61,12 +63,7 @@ class UserLeagueGameSimFactory(
         )
         val rotation = RotationMinutesBalancer.baseline(players, starters)
         val gameplan = defaultGameplan(starters)
-        val offensive = dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset
-            .fromWire(coach?.offensiveSchemeWire.orEmpty())
-            ?: dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset.Balanced
-        val defensive = dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset
-            .fromWire(coach?.defensiveSchemeWire.orEmpty())
-            ?: dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset.ManToMan
+        val (offensive, defensive) = strategyPrepRepository.resolveForLeagueSim(loaded.dynastyId)
         val homeRoster = if (players.isNotEmpty()) {
             GameLineupPrep.build(userTeamId, players, starters, rotation)
         } else {

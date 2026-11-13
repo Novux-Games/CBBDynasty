@@ -22,6 +22,8 @@ import dev.novux.dynasty.cbb.database.save.SaveSlotDao
 import dev.novux.dynasty.cbb.database.save.SaveSlotEntity
 import dev.novux.dynasty.cbb.database.staff.DynastyStaffDao
 import dev.novux.dynasty.cbb.database.staff.DynastyStaffMemberEntity
+import dev.novux.dynasty.cbb.database.strategy.DynastyStrategyPrepDao
+import dev.novux.dynasty.cbb.database.strategy.DynastyStrategyPrepEntity
 
 @Database(
     entities = [
@@ -34,8 +36,9 @@ import dev.novux.dynasty.cbb.database.staff.DynastyStaffMemberEntity
         DynastyRosterPlayerEntity::class,
         PlayerSeasonStatsEntity::class,
         DynastyStaffMemberEntity::class,
+        DynastyStrategyPrepEntity::class,
     ],
-    version = 21,
+    version = 22,
     exportSchema = false,
 )
 @androidx.room.TypeConverters(Converters::class)
@@ -57,6 +60,8 @@ abstract class DynastyDatabase : RoomDatabase() {
     abstract fun dynastyCalendarDao(): DynastyCalendarDao
 
     abstract fun provisionalGameDao(): ProvisionalGameDao
+
+    abstract fun dynastyStrategyPrepDao(): DynastyStrategyPrepDao
 
     companion object {
         const val DB_NAME = "dynasty.db"

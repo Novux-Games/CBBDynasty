@@ -483,6 +483,7 @@ fun DynastyApp(
                         StrategyScreen(
                             dynastyId = session.dynastyId,
                             rosterRepository = app.dynastyRosterRepository,
+                            strategyPrepRepository = app.dynastyStrategyPrepRepository,
                             teamChemistry = teamChem,
                             fatigueTuning = fatigueTuning,
                             homeTeamLabel = session.summary.schoolDisplayName.orEmpty().ifBlank { "Home" },

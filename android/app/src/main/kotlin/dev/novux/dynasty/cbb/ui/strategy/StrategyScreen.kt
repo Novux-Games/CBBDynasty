@@ -43,6 +43,7 @@ import dev.novux.dynasty.cbb.core.strategy.GameplanInput
 import dev.novux.dynasty.cbb.core.strategy.GameplanUsageNormalizer
 import dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
+import dev.novux.dynasty.cbb.data.strategy.DynastyStrategyPrepRepository
 import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
 import kotlinx.coroutines.launch
 
@@ -50,6 +51,7 @@ import kotlinx.coroutines.launch
 fun StrategyScreen(
     dynastyId: String,
     rosterRepository: DynastyRosterRepository,
+    strategyPrepRepository: DynastyStrategyPrepRepository,
     teamChemistry: Int? = null,
     fatigueTuning: dev.novux.dynasty.cbb.core.balance.BalanceFatigue =
         dev.novux.dynasty.cbb.core.balance.BalanceFatigue.DEFAULT,
@@ -79,6 +81,15 @@ fun StrategyScreen(
     var rotationMinutes by remember { mutableStateOf<Map<String, Int>>(emptyMap()) }
     var offensiveScheme by remember { mutableStateOf(OffensiveSchemePreset.Balanced) }
     var defensiveScheme by remember { mutableStateOf(DefensiveSchemePreset.ManToMan) }
+    var coachDefaultOffensive by remember { mutableStateOf(OffensiveSchemePreset.Balanced) }
+    var coachDefaultDefensive by remember { mutableStateOf(DefensiveSchemePreset.ManToMan) }
+    LaunchedEffect(dynastyId) {
+        val prep = strategyPrepRepository.loadForStrategy(dynastyId)
+        coachDefaultOffensive = prep.coachOffensiveScheme
+        coachDefaultDefensive = prep.coachDefensiveScheme
+        offensiveScheme = prep.gameOffensiveScheme
+        defensiveScheme = prep.gameDefensiveScheme
+    }
     LaunchedEffect(players, starters) {
         if (players.isNotEmpty() && rotationMinutes.isEmpty()) {
             rotationMinutes = RotationMinutesBalancer.baseline(players, starters)
@@ -180,6 +191,7 @@ fun StrategyScreen(
                 onAssign = {
                     val slot = assignTargetSlot ?: return@StrategyLineupCard
                     if (!LineupSlotPolicy.slotEligible(player.position, slot)) return@StrategyLineupCard
+                    if (player.injuryActive) return@StrategyLineupCard
                     if (!RotationMinutesAllocator.isLineupEligible(player)) return@StrategyLineupCard
                     if (DisciplineResolver.isIneligibleForLineup(player)) return@StrategyLineupCard
                     val cleaned = starters.filterValues { it != player.playerId }
@@ -191,8 +203,15 @@ fun StrategyScreen(
         StrategyGameSchemePanel(
             offensiveScheme = offensiveScheme,
             defensiveScheme = defensiveScheme,
+            coachDefaultOffensive = coachDefaultOffensive,
+            coachDefaultDefensive = coachDefaultDefensive,
             onOffensiveChange = { offensiveScheme = it },
             onDefensiveChange = { defensiveScheme = it },
+            onSaveGamePrep = {
+                scope.launch {
+                    strategyPrepRepository.saveGamePrep(dynastyId, offensiveScheme, defensiveScheme)
+                }
+            },
         )
         if (rotationMinutes.isNotEmpty()) {
             StrategyRotationMinutesPanel(
@@ -250,6 +269,7 @@ private fun eligibleForSlot(players: List<RosterPlayer>, slot: PlayerPosition): 
     players
         .filter { RotationMinutesAllocator.isLineupEligible(it) }
         .filter { LineupSlotPolicy.slotEligible(it.position, slot) }
+        .filter { !it.injuryActive }
         .filter { !DisciplineResolver.isIneligibleForLineup(it) }
         .sortedBy { it.depthOrder }
 
@@ -267,7 +287,7 @@ private fun StrategyLineupCard(
     onCycle: () -> Unit,
     onAssign: (() -> Unit)? = null,
 ) {
-    val injured = player != null && DisciplineResolver.isIneligibleForLineup(player)
+    val injured = player != null && (player.injuryActive || DisciplineResolver.isIneligibleForLineup(player))
     val exhausted = player != null && player.stamina < 20
     val dimmed = injured || exhausted
     Card(

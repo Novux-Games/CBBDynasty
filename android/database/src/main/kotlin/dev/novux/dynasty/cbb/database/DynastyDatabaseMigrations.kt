@@ -4,6 +4,20 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.novux.dynasty.cbb.core.save.DynastySchema
 
+val MIGRATION_21_22 = object : Migration(21, 22) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS dynasty_strategy_prep (
+                dynastyId TEXT NOT NULL PRIMARY KEY,
+                offensiveSchemeWire TEXT NOT NULL,
+                defensiveSchemeWire TEXT NOT NULL
+            )
+            """.trimIndent(),
+        )
+    }
+}
+
 val MIGRATION_20_21 = object : Migration(20, 21) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
@@ -376,7 +390,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 }
 
 /** Room user version after the latest migration in this chain. */
-const val DYNASTY_DB_VERSION: Int = 21
+const val DYNASTY_DB_VERSION: Int = 22
 
 /** Ordered migration chain registered on [DynastyDatabase]; used in CI migration tests. */
 val ALL_DYNASTY_MIGRATIONS: Array<Migration> =
@@ -401,4 +415,5 @@ val ALL_DYNASTY_MIGRATIONS: Array<Migration> =
         MIGRATION_18_19,
         MIGRATION_19_20,
         MIGRATION_20_21,
+        MIGRATION_21_22,
     )

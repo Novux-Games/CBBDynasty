@@ -60,6 +60,9 @@ class DynastyApplication : Application() {
     lateinit var dynastyRosterRepository: DynastyRosterRepository
         private set
 
+    lateinit var dynastyStrategyPrepRepository: dev.novux.dynasty.cbb.data.strategy.DynastyStrategyPrepRepository
+        private set
+
     lateinit var scrimmageGameRecordRepository: dev.novux.dynasty.cbb.data.scrimmage.ScrimmageGameRecordRepository
         private set
 
@@ -362,6 +365,7 @@ class DynastyApplication : Application() {
             applicationContext,
             database,
         )
+        dynastyStrategyPrepRepository = dev.novux.dynasty.cbb.data.strategy.DynastyStrategyPrepRepository(database)
         val userLeagueGameSimFactory = dev.novux.dynasty.cbb.data.sim.UserLeagueGameSimFactory(
             database,
             packRepository,
@@ -369,6 +373,7 @@ class DynastyApplication : Application() {
             simTuningRepository,
             preseasonScheduleRepository,
             dynastyRosterRepository,
+            dynastyStrategyPrepRepository,
         )
         saveSlotRepository = SaveSlotRepository(
             database,
