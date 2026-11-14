@@ -128,6 +128,7 @@ fun DynastyShellNewsTab(
     feed: ShallowNewsFeedSnapshot,
     contentPadding: PaddingValues,
     onOpenNewsHub: (() -> Unit)? = null,
+    emptyHint: String? = null,
 ) {
     val headlines = feed.headlines
     var selectedHeadline by remember { mutableStateOf<NewsHeadline?>(null) }
@@ -180,7 +181,7 @@ fun DynastyShellNewsTab(
         )
         if (headlines.isEmpty()) {
             Text(
-                text = stringResource(R.string.shell_news_empty),
+                text = emptyHint ?: stringResource(R.string.shell_news_empty),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

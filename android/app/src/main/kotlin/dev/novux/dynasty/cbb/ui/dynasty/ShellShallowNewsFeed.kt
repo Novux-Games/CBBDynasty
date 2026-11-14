@@ -18,11 +18,12 @@ fun rememberShellNewsFeed(
     weekIndex: Int,
     newsFeedRepository: NewsFeedRepository,
     rosterRepository: DynastyRosterRepository,
+    refreshKey: Any? = null,
 ): ShallowNewsFeedSnapshot {
     var feed by remember(dynastyId, seasonIndex) {
         mutableStateOf(ShallowNewsFeedSnapshot.Empty)
     }
-    LaunchedEffect(dynastyId, seasonIndex, weekIndex) {
+    LaunchedEffect(dynastyId, seasonIndex, weekIndex, refreshKey) {
         val roster = rosterRepository.listPlayers(dynastyId)
         feed = newsFeedRepository.shallowFeedSnapshot(dynastyId, seasonIndex, weekIndex, roster)
     }

@@ -112,12 +112,14 @@ fun PreseasonScreen(
     val context = LocalContext.current
     val app = context.requireDynastyApplication()
     val playerStatsRepository = app.playerStatsRepository
+    val incomingClassSeedComplete = progress?.isComplete(PreseasonTaskId.IncomingClassSeed) == true
     val newsFeed = rememberShellNewsFeed(
         dynastyId = loaded.dynastyId,
         seasonIndex = loaded.metadata.seasonIndex,
         weekIndex = loaded.weekCheckpoint.activePosition.weekIndex,
         newsFeedRepository = app.newsFeedRepository,
         rosterRepository = rosterRepository,
+        refreshKey = incomingClassSeedComplete,
     )
     val recruitingEconomyRepository = app.recruitingEconomyRepository
     val scope = rememberCoroutineScope()
@@ -269,6 +271,11 @@ fun PreseasonScreen(
                 feed = newsFeed,
                 contentPadding = padding,
                 onOpenNewsHub = hubMenuCallbacks.onOpenNewsHub,
+                emptyHint = if (!incomingClassSeedComplete) {
+                    stringResource(R.string.shell_news_preseason_awaiting_seed)
+                } else {
+                    null
+                },
             )
             DynastyShellTab.Dashboard -> {
                 val taskProgress = progress
@@ -340,6 +347,10 @@ fun PreseasonScreen(
                         progressRepository = progressRepository,
                         onSeeded = {
                             scope.launch {
+                                app.newsFeedRepository.publishRecruitingSpotlightWhenPoolReady(
+                                    loaded.dynastyId,
+                                    loaded.metadata.seasonIndex,
+                                )
                                 progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
                             }
                         },

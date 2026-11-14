@@ -1005,6 +1005,7 @@
     <string name="shell_calendar_your_games_only">Your games only — not the full D-I weekly slate.</string>
     <string name="shell_news_placeholder">League headlines will appear here.</string>
     <string name="shell_news_empty">No headlines yet. Play or advance the week to populate league stories.</string>
+    <string name="shell_news_preseason_awaiting_seed">Complete the incoming class seed task to publish the Top 60 recruiting headline.</string>
     <string name="shell_news_shallow_cap">Top %1$d headlines (same queue as News hub, truncated)</string>
     <string name="shell_news_more_in_hub">%1$d more stories in News hub</string>
     <string name="shell_news_open_hub">Open News hub</string>

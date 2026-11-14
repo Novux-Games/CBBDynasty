@@ -143,7 +143,7 @@
 | MEGA-FRAME-074 | SHIP | Task 6 tournament invites prestige tiers | Live prestige → `TournamentInvitesPrestigePolicy` tiers; elevated multi-invite cards + decline-all | `TournamentInvitesPanel`, `PreseasonScreen` |
 | MEGA-FRAME-075 | SHIP | Task 7 exhibitions 0–3 / skip | Opponent search sheet, H/A, exhibition week slots; persisted drafts feed solver | `ExhibitionSchedulePanel`, `ExhibitionScheduleUxPolicy` |
 | MEGA-FRAME-076 | SHIP | Task 8 RS schedule builder | Slot budget breakdown, validation errors, week-by-week review sheet before lock | `RegularSeasonScheduleBuilderUxPolicy`, `RegularSeasonSchedulePanel` |
-| MEGA-FRAME-077 | GAP | Preseason shell News tab live feed | Placeholder only — Top 60 headline should surface post seed | `PreseasonScreen` News tab |
+| MEGA-FRAME-077 | SHIP | Preseason shell News tab live feed | Top 60 spotlight after seed; refresh on task complete + preseason empty hint | `PreseasonNewsFeedPolicy`, `NewsFeedRepository` |
 | MEGA-FRAME-078 | SHIP | Start season → first playable focus | `PreseasonSeasonStartPolicy` + exhibition vs RS | `SaveSlotRepository.completePreseason` |
 
 ---

@@ -120,8 +120,10 @@ class NewsFeedRepository(
     }
 
     private suspend fun ensureRecruitingSpotlight(dynastyId: String, seasonIndex: Int) {
+        val storyId = dev.novux.dynasty.cbb.core.preseason.PreseasonNewsFeedPolicy.top60StoryId(seasonIndex)
         val archive = loadArchive(dynastyId, seasonIndex)
-        if (archive.any { it.id == "top60-$seasonIndex" }) return
+        if (archive.any { it.id == storyId }) return
+        if (!incomingClassSeedRepository.isSeeded(dynastyId, seasonIndex)) return
         val headline = incomingClassSeedRepository.loadHeadline(dynastyId, seasonIndex)?.headline ?: return
         appendAll(
             dynastyId,
