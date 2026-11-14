@@ -304,5 +304,11 @@
   "integrationBranch": "cursor/mega-build-executor-cb09",
   "baseBranch": "main",
   "pullRequestNumber": 30,
-  "pullRequestUrl": "https://github.com/Novux-Games/CBBDynasty/pull/30"
+  "pullRequestUrl": "https://github.com/Novux-Games/CBBDynasty/pull/30",
+  "queueMetrics": {
+    "openImplementation": 480,
+    "remaining": 480,
+    "shardPassShipDone": 814,
+    "completedIdsRecorded": 297
+  }
 }

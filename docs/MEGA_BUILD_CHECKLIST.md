@@ -26,7 +26,7 @@
 | [`planning-notes-traceability.md`](MEGA_BUILD_CHECKLIST_AUDIT/planning-notes-traceability.md) | Every **Done** row in `planning-notes.md` + 33-file inventory | 115 |
 | [`integration-playtest-regression.md`](MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md) | Perf, persistence, nav, playtest, Play/R8 release | 170 |
 
-**Scale:** **~1,650** unique `MEGA-*` mentions in shards (rollup text repeats some IDs). **`mega_queue.py`** ingests primary audit rows; **~710+ already SHIP/PASS/DONE** → implementation queue in [`MEGA_BUILD_QUEUE.json`](MEGA_BUILD_QUEUE.json) after `build` (excludes **`MEGA-QA-*`** — manual QA — and **`MEGA-NOTES-*`** traceability; all shard rows remain).  
+**Scale:** **~1,650** unique `MEGA-*` mentions in shards (rollup text repeats some IDs). **`mega_queue.py`** ingests primary audit rows. The executor queue in [`MEGA_BUILD_QUEUE.json`](MEGA_BUILD_QUEUE.json) excludes **`MEGA-QA-*`** (manual QA), **`MEGA-NOTES-*`** (traceability), and **`MEGA-POST-*`** (postseason — **`~166`** open rows still in shards). **Remaining subscription work** = `python3 planning/tools/mega_queue.py resync` then `stats` → **`remaining`** (persisted as `queueMetrics` in [`MEGA_BUILD_QUEUE_STATE.json`](MEGA_BUILD_QUEUE_STATE.json)). Re-run after every shard status change; the stale **646**-item JSON included postseason rows.  
 **Method:** Composer sub-agent spec↔code audits (static trace + grep). **`MEGA-QA-*`** lives only in [`integration-playtest-regression.md`](MEGA_BUILD_CHECKLIST_AUDIT/integration-playtest-regression.md) for manual/release checklists.
 
 ## Autonomous queue (subscription)

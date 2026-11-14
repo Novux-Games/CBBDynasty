@@ -2,7 +2,7 @@
 """
 MEGA build queue — ordered **implementation** work from docs/MEGA_BUILD_CHECKLIST_AUDIT/*.md.
 
-Excluded from this queue (audit rows remain): `MEGA-QA-*` (manual/device QA), `MEGA-NOTES-*` (planning traceability).
+Excluded from this queue (audit rows remain): `MEGA-QA-*` (manual/device QA), `MEGA-NOTES-*` (planning traceability), `MEGA-POST-*` (postseason burn-down after in-season queue drains).
 
 Build:   python3 planning/tools/mega_queue.py build
 Current: python3 planning/tools/mega_queue.py current
@@ -71,6 +71,7 @@ SKIP_STATUSES = frozenset({"N/A", "RULE", "META"})
 EXECUTOR_SKIP_PREFIXES = (
     "MEGA-QA-",
     "MEGA-NOTES-",
+    "MEGA-POST-",
 )
 SKIP_ID_PREFIXES = ("MEGA-NOTES-META-",)
 OPEN_STATUSES = frozenset(
@@ -242,17 +243,33 @@ def load_queue() -> list[dict]:
     return json.loads(QUEUE_PATH.read_text(encoding="utf-8"))
 
 
+def shard_done_count(rows: dict[str, MegaRow]) -> int:
+    return sum(1 for r in rows.values() if r.status in DONE_STATUSES)
+
+
+def persist_queue_metrics(state: dict, queue: list[dict]) -> None:
+    rows = parse_shards()
+    remaining = max(0, len(queue) - state["index"])
+    state["queueMetrics"] = {
+        "openImplementation": len(queue),
+        "remaining": remaining,
+        "shardPassShipDone": shard_done_count(rows),
+        "completedIdsRecorded": len(state.get("completedIds", [])),
+    }
+    save_state(state)
+
+
 def cmd_build(_: argparse.Namespace) -> int:
     rows = parse_shards()
     queue = build_queue(rows)
     QUEUE_PATH.write_text(json.dumps(queue, indent=2) + "\n", encoding="utf-8")
     state = load_state()
-  # clamp index if queue shrank
+    # clamp index if queue shrank
     if state["index"] > len(queue):
         state["index"] = len(queue)
-    save_state(state)
+    persist_queue_metrics(state, queue)
     open_count = len(queue)
-    done_count = len(rows) - open_count
+    done_count = shard_done_count(rows)
     print(f"Wrote {QUEUE_PATH.name}: {open_count} open, {done_count} already PASS/SHIP/DONE")
     return 0
 
@@ -261,7 +278,22 @@ def cmd_stats(_: argparse.Namespace) -> int:
     queue = load_queue()
     state = load_state()
     remaining = max(0, len(queue) - state["index"])
-    print(json.dumps({"totalOpen": len(queue), "index": state["index"], "remaining": remaining}, indent=2))
+    rows = parse_shards()
+    payload = {
+        "totalOpen": len(queue),
+        "index": state["index"],
+        "remaining": remaining,
+        "shardPassShipDone": shard_done_count(rows),
+        "completedIdsRecorded": len(state.get("completedIds", [])),
+    }
+    state["queueMetrics"] = {
+        "openImplementation": len(queue),
+        "remaining": remaining,
+        "shardPassShipDone": payload["shardPassShipDone"],
+        "completedIdsRecorded": payload["completedIdsRecorded"],
+    }
+    save_state(state)
+    print(json.dumps(payload, indent=2))
     if remaining == 0:
         print("QUEUE_EMPTY")
     return 0
