@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.offseason.leaving.PlayerLeavingRetentionPolicy
+import dev.novux.dynasty.cbb.core.offseason.weekone.WeekOneLeavingTabPolicy
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import kotlinx.coroutines.launch
@@ -61,6 +62,8 @@ fun PlayersLeavingPanel(
     }
 
     @Suppress("unused")
+    val weekOneTabsQa = WeekOneLeavingTabPolicy.MEGA_FRAME_ID
+    @Suppress("unused")
     val retentionQa = PlayerLeavingRetentionPolicy.MEGA_ID
     val rosterTab = rosterRepository.rosterTab(players)
     val transferTab = rosterRepository.transferTab(players)
@@ -71,19 +74,39 @@ fun PlayersLeavingPanel(
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
         )
+        Text(
+            text = stringResource(R.string.leaving_week_tabs_help),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         PrimaryTabRow(selectedTabIndex = tabIndex) {
             Tab(
-                selected = tabIndex == 0,
-                onClick = { tabIndex = 0 },
-                text = { Text(stringResource(R.string.leaving_tab_roster)) },
+                selected = tabIndex == WeekOneLeavingTabPolicy.ROSTER_TAB_INDEX,
+                onClick = { tabIndex = WeekOneLeavingTabPolicy.ROSTER_TAB_INDEX },
+                text = {
+                    Text(
+                        stringResource(
+                            R.string.leaving_tab_roster_count,
+                            rosterTab.size,
+                        ),
+                    )
+                },
             )
             Tab(
-                selected = tabIndex == 1,
-                onClick = { tabIndex = 1 },
-                text = { Text(stringResource(R.string.leaving_tab_transfer)) },
+                selected = tabIndex == WeekOneLeavingTabPolicy.TRANSFER_TAB_INDEX,
+                onClick = { tabIndex = WeekOneLeavingTabPolicy.TRANSFER_TAB_INDEX },
+                text = {
+                    Text(
+                        stringResource(
+                            R.string.leaving_tab_transfer_count,
+                            transferTab.size,
+                        ),
+                    )
+                },
             )
         }
-        val visible = if (tabIndex == 0) rosterTab else transferTab
+        val onRosterTab = tabIndex == WeekOneLeavingTabPolicy.ROSTER_TAB_INDEX
+        val visible = if (onRosterTab) rosterTab else transferTab
         val proDaysModifier = if (proDaysHighlighted) {
             Modifier
                 .fillMaxWidth()
@@ -110,6 +133,22 @@ fun PlayersLeavingPanel(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth(),
         ) {
+            if (visible.isEmpty()) {
+                item(key = "empty") {
+                    Text(
+                        text = stringResource(
+                            if (onRosterTab) {
+                                R.string.leaving_tab_roster_empty
+                            } else {
+                                R.string.leaving_tab_transfer_empty
+                            },
+                        ),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(vertical = 8.dp),
+                    )
+                }
+            }
             items(visible, key = { it.playerId }) { player ->
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(
@@ -118,7 +157,7 @@ fun PlayersLeavingPanel(
                     ) {
                         Text(player.displayLabel(), fontWeight = FontWeight.Medium)
                         PlayerLeavingRetentionSummary(player = player.toDynastyPlayer())
-                        if (tabIndex == 0) {
+                        if (onRosterTab) {
                             OutlinedButton(
                                 onClick = {
                                     scope.launch {

@@ -118,7 +118,7 @@
 |----|--------|--------------|---------|--------------|
 | MEGA-FRAME-057 | SHIP | Season 1 skip Week 10 | Policy in core + launch | `offseason.md#season-1-vs-later-seasons` |
 | MEGA-FRAME-058 | SHIP | Week 1 Players Leaving panel | `PlayersLeavingPanel` on week 1 dashboard | `OffseasonScreen` |
-| MEGA-FRAME-059 | PARTIAL | Week 1 Roster / Transfer tabs | Dedicated screen vs transfer-portal spec — audit transfer tab parity separately | `PlayersLeavingScreen.kt` |
+| MEGA-FRAME-059 | SHIP | Week 1 Roster / Transfer tabs | `PortalWeekOnePartition` + tab counts, mutual-exclusion copy, empty states in `PlayersLeavingPanel` | `WeekOneLeavingTabPolicy`, `PlayersLeavingScreen.kt` |
 | MEGA-FRAME-060 | SHIP | Week 2 draft results panel | `DraftResultsWeekTwoPanel` | `OffseasonScreen` week 2 |
 | MEGA-FRAME-061 | PARTIAL | Weeks 2–5 portal optional tasks | `OffseasonOptionalDashboardTasks` + recruiting deep links | UI density on dashboard |
 | MEGA-FRAME-062 | SHIP | Week 6 Signing Day required tasks | `SigningDayRequiredDashboardTasks` + signing screen route | `SigningDayScreen` |

@@ -182,6 +182,11 @@
     <string name="leaving_week_title">Players Leaving</string>
     <string name="leaving_tab_roster">Roster</string>
     <string name="leaving_tab_transfer">Transfer</string>
+    <string name="leaving_tab_roster_count">Roster (%1$d)</string>
+    <string name="leaving_tab_transfer_count">Transfer (%1$d)</string>
+    <string name="leaving_week_tabs_help">Each player appears on Roster or Transfer — never both. Encourage transfer moves a player to the Transfer tab; convince to stay returns them to Roster.</string>
+    <string name="leaving_tab_roster_empty">No roster players waiting on portal decisions. Everyone in the portal is on the Transfer tab.</string>
+    <string name="leaving_tab_transfer_empty">No portal entrants yet. Use Encourage transfer on the Roster tab to add players.</string>
     <string name="leaving_encourage_transfer">Encourage transfer</string>
     <string name="leaving_convince_stay">Convince to stay</string>
     <string name="pro_days_title">Pro days</string>
