@@ -33,6 +33,7 @@ import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.signingday.IncomingSignee
 import dev.novux.dynasty.cbb.core.signingday.NationalRankRow
 import dev.novux.dynasty.cbb.core.signingday.NationalRecruitingRankings
+import dev.novux.dynasty.cbb.core.signingday.SigningDayClassBoardSummaryPolicy
 import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignBlockReason
 import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignUiGate
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
@@ -285,6 +286,21 @@ private fun PositionsBody(
         offerPromises,
     )
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        @Suppress("unused")
+        val qaBoard = SigningDayClassBoardSummaryPolicy.MEGA_ID
+        if (signees.isNotEmpty()) {
+            val counts = SigningDayClassBoardSummaryPolicy.orderedCounts(signees)
+            val breakdown = counts.joinToString(" · ") { (pos, n) -> "${pos.label}: $n" }
+            Text(
+                text = stringResource(
+                    R.string.signing_day_board_summary,
+                    signees.size,
+                    breakdown,
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium,
+            )
+        }
         Text(
             text = stringResource(R.string.signing_day_promise_locked_note),
             style = MaterialTheme.typography.bodySmall,

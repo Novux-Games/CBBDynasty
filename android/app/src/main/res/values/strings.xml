@@ -683,6 +683,7 @@
     <string name="signing_day_tab_positions">Positions</string>
     <string name="signing_day_rank_line">#%1$d %2$s · %3$d★ %4$s</string>
     <string name="signing_day_no_commits">No scholarship offers on the board — hard sign is still available once tasks are complete.</string>
+    <string name="signing_day_board_summary">Class board: %1$d signees · %2$s</string>
     <string name="signing_day_signee_meta">%1$d★ · %2$s</string>
     <string name="signing_day_cycle_position">Position</string>
     <string name="signing_day_confirm_positions">Confirm positions</string>
@@ -805,6 +806,14 @@
     <string name="player_box_score_minutes">Minutes: %1$d</string>
     <string name="player_box_score_sim_source">From sim box score</string>
     <string name="player_card_history_eligibility">Eligibility used %1$d · remaining %2$d</string>
+    <string name="player_card_eligibility_clock">Eligibility clock: %1$d used · %2$d remaining</string>
+    <string name="player_card_eligibility_medical_rs">Medical redshirt season — out for the year; scholarship retained; eligibility clock still advances.</string>
+    <string name="player_card_eligibility_development_year">Development year on file — 0 regular-season games designee; clock does not pause for extra eligibility time.</string>
+    <string name="player_card_eligibility_five_year_path">Five-year path — more than four calendar eligibility seasons on roster.</string>
+    <string name="player_status_transfer_portal">In transfer portal</string>
+    <string name="player_status_declared_draft">Declared for draft</string>
+    <string name="player_status_pro_day_complete">Pro day complete</string>
+    <string name="player_status_draft_stock">Draft stock: %1$d</string>
     <string name="player_card_history_pipeline">Prior-season rows append after each season review.</string>
     <string name="player_card_history_prior_seasons_title">Prior seasons</string>
     <string name="player_card_history_school_line">School: %1$s</string>

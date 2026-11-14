@@ -32,6 +32,7 @@ import dev.novux.dynasty.cbb.core.carousel.CoachingCarouselState
 import dev.novux.dynasty.cbb.core.dashboard.CarouselDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
+import dev.novux.dynasty.cbb.core.carousel.CoachingCarouselPolicy
 import dev.novux.dynasty.cbb.core.qa.CoachingCarouselShellPath
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
@@ -53,7 +54,7 @@ import dev.novux.dynasty.cbb.ui.player.PlayerCardScreen
 import kotlinx.coroutines.launch
 
 /**
- * Coaching Carousel inside dynasty shell chrome ([MEGA-FRAME-007], [planning/offseason.md]).
+ * Coaching Carousel inside dynasty shell chrome ([MEGA-FRAME-007], [MEGA-GDD-026], [planning/offseason.md]).
  */
 @Composable
 fun CoachingCarouselScreen(
@@ -65,7 +66,9 @@ fun CoachingCarouselScreen(
     onComplete: () -> Unit,
 ) {
     @Suppress("unused")
-    val qaId = CoachingCarouselShellPath.MEGA_ID
+    val qaShell = CoachingCarouselShellPath.MEGA_ID
+    @Suppress("unused")
+    val qaFlow = CoachingCarouselPolicy.MEGA_ID
     var carousel by remember { mutableStateOf<CoachingCarouselState?>(null) }
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }

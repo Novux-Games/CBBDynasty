@@ -3,7 +3,9 @@ package dev.novux.dynasty.cbb.core.injuries
 import dev.novux.dynasty.cbb.core.balance.BalanceMedicalRedshirtRules
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 
+/** Medical RS gates + copy inputs for player cards ([MEGA-GDD-023]). */
 object MedicalRedshirtPolicy {
+    const val MEGA_ID: String = "MEGA-GDD-023"
     data class Eligibility(
         val eligible: Boolean,
         val reason: String? = null,

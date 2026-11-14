@@ -50,13 +50,13 @@
 |----|-----|--------|--------------|---------|----------|
 | MEGA-GDD-021 | P0 | PASS | Roster · 15 cap; ≤15 scholarships; walk-ons | Constants + roster lock policy. | `GameConstants.kt`, `RosterLockPolicy.kt`, `OffseasonRosterLockConstants.kt` |
 | MEGA-GDD-022 | P1 | SHIP | Roster · walk-ons OS tryouts; ≤2/year | Week 8 panel + `roster_cuts_walkon_tryout_hint`; cap in `RosterLockPolicy` | `WalkOnFactory.kt`, `RosterCutsWeekEightPanel.kt` |
-| MEGA-GDD-023 | P1 | GAP | Roster · standard + medical redshirt | `MedicalRedshirtPolicy`; five-year / “development year” card copy thin. | `MedicalRedshirtPolicy.kt`, `PlayerCardSheet.kt` |
-| MEGA-GDD-024 | P1 | GAP | Roster · portal, draft declare, coach promises | Core loyalty/chips; declare/pro-day/withdrawal UI thinner than spec. | `PlayerLoyaltyChips.kt`, `BalanceLoyaltyTuning`, `PortalWeekOnePartition.kt` |
+| MEGA-GDD-023 | P1 | SHIP | Roster · standard + medical redshirt | `PlayerEligibilityCardPolicy` + overview lines (medical RS, development year, five-year path). | `PlayerEligibilityStatusLines.kt`, `MedicalRedshirtPolicy.kt` |
+| MEGA-GDD-024 | P1 | SHIP | Roster · portal, draft declare, coach promises | `PlayerRosterStatusChips` on preview overview (portal, declare, pro day, stock). | `PlayerRosterStatusCardPolicy.kt`, `PlayerLoyaltyChips.kt` |
 | MEGA-GDD-025 | P1 | SHIP | Offseason · weeks 1–10 authoritative calendar | Offseason summary table aligned with [`offseason.md`](../../planning/offseason.md) weeks 6–10 | `planning/game-design.md` § Offseason summary |
-| MEGA-GDD-026 | P1 | GAP | Offseason · coaching carousel S2+ before week 1 | Engine + screen; league AI uses `stubUserApprovalCards()`. | `CoachingCarouselEngine.kt`, `CoachingCarouselScreen.kt` |
+| MEGA-GDD-026 | P1 | SHIP | Offseason · coaching carousel S2+ before week 1 | `CarouselUserApprovalPlanner` after league sim; shell approvals + `CoachingCarouselPolicy` gate. | `CoachingCarouselEngine.kt`, `CoachingCarouselScreen.kt` |
 | MEGA-GDD-027 | P0 | PASS | Recruiting · year-long HS/JUCO + portal hub | HS/JUCO pool + Top 60; portal entrants when window open | `HsJucoRecruitBoard.kt`, `RecruitingHubTabBodies.kt`, `PortalRecruitingHub.kt` |
-| MEGA-GDD-028 | P1 | GAP | Recruiting · Signing Day OS week 6 hard sign | `SigningDayScreen` + repo; board/crunch UX mostly task-driven. | `SigningDayRepository.kt`, `SigningDayScreen.kt` |
-| MEGA-GDD-029 | P1 | GAP | Recruiting · portal OS weeks 2–5 only | `PortalCyclePolicy` + sim; portal **UI** tab placeholder. | `PortalSimulationEngine.kt`, `RecruitingHubScreen.kt` |
+| MEGA-GDD-028 | P1 | SHIP | Recruiting · Signing Day OS week 6 hard sign | Positions tab class board summary (`SigningDayClassBoardSummaryPolicy`). | `SigningDayScreen.kt`, `SigningDayRepository.kt` |
+| MEGA-GDD-029 | P1 | SHIP | Recruiting · portal OS weeks 2–5 only | `PortalRecruitingTabBody` + Top 40 strip when window open (not placeholder string). | `PortalRecruitingHub.kt`, `RecruitingHubTabBodies.kt` |
 | MEGA-GDD-030 | P1 | GAP | NIL · annual pool; ledger; 3× ask cap | Engines/repos wired; assign-NIL not on every recruit surface GDD lists. | `NilAnnualPoolEngine.kt`, `NilBudgetLedger.kt`, `NilBudgetRepository.kt` |
 
 ---

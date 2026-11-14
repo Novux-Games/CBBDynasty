@@ -126,6 +126,8 @@ fun PlayerCardOverviewContent(
             fontWeight = FontWeight.Bold,
         )
         PlayerCardIdentityStripChips(player = player)
+        PlayerRosterStatusChips(player = player)
+        PlayerEligibilityStatusLines(player = player)
         Text(
             text = player.archetype.displayName,
             style = MaterialTheme.typography.bodySmall,
