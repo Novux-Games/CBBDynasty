@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -37,6 +38,7 @@ import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.data.carousel.CoachingCarouselRepository
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
+import dev.novux.dynasty.cbb.requireDynastyApplication
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
@@ -45,6 +47,8 @@ import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
 import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
 import dev.novux.dynasty.cbb.ui.hubs.buildDynastyHubMenu
+import dev.novux.dynasty.cbb.ui.player.PlayerCardPreviewSheet
+import dev.novux.dynasty.cbb.ui.player.PlayerCardScreen
 import kotlinx.coroutines.launch
 
 /**
@@ -64,6 +68,10 @@ fun CoachingCarouselScreen(
     var carousel by remember { mutableStateOf<CoachingCarouselState?>(null) }
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
+    var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
+    var fullScreenPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
+    val context = LocalContext.current
+    val playerStatsRepository = context.requireDynastyApplication().playerStatsRepository
     val scope = rememberCoroutineScope()
     val seasonIndex = loaded.metadata.seasonIndex
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
@@ -87,6 +95,29 @@ fun CoachingCarouselScreen(
         onRecruitingCycleClosed = {},
     )
 
+    PlayerCardPreviewSheet(
+        player = cardPlayer,
+        onDismiss = { cardPlayer = null },
+        onViewMore = { player ->
+            cardPlayer = null
+            fullScreenPlayer = player
+        },
+        allowEdit = false,
+    )
+
+    fullScreenPlayer?.let { player ->
+        PlayerCardScreen(
+            player = player,
+            schoolDisplayName = schoolName,
+            seasonRecordLabel = "0-0",
+            seasonIndex = seasonIndex,
+            playerStatsRepository = playerStatsRepository,
+            allowEdit = false,
+            onBack = { fullScreenPlayer = null },
+        )
+        return
+    }
+
     DynastyShellChrome(
         schoolDisplayName = schoolName,
         phaseWeekLabel = stringResource(R.string.carousel_shell_phase_label),
@@ -99,7 +130,7 @@ fun CoachingCarouselScreen(
             DynastyShellTab.Roster -> DynastyShellRosterTab(
                 players = fullRoster,
                 contentPadding = padding,
-                onPlayerClick = {},
+                onPlayerClick = { cardPlayer = it },
             )
             DynastyShellTab.Calendar -> DynastyShellCalendarTab(
                 dynastyId = loaded.dynastyId,
