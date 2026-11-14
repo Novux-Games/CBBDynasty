@@ -915,6 +915,9 @@
     <string name="shell_tab_dashboard">Dashboard</string>
     <string name="shell_tab_news">News</string>
     <string name="shell_roster_tab_title">Roster</string>
+    <string name="shell_roster_section_starters">Starters</string>
+    <string name="shell_roster_section_reserves">Reserves</string>
+    <string name="shell_roster_section_bench">Bench warmers</string>
     <string name="shell_roster_empty">No players on roster yet.</string>
     <string name="shell_calendar_placeholder">Full schedule and bye weeks arrive in the calendar tab update.</string>
     <string name="shell_calendar_bye">Bye</string>

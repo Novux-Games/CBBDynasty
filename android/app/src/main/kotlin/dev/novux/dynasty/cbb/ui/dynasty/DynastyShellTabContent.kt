@@ -21,6 +21,8 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.news.NewsHeadline
 import dev.novux.dynasty.cbb.core.news.NewsHeadlineKind
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
+import dev.novux.dynasty.cbb.core.roster.ShellRosterSection
+import dev.novux.dynasty.cbb.core.roster.ShellRosterSectionPartition
 import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
 import dev.novux.dynasty.cbb.ui.player.PlayerLoyaltyChips
 
@@ -50,23 +52,41 @@ fun DynastyShellRosterTab(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         } else {
-            players.sortedBy { it.role.depthOrder }.forEach { player ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onPlayerClick(player) },
-                ) {
-                    Column(
-                        modifier = Modifier.padding(12.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp),
+            val rosterPlayers = players.map { it.toRosterPlayer() }
+            ShellRosterSectionPartition.group(rosterPlayers).forEach { section ->
+                Text(
+                    text = shellRosterSectionTitle(section.section),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(top = 8.dp),
+                )
+                val dynastyById = players.associateBy { it.playerId }
+                section.players.forEach { rosterPlayer ->
+                    val player = dynastyById.getValue(rosterPlayer.playerId)
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onPlayerClick(player) },
                     ) {
-                        PlayerInjuryRosterRow(player = player.toRosterPlayer())
-                        PlayerLoyaltyChips(player)
+                        Column(
+                            modifier = Modifier.padding(12.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp),
+                        ) {
+                            PlayerInjuryRosterRow(player = rosterPlayer)
+                            PlayerLoyaltyChips(player)
+                        }
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun shellRosterSectionTitle(section: ShellRosterSection): String = when (section) {
+    ShellRosterSection.Starters -> stringResource(R.string.shell_roster_section_starters)
+    ShellRosterSection.Reserves -> stringResource(R.string.shell_roster_section_reserves)
+    ShellRosterSection.BenchWarmers -> stringResource(R.string.shell_roster_section_bench)
 }
 
 @Composable
