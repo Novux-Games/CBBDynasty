@@ -12,7 +12,10 @@ import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
 import dev.novux.dynasty.cbb.core.schedule.PreseasonScheduleSolver
 import dev.novux.dynasty.cbb.core.schedule.ScheduleGameKind
 import dev.novux.dynasty.cbb.core.schedule.ScheduledGameStub
+import dev.novux.dynasty.cbb.core.schedule.ExhibitionGameDraft
+import dev.novux.dynasty.cbb.core.schedule.ExhibitionScheduleUxPolicy
 import dev.novux.dynasty.cbb.core.schedule.PreseasonScheduleConstants
+import dev.novux.dynasty.cbb.core.pack.TeamDisplayOverlay
 import dev.novux.dynasty.cbb.data.league.LeagueScheduleRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
@@ -37,10 +40,45 @@ class PreseasonScheduleRepository(
         return decodePlan(raw)
     }
 
-    suspend fun saveExhibitions(dynastyId: String, seasonIndex: Int, count: Int) {
+    suspend fun loadExhibitionDrafts(dynastyId: String, seasonIndex: Int): List<ExhibitionGameDraft> {
+        val count = loadExhibitionCount(dynastyId, seasonIndex)
+        if (count == 0) return emptyList()
+        val raw = context.preseasonScheduleStore.data.first()[exhibitionDetailsKey(dynastyId, seasonIndex)]
+        val decoded = decodeExhibitionDrafts(raw).take(count)
+        return if (decoded.size == count) {
+            decoded
+        } else {
+            List(count) { index ->
+                ExhibitionGameDraft(exhibitionWeekIndex = (index + 1).coerceAtMost(PreseasonScheduleConstants.MAX_EXHIBITION_GAMES))
+            }
+        }
+    }
+
+    suspend fun loadNonConferenceOpponents(dynastyId: String): List<TeamDisplayOverlay> {
+        val coach = database.dynastyCoachDao().getByDynastyId(dynastyId) ?: return emptyList()
+        val userTeam = packRepository.activeSession().index.team(coach.userTeamId) ?: return emptyList()
+        return packRepository.activeSession().index.allTeamDisplays()
+            .filter { it.conferenceId != userTeam.conferenceId }
+            .sortedBy { it.displayName }
+    }
+
+    suspend fun saveExhibitions(
+        dynastyId: String,
+        seasonIndex: Int,
+        count: Int,
+        drafts: List<ExhibitionGameDraft>,
+    ) {
         val capped = count.coerceIn(0, PreseasonScheduleConstants.MAX_EXHIBITION_GAMES)
+        require(ExhibitionScheduleUxPolicy.validateDraft(capped, drafts.take(capped))) {
+            "Invalid exhibition draft"
+        }
         context.preseasonScheduleStore.edit { prefs ->
             prefs[exhibitionKey(dynastyId, seasonIndex)] = capped
+            if (capped == 0) {
+                prefs.remove(exhibitionDetailsKey(dynastyId, seasonIndex))
+            } else {
+                prefs[exhibitionDetailsKey(dynastyId, seasonIndex)] = encodeExhibitionDrafts(drafts.take(capped))
+            }
         }
     }
 
@@ -56,6 +94,8 @@ class PreseasonScheduleRepository(
         val inviteState = tournamentInvitesRepository.loadState(dynastyId, seasonIndex)
         val budget = inviteState.slotBudget
         val exhibitions = loadExhibitionCount(dynastyId, seasonIndex)
+        val exhibitionStubs = ExhibitionScheduleUxPolicy.draftsToStubs(loadExhibitionDrafts(dynastyId, seasonIndex))
+            .takeIf { it.size == exhibitions }
         val plan = PreseasonScheduleSolver.solve(
             userTeam = userTeam,
             conference = conference,
@@ -65,6 +105,7 @@ class PreseasonScheduleRepository(
             tournamentResolution = inviteState.resolution,
             exhibitionCount = exhibitions,
             seed = dynastyId.hashCode().toLong() xor seasonIndex.toLong(),
+            exhibitionStubs = exhibitionStubs,
         )
         if (!plan.isValidFor(budget)) return null
         context.preseasonScheduleStore.edit { prefs ->
@@ -76,6 +117,34 @@ class PreseasonScheduleRepository(
 
     private fun exhibitionKey(dynastyId: String, seasonIndex: Int) =
         intPreferencesKey("exhibitions_${dynastyId}_$seasonIndex")
+
+    private fun exhibitionDetailsKey(dynastyId: String, seasonIndex: Int) =
+        stringPreferencesKey("exhibition_details_${dynastyId}_$seasonIndex")
+
+    private fun encodeExhibitionDrafts(drafts: List<ExhibitionGameDraft>): String =
+        drafts.joinToString("\n") { draft ->
+            listOf(
+                draft.opponentTeamId.escape(),
+                draft.opponentDisplayName.escape(),
+                if (draft.homeGame) "H" else "A",
+                draft.exhibitionWeekIndex.toString(),
+            ).joinToString("|")
+        }
+
+    private fun decodeExhibitionDrafts(raw: String?): List<ExhibitionGameDraft> {
+        if (raw.isNullOrBlank()) return emptyList()
+        return raw.lineSequence().mapNotNull { line ->
+            val parts = line.split("|")
+            if (parts.size < 4) return@mapNotNull null
+            val week = parts[3].toIntOrNull() ?: return@mapNotNull null
+            ExhibitionGameDraft(
+                opponentTeamId = parts[0].unescape(),
+                opponentDisplayName = parts[1].unescape(),
+                homeGame = parts[2] == "H",
+                exhibitionWeekIndex = week,
+            )
+        }.toList()
+    }
 
     private fun planKey(dynastyId: String, seasonIndex: Int) =
         stringPreferencesKey("plan_${dynastyId}_$seasonIndex")

@@ -16,6 +16,7 @@ object PreseasonScheduleSolver {
         tournamentResolution: TournamentInviteResolution,
         exhibitionCount: Int,
         seed: Long,
+        exhibitionStubs: List<ScheduledGameStub>? = null,
     ): PreseasonSchedulePlan {
         val random = Random(seed)
         val confTarget = conference.leagueGameCount.coerceAtMost(budget.builderSlots)
@@ -31,7 +32,9 @@ object PreseasonScheduleSolver {
             random,
             eventWeeks + confWeeks,
         )
-        val exhibitions = buildExhibitions(nonConferencePool, exhibitionCount, random)
+        val exhibitions =
+            exhibitionStubs?.takeIf { it.size == exhibitionCount.coerceIn(0, PreseasonScheduleConstants.MAX_EXHIBITION_GAMES) }
+                ?: buildExhibitions(nonConferencePool, exhibitionCount, random)
         val regularSeason = eventGames + confGames + nonConfGames
         return PreseasonSchedulePlan(
             exhibitions = exhibitions,
