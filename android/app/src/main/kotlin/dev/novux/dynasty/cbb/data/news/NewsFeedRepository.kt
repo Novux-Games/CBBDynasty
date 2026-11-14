@@ -13,6 +13,7 @@ import dev.novux.dynasty.cbb.core.news.BracketologyNewsEngine
 import dev.novux.dynasty.cbb.core.news.NewsHeadline
 import dev.novux.dynasty.cbb.core.news.NewsHeadlinePublisher
 import dev.novux.dynasty.cbb.core.news.ShallowNewsFeed
+import dev.novux.dynasty.cbb.core.news.ShallowNewsFeedSnapshot
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import kotlinx.coroutines.flow.first
@@ -46,13 +47,21 @@ class NewsFeedRepository(
         seasonIndex: Int,
         rsWeekIndex: Int,
         userRoster: List<RosterPlayer>,
-    ): List<NewsHeadline> {
+    ): List<NewsHeadline> =
+        shallowFeedSnapshot(dynastyId, seasonIndex, rsWeekIndex, userRoster).headlines
+
+    suspend fun shallowFeedSnapshot(
+        dynastyId: String,
+        seasonIndex: Int,
+        rsWeekIndex: Int,
+        userRoster: List<RosterPlayer>,
+    ): ShallowNewsFeedSnapshot {
         ensureRecruitingSpotlight(dynastyId, seasonIndex)
         val archive = loadArchive(dynastyId, seasonIndex)
         val liveUser = userRoster.mapNotNull { player ->
             NewsHeadlinePublisher.userInjuryFromRoster(seasonIndex, rsWeekIndex, player)
         }
-        return ShallowNewsFeed.select(archive, liveUser)
+        return ShallowNewsFeed.snapshot(archive, liveUser)
     }
 
     suspend fun appendUserInjuries(

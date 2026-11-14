@@ -142,7 +142,7 @@ import dev.novux.dynasty.cbb.ui.hubs.notifyRecruitingCycleClosed
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTab
-import dev.novux.dynasty.cbb.core.news.NewsHeadline
+import dev.novux.dynasty.cbb.core.news.ShallowNewsFeedSnapshot
 import dev.novux.dynasty.cbb.data.news.NewsFeedRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import kotlinx.coroutines.launch
@@ -223,7 +223,7 @@ fun DynastyShellScreen(
     var exhibitionCount by remember { mutableStateOf(0) }
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
-    var newsHeadlines by remember { mutableStateOf<List<NewsHeadline>>(emptyList()) }
+    var newsFeed by remember { mutableStateOf(ShallowNewsFeedSnapshot.Empty) }
     var coachSkillPointBank by remember { mutableIntStateOf(0) }
     var coachSkillState by remember {
         mutableStateOf(dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointState())
@@ -428,7 +428,7 @@ fun DynastyShellScreen(
         fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
         rosterPreview = fullRoster.take(6)
         postgameEvents = rosterRepository.peekPostgameInjuries(loaded.dynastyId)
-        newsHeadlines = newsFeedRepository.shallowFeed(
+        newsFeed = newsFeedRepository.shallowFeedSnapshot(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
             loaded.weekCheckpoint.activePosition.weekIndex,
@@ -542,7 +542,7 @@ fun DynastyShellScreen(
                         names,
                         postgameEvents,
                     )
-                    newsHeadlines = newsFeedRepository.shallowFeed(
+                    newsFeed = newsFeedRepository.shallowFeedSnapshot(
                         loaded.dynastyId,
                         loaded.metadata.seasonIndex,
                         loaded.weekCheckpoint.activePosition.weekIndex,
@@ -944,7 +944,11 @@ fun DynastyShellScreen(
                     }
                 },
             )
-            DynastyShellTab.News -> DynastyShellNewsTab(headlines = newsHeadlines, contentPadding = padding)
+            DynastyShellTab.News -> DynastyShellNewsTab(
+                feed = newsFeed,
+                contentPadding = padding,
+                onOpenNewsHub = hubMenuCallbacks.onOpenNewsHub,
+            )
             DynastyShellTab.Dashboard -> Column(
                 modifier = Modifier
                     .fillMaxSize()

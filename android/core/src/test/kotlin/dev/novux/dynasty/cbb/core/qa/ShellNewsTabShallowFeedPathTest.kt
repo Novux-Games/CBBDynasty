@@ -18,8 +18,8 @@ class ShellNewsTabShallowFeedPathTest {
         )
         paths.forEach { relative ->
             val source = root.resolve(relative).readText()
-            assertTrue("$relative loads shell news", source.contains("rememberShellNewsHeadlines"))
-            assertTrue("$relative renders news tab", source.contains("DynastyShellNewsTab(headlines"))
+            assertTrue("$relative loads shell news", source.contains("rememberShellNewsFeed"))
+            assertTrue("$relative renders news tab", source.contains("DynastyShellNewsTab("))
             assertFalse("$relative uses news placeholder", source.contains("DynastyShellNewsTabPlaceholder"))
         }
         assertTrue(

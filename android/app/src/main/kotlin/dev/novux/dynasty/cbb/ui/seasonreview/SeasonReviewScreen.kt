@@ -44,7 +44,7 @@ import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTab
-import dev.novux.dynasty.cbb.ui.dynasty.rememberShellNewsHeadlines
+import dev.novux.dynasty.cbb.ui.dynasty.rememberShellNewsFeed
 import dev.novux.dynasty.cbb.requireDynastyApplication
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
 import kotlinx.coroutines.launch
@@ -63,7 +63,7 @@ fun SeasonReviewScreen(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val app = context.requireDynastyApplication()
-    val newsHeadlines = rememberShellNewsHeadlines(
+    val newsFeed = rememberShellNewsFeed(
         dynastyId = loaded.dynastyId,
         seasonIndex = loaded.metadata.seasonIndex,
         weekIndex = loaded.weekCheckpoint.activePosition.weekIndex,
@@ -112,7 +112,7 @@ fun SeasonReviewScreen(
                 calendarRepository = userCalendarRepository,
                 contentPadding = padding,
             )
-            DynastyShellTab.News -> DynastyShellNewsTab(headlines = newsHeadlines, contentPadding = padding)
+            DynastyShellTab.News -> DynastyShellNewsTab(feed = newsFeed, contentPadding = padding)
             DynastyShellTab.Roster,
             DynastyShellTab.Dashboard,
             -> Column(

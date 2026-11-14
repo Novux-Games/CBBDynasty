@@ -80,7 +80,7 @@ import dev.novux.dynasty.cbb.ui.hubs.notifyRecruitingCycleClosed
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTab
-import dev.novux.dynasty.cbb.ui.dynasty.rememberShellNewsHeadlines
+import dev.novux.dynasty.cbb.ui.dynasty.rememberShellNewsFeed
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import dev.novux.dynasty.cbb.ui.offseason.leaving.DraftResultsWeekTwoPanel
 import dev.novux.dynasty.cbb.ui.offseason.leaving.PlayersLeavingPanel
@@ -144,7 +144,7 @@ fun OffseasonScreen(
     val context = LocalContext.current
     val app = context.requireDynastyApplication()
     val playerStatsRepository = app.playerStatsRepository
-    val newsHeadlines = rememberShellNewsHeadlines(
+    val newsFeed = rememberShellNewsFeed(
         dynastyId = loaded.dynastyId,
         seasonIndex = loaded.metadata.seasonIndex,
         weekIndex = loaded.weekCheckpoint.activePosition.weekIndex,
@@ -290,7 +290,11 @@ fun OffseasonScreen(
                 calendarRepository = userCalendarRepository,
                 contentPadding = padding,
             )
-            DynastyShellTab.News -> DynastyShellNewsTab(headlines = newsHeadlines, contentPadding = padding)
+            DynastyShellTab.News -> DynastyShellNewsTab(
+                feed = newsFeed,
+                contentPadding = padding,
+                onOpenNewsHub = hubMenuCallbacks.onOpenNewsHub,
+            )
             DynastyShellTab.Dashboard -> Column(
                 modifier = Modifier
                     .fillMaxSize()

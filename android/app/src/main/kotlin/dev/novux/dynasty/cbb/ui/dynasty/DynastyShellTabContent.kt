@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
@@ -18,8 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
-import dev.novux.dynasty.cbb.core.news.NewsHeadline
 import dev.novux.dynasty.cbb.core.news.NewsHeadlineKind
+import dev.novux.dynasty.cbb.core.news.ShallowNewsFeedSnapshot
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.roster.ShellRosterSection
 import dev.novux.dynasty.cbb.core.roster.ShellRosterSectionPartition
@@ -113,9 +114,11 @@ fun DynastyShellCalendarTabPlaceholder(contentPadding: PaddingValues) {
 
 @Composable
 fun DynastyShellNewsTab(
-    headlines: List<NewsHeadline>,
+    feed: ShallowNewsFeedSnapshot,
     contentPadding: PaddingValues,
+    onOpenNewsHub: (() -> Unit)? = null,
 ) {
+    val headlines = feed.headlines
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -128,6 +131,11 @@ fun DynastyShellNewsTab(
             text = stringResource(R.string.shell_tab_news),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
+        )
+        Text(
+            text = stringResource(R.string.shell_news_shallow_cap, feed.cap),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         if (headlines.isEmpty()) {
             Text(
@@ -148,6 +156,21 @@ fun DynastyShellNewsTab(
                     }
                 }
             }
+            if (feed.truncated) {
+                Text(
+                    text = stringResource(
+                        R.string.shell_news_more_in_hub,
+                        feed.mergedCount - feed.headlines.size,
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            onOpenNewsHub?.let { open ->
+                OutlinedButton(onClick = open, modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.shell_news_open_hub))
+                }
+            }
         }
     }
 }
@@ -165,5 +188,5 @@ private fun newsKindLabel(kind: NewsHeadlineKind): String = when (kind) {
 
 @Composable
 fun DynastyShellNewsTabPlaceholder(contentPadding: PaddingValues) {
-    DynastyShellNewsTab(headlines = emptyList(), contentPadding = contentPadding)
+    DynastyShellNewsTab(feed = ShallowNewsFeedSnapshot.Empty, contentPadding = contentPadding)
 }
