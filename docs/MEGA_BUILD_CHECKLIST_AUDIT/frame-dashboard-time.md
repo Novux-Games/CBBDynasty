@@ -72,9 +72,9 @@
 
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
-| MEGA-FRAME-034 | GAP | Team overview card | No W–L, NET #, conf rank, T25, SOS on dashboard | `game-frame.md#team-overview` |
-| MEGA-FRAME-035 | GAP | NCBA NET tap → Rankings | Dashboard lacks NET row / deep link | Rankings hub exists but not on dashboard |
-| MEGA-FRAME-036 | GAP | Postseason seed row on dashboard | No `{NCBA\|NCI\|HC} #{seed}` when invited | `game-frame.md#postseason-row-dashboard` |
+| MEGA-FRAME-034 | SHIP | Team overview card | `DashboardTeamOverviewCard` — W–L, SOS, conf standing, T25 chips | `DynastyShellScreen.kt` |
+| MEGA-FRAME-035 | SHIP | NCBA NET tap → Rankings | NET row + poll line tap → `onOpenRankings` | `DashboardTeamOverviewCard.kt` |
+| MEGA-FRAME-036 | SHIP | Postseason seed row on dashboard | `DashboardPostseasonSeedResolver` when Selection Sunday set | `DynastyShellScreen.kt` |
 | MEGA-FRAME-037 | PARTIAL | Notifications feed | `DashboardNotificationFeedPanel` on in-season shell | Offseason/preseason use placeholder news, feed not always shown |
 | MEGA-FRAME-038 | GAP | Last game summary | No opponent/score/W–L + box score / postgame actions on dashboard | `game-frame.md#last-game` |
 | MEGA-FRAME-039 | PARTIAL | Next game card | `NextGameCard` with preview + opponent school — missing date/location line | `DynastyShellScreen.kt` `NextGameCard` |

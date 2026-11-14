@@ -95,7 +95,9 @@ import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
 import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
+import dev.novux.dynasty.cbb.core.dashboard.DashboardPostseasonSeedResolver
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
+import dev.novux.dynasty.cbb.ui.dashboard.DashboardTeamOverviewCard
 import dev.novux.dynasty.cbb.data.school.SchoolHubRepository
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.ui.dashboard.CareerBlockNotificationDialog
@@ -190,6 +192,7 @@ fun DynastyShellScreen(
     var staffRoster by remember { mutableStateOf<SchoolStaffRoster?>(null) }
     var coachSecurity by remember { mutableStateOf<CoachSecuritySnapshot?>(null) }
     var userSchool by remember { mutableStateOf<SchoolHubOverview?>(null) }
+    var dashboardPostseasonSeed by remember { mutableStateOf<String?>(null) }
     var coachView by remember { mutableStateOf<ShellCoachView>(ShellCoachView.Hub) }
     var headCoachTabWire by rememberSaveable { mutableStateOf(CoachCardTab.Overview.wire) }
     val headCoachCardRoute = CoachCardRoute.HeadCoach(
@@ -368,6 +371,13 @@ fun DynastyShellScreen(
             loaded.metadata.seasonIndex,
         )
         val app = context.requireDynastyApplication()
+        val standings = app.leagueWeekBatchRepository.loadStandings(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        )
+        dashboardPostseasonSeed = userSchool?.let { school ->
+            DashboardPostseasonSeedResolver.label(school.teamId, standings?.selectionSunday)
+        }
         val contractState = app.headCoachUserContractRepository.load(loaded.dynastyId)
         coachDeepTabs = app.coachCardDeepTabsRepository.loadDeepTabs(
             dynastyId = loaded.dynastyId,
@@ -865,6 +875,13 @@ fun DynastyShellScreen(
                     .padding(horizontal = 28.dp, vertical = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
+                userSchool?.let { overview ->
+                    DashboardTeamOverviewCard(
+                        overview = overview,
+                        postseasonSeedLabel = dashboardPostseasonSeed,
+                        onOpenRankings = hubMenuCallbacks.onOpenRankings,
+                    )
+                }
                 Text(
                     text = stringResource(R.string.dynasty_shell_hint),
                     style = MaterialTheme.typography.bodyMedium,

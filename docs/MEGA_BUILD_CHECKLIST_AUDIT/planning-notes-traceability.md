@@ -45,7 +45,7 @@
 | MEGA-NOTES-023 | P1 | PARTIAL | Notifications **Done** | In-app feed composer; not always on offseason/preseason dashboard. | `MEGA-GDD-134`; `NotificationFeedComposer.kt`, `MEGA-FRAME-037` |
 | MEGA-NOTES-024 | P1 | PARTIAL | News hub (portal) **Done** | News tab + headlines route; depth vs `news-hub.md` story tiers partial. | `news-shell-branding.md` shard; `NewsHubScreen.kt` |
 | MEGA-NOTES-025 | P2 | SHIP | Shell note — no separate offseason/preseason **layout** docs | Single `game-frame.md` chrome; phase content swaps inside shell. | `planning-notes.md` § Gameplan; shell screens share chrome |
-| MEGA-NOTES-026 | P2 | GAP | Dashboard team overview / NET / postseason rows | Spec W–L, NET #, seed row not on dashboard home. | `MEGA-FRAME-034`–`036`; `game-frame.md` |
+| MEGA-NOTES-026 | P2 | SHIP | Dashboard team overview / NET / postseason rows | `DashboardTeamOverviewCard` on shell dashboard. | `MEGA-FRAME-034`–`036`; `game-frame.md` |
 
 ---
 
