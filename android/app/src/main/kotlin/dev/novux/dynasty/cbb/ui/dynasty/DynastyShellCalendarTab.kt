@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarGameEntry
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarRowKind
@@ -88,8 +89,13 @@ private fun CalendarWeekCard(row: UserCalendarWeekRow) {
                     AssistChip(onClick = {}, label = { Text(stringResource(R.string.shell_calendar_bye)) })
                 }
                 UserCalendarRowKind.OffWeek -> {
+                    val copy = if (row.phase == CalendarPhase.Exhibition) {
+                        stringResource(R.string.shell_calendar_exhibition_empty)
+                    } else {
+                        stringResource(R.string.shell_calendar_open_week)
+                    }
                     Text(
-                        text = stringResource(R.string.shell_calendar_open_week),
+                        text = copy,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

@@ -24,11 +24,17 @@ sealed class AppRoute(val route: String) {
 
     data object SeasonReview : AppRoute("season_review")
 
+    /** Unified dynasty career shell — phase swaps body only ([MEGA-FRAME-005]). */
+    data object DynastyCareer : AppRoute("dynasty_career")
+
+    @Deprecated("Use DynastyCareer", ReplaceWith("DynastyCareer"))
     data object Offseason : AppRoute("offseason")
 
+    @Deprecated("Use DynastyCareer", ReplaceWith("DynastyCareer"))
     data object Preseason : AppRoute("preseason")
 
-    /** In-season dynasty shell — [planning/game-frame.md]. */
+    /** @deprecated Use [DynastyCareer] — [planning/game-frame.md]. */
+  @Deprecated("Use DynastyCareer", ReplaceWith("DynastyCareer"))
     data object DynastyShell : AppRoute("dynasty_shell")
 
     data object Strategy : AppRoute("strategy")

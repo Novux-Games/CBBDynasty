@@ -7,6 +7,7 @@ import dev.novux.dynasty.cbb.core.carousel.CoachingCarouselGate
 import dev.novux.dynasty.cbb.core.carousel.CoachingCarouselState
 import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentStatus
 import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentState
+import dev.novux.dynasty.cbb.core.navigation.DynastyCareerPhaseResolver
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 
 /** Routes after a dynasty load or sign ([planning/game-start.md], [planning/offseason.md]). */
@@ -28,22 +29,11 @@ object DynastyLaunch {
                 CoachingCarouselGate.blocksOffseasonShell(loaded.metadata.seasonIndex, carousel) -> {
                 navController.navigate(AppRoute.CoachingCarousel.route)
             }
-            loaded.weekCheckpoint.activePosition.phase == CalendarPhase.Offseason -> {
-                navController.navigate(AppRoute.Offseason.route)
-            }
-            loaded.weekCheckpoint.activePosition.phase == CalendarPhase.Preseason -> {
-                navController.navigate(AppRoute.Preseason.route)
-            }
-            loaded.weekCheckpoint.activePosition.phase in IN_SEASON_PHASES -> {
-                navController.navigate(AppRoute.DynastyShell.route)
+            DynastyCareerPhaseResolver.careerBody(loaded.weekCheckpoint.activePosition.phase) != null -> {
+                navController.navigate(AppRoute.DynastyCareer.route) {
+                    launchSingleTop = true
+                }
             }
         }
     }
-
-    private val IN_SEASON_PHASES = setOf(
-        CalendarPhase.Exhibition,
-        CalendarPhase.RegularSeason,
-        CalendarPhase.ConferenceTournament,
-        CalendarPhase.Postseason,
-    )
 }

@@ -7,13 +7,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
   },
   {
-    "id": "MEGA-FRAME-005",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "frame-dashboard-time.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
-  },
-  {
     "id": "MEGA-FRAME-016",
     "pri": "P1",
     "status": "GAP",
@@ -24,13 +17,6 @@
     "id": "MEGA-FRAME-017",
     "pri": "P1",
     "status": "PARTIAL",
-    "shard": "frame-dashboard-time.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
-  },
-  {
-    "id": "MEGA-FRAME-019",
-    "pri": "P1",
-    "status": "GAP",
     "shard": "frame-dashboard-time.md",
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
   },
@@ -206,13 +192,6 @@
     "id": "MEGA-FRAME-055",
     "pri": "P1",
     "status": "PARTIAL",
-    "shard": "frame-dashboard-time.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
-  },
-  {
-    "id": "MEGA-FRAME-056",
-    "pri": "P1",
-    "status": "GAP",
     "shard": "frame-dashboard-time.md",
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
   },
@@ -553,13 +532,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
   },
   {
-    "id": "MEGA-FRAME-130",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "frame-dashboard-time.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
-  },
-  {
     "id": "MEGA-FRAME-131",
     "pri": "P1",
     "status": "PARTIAL",
@@ -596,13 +568,6 @@
   },
   {
     "id": "MEGA-FRAME-136",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "frame-dashboard-time.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
-  },
-  {
-    "id": "MEGA-FRAME-138",
     "pri": "P1",
     "status": "GAP",
     "shard": "frame-dashboard-time.md",

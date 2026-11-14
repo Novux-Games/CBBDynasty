@@ -22,7 +22,7 @@
 | MEGA-FRAME-002 | SHIP | Bottom nav order Roster → Calendar → Dashboard → News | Tab order matches game-frame | `DynastyShellChrome.kt` |
 | MEGA-FRAME-003 | SHIP | Dashboard default tab | Screens initialize `selectedTab = DynastyShellTab.Dashboard` | Shell screen `remember` state |
 | MEGA-FRAME-004 | PARTIAL | Header: hamburger + school + phase/week | Top bar shows school + `CalendarWeekLabel`; menu is dropdown not slide drawer | `DynastyShellChrome.kt` |
-| MEGA-FRAME-005 | GAP | No separate offseason/preseason app routes in career loop | Preseason still separate `AppRoute` composable without unified in-shell phase switch for all years | `DynastyApp.kt`, `DynastyLaunch.kt` |
+| MEGA-FRAME-005 | SHIP | No separate offseason/preseason app routes in career loop | `AppRoute.DynastyCareer` + `DynastyCareerHost` swaps body by phase; legacy routes alias same host | `DynastyCareerHost.kt`, `DynastyApp.kt`, `DynastyLaunch.kt` |
 | MEGA-FRAME-006 | SHIP | Coaching Carousel not “Week 0” | Carousel is `CoachingCarouselScreen` with title only — no week index in UI | `CoachingCarouselScreen.kt`, `carousel_title` |
 | MEGA-FRAME-007 | SHIP | Carousel uses non-shell chrome | Carousel in `DynastyShellChrome` with four tabs + hamburger | `CoachingCarouselScreen.kt`, `CoachingCarouselShellPathTest` |
 
@@ -43,7 +43,7 @@
 | MEGA-FRAME-016 | GAP | NCBA round names on calendar | Postseason rows do not show Opening Round / Super 16 labels per `ncba-branding` | `DynastyShellCalendarTab.kt` |
 | MEGA-FRAME-017 | PARTIAL | Calendar lists games by date | Rows are week-bucketed; game line has no calendar date field | `UserCalendarGameEntry`, `CalendarGameLine` |
 | MEGA-FRAME-018 | SHIP | Bye week chip | `UserCalendarRowKind.Bye` shows bye chip | `DynastyShellCalendarTab.kt` |
-| MEGA-FRAME-019 | GAP | Empty exhibition week advance UX | No dedicated “empty week” copy for exhibition slots with zero games | `time-system.md#exhibition-weeks` |
+| MEGA-FRAME-019 | SHIP | Empty exhibition week advance UX | `shell_calendar_exhibition_empty` on exhibition `OffWeek` rows | `DynastyShellCalendarTab.kt` |
 
 ---
 
@@ -108,7 +108,7 @@
 | MEGA-FRAME-053 | PARTIAL | March Mayhem visibility | Menu when `Postseason` phase — spec: after Selection Sunday only | `DynastyHubMenuPolicy.marchMayhemMenuVisible` |
 | MEGA-FRAME-054 | SHIP | Conf tournament menu in phase | Extra item in conf tournament phase | `DynastyHubMenuPolicy` |
 | MEGA-FRAME-055 | PARTIAL | Rankings hub 365 + polls | `RankingsHubScreen` tabs when `published` | Placeholder when unpublished |
-| MEGA-FRAME-056 | GAP | Dashboard default after load | Launch routing splits Offseason / Preseason / Shell routes | `DynastyLaunch.kt` |
+| MEGA-FRAME-056 | SHIP | Dashboard default after load | `DynastyLaunch` navigates `DynastyCareer` for offseason/preseason/in-season | `DynastyLaunch.kt`, `DynastyCareerPhaseResolver.kt` |
 
 ---
 
@@ -238,7 +238,7 @@
 |----|--------|--------------|---------|--------------|
 | MEGA-FRAME-128 | GAP | Top 60 → News tab | Task 1 publishes seed — **News tab** remains `DynastyShellNewsTabPlaceholder` — Top 60 headline not on shallow feed | `PreseasonScreen` News tab |
 | MEGA-FRAME-129 | SHIP | Tasks 7–8 invite gate | Locked copy + `schedulingUnlocked()` matches `preseason.md` dependency on task 6 | `PreseasonScreen.kt` |
-| MEGA-FRAME-130 | GAP | Start season navigation | `onSeasonStarted()` pops NavHost — **not** in-place phase swap inside one shell route | `DynastyApp.kt`, `DynastyLaunch.kt` |
+| MEGA-FRAME-130 | SHIP | Start season navigation | `PreseasonScreen.onSeasonStarted` no-op; `ActiveDynastySession` listener recomposition inside `DynastyCareerHost` | `DynastyCareerHost.kt` |
 | MEGA-FRAME-131 | PARTIAL | Task order UX | Spec allows tasks 1–5 in any order — UI lists fixed enum order only | `PreseasonTaskId.entries` |
 | MEGA-FRAME-132 | GAP | Coach upgrades wiring | Task 3 completable via generic button — **skill tree** screen not required path | `PreseasonScreen` vs `game-design` coach upgrades |
 | MEGA-FRAME-133 | PARTIAL | Rankings review task | NET/Media/Coaches sheet exists in flow — completion not tied to **Continue** on rankings slice only | `RankingsHubScreen` / preseason |
@@ -253,7 +253,7 @@
 
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
-| MEGA-FRAME-138 | GAP | Multi-route career loop | `DynastyLaunch` maps phase → **distinct** `AppRoute` composables — not unified shell with `calendarPhase` swap only | `DynastyLaunch.kt` (extends MEGA-FRAME-005) |
+| MEGA-FRAME-138 | SHIP | Multi-route career loop | Single launch target `dynasty_career`; phase → body via `DynastyCareerPhaseResolver` | `DynastyCareerUnifiedRoutePathTest` |
 | MEGA-FRAME-139 | GAP | Hub back stack / tab reset | Returning from Recruiting/SigningDay hubs does not force **Dashboard** tab restore | NavHost patterns in `DynastyApp.kt` |
 | MEGA-FRAME-140 | PARTIAL | Season review chrome | `SeasonReviewScreen` separate from four-tab shell — partial spec compliance for review week | `SeasonReviewScreen.kt` |
 | MEGA-FRAME-141 | GAP | Players Leaving routing | Week 1 retention may be full-screen route vs in-shell panel — breaks “one chrome” mental model | `PlayersLeavingScreen.kt` |

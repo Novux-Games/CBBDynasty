@@ -51,7 +51,6 @@ import kotlinx.coroutines.withContext
 import dev.novux.dynasty.cbb.ui.navigation.DynastyLaunch
 import dev.novux.dynasty.cbb.ui.navigation.navigateToRecruitingHub
 import dev.novux.dynasty.cbb.ui.navigation.popBackToInShellDashboard
-import dev.novux.dynasty.cbb.ui.shell.DynastyShellScreen
 import dev.novux.dynasty.cbb.ui.strategy.StrategyScreen
 import dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch
 import dev.novux.dynasty.cbb.ui.sim.GameWatchScreen
@@ -71,8 +70,7 @@ import dev.novux.dynasty.cbb.ui.hubs.SchoolHubRouteScreen
 import dev.novux.dynasty.cbb.ui.hubs.StatisticsHubRouteScreen
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.ui.recruiting.RecruitingHubScreen
-import dev.novux.dynasty.cbb.ui.offseason.OffseasonScreen
-import dev.novux.dynasty.cbb.ui.preseason.PreseasonScreen
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyCareerHost
 import dev.novux.dynasty.cbb.ui.signingday.SigningDayInitialTab
 import dev.novux.dynasty.cbb.ui.signingday.SigningDayScreen
 import dev.novux.dynasty.cbb.ui.awards.AwardsHubScreen
@@ -209,6 +207,68 @@ fun DynastyApp(
                 DynastyLaunch.navigateForLoaded(navController, loaded, carousel, employment)
             }
 
+            @Composable
+            fun DynastyCareerRoute() {
+                DynastyCareerHost(
+                    saveSlotRepository = saveSlotRepository,
+                    recruitingEconomyRepository = recruitingEconomyRepository,
+                    portalCycleRepository = portalCycleRepository,
+                    signingDayRepository = signingDayRepository,
+                    offseasonWeekTwoRepository = offseasonWeekTwoRepository,
+                    summerWorkoutRepository = summerWorkoutRepository,
+                    offseasonWeekEightRepository = offseasonWeekEightRepository,
+                    offseasonWeekNineRepository = offseasonWeekNineRepository,
+                    offseasonWeekTenRepository = offseasonWeekTenRepository,
+                    preseasonProgressRepository = preseasonProgressRepository,
+                    incomingClassSeedRepository = incomingClassSeedRepository,
+                    tournamentInvitesRepository = tournamentInvitesRepository,
+                    preseasonScheduleRepository = preseasonScheduleRepository,
+                    preseasonReportRepository = preseasonReportRepository,
+                    preseasonSeasonStartRepository = preseasonSeasonStartRepository,
+                    schoolStaffRepository = schoolStaffRepository,
+                    schoolHubRepository = schoolHubRepository,
+                    coachSecurityRepository = coachSecurityRepository,
+                    coachEmploymentRepository = coachEmploymentRepository,
+                    hubMenuCallbacks = hubMenuCallbacks,
+                    postgameInjuryRefreshKey = postgameInjuryRefreshKey,
+                    showNotificationFeed = appSettings.showDashboardNotificationFeed,
+                    onOpenRecruitingTab = { tab ->
+                        recruitingLaunchTab = tab
+                        navController.navigateToRecruitingHub()
+                    },
+                    onOpenSigningDayFromOffseason = { link ->
+                        signingDayInitialTab = when (link) {
+                            DashboardDeepLink.SigningDayRankings -> SigningDayInitialTab.Rankings
+                            DashboardDeepLink.SigningDayPositions -> SigningDayInitialTab.Positions
+                            else -> SigningDayInitialTab.Rankings
+                        }
+                        navController.navigate(AppRoute.SigningDay.route)
+                    },
+                    onOpenSigningDayFromShell = { navController.navigate(AppRoute.SigningDay.route) },
+                    onOpenAutomation = { navController.navigate(AppRoute.DynastyAutomation.route) },
+                    onOpenDiscipline = { incident ->
+                        disciplineIncident = incident
+                        navController.navigate(AppRoute.Discipline.route)
+                    },
+                    onOpenGamePreview = { navController.navigate(AppRoute.GamePreview.route) },
+                    onOpenJobCenter = {
+                        scope.launch {
+                            val active = ActiveDynastySession.current ?: return@launch
+                            coachEmploymentRepository.refreshOffersIfNeeded(
+                                active.dynastyId,
+                                active.metadata.seasonIndex,
+                            )
+                            navController.navigate(AppRoute.JobCenter.route) {
+                                popUpTo(AppRoute.DynastyCareer.route) { inclusive = true }
+                            }
+                        }
+                    },
+                    onExitToHome = {
+                        navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                    },
+                )
+            }
+
             Scaffold(
                 snackbarHost = { SnackbarHost(snackbarHostState) },
             ) { padding ->
@@ -324,7 +384,7 @@ fun DynastyApp(
                             userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
                             hubMenuCallbacks = hubMenuCallbacks,
                             onComplete = {
-                                navController.navigate(AppRoute.Offseason.route) {
+                                navController.navigate(AppRoute.DynastyCareer.route) {
                                     popUpTo(AppRoute.Home.route) { inclusive = false }
                                 }
                             },
@@ -367,87 +427,9 @@ fun DynastyApp(
                         }
                     }
                 }
-                composable(AppRoute.Preseason.route) {
-                    val session = ActiveDynastySession.current
-                    if (session != null) {
-                        PreseasonScreen(
-                            initial = session,
-                            saveSlotRepository = saveSlotRepository,
-                            progressRepository = preseasonProgressRepository,
-                            incomingClassSeedRepository = incomingClassSeedRepository,
-                            tournamentInvitesRepository = tournamentInvitesRepository,
-                            scheduleRepository = preseasonScheduleRepository,
-                            preseasonReportRepository = preseasonReportRepository,
-                            seasonStartRepository = preseasonSeasonStartRepository,
-                            rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
-                            userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
-                            onSeasonStarted = {
-                                navController.navigate(AppRoute.DynastyShell.route) {
-                                    popUpTo(AppRoute.Home.route) { inclusive = false }
-                                }
-                            },
-                            hubMenuCallbacks = hubMenuCallbacks,
-                        )
-                    } else {
-                        LaunchedEffect(Unit) {
-                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
-                        }
-                    }
-                }
-                composable(AppRoute.DynastyShell.route) {
-                    val session = ActiveDynastySession.current
-                    if (session != null) {
-                        DynastyShellScreen(
-                            initial = session,
-                            saveSlotRepository = saveSlotRepository,
-                            scheduleRepository = preseasonScheduleRepository,
-                            staffRepository = schoolStaffRepository,
-                            schoolHubRepository = schoolHubRepository,
-                            coachSecurityRepository = coachSecurityRepository,
-                            rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
-                            disciplineRepository = LocalContext.current.requireDynastyApplication().disciplineRepository,
-                            chemistryRepository = LocalContext.current.requireDynastyApplication().chemistryRepository,
-                            userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
-                            newsFeedRepository = LocalContext.current.requireDynastyApplication().newsFeedRepository,
-                            coachSkillPointRepository = LocalContext.current.requireDynastyApplication().coachSkillPointRepository,
-                            notificationFeedRepository = LocalContext.current.requireDynastyApplication().notificationFeedRepository,
-                            coachEmploymentRepository = coachEmploymentRepository,
-                            dynastyAutomationRepository = LocalContext.current.requireDynastyApplication().dynastyAutomationRepository,
-                            showNotificationFeed = appSettings.showDashboardNotificationFeed,
-                            hubMenuCallbacks = hubMenuCallbacks,
-                            onOpenSigningDay = { _ ->
-                                navController.navigate(AppRoute.SigningDay.route)
-                            },
-                            onOpenRecruitingTab = { tab ->
-                                recruitingLaunchTab = tab
-                                navController.navigateToRecruitingHub()
-                            },
-                            onOpenAutomation = { navController.navigate(AppRoute.DynastyAutomation.route) },
-                            onOpenDiscipline = { incident ->
-                                disciplineIncident = incident
-                                navController.navigate(AppRoute.Discipline.route)
-                            },
-                            onOpenGamePreview = { navController.navigate(AppRoute.GamePreview.route) },
-                            onOpenJobCenter = {
-                                scope.launch {
-                                    val session = ActiveDynastySession.current ?: return@launch
-                                    coachEmploymentRepository.refreshOffersIfNeeded(
-                                        session.dynastyId,
-                                        session.metadata.seasonIndex,
-                                    )
-                                    navController.navigate(AppRoute.JobCenter.route) {
-                                        popUpTo(AppRoute.DynastyShell.route) { inclusive = true }
-                                    }
-                                }
-                            },
-                            postgameInjuryRefreshKey = postgameInjuryRefreshKey,
-                        )
-                    } else {
-                        LaunchedEffect(Unit) {
-                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
-                        }
-                    }
-                }
+                composable(AppRoute.DynastyCareer.route) { DynastyCareerRoute() }
+                composable(AppRoute.Preseason.route) { DynastyCareerRoute() }
+                composable(AppRoute.DynastyShell.route) { DynastyCareerRoute() }
                 composable(AppRoute.Discipline.route) {
                     val session = ActiveDynastySession.current
                     val app = LocalContext.current.requireDynastyApplication()
@@ -460,7 +442,7 @@ fun DynastyApp(
                             disciplineRepository = app.disciplineRepository,
                             onResolved = {
                                 disciplineIncident = null
-                                navController.popBackStack(AppRoute.DynastyShell.route, inclusive = false)
+                                navController.popBackToInShellDashboard()
                             },
                             onBack = { navController.popBackStack() },
                         )
@@ -722,42 +704,7 @@ fun DynastyApp(
                         )
                     }
                 }
-                composable(AppRoute.Offseason.route) {
-                    val session = ActiveDynastySession.current
-                    if (session != null) {
-                        OffseasonScreen(
-                            initial = session,
-                            saveSlotRepository = saveSlotRepository,
-                            rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
-                            recruitingEconomyRepository = recruitingEconomyRepository,
-                            portalCycleRepository = portalCycleRepository,
-                            signingDayRepository = signingDayRepository,
-                            offseasonWeekTwoRepository = offseasonWeekTwoRepository,
-                            summerWorkoutRepository = summerWorkoutRepository,
-                            weekEightRepository = offseasonWeekEightRepository,
-                            weekNineRepository = offseasonWeekNineRepository,
-                            weekTenRepository = offseasonWeekTenRepository,
-                            hubMenuCallbacks = hubMenuCallbacks,
-                            onOpenRecruiting = { tab ->
-                                recruitingLaunchTab = tab
-                                navController.navigateToRecruitingHub()
-                            },
-                            onOpenSigningDay = { link ->
-                                signingDayInitialTab = when (link) {
-                                    DashboardDeepLink.SigningDayRankings -> SigningDayInitialTab.Rankings
-                                    DashboardDeepLink.SigningDayPositions -> SigningDayInitialTab.Positions
-                                    else -> SigningDayInitialTab.Rankings
-                                }
-                                navController.navigate(AppRoute.SigningDay.route)
-                            },
-                            userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
-                        )
-                    } else {
-                        LaunchedEffect(Unit) {
-                            navController.popBackStack(AppRoute.Home.route, inclusive = false)
-                        }
-                    }
-                }
+                composable(AppRoute.Offseason.route) { DynastyCareerRoute() }
                 composable(AppRoute.NewGame.route) {
                     NewGameWizardScreen(
                         saveSlotRepository = saveSlotRepository,

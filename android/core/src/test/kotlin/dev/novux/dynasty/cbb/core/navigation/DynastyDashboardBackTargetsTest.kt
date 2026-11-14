@@ -6,8 +6,8 @@ import org.junit.Test
 
 class DynastyDashboardBackTargetsTest {
     @Test
-    fun ordered_prefersInSeasonShellFirst() {
-        assertEquals(DynastyDashboardBackTargets.DYNASTY_SHELL, DynastyDashboardBackTargets.ORDERED.first())
+    fun ordered_prefersUnifiedCareerRouteFirst() {
+        assertEquals(DynastyDashboardBackTargets.DYNASTY_CAREER, DynastyDashboardBackTargets.ORDERED.first())
     }
 
     @Test
