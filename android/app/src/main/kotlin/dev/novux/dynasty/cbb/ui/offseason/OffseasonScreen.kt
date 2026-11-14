@@ -37,7 +37,9 @@ import dev.novux.dynasty.cbb.core.dashboard.DashboardAdvanceGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonOptionalDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
+import dev.novux.dynasty.cbb.core.dashboard.OffseasonWeekOneRequiredDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.SigningDayRequiredDashboardTasks
+import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.offseason.weekeight.OffseasonRosterLockConstants
 import dev.novux.dynasty.cbb.core.offseason.weekeight.RosterLockPolicy
 import dev.novux.dynasty.cbb.core.offseason.weekseven.SummerWorkoutConstants
@@ -76,6 +78,8 @@ import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import dev.novux.dynasty.cbb.ui.offseason.leaving.DraftResultsWeekTwoPanel
 import dev.novux.dynasty.cbb.ui.offseason.leaving.PlayersLeavingPanel
+import dev.novux.dynasty.cbb.ui.offseason.leaving.WeekOneLeavingNavigation
+import dev.novux.dynasty.cbb.ui.offseason.leaving.weekOneNavigationFor
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceConfirmationUiPerf
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceDialog
@@ -121,6 +125,8 @@ fun OffseasonScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     var signingProgress by remember { mutableStateOf<SigningDayProgress?>(null) }
     var conferenceOffersResolved by remember { mutableStateOf(true) }
+    var weekOnePlayers by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
+    var weekOneLeavingNav by remember { mutableStateOf<WeekOneLeavingNavigation?>(null) }
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
@@ -142,6 +148,11 @@ fun OffseasonScreen(
             loaded.weekCheckpoint.activePosition.weekIndex == OffseasonWeekTenConstants.OFFSEASON_WEEK_INDEX
         ) {
             conferenceOffersResolved = weekTenRepository.canAdvance(loaded.dynastyId, loaded.metadata.seasonIndex)
+        }
+        if (loaded.weekCheckpoint.activePosition.phase == CalendarPhase.Offseason &&
+            loaded.weekCheckpoint.activePosition.weekIndex == 1
+        ) {
+            weekOnePlayers = rosterRepository.prepareWeekOneLeaving(loaded.dynastyId)
         }
     }
     val position = loaded.weekCheckpoint.activePosition
@@ -236,10 +247,20 @@ fun OffseasonScreen(
             )
         }
         if (inOffseason && position.weekIndex == 1) {
+            val weekOneRequired = OffseasonWeekOneRequiredDashboardTasks.build(weekOnePlayers)
+            DashboardRequiredTasksPanel(
+                tasks = weekOneRequired,
+                onOpenSigningDay = { link ->
+                    weekOneNavigationFor(link)?.let { weekOneLeavingNav = it }
+                },
+            )
             PlayersLeavingPanel(
                 dynastyId = loaded.dynastyId,
                 rosterRepository = rosterRepository,
                 modifier = Modifier.weight(1f),
+                onPlayersChanged = { weekOnePlayers = it },
+                navigationRequest = weekOneLeavingNav,
+                onNavigationRequestConsumed = { weekOneLeavingNav = null },
             )
         } else if (inOffseason && position.weekIndex == 2) {
             DraftResultsWeekTwoPanel(
@@ -395,10 +416,12 @@ fun OffseasonScreen(
                     val signing = signingProgress
                         ?: signingDayRepository.loadProgress(loaded.dynastyId, loaded.metadata.seasonIndex)
                     signingProgress = signing
-                    val requiredTasks = if (inOffseason && position.weekIndex == SigningDayConstants.OFFSEASON_WEEK_INDEX) {
-                        SigningDayRequiredDashboardTasks.build(signing)
-                    } else {
-                        emptyList()
+                    val requiredTasks = when {
+                        inOffseason && position.weekIndex == 1 ->
+                            OffseasonWeekOneRequiredDashboardTasks.build(weekOnePlayers)
+                        inOffseason && position.weekIndex == SigningDayConstants.OFFSEASON_WEEK_INDEX ->
+                            SigningDayRequiredDashboardTasks.build(signing)
+                        else -> emptyList()
                     }
                     if (DashboardAdvanceGate.blocksWeekAdvance(requiredTasks)) {
                         return@launch
@@ -471,6 +494,7 @@ fun OffseasonScreen(
                 OffseasonRosterLockConstants.OFFSEASON_WEEK_INDEX ->
                     rosterPlayerCount <= OffseasonRosterLockConstants.SCHOLARSHIP_ROSTER_CAP
                 OffseasonWeekTenConstants.OFFSEASON_WEEK_INDEX -> conferenceOffersResolved
+                1 -> OffseasonWeekOneRequiredDashboardTasks.canAdvanceWeek(weekOnePlayers)
                 else -> true
             },
         ) {

@@ -756,6 +756,8 @@
     <string name="dashboard_task_promise_at_risk">Promise at risk — %1$s (%2$s)</string>
     <string name="dashboard_task_play_game">Play or sim vs %1$s (%2$s)</string>
     <string name="dashboard_task_coach_sunday_points">Sunday coach skill points — %1$d in bank</string>
+    <string name="dashboard_task_week_one_pro_day">Run pro day — %1$s</string>
+    <string name="dashboard_task_week_one_transfer">Resolve transfer intent — %1$s</string>
     <string name="coach_skill_point_bank">Skill points in bank: %1$d</string>
     <string name="coach_skill_tree_title">Skill tree</string>
     <string name="coach_skill_branch_level">%1$s — level %2$d / %3$d</string>

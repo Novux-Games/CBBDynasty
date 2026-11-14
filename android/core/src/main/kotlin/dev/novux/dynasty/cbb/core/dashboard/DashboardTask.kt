@@ -26,6 +26,9 @@ enum class DashboardDeepLink {
     PreseasonTaskScheduleExhibitions,
     PreseasonTaskScheduleRegularSeason,
     RankingsHub,
+    PlayersLeavingRoster,
+    PlayersLeavingTransfer,
+    PlayersLeavingProDays,
     PlayWeekGame,
     CoachCard,
 }
@@ -52,6 +55,8 @@ enum class DashboardTaskId {
     PromiseAtRisk,
     CarouselLeagueSim,
     CarouselUserApproval,
+    WeekOneProDay,
+    WeekOneTransferRetention,
 }
 
 data class DashboardTask(

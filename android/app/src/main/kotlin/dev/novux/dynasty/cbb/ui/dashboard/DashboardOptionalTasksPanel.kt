@@ -179,6 +179,9 @@ private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {
     DashboardDeepLink.PreseasonTaskScheduleExhibitions,
     DashboardDeepLink.PreseasonTaskScheduleRegularSeason,
     DashboardDeepLink.RankingsHub,
+    DashboardDeepLink.PlayersLeavingRoster,
+    DashboardDeepLink.PlayersLeavingTransfer,
+    DashboardDeepLink.PlayersLeavingProDays,
     DashboardDeepLink.CoachCard,
     DashboardDeepLink.DisciplineSheet,
     -> RecruitingHubTab.Recommended

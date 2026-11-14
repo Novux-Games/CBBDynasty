@@ -78,6 +78,14 @@ private fun requiredTaskMessage(task: DashboardTask): String = when (task.id) {
     DashboardTaskId.CarouselLeagueSim -> stringResource(R.string.carousel_background_hint)
     DashboardTaskId.CarouselUserApproval -> task.stringFormatArgs.getOrNull(1)
         ?: stringResource(R.string.dashboard_task_carousel_approval)
+    DashboardTaskId.WeekOneProDay -> stringResource(
+        R.string.dashboard_task_week_one_pro_day,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+    )
+    DashboardTaskId.WeekOneTransferRetention -> stringResource(
+        R.string.dashboard_task_week_one_transfer,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+    )
     else -> task.id.name
 }
 

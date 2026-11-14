@@ -1,9 +1,11 @@
 package dev.novux.dynasty.cbb.ui.offseason.leaving
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
@@ -37,13 +39,25 @@ fun PlayersLeavingPanel(
     dynastyId: String,
     rosterRepository: DynastyRosterRepository,
     modifier: Modifier = Modifier,
+    onPlayersChanged: (List<RosterPlayer>) -> Unit = {},
+    navigationRequest: WeekOneLeavingNavigation? = null,
+    onNavigationRequestConsumed: () -> Unit = {},
 ) {
     var players by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
     var tabIndex by remember { mutableIntStateOf(0) }
+    var proDaysHighlighted by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(dynastyId) {
         players = rosterRepository.prepareWeekOneLeaving(dynastyId)
+        onPlayersChanged(players)
+    }
+
+    LaunchedEffect(navigationRequest) {
+        val nav = navigationRequest ?: return@LaunchedEffect
+        tabIndex = nav.tabIndex
+        proDaysHighlighted = nav.emphasizeProDays
+        onNavigationRequestConsumed()
     }
 
     @Suppress("unused")
@@ -70,11 +84,27 @@ fun PlayersLeavingPanel(
             )
         }
         val visible = if (tabIndex == 0) rosterTab else transferTab
+        val proDaysModifier = if (proDaysHighlighted) {
+            Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(8.dp),
+                )
+                .padding(4.dp)
+        } else {
+            Modifier.fillMaxWidth()
+        }
         ProDaysPanel(
             players = players,
             rosterRepository = rosterRepository,
             dynastyId = dynastyId,
-            onPlayersChanged = { players = it },
+            onPlayersChanged = {
+                players = it
+                onPlayersChanged(it)
+            },
+            modifier = proDaysModifier,
         )
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -92,7 +122,9 @@ fun PlayersLeavingPanel(
                             OutlinedButton(
                                 onClick = {
                                     scope.launch {
-                                        players = rosterRepository.encourageTransfer(dynastyId, player.playerId)
+                                        val updated = rosterRepository.encourageTransfer(dynastyId, player.playerId)
+                                        players = updated
+                                        onPlayersChanged(updated)
                                     }
                                 },
                                 modifier = Modifier.fillMaxWidth(),
@@ -103,11 +135,13 @@ fun PlayersLeavingPanel(
                             OutlinedButton(
                                 onClick = {
                                     scope.launch {
-                                        players = rosterRepository.convinceStay(
+                                        val updated = rosterRepository.convinceStay(
                                             dynastyId,
                                             player.playerId,
                                             stayed = true,
                                         )
+                                        players = updated
+                                        onPlayersChanged(updated)
                                     }
                                 },
                                 modifier = Modifier.fillMaxWidth(),
