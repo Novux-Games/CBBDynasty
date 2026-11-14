@@ -24,6 +24,8 @@ class PreseasonNewsFeedPathTest {
         assertEquals("MEGA-FRAME-077", PreseasonNewsFeedPolicy.MEGA_FRAME_ID)
         assertTrue(screen.contains("refreshKey = incomingClassSeedComplete"))
         assertTrue(screen.contains("publishRecruitingSpotlightWhenPoolReady"))
+        assertTrue(screen.contains("incomingClassSeedRepository.isSeeded"))
+        assertTrue(screen.contains("preseason_shell_header_hint"))
         assertTrue(screen.contains("shell_news_preseason_awaiting_seed"))
         assertTrue(newsRepo.contains("isSeeded"))
         assertTrue(shallow.contains("refreshKey"))

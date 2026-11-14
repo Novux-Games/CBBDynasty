@@ -68,6 +68,7 @@ fun DashboardRequiredTasksPanel(
 
 @Composable
 private fun requiredTaskMessage(task: DashboardTask): String = when (task.id) {
+    DashboardTaskId.SigningDayShellLauncher -> stringResource(R.string.dashboard_task_signing_day_shell_launcher)
     DashboardTaskId.SigningDayViewRankings -> stringResource(R.string.dashboard_task_signing_rankings)
     DashboardTaskId.SigningDayEditPositions -> stringResource(R.string.dashboard_task_signing_positions)
     DashboardTaskId.SigningDayHardSign -> stringResource(R.string.dashboard_task_signing_hard_sign)

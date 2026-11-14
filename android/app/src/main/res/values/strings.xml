@@ -282,6 +282,7 @@
     <string name="conference_offers_declined">Declined</string>
     <string name="preseason_shell_title">Preseason</string>
     <string name="preseason_checklist_hint">Complete every task to start the season.</string>
+    <string name="preseason_shell_header_hint">Complete all preseason tasks to start the season.</string>
     <string name="preseason_required_jump_heading">Jump to a required task</string>
     <string name="preseason_loading_checklist">Loading preseason tasks…</string>
     <string name="preseason_task_complete">Complete</string>
@@ -657,6 +658,9 @@
     <string name="recruiting_used_this_season">You already used scout or visit on this recruit this season.</string>
     <string name="recruiting_reservation_active">This recruit has a pending refunded action this week.</string>
     <string name="offseason_signing_day_hint">Signing Day — finalize your incoming class before advancing.</string>
+    <string name="dashboard_task_signing_day_shell_launcher">Open Signing Day — rankings, positions, and hard sign live in the hub (one place to finish your class).</string>
+    <string name="offseason_week_one_recruiting_title">Retention week</string>
+    <string name="offseason_week_one_recruiting_body">Season 1 opens with roster retention only. HS/JUCO chasing and recruiting points unlock in Offseason Week 2.</string>
     <string name="signing_day_title">Signing Day</string>
     <string name="signing_day_subtitle">Review recruit national ranks (Top 60), set positions, then hard sign your class — not team NET or polls.</string>
     <string name="signing_day_tab_rankings">Recruit rankings</string>

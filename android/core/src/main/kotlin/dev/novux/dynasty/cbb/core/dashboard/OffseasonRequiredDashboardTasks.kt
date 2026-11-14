@@ -26,7 +26,7 @@ object OffseasonRequiredDashboardTasks {
         when (ctx.weekIndex) {
             1 -> OffseasonWeekOneRequiredDashboardTasks.build(ctx.weekOnePlayers)
             SigningDayConstants.OFFSEASON_WEEK_INDEX ->
-                ctx.signingProgress?.let { SigningDayRequiredDashboardTasks.build(it) }.orEmpty()
+                ctx.signingProgress?.let { SigningDayShellDashboardTasks.build(it) }.orEmpty()
             OffseasonRosterLockConstants.OFFSEASON_WEEK_INDEX ->
                 OffseasonRosterLockRequiredDashboardTasks.build(ctx.rosterScholarshipCount)
             OffseasonWeekTenConstants.OFFSEASON_WEEK_INDEX ->

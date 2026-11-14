@@ -88,6 +88,7 @@ import dev.novux.dynasty.cbb.data.notification.DashboardNotificationSnapshotLoad
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
+import dev.novux.dynasty.cbb.ui.dynasty.rememberDynastyShellSelectedTab
 import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
 import dev.novux.dynasty.cbb.ui.hubs.buildDynastyHubMenu
 import dev.novux.dynasty.cbb.ui.hubs.notifyRecruitingCycleClosed
@@ -155,7 +156,7 @@ fun OffseasonScreen(
     var conferenceOffersState by remember { mutableStateOf<ConferenceOffersWeekState?>(null) }
     var weekOnePlayers by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
     var weekOneLeavingNav by remember { mutableStateOf<WeekOneLeavingNavigation?>(null) }
-    var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
+    var selectedTab by rememberDynastyShellSelectedTab()
     var notificationFeed by remember { mutableStateOf<List<NotificationFeedItem>>(emptyList()) }
     var careerModal by remember { mutableStateOf<NotificationFeedItem?>(null) }
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
@@ -553,6 +554,24 @@ fun OffseasonScreen(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(stringResource(R.string.recruiting_open_hub))
+            }
+        } else if (
+            inOffseason &&
+            position.weekIndex == 1 &&
+            RecruitingCyclePolicy.hubAccessible(position.phase, offseasonWeek) &&
+            !RecruitingCyclePolicy.hubNavigable(position.phase, offseasonWeek, ledgerCycleClosed)
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = stringResource(R.string.offseason_week_one_recruiting_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = stringResource(R.string.offseason_week_one_recruiting_body),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         } else if (
             RecruitingCyclePolicy.hubAccessible(position.phase, offseasonWeek) &&

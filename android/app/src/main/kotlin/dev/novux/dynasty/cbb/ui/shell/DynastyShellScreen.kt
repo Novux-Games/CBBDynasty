@@ -137,6 +137,7 @@ import dev.novux.dynasty.cbb.ui.school.SchoolHubScreen
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
+import dev.novux.dynasty.cbb.ui.dynasty.rememberDynastyShellSelectedTab
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
 import dev.novux.dynasty.cbb.ui.hubs.buildDynastyHubMenu
@@ -224,7 +225,7 @@ fun DynastyShellScreen(
     var teamChemistry by remember { mutableStateOf<Int?>(null) }
     var schedulePlan by remember { mutableStateOf<PreseasonSchedulePlan?>(null) }
     var exhibitionCount by remember { mutableStateOf(0) }
-    var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
+    var selectedTab by rememberDynastyShellSelectedTab()
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     var newsFeed by remember { mutableStateOf(ShallowNewsFeedSnapshot.Empty) }
     var coachSkillPointBank by remember { mutableIntStateOf(0) }

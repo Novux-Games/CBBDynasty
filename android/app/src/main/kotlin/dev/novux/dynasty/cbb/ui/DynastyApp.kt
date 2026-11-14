@@ -769,7 +769,7 @@ fun DynastyApp(
                             recruitOfferPromiseRepository = LocalContext.current.requireDynastyApplication()
                                 .recruitOfferPromiseRepository,
                             initialTab = signingDayInitialTab,
-                            onBack = { navController.popBackStack() },
+                            onBack = { navController.popBackToInShellDashboard() },
                         )
                     }
                 }

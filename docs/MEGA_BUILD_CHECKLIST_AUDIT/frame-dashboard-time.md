@@ -226,8 +226,8 @@
 | MEGA-FRAME-122 | SHIP | Week 10 → preseason CTA | Final-week CTA + helper copy tied to season 1 week 9 skip vs week 10 conf | `OffseasonWeekAdvancePolicy`, `OffseasonScreen` |
 | MEGA-FRAME-123 | SHIP | Offseason calendar tab | Empty offseason calendar shows `shell_calendar_offseason_no_games` instead of preseason placeholder | `DynastyShellCalendarTab.kt` |
 | MEGA-FRAME-124 | SHIP | Week 2 draft results + tasks | Optional portal / open-scholarship tasks use scholarship-based `openScholarshipSlots` from roster `LaunchedEffect` | `OffseasonScreen`, `OffseasonOptionalDashboardTasks` |
-| MEGA-FRAME-125 | GAP | Signing Day screen vs dashboard | Full **SigningDayScreen** route separate from shell — required tasks duplicated between screen and Week 6 panel | `SigningDayScreen.kt`, `AppRoute` |
-| MEGA-FRAME-126 | PARTIAL | Recruiting hub offseason W1 | Policy blocks hub Week 1 — **correct** for portal; shared points economy still inaccessible Week 1 via hub | `RecruitingCyclePolicy` week >= 2 |
+| MEGA-FRAME-125 | SHIP | Signing Day screen vs dashboard | Week 6 shell shows one **Signing Day launcher** task into full screen — steps live on `SigningDayScreen` only | `SigningDayShellDashboardTasks`, `OffseasonScreen` |
+| MEGA-FRAME-126 | SHIP | Recruiting hub offseason W1 | Week 1 retention copy when hub closed; chasing opens Week 2 per spec | `OffseasonScreen`, `SigningDayPreseasonRecruitingTransition` |
 | MEGA-FRAME-127 | SHIP | Close cycle UX after hard sign | Hub button hidden when `!hubNavigable`; closed cycle shows **Administration only** + body copy Weeks 7+ | `OffseasonScreen`, `RecruitingCyclePolicy` |
 
 ---
@@ -236,14 +236,14 @@
 
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
-| MEGA-FRAME-128 | GAP | Top 60 → News tab | Task 1 publishes seed — **News tab** remains `DynastyShellNewsTabPlaceholder` — Top 60 headline not on shallow feed | `PreseasonScreen` News tab |
+| MEGA-FRAME-128 | SHIP | Top 60 → News tab | `isSeeded` spotlight publish on load + after seed task; live `DynastyShellNewsTab` feed | `PreseasonScreen`, `NewsFeedRepository` |
 | MEGA-FRAME-129 | SHIP | Tasks 7–8 invite gate | Locked copy + `schedulingUnlocked()` matches `preseason.md` dependency on task 6 | `PreseasonScreen.kt` |
 | MEGA-FRAME-130 | SHIP | Start season navigation | `PreseasonScreen.onSeasonStarted` no-op; `ActiveDynastySession` listener recomposition inside `DynastyCareerHost` | `DynastyCareerHost.kt` |
 | MEGA-FRAME-131 | PARTIAL | Task order UX | Spec allows tasks 1–5 in any order — UI lists fixed enum order only | `PreseasonTaskId.entries` |
 | MEGA-FRAME-132 | GAP | Coach upgrades wiring | Task 3 completable via generic button — **skill tree** screen not required path | `PreseasonScreen` vs `game-design` coach upgrades |
 | MEGA-FRAME-133 | PARTIAL | Rankings review task | NET/Media/Coaches sheet exists in flow — completion not tied to **Continue** on rankings slice only | `RankingsHubScreen` / preseason |
 | MEGA-FRAME-134 | PARTIAL | Exhibition / RS builders | Dedicated panels for tasks 7–8 when unlocked — good; validation errors stay in builder not on task card | `ExhibitionSchedulePanel`, `RegularSeasonSchedulePanel` |
-| MEGA-FRAME-135 | GAP | Preseason header hint | Header shows **Preseason** label only — no “complete all tasks to start season” in chrome | `CalendarWeekLabel`, `DynastyShellChrome` |
+| MEGA-FRAME-135 | SHIP | Preseason header hint | `preseason_shell_header_hint` on `DynastyShellChrome.headerSubtitle` | `PreseasonScreen.kt` |
 | MEGA-FRAME-136 | GAP | Redshirt in task 2 | Optional redshirt during workouts — not surfaced on generic workout complete row | `preseason.md` redshirt note |
 | MEGA-FRAME-137 | SHIP | Eight-task gate to start | `PreseasonStartGate.canStartSeason` + `DashboardAdvanceGate` on start button | `PreseasonScreen.kt` |
 
@@ -254,7 +254,7 @@
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
 | MEGA-FRAME-138 | SHIP | Multi-route career loop | Single launch target `dynasty_career`; phase → body via `DynastyCareerPhaseResolver` | `DynastyCareerUnifiedRoutePathTest` |
-| MEGA-FRAME-139 | GAP | Hub back stack / tab reset | Returning from Recruiting/SigningDay hubs does not force **Dashboard** tab restore | NavHost patterns in `DynastyApp.kt` |
+| MEGA-FRAME-139 | SHIP | Hub back stack / tab reset | `popBackToInShellDashboard` bumps tab-restore nonce; shell uses `rememberDynastyShellSelectedTab` | `DynastyNavigation`, `ActiveDynastySession` |
 | MEGA-FRAME-140 | PARTIAL | Season review chrome | `SeasonReviewScreen` separate from four-tab shell — partial spec compliance for review week | `SeasonReviewScreen.kt` |
 | MEGA-FRAME-141 | GAP | Players Leaving routing | Week 1 retention may be full-screen route vs in-shell panel — breaks “one chrome” mental model | `PlayersLeavingScreen.kt` |
 | MEGA-FRAME-142 | GAP | Recruiting hub during preseason | `hubAccessible(Preseason) == true` — placeholder HS/Portal tabs during setup week (user confusion with signing) | `RecruitingCyclePolicy`, `RecruitingHubScreen` |

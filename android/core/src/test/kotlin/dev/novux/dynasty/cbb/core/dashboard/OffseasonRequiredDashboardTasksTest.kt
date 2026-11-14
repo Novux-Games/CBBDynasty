@@ -22,7 +22,7 @@ class OffseasonRequiredDashboardTasksTest {
                 ),
             ),
         )
-        assertEquals(DashboardTaskId.SigningDayViewRankings, tasks.single().id)
+        assertEquals(DashboardTaskId.SigningDayShellLauncher, tasks.single().id)
     }
 
     @Test

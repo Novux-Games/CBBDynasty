@@ -48,6 +48,7 @@ enum class DashboardTaskId {
     SigningDayViewRankings,
     SigningDayEditPositions,
     SigningDayHardSign,
+    SigningDayShellLauncher,
     ReviewInjury,
     MedicalRedshirtCandidate,
     TeamDisciplinePending,

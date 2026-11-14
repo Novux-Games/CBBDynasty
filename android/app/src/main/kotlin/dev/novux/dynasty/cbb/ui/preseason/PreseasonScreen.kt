@@ -61,6 +61,7 @@ import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
+import dev.novux.dynasty.cbb.ui.dynasty.rememberDynastyShellSelectedTab
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
@@ -102,7 +103,7 @@ fun PreseasonScreen(
     var loaded by remember(initial) { mutableStateOf(initial) }
     var progress by remember { mutableStateOf<PreseasonTaskProgress?>(null) }
     var tournamentInvitesState by remember { mutableStateOf<TournamentInvitesState?>(null) }
-    var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
+    var selectedTab by rememberDynastyShellSelectedTab()
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     var fullScreenPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
@@ -161,6 +162,17 @@ fun PreseasonScreen(
     LaunchedEffect(loaded.dynastyId) {
         userTeamId = app.schoolStaffRepository.userTeamId(loaded.dynastyId)
         programPrestige = recruitingEconomyRepository.resolveUserProgramPrestige(loaded)
+    }
+
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, incomingClassSeedComplete) {
+        withContext(Dispatchers.IO) {
+            if (incomingClassSeedRepository.isSeeded(loaded.dynastyId, loaded.metadata.seasonIndex)) {
+                app.newsFeedRepository.publishRecruitingSpotlightWhenPoolReady(
+                    loaded.dynastyId,
+                    loaded.metadata.seasonIndex,
+                )
+            }
+        }
     }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, selectedTab, programPrestige) {
@@ -254,6 +266,7 @@ fun PreseasonScreen(
         selectedTab = selectedTab,
         onTabSelected = { selectedTab = it },
         menuActions = menu,
+        headerSubtitle = stringResource(R.string.preseason_shell_header_hint),
     ) { padding ->
         when (selectedTab) {
             DynastyShellTab.Roster -> DynastyShellRosterTab(
