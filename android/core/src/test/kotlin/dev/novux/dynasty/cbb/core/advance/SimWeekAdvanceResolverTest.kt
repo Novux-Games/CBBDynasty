@@ -149,6 +149,31 @@ class SimWeekAdvanceResolverTest {
     }
 
     @Test
+    fun confirmation_byeWeekInjuryTickShowsByeCopyAndDestination() {
+        val confirmation = SimWeekAdvanceResolver.buildConfirmation(
+            SimWeekAdvanceInput(
+                nextWeekLabel = "Regular Season · Week 8",
+                unplayedUserGameCount = 0,
+                recruitingPointsAvailable = 0,
+                userManualRecruitingSpent = 0,
+                recruitingHubOpen = false,
+                estimatedAutoRecruitingSpend = 0,
+                portalRecruitingWeekOpen = false,
+                injuredPlayersTicking = 2,
+                userOnByeWeek = true,
+            ),
+        )
+        assertTrue(confirmation.needsDialog)
+        assertEquals(
+            SimWeekConfirmationLineKind.InjuryWeeksTickByeWeek,
+            confirmation.lines.first().kind,
+        )
+        assertTrue(
+            confirmation.lines.any { it.kind == SimWeekConfirmationLineKind.SimpleAdvance },
+        )
+    }
+
+    @Test
     fun unplayedGames_detectedWhenNoProvisionalMark() {
         val state = WeekCheckpointState.bootstrap(1, CalendarPhase.RegularSeason)
         val count = UserWeekGameStatus.unplayedUserGames(state, teamHasScheduledGame = true)

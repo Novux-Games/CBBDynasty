@@ -153,7 +153,7 @@
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
 | MEGA-FRAME-079 | SHIP | Bye week advance allowed | `ByeWeekPolicy.canAdvanceWeek` always true in-season | core tests |
-| MEGA-FRAME-080 | PARTIAL | Injury weeks tick on bye advance | Confirmation line `InjuryWeeksTick` | `SimWeekAdvanceDialog` |
+| MEGA-FRAME-080 | SHIP | Injury weeks tick on bye advance | `InjuryByeAdvanceConfirmPolicy` — bye copy + simple advance tail; `userOnByeWeek` in repository | `InjuryByeAdvanceConfirmPolicy`, `SimWeekAdvanceDialog` |
 | MEGA-FRAME-081 | GAP | Early-event bye weeks on calendar | Calendar may not mark eliminated-team event bye weeks distinctly | `time-system.md#byes-after-elimination` |
 | MEGA-FRAME-082 | GAP | Conf tourney shorter-bracket bye | Cross-conference bye weeks not called out in UI | `time-system.md#conference-tournaments` |
 | MEGA-FRAME-083 | PARTIAL | Week advance league batch sim | Repository advances checkpoint — full league batch visibility N/A in UI | `SaveSlotRepository.advanceDynastyWeek` |
@@ -206,7 +206,7 @@
 | MEGA-FRAME-109 | PARTIAL | Portal line on advance | `PortalRecruitingWeek` confirmation line when portal window open — OK; **absent** after Week 5 | `SimWeekAdvanceResolver.kt` |
 | MEGA-FRAME-110 | GAP | Manual recruiting spend param | UI always calls `advanceDynastyWeek(slot)` with default **`userManualRecruitingSpent = 0`** — no hook from Recruiting hub | `DynastyShellScreen.kt`, `OffseasonScreen.kt` |
 | MEGA-FRAME-111 | PARTIAL | Advance failure UX | Discipline block shows snackbar (`WeekAdvanceBlocked`); other unreadable load paths still silent | `DynastyWeekAdvanceFeedback.kt` |
-| MEGA-FRAME-112 | PARTIAL | Injury tick on bye | `InjuryWeeksTick` line emitted in resolver — calendar bye weeks may not explain tick in UI | `SimWeekAdvanceDialog`, `ByeWeekPolicy` |
+| MEGA-FRAME-112 | SHIP | Injury tick on bye | `InjuryWeeksTickByeWeek` explains no-game week; wired via `ByeWeekPolicy` + `userOnByeWeek` | `InjuryByeAdvanceConfirmPolicy`, `ByeWeekPolicy` |
 | MEGA-FRAME-113 | GAP | Double-tap advance | No **debounce** / `enabled = false` while `scope.launch` advance in flight — duplicate week commits risk | `DynastyShellScreen` advance `Button` |
 | MEGA-FRAME-114 | GAP | Advance work ordering | `advanceDynastyWeek` chains checkpoint, **AI recruiting**, league batch, injuries, fatigue, chemistry, coach Sunday — all on confirm path (lag source) | `SaveSlotRepository.advanceDynastyWeek` |
 | MEGA-FRAME-115 | PARTIAL | Simple advance line | Short “Advance to {label}?” exists when no optional work — in-season still may skip if `needsDialog` false | `SimWeekAdvanceResolver.buildConfirmation` |

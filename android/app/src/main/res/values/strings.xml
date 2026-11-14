@@ -602,6 +602,7 @@
     <string name="advance_confirm_portal_user_auto_spend">Your program will auto-spend about %1$d recruiting points on the transfer portal recommended board.</string>
     <string name="advance_confirm_line_simple">Advance to %1$s?</string>
     <string name="advance_confirm_line_injury_tick">Injuries: %1$d players\' recovery clocks tick down (byes included). Healthy returns restore lineup spots.</string>
+    <string name="advance_confirm_line_injury_tick_bye_week">Bye week — no game, but %1$d injured players\' recovery clocks still tick down. Healthy returns restore lineup spots.</string>
     <string name="dynasty_shell_advance_week">Advance week</string>
     <string name="recruiting_tab_recommended">Recommended</string>
     <string name="recruiting_tab_all_hs_juco">All (HS + JUCO)</string>

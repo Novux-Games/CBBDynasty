@@ -52,11 +52,19 @@ object SimWeekAdvanceResolver {
                 ),
             )
         }
-        if (input.injuredPlayersTicking > 0) {
+        InjuryByeAdvanceConfirmPolicy.injuryTickLineKind(input)?.let { kind ->
             lines.add(
                 SimWeekConfirmationLine(
-                    SimWeekConfirmationLineKind.InjuryWeeksTick,
+                    kind,
                     listOf(input.injuredPlayersTicking),
+                ),
+            )
+        }
+        if (InjuryByeAdvanceConfirmPolicy.appendSimpleAdvanceAfterInjuryBye(input)) {
+            lines.add(
+                SimWeekConfirmationLine(
+                    SimWeekConfirmationLineKind.SimpleAdvance,
+                    formatArgs = emptyList(),
                 ),
             )
         }

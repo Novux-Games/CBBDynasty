@@ -39,6 +39,7 @@ import kotlinx.coroutines.sync.withLock
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
+import dev.novux.dynasty.cbb.core.calendar.bye.ByeWeekPolicy
 import dev.novux.dynasty.cbb.core.calendar.checkpoint.ProvisionalGameMark
 import dev.novux.dynasty.cbb.core.calendar.checkpoint.ArchivedGameInjuryEvent
 import dev.novux.dynasty.cbb.core.calendar.checkpoint.WeekCheckpointState
@@ -937,6 +938,7 @@ class SaveSlotRepository(
             portalRecruitingWeekOpen = portalOpen,
             unresolvedOptionalTaskCount = unresolvedOptionalTaskCount,
             injuredPlayersTicking = injuredTicking,
+            userOnByeWeek = ByeWeekPolicy.isByeWeek(position.phase, hasScheduledGame),
             recruitingAutoMaintainEnabled = automation.recruitingAutoMaintain,
             userLeagueFastSim = userLeagueFastSim,
         )

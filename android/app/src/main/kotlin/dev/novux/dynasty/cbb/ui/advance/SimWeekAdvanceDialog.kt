@@ -93,6 +93,8 @@ private fun lineText(
         stringResource(R.string.advance_confirm_portal_user_auto_spend, args.firstOrNull() ?: 0)
     SimWeekConfirmationLineKind.InjuryWeeksTick ->
         stringResource(R.string.advance_confirm_line_injury_tick, args.firstOrNull() ?: 0)
+    SimWeekConfirmationLineKind.InjuryWeeksTickByeWeek ->
+        stringResource(R.string.advance_confirm_line_injury_tick_bye_week, args.firstOrNull() ?: 0)
     SimWeekConfirmationLineKind.SimpleAdvance ->
         stringResource(R.string.advance_confirm_line_simple, confirmation.nextWeekLabel)
 }
