@@ -29,6 +29,7 @@ fun DashboardOptionalTasksPanel(
     onDeepLink: (RecruitingHubTab) -> Unit,
     onStrategyOpen: () -> Unit = {},
     onCoachCardOpen: () -> Unit = {},
+    headingRes: Int? = null,
     modifier: Modifier = Modifier,
 ) {
     val visible = tasks.filterNot { it.id in dismissedIds }
@@ -38,7 +39,7 @@ fun DashboardOptionalTasksPanel(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = stringResource(R.string.dashboard_optional_heading),
+            text = stringResource(headingRes ?: R.string.dashboard_optional_heading),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
         )
@@ -115,6 +116,11 @@ private fun taskMessage(task: DashboardTask): String = when (task.id) {
         task.formatArgs.firstOrNull() ?: 2,
     )
     DashboardTaskId.PortalTop40Published -> stringResource(R.string.dashboard_task_portal_top40)
+    DashboardTaskId.PortalPipelineEntrant -> stringResource(
+        R.string.dashboard_task_portal_pipeline_entrant,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+        task.stringFormatArgs.getOrNull(1).orEmpty(),
+    )
     DashboardTaskId.SigningCrunch -> stringResource(
         R.string.dashboard_task_signing_crunch,
         task.formatArgs.firstOrNull() ?: 2,

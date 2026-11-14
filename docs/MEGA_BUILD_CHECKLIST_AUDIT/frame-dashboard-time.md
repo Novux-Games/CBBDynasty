@@ -120,7 +120,7 @@
 | MEGA-FRAME-058 | SHIP | Week 1 Players Leaving panel | `PlayersLeavingPanel` on week 1 dashboard | `OffseasonScreen` |
 | MEGA-FRAME-059 | SHIP | Week 1 Roster / Transfer tabs | `PortalWeekOnePartition` + tab counts, mutual-exclusion copy, empty states in `PlayersLeavingPanel` | `WeekOneLeavingTabPolicy`, `PlayersLeavingScreen.kt` |
 | MEGA-FRAME-060 | SHIP | Week 2 draft results panel | `DraftResultsWeekTwoPanel` | `OffseasonScreen` week 2 |
-| MEGA-FRAME-061 | PARTIAL | Weeks 2–5 portal optional tasks | `OffseasonOptionalDashboardTasks` + recruiting deep links | UI density on dashboard |
+| MEGA-FRAME-061 | SHIP | Weeks 2–5 portal optional tasks | Portal optional panel + pipeline entrant nudge, shared build helper, portal deep links | `OffseasonPortalOptionalNudgeResolver`, `OffseasonScreen` |
 | MEGA-FRAME-062 | SHIP | Week 6 Signing Day required tasks | `SigningDayRequiredDashboardTasks` + signing screen route | `SigningDayScreen` |
 | MEGA-FRAME-063 | PARTIAL | Week 7 summer workouts optional report | Core constants + repository; sheet UX thin on dashboard | `SummerWorkoutConstants` |
 | MEGA-FRAME-064 | SHIP | Week 8 roster ≤15 gate | `RosterCutsWeekEightPanel` + advance gate | `OffseasonScreen` |

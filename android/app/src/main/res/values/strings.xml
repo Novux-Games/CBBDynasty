@@ -529,6 +529,8 @@
     <string name="dashboard_task_rival_commit_respond">Respond — %1$s trending to %2$s</string>
     <string name="dashboard_task_portal_window">Transfer Portal — Offseason Week %1$d</string>
     <string name="dashboard_task_portal_top40">Portal Top 40 published</string>
+    <string name="dashboard_task_portal_pipeline_entrant">%1$s in portal (%2$s)</string>
+    <string name="dashboard_offseason_portal_optional_heading">Portal window — optional tasks (weeks 2–5)</string>
     <string name="dashboard_task_signing_crunch">Signing week R%1$d — 1.5× recruiting points</string>
     <string name="dashboard_task_open_scholarships">%1$d scholarship slots open</string>
     <string name="advance_confirm_title">Advance week?</string>

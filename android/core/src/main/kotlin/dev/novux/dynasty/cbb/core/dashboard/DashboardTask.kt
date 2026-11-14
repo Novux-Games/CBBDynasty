@@ -40,6 +40,7 @@ enum class DashboardTaskId {
     SpendRecruitingPoints,
     PortalWindow,
     PortalTop40Published,
+    PortalPipelineEntrant,
     SigningCrunch,
     OpenScholarships,
     SigningDayViewRankings,

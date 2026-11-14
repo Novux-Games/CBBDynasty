@@ -36,6 +36,9 @@ import dev.novux.dynasty.cbb.core.dashboard.OffseasonDashboardContext
 import dev.novux.dynasty.cbb.core.dashboard.DashboardAdvanceGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonOptionalDashboardTasks
+import dev.novux.dynasty.cbb.core.dashboard.OffseasonPortalOptionalNudgeResolver
+import dev.novux.dynasty.cbb.core.dashboard.OffseasonPortalOptionalTasksPolicy
+import dev.novux.dynasty.cbb.core.dashboard.PipelineEntrantSpotlight
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonConferenceOffersRequiredDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonRequiredDashboardTasks
@@ -56,6 +59,7 @@ import dev.novux.dynasty.cbb.data.signingday.SigningDayRepository
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
 import dev.novux.dynasty.cbb.ui.dashboard.SigningDayRequiredTasksSkeleton
 import dev.novux.dynasty.cbb.core.portal.PortalConstants
+import dev.novux.dynasty.cbb.core.portal.PortalEntrant
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
@@ -123,6 +127,8 @@ fun OffseasonScreen(
     var loaded by remember(initial) { mutableStateOf(initial) }
     var ledger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
     var portalTop40Locked by remember { mutableStateOf(false) }
+    var portalEntrants by remember { mutableStateOf<List<PortalEntrant>>(emptyList()) }
+    var portalPipelineSpotlight by remember { mutableStateOf<PipelineEntrantSpotlight?>(null) }
     var openScholarshipSlots by remember { mutableStateOf(0) }
     var rosterPlayerCount by remember { mutableStateOf(0) }
     var dismissedTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
@@ -186,6 +192,19 @@ fun OffseasonScreen(
         ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
         val portal = portalCycleRepository.loadOrSimulate(loaded.dynastyId, loaded.metadata.seasonIndex)
         portalTop40Locked = portal.top40Locked
+        portalEntrants = portal.entrants
+        val packIndex = app.packRepository.activeSession().index
+        val userTeamId = app.database.dynastyCoachDao().getByDynastyId(loaded.dynastyId)?.userTeamId
+        val pipelineStates = buildSet {
+            userTeamId?.let { id ->
+                packIndex.team(id)?.homeState?.takeIf { it.isNotBlank() }?.let(::add)
+            }
+        }
+        portalPipelineSpotlight = OffseasonPortalOptionalNudgeResolver.pipelineSpotlight(
+            packIndex,
+            portalEntrants,
+            pipelineStates.ifEmpty { setOf("OH") },
+        )
         val roster = rosterRepository.listPlayers(loaded.dynastyId)
         fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
         rosterPlayerCount = roster.size
@@ -470,21 +489,20 @@ fun OffseasonScreen(
             )
         }
 
-        if (inOffseason && position.weekIndex in PortalConstants.PORTAL_RECRUITING_WEEKS) {
-            val dashboardTasks = OffseasonOptionalDashboardTasks.build(
-                OffseasonDashboardContext(
-                    offseasonWeekIndex = position.weekIndex,
-                    recruitingPointsAvailable = ledger?.pointsAvailable ?: 0,
-                    portalTop40Locked = portalTop40Locked,
-                    openScholarshipSlots = openScholarshipSlots,
-                    signingCrunchActive = position.weekIndex in PortalConstants.PORTAL_RECRUITING_WEEKS,
-                ),
+        if (inOffseason && OffseasonPortalOptionalTasksPolicy.inPortalTaskWindow(position.weekIndex)) {
+            val dashboardTasks = buildOffseasonPortalOptionalTasks(
+                weekIndex = position.weekIndex,
+                ledger = ledger,
+                portalTop40Locked = portalTop40Locked,
+                openScholarshipSlots = openScholarshipSlots,
+                pipelineSpotlight = portalPipelineSpotlight,
             )
             DashboardOptionalTasksPanel(
                 tasks = dashboardTasks,
                 dismissedIds = dismissedTasks,
                 onDismiss = { dismissedTasks = dismissedTasks + it },
                 onDeepLink = onOpenRecruiting,
+                headingRes = R.string.dashboard_offseason_portal_optional_heading,
             )
         }
 
@@ -551,15 +569,15 @@ fun OffseasonScreen(
                     ) {
                         return@launch
                     }
-                    val dashboardTasks = if (inOffseason && position.weekIndex in PortalConstants.PORTAL_RECRUITING_WEEKS) {
-                        OffseasonOptionalDashboardTasks.build(
-                            OffseasonDashboardContext(
-                                offseasonWeekIndex = position.weekIndex,
-                                recruitingPointsAvailable = ledger?.pointsAvailable ?: 0,
-                                portalTop40Locked = portalTop40Locked,
-                                openScholarshipSlots = openScholarshipSlots,
-                                signingCrunchActive = true,
-                            ),
+                    val dashboardTasks = if (
+                        inOffseason && OffseasonPortalOptionalTasksPolicy.inPortalTaskWindow(position.weekIndex)
+                    ) {
+                        buildOffseasonPortalOptionalTasks(
+                            weekIndex = position.weekIndex,
+                            ledger = ledger,
+                            portalTop40Locked = portalTop40Locked,
+                            openScholarshipSlots = openScholarshipSlots,
+                            pipelineSpotlight = portalPipelineSpotlight,
                         )
                     } else {
                         emptyList()
@@ -636,3 +654,20 @@ fun OffseasonScreen(
         )
     }
 }
+
+private fun buildOffseasonPortalOptionalTasks(
+    weekIndex: Int,
+    ledger: RecruitingCycleLedger?,
+    portalTop40Locked: Boolean,
+    openScholarshipSlots: Int,
+    pipelineSpotlight: PipelineEntrantSpotlight?,
+) = OffseasonOptionalDashboardTasks.build(
+    OffseasonDashboardContext(
+        offseasonWeekIndex = weekIndex,
+        recruitingPointsAvailable = ledger?.pointsAvailable ?: 0,
+        portalTop40Locked = portalTop40Locked,
+        openScholarshipSlots = openScholarshipSlots,
+        signingCrunchActive = OffseasonPortalOptionalTasksPolicy.signingCrunchActive(weekIndex),
+        pipelineSpotlight = pipelineSpotlight,
+    ),
+)
