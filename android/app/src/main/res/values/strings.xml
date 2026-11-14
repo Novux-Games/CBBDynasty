@@ -906,6 +906,9 @@
     <string name="shell_calendar_kind_nonconf">Non-conference</string>
     <string name="shell_calendar_kind_event">Event</string>
     <string name="shell_calendar_kind_exhibition">Exhibition</string>
+    <string name="shell_calendar_section_conf">Conference games</string>
+    <string name="shell_calendar_section_nonconf">Non-conference games</string>
+    <string name="shell_calendar_section_other">Other games</string>
     <string name="shell_calendar_no_schedule">Schedule not built yet — finish preseason tasks.</string>
     <string name="shell_news_placeholder">League headlines will appear here.</string>
     <string name="shell_news_empty">No headlines yet. Play or advance the week to populate league stories.</string>

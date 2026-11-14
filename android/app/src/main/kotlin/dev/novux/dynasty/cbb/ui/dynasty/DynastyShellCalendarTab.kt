@@ -101,13 +101,47 @@ private fun CalendarWeekCard(row: UserCalendarWeekRow) {
                     )
                 }
                 UserCalendarRowKind.Game -> {
-                    row.games.forEach { game ->
-                        CalendarGameLine(game)
+                    val byBucket = row.games.groupBy { it.gameKind.calendarKindBucket() }
+                    CalendarKindBucket.entries.forEach { bucket ->
+                        val games = byBucket[bucket].orEmpty()
+                        if (games.isEmpty()) return@forEach
+                        if (row.games.size > 1 && bucket != CalendarKindBucket.Other) {
+                            Text(
+                                text = calendarSectionTitle(bucket),
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                        games.forEach { game ->
+                            CalendarGameLine(game)
+                        }
                     }
                 }
             }
         }
     }
+}
+
+private enum class CalendarKindBucket {
+    Conference,
+    NonConference,
+    Other,
+}
+
+private fun ScheduleGameKind.calendarKindBucket(): CalendarKindBucket = when (this) {
+    ScheduleGameKind.Conference -> CalendarKindBucket.Conference
+    ScheduleGameKind.NonConference -> CalendarKindBucket.NonConference
+    ScheduleGameKind.EarlyEvent,
+    ScheduleGameKind.Exhibition,
+    -> CalendarKindBucket.Other
+}
+
+@Composable
+private fun calendarSectionTitle(bucket: CalendarKindBucket): String = when (bucket) {
+    CalendarKindBucket.Conference -> stringResource(R.string.shell_calendar_section_conf)
+    CalendarKindBucket.NonConference -> stringResource(R.string.shell_calendar_section_nonconf)
+    CalendarKindBucket.Other -> stringResource(R.string.shell_calendar_section_other)
 }
 
 @Composable
@@ -123,17 +157,24 @@ private fun CalendarGameLine(game: UserCalendarGameEntry) {
         stringResource(R.string.dynasty_shell_away)
     }
     val date = game.gameDateLabel.ifBlank { "—" }
-    Text(
-        text = stringResource(
-            R.string.shell_calendar_game_line,
-            date,
-            game.opponentDisplayName,
-            location,
-            gameKindLabel(game.gameKind),
-            status,
-        ),
-        style = MaterialTheme.typography.bodyMedium,
-    )
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = stringResource(
+                R.string.shell_calendar_game_line,
+                date,
+                game.opponentDisplayName,
+                location,
+                gameKindLabel(game.gameKind),
+                status,
+            ),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        AssistChip(onClick = {}, label = { Text(gameKindLabel(game.gameKind)) })
+    }
 }
 
 @Composable
