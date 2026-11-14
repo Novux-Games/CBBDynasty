@@ -57,7 +57,7 @@
 | MEGA-FRAME-023 | PARTIAL | Confirmation copy intent | Lines exist but may not name opponent for unplayed game | `SimWeekConfirmationLineKind`, strings.xml |
 | MEGA-FRAME-024 | SHIP | Task cards Required vs Optional badge | `DashboardTaskKindChip` on required + optional task cards | `DashboardTaskKindChip.kt`, `DashboardTaskBadgePathTest` |
 | MEGA-FRAME-025 | SHIP | Preseason 8 required tasks | `PreseasonTaskId.entries` + `PreseasonStartGate` | `PreseasonScreen`, `dashboard-tasks.md#preseason` |
-| MEGA-FRAME-026 | GAP | Preseason task deep links | Checklist rows use generic `PreseasonRequired`; limited per-task navigation from card | `PreseasonRequiredDashboardTasks.kt` |
+| MEGA-FRAME-026 | SHIP | Preseason task deep links | `PreseasonTaskDeepLinks` + jump chips scroll/open hub per task | `PreseasonRequiredTaskChips.kt`, `PreseasonDeepLinkNavigation.kt` |
 | MEGA-FRAME-027 | SHIP | Preseason Start season gate | Button gated on all tasks complete (not “Advance week”) | `PreseasonScreen`, `preseason_start_season` |
 | MEGA-FRAME-028 | PARTIAL | Offseason required by week | Signing Day, roster lock, carousel cards wired in core — UI coverage uneven by week | `OffseasonScreen`, `dashboard-tasks.md#offseason` |
 | MEGA-FRAME-029 | GAP | Offseason Week 1 not on dashboard-only | Players Leaving is week panel — spec also allows dashboard task pattern for declare flows | `PlayersLeavingPanel` |
@@ -185,8 +185,8 @@
 | MEGA-FRAME-095 | PASS | In-season recruiting optional tasks | `InSeasonRecruitingOptionalDashboardTasks` + shell `InSeasonRecruitingDashboardContext` emit spend + watchlist nudges when cycle open | `DashboardTaskGate.kt`, `DynastyShellScreen.kt` |
 | MEGA-FRAME-096 | GAP | Shell recruiting ledger | `DynastyShellScreen` does not load `RecruitingEconomyRepository` for task counts or sim-week unresolved recruiting line | `DynastyShellScreen.kt` |
 | MEGA-FRAME-097 | SHIP | Required / Optional chips | `DashboardTaskKindChip` on both panels (same as MEGA-FRAME-024) | `DashboardTaskKindChip.kt` |
-| MEGA-FRAME-098 | GAP | Preseason required deep link dead | `DashboardRequiredTasksPanel.onOpenSigningDay` **no-op** on `PreseasonScreen` — **Open** button does not scroll/focus lazy task row | `PreseasonScreen.kt` `onOpenSigningDay = { }` |
-| MEGA-FRAME-099 | GAP | `PreseasonChecklist` deep link | All eight preseason tasks share `DashboardTaskId.PreseasonRequired` — cannot distinguish cards in analytics or dismiss sets | `PreseasonRequiredDashboardTasks.kt` |
+| MEGA-FRAME-098 | SHIP | Preseason required deep link | Jump chips + `navigatePreseasonDashboardTask` scroll/hub — no duplicate full task card panel | `PreseasonScreen.kt` |
+| MEGA-FRAME-099 | SHIP | `PreseasonChecklist` deep link | Each task has unique `DashboardDeepLink` + `preseasonTaskId` on `DashboardTask` | `PreseasonTaskDeepLinks.kt` |
 | MEGA-FRAME-100 | PARTIAL | Optional dismiss scope | `dismissedIds` keyed by `DashboardTaskId` only — multiple injury weeks / portal rows share ids | `DashboardOptionalTasksPanel`, `DynastyShellScreen` |
 | MEGA-FRAME-101 | GAP | Offseason dismiss persistence | `dismissedTasks` is `remember` only — not saved; week advance does not reset but **process death** resurrects nags user dismissed | `OffseasonScreen.kt` |
 | MEGA-FRAME-102 | GAP | Week 1 required dashboard pattern | Declare / pro-day flows live on **Players Leaving** screen — no mirrored **required** dashboard cards per `dashboard-tasks.md#offseason` | `PlayersLeavingPanel` vs dashboard |

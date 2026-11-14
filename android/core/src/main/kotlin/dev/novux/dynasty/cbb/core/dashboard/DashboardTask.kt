@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.core.dashboard
 
+import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskId
+
 enum class DashboardTaskKind {
     Required,
     Optional,
@@ -13,7 +15,17 @@ enum class DashboardDeepLink {
     SigningDayPositions,
     Strategy,
     DisciplineSheet,
+    @Deprecated("Use PreseasonTask* deep links", ReplaceWith("PreseasonTaskDeepLinks.deepLink(taskId)"))
     PreseasonChecklist,
+    PreseasonTaskIncomingClassSeed,
+    PreseasonTaskWorkouts,
+    PreseasonTaskCoachUpgrades,
+    PreseasonTaskRankingsReview,
+    PreseasonTaskReport,
+    PreseasonTaskTournamentInvites,
+    PreseasonTaskScheduleExhibitions,
+    PreseasonTaskScheduleRegularSeason,
+    RankingsHub,
     PlayWeekGame,
     CoachCard,
 }
@@ -49,6 +61,7 @@ data class DashboardTask(
     /** Optional format args for UI copy (e.g. points count, week index). */
     val formatArgs: List<Int> = emptyList(),
     val stringFormatArgs: List<String> = emptyList(),
+    val preseasonTaskId: PreseasonTaskId? = null,
 )
 
 object DashboardAdvanceGate {

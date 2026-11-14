@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "index": 2,
+  "index": 3,
   "completedIds": [
     "MEGA-COACH-028",
     "MEGA-COACH-031",
@@ -253,7 +253,10 @@
     "MEGA-FRAME-019",
     "MEGA-FRAME-016",
     "MEGA-FRAME-017",
-    "MEGA-FRAME-147"
+    "MEGA-FRAME-147",
+    "MEGA-FRAME-026",
+    "MEGA-FRAME-098",
+    "MEGA-FRAME-099"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

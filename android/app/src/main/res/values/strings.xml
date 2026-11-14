@@ -260,6 +260,7 @@
     <string name="conference_offers_declined">Declined</string>
     <string name="preseason_shell_title">Preseason</string>
     <string name="preseason_checklist_hint">Complete every task to start the season.</string>
+    <string name="preseason_required_jump_heading">Jump to a required task</string>
     <string name="preseason_loading_checklist">Loading preseason tasks…</string>
     <string name="preseason_task_complete">Complete</string>
     <string name="preseason_task_done">Done</string>

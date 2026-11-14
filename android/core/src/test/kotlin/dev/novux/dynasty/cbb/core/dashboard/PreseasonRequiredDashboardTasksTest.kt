@@ -19,4 +19,15 @@ class PreseasonRequiredDashboardTasksTest {
     fun checklistSurface_keepsAllEightTaskIds() {
         assertEquals(8, PreseasonTaskId.entries.size)
     }
+
+    @Test
+    fun eachIncompleteTask_hasDistinctDeepLinkAndTaskId() {
+        val tasks = PreseasonRequiredDashboardTasks.build(PreseasonTaskProgress())
+        assertEquals(PreseasonTaskId.entries.size, tasks.size)
+        val deepLinks = tasks.map { it.deepLink }.toSet()
+        assertEquals(PreseasonTaskId.entries.size, deepLinks.size)
+        tasks.forEach { task ->
+            assertEquals(task.preseasonTaskId, PreseasonTaskDeepLinks.taskId(task.deepLink))
+        }
+    }
 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -38,6 +39,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
 import dev.novux.dynasty.cbb.core.dashboard.DashboardAdvanceGate
+import dev.novux.dynasty.cbb.core.dashboard.DashboardTask
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskGate
 import dev.novux.dynasty.cbb.core.preseason.PreseasonFeatureTaskCompletionPolicy
 import dev.novux.dynasty.cbb.core.preseason.PreseasonStartGate
@@ -69,6 +71,7 @@ import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.lazy.animateScrollToItem
 
 @Composable
 fun PreseasonScreen(
@@ -101,6 +104,21 @@ fun PreseasonScreen(
     val position = loaded.weekCheckpoint.activePosition
 
     val coachSkillPointRepository = app.coachSkillPointRepository
+    val checklistState = rememberLazyListState()
+    var scrollToTask by remember { mutableStateOf<PreseasonTaskId?>(null) }
+
+    fun openRequiredTask(task: DashboardTask) {
+        navigatePreseasonDashboardTask(task, hubMenuCallbacks) { scrollToTask = it }
+    }
+
+    LaunchedEffect(scrollToTask) {
+        val target = scrollToTask ?: return@LaunchedEffect
+        val index = PreseasonTaskId.entries.indexOf(target)
+        if (index >= 0) {
+            checklistState.animateScrollToItem(index)
+        }
+        scrollToTask = null
+    }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, selectedTab) {
         progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
@@ -197,11 +215,16 @@ fun PreseasonScreen(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        PreseasonRequiredTaskChips(
+            tasks = preseasonDashboard.required,
+            onOpenTask = ::openRequiredTask,
+        )
         LazyColumn(
+            state = checklistState,
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(PreseasonTaskId.entries) { taskId ->
+            items(PreseasonTaskId.entries, key = { it.name }) { taskId ->
                 if (taskId == PreseasonTaskId.PreseasonReport &&
                     !taskProgress.isComplete(taskId)
                 ) {
