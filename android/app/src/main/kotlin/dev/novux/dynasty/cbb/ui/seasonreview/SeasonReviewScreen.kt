@@ -34,6 +34,7 @@ import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.seasonreview.SeasonReviewProgress
 import dev.novux.dynasty.cbb.core.seasonreview.SeasonReviewSnapshot
+import dev.novux.dynasty.cbb.core.seasonreview.SeasonReviewSurfacePolicy
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
@@ -167,7 +168,7 @@ fun SeasonReviewScreen(
                             )
                         }
                     }
-                    snapshot != null -> {
+                    SeasonReviewSurfacePolicy.hasRecap(snapshot) -> {
                         SeasonReviewScrollContent(
                             snapshot = snapshot!!,
                             modifier = Modifier.weight(1f, fill = false),
@@ -185,7 +186,7 @@ fun SeasonReviewScreen(
                     }
                     else -> {
                         Text(
-                            text = stringResource(R.string.season_review_placeholder),
+                            text = stringResource(R.string.season_review_cadence_hint),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.weight(1f),

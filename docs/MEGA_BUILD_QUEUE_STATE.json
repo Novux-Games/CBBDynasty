@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "index": 6,
+  "index": 8,
   "completedIds": [
     "MEGA-COACH-028",
     "MEGA-COACH-031",
@@ -362,7 +362,12 @@
     "MEGA-GDD-062",
     "MEGA-GDD-057",
     "MEGA-GDD-053",
-    "MEGA-GDD-055"
+    "MEGA-GDD-055",
+    "MEGA-GDD-075",
+    "MEGA-GDD-077",
+    "MEGA-GDD-073",
+    "MEGA-GDD-061",
+    "MEGA-GDD-067"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

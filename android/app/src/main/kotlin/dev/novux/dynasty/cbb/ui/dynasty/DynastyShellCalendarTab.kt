@@ -34,6 +34,7 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarGameEntry
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarRowKind
+import dev.novux.dynasty.cbb.core.calendar.UserCalendarScheduleDensityPolicy
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarSchedulePolicy
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarWeekRow
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
@@ -94,6 +95,14 @@ fun DynastyShellCalendarTab(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+                UserCalendarScheduleDensityPolicy.currentWeekRow(rows)?.let { current ->
+                    val count = UserCalendarScheduleDensityPolicy.gamesScheduledInWeek(current)
+                    Text(
+                        text = stringResource(R.string.shell_calendar_week_density, count),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
         }
         if (rows.isEmpty()) {

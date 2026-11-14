@@ -29,6 +29,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.news.NewsHeadline
 import dev.novux.dynasty.cbb.core.news.NewsHeadlineArticleBuilder
 import dev.novux.dynasty.cbb.core.news.NewsHeadlineKind
+import dev.novux.dynasty.cbb.core.news.DynastyShellNewsHeadlinesPolicy
 import dev.novux.dynasty.cbb.core.news.ShallowNewsFeedSnapshot
 import dev.novux.dynasty.cbb.ui.reports.ReportArticleView
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
@@ -173,6 +174,11 @@ fun DynastyShellNewsTab(
             text = stringResource(R.string.shell_tab_news),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
+        )
+        Text(
+            text = stringResource(R.string.shell_news_headlines_only_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Text(
             text = stringResource(R.string.shell_news_shallow_cap, feed.cap),

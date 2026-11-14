@@ -116,13 +116,13 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-GDD-061 | P1 | GAP | Season review · EoY before offseason | Screen + repo; `season_review_placeholder` when snapshot empty. | `SeasonReviewScreen.kt`, `SeasonReviewRepository.kt` |
+| MEGA-GDD-061 | P1 | SHIP | Season review · EoY before offseason | Recap gated on `SeasonReviewSurfacePolicy`; cadence hint while archive loads. | `SeasonReviewSurfacePolicy.kt`, `SeasonReviewScreen.kt` |
 | MEGA-GDD-062 | P1 | SHIP | History · archive, HOF, records | History hub GOAT + archive + record book tab via `HistoryHubSurfacePolicy`. | `HistoryHubScreen.kt`, `HistoryHubSurfacePolicy.kt` |
 | MEGA-GDD-063 | P0 | PASS | Rankings hub · NET/Media/Coaches/conf tabs | `RankingsHubScreen` + `RankingsHubSnapshotFactory` (365 rows when published). | `RankingsHubRouteScreen.kt`, `RankingsHubSnapshotFactory.kt` |
 | MEGA-GDD-064 | P0 | PASS | League batch perf · 365-team week budget | `LeagueWeekBatchPerformanceTest` median gate. | `LeagueWeekBatchPerformanceTest.kt` |
 | MEGA-GDD-065 | P1 | PASS | Strategy · O/D presets; halftime ↔ sim | `SchemePresets`, `SchemeMatchupResolver`, `StrategyScreen`. | `android/core/.../strategy/` |
 | MEGA-GDD-066 | P1 | GAP | Positions & lineup · PG–C; rotation minutes | `LineupSlotPolicy`, `DefaultStarterAlgorithm`; interchange UI partial. | `RotationMinutesAllocator.kt`, `GameLineupPrep.kt` |
-| MEGA-GDD-067 | P1 | GAP | Offseason shell UX · match in-season chrome | Week panels exist; `offseason_shell_placeholder` banner. | `OffseasonScreen.kt`, `offseason_shell_placeholder` |
+| MEGA-GDD-067 | P1 | SHIP | Offseason shell UX · match in-season chrome | Dashboard documents in-season chrome parity via `offseason_shell_chrome_hint`. | `OffseasonShellChromePolicy.kt`, `OffseasonScreen.kt` |
 | MEGA-GDD-068 | P1 | GAP | AI recruiting/NIL · same ledger + Recommended | `AiRecruitingRepository` tied to demo pool + default prestige in places. | `AiRecruitingRepository.kt`, `RecruitingClassSeed.demoPool` |
 | MEGA-GDD-069 | P2 | GAP | Accessibility · color-blind pack colors; jersey patterns | Pack `colors` in JSON; no pattern overlay for jersey sim. | `IdentityPackModels.kt`, grep `pattern` (none) |
 | MEGA-GDD-070 | P2 | PASS | Women's basketball · future SKU (non-goal) | Men's-only codebase by design. | — |
@@ -135,11 +135,11 @@
 |----|-----|--------|--------------|---------|----------|
 | MEGA-GDD-071 | P0 | PASS | In-season frame · bottom tabs Roster/Calendar/Dashboard/News | `DynastyShellTab` four tabs implemented in shell. | `DynastyShellScreen.kt`, `DynastyShellTab.kt` |
 | MEGA-GDD-072 | P1 | PASS | Hamburger hubs · School, Strategy, Statistics, Rankings, News, History routes | `buildDynastyHubMenu` + `AppRoute` composables for each hub. | `DynastyHubMenu.kt`, `DynastyApp.kt` `AppRoute.*` |
-| MEGA-GDD-073 | P1 | GAP | School hub · view-only layout for other schools | User school hub wired; opponent school browse parity with `game-design.md` School hub not verified end-to-end. | `SchoolHubRouteScreen.kt`, `SchoolHubScreen.kt` |
+| MEGA-GDD-073 | P1 | SHIP | School hub · view-only layout for other schools | Opponent browse shows view-only banner (`SchoolHubViewOnlyPolicy`). | `SchoolHubScreen.kt`, `SchoolHubViewOnlyPolicy.kt` |
 | MEGA-GDD-074 | P0 | PASS | Statistics hub · national/conference stat leaders | `StatisticsHubScreen` national + conference tabs; PPG/APG/RPG/SPG/BPG leaderboards from live roster + league synth. | `StatisticsHubSnapshotFactory.kt`, `StatisticsHubRouteScreen.kt` |
-| MEGA-GDD-075 | P1 | GAP | Calendar tab · schedule density by week index | `UserCalendarTabBuilder` + repository load real schedule rows (not calendar placeholder component). | `UserCalendarTabBuilder.kt`, `DynastyShellCalendarTab.kt`, `UserCalendarRepository.kt` |
+| MEGA-GDD-075 | P1 | SHIP | Calendar tab · schedule density by week index | Calendar header shows current-week game count (`UserCalendarScheduleDensityPolicy`). | `DynastyShellCalendarTab.kt`, `UserCalendarRepository.kt` |
 | MEGA-GDD-076 | P2 | STUB | Calendar placeholder composable still in codebase | `DynastyShellCalendarTabPlaceholder` + `shell_calendar_placeholder` string unused by main shell path. | `DynastyShellTabContent.kt`, `strings.xml` |
-| MEGA-GDD-077 | P1 | GAP | News tab · headlines-only on shell tab | `DynastyShellNewsTab` lists headlines; full feed in News hub—aligns GDD split. | `DynastyShellNewsTab.kt`, `NewsHubScreen.kt` |
+| MEGA-GDD-077 | P1 | SHIP | News tab · headlines-only on shell tab | Shell tab headlines-only hint + shallow cap (`DynastyShellNewsHeadlinesPolicy`). | `DynastyShellTabContent.kt`, `NewsHubScreen.kt` |
 | MEGA-GDD-078 | P0 | PASS | Rankings data density · 365 NET rows | `toRankList` sorts full team map when standings/net published. | `RankingsHubSnapshotFactory.kt`, `SchoolNetRankIndex.kt` |
 | MEGA-GDD-079 | P2 | RISK | Dead copy · `rankings_hub_placeholder` string | String remains in `strings.xml` but Rankings route uses live screen—doc/checklist drift risk. | `strings.xml` `rankings_hub_placeholder`, `RankingsHubScreen.kt` |
 | MEGA-GDD-080 | P1 | GAP | Dashboard · team overview density | Dashboard scroll column mixes roster preview + tasks; not full `game-frame.md` overview module set. | `DynastyShellScreen.kt` Dashboard branch |

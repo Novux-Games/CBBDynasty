@@ -145,6 +145,7 @@
     <string name="season_review_calendar_banner">Season review week — your calendar has no games. Use Dashboard for recap tasks.</string>
     <string name="season_review_shell_header_hint">End of season — finish recap tasks before offseason.</string>
     <string name="season_review_placeholder">Full rankings, awards, and prestige recap land here in a later phase.</string>
+    <string name="season_review_cadence_hint">Recap loads after the season archive finishes writing — try again in a moment.</string>
     <string name="season_review_enter_offseason">Enter offseason</string>
     <string name="season_review_offseason_week1">Next: Offseason Week 1 — roster and transfers.</string>
     <string name="season_review_carousel_next">Next: Coaching carousel before offseason begins.</string>
@@ -176,6 +177,7 @@
     <string name="offseason_shell_title">Offseason</string>
     <string name="offseason_shell_season">Season %1$s</string>
     <string name="offseason_shell_placeholder">Use optional tasks and the recruiting hub for this week.</string>
+    <string name="offseason_shell_chrome_hint">Same bottom tabs and menu as in-season — calendar and news stay available.</string>
     <string name="offseason_dashboard_week3_body">Portal window week 3: finalize interest on transfer targets and balance class needs before Week 4 crunch.</string>
     <string name="offseason_dashboard_week4_body">Portal window week 4: signing crunch approaches — lock key targets or keep points for Signing Day.</string>
     <string name="offseason_dashboard_week5_body">Portal window week 5 — last week of portal recruiting. Close gaps on scholarships and portal offers before Signing Day.</string>
@@ -545,6 +547,7 @@
     <string name="school_hub_title">School hub</string>
     <string name="school_hub_open">Your school hub</string>
     <string name="school_hub_view_opponent">View opponent school</string>
+    <string name="school_hub_view_only">View-only school profile — chemistry and staff tabs stay on your program.</string>
     <string name="school_hub_read_only">View only</string>
     <string name="school_hub_conference">Conference — %1$s</string>
     <string name="school_hub_record">Record %1$s (conf %2$s)</string>
@@ -1081,8 +1084,10 @@
     <string name="shell_calendar_no_schedule">Schedule not built yet — finish preseason tasks.</string>
     <string name="shell_calendar_offseason_no_games">Offseason — no games on your calendar. Use the dashboard to work through administration weeks.</string>
     <string name="shell_calendar_your_games_only">Your games only — not the full D-I weekly slate.</string>
+    <string name="shell_calendar_week_density">This week: %1$d scheduled game(s) on your calendar.</string>
     <string name="shell_news_placeholder">League headlines will appear here.</string>
     <string name="shell_news_empty">No headlines yet. Play or advance the week to populate league stories.</string>
+    <string name="shell_news_headlines_only_hint">Headlines only here — open News hub from the menu for the full feed.</string>
     <string name="shell_news_preseason_awaiting_seed">Complete the incoming class seed task to publish the Top 60 recruiting headline.</string>
     <string name="shell_news_shallow_cap">Top %1$d headlines (same queue as News hub, truncated)</string>
     <string name="shell_news_more_in_hub">%1$d more stories in News hub</string>
