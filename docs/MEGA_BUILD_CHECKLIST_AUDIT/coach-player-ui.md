@@ -74,7 +74,7 @@
 
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
-| MEGA-COACH-041 | P1 | GAP | Job security meter 0–100 + tier + trend | `JobSecurityMeter`, `CoachSecuritySnapshot` |
+| MEGA-COACH-041 | P1 | PASS | Job security meter 0–100 + tier + trend | `JobSecurityMeter` on HC Overview + Contract tab | `JobSecurityMeter.kt`, `HeadCoachCardScreen.kt` |
 | MEGA-COACH-042 | P1 | PASS | Factor list helping/hurting chips | `JobSecurityFactorContribution` in UI |
 | MEGA-COACH-043 | P1 | PASS | Core evaluator + tiers | `CoachSecurityEvaluator`, `JobSecurityTier` tests |
 | MEGA-COACH-044 | P2 | GAP | Job security on Contract tab + AD trust summary link | Meter on HC overview only; AD on staff tab |

@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb.ui.dashboard
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -42,6 +43,9 @@ fun DashboardRequiredTasksPanel(
                     modifier = Modifier.padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        DashboardTaskKindChip(task.kind)
+                    }
                     Text(text = requiredTaskMessage(task), style = MaterialTheme.typography.bodyLarge)
                     OutlinedButton(
                         onClick = {
@@ -71,6 +75,9 @@ private fun requiredTaskMessage(task: DashboardTask): String = when (task.id) {
         task.stringFormatArgs.firstOrNull().orEmpty(),
     )
     DashboardTaskId.PreseasonRequired -> preseasonDashboardTitle(task.stringFormatArgs.firstOrNull())
+    DashboardTaskId.CarouselLeagueSim -> stringResource(R.string.carousel_background_hint)
+    DashboardTaskId.CarouselUserApproval -> task.stringFormatArgs.getOrNull(1)
+        ?: stringResource(R.string.dashboard_task_carousel_approval)
     else -> task.id.name
 }
 

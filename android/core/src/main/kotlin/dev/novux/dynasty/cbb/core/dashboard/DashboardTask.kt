@@ -38,6 +38,8 @@ enum class DashboardTaskId {
     RecruitingTop60Movement,
     RecruitingRivalCommit,
     PromiseAtRisk,
+    CarouselLeagueSim,
+    CarouselUserApproval,
 }
 
 data class DashboardTask(

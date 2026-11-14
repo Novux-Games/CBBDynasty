@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb.ui.dashboard
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -71,6 +72,9 @@ private fun DashboardTaskCard(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                DashboardTaskKindChip(task.kind)
+            }
             Text(text = message, style = MaterialTheme.typography.bodyLarge)
             OutlinedButton(onClick = onOpen, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.dashboard_task_open))

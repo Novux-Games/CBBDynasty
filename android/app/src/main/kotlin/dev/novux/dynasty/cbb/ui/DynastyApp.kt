@@ -320,6 +320,9 @@ fun DynastyApp(
                         CoachingCarouselScreen(
                             loaded = session,
                             repository = coachingCarouselRepository,
+                            rosterRepository = LocalContext.current.requireDynastyApplication().dynastyRosterRepository,
+                            userCalendarRepository = LocalContext.current.requireDynastyApplication().userCalendarRepository,
+                            hubMenuCallbacks = hubMenuCallbacks,
                             onComplete = {
                                 navController.navigate(AppRoute.Offseason.route) {
                                     popUpTo(AppRoute.Home.route) { inclusive = false }

@@ -44,6 +44,7 @@ fun DynastyShellChrome(
     onTabSelected: (DynastyShellTab) -> Unit,
     menuActions: List<DynastyShellMenuAction>,
     modifier: Modifier = Modifier,
+    headerSubtitle: String? = null,
     content: @Composable (PaddingValues) -> Unit,
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
@@ -86,6 +87,14 @@ fun DynastyShellChrome(
                             color = MaterialTheme.colorScheme.primary,
                             maxLines = 1,
                         )
+                        headerSubtitle?.let { subtitle ->
+                            Text(
+                                text = subtitle,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 2,
+                            )
+                        }
                     }
                 },
             )

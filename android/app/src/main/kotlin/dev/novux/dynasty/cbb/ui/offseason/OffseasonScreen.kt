@@ -194,6 +194,7 @@ fun OffseasonScreen(
     DynastyShellChrome(
         schoolDisplayName = schoolName,
         phaseWeekLabel = weekHeader,
+        headerSubtitle = themeLine,
         selectedTab = selectedTab,
         onTabSelected = { selectedTab = it },
         menuActions = menu,
