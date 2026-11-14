@@ -68,8 +68,7 @@ fun NewsHubScreen(
 
     LaunchedEffect(dynastyId, seasonIndex, position) {
         stories = newsFeedRepository.storiesFeed(dynastyId, seasonIndex)
-        recruits = incomingClassSeedRepository.loadHeadline(dynastyId, seasonIndex)?.top60
-            ?: NationalRecruitingRankings.top60(seasonIndex)
+        recruits = incomingClassSeedRepository.loadHeadline(dynastyId, seasonIndex)?.top60.orEmpty()
         if (portalVisible) {
             portalState = portalCycleRepository.loadOrSimulate(dynastyId, seasonIndex)
         }
@@ -166,6 +165,11 @@ private fun RecruitsTab(rows: List<NationalRankRow>) {
         stringResource(R.string.news_hub_recruits_heading),
         style = MaterialTheme.typography.titleMedium,
         fontWeight = FontWeight.SemiBold,
+    )
+    Text(
+        stringResource(R.string.news_hub_recruits_scope),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
     rows.forEach { row ->
         val p = row.prospect

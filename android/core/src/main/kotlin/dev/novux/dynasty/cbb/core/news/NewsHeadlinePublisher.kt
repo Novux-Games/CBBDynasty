@@ -106,4 +106,7 @@ object NewsHeadlinePublisher {
         priority = 40,
         createdAtMs = System.currentTimeMillis(),
     )
+
+    fun bracketology(headline: NewsHeadline): NewsHeadline =
+        headline.copy(kind = NewsHeadlineKind.Bracketology)
 }

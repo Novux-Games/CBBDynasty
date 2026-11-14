@@ -9,6 +9,8 @@ enum class NewsHeadlineKind {
     RecruitingSpotlight,
     General,
     Awards,
+    /** Weekly February NET bracketology ([MEGA-GDD-130]). */
+    Bracketology,
 }
 
 @Serializable

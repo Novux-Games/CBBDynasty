@@ -24,13 +24,13 @@
 | MEGA-SHELL-003 | SHIP | Studio tap skip after 0.5s min | `STUDIO_MIN_SKIP_MS`; clickable gated on `skipEnabled` | `StudioScreen.kt` |
 | MEGA-SHELL-004 | SHIP | Studio Novux lockup, not game logo | `R.drawable.novux_studio_lockup` hero | `StudioScreen.kt`, `app-shell.md` |
 | MEGA-SHELL-005 | SHIP | Studio novux.dev line | `R.string.studio_website` | `StudioScreen.kt` |
-| MEGA-SHELL-006 | PARTIAL | Studio background `#181a25` full bleed | Theme uses brand hex; studio screen relies on Material `background` — verify edge-to-edge on device | `Theme.kt`, `StudioScreen.kt` |
-| MEGA-SHELL-007 | GAP | Studio tap hint in `strings.xml` | Hard-coded `"Tap to continue"` in Compose — violates branding single-source copy rule | `StudioScreen.kt` vs `branding.md#ui-copy` |
+| MEGA-SHELL-006 | SHIP | Studio background `#181a25` full bleed | `StudioBrandBackgroundPolicy` paints full-bleed brand hex on studio route. | `StudioScreen.kt` |
+| MEGA-SHELL-007 | SHIP | Studio tap hint in `strings.xml` | `studio_tap_to_continue` replaces hard-coded Compose copy. | `StudioScreen.kt`, `strings.xml` |
 | MEGA-SHELL-008 | SHIP | Settings: skip studio intro | `AppSettings.skipStudioIntro` → start at Splash | `SettingsScreen`, `DynastyApp` `startRoute` |
 | MEGA-SHELL-009 | SHIP | Splash: game logo + official title | `app_logo`, `GameConstants.GAME_TITLE` | `SplashScreen.kt` |
 | MEGA-SHELL-010 | SHIP | Splash pulsing Tap to Play CTA | Scale 0.94↔1.06, opacity 0.78↔1.0, 900ms | `SplashScreen.kt`, `app-shell.md#tap-to-play` |
-| MEGA-SHELL-011 | PARTIAL | Splash loading gate before CTA | Fixed `delay(600)` — not tied to pack/save index readiness | `SplashScreen.kt` |
-| MEGA-SHELL-012 | GAP | Splash pack / asset fail + Retry | Spec: stay on splash with error + Retry | `app-shell.md#loading--errors` — not implemented |
+| MEGA-SHELL-011 | SHIP | Splash loading gate before CTA | `SplashReadyGatePolicy` + bootstrap in `DynastyApp` after pack + save init. | `SplashScreen.kt`, `DynastyApp.kt` |
+| MEGA-SHELL-012 | SHIP | Splash pack / asset fail + Retry | `SplashPackErrorPolicy` — error copy + **Retry** relaunches bootstrap. | `SplashScreen.kt` |
 | MEGA-SHELL-013 | SHIP | Splash footer © Novux + director line | `splash_copyright`, `game_director_line` | `SplashScreen.kt` |
 | MEGA-SHELL-014 | SHIP | Brand background `#181A25` in theme + launcher | `GameConstants.BRAND_BACKGROUND_HEX`, `colors.xml`, adaptive icon | `Theme.kt`, `mipmap-anydpi-v26` |
 | MEGA-SHELL-015 | SHIP | Contrast tokens on brand field | `#E8EAED` on-surface, `#A8AEB8` muted | `Theme.kt` vs `branding.md#color` |
@@ -219,7 +219,7 @@
 | MEGA-SHELL-135 | GAP | Hub Stories tab hides kind chip | `StoriesTab` shows title only — no category/date | `NewsHubScreen.kt` vs dashboard tab |
 | MEGA-SHELL-136 | GAP | Portal headline kinds in enum | No `PortalEntry` / `Commit` / `Flip` in `NewsHeadlineKind` | `NewsHeadline.kt`, `news-hub.md` |
 | MEGA-SHELL-137 | GAP | Poll / NET movement headlines | `appendLeagueWeek` emits injury wire + upsets only — no poll lines | `NewsFeedRepository.kt` |
-| MEGA-SHELL-138 | GAP | Bracketology (February) stories | No generator wired | `news-hub.md`, `MEGA-GDD-130` |
+| MEGA-SHELL-138 | PASS | Bracketology (February) stories | `BracketologyNewsEngine` on league week advance | `NewsFeedRepository.kt`, `MEGA-GDD-130` |
 | MEGA-SHELL-139 | GAP | Coaching carousel league headlines | No `NewsHeadlineKind` or publisher path for carousel | `news-hub.md` brief list |
 | MEGA-SHELL-140 | PARTIAL | Awards headlines kind | `appendAwardsHeadlines` + `NewsHeadlineKind.Awards` | postseason awards wiring |
 | MEGA-SHELL-141 | SHIP | User vs league injury kinds split | `UserInjury` vs `LeagueInjury` | `NewsHeadlinePublisher.kt` |

@@ -35,6 +35,11 @@ object FatigueEngine {
         }
     }
 
+    fun drainFromFloorSeconds(stamina: Int, floorSeconds: Int, tuning: BalanceFatigue): Int {
+        val drain = (tuning.baseDrainPerMinute * floorSeconds / 60.0).toInt()
+        return (stamina - drain).coerceAtLeast(0)
+    }
+
     /** Estimate drain when box scores are not available yet. */
     fun applyEstimatedGameDrain(
         players: List<RosterPlayer>,

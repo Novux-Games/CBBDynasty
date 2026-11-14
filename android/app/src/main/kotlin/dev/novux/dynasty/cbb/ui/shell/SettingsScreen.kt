@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
@@ -33,6 +34,7 @@ import kotlinx.coroutines.launch
 fun SettingsScreen(
     settingsRepository: AppSettingsRepository,
     onBack: () -> Unit,
+    onOpenPackImport: () -> Unit = {},
 ) {
     val settings by settingsRepository.settingsFlow.collectAsState(
         initial = dev.novux.dynasty.cbb.core.settings.AppSettings(),
@@ -126,6 +128,27 @@ fun SettingsScreen(
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(vertical = 8.dp),
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        HorizontalDivider()
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = stringResource(R.string.settings_section_identity_pack),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        Text(
+            text = stringResource(R.string.settings_identity_pack_summary),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(vertical = 8.dp),
+        )
+        Button(
+            onClick = onOpenPackImport,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(stringResource(R.string.settings_open_pack_import))
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
         HorizontalDivider()
