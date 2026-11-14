@@ -275,6 +275,8 @@ fun RecruitingHubScreen(
         offerSnapshot,
         nilRules,
         interestSpendByProspect,
+        offerPromises,
+        gateRefresh,
     ) {
         if (!portalWindowOpen) return@remember emptyList()
         val ctx = schoolContext ?: return@remember emptyList()
@@ -294,6 +296,7 @@ fun RecruitingHubScreen(
             nilOffersByProspect = offerSnapshot,
             nilRules = nilRules,
             spendDeltaByProspect = interestSpendByProspect,
+            offerPromisesByProspect = offerPromises,
         )
     }
 
@@ -304,6 +307,8 @@ fun RecruitingHubScreen(
         offerSnapshot,
         nilRules,
         interestSpendByProspect,
+        offerPromises,
+        gateRefresh,
     ) {
         if (RecruitingHubTestHooks.forceEmptyRecommendedPool) return@remember emptyList()
         val pool = recruitingPool ?: return@remember emptyList()
@@ -315,6 +320,7 @@ fun RecruitingHubScreen(
             nilOffersByProspect = offerSnapshot,
             nilRules = nilRules,
             spendDeltaByProspect = interestSpendByProspect,
+            offerPromisesByProspect = offerPromises,
         )
     }
 
@@ -932,6 +938,9 @@ private fun RecommendedTabBody(
                     onAssignNil(row.prospect.prospectId, row.prospect.nilAskUsd, row.prospect.nilAskUsd.toLong())
                 },
                 onClearNil = { onAssignNil(row.prospect.prospectId, row.prospect.nilAskUsd, 0L) },
+                onAssignPartialNil = { offerUsd ->
+                    onAssignNil(row.prospect.prospectId, row.prospect.nilAskUsd, offerUsd)
+                },
                 onDm = {
                     gates?.dm?.takeIf { it.allowed }?.let {
                         onPointAction(row.prospect.prospectId, RecruitingPointAction.Dm, null)
@@ -979,6 +988,7 @@ private fun RecommendedProspectRow(
     onScholarshipOffer: () -> Unit,
     onMeetNilAsk: () -> Unit,
     onClearNil: () -> Unit,
+    onAssignPartialNil: (Long) -> Unit,
     onDm: () -> Unit,
     onPhoneCall: () -> Unit,
     onSendTheHouse: () -> Unit,
@@ -1051,6 +1061,13 @@ private fun RecommendedProspectRow(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         RecruitNilAssignCapLine(nilAskUsd = row.prospect.nilAskUsd, nilRules = nilRules)
+        RecruitNilPartialOfferControls(
+            nilAskUsd = row.prospect.nilAskUsd,
+            nilRules = nilRules,
+            currentOfferUsd = nilOfferUsd,
+            currency = currency,
+            onApplyPartialOffer = onAssignPartialNil,
+        )
         if (nilOfferUsd > 0L) {
             Text(
                 text = stringResource(R.string.recruiting_nil_offer_line, currency.format(nilOfferUsd)),

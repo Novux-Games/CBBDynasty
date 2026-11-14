@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.pack.ConferenceDisplayOverlay
 import dev.novux.dynasty.cbb.core.pack.TeamDisplayOverlay
-import dev.novux.dynasty.cbb.core.pack.WizardProgramPrestige
+import dev.novux.dynasty.cbb.core.pack.NewGameStarterPrestigeFilterPolicy
 import dev.novux.dynasty.cbb.core.save.NewGameSchoolSummaryPreview
 import dev.novux.dynasty.cbb.core.save.NewGameSchoolSummaryPreviewEngine
 import dev.novux.dynasty.cbb.core.balance.BalanceNilAnnualPoolTables
@@ -70,7 +70,7 @@ fun SchoolStepContent(
         val q = query.trim().lowercase()
         schools
             .asSequence()
-            .filter { WizardProgramPrestige.isSelectable(it.programPrestige, unlockAll) }
+            .filter { NewGameStarterPrestigeFilterPolicy.isVisible(it.programPrestige, unlockAll) }
             .filter {
                 q.isEmpty() ||
                     it.displayName.lowercase().contains(q) ||

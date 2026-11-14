@@ -11,6 +11,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingWeekReservation
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.signingday.IncomingSignee
 import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignEngine
+import dev.novux.dynasty.cbb.core.signingday.SigningDayNilSnapshotPolicy
 import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignResult
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
@@ -108,7 +109,7 @@ class SigningDayRepository(
                 dynasty.metadata.seasonIndex,
                 signee.prospectId,
             ).toInt()
-            val withNil = signee.copy(nilSignedUsd = nilSigned)
+            val withNil = SigningDayNilSnapshotPolicy.applyNilOffer(signee, nilSigned)
             if (override != null) withNil.copy(position = override) else withNil
         }
     }

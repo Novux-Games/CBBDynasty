@@ -149,7 +149,7 @@
 | MEGA-RECR-072 | P1 | PASS | School summary recruiting/NIL preview | Sheet shows pipeline, weekly points, annual NIL from shipped balance tables. | `NewGameSchoolSummaryPreviewEngine`, `SchoolStepContent.kt` |
 | MEGA-RECR-073 | P2 | GAP | Pipeline states on summary | Not shown on school summary sheet. | `SchoolStepContent.kt` |
 | MEGA-RECR-074 | P2 | GAP | School demeanor on summary | Not shown. | `SchoolStepContent.kt` |
-| MEGA-RECR-075 | P1 | GAP | Prestige ≤40 default filter | School step should filter — verify `SchoolStepContent` (pack overlay) — present in list UI. | newgame school step |
+| MEGA-RECR-075 | P1 | SHIP | Prestige ≤40 default filter | `NewGameStarterPrestigeFilterPolicy` + starter copy on school list unless unlock-all. | `SchoolStepContent.kt` |
 | MEGA-RECR-076 | P1 | PASS | Bootstrap recruiting on sign | `bootstrapSeasonOneRecruitingAfterSign` seeds class, opens ledger with chosen-school prestige, and `openCyclePoolUsd`. | `SaveSlotRepository`, `DynastyWizardBootstrapPolicy` |
 | MEGA-RECR-077 | P2 | PASS | Launch → Offseason W1 Players Leaving | Matches `game-start` step 6 narrative. | wizard + calendar |
 | MEGA-RECR-078 | P2 | RISK | `teamId` on coach/save | Wizard stores school in draft; confirm pack `teamId` bound on coach entity for recruiting context (audit: `userSchoolRecruitingContext` depends on loaded dynasty team). | `NilAnnualPoolRepository` |
@@ -178,7 +178,7 @@
 | MEGA-RECR-087 | P2 | GAP | Factor score debug | `factorScores` / `effectiveWeights` not exposed in UI or dev overlay. | `RecruitInterestSnapshot` |
 | MEGA-RECR-088 | P2 | FAIL | Influence closeness league sim | `InfluenceBoardEngine` ranks user school; **closeness** not advanced on league week advance / AI spend. | core recruiting influence |
 | MEGA-RECR-089 | P2 | GAP | Official visit → campus bump | Visit spend wired with `prospectId` — PASS reservation; no `campusLife` delta surfaced on meter. | `spendRefundableAction` |
-| MEGA-RECR-090 | P1 | GAP | Promise picker → `promiseDelta` | Offer flow lacks promise UI; interest model’s promise bump unused. | hub + `player-loyalty-promises.md` |
+| MEGA-RECR-090 | P1 | SHIP | Promise picker → `promiseDelta` | `RecruitScholarshipPromiseDeltaPolicy` feeds live interest when scholarship promise on file. | `RecommendedRecruitList`, hub picker |
 | MEGA-RECR-091 | P2 | GAP | Post-spend haptics / snackbar | Points pool header refreshes; no per-recruit confirmation that relationship moved. | `gateRefresh` pattern |
 | MEGA-RECR-092 | P2 | GAP | Dashboard deep link scroll-to-target | `DashboardDeepLink.RecruitingRecommended` opens hub; no `prospectId` scroll/highlight. | `DynastyApp.kt` |
 
@@ -188,12 +188,12 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-093 | P1 | GAP | Assign NIL partial offers | Buttons **Meet ask** / **Clear** only — no slider for partial $ between 0 and **3× ask**. | `RecruitingHubScreen` NIL row |
+| MEGA-RECR-093 | P1 | SHIP | Assign NIL partial offers | `RecruitNilPartialOfferControls` slider + `RecruitNilPartialOfferPolicy` between $0 and 3× cap. | `RecruitingHubScreen` NIL row |
 | MEGA-RECR-094 | P1 | PASS | NIL drill-down sheet | Bottom sheet: committed + reserved lines from ledger and open scholarship NIL offers. | `NilBudgetDrillDownEngine` |
 | MEGA-RECR-095 | P2 | GAP | Reserved vs committed copy | `NilBudgetLedger` tracks buckets in core; hub shows aggregate remaining only. | `NilBudgetRepository` |
 | MEGA-RECR-096 | P2 | GAP | 3× cap affordance | `NilOfferEngine.validateAssign` enforces cap; UI does not show max assignable for this recruit. | core nil tests |
-| MEGA-RECR-097 | P1 | GAP | Interest NIL tops at ask | `NilInterestScoring` tested; assign path does not refresh row **badge** / meter when offer changes. | hub `gateRefresh` |
-| MEGA-RECR-098 | P1 | GAP | NIL at hard sign snapshot | `IncomingSignee.nilSignedUsd` defaults **0**; hard sign does not persist offer map into signee rows. | `SigningDayIncomingSignee.kt` |
+| MEGA-RECR-097 | P1 | SHIP | Interest NIL tops at ask | Badge tracks live interest when NIL assigned; rows rebuild on `gateRefresh` + offer map. | `RecruitNilInterestBadgeRefreshPolicy` |
+| MEGA-RECR-098 | P1 | SHIP | NIL at hard sign snapshot | `SigningDayNilSnapshotPolicy` hydrates `nilSignedUsd` from ledger on class load. | `SigningDayRepository.loadIncomingClass` |
 | MEGA-RECR-099 | P2 | PASS | Annual pool + week-9 boost | Hub loads `nilPoolBoostUsd` from facilities week — PASS wiring. | `RecruitingHubScreen` LaunchedEffect |
 | MEGA-RECR-100 | P0 | PASS | Dynasty bootstrap NIL cycle | Wizard sign calls `openCyclePoolUsd` with conference + prestige from `draft.selectedTeamId` ([DynastyWizardBootstrapPolicy]). | `SaveSlotRepository` |
 | MEGA-RECR-101 | P2 | PASS | Portal NIL same ledger | Portal targets use `assignOffer` by entrant id. | `NilBudgetRepository` |
@@ -206,7 +206,7 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-103 | P1 | PASS | Required task gating | `SigningDayHardSignUiGate` blocks confirm positions until rankings viewed; hard sign until both tasks + promises. | `SigningDayScreen.kt` |
-| MEGA-RECR-104 | P1 | GAP | Admin week — no new drip | Spec: week 6 **no chasing**; verify `RecruitingWeekGrant` skips grant when `cycleClosed` after hard sign — partial wiring via `closeCycleAfterHardSign`. | `RecruitingEconomyRepository` |
+| MEGA-RECR-104 | P1 | SHIP | Admin week — no new drip | `RecruitingClosedCycleWeekGrantPolicy` — zero weekly grant when `cycleClosed`. | `RecruitingWeekGrant.applyWeekAdvanceGrant` |
 | MEGA-RECR-105 | P2 | GAP | Walk-ons after close | No in-app feed / board after hard sign per `recruiting-engine#walk-ons`. | spec; no UI |
 | MEGA-RECR-106 | P1 | GAP | Unsigned targets sim elsewhere | Hard sign finalizes offer-based class only; no league AI “sign elsewhere” for open elite targets. | `SigningDayHardSignEngine` |
 | MEGA-RECR-107 | P2 | GAP | Position editor depth | Positions tab **cycles enum** per signee — not bulk roster editor / flex validation from spec. | `SigningDayScreen` `onCyclePosition` |
