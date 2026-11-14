@@ -465,6 +465,7 @@ class DynastyApplication : Application() {
             leagueWeekBatchRepository,
             balanceRulesetRepository,
             offseasonWeekNineRepository,
+            nilBudgetRepository,
         )
         rankingsHubRepository = dev.novux.dynasty.cbb.data.rankings.RankingsHubRepository(
             packRepository,

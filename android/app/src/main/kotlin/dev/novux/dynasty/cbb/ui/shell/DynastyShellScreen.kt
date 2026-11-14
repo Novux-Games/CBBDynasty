@@ -739,6 +739,7 @@ fun DynastyShellScreen(
                             SchoolStaffTabPanel(
                                 roster = staffRoster!!,
                                 adTrust = coachSecurity,
+                                programPrestige = view.overview.programPrestige,
                                 onHeadCoachClick = { openHeadCoachPreview(staffRoster!!.headCoach) },
                                 onAssistantClick = { id ->
                                     staffRoster!!.assistants.firstOrNull { it.staffId == id }?.let {
@@ -888,6 +889,7 @@ fun DynastyShellScreen(
                     SchoolStaffTabPanel(
                         roster = roster,
                         adTrust = coachSecurity,
+                        programPrestige = userSchool?.programPrestige,
                         onHeadCoachClick = { openHeadCoachPreview(roster.headCoach) },
                         onAssistantClick = { id ->
                             roster.assistants.firstOrNull { it.staffId == id }?.let {

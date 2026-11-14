@@ -14,6 +14,8 @@ import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.core.facilities.FacilityGradeEngine
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonProgressRepository
+import dev.novux.dynasty.cbb.core.school.SchoolHubNilCycleSummaryPolicy
+import dev.novux.dynasty.cbb.data.nil.NilBudgetRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import dev.novux.dynasty.cbb.database.roster.toDomain
 
@@ -24,6 +26,7 @@ class SchoolHubRepository(
     private val leagueWeekBatchRepository: LeagueWeekBatchRepository,
     private val balanceRulesetRepository: BalanceRulesetRepository,
     private val offseasonWeekNineRepository: OffseasonWeekNineRepository,
+    private val nilBudgetRepository: NilBudgetRepository,
 ) {
     suspend fun loadOverview(
         dynastyId: String,
@@ -57,6 +60,25 @@ class SchoolHubRepository(
         } else {
             null
         }
+        val nilSummary = if (team.teamId == coach.userTeamId) {
+            val pool = nilBudgetRepository.frozenAnnualPoolUsd(dynastyId, seasonIndex)
+            if (pool != null) {
+                val rosterCommitted = database.dynastyRosterDao()
+                    .listForDynasty(dynastyId)
+                    .sumOf { it.nilUsdPerYear }
+                val ledger = nilBudgetRepository.loadLedger(
+                    dynastyId,
+                    seasonIndex,
+                    pool,
+                    rosterCommitted,
+                )
+                SchoolHubNilCycleSummaryPolicy.from(pool, ledger)
+            } else {
+                null
+            }
+        } else {
+            null
+        }
         return SchoolHubSnapshotFactory.build(
             team = team,
             packIndex = index,
@@ -69,7 +91,7 @@ class SchoolHubRepository(
             coachesPollRankings = coachesPoll,
             facilitySummary = facilitySummary,
             programAcademics = programAcademics,
-        )
+        ).copy(nilCycleSummary = nilSummary)
     }
 
     private suspend fun resumeMetrics(

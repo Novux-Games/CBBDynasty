@@ -7,34 +7,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
   },
   {
-    "id": "MEGA-GDD-034",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
-    "id": "MEGA-GDD-036",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
-    "id": "MEGA-GDD-039",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
-    "id": "MEGA-GDD-049",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
     "id": "MEGA-GDD-050",
     "pri": "P1",
     "status": "GAP",
@@ -196,13 +168,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
   },
   {
-    "id": "MEGA-GDD-114",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
     "id": "MEGA-GDD-115",
     "pri": "P1",
     "status": "GAP",
@@ -232,13 +197,6 @@
   },
   {
     "id": "MEGA-GDD-122",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
-    "id": "MEGA-GDD-123",
     "pri": "P1",
     "status": "GAP",
     "shard": "game-design.md",

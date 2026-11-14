@@ -20,6 +20,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.coach.card.CoachCardPolicy
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.coach.staff.SchoolStaffRoster
+import dev.novux.dynasty.cbb.core.coach.staff.StaffFourthAssistantSlotPolicy
 import dev.novux.dynasty.cbb.core.coach.staff.StaffKind
 import dev.novux.dynasty.cbb.ui.portrait.CoachPortraitSlot
 
@@ -31,6 +32,7 @@ fun SchoolStaffTabPanel(
     onAssistantClick: (String) -> Unit,
     userCanManage: Boolean = false,
     onManageStaff: (StaffManageTarget) -> Unit = {},
+    programPrestige: Int? = null,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -60,6 +62,34 @@ fun SchoolStaffTabPanel(
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Medium,
         )
+        programPrestige?.let { prestige ->
+            @Suppress("unused")
+            val qaSlots = StaffFourthAssistantSlotPolicy.MEGA_ID
+            Text(
+                stringResource(
+                    R.string.staff_assistant_slot_policy,
+                    StaffFourthAssistantSlotPolicy.maxAssistantSlots(prestige),
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            if (StaffFourthAssistantSlotPolicy.showFourthSlotPlaceholder(prestige, roster.assistants.size)) {
+                Text(
+                    stringResource(R.string.staff_fourth_slot_open),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            } else if (!StaffFourthAssistantSlotPolicy.fourthSlotUnlocked(prestige)) {
+                Text(
+                    stringResource(
+                        R.string.staff_fourth_slot_locked,
+                        StaffFourthAssistantSlotPolicy.FOURTH_SLOT_PRESTIGE_THRESHOLD,
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
         roster.assistants.forEach { assistant ->
             StaffRow(
                 title = assistant.displayName,

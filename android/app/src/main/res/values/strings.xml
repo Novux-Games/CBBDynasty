@@ -299,6 +299,7 @@
     <string name="conference_offers_season_one_skip">Season 1 skips conference realignment week (offers generate in season 2+).</string>
     <string name="preseason_shell_title">Preseason</string>
     <string name="preseason_checklist_hint">Complete every task to start the season.</string>
+    <string name="preseason_tasks_progress">Preseason tasks: %1$d of %2$d complete</string>
     <string name="preseason_task_order_hint">Tasks 1–5 can be completed in any order.</string>
     <string name="preseason_builder_status_heading">Builder status</string>
     <string name="preseason_exhibitions_zero_week_copy">No exhibition games — you can confirm zero and still build your regular-season slate.</string>
@@ -435,6 +436,9 @@
     <string name="staff_manage_blocked_min_assistants">You need at least two assistants on staff.</string>
     <string name="staff_manage_done">Staff roster updated.</string>
     <string name="staff_assistants_header">Assistant coaches</string>
+    <string name="staff_assistant_slot_policy">Assistant slots filled: up to %1$d on staff</string>
+    <string name="staff_fourth_slot_open">Prestige unlock: fourth assistant slot open — hire from Manage.</string>
+    <string name="staff_fourth_slot_locked">Fourth assistant slot unlocks at program prestige %1$d.</string>
     <string name="staff_support_header">Support staff</string>
     <string name="staff_support_no_card">Support roles use Manage sheets — no coach card.</string>
     <string name="staff_rating_chip">Rating %1$d</string>
@@ -545,6 +549,7 @@
     <string name="school_hub_prestige">Program prestige %1$d</string>
     <string name="school_hub_academics_grade">Program academics grade: %1$d / 100</string>
     <string name="school_hub_academics_budget_multiplier">Recruiting budget multiplier ×%1$.2f from academics</string>
+    <string name="school_hub_nil_cycle_summary">NIL cycle (read-only): %1$s pool · %2$s remaining</string>
     <string name="school_hub_sos">Strength of schedule %1$d</string>
     <string name="school_hub_power_index">Power index %1$d</string>
     <string name="school_hub_team_ratings">Team OFF %1$d · DEF %2$d</string>
@@ -1202,5 +1207,6 @@
     <string name="awards_runner_up_line">Runner-up: %1$s</string>
     <string name="awards_no_rows">No honorees to show yet.</string>
     <string name="awards_weekly_offseason">Weekly honors update during the regular season.</string>
+    <string name="awards_weekly_cadence_hint">Player of the Week and conference honors refresh each regular-season week you sim.</string>
     <string name="awards_week_chip">Week %1$d</string>
 </resources>

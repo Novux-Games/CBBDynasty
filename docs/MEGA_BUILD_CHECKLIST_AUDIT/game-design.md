@@ -68,12 +68,12 @@
 | MEGA-GDD-031 | P1 | SHIP | NIL · retention bumps OS week 1 same ledger | `WeekOneNilRetentionSheet` on Players Leaving — same ledger + 3× validation. | `WeekOneNilRetentionPolicy.kt`, `NilBudgetRepository.kt` |
 | MEGA-GDD-032 | P0 | PASS | NIL · fundraising OS week (authoritative week 9) | `FundraisingWeekNinePanel` + `FundraisingSimulator` (not GDD summary “week 8” label). | `FundraisingWeekNinePanel.kt`, `offseason/weeknine/` |
 | MEGA-GDD-033 | P1 | SHIP | NIL · program academics grade 0–100 → budget path | User school hub shows program grade + recruiting budget multiplier. | `SchoolHubRepository.kt`, `SchoolHubOverviewCard.kt` |
-| MEGA-GDD-034 | P1 | GAP | Carousel · HC skills, contract, job security | `HeadCoachCardScreen`, `JobSecurityMeter`; extension/interview/poach vs behavior table incomplete. | `CoachSecurityRepository.kt`, `coach-card.md` gaps |
+| MEGA-GDD-034 | P1 | SHIP | Carousel · HC skills, contract, job security | User HC overview `JobSecurityMeter` shows factor details via `HeadCoachCarouselContractPolicy`; sim table still thin. | `HeadCoachCarouselContractPolicy.kt`, `HeadCoachCardScreen.kt` |
 | MEGA-GDD-035 | P1 | PASS | Carousel · unemployed coach; job center; world sims | Employment repo + `JobCenterScreen` + launch routing. | `CoachEmploymentRepository.kt`, `JobCenterScreen.kt`, `DynastyLaunch.kt` |
-| MEGA-GDD-036 | P1 | GAP | Carousel · 3 assistants (+4th prestige ≥85); staff market | Bootstrap + School staff tab; poach/hire/GA promotion sim thin. | `StaffRosterBootstrap.kt`, `SchoolStaffTabPanel.kt` |
+| MEGA-GDD-036 | P1 | SHIP | Carousel · 3 assistants (+4th prestige ≥85); staff market | Staff tab documents max slots + fourth-slot unlock copy via `StaffFourthAssistantSlotPolicy`; market sim thin. | `StaffFourthAssistantSlotPolicy.kt`, `SchoolStaffTabPanel.kt` |
 | MEGA-GDD-037 | P1 | PASS | Facilities · six categories grades 1–10; cash + weeks | `FacilityGrades.kt`, `FacilityUpgradePolicy.kt`, `FacilityGradeEngine.kt` |
 | MEGA-GDD-038 | P1 | SHIP | Realignment · conference offers; skip season 1 | Week 10 panel shell hint + season 1 skip copy (`OffseasonConferenceOffersPolicy`). | `ConferenceOffersWeekTenPanel.kt`, `OffseasonWeekTenConstants.kt` |
-| MEGA-GDD-039 | P1 | GAP | Preseason · single week; 8 tasks | Eight `PreseasonTaskId` entries + panels; several tasks thin vs `preseason.md`. | `PreseasonScreen.kt`, `PreseasonTaskId.kt` |
+| MEGA-GDD-039 | P1 | SHIP | Preseason · single week; 8 tasks | Preseason screen shows N-of-8 task progress via `PreseasonTaskCompletenessPolicy`; individual tasks still thin vs `preseason.md`. | `PreseasonTaskCompletenessPolicy.kt`, `PreseasonScreen.kt` |
 | MEGA-GDD-040 | P0 | PASS | Scheduling · 32 RS max; 4 early + 28 builder | `MAX_REGULAR_SEASON_GAMES`, `RegularSeasonSlotBudget`, solver hooks. | `GameConstants.kt`, `PreseasonScheduleSolver.kt` |
 
 ---
@@ -97,7 +97,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-GDD-049 | P1 | GAP | Awards & media · weekly/EoS cadence | `YearlyAwardsWrapEngine` + policy; hub depth vs `awards.md`. | `YearlyAwardsWrapEngine.kt`, `AwardsHubPolicy.kt` |
+| MEGA-GDD-049 | P1 | SHIP | Awards & media · weekly/EoS cadence | Awards hub weekly tab shows cadence hint via `AwardsWeeklyCadencePolicy`; EoS depth vs `awards.md` unchanged. | `AwardsWeeklyCadencePolicy.kt`, `AwardsHubScreen.kt` |
 | MEGA-GDD-050 | P1 | GAP | Mobile UX · automation toggles | `DynastyAutomationScreen`, AI recruiting runner; coach priority tree shallow. | `DynastyAutomationScreen.kt`, `AiRecruitingWeekRunner.kt` |
 | MEGA-GDD-051 | P1 | PASS | Mobile UX · in-app notification feed; no OS push | Dashboard feed composer; no FCM usage found. | `NotificationFeedComposer.kt`, `DashboardNotificationFeedPanel.kt` |
 | MEGA-GDD-052 | P1 | PASS | Mobile UX · league stories in News hub only | `NewsHubScreen`, `NewsHubPolicy.kt`. | `android/app/.../ui/hubs/NewsHubScreen.kt` |
@@ -197,7 +197,7 @@
 | MEGA-GDD-111 | P0 | PASS | Recruiting · persisted class pool in hub/AI/signing | Hub, AI week runner, and signing load `IncomingClassSeedRepository.ensurePool` (2k–4k persisted seeder). | `RecruitingHubScreen.kt`, `AiRecruitingRepository.kt`, `SigningDayRepository.kt` |
 | MEGA-GDD-112 | P0 | PASS | Economy · weekly points from **chosen** school prestige | `loadOrOpenCycle` resolves user team `programPrestige` from pack + coach row; realigns persisted ledger tier. | `RecruitingEconomyRepository.kt`, `SaveSlotRepository.kt` |
 | MEGA-GDD-113 | P1 | GAP | NIL UX · committed/reserved/remaining breakdown | GDD ledger fields; hub shows pool remaining strip without full three-field header everywhere. | `RecruitingHubScreen.kt`, `NilBudgetLedger.kt` |
-| MEGA-GDD-114 | P1 | GAP | NIL · School hub optional read-only cycle summary | Not on `SchoolHubOverviewCard` as GDD optional surface. | `SchoolHubOverviewCard.kt` |
+| MEGA-GDD-114 | P1 | SHIP | NIL · School hub optional read-only cycle summary | School hub overview shows read-only pool/remaining via `SchoolHubNilCycleSummaryPolicy`. | `SchoolHubNilCycleSummaryPolicy.kt`, `SchoolHubRepository.kt` |
 | MEGA-GDD-115 | P1 | GAP | Recruiting · 50% carryover + 1.5× crunch weeks 2–5 | Core grant math PASS in tests; undermined when hub uses demo pool (MEGA-GDD-111). | `RecruitingWeekGrant.kt`, `balance-2026.json` |
 | MEGA-GDD-116 | P1 | GAP | Recruiting · Top 60 national ranks in-season | `NationalRecruitingRankings` falls back to demo pool. | `NationalRecruitingRankings.kt` |
 | MEGA-GDD-117 | P2 | GAP | Recruiting · geography breadth in seeder | Seeder uses 11 stub states—not pack-driven national pipeline. | `IncomingClassSeeder.kt` `states` |
@@ -213,7 +213,7 @@
 | MEGA-GDD-120 | P1 | GAP | Carousel · user accept extension / interview offers | Partial flows on coach card; not full renegotiate/resign matrix. | `HeadCoachCardScreen.kt`, `coach-card.md` |
 | MEGA-GDD-121 | P1 | PASS | Unemployed · league keeps simming; job center offers | `JobCenterEngine.generateOffers`, employed vs unemployed routing. | `JobCenterEngine.kt`, `CoachEmploymentRepository.kt` |
 | MEGA-GDD-122 | P1 | GAP | Unemployed · watch any game while jobless | Employment gate on shell not fully audited for spectate-only mode. | `DynastyLaunch.kt`, `JobCenterScreen.kt` |
-| MEGA-GDD-123 | P1 | GAP | Staff · 4th assistant slot when prestige ≥ 85 | `StaffRosterBootstrap` policy—verify UI exposes 4th slot at threshold. | `StaffRosterBootstrap.kt`, `SchoolStaffTabPanel.kt` |
+| MEGA-GDD-123 | P1 | SHIP | Staff · 4th assistant slot when prestige ≥ 85 | Staff tab prestige-gated fourth-slot messaging matches bootstrap threshold. | `StaffFourthAssistantSlotPolicy.kt`, `SchoolStaffTabPanel.kt` |
 | MEGA-GDD-124 | P2 | GAP | Staff · GA→assistant after 2 seasons | Promotion path not evident in staff market sim grep. | grep `graduate assistant` / `GA` under `android/` |
 | MEGA-GDD-125 | P1 | GAP | Coach skills · Sunday in-season point grants + auto-spend priority | Notification feed tier exists; full priority tree per `coach-card.md` shallow. | `NotificationFeedComposer.kt`, `DynastyAutomationScreen.kt` |
 

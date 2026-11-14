@@ -44,6 +44,7 @@ import dev.novux.dynasty.cbb.core.dashboard.DashboardTask
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskGate
 import dev.novux.dynasty.cbb.core.preseason.PreseasonFeatureTaskCompletionPolicy
 import dev.novux.dynasty.cbb.core.preseason.PreseasonStartGate
+import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskCompletenessPolicy
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskId
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskProgress
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
@@ -328,6 +329,15 @@ fun PreseasonScreen(
             text = stringResource(R.string.preseason_checklist_hint),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            text = stringResource(
+                R.string.preseason_tasks_progress,
+                PreseasonTaskCompletenessPolicy.completedCount(taskProgress),
+                PreseasonTaskCompletenessPolicy.requiredCount,
+            ),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
         )
         Text(
             text = stringResource(R.string.preseason_task_order_hint),

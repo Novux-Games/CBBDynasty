@@ -19,4 +19,5 @@ data class SchoolHubOverview(
     /** User school only — program academics grade 0–100 ([MEGA-GDD-033]). */
     val programAcademicsGrade: Int? = null,
     val recruitingBudgetMultiplier: Double? = null,
+    val nilCycleSummary: SchoolHubNilCycleSummary? = null,
 )

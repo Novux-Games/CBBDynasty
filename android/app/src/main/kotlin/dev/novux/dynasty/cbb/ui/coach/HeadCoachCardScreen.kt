@@ -33,6 +33,7 @@ import dev.novux.dynasty.cbb.core.coach.contract.HeadCoachContractEngine
 import dev.novux.dynasty.cbb.core.coach.contract.HeadCoachExtensionOffer
 import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentStatus
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
+import dev.novux.dynasty.cbb.core.coach.security.HeadCoachCarouselContractPolicy
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillBranch
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointState
 import dev.novux.dynasty.cbb.core.coach.card.deep.CoachCardDeepTabsSnapshot
@@ -249,9 +250,12 @@ private fun HeadCoachOverviewTab(
         }
     CoachOverviewAchievementsCard(achievements = overviewAchievements)
     userCoachSecurity?.let { security ->
+        @Suppress("unused")
+        val qaContract = HeadCoachCarouselContractPolicy.MEGA_ID
         JobSecurityMeter(
             snapshot = security,
-            showFactorDetails = false,
+            showFactorDetails = HeadCoachCarouselContractPolicy
+                .showJobSecurityFactorDetailsForUserCoach(isUserCoach),
             onNavigateToContract = onOpenContractTab,
         )
     }
