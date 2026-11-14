@@ -551,6 +551,11 @@ fun OffseasonScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
+                    text = stringResource(R.string.offseason_ai_recruit_batch_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Text(
                     text = stringResource(R.string.offseason_shell_placeholder),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

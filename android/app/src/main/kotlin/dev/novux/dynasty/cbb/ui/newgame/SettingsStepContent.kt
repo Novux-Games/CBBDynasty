@@ -18,10 +18,22 @@ import dev.novux.dynasty.cbb.core.save.NewGameWizardSeasonPolicy
 @Composable
 fun SettingsStepContent(
     settings: NewGameDynastySettings,
+    activePackLabel: String,
     onChange: (NewGameDynastySettings) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
+        Text(
+            text = stringResource(R.string.new_wizard_active_pack, activePackLabel),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 8.dp),
+        )
+        Text(
+            text = stringResource(R.string.new_wizard_pack_selection_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(bottom = 12.dp),
+        )
         Text(
             text = stringResource(
                 R.string.new_settings_starting_season,

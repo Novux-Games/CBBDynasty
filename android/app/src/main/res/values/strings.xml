@@ -96,6 +96,8 @@
     <string name="new_settings_unlimited_age">Unlimited coach age</string>
     <string name="new_settings_unlimited_age_summary">When off, head coach retires at 75.</string>
     <string name="new_settings_import_stub">After you start a dynasty, open Home → Settings → Import identity pack to load a custom JSON or TXT overlay (attestation required).</string>
+    <string name="new_wizard_active_pack">Active league: %1$s</string>
+    <string name="new_wizard_pack_selection_hint">School choices use this pack until you import another identity pack from dynasty settings.</string>
     <string name="new_settings_starting_season">First season %1$s — you start in offseason week 1.</string>
     <string name="new_step_coach_title">Coach</string>
     <string name="new_step_coach_subtitle">Name, age, and appearance presets.</string>
@@ -178,6 +180,7 @@
     <string name="offseason_shell_season">Season %1$s</string>
     <string name="offseason_shell_placeholder">Use optional tasks and the recruiting hub for this week.</string>
     <string name="offseason_shell_chrome_hint">Same bottom tabs and menu as in-season — calendar and news stay available.</string>
+    <string name="offseason_ai_recruit_batch_hint">Advancing a week simulates every program\'s recruiting pass while you are away.</string>
     <string name="offseason_dashboard_week3_body">Portal window week 3: finalize interest on transfer targets and balance class needs before Week 4 crunch.</string>
     <string name="offseason_dashboard_week4_body">Portal window week 4: signing crunch approaches — lock key targets or keep points for Signing Day.</string>
     <string name="offseason_dashboard_week5_body">Portal window week 5 — last week of portal recruiting. Close gaps on scholarships and portal offers before Signing Day.</string>
@@ -580,6 +583,8 @@
     <string name="recruiting_hub_title">Recruiting</string>
     <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
     <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>
+    <string name="recruiting_carryover_cadence_hint">Unspent points carry over at 50%%. Offseason weeks 2–5 add a recruiting crunch multiplier.</string>
+    <string name="recruiting_nil_breakdown_line">NIL ledger — committed %1$s · reserved %2$s · remaining %3$s</string>
     <string name="recruiting_academics_multiplier">Program academics %1$d — weekly pool ×%2$.2f</string>
     <string name="recruiting_recommended_summary">%1$d targets look realistic for your program · showing %2$d on Recommended</string>
     <string name="recruiting_row_meta">%1$d★ %2$s · %3$s · Grade %4$s</string>

@@ -21,6 +21,7 @@ import dev.novux.dynasty.cbb.core.schedule.PreseasonScheduleConstants
 import dev.novux.dynasty.cbb.core.pack.TeamDisplayOverlay
 import dev.novux.dynasty.cbb.data.league.LeagueScheduleRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
+import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import kotlinx.coroutines.flow.first
 
@@ -34,7 +35,13 @@ class PreseasonScheduleRepository(
     private val database: DynastyDatabase,
     private val tournamentInvitesRepository: TournamentInvitesRepository,
     private val leagueScheduleRepository: LeagueScheduleRepository,
+    private val recruitingEconomyRepository: RecruitingEconomyRepository,
 ) {
+    /** [TournamentInvitesLivePrestigePolicy] */
+    private suspend fun liveProgramPrestige(dynastyId: String): Int {
+        val packId = database.dynastyMetadataDao().getById(dynastyId)?.packId
+        return recruitingEconomyRepository.resolveProgramPrestigeForDynasty(dynastyId, packId)
+    }
     suspend fun loadExhibitionCount(dynastyId: String, seasonIndex: Int): Int =
         context.preseasonScheduleStore.data.first()[exhibitionKey(dynastyId, seasonIndex)] ?: 0
 
@@ -92,7 +99,11 @@ class PreseasonScheduleRepository(
         val coach = database.dynastyCoachDao().getByDynastyId(dynastyId) ?: return null
         val userTeam = packRepository.activeSession().index.team(coach.userTeamId) ?: return null
         val conference = packRepository.activeSession().index.conference(userTeam.conferenceId) ?: return null
-        val inviteState = tournamentInvitesRepository.loadState(dynastyId, seasonIndex)
+        val inviteState = tournamentInvitesRepository.loadState(
+            dynastyId,
+            seasonIndex,
+            liveProgramPrestige(dynastyId),
+        )
         return RegularSeasonScheduleBuilderUxPolicy.BuilderContext(
             budget = inviteState.slotBudget,
             conferenceTemplateGames = conference.leagueGameCount,
@@ -106,7 +117,11 @@ class PreseasonScheduleRepository(
     ): RegularSeasonScheduleSolveResult = when (val plan = solveRegularSeasonPlan(dynastyId, seasonIndex)) {
         null -> RegularSeasonScheduleSolveResult.MissingContext
         else -> {
-            val budget = tournamentInvitesRepository.loadState(dynastyId, seasonIndex).slotBudget
+            val budget = tournamentInvitesRepository.loadState(
+                dynastyId,
+                seasonIndex,
+                liveProgramPrestige(dynastyId),
+            ).slotBudget
             val validation = PreseasonScheduleValidator.validate(plan, budget)
             if (!validation.isValid) {
                 RegularSeasonScheduleSolveResult.Invalid(validation)
@@ -133,7 +148,8 @@ class PreseasonScheduleRepository(
             .filter { it.conferenceId == userTeam.conferenceId && it.teamId != userTeam.teamId }
         val nonConf = index.allTeamDisplays()
             .filter { it.conferenceId != userTeam.conferenceId }
-        val inviteState = tournamentInvitesRepository.loadState(dynastyId, seasonIndex)
+        val prestige = liveProgramPrestige(dynastyId)
+        val inviteState = tournamentInvitesRepository.loadState(dynastyId, seasonIndex, prestige)
         val budget = inviteState.slotBudget
         val exhibitions = loadExhibitionCount(dynastyId, seasonIndex)
         val exhibitionStubs = ExhibitionScheduleUxPolicy.draftsToStubs(loadExhibitionDrafts(dynastyId, seasonIndex))

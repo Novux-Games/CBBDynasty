@@ -377,6 +377,11 @@ fun RecruitingHubScreen(
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
             )
+            Text(
+                text = stringResource(R.string.recruiting_carryover_cadence_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
             row.programAcademicsGrade?.let { grade ->
                 Text(
                     text = stringResource(
@@ -411,6 +416,16 @@ fun RecruitingHubScreen(
                     ),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = stringResource(
+                        R.string.recruiting_nil_breakdown_line,
+                        currency.format(nilRow.nilCommittedUsd),
+                        currency.format(nilRow.nilReservedUsd),
+                        currency.format(nilRow.nilRemainingUsd),
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
                     text = stringResource(R.string.recruiting_nil_budget_tap_hint),

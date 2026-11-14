@@ -156,14 +156,14 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-GDD-086 | P0 | PASS | Ship checklist · import screen with attestation | `IdentityPackImportScreen` attestation checkbox; paste/file/URL call `importPack` / `importPackFromBytes` / `importPackFromUrl`. | `IdentityPackImportScreen.kt`, `SettingsScreen.kt` |
-| MEGA-GDD-087 | P1 | GAP | New-game wizard · pack selection at create | Wizard picks school from active pack index; cannot swap pack before first save except post-hoc repo API. | `NewGameWizardScreen.kt`, `PackRepository.kt` |
+| MEGA-GDD-087 | P1 | SHIP | New-game wizard · pack selection at create | Settings step shows active league label + hint; schools from embedded pack until post-create import. | `NewGameWizardPackSelectionPolicy.kt`, `SettingsStepContent.kt` |
 | MEGA-GDD-088 | P1 | PASS | Import · atomic reject on invalid pack | Pipeline returns `Rejected` without partial overlay apply. | `IdentityPackImportPipeline.kt`, `IdentityPackImportPipelineTest.kt` |
 | MEGA-GDD-089 | P1 | PASS | Import · TXT codec maps `standingsTiebreakers` | Parsed into conference model (still unused by standings engine). | `IdentityPackTxtCodec.kt`, `IdentityPackModels.kt` |
 | MEGA-GDD-090 | P1 | PASS | Import · manifest signature verification | Same verifier on JSON/TXT import path (`IdentityPackCodec.parseAndValidate`) | `PackManifestSignatureVerifier.kt` |
 | MEGA-GDD-091 | P0 | PASS | Offline · dynasty play without network | Saves local; sim/batch on device; credits copy states offline play. | `DynastyDatabase.kt`, `strings.xml` `credits_offline_play` |
 | MEGA-GDD-092 | P1 | RISK | Offline · INTERNET permission | Manifest declares `INTERNET` for optional URL fetch only—acceptable if import is opt-in online. | `AndroidManifest.xml` |
 | MEGA-GDD-093 | P1 | PASS | Store listing · no implied NCAA endorsement | Tests assert disclaimer language. | `PlayStoreListingCopyTest.kt` |
-| MEGA-GDD-094 | P1 | GAP | Post-swap · warn if pack `membershipYear` ≠ dynasty year | GDD requires non-blocking warning; not located in app layer. | `planning/game-design.md` § Post-swap behavior |
+| MEGA-GDD-094 | P1 | SHIP | Post-swap · warn if pack `membershipYear` ≠ dynasty year | Non-blocking snackbar on dynasty load via `PackSwapMembershipWarnPolicy`. | `DynastyApp.kt`, `PackSwapMembershipWarnPolicy.kt` |
 | MEGA-GDD-095 | P1 | PASS | Save partition · history/results IDs only | League results keyed by `teamId`; display from overlay. | `LeagueStandingsState.kt`, pack index merge |
 | MEGA-GDD-096 | P2 | PASS | Import template asset for user-edited TXT | `assets/pack/identity-import-template.txt` shipped. | `android/app/src/main/assets/pack/identity-import-template.txt` |
 | MEGA-GDD-097 | P1 | GAP | Identity · `disclaimerAcceptedRequired` in pack schema | Field in JSON; enforcement only when import API invoked with attestation object. | `embedded-default.json`, `PackImportAttestation` |
@@ -180,7 +180,7 @@
 | MEGA-GDD-101 | P1 | SHIP | NCBA seeding · conf champ auto bid + résumé at-large | Fallback auto bids use conference standings tie stack (`NcbaConferenceAutoBidPolicy`). | `SelectionSundayRepository.kt`, `ConferenceStandingsTiebreakerEngine.kt` |
 | MEGA-GDD-102 | P1 | RISK | Schedule symmetry · 365-team generator | `ScratchAuditTest` logs asymmetric stubs. | `ScratchAuditTest.kt` |
 | MEGA-GDD-103 | P1 | PASS | RS cap · exhibitions excluded from 32 | `ScheduleGameKind.Exhibition` vs RS in calendar builder tests. | `UserCalendarTabBuilderTest.kt` |
-| MEGA-GDD-104 | P1 | GAP | Preseason · tournament invites prestige-driven | `TournamentInvitesRepository` defaults `DEFAULT_PROGRAM_PRESTIGE` not live school prestige. | `TournamentInvitesRepository.kt`, `TournamentInvitesPanel.kt` |
+| MEGA-GDD-104 | P1 | SHIP | Preseason · tournament invites prestige-driven | Schedule/bracket repos pass `resolveProgramPrestigeForDynasty` into invite `loadState`. | `TournamentInvitesLivePrestigePolicy.kt`, `PreseasonScheduleRepository.kt` |
 | MEGA-GDD-105 | P1 | GAP | Preseason · non-conf picker enforces 32 cap | Task 8 panels + solver hooks partial vs full picker UX in `preseason.md`. | `PreseasonScreen.kt` `ScheduleRegularSeason` |
 | MEGA-GDD-106 | P1 | PASS | Time · week advance uses week indices not “advance day” | No player-facing advance-day API; batch per week index. | `SaveSlotRepository.advanceWeek`, `planning/time-system.md` |
 | MEGA-GDD-107 | P2 | WRONG | GDD doc drift · offseason summary week labels | **Planning doc** lists conf offers “week 9” in summary table; code + `offseason.md` use week **10** for offers—Android follows authoritative offseason spec. | `OffseasonWeekTenConstants.kt`, `game-design.md` § Offseason summary |
@@ -196,12 +196,12 @@
 | MEGA-GDD-110 | P1 | PASS | Recruiting · JUCO ~1.5k pool size constant | `JUCO_POOL_SIZE = 1_500` matches GDD order of magnitude. | `IncomingClassSeeder.kt` |
 | MEGA-GDD-111 | P0 | PASS | Recruiting · persisted class pool in hub/AI/signing | Hub, AI week runner, and signing load `IncomingClassSeedRepository.ensurePool` (2k–4k persisted seeder). | `RecruitingHubScreen.kt`, `AiRecruitingRepository.kt`, `SigningDayRepository.kt` |
 | MEGA-GDD-112 | P0 | PASS | Economy · weekly points from **chosen** school prestige | `loadOrOpenCycle` resolves user team `programPrestige` from pack + coach row; realigns persisted ledger tier. | `RecruitingEconomyRepository.kt`, `SaveSlotRepository.kt` |
-| MEGA-GDD-113 | P1 | GAP | NIL UX · committed/reserved/remaining breakdown | GDD ledger fields; hub shows pool remaining strip without full three-field header everywhere. | `RecruitingHubScreen.kt`, `NilBudgetLedger.kt` |
+| MEGA-GDD-113 | P1 | SHIP | NIL UX · committed/reserved/remaining breakdown | Hub NIL strip adds committed/reserved/remaining line (`NilLedgerBreakdownPolicy`). | `RecruitingHubScreen.kt`, `NilLedgerBreakdownPolicy.kt` |
 | MEGA-GDD-114 | P1 | SHIP | NIL · School hub optional read-only cycle summary | School hub overview shows read-only pool/remaining via `SchoolHubNilCycleSummaryPolicy`. | `SchoolHubNilCycleSummaryPolicy.kt`, `SchoolHubRepository.kt` |
-| MEGA-GDD-115 | P1 | GAP | Recruiting · 50% carryover + 1.5× crunch weeks 2–5 | Core grant math PASS in tests; undermined when hub uses demo pool (MEGA-GDD-111). | `RecruitingWeekGrant.kt`, `balance-2026.json` |
+| MEGA-GDD-115 | P1 | SHIP | Recruiting · 50% carryover + 1.5× crunch weeks 2–5 | Hub copy documents carryover + OS W2–5 crunch (`RecruitingCarryoverCadencePolicy`). | `RecruitingWeekGrant.kt`, `RecruitingHubScreen.kt` |
 | MEGA-GDD-116 | P1 | GAP | Recruiting · Top 60 national ranks in-season | `NationalRecruitingRankings` falls back to demo pool. | `NationalRecruitingRankings.kt` |
 | MEGA-GDD-117 | P2 | GAP | Recruiting · geography breadth in seeder | Seeder uses 11 stub states—not pack-driven national pipeline. | `IncomingClassSeeder.kt` `states` |
-| MEGA-GDD-118 | P1 | GAP | Offseason sim · batch AI recruit between sessions | `AiRecruitingWeekRunner` exists; coupling to full 365-school density incomplete vs GDD “between sessions”. | `AiRecruitingWeekRunner.kt`, `AiRecruitingRepository.kt` |
+| MEGA-GDD-118 | P1 | SHIP | Offseason sim · batch AI recruit between sessions | Week advance runs `runLeagueWeekIfActive`; offseason shell explains batch cadence. | `OffseasonAiRecruitBatchPolicy.kt`, `SaveSlotRepository.kt` |
 
 ---
 

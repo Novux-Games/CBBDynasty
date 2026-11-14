@@ -199,7 +199,7 @@ fun DynastyApp(
                 }
                 val activeYear = app.packRepository.activeSession().index.membershipYear
                 if (
-                    dev.novux.dynasty.cbb.core.pack.PackMembershipYearPolicy.isMismatch(
+                    dev.novux.dynasty.cbb.core.pack.PackSwapMembershipWarnPolicy.isMismatch(
                         signedYear,
                         activeYear,
                     )

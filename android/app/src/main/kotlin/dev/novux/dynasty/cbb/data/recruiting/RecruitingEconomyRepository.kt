@@ -92,13 +92,16 @@ class RecruitingEconomyRepository(
             )
         }
     }
-    suspend fun resolveUserProgramPrestige(dynasty: LoadedDynasty): Int {
-        val coach = database.dynastyCoachDao().getByDynastyId(dynasty.dynastyId) ?: return DEFAULT_PROGRAM_PRESTIGE
-        val packId = dynasty.summary.packId ?: DynastySchema.DEFAULT_PACK_ID
-        val session = packRepository.restorePack(packId)
+    suspend fun resolveProgramPrestigeForDynasty(dynastyId: String, packId: String?): Int {
+        val coach = database.dynastyCoachDao().getByDynastyId(dynastyId) ?: return DEFAULT_PROGRAM_PRESTIGE
+        val effectivePackId = packId ?: DynastySchema.DEFAULT_PACK_ID
+        val session = packRepository.restorePack(effectivePackId)
         val team = session.index.team(coach.userTeamId) ?: return DEFAULT_PROGRAM_PRESTIGE
         return team.programPrestige
     }
+
+    suspend fun resolveUserProgramPrestige(dynasty: LoadedDynasty): Int =
+        resolveProgramPrestigeForDynasty(dynasty.dynastyId, dynasty.summary.packId)
 
     suspend fun loadOrOpenCycle(
         dynasty: LoadedDynasty,

@@ -58,6 +58,7 @@ fun NewGameWizardScreen(
     var signing by remember { mutableStateOf(false) }
     var wizardRecruitingEconomy by remember { mutableStateOf<BalanceRecruitingEconomy?>(null) }
     var wizardNilTables by remember { mutableStateOf<BalanceNilAnnualPoolTables?>(null) }
+    var activePackLabel by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         val shipped = balanceRulesetRepository.ensureShippedDefaultLoaded()
@@ -79,6 +80,7 @@ fun NewGameWizardScreen(
         schools = session.index.allTeamDisplays()
         conferences = session.index.allConferenceDisplays()
         packId = session.packId
+        activePackLabel = session.leagueDisplayName
     }
 
     if (!slotGatePassed) {
@@ -145,6 +147,7 @@ fun NewGameWizardScreen(
                         )
                         NewGameStep.Settings -> SettingsStepContent(
                             settings = draft.dynastySettings,
+                            activePackLabel = activePackLabel,
                             onChange = { draft = draft.copy(dynastySettings = it) },
                         )
                         NewGameStep.School -> {

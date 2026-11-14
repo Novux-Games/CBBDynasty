@@ -342,6 +342,7 @@ class DynastyApplication : Application() {
             packRepository,
             tournamentInvitesRepository,
             database,
+            recruitingEconomyRepository,
         )
         leagueScheduleRepository = LeagueScheduleRepository(applicationContext, packRepository)
         preseasonScheduleRepository = PreseasonScheduleRepository(
@@ -350,6 +351,7 @@ class DynastyApplication : Application() {
             database,
             tournamentInvitesRepository,
             leagueScheduleRepository,
+            recruitingEconomyRepository,
         )
         newsFeedRepository = NewsFeedRepository(applicationContext, incomingClassSeedRepository)
         leagueWeekBatchRepository = LeagueWeekBatchRepository(
