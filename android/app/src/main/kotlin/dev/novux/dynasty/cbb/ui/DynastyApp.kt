@@ -77,6 +77,8 @@ import dev.novux.dynasty.cbb.ui.awards.AwardsHubScreen
 import dev.novux.dynasty.cbb.ui.awards.ConferenceOption
 import dev.novux.dynasty.cbb.ui.news.NewsHubScreen
 import dev.novux.dynasty.cbb.ui.seasonreview.SeasonReviewScreen
+import dev.novux.dynasty.cbb.core.shell.SplashBootstrapPhase
+import dev.novux.dynasty.cbb.core.shell.SplashReadyGatePolicy
 import dev.novux.dynasty.cbb.ui.shell.SplashScreen
 import dev.novux.dynasty.cbb.ui.shell.StudioScreen
 import dev.novux.dynasty.cbb.ui.theme.DynastyTheme
@@ -124,6 +126,29 @@ fun DynastyApp(
             val snackbarHostState = remember { SnackbarHostState() }
             var continueLoadFailedSlot by remember { mutableStateOf<Int?>(null) }
             var continueLoading by remember { mutableStateOf(false) }
+            var splashPhase by remember { mutableStateOf(SplashBootstrapPhase.Loading) }
+            var splashLoadAttempt by remember { mutableIntStateOf(0) }
+            val dynastyApp = context.requireDynastyApplication()
+            LaunchedEffect(splashLoadAttempt) {
+                splashPhase = SplashBootstrapPhase.Loading
+                try {
+                    val session = withContext(Dispatchers.IO) {
+                        saveSlotRepository.ensureInitialized()
+                        dynastyApp.packRepository.ensureEmbeddedLoaded()
+                    }
+                    val ready = SplashReadyGatePolicy.isReady(
+                        packTeamCount = session.index.allTeamDisplays().size,
+                        saveSlotsInitialized = true,
+                    )
+                    splashPhase = if (ready) {
+                        SplashBootstrapPhase.Ready
+                    } else {
+                        SplashBootstrapPhase.Error
+                    }
+                } catch (_: Exception) {
+                    splashPhase = SplashBootstrapPhase.Error
+                }
+            }
             var recruitingLaunchTab by remember {
                 mutableStateOf(RecruitingHubDefaults.defaultTab)
             }
@@ -309,6 +334,7 @@ fun DynastyApp(
                 }
                 composable(AppRoute.Splash.route) {
                     SplashScreen(
+                        bootstrapPhase = splashPhase,
                         onTapToPlay = {
                             navController.navigate(AppRoute.Home.route) {
                                 popUpTo(navController.graph.startDestinationId) {
@@ -316,6 +342,7 @@ fun DynastyApp(
                                 }
                             }
                         },
+                        onRetryLoad = { splashLoadAttempt++ },
                     )
                 }
                 composable(AppRoute.Home.route) {

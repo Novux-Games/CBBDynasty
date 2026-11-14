@@ -39,7 +39,7 @@ import dev.novux.dynasty.cbb.core.dashboard.OffseasonDashboardContext
 import dev.novux.dynasty.cbb.core.dashboard.DashboardAdvanceGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonOptionalDashboardTasks
-import dev.novux.dynasty.cbb.core.dashboard.OffseasonPortalOptionalNudgeResolver
+import dev.novux.dynasty.cbb.core.dashboard.PortalPipelineEntrantDashboardPolicy
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonPortalOptionalTasksPolicy
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonWeekSevenOptionalDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonWeekNineOptionalDashboardTasks
@@ -251,7 +251,7 @@ fun OffseasonScreen(
                 packIndex.team(id)?.homeState?.takeIf { it.isNotBlank() }?.let(::add)
             }
         }
-        portalPipelineSpotlight = OffseasonPortalOptionalNudgeResolver.pipelineSpotlight(
+        portalPipelineSpotlight = PortalPipelineEntrantDashboardPolicy.spotlight(
             packIndex,
             portalEntrants,
             pipelineStates.ifEmpty { setOf("OH") },

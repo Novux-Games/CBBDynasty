@@ -292,7 +292,7 @@
 | MEGA-RECR-145 | P0 | PASS | In-season drip nudge | `SpendRecruitingPoints` optional card when ledger `pointsAvailable > 0` in RS. | `InSeasonRecruitingOptionalDashboardTasks.kt` |
 | MEGA-RECR-146 | P1 | PASS | Watchlist threshold tasks | `DashboardTaskId` offer / re-engage / Top 60 / rival commit + `InSeasonRecruitingNudgeResolver`. | `DashboardTask.kt`, shell watchlist |
 | MEGA-RECR-147 | P1 | PASS | Top 60 movement nudge | `RecruitingWatchlistTop60RankRepository` + `RecruitingTop60MovementPolicy` on watchlist rank delta. | `DynastyShellScreen` |
-| MEGA-RECR-148 | P1 | GAP | Portal pipeline entrant task | `OffseasonOptionalDashboardTasks` has portal window flavor; **pipeline entrant** `{Name} in portal` trigger not built. | `transfer-portal.md` dashboard table |
+| MEGA-RECR-148 | P1 | SHIP | Portal pipeline entrant task | `PortalPipelineEntrantDashboardPolicy` spotlights pipeline match → `PortalPipelineEntrant` optional task. | `OffseasonScreen`, `OffseasonOptionalDashboardTasks` |
 | MEGA-RECR-149 | P2 | PASS | Signing required trio | Rankings + positions + hard sign task ids emitted on OS W6 — PASS shell. | `SigningDayRequiredDashboardTasks` |
 | MEGA-RECR-150 | P2 | GAP | Task complete detection | Optional recruiting complete-on-action not implemented — no hub spend listener marks task done. | `dashboard-tasks.md` |
 | MEGA-RECR-151 | P2 | GAP | Dismiss / skip week hiding | Offseason portal dismiss flags exist; in-season recruiting dismiss ids never emitted. | RECR-047 |
@@ -310,7 +310,7 @@
 | MEGA-RECR-156 | P2 | GAP | AI portal slice | Runner HS/JUCO Recommended only — portal entrants excluded (RECR-067). | `AiRecruitingWeekRunner` |
 | MEGA-RECR-157 | P2 | PASS | Auto-maintain flag | Respects `automation.recruitingAutoMaintain` when hub open — PASS. | `AiRecruitingRepository` |
 | MEGA-RECR-158 | P2 | RISK | AI + 365 programs lag | `AiLeagueProgramGenerator.demoLeague` + week batch in same advance as user sim — perf budget unrelated to recruiting pool size until real pool wired. | `LeagueWeekBatchPerformanceBudget` |
-| MEGA-RECR-159 | P1 | GAP | Same interest pipeline | AI should use `RecruitInterestEngine` weights; runner uses simplified Recommended sort — parity gap. | `AiRecruitingWeekRunner` |
+| MEGA-RECR-159 | P1 | SHIP | Same interest pipeline | `AiRecruitingInterestParityPolicy` routes AI targets through `RecommendedRecruitList`. | `AiRecruitingWeekRunner` |
 | MEGA-RECR-160 | P2 | GAP | Sim-week confirm line copy | Advance confirmation should mention recruiting auto-maintain spend estimate — partial via sim-week input only. | `SaveSlotRepository` |
 
 ---
