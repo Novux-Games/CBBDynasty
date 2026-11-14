@@ -276,7 +276,7 @@ fun DynastyShellScreen(
         recruiting = recruitingDashContext,
     )
     val optionalTaskDismissKey: (DashboardTask) -> String = { task ->
-        DashboardTaskDismissal.key(position, task.id)
+        DashboardTaskDismissal.key(position, task)
     }
 
     LaunchedEffect(loaded.dynastyId) {
@@ -371,7 +371,12 @@ fun DynastyShellScreen(
         )
     }
 
+    // shellDashboardHydrationEffect — [DisciplineDashboardFirstPaint.SHELL_HYDRATION_EFFECT_MARKER] ([MEGA-FRAME-104])
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint, showNotificationFeed) {
+        disciplinePending = disciplineRepository.loadState(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        ).pending
         teamChemistry = chemistryRepository.loadState(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
@@ -1146,6 +1151,7 @@ fun DynastyShellScreen(
                 }
                 Button(
                     onClick = {
+                        if (weekAdvanceInProgress || dialogAdvanceInProgress) return@Button
                         scope.launch {
                             if (DashboardAdvanceGate.blocksWeekAdvance(dashboardTasks.required)) {
                                 return@launch

@@ -82,6 +82,8 @@ data class DashboardTask(
     val formatArgs: List<Int> = emptyList(),
     val stringFormatArgs: List<String> = emptyList(),
     val preseasonTaskId: PreseasonTaskId? = null,
+    /** Disambiguates repeated task ids in one week (e.g. multiple games — [MEGA-FRAME-106]). */
+    val dismissScopeKey: String? = null,
 )
 
 object DashboardAdvanceGate {

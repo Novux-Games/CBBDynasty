@@ -20,6 +20,7 @@ class DisciplineDashboardSheetPathTest {
         assertTrue(sheet.contains("DisciplineDecisionBottomSheet"))
         assertTrue(screen.contains("DisciplineDecisionBottomSheet"))
         assertTrue(screen.contains("DisciplineDashboardFirstPaint.SHELL_DEDICATED_EFFECT_MARKER"))
+        assertTrue(screen.contains(DisciplineDashboardFirstPaint.SHELL_HYDRATION_EFFECT_MARKER))
         assertTrue(screen.contains("DashboardRequiredTasksPanel"))
         assertTrue(screen.contains("disciplineSheetTarget"))
     }

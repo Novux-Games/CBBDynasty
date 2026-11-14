@@ -35,6 +35,9 @@ object SimWeekAdvanceResolver {
         if (input.portalRecruitingWeekOpen) {
             lines.add(SimWeekConfirmationLine(SimWeekConfirmationLineKind.PortalRecruitingWeek))
         }
+        if (input.portalRecruitingWindowClosed) {
+            lines.add(SimWeekConfirmationLine(SimWeekConfirmationLineKind.PortalRecruitingWindowClosed))
+        }
         if (OffseasonPortalSimWeekPolicy.showPortalOptionalNudgeLine(input)) {
             lines.add(
                 SimWeekConfirmationLine(
@@ -74,6 +77,16 @@ object SimWeekAdvanceResolver {
         if (input.recruitingHubOpen || input.portalRecruitingWeekOpen) {
             lines.add(SimWeekConfirmationLine(SimWeekConfirmationLineKind.LeagueRecruitingBatch))
         }
+        if (input.offseasonMilestoneAdvance) {
+            if (lines.none { it.kind == SimWeekConfirmationLineKind.SimpleAdvance }) {
+                lines.add(
+                    SimWeekConfirmationLine(
+                        SimWeekConfirmationLineKind.SimpleAdvance,
+                        formatArgs = emptyList(),
+                    ),
+                )
+            }
+        }
         if (lines.isEmpty()) {
             lines.add(
                 SimWeekConfirmationLine(
@@ -86,6 +99,8 @@ object SimWeekAdvanceResolver {
             willAutoMaintain ||
             input.unresolvedOptionalTaskCount > 0 ||
             input.portalRecruitingWeekOpen ||
+            input.portalRecruitingWindowClosed ||
+            input.offseasonMilestoneAdvance ||
             input.injuredPlayersTicking > 0 ||
             input.simulatesLeagueWeekBatch
         return SimWeekConfirmation(

@@ -142,6 +142,10 @@ class DynastyApplication : Application() {
     lateinit var dashboardLastGameRepository: dev.novux.dynasty.cbb.data.dashboard.DashboardLastGameRepository
         private set
 
+    lateinit var dashboardOptionalDismissRepository:
+        dev.novux.dynasty.cbb.data.dashboard.DashboardOptionalDismissRepository
+        private set
+
     lateinit var dynastyAutomationRepository: dev.novux.dynasty.cbb.data.settings.DynastyAutomationRepository
         private set
 
@@ -304,6 +308,8 @@ class DynastyApplication : Application() {
             packRepository,
             database,
         )
+        dashboardOptionalDismissRepository =
+            dev.novux.dynasty.cbb.data.dashboard.DashboardOptionalDismissRepository(applicationContext)
         recruitingWatchlistRepository = RecruitingWatchlistRepository(applicationContext)
         recruitingWatchlistTop60RankRepository = RecruitingWatchlistTop60RankRepository(applicationContext)
         recruitingLostProspectsRepository = RecruitingLostProspectsRepository(applicationContext)

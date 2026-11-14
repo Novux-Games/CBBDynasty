@@ -188,12 +188,12 @@
 | MEGA-FRAME-098 | SHIP | Preseason required deep link | Jump chips + `navigatePreseasonDashboardTask` scroll/hub — no duplicate full task card panel | `PreseasonScreen.kt` |
 | MEGA-FRAME-099 | SHIP | `PreseasonChecklist` deep link | Each task has unique `DashboardDeepLink` + `preseasonTaskId` on `DashboardTask` | `PreseasonTaskDeepLinks.kt` |
 | MEGA-FRAME-100 | SHIP | Optional dismiss scope | Scoped dismiss keys `${phase}:${week}:${taskId}` via `DashboardTaskDismissal` on shell + offseason panels | `DashboardOptionalTasksPanel`, `DashboardTaskDismissal.kt` |
-| MEGA-FRAME-101 | GAP | Offseason dismiss persistence | `dismissedTasks` is `remember` only — not saved; week advance does not reset but **process death** resurrects nags user dismissed | `OffseasonScreen.kt` |
+| MEGA-FRAME-101 | SHIP | Offseason dismiss persistence | Scoped optional dismiss keys persisted via `DashboardOptionalDismissRepository` (DataStore) | `OffseasonScreen.kt` |
 | MEGA-FRAME-102 | SHIP | Week 1 required dashboard pattern | Required cards for pro day + transfer retention mirror panel actions | `OffseasonWeekOneRequiredDashboardTasks.kt` |
 | MEGA-FRAME-103 | SHIP | Required blocks advance core | `DashboardAdvanceGate.blocksWeekAdvance` used on shell, offseason, preseason | `DashboardAdvanceGate.kt` |
-| MEGA-FRAME-104 | GAP | Discipline task visibility | Pending discipline blocks advance in repository but task panel depends on `DisciplineRequiredDashboardTasks` wiring from load | `SaveSlotRepository.advanceDynastyWeek` early return |
+| MEGA-FRAME-104 | SHIP | Discipline task visibility | Pending discipline loaded in shell dashboard hydration effect + dedicated refresh effect | `DynastyShellScreen.kt`, `DisciplineRequiredDashboardTasks` |
 | MEGA-FRAME-105 | PASS | Signing Day panel null race | Week 6 shows `SigningDayRequiredTasksSkeleton` until `signingProgress` loads ([MEGA-QA-094]) | `OffseasonScreen.kt` |
-| MEGA-FRAME-106 | PARTIAL | In-season optional game task | Only **first** scheduled game becomes optional task when multiple user games same week | `InSeasonOptionalDashboardTasks.build` |
+| MEGA-FRAME-106 | SHIP | In-season optional game task | One optional play task per scheduled user game; `dismissScopeKey` = opponent team id | `InSeasonOptionalDashboardTasks` |
 
 ---
 
@@ -202,12 +202,12 @@
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
 | MEGA-FRAME-107 | SHIP | Unplayed game copy | Opponent in `advance_confirm_line_fast_sim` via `stringFormatArgs` | `SimWeekAdvanceDialog.kt` |
-| MEGA-FRAME-108 | GAP | Offseason lightweight confirm | Offseason advance often skips dialog when `unresolvedOptionalTaskCount == 0` even crossing **Signing Day** / roster lock — no “Advance to Offseason Week N?” | `OffseasonScreen.kt`, `SimWeekAdvanceResolver` |
-| MEGA-FRAME-109 | PARTIAL | Portal line on advance | `PortalRecruitingWeek` confirmation line when portal window open — OK; **absent** after Week 5 | `SimWeekAdvanceResolver.kt` |
+| MEGA-FRAME-108 | SHIP | Offseason lightweight confirm | `OffseasonAdvanceConfirmPolicy` forces `SimpleAdvance` dialog on milestone offseason weeks | `SimWeekAdvanceResolver`, `SaveSlotRepository` |
+| MEGA-FRAME-109 | SHIP | Portal line on advance | `PortalRecruitingWindowClosed` confirm line when portal window closed (week 6+) | `SimWeekAdvanceResolver.kt`, `SimWeekAdvanceDialog.kt` |
 | MEGA-FRAME-110 | GAP | Manual recruiting spend param | UI always calls `advanceDynastyWeek(slot)` with default **`userManualRecruitingSpent = 0`** — no hook from Recruiting hub | `DynastyShellScreen.kt`, `OffseasonScreen.kt` |
 | MEGA-FRAME-111 | PARTIAL | Advance failure UX | Discipline block shows snackbar (`WeekAdvanceBlocked`); other unreadable load paths still silent | `DynastyWeekAdvanceFeedback.kt` |
 | MEGA-FRAME-112 | SHIP | Injury tick on bye | `InjuryWeeksTickByeWeek` explains no-game week; wired via `ByeWeekPolicy` + `userOnByeWeek` | `InjuryByeAdvanceConfirmPolicy`, `ByeWeekPolicy` |
-| MEGA-FRAME-113 | GAP | Double-tap advance | No **debounce** / `enabled = false` while `scope.launch` advance in flight — duplicate week commits risk | `DynastyShellScreen` advance `Button` |
+| MEGA-FRAME-113 | SHIP | Double-tap advance | Advance `Button` ignores clicks while in-flight (`weekAdvanceInProgress` / `dialogAdvanceInProgress`) before launching coroutine | `DynastyShellScreen.kt`, `OffseasonScreen.kt` |
 | MEGA-FRAME-114 | GAP | Advance work ordering | `advanceDynastyWeek` chains checkpoint, **AI recruiting**, league batch, injuries, fatigue, chemistry, coach Sunday — all on confirm path (lag source) | `SaveSlotRepository.advanceDynastyWeek` |
 | MEGA-FRAME-115 | PARTIAL | Simple advance line | Short “Advance to {label}?” exists when no optional work — in-season still may skip if `needsDialog` false | `SimWeekAdvanceResolver.buildConfirmation` |
 | MEGA-FRAME-116 | GAP | Sim-week vs Start season | Preseason uses **Start season** CTA only — no sim-week dialog (correct) but shares heavy `startSeason` repository path without progress UI | `PreseasonSeasonStartRepository` |

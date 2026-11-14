@@ -602,6 +602,7 @@
     <string name="advance_confirm_line_league_recruiting">League programs will run their weekly recruiting pass.</string>
     <string name="advance_confirm_line_league_batch">Simulates the rest of the league’s games, NET, and polls for this week.</string>
     <string name="advance_confirm_line_portal">Transfer portal: league portal recruiting runs this week.</string>
+    <string name="advance_confirm_line_portal_closed">Transfer portal recruiting window has closed; AI programs may still finalize offers.</string>
     <string name="advance_confirm_portal_optional_nudges">Transfer portal: %1$d optional dashboard nudges will be dismissed when you advance.</string>
     <string name="advance_confirm_portal_user_auto_spend">Your program will auto-spend about %1$d recruiting points on the transfer portal recommended board.</string>
     <string name="advance_confirm_line_simple">Advance to %1$s?</string>

@@ -7,6 +7,7 @@ enum class SimWeekConfirmationLineKind {
     UserRecruitingAutoMaintain,
     LeagueRecruitingBatch,
     PortalRecruitingWeek,
+    PortalRecruitingWindowClosed,
     OffseasonPortalOptionalNudges,
     PortalUserSchoolAutoSpend,
     InjuryWeeksTick,
@@ -45,6 +46,8 @@ data class SimWeekAdvanceInput(
     val unplayedUserGameOpponentDisplayName: String? = null,
     /** Regular-season advance runs 365-team batch sim + rankings ([planning/time-system.md]). */
     val simulatesLeagueWeekBatch: Boolean = false,
+    val offseasonMilestoneAdvance: Boolean = false,
+    val portalRecruitingWindowClosed: Boolean = false,
 )
 
 data class SimWeekAdvanceResolution(

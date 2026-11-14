@@ -200,6 +200,24 @@ fun OffseasonScreen(
         }
     }
 
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
+        dismissedTaskKeys = app.dashboardOptionalDismissRepository.load(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        )
+    }
+
+    val onDismissOptionalTask: (String) -> Unit = { key ->
+        dismissedTaskKeys = dismissedTaskKeys + key
+        scope.launch {
+            dismissedTaskKeys = app.dashboardOptionalDismissRepository.recordDismiss(
+                loaded.dynastyId,
+                loaded.metadata.seasonIndex,
+                key,
+            )
+        }
+    }
+
     LaunchedEffect(loaded.dynastyId, loaded.weekCheckpoint) {
         signingProgress = signingDayRepository.loadProgress(loaded.dynastyId, loaded.metadata.seasonIndex)
         ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
@@ -506,9 +524,8 @@ fun OffseasonScreen(
         }
 
         val taskDismissKey: (DashboardTask) -> String = { task ->
-            DashboardTaskDismissal.key(position, task.id)
+            DashboardTaskDismissal.key(position, task)
         }
-
         val offseasonWeek = position.weekIndex.takeIf { inOffseason }
         val ledgerCycleClosed = ledger?.cycleClosed == true
         if (RecruitingCyclePolicy.hubNavigable(position.phase, offseasonWeek, ledgerCycleClosed)) {
@@ -540,7 +557,7 @@ fun OffseasonScreen(
                 DashboardOptionalTasksPanel(
                     tasks = weekSevenTasks,
                     dismissedKeys = dismissedTaskKeys,
-                    onDismiss = { dismissedTaskKeys = dismissedTaskKeys + it },
+                    onDismiss = onDismissOptionalTask,
                     taskDismissKey = taskDismissKey,
                     onDeepLink = onOpenRecruiting,
                     onSummerWorkoutReportOpen = { summerWorkoutSheetOpen = true },
@@ -557,7 +574,7 @@ fun OffseasonScreen(
                 DashboardOptionalTasksPanel(
                     tasks = weekNineTasks,
                     dismissedKeys = dismissedTaskKeys,
-                    onDismiss = { dismissedTaskKeys = dismissedTaskKeys + it },
+                    onDismiss = onDismissOptionalTask,
                     taskDismissKey = taskDismissKey,
                     onDeepLink = onOpenRecruiting,
                     onFundraisingWeekNineOpen = { fundraisingSheetOpen = true },
@@ -576,7 +593,7 @@ fun OffseasonScreen(
             DashboardOptionalTasksPanel(
                 tasks = dashboardTasks,
                 dismissedKeys = dismissedTaskKeys,
-                onDismiss = { dismissedTaskKeys = dismissedTaskKeys + it },
+                onDismiss = onDismissOptionalTask,
                 taskDismissKey = taskDismissKey,
                 onDeepLink = onOpenRecruiting,
                 headingRes = R.string.dashboard_offseason_portal_optional_heading,
@@ -629,6 +646,7 @@ fun OffseasonScreen(
 
         Button(
             onClick = {
+                if (weekAdvanceInProgress || dialogAdvanceInProgress) return@Button
                 scope.launch {
                     val signing = signingProgress
                         ?: signingDayRepository.loadProgress(loaded.dynastyId, loaded.metadata.seasonIndex)
@@ -673,7 +691,7 @@ fun OffseasonScreen(
                     weekAdvanceInProgress = true
                     try {
                         val dismissKey = { task: DashboardTask ->
-                            DashboardTaskDismissal.key(position, task.id)
+                            DashboardTaskDismissal.key(position, task)
                         }
                         val unresolved = OffseasonAdvanceOptionalTaskAggregator.unresolvedCount(
                             dashboardTasks,

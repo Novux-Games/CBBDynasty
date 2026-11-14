@@ -47,6 +47,7 @@ import dev.novux.dynasty.cbb.core.injuries.InjuryApplyContext
 import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.PhaseWeekPolicy
+import dev.novux.dynasty.cbb.core.advance.OffseasonAdvanceConfirmPolicy
 import dev.novux.dynasty.cbb.core.portal.PortalCyclePolicy
 import dev.novux.dynasty.cbb.data.news.NewsFeedRepository
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
@@ -942,6 +943,13 @@ class SaveSlotRepository(
             recruitingAutoMaintainEnabled = automation.recruitingAutoMaintain,
             userLeagueFastSim = userLeagueFastSim,
             simulatesLeagueWeekBatch = position.phase == CalendarPhase.RegularSeason,
+            offseasonMilestoneAdvance = OffseasonAdvanceConfirmPolicy.requiresLightweightDialog(
+                position.phase,
+                offseasonWeek,
+            ),
+            portalRecruitingWindowClosed = position.phase == CalendarPhase.Offseason &&
+                (offseasonWeek?.let { PortalCyclePolicy.portalWindowClosed(it) } == true) &&
+                !portalOpen,
         )
     }
 

@@ -181,6 +181,44 @@ class SimWeekAdvanceResolverTest {
     }
 
     @Test
+    fun confirmation_offseasonMilestoneShowsDestination() {
+        val confirmation = SimWeekAdvanceResolver.buildConfirmation(
+            SimWeekAdvanceInput(
+                nextWeekLabel = "Offseason · Week 7",
+                unplayedUserGameCount = 0,
+                recruitingPointsAvailable = 0,
+                userManualRecruitingSpent = 0,
+                recruitingHubOpen = false,
+                estimatedAutoRecruitingSpend = 0,
+                portalRecruitingWeekOpen = false,
+                offseasonMilestoneAdvance = true,
+            ),
+        )
+        assertTrue(confirmation.needsDialog)
+        assertTrue(confirmation.lines.any { it.kind == SimWeekConfirmationLineKind.SimpleAdvance })
+    }
+
+    @Test
+    fun confirmation_portalWindowClosedLine() {
+        val confirmation = SimWeekAdvanceResolver.buildConfirmation(
+            SimWeekAdvanceInput(
+                nextWeekLabel = "Offseason · Week 7",
+                unplayedUserGameCount = 0,
+                recruitingPointsAvailable = 0,
+                userManualRecruitingSpent = 0,
+                recruitingHubOpen = false,
+                estimatedAutoRecruitingSpend = 0,
+                portalRecruitingWeekOpen = false,
+                portalRecruitingWindowClosed = true,
+            ),
+        )
+        assertTrue(confirmation.needsDialog)
+        assertTrue(
+            confirmation.lines.any { it.kind == SimWeekConfirmationLineKind.PortalRecruitingWindowClosed },
+        )
+    }
+
+    @Test
     fun confirmation_includesLeagueBatchLineDuringRegularSeason() {
         val confirmation = SimWeekAdvanceResolver.buildConfirmation(
             SimWeekAdvanceInput(

@@ -87,6 +87,8 @@ private fun lineText(
         stringResource(R.string.advance_confirm_line_league_recruiting)
     SimWeekConfirmationLineKind.PortalRecruitingWeek ->
         stringResource(R.string.advance_confirm_line_portal)
+    SimWeekConfirmationLineKind.PortalRecruitingWindowClosed ->
+        stringResource(R.string.advance_confirm_line_portal_closed)
     SimWeekConfirmationLineKind.OffseasonPortalOptionalNudges ->
         stringResource(R.string.advance_confirm_portal_optional_nudges, args.firstOrNull() ?: 0)
     SimWeekConfirmationLineKind.PortalUserSchoolAutoSpend ->
