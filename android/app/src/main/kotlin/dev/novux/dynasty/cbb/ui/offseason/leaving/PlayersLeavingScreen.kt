@@ -43,8 +43,10 @@ fun PlayersLeavingPanel(
     onPlayersChanged: (List<RosterPlayer>) -> Unit = {},
     navigationRequest: WeekOneLeavingNavigation? = null,
     onNavigationRequestConsumed: () -> Unit = {},
+    nilRetentionHost: WeekOneNilRetentionHost? = null,
 ) {
     var players by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
+    var nilRetentionTarget by remember { mutableStateOf<RosterPlayer?>(null) }
     var tabIndex by remember { mutableIntStateOf(0) }
     var proDaysHighlighted by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -157,6 +159,14 @@ fun PlayersLeavingPanel(
                     ) {
                         Text(player.displayLabel(), fontWeight = FontWeight.Medium)
                         PlayerLeavingRetentionSummary(player = player.toDynastyPlayer())
+                        nilRetentionHost?.let { host ->
+                            OutlinedButton(
+                                onClick = { nilRetentionTarget = player },
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                Text(stringResource(R.string.week_one_nil_open_sheet))
+                            }
+                        }
                         if (onRosterTab) {
                             OutlinedButton(
                                 onClick = {
@@ -192,5 +202,20 @@ fun PlayersLeavingPanel(
                 }
             }
         }
+    }
+    nilRetentionHost?.let { host ->
+        WeekOneNilRetentionSheet(
+            player = nilRetentionTarget,
+            loaded = host.loaded,
+            nilRules = host.nilRules,
+            nilBudgetRepository = host.nilBudgetRepository,
+            nilAnnualPoolRepository = host.nilAnnualPoolRepository,
+            rosterRepository = rosterRepository,
+            onDismiss = { nilRetentionTarget = null },
+            onPlayersChanged = {
+                players = it
+                onPlayersChanged(it)
+            },
+        )
     }
 }

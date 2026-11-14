@@ -57,7 +57,7 @@
 | MEGA-GDD-027 | P0 | PASS | Recruiting · year-long HS/JUCO + portal hub | HS/JUCO pool + Top 60; portal entrants when window open | `HsJucoRecruitBoard.kt`, `RecruitingHubTabBodies.kt`, `PortalRecruitingHub.kt` |
 | MEGA-GDD-028 | P1 | SHIP | Recruiting · Signing Day OS week 6 hard sign | Positions tab class board summary (`SigningDayClassBoardSummaryPolicy`). | `SigningDayScreen.kt`, `SigningDayRepository.kt` |
 | MEGA-GDD-029 | P1 | SHIP | Recruiting · portal OS weeks 2–5 only | `PortalRecruitingTabBody` + Top 40 strip when window open (not placeholder string). | `PortalRecruitingHub.kt`, `RecruitingHubTabBodies.kt` |
-| MEGA-GDD-030 | P1 | GAP | NIL · annual pool; ledger; 3× ask cap | Engines/repos wired; assign-NIL not on every recruit surface GDD lists. | `NilAnnualPoolEngine.kt`, `NilBudgetLedger.kt`, `NilBudgetRepository.kt` |
+| MEGA-GDD-030 | P1 | SHIP | NIL · annual pool; ledger; 3× ask cap | `RecruitNilAssignCapLine` + `NilAssignCapLinePolicy` on recommended recruit rows. | `NilOfferEngine.kt`, `RecruitingHubScreen.kt` |
 
 ---
 
@@ -65,14 +65,14 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-GDD-031 | P1 | GAP | NIL · retention bumps OS week 1 same ledger | Data paths exist; dedicated retention sheet vs chips-only. | `NilBudgetRepository.kt`, offseason week-one modules |
+| MEGA-GDD-031 | P1 | SHIP | NIL · retention bumps OS week 1 same ledger | `WeekOneNilRetentionSheet` on Players Leaving — same ledger + 3× validation. | `WeekOneNilRetentionPolicy.kt`, `NilBudgetRepository.kt` |
 | MEGA-GDD-032 | P0 | PASS | NIL · fundraising OS week (authoritative week 9) | `FundraisingWeekNinePanel` + `FundraisingSimulator` (not GDD summary “week 8” label). | `FundraisingWeekNinePanel.kt`, `offseason/weeknine/` |
-| MEGA-GDD-033 | P1 | GAP | NIL · program academics grade 0–100 → budget path | `ProgramAcademicsGradeEngine` + recruiting budget engine; grade not prominent on School overview. | `ProgramAcademicsGradeEngine.kt`, `SchoolHubOverviewCard.kt` |
+| MEGA-GDD-033 | P1 | SHIP | NIL · program academics grade 0–100 → budget path | User school hub shows program grade + recruiting budget multiplier. | `SchoolHubRepository.kt`, `SchoolHubOverviewCard.kt` |
 | MEGA-GDD-034 | P1 | GAP | Carousel · HC skills, contract, job security | `HeadCoachCardScreen`, `JobSecurityMeter`; extension/interview/poach vs behavior table incomplete. | `CoachSecurityRepository.kt`, `coach-card.md` gaps |
 | MEGA-GDD-035 | P1 | PASS | Carousel · unemployed coach; job center; world sims | Employment repo + `JobCenterScreen` + launch routing. | `CoachEmploymentRepository.kt`, `JobCenterScreen.kt`, `DynastyLaunch.kt` |
 | MEGA-GDD-036 | P1 | GAP | Carousel · 3 assistants (+4th prestige ≥85); staff market | Bootstrap + School staff tab; poach/hire/GA promotion sim thin. | `StaffRosterBootstrap.kt`, `SchoolStaffTabPanel.kt` |
 | MEGA-GDD-037 | P1 | PASS | Facilities · six categories grades 1–10; cash + weeks | `FacilityGrades.kt`, `FacilityUpgradePolicy.kt`, `FacilityGradeEngine.kt` |
-| MEGA-GDD-038 | P1 | GAP | Realignment · conference offers; skip season 1 | Week **10** panel + generator (authoritative `offseason.md`); shell placeholder copy remains. | `ConferenceOffersWeekTenPanel.kt`, `OffseasonWeekTenConstants.OFFSEASON_WEEK_INDEX = 10` |
+| MEGA-GDD-038 | P1 | SHIP | Realignment · conference offers; skip season 1 | Week 10 panel shell hint + season 1 skip copy (`OffseasonConferenceOffersPolicy`). | `ConferenceOffersWeekTenPanel.kt`, `OffseasonWeekTenConstants.kt` |
 | MEGA-GDD-039 | P1 | GAP | Preseason · single week; 8 tasks | Eight `PreseasonTaskId` entries + panels; several tasks thin vs `preseason.md`. | `PreseasonScreen.kt`, `PreseasonTaskId.kt` |
 | MEGA-GDD-040 | P0 | PASS | Scheduling · 32 RS max; 4 early + 28 builder | `MAX_REGULAR_SEASON_GAMES`, `RegularSeasonSlotBudget`, solver hooks. | `GameConstants.kt`, `PreseasonScheduleSolver.kt` |
 

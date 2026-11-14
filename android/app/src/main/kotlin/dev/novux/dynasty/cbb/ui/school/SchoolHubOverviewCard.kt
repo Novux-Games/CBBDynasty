@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.qa.SchoolHubAcademicsPath
 import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
 
 @Composable
@@ -49,6 +50,24 @@ fun SchoolHubOverviewCard(
                 stringResource(R.string.school_hub_prestige, overview.programPrestige),
                 style = MaterialTheme.typography.bodyMedium,
             )
+            if (overview.isUserSchool) {
+                @Suppress("unused")
+                val qaAcademics = SchoolHubAcademicsPath.MEGA_ID
+                overview.programAcademicsGrade?.let { grade ->
+                    Text(
+                        stringResource(R.string.school_hub_academics_grade, grade),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    overview.recruitingBudgetMultiplier?.let { multiplier ->
+                        Text(
+                            stringResource(R.string.school_hub_academics_budget_multiplier, multiplier),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
             Text(
                 stringResource(R.string.school_hub_sos, overview.sosRating),
                 style = MaterialTheme.typography.bodyMedium,

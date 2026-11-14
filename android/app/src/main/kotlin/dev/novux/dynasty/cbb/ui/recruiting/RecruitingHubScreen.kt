@@ -859,6 +859,7 @@ private fun RecommendedTabBody(
                 row = row,
                 gates = gates,
                 currency = currency,
+                nilRules = nilRules,
                 nilOfferUsd = nilOffers[row.prospect.prospectId] ?: 0L,
                 scholarshipOfferPointCost = scholarshipOfferPointCost,
                 scholarshipOfferPromiseLabel = offerPromises[row.prospect.prospectId]?.displayLabel(),
@@ -927,6 +928,7 @@ private fun RecommendedProspectRow(
     row: RecommendedProspectRow,
     gates: RecruitingProspectActionGates?,
     currency: NumberFormat,
+    nilRules: dev.novux.dynasty.cbb.core.balance.BalanceNilRules,
     nilOfferUsd: Long,
     scholarshipOfferPointCost: Int,
     scholarshipOfferPromiseLabel: String? = null,
@@ -1006,6 +1008,7 @@ private fun RecommendedProspectRow(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        RecruitNilAssignCapLine(nilAskUsd = row.prospect.nilAskUsd, nilRules = nilRules)
         if (nilOfferUsd > 0L) {
             Text(
                 text = stringResource(R.string.recruiting_nil_offer_line, currency.format(nilOfferUsd)),

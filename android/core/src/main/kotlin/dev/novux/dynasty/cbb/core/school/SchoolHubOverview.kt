@@ -16,4 +16,7 @@ data class SchoolHubOverview(
     val record: SchoolSeasonRecord,
     val rankings: SchoolRankingsSnapshot,
     val facilitySummary: FacilityGradeSummary? = null,
+    /** User school only — program academics grade 0–100 ([MEGA-GDD-033]). */
+    val programAcademicsGrade: Int? = null,
+    val recruitingBudgetMultiplier: Double? = null,
 )

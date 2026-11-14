@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.data.school
 
+import dev.novux.dynasty.cbb.core.academics.ProgramAcademicsGradeEngine
 import dev.novux.dynasty.cbb.core.balance.selectionTuning
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskId
 import dev.novux.dynasty.cbb.core.resume.TeamResumeEngine
@@ -14,6 +15,7 @@ import dev.novux.dynasty.cbb.core.facilities.FacilityGradeEngine
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonProgressRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
+import dev.novux.dynasty.cbb.database.roster.toDomain
 
 class SchoolHubRepository(
     private val database: DynastyDatabase,
@@ -39,9 +41,19 @@ class SchoolHubRepository(
         val netRankings = standings?.netRankByTeam?.takeIf { it.isNotEmpty() }
         val mediaPoll = standings?.mediaPollRankByTeam?.takeIf { it.isNotEmpty() }
         val coachesPoll = standings?.coachesPollRankByTeam?.takeIf { it.isNotEmpty() }
-        val facilitySummary = if (team.teamId == coach.userTeamId) {
-            val grades = offseasonWeekNineRepository.loadFacilityGrades(dynastyId, seasonIndex)
-            FacilityGradeEngine.summarize(grades)
+        val facilityGrades = if (team.teamId == coach.userTeamId) {
+            offseasonWeekNineRepository.loadFacilityGrades(dynastyId, seasonIndex)
+        } else {
+            null
+        }
+        val facilitySummary = facilityGrades?.let { FacilityGradeEngine.summarize(it) }
+        val programAcademics = if (team.teamId == coach.userTeamId && facilityGrades != null) {
+            val roster = database.dynastyRosterDao()
+                .listForDynasty(dynastyId)
+                .map { it.toDomain() }
+            ProgramAcademicsGradeEngine.snapshot(
+                ProgramAcademicsGradeEngine.inputsFromRoster(roster, facilityGrades),
+            )
         } else {
             null
         }
@@ -56,6 +68,7 @@ class SchoolHubRepository(
             mediaPollRankings = mediaPoll,
             coachesPollRankings = coachesPoll,
             facilitySummary = facilitySummary,
+            programAcademics = programAcademics,
         )
     }
 

@@ -24,6 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -100,6 +101,7 @@ import dev.novux.dynasty.cbb.ui.dynasty.rememberShellNewsFeed
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import dev.novux.dynasty.cbb.ui.offseason.leaving.DraftResultsWeekTwoPanel
 import dev.novux.dynasty.cbb.ui.offseason.leaving.PlayersLeavingPanel
+import dev.novux.dynasty.cbb.ui.offseason.leaving.WeekOneNilRetentionHost
 import dev.novux.dynasty.cbb.ui.offseason.leaving.WeekOneLeavingNavigation
 import dev.novux.dynasty.cbb.ui.offseason.leaving.weekOneNavigationFor
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
@@ -165,6 +167,14 @@ fun OffseasonScreen(
     var fullScreenPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     val context = LocalContext.current
     val app = context.requireDynastyApplication()
+    val weekOneNilRetentionHost = remember(loaded.dynastyId, loaded.metadata.seasonIndex) {
+        WeekOneNilRetentionHost(
+            loaded = loaded,
+            nilRules = app.balanceRulesetRepository.activeRuleset().nil,
+            nilBudgetRepository = app.nilBudgetRepository,
+            nilAnnualPoolRepository = app.nilAnnualPoolRepository,
+        )
+    }
     val playerStatsRepository = app.playerStatsRepository
     val newsFeed = rememberShellNewsFeed(
         dynastyId = loaded.dynastyId,
@@ -426,6 +436,7 @@ fun OffseasonScreen(
                 onPlayersChanged = { weekOnePlayers = it },
                 navigationRequest = weekOneLeavingNav,
                 onNavigationRequestConsumed = { weekOneLeavingNav = null },
+                nilRetentionHost = weekOneNilRetentionHost,
             )
         } else if (inOffseason && position.weekIndex == 2) {
             DraftResultsWeekTwoPanel(
