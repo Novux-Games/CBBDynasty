@@ -77,11 +77,11 @@
 | MEGA-FRAME-036 | SHIP | Postseason seed row on dashboard | `DashboardPostseasonSeedResolver` when Selection Sunday set | `DynastyShellScreen.kt` |
 | MEGA-FRAME-037 | PARTIAL | Notifications feed | `DashboardNotificationFeedPanel` on in-season shell | Offseason/preseason use placeholder news, feed not always shown |
 | MEGA-FRAME-038 | GAP | Last game summary | No opponent/score/W–L + box score / postgame actions on dashboard | `game-frame.md#last-game` |
-| MEGA-FRAME-039 | PARTIAL | Next game card | `NextGameCard` with preview + opponent school — missing date/location line | `DynastyShellScreen.kt` `NextGameCard` |
+| MEGA-FRAME-039 | SHIP | Next game card | Date + location line via `FirstPlayableGame.gameDateLabel` | `DynastyShellScreen.kt` `NextGameCard` |
 | MEGA-FRAME-040 | SHIP | Game preview from next game | Opens `GamePreviewScreen` with win %, score, pregame article | `GamePreviewScreen.kt` |
 | MEGA-FRAME-041 | PARTIAL | Game preview sections | Win %, predicted score, pregame report — team side-by-side / matchup history thin | `HeadToHeadHistory.summarize(emptyList())` in shell |
-| MEGA-FRAME-042 | GAP | Primary CTA lineup/gameplan from preview | Strategy button on preview — verify prominent “set lineup” path | `GamePreviewScreen` tail |
-| MEGA-FRAME-043 | GAP | Dashboard roster teaser vs spec | Shows 6-player preview cards, not team overview metrics | `DynastyShellScreen` roster preview block |
+| MEGA-FRAME-042 | SHIP | Primary CTA lineup/gameplan from preview | Filled Strategy CTA above H2H; Play game secondary | `GamePreviewScreen.kt` |
+| MEGA-FRAME-043 | SHIP | Dashboard roster teaser vs spec | Removed 6-player preview strip; roster tab hint only | `DynastyShellScreen.kt` |
 
 ---
 

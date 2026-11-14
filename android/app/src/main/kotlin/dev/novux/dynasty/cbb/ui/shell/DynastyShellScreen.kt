@@ -887,28 +887,11 @@ fun DynastyShellScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                if (rosterPreview.isNotEmpty()) {
-                    Text(
-                        text = stringResource(R.string.dynasty_shell_roster),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                    )
-                    rosterPreview.forEach { player ->
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { cardPlayer = player },
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(12.dp),
-                                verticalArrangement = Arrangement.spacedBy(6.dp),
-                            ) {
-                                PlayerInjuryRosterRow(player = player.toRosterPlayer())
-                                PlayerLoyaltyChips(player)
-                            }
-                        }
-                    }
-                }
+                Text(
+                    text = stringResource(R.string.dynasty_shell_roster_tab_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
                 if (showNotificationFeed) {
                     DashboardNotificationFeedPanel(
                         feed = notificationFeed,
@@ -934,6 +917,7 @@ fun DynastyShellScreen(
                 focus?.firstGame?.let { game ->
                     NextGameCard(
                         game = game,
+                        seasonIndex = loaded.metadata.seasonIndex,
                         onViewOpponentSchool = {
                             val opponentId = game.opponentTeamId
                             if (!opponentId.startsWith("event-")) {
@@ -1108,9 +1092,16 @@ fun DynastyShellScreen(
 @Composable
 private fun NextGameCard(
     game: FirstPlayableGame,
+    seasonIndex: Int,
     onViewOpponentSchool: () -> Unit,
     onOpenPreview: () -> Unit,
 ) {
+    val locationLabel = if (game.homeGame) {
+        stringResource(R.string.dynasty_shell_home)
+    } else {
+        stringResource(R.string.dynasty_shell_away)
+    }
+    val dateLabel = game.gameDateLabel(seasonIndex)
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
@@ -1125,14 +1116,17 @@ private fun NextGameCard(
                 text = stringResource(
                     R.string.dynasty_shell_matchup,
                     game.opponentDisplayName,
-                    if (game.homeGame) {
-                        stringResource(R.string.dynasty_shell_home)
-                    } else {
-                        stringResource(R.string.dynasty_shell_away)
-                    },
+                    locationLabel,
                 ),
                 style = MaterialTheme.typography.bodyLarge,
             )
+            if (dateLabel.isNotBlank()) {
+                Text(
+                    text = stringResource(R.string.dynasty_shell_next_game_date, dateLabel, locationLabel),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+            }
             Text(
                 text = stringResource(R.string.dynasty_shell_game_type, game.kind.name),
                 style = MaterialTheme.typography.bodySmall,

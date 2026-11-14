@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -80,6 +81,19 @@ fun GamePreviewScreen(
             style = MaterialTheme.typography.titleLarge,
         )
         Text(
+            text = stringResource(R.string.game_preview_primary_cta_heading),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+        )
+        Text(
+            text = stringResource(R.string.game_preview_primary_cta_body),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Button(onClick = onOpenStrategy, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.game_preview_open_strategy))
+        }
+        Text(
             text = stringResource(R.string.game_preview_h2h_heading),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
@@ -112,9 +126,6 @@ fun GamePreviewScreen(
         }
         OutlinedButton(onClick = onPlayGame, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.game_preview_play_game))
-        }
-        OutlinedButton(onClick = onOpenStrategy, modifier = Modifier.fillMaxWidth()) {
-            Text(stringResource(R.string.game_preview_open_strategy))
         }
         OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.settings_back))
