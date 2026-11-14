@@ -997,6 +997,11 @@ fun DynastyShellScreen(
                         postseasonSeedLabel = dashboardPostseasonSeed,
                         onOpenRankings = hubMenuCallbacks.onOpenRankings,
                     )
+                    Text(
+                        text = stringResource(R.string.dashboard_team_overview_hint),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
                 lastGameSummary?.let { summary ->
                     DashboardLastGameCard(

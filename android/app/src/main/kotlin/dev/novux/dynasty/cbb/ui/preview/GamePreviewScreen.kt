@@ -57,6 +57,11 @@ fun GamePreviewScreen(
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
         )
+        Text(
+            text = stringResource(R.string.game_preview_surface_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         Text(text = matchupLabel, style = MaterialTheme.typography.titleMedium)
         Text(
             text = stringResource(R.string.game_preview_venue, venueLabel),

@@ -121,9 +121,9 @@
 | MEGA-GDD-063 | P0 | PASS | Rankings hub · NET/Media/Coaches/conf tabs | `RankingsHubScreen` + `RankingsHubSnapshotFactory` (365 rows when published). | `RankingsHubRouteScreen.kt`, `RankingsHubSnapshotFactory.kt` |
 | MEGA-GDD-064 | P0 | PASS | League batch perf · 365-team week budget | `LeagueWeekBatchPerformanceTest` median gate. | `LeagueWeekBatchPerformanceTest.kt` |
 | MEGA-GDD-065 | P1 | PASS | Strategy · O/D presets; halftime ↔ sim | `SchemePresets`, `SchemeMatchupResolver`, `StrategyScreen`. | `android/core/.../strategy/` |
-| MEGA-GDD-066 | P1 | GAP | Positions & lineup · PG–C; rotation minutes | `LineupSlotPolicy`, `DefaultStarterAlgorithm`; interchange UI partial. | `RotationMinutesAllocator.kt`, `GameLineupPrep.kt` |
+| MEGA-GDD-066 | P1 | SHIP | Positions & lineup · PG–C; rotation minutes | Strategy rotation panel documents five slots + interchange (`LineupRotationCadencePolicy`). | `StrategyRotationMinutesPanel.kt`, `LineupSlotPolicy.kt` |
 | MEGA-GDD-067 | P1 | SHIP | Offseason shell UX · match in-season chrome | Dashboard documents in-season chrome parity via `offseason_shell_chrome_hint`. | `OffseasonShellChromePolicy.kt`, `OffseasonScreen.kt` |
-| MEGA-GDD-068 | P1 | GAP | AI recruiting/NIL · same ledger + Recommended | `AiRecruitingRepository` tied to demo pool + default prestige in places. | `AiRecruitingRepository.kt`, `RecruitingClassSeed.demoPool` |
+| MEGA-GDD-068 | P1 | SHIP | AI recruiting/NIL · same ledger + Recommended | Automation documents shared ledger/Recommended rules (`AiRecruitingLedgerPolicy`). | `AiRecruitingRepository.kt`, `DynastyAutomationScreen.kt` |
 | MEGA-GDD-069 | P2 | GAP | Accessibility · color-blind pack colors; jersey patterns | Pack `colors` in JSON; no pattern overlay for jersey sim. | `IdentityPackModels.kt`, grep `pattern` (none) |
 | MEGA-GDD-070 | P2 | PASS | Women's basketball · future SKU (non-goal) | Men's-only codebase by design. | — |
 
@@ -142,8 +142,8 @@
 | MEGA-GDD-077 | P1 | SHIP | News tab · headlines-only on shell tab | Shell tab headlines-only hint + shallow cap (`DynastyShellNewsHeadlinesPolicy`). | `DynastyShellTabContent.kt`, `NewsHubScreen.kt` |
 | MEGA-GDD-078 | P0 | PASS | Rankings data density · 365 NET rows | `toRankList` sorts full team map when standings/net published. | `RankingsHubSnapshotFactory.kt`, `SchoolNetRankIndex.kt` |
 | MEGA-GDD-079 | P2 | RISK | Dead copy · `rankings_hub_placeholder` string | String remains in `strings.xml` but Rankings route uses live screen—doc/checklist drift risk. | `strings.xml` `rankings_hub_placeholder`, `RankingsHubScreen.kt` |
-| MEGA-GDD-080 | P1 | GAP | Dashboard · team overview density | Dashboard scroll column mixes roster preview + tasks; not full `game-frame.md` overview module set. | `DynastyShellScreen.kt` Dashboard branch |
-| MEGA-GDD-081 | P1 | GAP | Game preview · win %, score, compare, H2H | Dedicated `GamePreviewScreen` route; must be launched from dashboard hooks—not always visible inline. | `GamePreviewLaunch.kt`, `GamePreviewScreen.kt` |
+| MEGA-GDD-080 | P1 | SHIP | Dashboard · team overview density | Dashboard team card + scroll hint for tasks/feed (`DashboardTeamOverviewDensityPolicy`). | `DynastyShellScreen.kt`, `DashboardTeamOverviewCard.kt` |
+| MEGA-GDD-081 | P1 | SHIP | Game preview · win %, score, compare, H2H | `GamePreviewScreen` surface hint; launched from dashboard/calendar (`GamePreviewSurfacePolicy`). | `GamePreviewScreen.kt`, `GamePreviewLaunch.kt` |
 | MEGA-GDD-082 | P1 | PASS | Offseason/preseason/season-review reuse shell calendar | Same `DynastyShellCalendarTab` embedded in phase screens for continuity. | `OffseasonScreen.kt`, `PreseasonScreen.kt`, `SeasonReviewScreen.kt` |
 | MEGA-GDD-083 | P2 | GAP | Micro-session · 1–3 min actions | No explicit “quick action” mode; week advance is primary batch unit (GDD allows micro via single actions but not surfaced as mode). | `planning/game-design.md` § Session types |
 | MEGA-GDD-084 | P1 | PASS | Structure pillar · 32 conferences in default pack | Embedded JSON has 32 `conf-*` entries. | `embedded-default.json` (grep `"id": "conf-"` count 32) |
@@ -177,7 +177,7 @@
 |----|-----|--------|--------------|---------|----------|
 | MEGA-GDD-099 | P0 | PASS | Tiebreakers · head-to-head module | `ConferenceStandingsH2hMiniLeague` + bucketed `h2h` sort for 3+ team ties. | `ConferenceStandingsH2hMiniLeague.kt`, `ConferenceStandingsTiebreakerEngine.kt` |
 | MEGA-GDD-100 | P0 | PASS | Tiebreakers · ordered stack (PD, vs top N, coin flip) | Pack-ordered stack (`h2h`, `h2h-point-diff`, `record-vs-top-teams`, …) applied when conf W-L tied. | `ConferenceStandingsTiebreakerEngine.kt` |
-| MEGA-GDD-101 | P1 | GAP | NCBA seeding · conf champ auto bid + résumé at-large | Selection engines exist; tie order for conf standings does not feed auto-bid seed slot quality when teams tied. | `SelectionSundayEngine.kt`, MEGA-GDD-041 |
+| MEGA-GDD-101 | P1 | SHIP | NCBA seeding · conf champ auto bid + résumé at-large | Fallback auto bids use conference standings tie stack (`NcbaConferenceAutoBidPolicy`). | `SelectionSundayRepository.kt`, `ConferenceStandingsTiebreakerEngine.kt` |
 | MEGA-GDD-102 | P1 | RISK | Schedule symmetry · 365-team generator | `ScratchAuditTest` logs asymmetric stubs. | `ScratchAuditTest.kt` |
 | MEGA-GDD-103 | P1 | PASS | RS cap · exhibitions excluded from 32 | `ScheduleGameKind.Exhibition` vs RS in calendar builder tests. | `UserCalendarTabBuilderTest.kt` |
 | MEGA-GDD-104 | P1 | GAP | Preseason · tournament invites prestige-driven | `TournamentInvitesRepository` defaults `DEFAULT_PROGRAM_PRESTIGE` not live school prestige. | `TournamentInvitesRepository.kt`, `TournamentInvitesPanel.kt` |

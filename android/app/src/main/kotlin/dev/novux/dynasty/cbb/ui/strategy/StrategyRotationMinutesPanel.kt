@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.lineup.LineupRotationCadencePolicy
 import dev.novux.dynasty.cbb.core.lineup.RotationMinutesAllocator
 import dev.novux.dynasty.cbb.core.lineup.RotationMinutesBalancer
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
@@ -44,6 +45,14 @@ fun StrategyRotationMinutesPanel(
             text = stringResource(R.string.strategy_rotation_title),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
+        )
+        Text(
+            text = stringResource(
+                R.string.strategy_rotation_slots_hint,
+                LineupRotationCadencePolicy.starterSlotCount,
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         RotationMinutesBudgetMeter(
             totalMinutes = total,

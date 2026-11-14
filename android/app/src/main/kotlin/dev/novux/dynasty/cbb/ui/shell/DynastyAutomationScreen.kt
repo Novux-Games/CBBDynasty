@@ -79,6 +79,11 @@ fun DynastyAutomationScreen(
             modifier = Modifier.padding(top = 8.dp),
         )
         Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = stringResource(R.string.dynasty_automation_recruiting_ledger_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         AutomationToggleRow(
             label = stringResource(R.string.dynasty_automation_recruiting),
             description = stringResource(R.string.dynasty_automation_recruiting_summary),

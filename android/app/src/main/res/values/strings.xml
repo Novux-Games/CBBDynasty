@@ -421,6 +421,7 @@
     <string name="preseason_report_done">Report read</string>
     <string name="dynasty_shell_title">Dynasty</string>
     <string name="dynasty_shell_hint">Calendar focuses on your next playable game.</string>
+    <string name="dashboard_team_overview_hint">Scroll for tasks, notifications, and your next game — overview stays pinned up top.</string>
     <string name="dynasty_shell_next_game">Next game</string>
     <string name="dynasty_shell_matchup">vs %1$s (%2$s)</string>
     <string name="dynasty_shell_home">Home</string>
@@ -615,6 +616,7 @@
     <string name="dynasty_automation_priority_hint">Coach priority tree depth %1$d — broaden targets in a later update.</string>
     <string name="dynasty_automation_recruiting">Recruiting auto-maintain</string>
     <string name="dynasty_automation_recruiting_summary">On week advance, spend recruiting points/NIL when you did not recruit manually.</string>
+    <string name="dynasty_automation_recruiting_ledger_hint">Uses the same recruiting ledger and Recommended ordering as your manual hub.</string>
     <string name="dynasty_automation_coach_skills">Coach skill auto-spend</string>
     <string name="dynasty_automation_coach_skills_summary">Assign Sunday skill points using your archetype priority (also on Coach card).</string>
     <string name="dashboard_required_heading">Required tasks</string>
@@ -954,6 +956,7 @@
     <string name="strategy_game_schemes_title">This game\'s schemes</string>
     <string name="strategy_game_schemes_hint">Offense and defense for the next sim — separate from season defaults.</string>
     <string name="strategy_rotation_title">Rotation minutes</string>
+    <string name="strategy_rotation_slots_hint">%1$d starter slots (PG–C) — guards and forwards can interchange within their pair.</string>
     <string name="strategy_rotation_total">Team total: %1$d / %2$d min</string>
     <string name="strategy_rotation_minutes_value">%1$d min</string>
     <string name="strategy_rotation_budget_ok">Rotation fills the 200-minute regulation budget.</string>
@@ -1013,6 +1016,7 @@
     <string name="game_watch_injury_log">INJURY — %1$s (%2$d wk)</string>
     <string name="game_watch_opponent_scrimmage">Scrimmage foe</string>
     <string name="game_preview_title">Game preview</string>
+    <string name="game_preview_surface_hint">Win chance, predicted score, team compare, and head-to-head on this screen.</string>
     <string name="game_preview_venue">Location: %1$s</string>
     <string name="game_preview_win_pct">Win chance %1$d%%</string>
     <string name="game_preview_predicted_score">Predicted score %1$d–%2$d</string>
