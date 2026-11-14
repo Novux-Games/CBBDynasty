@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-FRAME-082",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "frame-dashboard-time.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
-  },
-  {
     "id": "MEGA-FRAME-083",
     "pri": "P1",
     "status": "PARTIAL",

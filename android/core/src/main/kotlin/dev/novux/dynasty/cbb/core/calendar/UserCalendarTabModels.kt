@@ -8,6 +8,8 @@ enum class UserCalendarRowKind {
     Bye,
     /** Eliminated from early-season event — remaining event weeks with no game ([planning/time-system.md]). */
     EventEliminationBye,
+    /** Shorter conference bracket — idle while deeper leagues finish ([planning/time-system.md#conference-tournaments]). */
+    ConfTournamentStructuralBye,
     OffWeek,
 }
 
@@ -41,4 +43,5 @@ data class UserCalendarWeekRow(
     val games: List<UserCalendarGameEntry>,
     val isCurrentWeek: Boolean,
     val eventEliminationByeEventName: String? = null,
+    val confTournamentStructuralByeConferenceName: String? = null,
 )

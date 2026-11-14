@@ -33,15 +33,17 @@ class UserCalendarRepository(
         val coach = database.dynastyCoachDao().getByDynastyId(dynastyId)
         val session = packRepository.activeSession()
         val index = session.index
-        val confByeWeeks = if (coach != null) {
+        val (confByeWeeks, confDisplayName) = if (coach != null) {
             val team = index.team(coach.userTeamId)
             if (team != null) {
-                ConferenceTournamentCalendar.byeWeeksForConference(index.source, team.conferenceId)
+                val byes = ConferenceTournamentCalendar.byeWeeksForConference(index.source, team.conferenceId)
+                val name = index.conference(team.conferenceId)?.displayName
+                byes to name
             } else {
-                emptyList()
+                emptyList<Int>() to null
             }
         } else {
-            emptyList()
+            emptyList<Int>() to null
         }
         val standings = leagueWeekBatchRepository.loadStandings(dynastyId, seasonIndex)
         val confContext = if (coach != null) {
@@ -69,6 +71,7 @@ class UserCalendarRepository(
             conferenceTourneyQualified = confContext.qualified,
             conferenceTourneySimmed = confContext.bracketSimmed,
             eventEliminationByeWeeks = eventEliminationByes,
+            conferenceTourneyStructuralByeConferenceName = confDisplayName,
         )
         if (userTeamId == null) return built
         val checkpoint = weekCheckpointRepository.loadCheckpoint(dynastyId)

@@ -155,7 +155,7 @@
 | MEGA-FRAME-079 | SHIP | Bye week advance allowed | `ByeWeekPolicy.canAdvanceWeek` always true in-season | core tests |
 | MEGA-FRAME-080 | SHIP | Injury weeks tick on bye advance | `InjuryByeAdvanceConfirmPolicy` — bye copy + simple advance tail; `userOnByeWeek` in repository | `InjuryByeAdvanceConfirmPolicy`, `SimWeekAdvanceDialog` |
 | MEGA-FRAME-081 | SHIP | Early-event bye weeks on calendar | `EarlySeasonUserCalendarByes` + `UserCalendarRowKind.EventEliminationBye` in shell calendar tab | `UserCalendarRepository`, `DynastyShellCalendarTab.kt` |
-| MEGA-FRAME-082 | GAP | Conf tourney shorter-bracket bye | Cross-conference bye weeks not called out in UI | `time-system.md#conference-tournaments` |
+| MEGA-FRAME-082 | SHIP | Conf tourney shorter-bracket bye | `ConfTournamentStructuralBye` chip + conference detail on calendar tab | `UserCalendarTabBuilder`, `DynastyShellCalendarTab.kt` |
 | MEGA-FRAME-083 | PARTIAL | Week advance league batch sim | Repository advances checkpoint — full league batch visibility N/A in UI | `SaveSlotRepository.advanceDynastyWeek` |
 | MEGA-FRAME-084 | GAP | Season review week no bottom-tab games | Season review screen — confirm calendar empty / copy | `SeasonReviewScreen` |
 

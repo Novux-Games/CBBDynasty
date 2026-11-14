@@ -300,7 +300,8 @@
     "MEGA-FRAME-077",
     "MEGA-FRAME-080",
     "MEGA-FRAME-081",
-    "MEGA-FRAME-149"
+    "MEGA-FRAME-149",
+    "MEGA-FRAME-082"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
@@ -308,9 +309,9 @@
   "pullRequestNumber": 30,
   "pullRequestUrl": "https://github.com/Novux-Games/CBBDynasty/pull/30",
   "queueMetrics": {
-    "openImplementation": 478,
-    "remaining": 478,
-    "shardPassShipDone": 816,
-    "completedIdsRecorded": 299
+    "openImplementation": 477,
+    "remaining": 476,
+    "shardPassShipDone": 817,
+    "completedIdsRecorded": 300
   }
 }

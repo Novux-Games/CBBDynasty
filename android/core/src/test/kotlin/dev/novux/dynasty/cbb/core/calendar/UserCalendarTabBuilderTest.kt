@@ -145,9 +145,11 @@ class UserCalendarTabBuilderTest {
             exhibitionCount = 0,
             conferenceTourneyByeWeeks = listOf(5),
             conferenceTourneySimmed = false,
+            conferenceTourneyStructuralByeConferenceName = "Big West",
         )
         val week5 = rows.first { it.phase == CalendarPhase.ConferenceTournament && it.weekIndex == 5 }
-        assertEquals(UserCalendarRowKind.Bye, week5.rowKind)
+        assertEquals(UserCalendarRowKind.ConfTournamentStructuralBye, week5.rowKind)
+        assertEquals("Big West", week5.confTournamentStructuralByeConferenceName)
     }
 
     private fun stub(

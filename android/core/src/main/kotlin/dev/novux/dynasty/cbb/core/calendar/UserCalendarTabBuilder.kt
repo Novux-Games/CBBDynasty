@@ -17,6 +17,7 @@ object UserCalendarTabBuilder {
         conferenceTourneyQualified: Boolean = true,
         conferenceTourneySimmed: Boolean = false,
         eventEliminationByeWeeks: Map<Int, String> = emptyMap(),
+        conferenceTourneyStructuralByeConferenceName: String? = null,
     ): List<UserCalendarWeekRow> {
         if (plan == null) {
             return listOf(
@@ -35,6 +36,7 @@ object UserCalendarTabBuilder {
             conferenceTourneyGamesByWeek,
             conferenceTourneyQualified,
             conferenceTourneySimmed,
+            conferenceTourneyStructuralByeConferenceName,
         )
         rows += postseasonWeeks(activePosition)
         return rows
@@ -88,12 +90,14 @@ object UserCalendarTabBuilder {
         gamesByWeek: Map<Int, List<ScheduledGameStub>>,
         qualified: Boolean,
         bracketSimmed: Boolean,
+        structuralByeConferenceName: String?,
     ): List<UserCalendarWeekRow> {
         val max = PhaseWeekPolicy.weeksInPhase(CalendarPhase.ConferenceTournament)
         return (1..max).map { week ->
             val position = CalendarPosition(active.seasonIndex, CalendarPhase.ConferenceTournament, week)
             when {
-                week in structuralByeWeeks -> byeRow(active, position)
+                week in structuralByeWeeks ->
+                    confTournamentStructuralByeRow(active, position, structuralByeConferenceName)
                 !qualified -> byeRow(active, position)
                 gamesByWeek[week].orEmpty().isNotEmpty() -> weekRow(active, position, gamesByWeek[week].orEmpty())
                 bracketSimmed -> byeRow(active, position)
@@ -173,6 +177,21 @@ object UserCalendarTabBuilder {
             games = emptyList(),
             isCurrentWeek = position == active,
             eventEliminationByeEventName = eventName,
+        )
+
+    private fun confTournamentStructuralByeRow(
+        active: CalendarPosition,
+        position: CalendarPosition,
+        conferenceName: String?,
+    ): UserCalendarWeekRow =
+        UserCalendarWeekRow(
+            weekLabel = CalendarWeekLabel.display(position),
+            phase = position.phase,
+            weekIndex = position.weekIndex,
+            rowKind = UserCalendarRowKind.ConfTournamentStructuralBye,
+            games = emptyList(),
+            isCurrentWeek = position == active,
+            confTournamentStructuralByeConferenceName = conferenceName,
         )
 
     private fun isPastWeek(active: CalendarPosition, row: CalendarPosition): Boolean {
