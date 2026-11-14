@@ -140,7 +140,7 @@
 | MEGA-FRAME-071 | SHIP | Task 1 Incoming class seed UX | Stepped HS/JUCO/rank/headline/save progress + determinate bar on `IncomingClassSeedPanel` | `IncomingClassSeedRunProgress`, `IncomingClassSeedRepository` |
 | MEGA-FRAME-072 | SHIP | Task 4 NET + polls review sheet | `PreseasonRankingsReviewBottomSheet` — NET preview, program poll chips, Continue publishes + dismisses; hub route also pops on Continue | `PreseasonRankingsReviewUxPolicy` |
 | MEGA-FRAME-073 | SHIP | Task 5 preseason report article | `PreseasonReportPanel` + `ReportArticleView` pattern | `preseason.md#view-preseason-report` |
-| MEGA-FRAME-074 | PARTIAL | Task 6 tournament invites prestige tiers | `TournamentInvitesState` — UI cards for multi-invite | `PreseasonScreen` |
+| MEGA-FRAME-074 | SHIP | Task 6 tournament invites prestige tiers | Live prestige → `TournamentInvitesPrestigePolicy` tiers; elevated multi-invite cards + decline-all | `TournamentInvitesPanel`, `PreseasonScreen` |
 | MEGA-FRAME-075 | PARTIAL | Task 7 exhibitions 0–3 / skip | Strings + schedule repo | Builder UX |
 | MEGA-FRAME-076 | PARTIAL | Task 8 RS schedule builder | Solver + validation in core; UI shows summary / build | `PreseasonScheduleSolver` |
 | MEGA-FRAME-077 | GAP | Preseason shell News tab live feed | Placeholder only — Top 60 headline should surface post seed | `PreseasonScreen` News tab |

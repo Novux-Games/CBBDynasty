@@ -54,6 +54,7 @@ import dev.novux.dynasty.cbb.data.preseason.PreseasonReportRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonSeasonStartRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.preseason.TournamentInvitesRepository
+import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
@@ -127,6 +128,9 @@ fun PreseasonScreen(
     var scrollToTask by remember { mutableStateOf<PreseasonTaskId?>(null) }
     var rankingsReviewSheetOpen by remember { mutableStateOf(false) }
     var userTeamId by remember { mutableStateOf<String?>(null) }
+    var programPrestige by remember {
+        mutableStateOf(RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE)
+    }
 
     fun openRequiredTask(task: DashboardTask) {
         navigatePreseasonDashboardTask(
@@ -153,13 +157,15 @@ fun PreseasonScreen(
 
     LaunchedEffect(loaded.dynastyId) {
         userTeamId = app.schoolStaffRepository.userTeamId(loaded.dynastyId)
+        programPrestige = recruitingEconomyRepository.resolveUserProgramPrestige(loaded)
     }
 
-    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, selectedTab) {
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, selectedTab, programPrestige) {
         progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
         tournamentInvitesState = tournamentInvitesRepository.loadState(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
+            programPrestige,
         )
         fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
         recruitingLedger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
@@ -345,6 +351,7 @@ fun PreseasonScreen(
                     TournamentInvitesPanel(
                         dynastyId = loaded.dynastyId,
                         seasonIndex = loaded.metadata.seasonIndex,
+                        programPrestige = programPrestige,
                         invitesRepository = tournamentInvitesRepository,
                         progressRepository = progressRepository,
                         onResolved = {

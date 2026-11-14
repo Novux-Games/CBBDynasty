@@ -321,6 +321,12 @@
     <string name="tournament_invites_none">No invites available this season.</string>
     <string name="tournament_invites_acknowledge">Acknowledge</string>
     <string name="tournament_invites_pick_one">Accept at most one early-season event.</string>
+    <string name="tournament_invites_pick_one_multi">You received %1$d invites — accept at most one early-season event.</string>
+    <string name="tournament_invites_tier_low">Program prestige is low — holiday events rarely invite programs like yours.</string>
+    <string name="tournament_invites_tier_mid">Program prestige is mid-tier — you may see zero or one invite.</string>
+    <string name="tournament_invites_tier_high">High prestige — multiple holiday events are interested.</string>
+    <string name="tournament_invites_tier_high_multi">High prestige — %1$d holiday events want your program.</string>
+    <string name="tournament_invites_event_detail">%1$d teams · %2$d RS weeks on the calendar</string>
     <string name="tournament_invites_event_games">Counts %1$d regular-season games toward your 32-game cap.</string>
     <string name="tournament_invites_accept">Accept invite</string>
     <string name="tournament_invites_decline_all">Decline all invites</string>
