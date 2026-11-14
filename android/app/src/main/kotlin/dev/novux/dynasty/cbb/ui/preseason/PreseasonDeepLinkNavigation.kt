@@ -10,12 +10,13 @@ fun navigatePreseasonDashboardTask(
     task: DashboardTask,
     hubMenuCallbacks: DynastyHubMenuCallbacks,
     scrollToTask: (PreseasonTaskId) -> Unit,
+    onOpenRankingsReviewSheet: () -> Unit,
 ) {
     val taskId = task.preseasonTaskId ?: PreseasonTaskDeepLinks.taskId(task.deepLink) ?: return
     when (PreseasonTaskDeepLinks.hubAction(taskId)) {
         PreseasonTaskDeepLinks.HubAction.RecruitingHsJuco -> hubMenuCallbacks.onOpenRecruiting()
         PreseasonTaskDeepLinks.HubAction.Strategy -> hubMenuCallbacks.onOpenStrategy()
-        PreseasonTaskDeepLinks.HubAction.Rankings -> hubMenuCallbacks.onOpenRankings()
+        PreseasonTaskDeepLinks.HubAction.Rankings -> onOpenRankingsReviewSheet()
         PreseasonTaskDeepLinks.HubAction.None -> scrollToTask(taskId)
     }
 }
@@ -24,12 +25,13 @@ fun navigatePreseasonDeepLink(
     deepLink: DashboardDeepLink,
     hubMenuCallbacks: DynastyHubMenuCallbacks,
     scrollToTask: (PreseasonTaskId) -> Unit,
+    onOpenRankingsReviewSheet: () -> Unit,
 ) {
     val taskId = PreseasonTaskDeepLinks.taskId(deepLink) ?: return
     when (PreseasonTaskDeepLinks.hubAction(taskId)) {
         PreseasonTaskDeepLinks.HubAction.RecruitingHsJuco -> hubMenuCallbacks.onOpenRecruiting()
         PreseasonTaskDeepLinks.HubAction.Strategy -> hubMenuCallbacks.onOpenStrategy()
-        PreseasonTaskDeepLinks.HubAction.Rankings -> hubMenuCallbacks.onOpenRankings()
+        PreseasonTaskDeepLinks.HubAction.Rankings -> onOpenRankingsReviewSheet()
         PreseasonTaskDeepLinks.HubAction.None -> scrollToTask(taskId)
     }
 }

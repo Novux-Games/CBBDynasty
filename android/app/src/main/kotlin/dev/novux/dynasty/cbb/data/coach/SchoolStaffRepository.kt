@@ -30,6 +30,10 @@ class SchoolStaffRepository(
     private val staffDao = database.dynastyStaffDao()
     private val coachDao = database.dynastyCoachDao()
 
+    suspend fun userTeamId(dynastyId: String): String? = withContext(Dispatchers.IO) {
+        coachDao.getByDynastyId(dynastyId)?.userTeamId
+    }
+
     suspend fun ensureBootstrap(dynastyId: String, schoolDisplayName: String) {
         val existing = staffDao.listForDynasty(dynastyId)
         if (existing.isNotEmpty()) return

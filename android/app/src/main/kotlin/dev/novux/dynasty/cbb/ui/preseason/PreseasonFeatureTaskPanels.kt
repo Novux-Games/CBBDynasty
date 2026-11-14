@@ -148,7 +148,8 @@ fun PreseasonCoachUpgradesPanel(
 
 @Composable
 fun PreseasonRankingsReviewPanel(
-    onOpenRankings: () -> Unit,
+    onOpenReviewSheet: () -> Unit,
+    onOpenRankingsHub: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -162,7 +163,10 @@ fun PreseasonRankingsReviewPanel(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        OutlinedButton(onClick = onOpenRankings, modifier = Modifier.fillMaxWidth()) {
+        OutlinedButton(onClick = onOpenReviewSheet, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.preseason_rankings_open_review))
+        }
+        OutlinedButton(onClick = onOpenRankingsHub, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.preseason_rankings_open_hub))
         }
     }

@@ -76,7 +76,9 @@ import dev.novux.dynasty.cbb.ui.dashboard.CareerBlockNotificationDialog
 import dev.novux.dynasty.cbb.core.notification.NotificationFeedItem
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.data.notification.DashboardNotificationSnapshotLoader
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import androidx.compose.foundation.lazy.animateScrollToItem
 
 @Composable
@@ -123,9 +125,16 @@ fun PreseasonScreen(
     val coachSkillPointRepository = app.coachSkillPointRepository
     val checklistState = rememberLazyListState()
     var scrollToTask by remember { mutableStateOf<PreseasonTaskId?>(null) }
+    var rankingsReviewSheetOpen by remember { mutableStateOf(false) }
+    var userTeamId by remember { mutableStateOf<String?>(null) }
 
     fun openRequiredTask(task: DashboardTask) {
-        navigatePreseasonDashboardTask(task, hubMenuCallbacks) { scrollToTask = it }
+        navigatePreseasonDashboardTask(
+            task,
+            hubMenuCallbacks,
+            scrollToTask = { scrollToTask = it },
+            onOpenRankingsReviewSheet = { rankingsReviewSheetOpen = true },
+        )
     }
 
     LaunchedEffect(scrollToTask) {
@@ -141,6 +150,10 @@ fun PreseasonScreen(
     val coachEmploymentRepository = app.coachEmploymentRepository
     val coachSkillPointRepository = app.coachSkillPointRepository
     val signingDayRepository = app.signingDayRepository
+
+    LaunchedEffect(loaded.dynastyId) {
+        userTeamId = app.schoolStaffRepository.userTeamId(loaded.dynastyId)
+    }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, selectedTab) {
         progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
@@ -425,7 +438,8 @@ fun PreseasonScreen(
                 if (taskId == PreseasonTaskId.RankingsReview && !taskProgress.isComplete(taskId)) {
                     Card(modifier = Modifier.fillMaxWidth()) {
                         PreseasonRankingsReviewPanel(
-                            onOpenRankings = hubMenuCallbacks.onOpenRankings,
+                            onOpenReviewSheet = { rankingsReviewSheetOpen = true },
+                            onOpenRankingsHub = hubMenuCallbacks.onOpenRankings,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
@@ -530,6 +544,21 @@ fun PreseasonScreen(
                 }
             }
         }
+    }
+
+    if (rankingsReviewSheetOpen) {
+        PreseasonRankingsReviewBottomSheet(
+            dynastyId = loaded.dynastyId,
+            seasonIndex = loaded.metadata.seasonIndex,
+            userTeamId = userTeamId,
+            rankingsHubRepository = app.rankingsHubRepository,
+            onPublished = {
+                scope.launch {
+                    progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
+                }
+            },
+            onDismiss = { rankingsReviewSheetOpen = false },
+        )
     }
 }
 

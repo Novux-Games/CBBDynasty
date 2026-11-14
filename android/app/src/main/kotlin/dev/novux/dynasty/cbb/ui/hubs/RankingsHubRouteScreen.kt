@@ -39,6 +39,7 @@ fun RankingsHubRouteScreen(
             onPublishPreseason = {
                 scope.launch {
                     snapshot = rankingsHubRepository.publishPreseasonRankings(dynastyId, seasonIndex)
+                    onBack()
                 }
             },
         )
