@@ -24,6 +24,7 @@ data class DynastyHubMenuCallbacks(
 fun buildDynastyHubMenu(
     position: CalendarPosition,
     callbacks: DynastyHubMenuCallbacks,
+    selectionSundayPublished: Boolean = false,
     recruitingCycleClosed: Boolean = false,
     onRecruitingCycleClosed: () -> Unit = {},
     leadingExtras: List<DynastyShellMenuAction> = emptyList(),
@@ -52,7 +53,7 @@ fun buildDynastyHubMenu(
         if (DynastyHubMenuPolicy.conferenceTournamentMenuVisible(position)) {
             add(DynastyShellMenuAction(R.string.shell_menu_conf_tourney, callbacks.onOpenConferenceTournament))
         }
-        if (DynastyHubMenuPolicy.marchMayhemMenuVisible(position)) {
+        if (DynastyHubMenuPolicy.marchMayhemMenuVisible(position, selectionSundayPublished)) {
             add(DynastyShellMenuAction(R.string.shell_menu_march_mayhem, callbacks.onOpenMarchMayhem))
         }
         add(DynastyShellMenuAction(R.string.shell_menu_exit_home, callbacks.onExitHome))

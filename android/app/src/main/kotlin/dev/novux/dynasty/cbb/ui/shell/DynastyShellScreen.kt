@@ -202,6 +202,7 @@ fun DynastyShellScreen(
     var coachSecurity by remember { mutableStateOf<CoachSecuritySnapshot?>(null) }
     var userSchool by remember { mutableStateOf<SchoolHubOverview?>(null) }
     var dashboardPostseasonSeed by remember { mutableStateOf<String?>(null) }
+    var selectionSundayPublished by remember { mutableStateOf(false) }
     var coachView by remember { mutableStateOf<ShellCoachView>(ShellCoachView.Hub) }
     var headCoachTabWire by rememberSaveable { mutableStateOf(CoachCardTab.Overview.wire) }
     val headCoachCardRoute = CoachCardRoute.HeadCoach(
@@ -401,6 +402,7 @@ fun DynastyShellScreen(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
         )
+        selectionSundayPublished = standings?.selectionSunday != null
         dashboardPostseasonSeed = userSchool?.let { school ->
             DashboardPostseasonSeedResolver.label(school.teamId, standings?.selectionSunday)
         }
@@ -900,6 +902,7 @@ fun DynastyShellScreen(
         callbacks = hubMenuCallbacks.copy(
             onOpenSchool = { userSchool?.let { coachView = ShellCoachView.School(it) } },
         ),
+        selectionSundayPublished = selectionSundayPublished,
         recruitingCycleClosed = recruitingCycleClosed,
         onRecruitingCycleClosed = { notifyRecruitingCycleClosed(context) },
         leadingExtras = listOf(
