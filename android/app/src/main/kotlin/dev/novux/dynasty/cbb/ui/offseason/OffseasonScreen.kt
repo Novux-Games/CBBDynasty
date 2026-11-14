@@ -53,6 +53,7 @@ import dev.novux.dynasty.cbb.core.dashboard.OffseasonRosterLockRequiredDashboard
 import dev.novux.dynasty.cbb.data.offseason.ConferenceOffersWeekState
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.offseason.weekeight.OffseasonRosterLockConstants
+import dev.novux.dynasty.cbb.core.offseason.weekeight.RosterLockPolicy
 import dev.novux.dynasty.cbb.core.offseason.weekseven.SummerWorkoutConstants
 import dev.novux.dynasty.cbb.core.offseason.weeknine.OffseasonWeekNineConstants
 import dev.novux.dynasty.cbb.core.offseason.weekten.OffseasonConferenceOffersPolicy
@@ -112,7 +113,6 @@ import dev.novux.dynasty.cbb.ui.player.PlayerCardPreviewSheet
 import dev.novux.dynasty.cbb.ui.player.PlayerCardScreen
 import kotlinx.coroutines.launch
 
-private const val SCHOLARSHIP_LIMIT = 15
 
 /** Offseason shell — week header and advance ([planning/offseason.md]). */
 @Composable
@@ -144,7 +144,7 @@ fun OffseasonScreen(
     var weekNineEconomy by remember { mutableStateOf<ProgramEconomyState?>(null) }
     var fundraisingSheetOpen by remember { mutableStateOf(false) }
     var openScholarshipSlots by remember { mutableStateOf(0) }
-    var rosterPlayerCount by remember { mutableStateOf(0) }
+    var rosterScholarshipCount by remember { mutableStateOf(0) }
     var dismissedTaskKeys by remember { mutableStateOf(setOf<String>()) }
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
     var weekAdvanceInProgress by remember { mutableStateOf(false) }
@@ -239,8 +239,10 @@ fun OffseasonScreen(
         )
         val roster = rosterRepository.listPlayers(loaded.dynastyId)
         fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
-        rosterPlayerCount = roster.size
-        openScholarshipSlots = (SCHOLARSHIP_LIMIT - roster.size).coerceAtLeast(0)
+        val scholarships = RosterLockPolicy.scholarshipCount(roster)
+        rosterScholarshipCount = scholarships
+        openScholarshipSlots =
+            (OffseasonRosterLockConstants.SCHOLARSHIP_ROSTER_CAP - scholarships).coerceAtLeast(0)
         if (loaded.weekCheckpoint.activePosition.phase == CalendarPhase.Offseason &&
             loaded.weekCheckpoint.activePosition.weekIndex == OffseasonWeekTenConstants.OFFSEASON_WEEK_INDEX
         ) {
@@ -392,7 +394,7 @@ fun OffseasonScreen(
             seasonIndex = loaded.metadata.seasonIndex,
             weekOnePlayers = weekOnePlayers,
             signingProgress = signingProgress,
-            rosterScholarshipCount = rosterPlayerCount,
+            rosterScholarshipCount = rosterScholarshipCount,
             conferenceOffers = conferenceOffersState?.offers.orEmpty(),
             conferenceDecisions = conferenceOffersState?.decisions.orEmpty(),
         )
@@ -438,8 +440,10 @@ fun OffseasonScreen(
                 onRosterChanged = {
                     scope.launch {
                         val roster = rosterRepository.listPlayers(loaded.dynastyId)
-                        rosterPlayerCount = roster.size
-                        openScholarshipSlots = (SCHOLARSHIP_LIMIT - roster.size).coerceAtLeast(0)
+                        val scholarships = RosterLockPolicy.scholarshipCount(roster)
+                        rosterScholarshipCount = scholarships
+                        openScholarshipSlots =
+                            (OffseasonRosterLockConstants.SCHOLARSHIP_ROSTER_CAP - scholarships).coerceAtLeast(0)
                     }
                 },
                 modifier = Modifier.weight(1f),
@@ -554,11 +558,18 @@ fun OffseasonScreen(
             RecruitingCyclePolicy.hubAccessible(position.phase, offseasonWeek) &&
             recruitingCycleClosed
         ) {
-            Text(
-                text = stringResource(R.string.recruiting_cycle_closed_body),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = stringResource(R.string.recruiting_administration_only_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = stringResource(R.string.recruiting_cycle_closed_body),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
 
         if (inOffseason && position.weekIndex == SummerWorkoutConstants.OFFSEASON_WEEK_INDEX) {
@@ -673,7 +684,9 @@ fun OffseasonScreen(
                                 seasonIndex = loaded.metadata.seasonIndex,
                                 weekOnePlayers = weekOnePlayers,
                                 signingProgress = signing,
-                                rosterScholarshipCount = rosterRepository.listPlayers(loaded.dynastyId).size,
+                                rosterScholarshipCount = RosterLockPolicy.scholarshipCount(
+                                    rosterRepository.listPlayers(loaded.dynastyId),
+                                ),
                                 conferenceOffers = conferenceOffersState?.offers.orEmpty(),
                                 conferenceDecisions = conferenceOffersState?.decisions.orEmpty(),
                             ),
@@ -751,7 +764,7 @@ fun OffseasonScreen(
                 SigningDayConstants.OFFSEASON_WEEK_INDEX ->
                     signingProgress?.canAdvanceOffseasonWeek() == true
                 OffseasonRosterLockConstants.OFFSEASON_WEEK_INDEX ->
-                    OffseasonRosterLockRequiredDashboardTasks.canAdvanceWeek(rosterPlayerCount)
+                    OffseasonRosterLockRequiredDashboardTasks.canAdvanceWeek(rosterScholarshipCount)
                 OffseasonWeekTenConstants.OFFSEASON_WEEK_INDEX -> conferenceOffersResolved
                 1 -> !DashboardAdvanceGate.blocksWeekAdvance(offseasonRequiredTasks)
                 else -> true

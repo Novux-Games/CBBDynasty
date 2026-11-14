@@ -92,8 +92,13 @@ fun DynastyShellCalendarTab(
         }
         if (rows.isEmpty()) {
             item(key = "calendar_empty") {
+                val emptyCopy = if (activePosition.phase == CalendarPhase.Offseason) {
+                    stringResource(R.string.shell_calendar_offseason_no_games)
+                } else {
+                    stringResource(R.string.shell_calendar_no_schedule)
+                }
                 Text(
-                    text = stringResource(R.string.shell_calendar_no_schedule),
+                    text = emptyCopy,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

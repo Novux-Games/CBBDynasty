@@ -129,6 +129,7 @@ fun PreseasonScreen(
     val checklistState = rememberLazyListState()
     var scrollToTask by remember { mutableStateOf<PreseasonTaskId?>(null) }
     var rankingsReviewSheetOpen by remember { mutableStateOf(false) }
+    var startSeasonInProgress by remember { mutableStateOf(false) }
     var userTeamId by remember { mutableStateOf<String?>(null) }
     var programPrestige by remember {
         mutableStateOf(RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE)
@@ -541,22 +542,43 @@ fun PreseasonScreen(
         }
         Button(
             onClick = {
+                if (startSeasonInProgress) return@Button
                 scope.launch {
-                    when (val result = seasonStartRepository.startSeason(loaded.slotIndex)) {
-                        is DynastyLoadResult.Success -> {
-                            loaded = result.loaded
-                            ActiveDynastySession.set(result.loaded)
-                            onSeasonStarted()
+                    startSeasonInProgress = true
+                    try {
+                        when (val result = seasonStartRepository.startSeason(loaded.slotIndex)) {
+                            is DynastyLoadResult.Success -> {
+                                loaded = result.loaded
+                                ActiveDynastySession.set(result.loaded)
+                                onSeasonStarted()
+                            }
+                            else -> Unit
                         }
-                        else -> Unit
+                    } finally {
+                        startSeasonInProgress = false
                     }
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = PreseasonStartGate.canStartSeason(taskProgress) &&
+            enabled = !startSeasonInProgress &&
+                PreseasonStartGate.canStartSeason(taskProgress) &&
                 !DashboardAdvanceGate.blocksWeekAdvance(preseasonDashboard.required),
         ) {
-            Text(stringResource(R.string.preseason_start_season))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (startSeasonInProgress) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(18.dp),
+                        strokeWidth = 2.dp,
+                    )
+                }
+                Text(
+                    if (startSeasonInProgress) {
+                        stringResource(R.string.preseason_start_season_in_progress)
+                    } else {
+                        stringResource(R.string.preseason_start_season)
+                    },
+                )
+            }
         }
             }
                 }

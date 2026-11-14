@@ -208,9 +208,9 @@
 | MEGA-FRAME-111 | SHIP | Advance failure UX | `WeekAdvanceBlocked` + `Unreadable` snackbars; null confirm shows `advance_confirm_unavailable` | `DynastyWeekAdvanceFeedback.kt` |
 | MEGA-FRAME-112 | SHIP | Injury tick on bye | `InjuryWeeksTickByeWeek` explains no-game week; wired via `ByeWeekPolicy` + `userOnByeWeek` | `InjuryByeAdvanceConfirmPolicy`, `ByeWeekPolicy` |
 | MEGA-FRAME-113 | SHIP | Double-tap advance | Advance `Button` ignores clicks while in-flight (`weekAdvanceInProgress` / `dialogAdvanceInProgress`) before launching coroutine | `DynastyShellScreen.kt`, `OffseasonScreen.kt` |
-| MEGA-FRAME-114 | GAP | Advance work ordering | `advanceDynastyWeek` chains checkpoint, **AI recruiting**, league batch, injuries, fatigue, chemistry, coach Sunday — all on confirm path (lag source) | `SaveSlotRepository.advanceDynastyWeek` |
+| MEGA-FRAME-114 | SHIP | Advance work ordering | Post-confirm pipeline documented in `DynastyWeekAdvancePipelineStages`; pre-dialog lag split to [MEGA-QA-008] / [MEGA-FRAME-093] | `SaveSlotRepository.advanceDynastyWeek`, `DynastyWeekAdvancePipelineStages` |
 | MEGA-FRAME-115 | SHIP | Simple advance line | `InSeasonAdvanceConfirmPolicy` forces destination `SimpleAdvance` dialog in exhibition/RS/postseason | `SimWeekAdvanceResolver`, `SaveSlotRepository` |
-| MEGA-FRAME-116 | GAP | Sim-week vs Start season | Preseason uses **Start season** CTA only — no sim-week dialog (correct) but shares heavy `startSeason` repository path without progress UI | `PreseasonSeasonStartRepository` |
+| MEGA-FRAME-116 | SHIP | Sim-week vs Start season | Preseason **Start season** CTA shows in-progress indicator and blocks double-tap while `startSeason` runs | `PreseasonScreen.kt`, `PreseasonSeasonStartRepository` |
 
 ---
 
@@ -221,14 +221,14 @@
 | MEGA-FRAME-117 | SHIP | Weeks 3–5 dashboard body | Week-specific portal recap copy (`offseason_dashboard_week3_body` … `_week5_body`) on dashboard | `OffseasonScreen.kt` |
 | MEGA-FRAME-118 | SHIP | Theme line placement | `OffseasonWeekHeading.themeLine` via `DynastyShellChrome.headerSubtitle` only (no duplicate dashboard title) | `OffseasonScreen.kt`, `DynastyShellChrome.kt` |
 | MEGA-FRAME-119 | SHIP | Week 7 workout optional task | Optional review dashboard card opens full report sheet (see MEGA-FRAME-063) | `OffseasonWeekSevenOptionalDashboardTasks` |
-| MEGA-FRAME-120 | PARTIAL | Week 8 scholarship gate | Advance enabled when `rosterPlayerCount <= 15` — may not match **scholarship** subset vs walk-ons | `OffseasonScreen` `SCHOLARSHIP_LIMIT` |
+| MEGA-FRAME-120 | SHIP | Week 8 scholarship gate | Week 8 advance + open slots use `RosterLockPolicy.scholarshipCount` (walk-ons excluded) | `OffseasonScreen`, `RosterLockPolicy` |
 | MEGA-FRAME-121 | SHIP | Week 9 fundraising tasks | Optional fundraising dashboard cards per `dashboard-tasks.md` week 9 table | `OffseasonWeekNineOptionalDashboardTasks` |
 | MEGA-FRAME-122 | SHIP | Week 10 → preseason CTA | Final-week CTA + helper copy tied to season 1 week 9 skip vs week 10 conf | `OffseasonWeekAdvancePolicy`, `OffseasonScreen` |
-| MEGA-FRAME-123 | GAP | Offseason calendar tab | `DynastyShellCalendarTab` during offseason likely **empty** — no “no games this phase” copy | `UserCalendarRepository` + shell tabs |
-| MEGA-FRAME-124 | GAP | Week 2 draft results + tasks | `DraftResultsWeekTwoPanel` present — optional **open scholarships** / portal tasks depend on context flags from `LaunchedEffect` | `OffseasonScreen` context builder |
+| MEGA-FRAME-123 | SHIP | Offseason calendar tab | Empty offseason calendar shows `shell_calendar_offseason_no_games` instead of preseason placeholder | `DynastyShellCalendarTab.kt` |
+| MEGA-FRAME-124 | SHIP | Week 2 draft results + tasks | Optional portal / open-scholarship tasks use scholarship-based `openScholarshipSlots` from roster `LaunchedEffect` | `OffseasonScreen`, `OffseasonOptionalDashboardTasks` |
 | MEGA-FRAME-125 | GAP | Signing Day screen vs dashboard | Full **SigningDayScreen** route separate from shell — required tasks duplicated between screen and Week 6 panel | `SigningDayScreen.kt`, `AppRoute` |
 | MEGA-FRAME-126 | PARTIAL | Recruiting hub offseason W1 | Policy blocks hub Week 1 — **correct** for portal; shared points economy still inaccessible Week 1 via hub | `RecruitingCyclePolicy` week >= 2 |
-| MEGA-FRAME-127 | GAP | Close cycle UX after hard sign | `closeCycleAfterHardSign` runs on screen — hub CTA on Weeks 7+ should hide or show “administration only” | `SigningDayScreen`, `OffseasonScreen` |
+| MEGA-FRAME-127 | SHIP | Close cycle UX after hard sign | Hub button hidden when `!hubNavigable`; closed cycle shows **Administration only** + body copy Weeks 7+ | `OffseasonScreen`, `RecruitingCyclePolicy` |
 
 ---
 
