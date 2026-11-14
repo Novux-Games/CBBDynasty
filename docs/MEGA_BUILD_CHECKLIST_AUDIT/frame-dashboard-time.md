@@ -21,7 +21,7 @@
 | MEGA-FRAME-001 | SHIP | Single dynasty shell all phases | Offseason, preseason, in-season, season review reuse `DynastyShellChrome` + four bottom tabs | `OffseasonScreen`, `PreseasonScreen`, `DynastyShellScreen`, `SeasonReviewScreen` |
 | MEGA-FRAME-002 | SHIP | Bottom nav order Roster → Calendar → Dashboard → News | Tab order matches game-frame | `DynastyShellChrome.kt` |
 | MEGA-FRAME-003 | SHIP | Dashboard default tab | Screens initialize `selectedTab = DynastyShellTab.Dashboard` | Shell screen `remember` state |
-| MEGA-FRAME-004 | PARTIAL | Header: hamburger + school + phase/week | Top bar shows school + `CalendarWeekLabel`; menu is dropdown not slide drawer | `DynastyShellChrome.kt` |
+| MEGA-FRAME-004 | SHIP | Header: hamburger + school + phase/week | `ModalNavigationDrawer` hub sheet; school + phase/week in `TopAppBar` | `DynastyShellChrome.kt` |
 | MEGA-FRAME-005 | SHIP | No separate offseason/preseason app routes in career loop | `AppRoute.DynastyCareer` + `DynastyCareerHost` swaps body by phase; legacy routes alias same host | `DynastyCareerHost.kt`, `DynastyApp.kt`, `DynastyLaunch.kt` |
 | MEGA-FRAME-006 | SHIP | Coaching Carousel not “Week 0” | Carousel is `CoachingCarouselScreen` with title only — no week index in UI | `CoachingCarouselScreen.kt`, `carousel_title` |
 | MEGA-FRAME-007 | SHIP | Carousel uses non-shell chrome | Carousel in `DynastyShellChrome` with four tabs + hamburger | `CoachingCarouselScreen.kt`, `CoachingCarouselShellPathTest` |

@@ -887,6 +887,7 @@
     <string name="game_report_postgame_heading">Postgame report</string>
     <string name="school_hub_chemistry">Team chemistry: %1$d</string>
     <string name="shell_dynasty_school">Dynasty: %1$s</string>
+    <string name="shell_drawer_hub_heading">Dynasty hubs</string>
     <string name="shell_menu_open">Open menu</string>
     <string name="shell_tab_roster">Roster</string>
     <string name="shell_tab_calendar">Calendar</string>
