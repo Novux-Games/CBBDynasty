@@ -7,11 +7,13 @@ import org.junit.Test
 
 class UserCalendarSchedulePolicyTest {
     private fun entry(kind: ScheduleGameKind) = UserCalendarGameEntry(
+        opponentTeamId = "opp-1",
         opponentDisplayName = "Opp",
         homeGame = true,
         gameKind = kind,
         isPastWeek = false,
         gameDateLabel = "Jan 1",
+        gamePosition = CalendarPosition(1, CalendarPhase.RegularSeason, 2),
     )
 
     @Test

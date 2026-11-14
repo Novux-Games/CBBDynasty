@@ -15,7 +15,7 @@ class CalendarConfNonConfPathTest {
         ).readText()
         assertTrue(tab.contains("calendarKindBucket"))
         assertTrue(tab.contains("shell_calendar_section_conf"))
-        assertTrue(tab.contains("AssistChip(onClick = {}, label = { Text(gameKindLabel"))
+        assertTrue(tab.contains("AssistChip(onClick = if (game.isTappable) onClick else"))
     }
 
     private fun repoRoot() =

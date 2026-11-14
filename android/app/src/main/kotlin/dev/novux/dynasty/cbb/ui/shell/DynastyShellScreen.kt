@@ -82,6 +82,7 @@ import dev.novux.dynasty.cbb.core.preview.GamePreviewScoutingBuilder
 import dev.novux.dynasty.cbb.core.preview.HeadToHeadHistory
 import dev.novux.dynasty.cbb.core.preview.HeadToHeadHistoryResolver
 import dev.novux.dynasty.cbb.core.preview.TeamPreviewSide
+import dev.novux.dynasty.cbb.ui.preview.GamePreviewFromCalendar
 import dev.novux.dynasty.cbb.ui.preview.GamePreviewLaunch
 import dev.novux.dynasty.cbb.core.preseason.PreseasonSeasonStartPolicy
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
@@ -927,6 +928,21 @@ fun DynastyShellScreen(
                 activePosition = position,
                 calendarRepository = userCalendarRepository,
                 contentPadding = padding,
+                rosterPlayers = fullRoster.map { it.toRosterPlayer() },
+                userTeamDisplayName = userSchool?.displayName.orEmpty(),
+                onOpenGamePreview = { game ->
+                    scope.launch {
+                        val school = userSchool ?: return@launch
+                        GamePreviewFromCalendar.launch(
+                            context = context,
+                            dynastyId = loaded.dynastyId,
+                            seasonIndex = loaded.metadata.seasonIndex,
+                            userSchool = school,
+                            game = game,
+                        )
+                        onOpenGamePreview()
+                    }
+                },
             )
             DynastyShellTab.News -> DynastyShellNewsTab(headlines = newsHeadlines, contentPadding = padding)
             DynastyShellTab.Dashboard -> Column(

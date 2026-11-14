@@ -365,6 +365,8 @@ class DynastyApplication : Application() {
             packRepository,
             leagueWeekBatchRepository,
             database,
+            weekCheckpointRepository,
+            dashboardLastGameRepository,
         )
         preseasonReportRepository = PreseasonReportRepository(
             applicationContext,

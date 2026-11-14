@@ -2,8 +2,10 @@ package dev.novux.dynasty.cbb.data.calendar
 
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.calendar.ConferenceTournamentCalendar
+import dev.novux.dynasty.cbb.core.calendar.UserCalendarGameEnricher
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarTabBuilder
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarWeekRow
+import dev.novux.dynasty.cbb.data.dashboard.DashboardLastGameRepository
 import dev.novux.dynasty.cbb.core.conference.ConferenceTournamentQualifier
 import dev.novux.dynasty.cbb.core.conference.ConferenceTournamentUserCalendar
 import dev.novux.dynasty.cbb.core.league.LeagueTeamRecord
@@ -16,6 +18,8 @@ class UserCalendarRepository(
     private val packRepository: PackRepository,
     private val leagueWeekBatchRepository: LeagueWeekBatchRepository,
     private val database: DynastyDatabase,
+    private val weekCheckpointRepository: dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository,
+    private val dashboardLastGameRepository: DashboardLastGameRepository,
 ) {
     suspend fun loadCalendarRows(
         dynastyId: String,
@@ -47,7 +51,7 @@ class UserCalendarRepository(
         } else {
             ConferenceCalendarContext()
         }
-        return UserCalendarTabBuilder.build(
+        val built = UserCalendarTabBuilder.build(
             activePosition = activePosition,
             plan = plan,
             exhibitionCount = exhibitionCount,
@@ -55,6 +59,17 @@ class UserCalendarRepository(
             conferenceTourneyGamesByWeek = confContext.gamesByWeek,
             conferenceTourneyQualified = confContext.qualified,
             conferenceTourneySimmed = confContext.bracketSimmed,
+        )
+        val userTeamId = coach?.userTeamId ?: return built
+        val checkpoint = weekCheckpointRepository.loadCheckpoint(dynastyId)
+        val lastGame = dashboardLastGameRepository.load(dynastyId, seasonIndex)
+        return UserCalendarGameEnricher.enrichRows(
+            rows = built,
+            userTeamId = userTeamId,
+            activePosition = activePosition,
+            standings = standings,
+            provisionalGames = checkpoint?.provisionalGames.orEmpty(),
+            lastGame = lastGame,
         )
     }
 

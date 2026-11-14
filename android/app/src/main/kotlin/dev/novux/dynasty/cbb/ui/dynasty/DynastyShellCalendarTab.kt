@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.ui.dynasty
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,8 +13,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,8 +35,10 @@ import dev.novux.dynasty.cbb.core.calendar.UserCalendarGameEntry
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarRowKind
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarSchedulePolicy
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarWeekRow
+import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.schedule.ScheduleGameKind
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
+import dev.novux.dynasty.cbb.ui.sim.PostgameBoxScorePanel
 
 @Composable
 fun DynastyShellCalendarTab(
@@ -41,10 +47,26 @@ fun DynastyShellCalendarTab(
     activePosition: CalendarPosition,
     calendarRepository: UserCalendarRepository,
     contentPadding: PaddingValues,
+    rosterPlayers: List<RosterPlayer> = emptyList(),
+    userTeamDisplayName: String = "",
+    onOpenGamePreview: (UserCalendarGameEntry) -> Unit = {},
 ) {
     var rows by remember { mutableStateOf<List<UserCalendarWeekRow>>(emptyList()) }
+    var boxGame by remember { mutableStateOf<UserCalendarGameEntry?>(null) }
+    val boxSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
     LaunchedEffect(dynastyId, seasonIndex, activePosition) {
         rows = calendarRepository.loadCalendarRows(dynastyId, seasonIndex, activePosition)
+    }
+
+    if (boxGame != null) {
+        CalendarGameBoxSheet(
+            game = boxGame!!,
+            rosterPlayers = rosterPlayers,
+            userTeamDisplayName = userTeamDisplayName,
+            sheetState = boxSheetState,
+            onDismiss = { boxGame = null },
+        )
     }
 
     LazyColumn(
@@ -78,14 +100,79 @@ fun DynastyShellCalendarTab(
             }
         } else {
             items(rows, key = { "${it.phase}:${it.weekIndex}" }) { row ->
-                CalendarWeekCard(row = row)
+                CalendarWeekCard(
+                    row = row,
+                    onGameClick = { game ->
+                        when {
+                            game.playedResult != null -> boxGame = game
+                            !game.isPastWeek -> onOpenGamePreview(game)
+                        }
+                    },
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CalendarGameBoxSheet(
+    game: UserCalendarGameEntry,
+    rosterPlayers: List<RosterPlayer>,
+    userTeamDisplayName: String,
+    sheetState: androidx.compose.material3.SheetState,
+    onDismiss: () -> Unit,
+) {
+    val result = game.playedResult ?: return
+    val archive = result.boxArchive
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
+        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+            Text(
+                text = stringResource(R.string.shell_calendar_box_score_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Text(
+                text = stringResource(
+                    R.string.shell_calendar_game_line_result,
+                    game.gameDateLabel,
+                    game.opponentDisplayName,
+                    if (game.homeGame) stringResource(R.string.dynasty_shell_home)
+                    else stringResource(R.string.dynasty_shell_away),
+                    gameKindLabel(game.gameKind),
+                    stringResource(R.string.shell_calendar_played),
+                    result.userScore,
+                    result.opponentScore,
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(vertical = 8.dp),
+            )
+            if (archive != null) {
+                val homeName = if (result.userTeamIsHome) userTeamDisplayName else game.opponentDisplayName
+                val awayName = if (result.userTeamIsHome) game.opponentDisplayName else userTeamDisplayName
+                val homeScore = if (result.userTeamIsHome) result.userScore else result.opponentScore
+                val awayScore = if (result.userTeamIsHome) result.opponentScore else result.userScore
+                val sim = archive.toGameSimResultForUser(
+                    userTeamIsHome = result.userTeamIsHome,
+                    homeScore = homeScore,
+                    awayScore = awayScore,
+                )
+                PostgameBoxScorePanel(
+                    result = sim,
+                    homeName = homeName,
+                    awayName = awayName,
+                    homeRosterPlayers = if (result.userTeamIsHome) rosterPlayers else emptyList(),
+                )
             }
         }
     }
 }
 
 @Composable
-private fun CalendarWeekCard(row: UserCalendarWeekRow) {
+private fun CalendarWeekCard(
+    row: UserCalendarWeekRow,
+    onGameClick: (UserCalendarGameEntry) -> Unit,
+) {
     val colors = if (row.isCurrentWeek) {
         CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     } else {
@@ -138,7 +225,7 @@ private fun CalendarWeekCard(row: UserCalendarWeekRow) {
                                 color = MaterialTheme.colorScheme.primary,
                             )
                         }
-                        CalendarGameLine(game)
+                        CalendarGameLine(game = game, onClick = { onGameClick(game) })
                     }
                 }
             }
@@ -168,11 +255,15 @@ private fun calendarSectionTitle(bucket: CalendarKindBucket): String = when (buc
 }
 
 @Composable
-private fun CalendarGameLine(game: UserCalendarGameEntry) {
-    val status = if (game.isPastWeek) {
-        stringResource(R.string.shell_calendar_played)
-    } else {
-        stringResource(R.string.shell_calendar_upcoming)
+private fun CalendarGameLine(
+    game: UserCalendarGameEntry,
+    onClick: () -> Unit,
+) {
+    val result = game.playedResult
+    val status = when {
+        result != null -> stringResource(R.string.shell_calendar_played)
+        game.isPastWeek -> stringResource(R.string.shell_calendar_played)
+        else -> stringResource(R.string.shell_calendar_upcoming)
     }
     val location = if (game.homeGame) {
         stringResource(R.string.dynasty_shell_home)
@@ -180,23 +271,52 @@ private fun CalendarGameLine(game: UserCalendarGameEntry) {
         stringResource(R.string.dynasty_shell_away)
     }
     val date = game.gameDateLabel.ifBlank { "—" }
+    val line = if (result != null) {
+        stringResource(
+            R.string.shell_calendar_game_line_result,
+            date,
+            game.opponentDisplayName,
+            location,
+            gameKindLabel(game.gameKind),
+            status,
+            result.userScore,
+            result.opponentScore,
+        )
+    } else {
+        stringResource(
+            R.string.shell_calendar_game_line,
+            date,
+            game.opponentDisplayName,
+            location,
+            gameKindLabel(game.gameKind),
+            status,
+        )
+    }
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(
+                if (game.isTappable) {
+                    Modifier.clickable(onClick = onClick)
+                } else {
+                    Modifier
+                },
+            ),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            text = stringResource(
-                R.string.shell_calendar_game_line,
-                date,
-                game.opponentDisplayName,
-                location,
-                gameKindLabel(game.gameKind),
-                status,
-            ),
+            text = line,
             style = MaterialTheme.typography.bodyMedium,
+            color = if (game.isTappable) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            },
         )
-        AssistChip(onClick = {}, label = { Text(gameKindLabel(game.gameKind)) })
+        AssistChip(onClick = if (game.isTappable) onClick else ({}), enabled = game.isTappable, label = {
+            Text(gameKindLabel(game.gameKind))
+        })
     }
 }
 

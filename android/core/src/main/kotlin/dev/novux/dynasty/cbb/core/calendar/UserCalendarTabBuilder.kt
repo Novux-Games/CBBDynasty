@@ -126,13 +126,16 @@ object UserCalendarTabBuilder {
             phase = position.phase,
             weekIndex = position.weekIndex,
             rowKind = UserCalendarRowKind.Game,
-            games = games.map { stub ->
+            games = games.mapIndexed { index, stub ->
                 UserCalendarGameEntry(
+                    opponentTeamId = stub.opponentTeamId,
                     opponentDisplayName = stub.opponentDisplayName,
                     homeGame = stub.homeGame,
                     gameKind = stub.kind,
                     isPastWeek = isPast,
                     gameDateLabel = CalendarWeekDisplayDate.gameDateLabel(position).orEmpty(),
+                    gamePosition = position,
+                    gameIndexInWeek = index,
                 )
             },
             isCurrentWeek = position == active,
