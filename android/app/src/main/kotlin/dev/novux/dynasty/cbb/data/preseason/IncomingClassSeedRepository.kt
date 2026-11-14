@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dev.novux.dynasty.cbb.core.preseason.IncomingClassSeedRunPhase
 import dev.novux.dynasty.cbb.core.preseason.Top60NewsHeadline
 import dev.novux.dynasty.cbb.core.preseason.Top60NewsPublisher
 import dev.novux.dynasty.cbb.core.recruiting.IncomingClassSeeder
@@ -58,27 +59,38 @@ class IncomingClassSeedRepository(private val context: Context) {
             )
         }
 
-    suspend fun runSeed(dynastyId: String, seasonIndex: Int): Top60NewsHeadline =
-        withContext(Dispatchers.IO) {
-            runSeedOnIo(dynastyId, seasonIndex)
-        }
+    suspend fun runSeed(
+        dynastyId: String,
+        seasonIndex: Int,
+        onPhase: ((IncomingClassSeedRunPhase) -> Unit)? = null,
+    ): Top60NewsHeadline = withContext(Dispatchers.IO) {
+        runSeedOnIo(dynastyId, seasonIndex, onPhase)
+    }
 
-    private suspend fun runSeedOnIo(dynastyId: String, seasonIndex: Int): Top60NewsHeadline {
+    private suspend fun runSeedOnIo(
+        dynastyId: String,
+        seasonIndex: Int,
+        onPhase: ((IncomingClassSeedRunPhase) -> Unit)? = null,
+    ): Top60NewsHeadline {
         val pool = withContext(Dispatchers.Default) {
             IncomingClassSeeder.seed(
                 enrollingSeasonIndex = seasonIndex,
                 seedKey = dynastyId.hashCode().toLong(),
+                onPhase = onPhase,
             )
         }
+        onPhase?.invoke(IncomingClassSeedRunPhase.PublishingTop60Headline)
         val news = withContext(Dispatchers.Default) {
             Top60NewsPublisher.publish(seasonIndex, pool)
         }
+        onPhase?.invoke(IncomingClassSeedRunPhase.SavingClassPool)
         val encoded = withContext(Dispatchers.Default) { encodePool(pool) }
         context.incomingClassSeedStore.edit { prefs ->
             prefs[seededKey(dynastyId, seasonIndex)] = true
             prefs[poolKey(dynastyId, seasonIndex)] = encoded
             prefs[headlineKey(dynastyId, seasonIndex)] = news.headline
         }
+        onPhase?.invoke(IncomingClassSeedRunPhase.Done)
         return news
     }
 

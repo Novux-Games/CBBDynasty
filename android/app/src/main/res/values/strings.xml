@@ -300,6 +300,11 @@
     <string name="incoming_seed_title">Incoming class seed</string>
     <string name="incoming_seed_run">Run class seed</string>
     <string name="incoming_seed_running">Seeding class pools…</string>
+    <string name="incoming_seed_progress_hs">Rolling high school class (2,000–4,000 prospects)…</string>
+    <string name="incoming_seed_progress_juco">Rolling JUCO transfers (1,500)…</string>
+    <string name="incoming_seed_progress_rank">Ranking national recruits…</string>
+    <string name="incoming_seed_progress_headline">Publishing Top 60 headline…</string>
+    <string name="incoming_seed_progress_save">Saving class pool…</string>
     <string name="incoming_seed_done">Class seeded</string>
     <string name="incoming_seed_confirm">Confirm Top 60 for season</string>
     <string name="incoming_seed_top60_heading">Top 60 national recruits</string>

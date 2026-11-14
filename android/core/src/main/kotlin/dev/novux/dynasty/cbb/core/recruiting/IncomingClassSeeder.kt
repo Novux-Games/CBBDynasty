@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.recruiting
 
+import dev.novux.dynasty.cbb.core.preseason.IncomingClassSeedRunPhase
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import kotlin.random.Random
 
@@ -31,9 +32,11 @@ object IncomingClassSeeder {
         hsCount: Int? = null,
         jucoCount: Int = JUCO_POOL_SIZE,
         seedKey: Long = enrollingSeasonIndex.toLong(),
+        onPhase: ((IncomingClassSeedRunPhase) -> Unit)? = null,
     ): List<RecruitProspect> {
         val resolvedHsCount = hsCount ?: resolveHsPoolSize(enrollingSeasonIndex, seedKey)
         val random = Random(seedKey xor (enrollingSeasonIndex.toLong() * 524_287))
+        onPhase?.invoke(IncomingClassSeedRunPhase.RollingHighSchoolPool)
         val hs = generatePool(
             enrollingSeasonIndex,
             resolvedHsCount,
@@ -42,6 +45,7 @@ object IncomingClassSeeder {
             random,
             jucoBias = false,
         )
+        onPhase?.invoke(IncomingClassSeedRunPhase.RollingJucoPool)
         val juco = generatePool(
             enrollingSeasonIndex,
             jucoCount,
@@ -51,6 +55,7 @@ object IncomingClassSeeder {
             jucoBias = true,
         )
         val combined = hs + juco
+        onPhase?.invoke(IncomingClassSeedRunPhase.RankingNationalRecruits)
         val ranked = combined.sortedByDescending { it.hiddenRating }
         val rankById = ranked.take(TOP_NATIONAL_RANKS)
             .mapIndexed { index, prospect -> prospect.prospectId to (index + 1) }

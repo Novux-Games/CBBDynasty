@@ -137,7 +137,7 @@
 |----|--------|--------------|---------|--------------|
 | MEGA-FRAME-069 | SHIP | Single week Preseason label | Header `Preseason` | `CalendarWeekLabel` |
 | MEGA-FRAME-070 | SHIP | Tasks 7–8 locked until invites | `preseason_task_locked_invites` + progress gate | `PreseasonScreen` |
-| MEGA-FRAME-071 | PARTIAL | Task 1 Incoming class seed UX | Repository + progress; UI may be button-only vs “Run seed” progress | `IncomingClassSeedRepository` |
+| MEGA-FRAME-071 | SHIP | Task 1 Incoming class seed UX | Stepped HS/JUCO/rank/headline/save progress + determinate bar on `IncomingClassSeedPanel` | `IncomingClassSeedRunProgress`, `IncomingClassSeedRepository` |
 | MEGA-FRAME-072 | PARTIAL | Task 4 NET + polls review sheet | Rankings sheet — confirm Continue dismiss | preseason rankings flow |
 | MEGA-FRAME-073 | SHIP | Task 5 preseason report article | `PreseasonReportPanel` + `ReportArticleView` pattern | `preseason.md#view-preseason-report` |
 | MEGA-FRAME-074 | PARTIAL | Task 6 tournament invites prestige tiers | `TournamentInvitesState` — UI cards for multi-invite | `PreseasonScreen` |
