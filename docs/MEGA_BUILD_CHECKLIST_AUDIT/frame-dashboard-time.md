@@ -54,7 +54,7 @@
 | MEGA-FRAME-020 | SHIP | Required tasks block advance | `DashboardAdvanceGate.blocksWeekAdvance` disables button | `DynastyShellScreen`, `OffseasonScreen` |
 | MEGA-FRAME-021 | SHIP | Optional tasks do not block | In-season optional panel + advance still enabled when required clear | `DashboardOptionalTasksPanel`, gate tests |
 | MEGA-FRAME-022 | SHIP | Sim-week confirmation dialog | `SimWeekAdvanceDialog` for fast-sim / recruiting / simple advance lines | `SimWeekAdvanceDialog.kt` |
-| MEGA-FRAME-023 | PARTIAL | Confirmation copy intent | Lines exist but may not name opponent for unplayed game | `SimWeekConfirmationLineKind`, strings.xml |
+| MEGA-FRAME-023 | SHIP | Confirmation copy intent | Fast-sim line names opponent from `ScheduledGameStub` | `SimWeekAdvanceResolver.kt` |
 | MEGA-FRAME-024 | SHIP | Task cards Required vs Optional badge | `DashboardTaskKindChip` on required + optional task cards | `DashboardTaskKindChip.kt`, `DashboardTaskBadgePathTest` |
 | MEGA-FRAME-025 | SHIP | Preseason 8 required tasks | `PreseasonTaskId.entries` + `PreseasonStartGate` | `PreseasonScreen`, `dashboard-tasks.md#preseason` |
 | MEGA-FRAME-026 | SHIP | Preseason task deep links | `PreseasonTaskDeepLinks` + jump chips scroll/open hub per task | `PreseasonRequiredTaskChips.kt`, `PreseasonDeepLinkNavigation.kt` |
@@ -201,7 +201,7 @@
 
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
-| MEGA-FRAME-107 | PARTIAL | Unplayed game copy | `UnplayedGameFastSim` confirmation string is generic — **opponent name** not passed from `ScheduledGameStub` | `SimWeekAdvanceDialog.kt`, `SimWeekConfirmationLineKind` |
+| MEGA-FRAME-107 | SHIP | Unplayed game copy | Opponent in `advance_confirm_line_fast_sim` via `stringFormatArgs` | `SimWeekAdvanceDialog.kt` |
 | MEGA-FRAME-108 | GAP | Offseason lightweight confirm | Offseason advance often skips dialog when `unresolvedOptionalTaskCount == 0` even crossing **Signing Day** / roster lock — no “Advance to Offseason Week N?” | `OffseasonScreen.kt`, `SimWeekAdvanceResolver` |
 | MEGA-FRAME-109 | PARTIAL | Portal line on advance | `PortalRecruitingWeek` confirmation line when portal window open — OK; **absent** after Week 5 | `SimWeekAdvanceResolver.kt` |
 | MEGA-FRAME-110 | GAP | Manual recruiting spend param | UI always calls `advanceDynastyWeek(slot)` with default **`userManualRecruitingSpent = 0`** — no hook from Recruiting hub | `DynastyShellScreen.kt`, `OffseasonScreen.kt` |

@@ -531,7 +531,7 @@
     <string name="advance_confirm_advancing">Simulating week…</string>
     <string name="dynasty_shell_advance_week_in_progress">Advancing…</string>
     <string name="advance_confirm_cancel">Stay on this week</string>
-    <string name="advance_confirm_line_fast_sim">Your unplayed game will be simulated with the current lineup. Results are final for this week.</string>
+    <string name="advance_confirm_line_fast_sim">Your unplayed game vs %1$s will be simulated with the current lineup. Results are final for this week.</string>
     <string name="advance_confirm_line_recruiting">Recruiting: your program will auto-spend about %1$d points on the recommended board.</string>
     <string name="advance_confirm_line_league_recruiting">League programs will run their weekly recruiting pass.</string>
     <string name="advance_confirm_line_portal">Transfer portal: league portal recruiting runs this week.</string>

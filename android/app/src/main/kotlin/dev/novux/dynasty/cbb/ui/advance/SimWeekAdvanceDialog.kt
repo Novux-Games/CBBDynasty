@@ -30,7 +30,14 @@ fun SimWeekAdvanceDialog(
             Text(
                 buildString {
                     confirmation.lines.forEach { line ->
-                        appendLine(lineText(confirmation, line.kind, line.formatArgs))
+                        appendLine(
+                            lineText(
+                                confirmation,
+                                line.kind,
+                                line.formatArgs,
+                                line.stringFormatArgs,
+                            ),
+                        )
                     }
                 }.trim(),
             )
@@ -67,9 +74,13 @@ private fun lineText(
     confirmation: SimWeekConfirmation,
     kind: SimWeekConfirmationLineKind,
     args: List<Int>,
+    stringArgs: List<String>,
 ): String = when (kind) {
     SimWeekConfirmationLineKind.UnplayedGameFastSim ->
-        stringResource(R.string.advance_confirm_line_fast_sim)
+        stringResource(
+            R.string.advance_confirm_line_fast_sim,
+            stringArgs.firstOrNull() ?: "your opponent",
+        )
     SimWeekConfirmationLineKind.UserRecruitingAutoMaintain ->
         stringResource(R.string.advance_confirm_line_recruiting, args.firstOrNull() ?: 0)
     SimWeekConfirmationLineKind.LeagueRecruitingBatch ->

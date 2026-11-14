@@ -14,6 +14,7 @@ enum class SimWeekConfirmationLineKind {
 data class SimWeekConfirmationLine(
     val kind: SimWeekConfirmationLineKind,
     val formatArgs: List<Int> = emptyList(),
+    val stringFormatArgs: List<String> = emptyList(),
 )
 
 data class SimWeekConfirmation(
@@ -35,6 +36,8 @@ data class SimWeekAdvanceInput(
     val recruitingAutoMaintainEnabled: Boolean = true,
     /** Required when [unplayedUserGameCount] > 0 and no provisional mark is staged. */
     val userLeagueFastSim: UserLeagueFastSimBundle? = null,
+    /** Opponent display name for unplayed-game confirmation copy ([MEGA-FRAME-023]). */
+    val unplayedUserGameOpponentDisplayName: String? = null,
 )
 
 data class SimWeekAdvanceResolution(

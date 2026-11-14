@@ -915,6 +915,7 @@ class SaveSlotRepository(
         return SimWeekAdvanceInput(
             nextWeekLabel = nextLabel,
             unplayedUserGameCount = unplayed,
+            unplayedUserGameOpponentDisplayName = weekGames.firstOrNull()?.opponentDisplayName,
             recruitingPointsAvailable = ledger.pointsAvailable,
             userManualRecruitingSpent = userManualRecruitingSpent,
             recruitingHubOpen = hubOpen,

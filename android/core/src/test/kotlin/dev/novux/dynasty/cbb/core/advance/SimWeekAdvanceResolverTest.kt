@@ -31,6 +31,24 @@ class SimWeekAdvanceResolverTest {
     )
 
     @Test
+    fun confirmation_fastSimLineNamesOpponent() {
+        val confirmation = SimWeekAdvanceResolver.buildConfirmation(
+            SimWeekAdvanceInput(
+                nextWeekLabel = "Regular Season · Week 2",
+                unplayedUserGameCount = 1,
+                unplayedUserGameOpponentDisplayName = "Kentucky",
+                recruitingPointsAvailable = 0,
+                userManualRecruitingSpent = 0,
+                recruitingHubOpen = false,
+                estimatedAutoRecruitingSpend = 0,
+                portalRecruitingWeekOpen = false,
+            ),
+        )
+        val line = confirmation.lines.first { it.kind == SimWeekConfirmationLineKind.UnplayedGameFastSim }
+        assertEquals(listOf("Kentucky"), line.stringFormatArgs)
+    }
+
+    @Test
     fun confirmation_includesRecruitingLineWhenAutoMaintain() {
         val confirmation = SimWeekAdvanceResolver.buildConfirmation(
             SimWeekAdvanceInput(

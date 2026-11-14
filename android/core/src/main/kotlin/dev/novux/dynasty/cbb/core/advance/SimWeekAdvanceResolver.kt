@@ -10,7 +10,13 @@ object SimWeekAdvanceResolver {
     fun buildConfirmation(input: SimWeekAdvanceInput): SimWeekConfirmation {
         val lines = mutableListOf<SimWeekConfirmationLine>()
         if (input.unplayedUserGameCount > 0) {
-            lines.add(SimWeekConfirmationLine(SimWeekConfirmationLineKind.UnplayedGameFastSim))
+            val opponent = input.unplayedUserGameOpponentDisplayName?.takeIf { it.isNotBlank() }
+            lines.add(
+                SimWeekConfirmationLine(
+                    kind = SimWeekConfirmationLineKind.UnplayedGameFastSim,
+                    stringFormatArgs = listOf(opponent ?: "your opponent"),
+                ),
+            )
         }
         val willAutoMaintain = input.recruitingAutoMaintainEnabled &&
             input.recruitingHubOpen &&
