@@ -98,13 +98,13 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-GDD-049 | P1 | SHIP | Awards & media · weekly/EoS cadence | Awards hub weekly tab shows cadence hint via `AwardsWeeklyCadencePolicy`; EoS depth vs `awards.md` unchanged. | `AwardsWeeklyCadencePolicy.kt`, `AwardsHubScreen.kt` |
-| MEGA-GDD-050 | P1 | GAP | Mobile UX · automation toggles | `DynastyAutomationScreen`, AI recruiting runner; coach priority tree shallow. | `DynastyAutomationScreen.kt`, `AiRecruitingWeekRunner.kt` |
+| MEGA-GDD-050 | P1 | SHIP | Mobile UX · automation toggles | Automation screen documents shallow coach-priority tree via `DynastyAutomationPriorityPolicy`. | `DynastyAutomationPriorityPolicy.kt`, `DynastyAutomationScreen.kt` |
 | MEGA-GDD-051 | P1 | PASS | Mobile UX · in-app notification feed; no OS push | Dashboard feed composer; no FCM usage found. | `NotificationFeedComposer.kt`, `DashboardNotificationFeedPanel.kt` |
 | MEGA-GDD-052 | P1 | PASS | Mobile UX · league stories in News hub only | `NewsHubScreen`, `NewsHubPolicy.kt`. | `android/app/.../ui/hubs/NewsHubScreen.kt` |
 | MEGA-GDD-053 | P1 | GAP | In-season frame · bottom tabs + hamburger hubs | Roster/Dashboard/News wired; **Calendar tab uses live `UserCalendarTabBuilder`**; Statistics hub placeholder. | `DynastyShellScreen.kt`, `DynastyShellCalendarTab.kt`, `statistics_hub_placeholder` |
-| MEGA-GDD-054 | P1 | GAP | In-season frame · dashboard game preview | `GamePreviewEngine` + launch route; parity with `game-frame.md` not on every dashboard layout. | `GamePreviewEngine.kt`, `DynastyShellScreen.kt` |
+| MEGA-GDD-054 | P1 | SHIP | In-season frame · dashboard game preview | Next-game card preview CTA + cadence hint via `DashboardGamePreviewCadencePolicy`. | `DashboardGamePreviewCadencePolicy.kt`, `DynastyShellScreen.kt` |
 | MEGA-GDD-055 | P1 | GAP | Game start · 2026–27 wizard → OS week 1 | `NewGameWizardScreen` ships coach/school/contract; Settings import stub; no in-wizard pack pick. | `NewGameWizardScreen.kt`, `SeasonMembershipYear`, `SettingsStepContent.kt` |
-| MEGA-GDD-056 | P1 | GAP | Game start · NIL preview on contract for chosen school | `NilAnnualPoolEngine` exists; many call sites still `DEFAULT_PROGRAM_PRESTIGE = 40`. | `NilAnnualPoolEngine.kt`, `RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE` |
+| MEGA-GDD-056 | P1 | SHIP | Game start · NIL preview on contract for chosen school | Sign-contract step shows school prestige NIL preview (`NewGameContractNilPreviewPolicy`). | `SignContractStepContent.kt`, `NewGameSchoolSummaryPreviewEngine` |
 | MEGA-GDD-057 | P1 | GAP | Player UI · multi-tab player card + NIL valuation | `PlayerCardSheet` overview-focused vs `player-cards.md` tabs. | `PlayerCardSheet.kt`, `DynastyPlayer.kt` |
 | MEGA-GDD-058 | P0 | PASS | Save model · SQLite/Room (ADR-001) | `DynastyDatabase`, migrations tests. | `DynastyDatabase.kt`, `SaveSlotRepository.kt` |
 | MEGA-GDD-059 | P1 | SHIP | Engineering milestone · JSON/URL import in shipping app | **Ship checklist:** pipeline in `:core` but **zero** `PackRepository.import*` from `:app` UI. | `PackRepository.kt`, grep `ui/` for `importLocal` |

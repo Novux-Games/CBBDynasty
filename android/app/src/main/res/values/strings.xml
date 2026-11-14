@@ -110,6 +110,7 @@
     <string name="new_step_sign_subtitle">Confirm and launch Season 1.</string>
     <string name="new_sign_school_label">Program: %1$s</string>
     <string name="new_sign_coach_label">Head coach: %1$s</string>
+    <string name="new_sign_nil_preview">Projected annual NIL pool (chosen school): %1$s</string>
     <string name="new_sign_cta">Sign contract</string>
     <string name="new_sign_err_incomplete">Finish the earlier steps before signing.</string>
     <string name="new_school_search">Search schools</string>
@@ -607,6 +608,7 @@
     <string name="shell_menu_automation">Automation</string>
     <string name="dynasty_automation_title">Dynasty automation</string>
     <string name="dynasty_automation_hint">Controls for this save only. Sim-week recruiting and head coach skill spend.</string>
+    <string name="dynasty_automation_priority_hint">Coach priority tree depth %1$d — broaden targets in a later update.</string>
     <string name="dynasty_automation_recruiting">Recruiting auto-maintain</string>
     <string name="dynasty_automation_recruiting_summary">On week advance, spend recruiting points/NIL when you did not recruit manually.</string>
     <string name="dynasty_automation_coach_skills">Coach skill auto-spend</string>
@@ -1032,6 +1034,7 @@
     <string name="strategy_prep_locked">Game week prep is locked. Advance the calendar or wait for your next scheduled game.</string>
     <string name="game_preview_neutral">Neutral court</string>
     <string name="dynasty_shell_game_preview">Game preview</string>
+    <string name="dynasty_shell_game_preview_hint">Win chance, scouting stats, and lineup reminders before you play or sim.</string>
     <string name="game_preview_venue_phrase_home">home court</string>
     <string name="game_preview_venue_phrase_away">the road</string>
     <string name="game_report_pregame_heading">Pregame report</string>

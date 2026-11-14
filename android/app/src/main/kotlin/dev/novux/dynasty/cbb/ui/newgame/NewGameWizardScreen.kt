@@ -30,6 +30,7 @@ import dev.novux.dynasty.cbb.core.balance.BalanceNilAnnualPoolParser
 import dev.novux.dynasty.cbb.core.balance.BalanceNilAnnualPoolTables
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingEconomy
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
+import dev.novux.dynasty.cbb.core.save.NewGameSchoolSummaryPreviewEngine
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
@@ -183,9 +184,17 @@ fun NewGameWizardScreen(
                             val schoolName = schools.firstOrNull {
                                 it.teamId == draft.selectedTeamId
                             }?.displayName.orEmpty()
+                            val contractPreview = wizardRecruitingEconomy?.let { economy ->
+                                wizardNilTables?.let { nilTables ->
+                                    schools.firstOrNull { it.teamId == draft.selectedTeamId }?.let { team ->
+                                        NewGameSchoolSummaryPreviewEngine.build(team, economy, nilTables)
+                                    }
+                                }
+                            }
                             SignContractStepContent(
                                 draft = draft,
                                 schoolDisplayName = schoolName,
+                                contractNilPreview = contractPreview,
                                 signError = signError,
                                 signingInProgress = signing,
                                 onSign = {

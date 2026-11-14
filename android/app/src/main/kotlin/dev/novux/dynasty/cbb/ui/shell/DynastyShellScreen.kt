@@ -79,6 +79,7 @@ import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.coach.staff.SchoolStaffRoster
 import dev.novux.dynasty.cbb.core.preseason.FirstPlayableGame
+import dev.novux.dynasty.cbb.core.preview.DashboardGamePreviewCadencePolicy
 import dev.novux.dynasty.cbb.core.preview.GamePreviewEngine
 import dev.novux.dynasty.cbb.core.preview.GamePreviewRequest
 import dev.novux.dynasty.cbb.core.preview.GamePreviewVenue
@@ -1311,6 +1312,13 @@ private fun NextGameCard(
             }
             OutlinedButton(onClick = onOpenPreview, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.dynasty_shell_game_preview))
+            }
+            if (DashboardGamePreviewCadencePolicy.showPreviewHint(game)) {
+                Text(
+                    text = stringResource(R.string.dynasty_shell_game_preview_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
     }
