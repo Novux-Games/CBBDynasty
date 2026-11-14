@@ -105,13 +105,26 @@ fun SeasonReviewScreen(
         menuActions = menu,
     ) { padding ->
         when (selectedTab) {
-            DynastyShellTab.Calendar -> DynastyShellCalendarTab(
-                dynastyId = loaded.dynastyId,
-                seasonIndex = loaded.metadata.seasonIndex,
-                activePosition = loaded.weekCheckpoint.activePosition,
-                calendarRepository = userCalendarRepository,
-                contentPadding = padding,
-            )
+            DynastyShellTab.Calendar -> Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Text(
+                    text = stringResource(R.string.season_review_calendar_banner),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 28.dp, vertical = 12.dp),
+                )
+                DynastyShellCalendarTab(
+                    dynastyId = loaded.dynastyId,
+                    seasonIndex = loaded.metadata.seasonIndex,
+                    activePosition = loaded.weekCheckpoint.activePosition,
+                    calendarRepository = userCalendarRepository,
+                    contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp),
+                )
+            }
             DynastyShellTab.News -> DynastyShellNewsTab(feed = newsFeed, contentPadding = padding)
             DynastyShellTab.Roster,
             DynastyShellTab.Dashboard,

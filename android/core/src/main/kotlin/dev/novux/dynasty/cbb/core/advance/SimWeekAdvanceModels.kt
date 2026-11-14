@@ -11,6 +11,7 @@ enum class SimWeekConfirmationLineKind {
     PortalUserSchoolAutoSpend,
     InjuryWeeksTick,
     InjuryWeeksTickByeWeek,
+    LeagueWeekBatch,
     SimpleAdvance,
 }
 
@@ -42,6 +43,8 @@ data class SimWeekAdvanceInput(
     val userLeagueFastSim: UserLeagueFastSimBundle? = null,
     /** Opponent display name for unplayed-game confirmation copy ([MEGA-FRAME-023]). */
     val unplayedUserGameOpponentDisplayName: String? = null,
+    /** Regular-season advance runs 365-team batch sim + rankings ([planning/time-system.md]). */
+    val simulatesLeagueWeekBatch: Boolean = false,
 )
 
 data class SimWeekAdvanceResolution(

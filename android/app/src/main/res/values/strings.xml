@@ -136,6 +136,7 @@
     <string name="load_slot_export_metadata_chip">%1$s · %2$s · %3$d–%4$d</string>
     <string name="season_review_title">End of Season</string>
     <string name="season_review_subtitle">Final rankings and program recap. No games this week.</string>
+    <string name="season_review_calendar_banner">Season review week — your calendar has no games. Use Dashboard for recap tasks.</string>
     <string name="season_review_placeholder">Full rankings, awards, and prestige recap land here in a later phase.</string>
     <string name="season_review_enter_offseason">Enter offseason</string>
     <string name="season_review_offseason_week1">Next: Offseason Week 1 — roster and transfers.</string>
@@ -587,6 +588,8 @@
     <string name="dashboard_task_portal_top40">Portal Top 40 published</string>
     <string name="dashboard_task_portal_pipeline_entrant">%1$s in portal (%2$s)</string>
     <string name="dashboard_offseason_portal_optional_heading">Portal window — optional tasks (weeks 2–5)</string>
+    <string name="dashboard_offseason_portal_window_closed_heading">Portal recruiting window closed</string>
+    <string name="dashboard_offseason_portal_window_closed_body">Weeks 2–5 optional portal tasks are done. Finish signing and roster moves from the recruiting hub or advance the week.</string>
     <string name="dashboard_task_signing_crunch">Signing week R%1$d — 1.5× recruiting points</string>
     <string name="dashboard_task_open_scholarships">%1$d scholarship slots open</string>
     <string name="advance_confirm_title">Advance week?</string>
@@ -597,6 +600,7 @@
     <string name="advance_confirm_line_fast_sim">Your unplayed game vs %1$s will be simulated with the current lineup. Results are final for this week.</string>
     <string name="advance_confirm_line_recruiting">Recruiting: your program will auto-spend about %1$d points on the recommended board.</string>
     <string name="advance_confirm_line_league_recruiting">League programs will run their weekly recruiting pass.</string>
+    <string name="advance_confirm_line_league_batch">Simulates the rest of the league’s games, NET, and polls for this week.</string>
     <string name="advance_confirm_line_portal">Transfer portal: league portal recruiting runs this week.</string>
     <string name="advance_confirm_portal_optional_nudges">Transfer portal: %1$d optional dashboard nudges will be dismissed when you advance.</string>
     <string name="advance_confirm_portal_user_auto_spend">Your program will auto-spend about %1$d recruiting points on the transfer portal recommended board.</string>

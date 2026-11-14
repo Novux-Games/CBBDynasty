@@ -46,7 +46,8 @@ import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskGate
-import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
+import dev.novux.dynasty.cbb.core.dashboard.DashboardTask
+import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskDismissal
 import dev.novux.dynasty.cbb.core.dashboard.InSeasonRecruitingDashboardContext
 import dev.novux.dynasty.cbb.core.dashboard.InSeasonRecruitingNudgeResolver
 import dev.novux.dynasty.cbb.core.dashboard.RecruitingTop60MovementPolicy
@@ -215,7 +216,7 @@ fun DynastyShellScreen(
     var fullScreenPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     var rosterPlayers by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
     var postgameEvents by remember { mutableStateOf<List<GameSimInjuryEvent>>(emptyList()) }
-    var dismissedInjuryTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
+    var dismissedOptionalTaskKeys by remember { mutableStateOf(setOf<String>()) }
     var disciplinePending by remember { mutableStateOf<PendingDisciplineIncident?>(null) }
     var disciplineSheetTarget by remember { mutableStateOf<PendingDisciplineIncident?>(null) }
     val disciplineSheetState = rememberDisciplineDecisionSheetState()
@@ -274,13 +275,12 @@ fun DynastyShellScreen(
         coachSkillPointBank = coachSkillPointBank,
         recruiting = recruitingDashContext,
     )
+    val optionalTaskDismissKey: (DashboardTask) -> String = { task ->
+        DashboardTaskDismissal.key(position, task.id)
+    }
 
     LaunchedEffect(loaded.dynastyId) {
         coachEmploymentStatus = coachEmploymentRepository.loadState(loaded.dynastyId).status
-    }
-
-    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint, postgameInjuryRefreshKey) {
-        recruitingLedger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
     }
 
     // disciplinePendingLoadEffect — [DisciplineDashboardFirstPaint.SHELL_DEDICATED_EFFECT_MARKER]
@@ -298,19 +298,17 @@ fun DynastyShellScreen(
     }
 
     val incomingClassSeedRepository = context.requireDynastyApplication().incomingClassSeedRepository
+    // recruitingLedgerDashContextLoadEffect — [RecruitingDashboardFirstPaint.SHELL_LEDGER_CONTEXT_EFFECT_MARKER]
     LaunchedEffect(
         loaded.dynastyId,
         loaded.metadata.seasonIndex,
         loaded.weekCheckpoint,
-        recruitingLedger,
+        postgameInjuryRefreshKey,
         loaded.balanceRuleset,
         userSchool,
     ) {
-        val ledger = recruitingLedger
-        if (ledger == null) {
-            recruitingDashContext = null
-            return@LaunchedEffect
-        }
+        val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+        recruitingLedger = ledger
         val active = loaded.weekCheckpoint.activePosition
         val offseasonWeek = active.weekIndex.takeIf { active.phase == CalendarPhase.Offseason }
         val hubOpen = RecruitingCyclePolicy.hubNavigable(active.phase, offseasonWeek, ledger.cycleClosed)
@@ -1001,8 +999,9 @@ fun DynastyShellScreen(
                 )
                 DashboardOptionalTasksPanel(
                     tasks = dashboardTasks.optional,
-                    dismissedIds = dismissedInjuryTasks,
-                    onDismiss = { dismissedInjuryTasks = dismissedInjuryTasks + it },
+                    dismissedKeys = dismissedOptionalTaskKeys,
+                    onDismiss = { dismissedOptionalTaskKeys = dismissedOptionalTaskKeys + it },
+                    taskDismissKey = optionalTaskDismissKey,
                     onDeepLink = onOpenRecruitingTab,
                     onStrategyOpen = hubMenuCallbacks.onOpenStrategy,
                     onCoachCardOpen = { staffRoster?.headCoach?.let { openHeadCoachPreview(it) } },
@@ -1130,7 +1129,7 @@ fun DynastyShellScreen(
                                     ) { updated ->
                                         loaded = updated
                                         ActiveDynastySession.set(updated)
-                                        dismissedInjuryTasks = emptySet()
+                                        dismissedOptionalTaskKeys = emptySet()
                                         pendingAdvanceConfirmation = null
                                     }
                                 } finally {
@@ -1153,7 +1152,9 @@ fun DynastyShellScreen(
                             }
                             weekAdvanceInProgress = true
                             try {
-                                val unresolved = dashboardTasks.optional.count { it.id !in dismissedInjuryTasks }
+                                val unresolved = dashboardTasks.optional.count {
+                                    optionalTaskDismissKey(it) !in dismissedOptionalTaskKeys
+                                }
                                 val confirmation = SimWeekAdvanceConfirmationUiPerf.measure {
                                     saveSlotRepository.buildSimWeekAdvanceConfirmation(
                                         loaded.slotIndex,
@@ -1173,7 +1174,7 @@ fun DynastyShellScreen(
                                     ) { updated ->
                                         loaded = updated
                                         ActiveDynastySession.set(updated)
-                                        dismissedInjuryTasks = emptySet()
+                                        dismissedOptionalTaskKeys = emptySet()
                                     }
                                 }
                             } finally {

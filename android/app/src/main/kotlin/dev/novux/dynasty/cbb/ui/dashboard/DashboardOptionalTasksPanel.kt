@@ -24,8 +24,9 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 @Composable
 fun DashboardOptionalTasksPanel(
     tasks: List<DashboardTask>,
-    dismissedIds: Set<DashboardTaskId>,
-    onDismiss: (DashboardTaskId) -> Unit,
+    dismissedKeys: Set<String>,
+    onDismiss: (String) -> Unit,
+    taskDismissKey: (DashboardTask) -> String = { it.id.name },
     onDeepLink: (RecruitingHubTab) -> Unit,
     onStrategyOpen: () -> Unit = {},
     onCoachCardOpen: () -> Unit = {},
@@ -34,7 +35,7 @@ fun DashboardOptionalTasksPanel(
     headingRes: Int? = null,
     modifier: Modifier = Modifier,
 ) {
-    val visible = tasks.filterNot { it.id in dismissedIds }
+    val visible = tasks.filterNot { taskDismissKey(it) in dismissedKeys }
     if (visible.isEmpty()) return
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -59,7 +60,7 @@ fun DashboardOptionalTasksPanel(
                         else -> onDeepLink(task.deepLink.toHubTab())
                     }
                 },
-                onDismiss = { onDismiss(task.id) },
+                onDismiss = { onDismiss(taskDismissKey(task)) },
             )
         }
     }

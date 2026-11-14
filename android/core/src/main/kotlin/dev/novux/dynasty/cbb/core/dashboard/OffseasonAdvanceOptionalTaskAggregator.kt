@@ -51,6 +51,9 @@ object OffseasonAdvanceOptionalTaskAggregator {
         }
     }
 
-    fun unresolvedCount(tasks: List<DashboardTask>, dismissed: Set<DashboardTaskId>): Int =
-        tasks.count { it.id !in dismissed }
+    fun unresolvedCount(
+        tasks: List<DashboardTask>,
+        dismissedKeys: Set<String>,
+        dismissKey: (DashboardTask) -> String = { it.id.name },
+    ): Int = tasks.count { dismissKey(it) !in dismissedKeys }
 }

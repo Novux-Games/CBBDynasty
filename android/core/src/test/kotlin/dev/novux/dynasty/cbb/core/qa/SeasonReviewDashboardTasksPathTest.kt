@@ -20,6 +20,7 @@ class SeasonReviewDashboardTasksPathTest {
         assertTrue(screen.contains("SeasonReviewRequiredDashboardTasks"))
         assertTrue(screen.contains("DashboardRequiredTasksPanel"))
         assertTrue(screen.contains("seasonReviewProgressRepository"))
+        assertTrue(screen.contains("season_review_calendar_banner"))
     }
 
     private fun repoRoot() =

@@ -156,8 +156,8 @@
 | MEGA-FRAME-080 | SHIP | Injury weeks tick on bye advance | `InjuryByeAdvanceConfirmPolicy` — bye copy + simple advance tail; `userOnByeWeek` in repository | `InjuryByeAdvanceConfirmPolicy`, `SimWeekAdvanceDialog` |
 | MEGA-FRAME-081 | SHIP | Early-event bye weeks on calendar | `EarlySeasonUserCalendarByes` + `UserCalendarRowKind.EventEliminationBye` in shell calendar tab | `UserCalendarRepository`, `DynastyShellCalendarTab.kt` |
 | MEGA-FRAME-082 | SHIP | Conf tourney shorter-bracket bye | `ConfTournamentStructuralBye` chip + conference detail on calendar tab | `UserCalendarTabBuilder`, `DynastyShellCalendarTab.kt` |
-| MEGA-FRAME-083 | PARTIAL | Week advance league batch sim | Repository advances checkpoint — full league batch visibility N/A in UI | `SaveSlotRepository.advanceDynastyWeek` |
-| MEGA-FRAME-084 | GAP | Season review week no bottom-tab games | Season review screen — confirm calendar empty / copy | `SeasonReviewScreen` |
+| MEGA-FRAME-083 | SHIP | Week advance league batch sim | RS advance confirm line `LeagueWeekBatch` from `simulatesLeagueWeekBatch` in repository input | `SimWeekAdvanceResolver`, `SaveSlotRepository`, `SimWeekAdvanceDialog` |
+| MEGA-FRAME-084 | SHIP | Season review week no bottom-tab games | Calendar tab banner `season_review_calendar_banner` — no games this week | `SeasonReviewScreen` |
 
 ---
 
@@ -174,7 +174,7 @@
 | MEGA-FRAME-091 | PASS | Sim week advance loading UX | Advance button and confirm dialog show spinner + disable while suspend advance runs | `DynastyShellScreen.kt`, `OffseasonScreen.kt` |
 | MEGA-FRAME-092 | PASS | Sim week confirm loading UX | Dialog confirm shows spinner; dismiss blocked while advancing | `SimWeekAdvanceDialog.kt` |
 | MEGA-FRAME-093 | PASS | **Bug: sim week lag (pre-dialog)** | Confirmation path sets `preDialogOnly` — `loadPool` (no seed) and skips `buildFastSimBundle` until confirm ([MEGA-QA-008]) | `SaveSlotRepository`, `SimWeekAdvancePreDialogPath` |
-| MEGA-FRAME-094 | GAP | **Bug: tasks disappear (portal weeks)** | Offseason optional portal/recruiting cards only render for **`PORTAL_RECRUITING_WEEKS`** — advancing to Week 6+ **removes entire optional block** abruptly | `OffseasonScreen.kt` weeks 2–5 only |
+| MEGA-FRAME-094 | SHIP | **Bug: tasks disappear (portal weeks)** | After portal window closes, dashboard shows closed heading/body instead of removing optional block | `OffseasonScreen.kt`, `PortalCyclePolicy.portalWindowClosed` |
 
 ---
 
@@ -183,11 +183,11 @@
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
 | MEGA-FRAME-095 | PASS | In-season recruiting optional tasks | `InSeasonRecruitingOptionalDashboardTasks` + shell `InSeasonRecruitingDashboardContext` emit spend + watchlist nudges when cycle open | `DashboardTaskGate.kt`, `DynastyShellScreen.kt` |
-| MEGA-FRAME-096 | GAP | Shell recruiting ledger | `DynastyShellScreen` does not load `RecruitingEconomyRepository` for task counts or sim-week unresolved recruiting line | `DynastyShellScreen.kt` |
+| MEGA-FRAME-096 | SHIP | Shell recruiting ledger | Single effect loads ledger + `InSeasonRecruitingDashboardContext` for optional tasks and sim-week confirm | `DynastyShellScreen.kt`, `RecruitingDashboardFirstPaint` |
 | MEGA-FRAME-097 | SHIP | Required / Optional chips | `DashboardTaskKindChip` on both panels (same as MEGA-FRAME-024) | `DashboardTaskKindChip.kt` |
 | MEGA-FRAME-098 | SHIP | Preseason required deep link | Jump chips + `navigatePreseasonDashboardTask` scroll/hub — no duplicate full task card panel | `PreseasonScreen.kt` |
 | MEGA-FRAME-099 | SHIP | `PreseasonChecklist` deep link | Each task has unique `DashboardDeepLink` + `preseasonTaskId` on `DashboardTask` | `PreseasonTaskDeepLinks.kt` |
-| MEGA-FRAME-100 | PARTIAL | Optional dismiss scope | `dismissedIds` keyed by `DashboardTaskId` only — multiple injury weeks / portal rows share ids | `DashboardOptionalTasksPanel`, `DynastyShellScreen` |
+| MEGA-FRAME-100 | SHIP | Optional dismiss scope | Scoped dismiss keys `${phase}:${week}:${taskId}` via `DashboardTaskDismissal` on shell + offseason panels | `DashboardOptionalTasksPanel`, `DashboardTaskDismissal.kt` |
 | MEGA-FRAME-101 | GAP | Offseason dismiss persistence | `dismissedTasks` is `remember` only — not saved; week advance does not reset but **process death** resurrects nags user dismissed | `OffseasonScreen.kt` |
 | MEGA-FRAME-102 | SHIP | Week 1 required dashboard pattern | Required cards for pro day + transfer retention mirror panel actions | `OffseasonWeekOneRequiredDashboardTasks.kt` |
 | MEGA-FRAME-103 | SHIP | Required blocks advance core | `DashboardAdvanceGate.blocksWeekAdvance` used on shell, offseason, preseason | `DashboardAdvanceGate.kt` |

@@ -68,6 +68,9 @@ object SimWeekAdvanceResolver {
                 ),
             )
         }
+        if (input.simulatesLeagueWeekBatch) {
+            lines.add(SimWeekConfirmationLine(SimWeekConfirmationLineKind.LeagueWeekBatch))
+        }
         if (input.recruitingHubOpen || input.portalRecruitingWeekOpen) {
             lines.add(SimWeekConfirmationLine(SimWeekConfirmationLineKind.LeagueRecruitingBatch))
         }
@@ -83,7 +86,8 @@ object SimWeekAdvanceResolver {
             willAutoMaintain ||
             input.unresolvedOptionalTaskCount > 0 ||
             input.portalRecruitingWeekOpen ||
-            input.injuredPlayersTicking > 0
+            input.injuredPlayersTicking > 0 ||
+            input.simulatesLeagueWeekBatch
         return SimWeekConfirmation(
             needsDialog = needsDialog,
             nextWeekLabel = input.nextWeekLabel,

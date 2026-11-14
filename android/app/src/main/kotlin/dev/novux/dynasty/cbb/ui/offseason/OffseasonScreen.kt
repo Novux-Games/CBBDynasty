@@ -44,7 +44,9 @@ import dev.novux.dynasty.cbb.core.dashboard.OffseasonWeekNineOptionalDashboardTa
 import dev.novux.dynasty.cbb.core.offseason.weeknine.ProgramEconomyState
 import dev.novux.dynasty.cbb.core.offseason.weekseven.SummerWorkoutReport
 import dev.novux.dynasty.cbb.core.dashboard.PipelineEntrantSpotlight
-import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
+import dev.novux.dynasty.cbb.core.dashboard.DashboardTask
+import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskDismissal
+import dev.novux.dynasty.cbb.core.portal.PortalCyclePolicy
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonConferenceOffersRequiredDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonRequiredDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonRosterLockRequiredDashboardTasks
@@ -142,7 +144,7 @@ fun OffseasonScreen(
     var fundraisingSheetOpen by remember { mutableStateOf(false) }
     var openScholarshipSlots by remember { mutableStateOf(0) }
     var rosterPlayerCount by remember { mutableStateOf(0) }
-    var dismissedTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
+    var dismissedTaskKeys by remember { mutableStateOf(setOf<String>()) }
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
     var weekAdvanceInProgress by remember { mutableStateOf(false) }
     var dialogAdvanceInProgress by remember { mutableStateOf(false) }
@@ -503,6 +505,10 @@ fun OffseasonScreen(
             }
         }
 
+        val taskDismissKey: (DashboardTask) -> String = { task ->
+            DashboardTaskDismissal.key(position, task.id)
+        }
+
         val offseasonWeek = position.weekIndex.takeIf { inOffseason }
         val ledgerCycleClosed = ledger?.cycleClosed == true
         if (RecruitingCyclePolicy.hubNavigable(position.phase, offseasonWeek, ledgerCycleClosed)) {
@@ -533,8 +539,9 @@ fun OffseasonScreen(
             if (weekSevenTasks.isNotEmpty()) {
                 DashboardOptionalTasksPanel(
                     tasks = weekSevenTasks,
-                    dismissedIds = dismissedTasks,
-                    onDismiss = { dismissedTasks = dismissedTasks + it },
+                    dismissedKeys = dismissedTaskKeys,
+                    onDismiss = { dismissedTaskKeys = dismissedTaskKeys + it },
+                    taskDismissKey = taskDismissKey,
                     onDeepLink = onOpenRecruiting,
                     onSummerWorkoutReportOpen = { summerWorkoutSheetOpen = true },
                 )
@@ -549,8 +556,9 @@ fun OffseasonScreen(
             if (weekNineTasks.isNotEmpty()) {
                 DashboardOptionalTasksPanel(
                     tasks = weekNineTasks,
-                    dismissedIds = dismissedTasks,
-                    onDismiss = { dismissedTasks = dismissedTasks + it },
+                    dismissedKeys = dismissedTaskKeys,
+                    onDismiss = { dismissedTaskKeys = dismissedTaskKeys + it },
+                    taskDismissKey = taskDismissKey,
                     onDeepLink = onOpenRecruiting,
                     onFundraisingWeekNineOpen = { fundraisingSheetOpen = true },
                 )
@@ -567,10 +575,22 @@ fun OffseasonScreen(
             )
             DashboardOptionalTasksPanel(
                 tasks = dashboardTasks,
-                dismissedIds = dismissedTasks,
-                onDismiss = { dismissedTasks = dismissedTasks + it },
+                dismissedKeys = dismissedTaskKeys,
+                onDismiss = { dismissedTaskKeys = dismissedTaskKeys + it },
+                taskDismissKey = taskDismissKey,
                 onDeepLink = onOpenRecruiting,
                 headingRes = R.string.dashboard_offseason_portal_optional_heading,
+            )
+        } else if (inOffseason && PortalCyclePolicy.portalWindowClosed(position.weekIndex)) {
+            Text(
+                text = stringResource(R.string.dashboard_offseason_portal_window_closed_heading),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Text(
+                text = stringResource(R.string.dashboard_offseason_portal_window_closed_body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
 
@@ -652,9 +672,13 @@ fun OffseasonScreen(
                     }
                     weekAdvanceInProgress = true
                     try {
+                        val dismissKey = { task: DashboardTask ->
+                            DashboardTaskDismissal.key(position, task.id)
+                        }
                         val unresolved = OffseasonAdvanceOptionalTaskAggregator.unresolvedCount(
                             dashboardTasks,
-                            dismissedTasks,
+                            dismissedTaskKeys,
+                            dismissKey,
                         )
                         val confirmation = SimWeekAdvanceConfirmationUiPerf.measure {
                             saveSlotRepository.buildSimWeekAdvanceConfirmation(

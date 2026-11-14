@@ -35,7 +35,7 @@ class OffseasonAdvanceOptionalTaskAggregatorTest {
         )
         val count = OffseasonAdvanceOptionalTaskAggregator.unresolvedCount(
             tasks,
-            dismissed = setOf(DashboardTaskId.SpendRecruitingPoints),
+            dismissedKeys = setOf(DashboardTaskId.SpendRecruitingPoints.name),
         )
         assertEquals(1, count)
     }

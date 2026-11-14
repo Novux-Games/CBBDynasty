@@ -179,4 +179,24 @@ class SimWeekAdvanceResolverTest {
         val count = UserWeekGameStatus.unplayedUserGames(state, teamHasScheduledGame = true)
         assertEquals(1, count)
     }
+
+    @Test
+    fun confirmation_includesLeagueBatchLineDuringRegularSeason() {
+        val confirmation = SimWeekAdvanceResolver.buildConfirmation(
+            SimWeekAdvanceInput(
+                nextWeekLabel = "Regular Season · Week 3",
+                unplayedUserGameCount = 0,
+                recruitingPointsAvailable = 0,
+                userManualRecruitingSpent = 0,
+                recruitingHubOpen = false,
+                estimatedAutoRecruitingSpend = 0,
+                portalRecruitingWeekOpen = false,
+                simulatesLeagueWeekBatch = true,
+            ),
+        )
+        assertTrue(confirmation.needsDialog)
+        assertTrue(
+            confirmation.lines.any { it.kind == SimWeekConfirmationLineKind.LeagueWeekBatch },
+        )
+    }
 }

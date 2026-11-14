@@ -19,6 +19,8 @@ class OffseasonPortalOptionalTasksPathTest {
         assertTrue(screen.contains("OffseasonPortalOptionalTasksPolicy"))
         assertTrue(screen.contains("buildOffseasonPortalOptionalTasks"))
         assertTrue(screen.contains("dashboard_offseason_portal_optional_heading"))
+        assertTrue(screen.contains("PortalCyclePolicy.portalWindowClosed"))
+        assertTrue(screen.contains("dashboard_offseason_portal_window_closed_body"))
         assertTrue(screen.contains("OffseasonPortalOptionalNudgeResolver"))
         assertTrue(tasks.contains("PortalPipelineEntrant"))
         assertTrue(tasks.contains("PortalWindow"))

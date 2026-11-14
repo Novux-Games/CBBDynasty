@@ -941,6 +941,7 @@ class SaveSlotRepository(
             userOnByeWeek = ByeWeekPolicy.isByeWeek(position.phase, hasScheduledGame),
             recruitingAutoMaintainEnabled = automation.recruitingAutoMaintain,
             userLeagueFastSim = userLeagueFastSim,
+            simulatesLeagueWeekBatch = position.phase == CalendarPhase.RegularSeason,
         )
     }
 
