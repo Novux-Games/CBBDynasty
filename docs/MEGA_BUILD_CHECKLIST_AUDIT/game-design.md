@@ -32,14 +32,14 @@
 | MEGA-GDD-009 | P1 | GAP | Simulation · lineup / rotation / halftime | Prep + halftime hook exist; away rotation / full rotation UI below `player-cards.md`. | `GameLineupPrep.kt`, `StrategyScreen.kt`, `GameWatchLaunch.kt` |
 | MEGA-GDD-010 | P0 | PASS | Simulation · watch ~2s/possession; fast sim same engine | Playback delay + league fast sim share engine. | `GameWatchPlayback.kt`, `LeagueFastSim.kt` |
 | MEGA-GDD-011 | P0 | PASS | World · advance week commits save + batch league | `advanceWeek` persists + `LeagueWeekBatchSimEngine`. | `SaveSlotRepository.kt`, `LeagueWeekBatchSimEngine.kt` |
-| MEGA-GDD-012 | P1 | GAP | World · replay before week advance | Checkpoint `canReplay` + provisional games in core; not every UI entry re-opens watch. | `WeekCheckpointState.kt`, `UserWeekGameStatus.kt`, `DynastyApp.kt` routes |
+| MEGA-GDD-012 | P1 | SHIP | World · replay before week advance | Staged week → replay optional tasks + calendar box **Replay game** before advance | `ProvisionalGameReplayPolicy`, `InSeasonOptionalDashboardTasks.kt` |
 | MEGA-GDD-013 | P0 | PASS | World · required dashboard tasks gate advance | Advance gate + sim-week confirm for optional work. | `DashboardAdvanceGate.kt`, `DashboardTaskGate.kt`, `SimWeekAdvanceDialog.kt` |
 | MEGA-GDD-014 | P0 | PASS | Identity · default generic ship; opaque IDs; overlay | Embedded default + `IdentityPackIndex` display merge. | `PackRepository.kt`, `IdentityPackIndex.kt`, `embedded-default.json` |
 | MEGA-GDD-015 | P0 | PASS | Identity · JSON/TXT + HTTPS URL atomic import | Pipeline validates atomically; repo wraps local/URL. | `IdentityPackImportPipeline.kt`, `PackRepository.kt`, `HttpPackRemoteFetcher.kt` |
 | MEGA-GDD-016 | P1 | PASS | Identity · import attestation + disclaimer UX | Settings → Import identity pack with disclaimer checkbox wired to `PackImportAttestation`. | `IdentityPackImportScreen.kt`, `SettingsStepContent.kt` |
 | MEGA-GDD-017 | P1 | PASS | Identity · URL allowlist + 5 MB cap | `PackUrlPolicy`, `PackPayloadPolicy`, hardening tests. | `PackUrlPolicy.kt`, `PackImportHardeningTest.kt` |
 | MEGA-GDD-018 | P1 | PASS | Identity · optional pack manifest signature | Optional `manifestSignature` HMAC via `PackManifestSignatureVerifier` + `PackConstants.TRUSTED_MANIFEST_SIGNERS` | `PackConstants.kt`, `IdentityPackCodec.kt` |
-| MEGA-GDD-019 | P1 | GAP | Identity · swap never rewrites history; display cache rebuild | Overlay merge + save IDs; pack-year mismatch UI warning not found. | `IdentityPackOverlayMerger.kt`, `PackOverlaySession` (grep: no year-mismatch toast) |
+| MEGA-GDD-019 | P1 | SHIP | Identity · swap never rewrites history; display cache rebuild | `PackDynastyIdentityRepository` + load/import membership-year warnings | `PackMembershipYearPolicy`, `DynastyApp.kt` |
 | MEGA-GDD-020 | P0 | PASS | World · rulesetYear + balance/sim pinned at create | ADR-002/003 bundles on dynasty metadata. | `BalanceRulesetRepository.kt`, `SimTuningRepository.kt`, `docs/ADR-002-*.md` |
 
 ---
@@ -49,10 +49,10 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-GDD-021 | P0 | PASS | Roster · 15 cap; ≤15 scholarships; walk-ons | Constants + roster lock policy. | `GameConstants.kt`, `RosterLockPolicy.kt`, `OffseasonRosterLockConstants.kt` |
-| MEGA-GDD-022 | P1 | GAP | Roster · walk-ons OS tryouts; ≤2/year | `WalkOnFactory` + week-eight panels; GDD summary table stale vs `offseason.md`. | `WalkOnFactory.kt`, `offseason/weekeight/`, `planning/offseason.md` |
+| MEGA-GDD-022 | P1 | SHIP | Roster · walk-ons OS tryouts; ≤2/year | Week 8 panel + `roster_cuts_walkon_tryout_hint`; cap in `RosterLockPolicy` | `WalkOnFactory.kt`, `RosterCutsWeekEightPanel.kt` |
 | MEGA-GDD-023 | P1 | GAP | Roster · standard + medical redshirt | `MedicalRedshirtPolicy`; five-year / “development year” card copy thin. | `MedicalRedshirtPolicy.kt`, `PlayerCardSheet.kt` |
 | MEGA-GDD-024 | P1 | GAP | Roster · portal, draft declare, coach promises | Core loyalty/chips; declare/pro-day/withdrawal UI thinner than spec. | `PlayerLoyaltyChips.kt`, `BalanceLoyaltyTuning`, `PortalWeekOnePartition.kt` |
-| MEGA-GDD-025 | P1 | GAP | Offseason · weeks 1–10 authoritative calendar | Code follows `offseason.md`; **game-design.md** summary table still mis-labels weeks 6–9. | `OffseasonScreen.kt`, `OffseasonWeekHeading.kt`, `planning/game-design.md` § Offseason summary |
+| MEGA-GDD-025 | P1 | SHIP | Offseason · weeks 1–10 authoritative calendar | Offseason summary table aligned with [`offseason.md`](../../planning/offseason.md) weeks 6–10 | `planning/game-design.md` § Offseason summary |
 | MEGA-GDD-026 | P1 | GAP | Offseason · coaching carousel S2+ before week 1 | Engine + screen; league AI uses `stubUserApprovalCards()`. | `CoachingCarouselEngine.kt`, `CoachingCarouselScreen.kt` |
 | MEGA-GDD-027 | P0 | PASS | Recruiting · year-long HS/JUCO + portal hub | HS/JUCO pool + Top 60; portal entrants when window open | `HsJucoRecruitBoard.kt`, `RecruitingHubTabBodies.kt`, `PortalRecruitingHub.kt` |
 | MEGA-GDD-028 | P1 | GAP | Recruiting · Signing Day OS week 6 hard sign | `SigningDayScreen` + repo; board/crunch UX mostly task-driven. | `SigningDayRepository.kt`, `SigningDayScreen.kt` |

@@ -230,6 +230,9 @@
     <string name="roster_cuts_locked">Roster locked for this season.</string>
     <string name="roster_cuts_cut">Cut</string>
     <string name="roster_cuts_add_walkon">Add walk-on</string>
+    <string name="roster_cuts_walkon_tryout_hint">Walk-on tryouts — add up to two non-scholarship players before you lock the roster.</string>
+    <string name="dashboard_task_replay_staged_game">Replay vs %1$s (%2$s) — week not advanced yet</string>
+    <string name="shell_calendar_replay_staged_game">Replay game</string>
     <string name="roster_cuts_lock">Lock roster</string>
     <string name="fundraising_title">Fundraising and facility upgrades</string>
     <string name="fundraising_balances">Program cash %1$s · NIL boost this cycle %2$s</string>

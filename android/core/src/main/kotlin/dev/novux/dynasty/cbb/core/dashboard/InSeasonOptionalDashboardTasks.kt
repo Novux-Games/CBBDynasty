@@ -8,7 +8,19 @@ object InSeasonOptionalDashboardTasks {
         weekGames: List<ScheduledGameStub>,
         weekSimStaged: Boolean,
     ): List<DashboardTask> {
-        if (weekSimStaged || weekGames.isEmpty()) return emptyList()
+        if (weekGames.isEmpty()) return emptyList()
+        if (weekSimStaged) {
+            return weekGames.map { game ->
+                DashboardTask(
+                    id = DashboardTaskId.ReplayStagedWeekGame,
+                    kind = DashboardTaskKind.Optional,
+                    deepLink = DashboardDeepLink.ReplayProvisionalWeekGame,
+                    stringFormatArgs = listOf(game.opponentDisplayName),
+                    formatArgs = listOf(if (game.homeGame) 1 else 0),
+                    dismissScopeKey = game.opponentTeamId,
+                )
+            }
+        }
         return weekGames.map { game ->
             DashboardTask(
                 id = DashboardTaskId.PlayScheduledGame,

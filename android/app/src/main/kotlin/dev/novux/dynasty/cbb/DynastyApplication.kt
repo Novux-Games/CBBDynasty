@@ -92,6 +92,9 @@ class DynastyApplication : Application() {
     lateinit var packRepository: PackRepository
         private set
 
+    lateinit var packDynastyIdentityRepository: dev.novux.dynasty.cbb.data.pack.PackDynastyIdentityRepository
+        private set
+
     lateinit var balanceRulesetRepository: BalanceRulesetRepository
         private set
 
@@ -409,6 +412,8 @@ class DynastyApplication : Application() {
         )
         seasonReviewProgressRepository =
             dev.novux.dynasty.cbb.data.seasonreview.SeasonReviewProgressRepository(applicationContext)
+        packDynastyIdentityRepository =
+            dev.novux.dynasty.cbb.data.pack.PackDynastyIdentityRepository(applicationContext)
         saveSlotRepository = SaveSlotRepository(
             database,
             weekCheckpointRepository,
@@ -436,6 +441,7 @@ class DynastyApplication : Application() {
             seasonReviewProgressRepository,
             dashboardLastGameRepository,
             recruitingManualWeekSpendRepository,
+            packDynastyIdentityRepository,
         )
         preseasonSeasonStartRepository = PreseasonSeasonStartRepository(
             saveSlotRepository,

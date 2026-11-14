@@ -339,7 +339,8 @@
     "MEGA-FRAME-150",
     "MEGA-FRAME-155",
     "MEGA-FRAME-158",
-    "MEGA-FRAME-152"
+    "MEGA-FRAME-152",
+    "MEGA-GDD-025"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

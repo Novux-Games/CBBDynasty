@@ -130,6 +130,7 @@ class SaveSlotRepository(
     private val seasonReviewProgressRepository: SeasonReviewProgressRepository,
     private val dashboardLastGameRepository: DashboardLastGameRepository,
     private val recruitingManualWeekSpendRepository: RecruitingManualWeekSpendRepository,
+    private val packDynastyIdentityRepository: dev.novux.dynasty.cbb.data.pack.PackDynastyIdentityRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -512,6 +513,10 @@ class SaveSlotRepository(
             coachSkillPointRepository.setAutoSpend(dynastyId, true, CoachArchetype.Balanced)
         }
         bootstrapSeasonOneRecruitingAfterSign(loaded, draft)
+        packDynastyIdentityRepository.recordMembershipYearAtSign(
+            dynastyId,
+            packRepository.activeSession().index.membershipYear,
+        )
         loaded
         }
     }

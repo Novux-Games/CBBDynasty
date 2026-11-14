@@ -193,6 +193,25 @@ fun DynastyApp(
 
             suspend fun onDynastyReady(loaded: LoadedDynasty) {
                 ActiveDynastySession.set(loaded)
+                val app = context.requireDynastyApplication()
+                val signedYear = withContext(Dispatchers.IO) {
+                    app.packDynastyIdentityRepository.loadMembershipYearAtSign(loaded.dynastyId)
+                }
+                val activeYear = app.packRepository.activeSession().index.membershipYear
+                if (
+                    dev.novux.dynasty.cbb.core.pack.PackMembershipYearPolicy.isMismatch(
+                        signedYear,
+                        activeYear,
+                    )
+                ) {
+                    snackbarHostState.showSnackbar(
+                        context.getString(
+                            R.string.pack_import_membership_year_warning,
+                            signedYear,
+                            activeYear,
+                        ),
+                    )
+                }
                 val carousel = withContext(Dispatchers.IO) {
                     coachingCarouselRepository.loadOrCreate(
                         loaded.dynastyId,
@@ -253,6 +272,7 @@ fun DynastyApp(
                         navController.navigate(AppRoute.Discipline.route)
                     },
                     onOpenGamePreview = { navController.navigate(AppRoute.GamePreview.route) },
+                    onOpenGameWatch = { navController.navigate(AppRoute.GameWatch.route) },
                     onOpenJobCenter = {
                         scope.launch {
                             val active = ActiveDynastySession.current ?: return@launch
@@ -767,10 +787,20 @@ fun DynastyApp(
                     )
                 }
                 composable(AppRoute.PackImport.route) {
-                    val app = LocalContext.current.requireDynastyApplication()
+                    val app = context.requireDynastyApplication()
+                    var dynastyMembershipYear by remember { mutableStateOf<String?>(null) }
+                    val session = ActiveDynastySession.current
+                    LaunchedEffect(session?.dynastyId) {
+                        val dynastyId = session?.dynastyId
+                        dynastyMembershipYear = if (dynastyId != null) {
+                            app.packDynastyIdentityRepository.loadMembershipYearAtSign(dynastyId)
+                        } else {
+                            null
+                        }
+                    }
                     IdentityPackImportScreen(
                         packRepository = app.packRepository,
-                        dynastyMembershipYear = null,
+                        dynastyMembershipYear = dynastyMembershipYear,
                         onBack = { navController.popBackStack() },
                     )
                 }

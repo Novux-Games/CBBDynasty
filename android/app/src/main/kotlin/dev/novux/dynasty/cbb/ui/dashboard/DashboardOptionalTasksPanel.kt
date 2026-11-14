@@ -32,6 +32,7 @@ fun DashboardOptionalTasksPanel(
     onCoachCardOpen: () -> Unit = {},
     onSummerWorkoutReportOpen: () -> Unit = {},
     onFundraisingWeekNineOpen: () -> Unit = {},
+    onReplayStagedGame: () -> Unit = {},
     headingRes: Int? = null,
     modifier: Modifier = Modifier,
 ) {
@@ -51,6 +52,7 @@ fun DashboardOptionalTasksPanel(
                 task = task,
                 onOpen = {
                     when (task.deepLink) {
+                        DashboardDeepLink.ReplayProvisionalWeekGame -> onReplayStagedGame()
                         DashboardDeepLink.Strategy,
                         DashboardDeepLink.PlayWeekGame,
                         -> onStrategyOpen()
@@ -156,6 +158,15 @@ private fun taskMessage(task: DashboardTask): String = when (task.id) {
             stringResource(R.string.dynasty_shell_away)
         },
     )
+    DashboardTaskId.ReplayStagedWeekGame -> stringResource(
+        R.string.dashboard_task_replay_staged_game,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+        if (task.formatArgs.firstOrNull() == 1) {
+            stringResource(R.string.dynasty_shell_home)
+        } else {
+            stringResource(R.string.dynasty_shell_away)
+        },
+    )
     DashboardTaskId.CoachSundaySkillPoints -> stringResource(
         R.string.dashboard_task_coach_sunday_points,
         task.formatArgs.firstOrNull() ?: 0,
@@ -195,6 +206,7 @@ private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {
     DashboardDeepLink.RecruitingHsJuco -> RecruitingHubTab.AllHsJuco
     DashboardDeepLink.Strategy,
     DashboardDeepLink.PlayWeekGame,
+    DashboardDeepLink.ReplayProvisionalWeekGame,
     DashboardDeepLink.SigningDayRankings,
     DashboardDeepLink.SigningDayPositions,
     DashboardDeepLink.PreseasonChecklist,

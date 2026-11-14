@@ -189,6 +189,7 @@ fun DynastyShellScreen(
     hubMenuCallbacks: DynastyHubMenuCallbacks,
     onOpenDiscipline: (PendingDisciplineIncident) -> Unit,
     onOpenGamePreview: () -> Unit = {},
+    onOpenGameWatch: () -> Unit = {},
     onOpenSigningDay: (dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink) -> Unit = {},
     onOpenRecruitingTab: (RecruitingHubTab) -> Unit = {},
     onOpenAutomation: () -> Unit = {},
@@ -965,6 +966,14 @@ fun DynastyShellScreen(
                         onOpenGamePreview()
                     }
                 },
+                onReplayStagedGame = {
+                    scope.launch {
+                        val app = context.requireDynastyApplication()
+                        if (app.userCalendarGameWatchBootstrap.configure(loaded)) {
+                            onOpenGameWatch()
+                        }
+                    }
+                },
             )
             DynastyShellTab.News -> DynastyShellNewsTab(
                 feed = newsFeed,
@@ -1026,6 +1035,14 @@ fun DynastyShellScreen(
                     onDeepLink = onOpenRecruitingTab,
                     onStrategyOpen = hubMenuCallbacks.onOpenStrategy,
                     onCoachCardOpen = { staffRoster?.headCoach?.let { openHeadCoachPreview(it) } },
+                    onReplayStagedGame = {
+                        scope.launch {
+                            val app = context.requireDynastyApplication()
+                            if (app.userCalendarGameWatchBootstrap.configure(loaded)) {
+                                onOpenGameWatch()
+                            }
+                        }
+                    },
                 )
                 focus?.firstGame?.let { game ->
                     NextGameCard(

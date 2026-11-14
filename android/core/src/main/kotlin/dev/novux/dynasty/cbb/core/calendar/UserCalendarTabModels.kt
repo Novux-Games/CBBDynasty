@@ -20,6 +20,8 @@ data class UserCalendarGameResult(
     val opponentScore: Int,
     val userTeamIsHome: Boolean,
     val boxArchive: ProvisionalGameBoxArchive? = null,
+    /** Staged sim this week — user may re-open watch before advance ([MEGA-GDD-012]). */
+    val provisionalReplay: Boolean = false,
 )
 
 data class UserCalendarGameEntry(

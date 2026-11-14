@@ -73,6 +73,7 @@ class DashboardTaskGateTest {
             BalanceMedicalRedshirtRules(),
         )
         assertTrue(snapshot.optional.none { it.id == DashboardTaskId.PlayScheduledGame })
+        assertTrue(snapshot.optional.any { it.id == DashboardTaskId.ReplayStagedWeekGame })
     }
 
     @Test

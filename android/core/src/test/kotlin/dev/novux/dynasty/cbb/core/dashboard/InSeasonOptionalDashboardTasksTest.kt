@@ -17,4 +17,15 @@ class InSeasonOptionalDashboardTasksTest {
         assertEquals(2, tasks.size)
         assertEquals(setOf("a", "b"), tasks.map { it.dismissScopeKey }.toSet())
     }
+
+    @Test
+    fun build_weekStaged_emitsReplayTasks() {
+        val games = listOf(
+            ScheduledGameStub(ScheduleGameKind.NonConference, "a", "Alpha", true, 2),
+        )
+        val tasks = InSeasonOptionalDashboardTasks.build(games, weekSimStaged = true)
+        assertEquals(1, tasks.size)
+        assertEquals(DashboardTaskId.ReplayStagedWeekGame, tasks.single().id)
+        assertEquals(DashboardDeepLink.ReplayProvisionalWeekGame, tasks.single().deepLink)
+    }
 }

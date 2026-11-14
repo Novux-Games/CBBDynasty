@@ -52,6 +52,7 @@ object UserCalendarGameEnricher {
                 opponentScore = oppScore,
                 userTeamIsHome = userHome,
                 boxArchive = mark.boxArchive,
+                provisionalReplay = true,
             )
         }
         if (!game.isPastWeek) return null
