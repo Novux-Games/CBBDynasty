@@ -10,6 +10,8 @@ enum class UserCalendarRowKind {
     EventEliminationBye,
     /** Shorter conference bracket — idle while deeper leagues finish ([planning/time-system.md#conference-tournaments]). */
     ConfTournamentStructuralBye,
+    /** NCBA top-52 (and direct bids) skip Opening Round — postseason week 1 ([planning/time-system.md#national-postseason-weeks]). */
+    NcbaOpeningRoundBye,
     OffWeek,
 }
 

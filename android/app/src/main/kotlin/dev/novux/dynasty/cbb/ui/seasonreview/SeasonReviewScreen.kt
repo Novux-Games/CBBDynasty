@@ -103,6 +103,7 @@ fun SeasonReviewScreen(
         selectedTab = selectedTab,
         onTabSelected = { selectedTab = it },
         menuActions = menu,
+        headerSubtitle = stringResource(R.string.season_review_shell_header_hint),
     ) { padding ->
         when (selectedTab) {
             DynastyShellTab.Calendar -> Column(
@@ -136,7 +137,7 @@ fun SeasonReviewScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 Text(
-                    text = stringResource(R.string.season_review_title),
+                    text = weekHeader,
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
                 )

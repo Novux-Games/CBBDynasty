@@ -18,6 +18,8 @@ object UserCalendarTabBuilder {
         conferenceTourneySimmed: Boolean = false,
         eventEliminationByeWeeks: Map<Int, String> = emptyMap(),
         conferenceTourneyStructuralByeConferenceName: String? = null,
+        leagueMaxConfTourneyWeeks: Int? = null,
+        userSkipsNcbaOpeningRound: Boolean = false,
     ): List<UserCalendarWeekRow> {
         if (plan == null) {
             return listOf(
@@ -37,8 +39,9 @@ object UserCalendarTabBuilder {
             conferenceTourneyQualified,
             conferenceTourneySimmed,
             conferenceTourneyStructuralByeConferenceName,
+            leagueMaxConfTourneyWeeks,
         )
-        rows += postseasonWeeks(activePosition)
+        rows += postseasonWeeks(activePosition, userSkipsNcbaOpeningRound)
         return rows
     }
 
@@ -91,32 +94,50 @@ object UserCalendarTabBuilder {
         qualified: Boolean,
         bracketSimmed: Boolean,
         structuralByeConferenceName: String?,
+        leagueMaxConfTourneyWeeks: Int?,
     ): List<UserCalendarWeekRow> {
         val max = PhaseWeekPolicy.weeksInPhase(CalendarPhase.ConferenceTournament)
         return (1..max).map { week ->
             val position = CalendarPosition(active.seasonIndex, CalendarPhase.ConferenceTournament, week)
             when {
                 week in structuralByeWeeks ->
-                    confTournamentStructuralByeRow(active, position, structuralByeConferenceName)
-                !qualified -> byeRow(active, position)
-                gamesByWeek[week].orEmpty().isNotEmpty() -> weekRow(active, position, gamesByWeek[week].orEmpty())
-                bracketSimmed -> byeRow(active, position)
-                else -> openWeekRow(active, position)
+                    confTournamentStructuralByeRow(
+                        active,
+                        position,
+                        structuralByeConferenceName,
+                        leagueMaxConfTourneyWeeks,
+                    )
+                !qualified -> byeRow(active, position, leagueMaxConfTourneyWeeks)
+                gamesByWeek[week].orEmpty().isNotEmpty() ->
+                    weekRow(active, position, gamesByWeek[week].orEmpty(), leagueMaxConfTourneyWeeks)
+                bracketSimmed -> byeRow(active, position, leagueMaxConfTourneyWeeks)
+                else -> openWeekRow(active, position, leagueMaxConfTourneyWeeks)
             }
         }
     }
 
-    private fun postseasonWeeks(active: CalendarPosition): List<UserCalendarWeekRow> {
+    private fun postseasonWeeks(
+        active: CalendarPosition,
+        userSkipsNcbaOpeningRound: Boolean,
+    ): List<UserCalendarWeekRow> {
         val max = PhaseWeekPolicy.weeksInPhase(CalendarPhase.Postseason)
         return (1..max).map { week ->
             val position = CalendarPosition(active.seasonIndex, CalendarPhase.Postseason, week)
-            openWeekRow(active, position)
+            if (week == PostseasonCalendar.OPENING_ROUND_WEEK && userSkipsNcbaOpeningRound) {
+                ncbaOpeningRoundByeRow(active, position)
+            } else {
+                openWeekRow(active, position)
+            }
         }
     }
 
-    private fun openWeekRow(active: CalendarPosition, position: CalendarPosition): UserCalendarWeekRow =
+    private fun openWeekRow(
+        active: CalendarPosition,
+        position: CalendarPosition,
+        leagueMaxConfTourneyWeeks: Int? = null,
+    ): UserCalendarWeekRow =
         UserCalendarWeekRow(
-            weekLabel = CalendarWeekLabel.display(position),
+            weekLabel = CalendarWeekLabel.display(position, leagueMaxConfTourneyWeeks),
             phase = position.phase,
             weekIndex = position.weekIndex,
             rowKind = UserCalendarRowKind.OffWeek,
@@ -128,13 +149,14 @@ object UserCalendarTabBuilder {
         active: CalendarPosition,
         position: CalendarPosition,
         games: List<ScheduledGameStub>,
+        leagueMaxConfTourneyWeeks: Int? = null,
     ): UserCalendarWeekRow {
         val isPast = isPastWeek(active, position)
         if (games.isEmpty()) {
-            return byeRow(active, position)
+            return byeRow(active, position, leagueMaxConfTourneyWeeks)
         }
         return UserCalendarWeekRow(
-            weekLabel = CalendarWeekLabel.display(position),
+            weekLabel = CalendarWeekLabel.display(position, leagueMaxConfTourneyWeeks),
             phase = position.phase,
             weekIndex = position.weekIndex,
             rowKind = UserCalendarRowKind.Game,
@@ -154,9 +176,13 @@ object UserCalendarTabBuilder {
         )
     }
 
-    private fun byeRow(active: CalendarPosition, position: CalendarPosition): UserCalendarWeekRow =
+    private fun byeRow(
+        active: CalendarPosition,
+        position: CalendarPosition,
+        leagueMaxConfTourneyWeeks: Int? = null,
+    ): UserCalendarWeekRow =
         UserCalendarWeekRow(
-            weekLabel = CalendarWeekLabel.display(position),
+            weekLabel = CalendarWeekLabel.display(position, leagueMaxConfTourneyWeeks),
             phase = position.phase,
             weekIndex = position.weekIndex,
             rowKind = UserCalendarRowKind.Bye,
@@ -183,15 +209,29 @@ object UserCalendarTabBuilder {
         active: CalendarPosition,
         position: CalendarPosition,
         conferenceName: String?,
+        leagueMaxConfTourneyWeeks: Int?,
     ): UserCalendarWeekRow =
         UserCalendarWeekRow(
-            weekLabel = CalendarWeekLabel.display(position),
+            weekLabel = CalendarWeekLabel.display(position, leagueMaxConfTourneyWeeks),
             phase = position.phase,
             weekIndex = position.weekIndex,
             rowKind = UserCalendarRowKind.ConfTournamentStructuralBye,
             games = emptyList(),
             isCurrentWeek = position == active,
             confTournamentStructuralByeConferenceName = conferenceName,
+        )
+
+    private fun ncbaOpeningRoundByeRow(
+        active: CalendarPosition,
+        position: CalendarPosition,
+    ): UserCalendarWeekRow =
+        UserCalendarWeekRow(
+            weekLabel = CalendarWeekLabel.display(position),
+            phase = position.phase,
+            weekIndex = position.weekIndex,
+            rowKind = UserCalendarRowKind.NcbaOpeningRoundBye,
+            games = emptyList(),
+            isCurrentWeek = position == active,
         )
 
     private fun isPastWeek(active: CalendarPosition, row: CalendarPosition): Boolean {

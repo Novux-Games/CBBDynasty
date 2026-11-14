@@ -40,6 +40,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.requireDynastyApplication
 import dev.novux.dynasty.cbb.core.balance.BalanceMedicalRedshirtRules
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
+import dev.novux.dynasty.cbb.core.calendar.ConferenceTournamentCalendar
 import dev.novux.dynasty.cbb.core.advance.SimWeekConfirmation
 import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentStatus
 import dev.novux.dynasty.cbb.core.dashboard.DashboardAdvanceGate
@@ -903,7 +904,12 @@ fun DynastyShellScreen(
     }
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
-    val phaseLabel = CalendarWeekLabel.display(position)
+    val leagueMaxConfWeeks = remember(loaded.dynastyId) {
+        ConferenceTournamentCalendar.leagueMaxConfTourneyWeeks(
+            context.requireDynastyApplication().packRepository.activeSession().index.source,
+        )
+    }
+    val phaseLabel = CalendarWeekLabel.display(position, leagueMaxConfWeeks)
     val shellOffseasonWeek = position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason }
     val recruitingCycleClosed = RecruitingCyclePolicy.recruitingMenuTreatsCycleClosed(
         position.phase,

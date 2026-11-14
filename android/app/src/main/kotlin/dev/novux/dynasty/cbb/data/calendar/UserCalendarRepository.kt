@@ -4,6 +4,7 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.calendar.ConferenceTournamentCalendar
 import dev.novux.dynasty.cbb.core.calendar.EarlySeasonUserCalendarByes
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarGameEnricher
+import dev.novux.dynasty.cbb.core.calendar.PostseasonUserCalendar
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarTabBuilder
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarWeekRow
 import dev.novux.dynasty.cbb.data.dashboard.DashboardLastGameRepository
@@ -62,6 +63,12 @@ class UserCalendarRepository(
         } else {
             emptyMap()
         }
+        val leagueMaxConfWeeks = ConferenceTournamentCalendar.leagueMaxConfTourneyWeeks(index.source)
+        val skipsOpeningRound = if (userTeamId != null) {
+            PostseasonUserCalendar.skipsNcbaOpeningRound(standings?.selectionSunday, userTeamId)
+        } else {
+            false
+        }
         val built = UserCalendarTabBuilder.build(
             activePosition = activePosition,
             plan = plan,
@@ -72,6 +79,8 @@ class UserCalendarRepository(
             conferenceTourneySimmed = confContext.bracketSimmed,
             eventEliminationByeWeeks = eventEliminationByes,
             conferenceTourneyStructuralByeConferenceName = confDisplayName,
+            leagueMaxConfTourneyWeeks = leagueMaxConfWeeks,
+            userSkipsNcbaOpeningRound = skipsOpeningRound,
         )
         if (userTeamId == null) return built
         val checkpoint = weekCheckpointRepository.loadCheckpoint(dynastyId)

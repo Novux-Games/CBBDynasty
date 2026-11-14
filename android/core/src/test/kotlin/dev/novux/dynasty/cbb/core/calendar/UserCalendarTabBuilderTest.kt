@@ -55,6 +55,32 @@ class UserCalendarTabBuilderTest {
     }
 
     @Test
+    fun postseasonWeek1_top52SkipUsesOpeningRoundByeRow() {
+        val plan = emptyPlan()
+        val rows = UserCalendarTabBuilder.build(
+            activePosition = CalendarPosition(1, CalendarPhase.Postseason, 1),
+            plan = plan,
+            exhibitionCount = 0,
+            userSkipsNcbaOpeningRound = true,
+        )
+        val week1 = rows.first { it.phase == CalendarPhase.Postseason && it.weekIndex == 1 }
+        assertEquals(UserCalendarRowKind.NcbaOpeningRoundBye, week1.rowKind)
+    }
+
+    @Test
+    fun conferenceTournamentRowLabelIncludesMaxWeeks() {
+        val plan = emptyPlan()
+        val rows = UserCalendarTabBuilder.build(
+            activePosition = CalendarPosition(1, CalendarPhase.ConferenceTournament, 1),
+            plan = plan,
+            exhibitionCount = 0,
+            leagueMaxConfTourneyWeeks = 3,
+        )
+        val week1 = rows.first { it.phase == CalendarPhase.ConferenceTournament && it.weekIndex == 1 }
+        assertTrue(week1.weekLabel.contains("of 3"))
+    }
+
+    @Test
     fun postseasonWeekHeaderIncludesNcbaRoundName() {
         val plan = PreseasonSchedulePlan(
             exhibitions = emptyList(),
@@ -151,6 +177,14 @@ class UserCalendarTabBuilderTest {
         assertEquals(UserCalendarRowKind.ConfTournamentStructuralBye, week5.rowKind)
         assertEquals("Big West", week5.confTournamentStructuralByeConferenceName)
     }
+
+    private fun emptyPlan() = PreseasonSchedulePlan(
+        exhibitions = emptyList(),
+        regularSeason = emptyList(),
+        conferenceGameCount = 0,
+        nonConferenceGameCount = 0,
+        earlyEventGameCount = 0,
+    )
 
     private fun stub(
         kind: ScheduleGameKind,

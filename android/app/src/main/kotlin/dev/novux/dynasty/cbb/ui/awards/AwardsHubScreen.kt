@@ -98,6 +98,11 @@ private fun AwardsLanding(onBack: () -> Unit, onYearly: () -> Unit, onWeekly: ()
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            Text(
+                text = stringResource(R.string.awards_hub_shell_access_hint),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
             Button(onClick = onYearly, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.awards_hub_yearly_button))
             }

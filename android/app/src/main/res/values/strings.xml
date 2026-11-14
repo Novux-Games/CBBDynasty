@@ -141,6 +141,7 @@
     <string name="season_review_title">End of Season</string>
     <string name="season_review_subtitle">Final rankings and program recap. No games this week.</string>
     <string name="season_review_calendar_banner">Season review week — your calendar has no games. Use Dashboard for recap tasks.</string>
+    <string name="season_review_shell_header_hint">End of season — finish recap tasks before offseason.</string>
     <string name="season_review_placeholder">Full rankings, awards, and prestige recap land here in a later phase.</string>
     <string name="season_review_enter_offseason">Enter offseason</string>
     <string name="season_review_offseason_week1">Next: Offseason Week 1 — roster and transfers.</string>
@@ -628,6 +629,7 @@
     <string name="advance_confirm_line_injury_tick">Injuries: %1$d players\' recovery clocks tick down (byes included). Healthy returns restore lineup spots.</string>
     <string name="advance_confirm_line_injury_tick_bye_week">Bye week — no game, but %1$d injured players\' recovery clocks still tick down. Healthy returns restore lineup spots.</string>
     <string name="dynasty_shell_advance_week">Advance week</string>
+    <string name="advance_week_saved">Week advanced — progress saved</string>
     <string name="recruiting_tab_recommended">Recommended</string>
     <string name="recruiting_tab_all_hs_juco">All (HS + JUCO)</string>
     <string name="recruiting_tab_high_school">High school</string>
@@ -1019,6 +1021,8 @@
     <string name="shell_calendar_conf_tourney_structural_bye">Conference tourney bye</string>
     <string name="shell_calendar_conf_tourney_structural_bye_detail">%1$s bracket finished — other conferences still playing.</string>
     <string name="shell_calendar_conf_tourney_structural_bye_fallback">Your conference</string>
+    <string name="shell_calendar_ncba_opening_round_bye">Opening Round bye</string>
+    <string name="shell_calendar_ncba_opening_round_bye_detail">Your seed skips the NCBA Opening Round — Round 1 starts next week.</string>
     <string name="shell_calendar_current">This week</string>
     <string name="shell_calendar_upcoming">Upcoming</string>
     <string name="shell_calendar_played">Played</string>
@@ -1146,6 +1150,7 @@
     <string name="march_mayhem_score_line">%1$s %2$s %3$d, %4$s %5$s %6$d</string>
     <string name="shell_menu_awards_hub">Awards</string>
     <string name="awards_hub_title">Awards</string>
+    <string name="awards_hub_shell_access_hint">Open from the shell menu while your dynasty is active — use Back to return to the game.</string>
     <string name="awards_hub_yearly_button">Yearly awards</string>
     <string name="awards_hub_weekly_button">Weekly awards</string>
     <string name="awards_hub_back_landing">Back to awards home</string>

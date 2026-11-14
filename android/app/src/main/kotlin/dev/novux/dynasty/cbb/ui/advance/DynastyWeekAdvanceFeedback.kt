@@ -37,6 +37,7 @@ suspend fun applyWeekAdvanceResult(
     when (result) {
         is DynastyLoadResult.Success -> {
             onSuccess(result.loaded)
+            snackbarHostState.showSnackbar(context.getString(R.string.advance_week_saved))
             true
         }
         is DynastyLoadResult.WeekAdvanceBlocked -> {

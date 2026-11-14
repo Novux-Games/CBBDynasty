@@ -238,6 +238,19 @@ private fun CalendarWeekCard(
                         )
                     }
                 }
+                UserCalendarRowKind.NcbaOpeningRoundBye -> {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        AssistChip(
+                            onClick = {},
+                            label = { Text(stringResource(R.string.shell_calendar_ncba_opening_round_bye)) },
+                        )
+                        Text(
+                            text = stringResource(R.string.shell_calendar_ncba_opening_round_bye_detail),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
                 UserCalendarRowKind.OffWeek -> {
                     val copy = if (row.phase == CalendarPhase.Exhibition) {
                         stringResource(R.string.shell_calendar_exhibition_empty)
