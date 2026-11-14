@@ -52,6 +52,8 @@ import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.offseason.weekeight.OffseasonRosterLockConstants
 import dev.novux.dynasty.cbb.core.offseason.weekseven.SummerWorkoutConstants
 import dev.novux.dynasty.cbb.core.offseason.weeknine.OffseasonWeekNineConstants
+import dev.novux.dynasty.cbb.core.offseason.weekten.OffseasonConferenceOffersPolicy
+import dev.novux.dynasty.cbb.core.offseason.weekten.OffseasonWeekAdvancePolicy
 import dev.novux.dynasty.cbb.core.offseason.weekten.OffseasonWeekTenConstants
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekEightRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
@@ -715,13 +717,26 @@ fun OffseasonScreen(
                 Text(
                     if (weekAdvanceInProgress) {
                         stringResource(R.string.dynasty_shell_advance_week_in_progress)
-                    } else if (inOffseason && position.weekIndex >= 10) {
+                    } else if (inOffseason && OffseasonWeekAdvancePolicy.showsAdvanceToPreseasonCta(position)) {
                         stringResource(R.string.offseason_advance_to_preseason)
                     } else {
                         stringResource(R.string.offseason_advance_week)
                     },
                 )
             }
+        }
+        if (inOffseason && OffseasonWeekAdvancePolicy.showsAdvanceToPreseasonCta(position)) {
+            Text(
+                text = stringResource(
+                    if (OffseasonConferenceOffersPolicy.skipConferenceOffersWeek(loaded.metadata.seasonIndex)) {
+                        R.string.offseason_advance_to_preseason_season_one
+                    } else {
+                        R.string.offseason_advance_to_preseason_after_conf
+                    },
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
 
             }

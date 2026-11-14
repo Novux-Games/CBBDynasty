@@ -170,6 +170,8 @@
     <string name="offseason_shell_placeholder">Roster, recruiting, and portal screens arrive in a future update.</string>
     <string name="offseason_advance_week">Advance week</string>
     <string name="offseason_advance_to_preseason">Advance to preseason</string>
+    <string name="offseason_advance_to_preseason_season_one">Season 1 skips conference offers week — this advance enters preseason.</string>
+    <string name="offseason_advance_to_preseason_after_conf">Conference offers resolved — next step is preseason camp.</string>
     <string name="carousel_title">Coaching Carousel</string>
     <string name="carousel_subtitle">League coaching moves resolve here before Offseason Week 1.</string>
     <string name="carousel_background_hint">Simulate league firings, hires, and extensions, then handle your own offers.</string>
