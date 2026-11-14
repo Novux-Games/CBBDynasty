@@ -60,6 +60,11 @@ fun PreseasonWorkoutsPanel(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        Text(
+            text = stringResource(R.string.preseason_workouts_redshirt_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         report?.let { row ->
             Text(
                 text = stringResource(
@@ -112,6 +117,7 @@ fun PreseasonCoachUpgradesPanel(
     modifier: Modifier = Modifier,
 ) {
     var bank by remember { mutableStateOf(0) }
+    var strategyOpened by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(dynastyId) {
@@ -129,8 +135,21 @@ fun PreseasonCoachUpgradesPanel(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        OutlinedButton(onClick = onOpenStrategy, modifier = Modifier.fillMaxWidth()) {
+        OutlinedButton(
+            onClick = {
+                strategyOpened = true
+                onOpenStrategy()
+            },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
             Text(stringResource(R.string.preseason_coach_open_strategy))
+        }
+        if (!strategyOpened) {
+            Text(
+                text = stringResource(R.string.preseason_coach_upgrades_strategy_required),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
         OutlinedButton(
             onClick = {
@@ -139,6 +158,7 @@ fun PreseasonCoachUpgradesPanel(
                     onComplete()
                 }
             },
+            enabled = strategyOpened,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(stringResource(R.string.preseason_coach_bank_season))

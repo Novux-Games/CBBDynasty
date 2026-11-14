@@ -9,7 +9,7 @@ object CalendarWeekLabel {
     fun display(position: CalendarPosition): String =
         when (position.phase) {
             CalendarPhase.Offseason -> "Offseason Week ${position.weekIndex}"
-            CalendarPhase.Preseason -> "Preseason"
+            CalendarPhase.Preseason -> "Preseason — setup week"
             CalendarPhase.Exhibition -> "Exhibition Week ${position.weekIndex}"
             CalendarPhase.RegularSeason -> "Week ${position.weekIndex}"
             CalendarPhase.ConferenceTournament -> "Conference Tournament Week ${position.weekIndex}"

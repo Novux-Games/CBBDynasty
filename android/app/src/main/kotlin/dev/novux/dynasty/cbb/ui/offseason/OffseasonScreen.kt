@@ -16,6 +16,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -173,6 +174,13 @@ fun OffseasonScreen(
         rosterRepository = rosterRepository,
     )
     val scope = rememberCoroutineScope()
+
+    DisposableEffect(Unit) {
+        val remove = ActiveDynastySession.addListener {
+            ActiveDynastySession.current?.let { session -> loaded = session }
+        }
+        onDispose(remove)
+    }
 
     val notificationFeedRepository = context.requireDynastyApplication().notificationFeedRepository
     val coachEmploymentRepository = context.requireDynastyApplication().coachEmploymentRepository

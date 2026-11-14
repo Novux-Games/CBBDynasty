@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,6 +57,8 @@ import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.preseason.TournamentInvitesRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
+import dev.novux.dynasty.cbb.core.schedule.ExhibitionDraftIssue
+import dev.novux.dynasty.cbb.core.schedule.PreseasonScheduleValidation
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
@@ -131,6 +134,8 @@ fun PreseasonScreen(
     var scrollToTask by remember { mutableStateOf<PreseasonTaskId?>(null) }
     var rankingsReviewSheetOpen by remember { mutableStateOf(false) }
     var startSeasonInProgress by remember { mutableStateOf(false) }
+    var exhibitionDraftIssue by remember { mutableStateOf<ExhibitionDraftIssue?>(null) }
+    var regularSeasonValidation by remember { mutableStateOf<PreseasonScheduleValidation?>(null) }
     var userTeamId by remember { mutableStateOf<String?>(null) }
     var programPrestige by remember {
         mutableStateOf(RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE)
@@ -158,6 +163,13 @@ fun PreseasonScreen(
     val coachEmploymentRepository = app.coachEmploymentRepository
     val coachSkillPointRepository = app.coachSkillPointRepository
     val signingDayRepository = app.signingDayRepository
+
+    DisposableEffect(Unit) {
+        val remove = ActiveDynastySession.addListener {
+            ActiveDynastySession.current?.let { session -> loaded = session }
+        }
+        onDispose(remove)
+    }
 
     LaunchedEffect(loaded.dynastyId) {
         userTeamId = app.schoolStaffRepository.userTeamId(loaded.dynastyId)
@@ -317,6 +329,15 @@ fun PreseasonScreen(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        Text(
+            text = stringResource(R.string.preseason_task_order_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        preseasonBuilderStatusBanner(
+            exhibitionDraftIssue = exhibitionDraftIssue,
+            regularSeasonValidation = regularSeasonValidation,
+        )
         if (showNotificationFeed) {
             DashboardNotificationFeedPanel(
                 feed = notificationFeed,
@@ -401,6 +422,7 @@ fun PreseasonScreen(
                         seasonIndex = loaded.metadata.seasonIndex,
                         scheduleRepository = scheduleRepository,
                         progressRepository = progressRepository,
+                        onDraftIssueChanged = { exhibitionDraftIssue = it },
                         onSaved = {
                             scope.launch {
                                 progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
@@ -419,6 +441,7 @@ fun PreseasonScreen(
                         seasonIndex = loaded.metadata.seasonIndex,
                         scheduleRepository = scheduleRepository,
                         progressRepository = progressRepository,
+                        onValidationChanged = { regularSeasonValidation = it },
                         onSaved = {
                             scope.launch {
                                 progress = progressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
@@ -511,6 +534,24 @@ fun PreseasonScreen(
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.error,
                                 )
+                            }
+                            if (taskId == PreseasonTaskId.ScheduleExhibitions) {
+                                exhibitionDraftIssue?.let { issue ->
+                                    Text(
+                                        text = preseasonExhibitionIssueLine(issue),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.error,
+                                    )
+                                }
+                            }
+                            if (taskId == PreseasonTaskId.ScheduleRegularSeason) {
+                                regularSeasonValidation?.let { err ->
+                                    Text(
+                                        text = preseasonRsValidationLine(err),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.error,
+                                    )
+                                }
                             }
                             if (taskProgress.schedulingUnlocked() &&
                                 taskId == PreseasonTaskId.ScheduleRegularSeason
@@ -663,6 +704,55 @@ private fun PreseasonDashboardLoadingBody(
 }
 
 @Composable
+@Composable
+private fun preseasonBuilderStatusBanner(
+    exhibitionDraftIssue: ExhibitionDraftIssue?,
+    regularSeasonValidation: PreseasonScheduleValidation?,
+) {
+    if (exhibitionDraftIssue == null && regularSeasonValidation == null) return
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(
+            text = stringResource(R.string.preseason_builder_status_heading),
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.SemiBold,
+        )
+        exhibitionDraftIssue?.let { issue ->
+            Text(
+                text = preseasonExhibitionIssueLine(issue),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+            )
+        }
+        regularSeasonValidation?.let { err ->
+            Text(
+                text = preseasonRsValidationLine(err),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+            )
+        }
+    }
+}
+
+@Composable
+private fun preseasonExhibitionIssueLine(issue: ExhibitionDraftIssue): String = when (issue) {
+    ExhibitionDraftIssue.MissingOpponent -> stringResource(R.string.preseason_exhibitions_error_opponent)
+    ExhibitionDraftIssue.InvalidWeek -> stringResource(R.string.preseason_exhibitions_error_week)
+    ExhibitionDraftIssue.DuplicateWeek -> stringResource(R.string.preseason_exhibitions_error_duplicate_week)
+    ExhibitionDraftIssue.DraftCountMismatch -> stringResource(R.string.preseason_exhibitions_error_draft_count)
+}
+
+@Composable
+private fun preseasonRsValidationLine(validation: PreseasonScheduleValidation): String =
+    when (validation.message) {
+        "Too many exhibition games" -> stringResource(R.string.preseason_rs_error_exhibitions)
+        "Over regular-season cap" -> stringResource(R.string.preseason_rs_error_over_cap)
+        "Over builder slot budget" -> stringResource(R.string.preseason_rs_error_builder)
+        "Event plus builder exceeds cap" -> stringResource(R.string.preseason_rs_error_event_builder)
+        "Double-booked regular-season week" -> stringResource(R.string.preseason_rs_error_double_book)
+        "MissingContext" -> stringResource(R.string.preseason_rs_error_missing)
+        else -> stringResource(R.string.preseason_rs_error_generic)
+    }
+
 private fun preseasonTaskTitle(taskId: PreseasonTaskId): String = when (taskId) {
     PreseasonTaskId.IncomingClassSeed -> stringResource(R.string.preseason_task_incoming_class)
     PreseasonTaskId.PreseasonWorkouts -> stringResource(R.string.preseason_task_workouts)

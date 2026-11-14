@@ -38,6 +38,7 @@ fun RegularSeasonSchedulePanel(
     scheduleRepository: PreseasonScheduleRepository,
     progressRepository: PreseasonProgressRepository,
     onSaved: () -> Unit,
+    onValidationChanged: (PreseasonScheduleValidation?) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     var plan by remember { mutableStateOf<PreseasonSchedulePlan?>(null) }
@@ -52,6 +53,10 @@ fun RegularSeasonSchedulePanel(
     LaunchedEffect(dynastyId, seasonIndex) {
         plan = scheduleRepository.loadPlan(dynastyId, seasonIndex)
         builderContext = scheduleRepository.loadRegularSeasonBuilderContext(dynastyId, seasonIndex)
+    }
+
+    LaunchedEffect(validationError) {
+        onValidationChanged(validationError)
     }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {

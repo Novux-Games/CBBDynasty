@@ -29,7 +29,7 @@ class PreseasonRankingsReviewSheetPathTest {
         assertTrue(screen.contains("rankingsReviewSheetOpen"))
         assertTrue(sheet.contains("publishPreseasonRankings"))
         assertTrue(sheet.contains("onDismiss"))
-        assertTrue(hubRoute.contains("onBack()"))
+        assertTrue(hubRoute.contains("onPublishPreseason = null"))
         assertTrue(deepLinks.contains("onOpenRankingsReviewSheet"))
     }
 

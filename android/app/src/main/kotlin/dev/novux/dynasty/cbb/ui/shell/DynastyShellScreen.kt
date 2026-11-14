@@ -21,6 +21,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -250,6 +251,13 @@ fun DynastyShellScreen(
     var staffManageTarget by remember { mutableStateOf<StaffManageTarget?>(null) }
     val staffManageSheetState = rememberStaffManageSheetState()
     val scope = rememberCoroutineScope()
+
+    DisposableEffect(Unit) {
+        val remove = ActiveDynastySession.addListener {
+            ActiveDynastySession.current?.let { session -> loaded = session }
+        }
+        onDispose(remove)
+    }
 
     val refreshStaffRoster: () -> Unit = {
         scope.launch {

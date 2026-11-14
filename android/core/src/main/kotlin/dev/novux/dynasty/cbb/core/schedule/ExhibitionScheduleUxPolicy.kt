@@ -6,12 +6,18 @@ object ExhibitionScheduleUxPolicy {
 
     val exhibitionWeekIndices: IntRange = 1..PreseasonScheduleConstants.MAX_EXHIBITION_GAMES
 
-    fun validateDraft(count: Int, drafts: List<ExhibitionGameDraft>): Boolean {
-        if (count == 0) return true
-        if (drafts.size != count) return false
-        if (drafts.any { it.opponentTeamId.isBlank() }) return false
+    fun validateDraft(count: Int, drafts: List<ExhibitionGameDraft>): Boolean =
+        draftIssue(count, drafts) == null
+
+    /** Why confirm is disabled — surfaced on checklist + builder ([MEGA-FRAME-134]). */
+    fun draftIssue(count: Int, drafts: List<ExhibitionGameDraft>): ExhibitionDraftIssue? {
+        if (count == 0) return null
+        if (drafts.size != count) return ExhibitionDraftIssue.DraftCountMismatch
+        if (drafts.any { it.opponentTeamId.isBlank() }) return ExhibitionDraftIssue.MissingOpponent
         val weeks = drafts.map { it.exhibitionWeekIndex }
-        return weeks.all { it in exhibitionWeekIndices } && weeks.distinct().size == weeks.size
+        if (!weeks.all { it in exhibitionWeekIndices }) return ExhibitionDraftIssue.InvalidWeek
+        if (weeks.distinct().size != weeks.size) return ExhibitionDraftIssue.DuplicateWeek
+        return null
     }
 
     fun draftsToStubs(drafts: List<ExhibitionGameDraft>): List<ScheduledGameStub> =
@@ -26,6 +32,13 @@ object ExhibitionScheduleUxPolicy {
                     rsWeekIndex = it.exhibitionWeekIndex,
                 )
             }
+}
+
+enum class ExhibitionDraftIssue {
+    DraftCountMismatch,
+    MissingOpponent,
+    InvalidWeek,
+    DuplicateWeek,
 }
 
 data class ExhibitionGameDraft(

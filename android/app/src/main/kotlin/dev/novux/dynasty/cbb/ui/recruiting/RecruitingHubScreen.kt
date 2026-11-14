@@ -355,6 +355,13 @@ fun RecruitingHubScreen(
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
         )
+        if (activePosition.phase == CalendarPhase.Preseason) {
+            Text(
+                text = stringResource(R.string.recruiting_hub_preseason_setup_banner),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
         Text(
             text = stringResource(R.string.recruiting_hub_cycle_hint),
             style = MaterialTheme.typography.bodyMedium,

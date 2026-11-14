@@ -282,6 +282,16 @@
     <string name="conference_offers_declined">Declined</string>
     <string name="preseason_shell_title">Preseason</string>
     <string name="preseason_checklist_hint">Complete every task to start the season.</string>
+    <string name="preseason_task_order_hint">Tasks 1–5 can be completed in any order.</string>
+    <string name="preseason_builder_status_heading">Builder status</string>
+    <string name="preseason_exhibitions_zero_week_copy">No exhibition games — you can confirm zero and still build your regular-season slate.</string>
+    <string name="preseason_exhibitions_error_opponent">Pick an opponent for every exhibition slot.</string>
+    <string name="preseason_exhibitions_error_week">Exhibition weeks must be weeks 1–3.</string>
+    <string name="preseason_exhibitions_error_duplicate_week">Each exhibition needs a different exhibition week.</string>
+    <string name="preseason_exhibitions_error_draft_count">Finish every exhibition slot before confirming.</string>
+    <string name="preseason_workouts_redshirt_hint">Optional: apply medical redshirts from the roster tab before you confirm workouts.</string>
+    <string name="preseason_coach_upgrades_strategy_required">Open Strategy at least once before marking coach upgrades done.</string>
+    <string name="recruiting_hub_preseason_setup_banner">Preseason setup — browse boards and points economy; finish incoming-class seed on the dashboard before chasing live.</string>
     <string name="preseason_shell_header_hint">Complete all preseason tasks to start the season.</string>
     <string name="preseason_required_jump_heading">Jump to a required task</string>
     <string name="preseason_loading_checklist">Loading preseason tasks…</string>

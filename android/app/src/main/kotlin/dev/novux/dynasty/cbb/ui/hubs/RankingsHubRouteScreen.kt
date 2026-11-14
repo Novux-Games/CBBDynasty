@@ -8,9 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import dev.novux.dynasty.cbb.core.rankings.RankingsHubSnapshot
@@ -25,7 +23,6 @@ fun RankingsHubRouteScreen(
     onBack: () -> Unit,
 ) {
     var snapshot by remember { mutableStateOf<RankingsHubSnapshot?>(null) }
-    val scope = rememberCoroutineScope()
     LaunchedEffect(dynastyId, seasonIndex) {
         snapshot = rankingsHubRepository.load(dynastyId, seasonIndex)
     }
@@ -36,12 +33,7 @@ fun RankingsHubRouteScreen(
         else -> RankingsHubScreen(
             snapshot = data,
             onBack = onBack,
-            onPublishPreseason = {
-                scope.launch {
-                    snapshot = rankingsHubRepository.publishPreseasonRankings(dynastyId, seasonIndex)
-                    onBack()
-                }
-            },
+            onPublishPreseason = null,
         )
     }
 }

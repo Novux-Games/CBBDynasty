@@ -34,6 +34,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.pack.TeamDisplayOverlay
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskId
 import dev.novux.dynasty.cbb.core.schedule.ExhibitionGameDraft
+import dev.novux.dynasty.cbb.core.schedule.ExhibitionDraftIssue
 import dev.novux.dynasty.cbb.core.schedule.ExhibitionScheduleUxPolicy
 import dev.novux.dynasty.cbb.core.schedule.PreseasonScheduleConstants
 import dev.novux.dynasty.cbb.data.preseason.PreseasonProgressRepository
@@ -47,6 +48,7 @@ fun ExhibitionSchedulePanel(
     scheduleRepository: PreseasonScheduleRepository,
     progressRepository: PreseasonProgressRepository,
     onSaved: () -> Unit,
+    onDraftIssueChanged: (ExhibitionDraftIssue?) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     var count by remember { mutableIntStateOf(0) }
@@ -68,7 +70,12 @@ fun ExhibitionSchedulePanel(
         resizeDrafts(drafts, newCount)
     }
 
-    val canSave = ExhibitionScheduleUxPolicy.validateDraft(count, drafts.toList())
+    val draftIssue = ExhibitionScheduleUxPolicy.draftIssue(count, drafts.toList())
+    val canSave = draftIssue == null
+
+    LaunchedEffect(draftIssue) {
+        onDraftIssueChanged(draftIssue)
+    }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
@@ -81,6 +88,20 @@ fun ExhibitionSchedulePanel(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        if (count == 0) {
+            Text(
+                text = stringResource(R.string.preseason_exhibitions_zero_week_copy),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        draftIssue?.let { issue ->
+            Text(
+                text = exhibitionDraftIssueMessage(issue),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.error,
+            )
+        }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             (0..PreseasonScheduleConstants.MAX_EXHIBITION_GAMES).forEach { option ->
                 FilterChip(
@@ -212,6 +233,14 @@ private fun ExhibitionSlotCard(
             }
         }
     }
+}
+
+@Composable
+private fun exhibitionDraftIssueMessage(issue: ExhibitionDraftIssue): String = when (issue) {
+    ExhibitionDraftIssue.MissingOpponent -> stringResource(R.string.preseason_exhibitions_error_opponent)
+    ExhibitionDraftIssue.InvalidWeek -> stringResource(R.string.preseason_exhibitions_error_week)
+    ExhibitionDraftIssue.DuplicateWeek -> stringResource(R.string.preseason_exhibitions_error_duplicate_week)
+    ExhibitionDraftIssue.DraftCountMismatch -> stringResource(R.string.preseason_exhibitions_error_draft_count)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
