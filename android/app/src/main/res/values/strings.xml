@@ -60,6 +60,10 @@
     <string name="home_continue_hint">Latest: %1$s</string>
     <string name="dynasty_load_progress">Loading dynasty…</string>
     <string name="advance_blocked_discipline">Resolve team discipline before advancing the week.</string>
+    <string name="advance_confirm_unavailable">Could not prepare advance confirmation. Try again.</string>
+    <string name="advance_failed_load_generic">Dynasty save could not be read. Reload from the home menu.</string>
+    <string name="advance_failed_database_read">Save read error: %1$s</string>
+    <string name="advance_failed_invalid_calendar">Calendar state error: %1$s</string>
     <string name="new_draft_school">No school chosen yet</string>
     <string name="new_draft_coach">No coach profile yet</string>
     <string name="new_no_empty_slot">All ten saves are in use. Delete one from Load to start a new dynasty.</string>
@@ -168,7 +172,10 @@
     <string name="season_review_contract_years">Contract: %1$d years left</string>
     <string name="offseason_shell_title">Offseason</string>
     <string name="offseason_shell_season">Season %1$s</string>
-    <string name="offseason_shell_placeholder">Roster, recruiting, and portal screens arrive in a future update.</string>
+    <string name="offseason_shell_placeholder">Use optional tasks and the recruiting hub for this week.</string>
+    <string name="offseason_dashboard_week3_body">Portal window week 3: finalize interest on transfer targets and balance class needs before Week 4 crunch.</string>
+    <string name="offseason_dashboard_week4_body">Portal window week 4: signing crunch approaches — lock key targets or keep points for Signing Day.</string>
+    <string name="offseason_dashboard_week5_body">Portal window week 5 — last week of portal recruiting. Close gaps on scholarships and portal offers before Signing Day.</string>
     <string name="offseason_advance_week">Advance week</string>
     <string name="offseason_advance_to_preseason">Advance to preseason</string>
     <string name="offseason_advance_to_preseason_season_one">Season 1 skips conference offers week — this advance enters preseason.</string>

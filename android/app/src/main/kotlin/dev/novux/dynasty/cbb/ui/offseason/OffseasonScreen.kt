@@ -104,6 +104,7 @@ import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceConfirmationUiPerf
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceDialog
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceUiPerf
 import dev.novux.dynasty.cbb.ui.advance.applyWeekAdvanceResult
+import dev.novux.dynasty.cbb.ui.advance.showWeekAdvanceConfirmationUnavailable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import dev.novux.dynasty.cbb.requireDynastyApplication
@@ -377,13 +378,6 @@ fun OffseasonScreen(
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        themeLine?.let {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-            )
-        }
         if (showNotificationFeed) {
             DashboardNotificationFeedPanel(
                 feed = notificationFeed,
@@ -500,6 +494,27 @@ fun OffseasonScreen(
         } else if (inOffseason && position.weekIndex == SigningDayConstants.OFFSEASON_WEEK_INDEX) {
             Text(
                 text = stringResource(R.string.offseason_signing_day_hint),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.weight(1f),
+            )
+        } else if (inOffseason && position.weekIndex == 3) {
+            Text(
+                text = stringResource(R.string.offseason_dashboard_week3_body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.weight(1f),
+            )
+        } else if (inOffseason && position.weekIndex == 4) {
+            Text(
+                text = stringResource(R.string.offseason_dashboard_week4_body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.weight(1f),
+            )
+        } else if (inOffseason && position.weekIndex == 5) {
+            Text(
+                text = stringResource(R.string.offseason_dashboard_week5_body),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f),
@@ -704,7 +719,12 @@ fun OffseasonScreen(
                                 unresolvedOptionalTaskCount = unresolved,
                             )
                         }
-                        if (confirmation != null && confirmation.needsDialog) {
+                        if (confirmation == null) {
+                            showWeekAdvanceConfirmationUnavailable(
+                                snackbarHostState,
+                                context,
+                            )
+                        } else if (confirmation.needsDialog) {
                             pendingAdvanceConfirmation = confirmation
                         } else {
                             val result = SimWeekAdvanceUiPerf.measure {

@@ -47,6 +47,7 @@ import dev.novux.dynasty.cbb.core.injuries.InjuryApplyContext
 import dev.novux.dynasty.cbb.core.preseason.SeasonStartFocus
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.PhaseWeekPolicy
+import dev.novux.dynasty.cbb.core.advance.InSeasonAdvanceConfirmPolicy
 import dev.novux.dynasty.cbb.core.advance.OffseasonAdvanceConfirmPolicy
 import dev.novux.dynasty.cbb.core.portal.PortalCyclePolicy
 import dev.novux.dynasty.cbb.data.news.NewsFeedRepository
@@ -76,6 +77,7 @@ import dev.novux.dynasty.cbb.data.coach.CoachAchievementsRepository
 import dev.novux.dynasty.cbb.data.coach.CoachSkillPointRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
+import dev.novux.dynasty.cbb.data.recruiting.RecruitingManualWeekSpendRepository
 import dev.novux.dynasty.cbb.data.seasonreview.SeasonReviewProgressRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
@@ -126,6 +128,7 @@ class SaveSlotRepository(
     private val coachAchievementsRepository: CoachAchievementsRepository,
     private val seasonReviewProgressRepository: SeasonReviewProgressRepository,
     private val dashboardLastGameRepository: DashboardLastGameRepository,
+    private val recruitingManualWeekSpendRepository: RecruitingManualWeekSpendRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -575,11 +578,12 @@ class SaveSlotRepository(
             else -> return@withContext null
         }
         val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+        val manualSpent = recruitingManualWeekSpendRepository.totalForDynasty(loaded)
         val input = buildSimWeekAdvanceInputSuspended(
             loaded,
             ledger,
             unresolvedOptionalTaskCount = unresolvedOptionalTaskCount,
-            userManualRecruitingSpent = 0,
+            userManualRecruitingSpent = manualSpent,
             dynastySeed = loaded.dynastyId.hashCode().toLong(),
             preDialogOnly = true,
         )
@@ -646,11 +650,13 @@ class SaveSlotRepository(
         }
         val ledger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
         val dynastySeed = loaded.dynastyId.hashCode().toLong()
+        val manualSpent = userManualRecruitingSpent.takeIf { it > 0 }
+            ?: recruitingManualWeekSpendRepository.totalForDynasty(loaded)
         val input = buildSimWeekAdvanceInputSuspended(
             loaded,
             ledger,
             0,
-            userManualRecruitingSpent,
+            manualSpent,
             dynastySeed,
         )
         val preAdvance = SimWeekAdvanceResolver.resolvePreAdvance(
@@ -667,7 +673,7 @@ class SaveSlotRepository(
         }
         // Skip intermediate persist so kill mid-advance leaves prior week or final week only (MEGA-QA-028).
         val checkpoint = preAdvance.checkpointAfterPreAdvance
-        val aiWeek = aiRecruitingRepository.runLeagueWeekIfActive(loaded, ledger, userManualRecruitingSpent)
+        val aiWeek = aiRecruitingRepository.runLeagueWeekIfActive(loaded, ledger, manualSpent)
         val recruitingSpentClosingWeek = aiWeek?.userPointsSpent ?: 0
         val advanceResult = weekCheckpointRepository.advanceWeek(loaded.dynastyId, checkpoint)
         leagueWeekBatchRepository.afterWeekAdvance(
@@ -950,6 +956,8 @@ class SaveSlotRepository(
             portalRecruitingWindowClosed = position.phase == CalendarPhase.Offseason &&
                 (offseasonWeek?.let { PortalCyclePolicy.portalWindowClosed(it) } == true) &&
                 !portalOpen,
+            inSeasonDestinationAcknowledgment = InSeasonAdvanceConfirmPolicy
+                .requiresDestinationAcknowledgment(position.phase),
         )
     }
 

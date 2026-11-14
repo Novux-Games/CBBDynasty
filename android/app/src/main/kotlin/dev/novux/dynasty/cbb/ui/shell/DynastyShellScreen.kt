@@ -65,6 +65,7 @@ import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceConfirmationUiPerf
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceDialog
 import dev.novux.dynasty.cbb.ui.advance.SimWeekAdvanceUiPerf
 import dev.novux.dynasty.cbb.ui.advance.applyWeekAdvanceResult
+import dev.novux.dynasty.cbb.ui.advance.showWeekAdvanceConfirmationUnavailable
 import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
 import dev.novux.dynasty.cbb.core.discipline.PendingDisciplineIncident
 import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
@@ -1167,7 +1168,12 @@ fun DynastyShellScreen(
                                         unresolvedOptionalTaskCount = unresolved,
                                     )
                                 }
-                                if (confirmation != null && confirmation.needsDialog) {
+                                if (confirmation == null) {
+                                    showWeekAdvanceConfirmationUnavailable(
+                                        snackbarHostState,
+                                        context,
+                                    )
+                                } else if (confirmation.needsDialog) {
                                     pendingAdvanceConfirmation = confirmation
                                 } else {
                                     val result = SimWeekAdvanceUiPerf.measure {

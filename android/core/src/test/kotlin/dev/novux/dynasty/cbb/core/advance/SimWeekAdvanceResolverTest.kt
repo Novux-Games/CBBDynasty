@@ -219,6 +219,24 @@ class SimWeekAdvanceResolverTest {
     }
 
     @Test
+    fun confirmation_inSeasonShowsSimpleAdvanceWhenPolicySet() {
+        val confirmation = SimWeekAdvanceResolver.buildConfirmation(
+            SimWeekAdvanceInput(
+                nextWeekLabel = "Regular Season · Week 4",
+                unplayedUserGameCount = 0,
+                recruitingPointsAvailable = 0,
+                userManualRecruitingSpent = 0,
+                recruitingHubOpen = false,
+                estimatedAutoRecruitingSpend = 0,
+                portalRecruitingWeekOpen = false,
+                inSeasonDestinationAcknowledgment = true,
+            ),
+        )
+        assertTrue(confirmation.needsDialog)
+        assertTrue(confirmation.lines.any { it.kind == SimWeekConfirmationLineKind.SimpleAdvance })
+    }
+
+    @Test
     fun confirmation_includesLeagueBatchLineDuringRegularSeason() {
         val confirmation = SimWeekAdvanceResolver.buildConfirmation(
             SimWeekAdvanceInput(

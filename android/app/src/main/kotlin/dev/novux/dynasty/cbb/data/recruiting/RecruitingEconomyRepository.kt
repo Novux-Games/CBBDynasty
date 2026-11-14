@@ -51,6 +51,7 @@ class RecruitingEconomyRepository(
     private val database: DynastyDatabase,
     private val packRepository: PackRepository,
     private val interestSpendRepository: RecruitingInterestSpendRepository,
+    private val manualWeekSpendRepository: RecruitingManualWeekSpendRepository,
 ) {
     suspend fun loadInterestSpendDeltaByProspect(dynasty: LoadedDynasty): Map<String, Int> {
         val ledger = loadOrOpenCycle(dynasty)
@@ -74,6 +75,11 @@ class RecruitingEconomyRepository(
                 dynasty.dynastyId,
                 ledger.cycleSeasonIndex,
                 prospectId,
+                pointsCharged,
+            )
+            manualWeekSpendRepository.recordSpend(
+                dynasty.dynastyId,
+                dynasty.weekCheckpoint.activePosition,
                 pointsCharged,
             )
         }

@@ -48,6 +48,7 @@ data class SimWeekAdvanceInput(
     val simulatesLeagueWeekBatch: Boolean = false,
     val offseasonMilestoneAdvance: Boolean = false,
     val portalRecruitingWindowClosed: Boolean = false,
+    val inSeasonDestinationAcknowledgment: Boolean = false,
 )
 
 data class SimWeekAdvanceResolution(

@@ -272,6 +272,8 @@ class DynastyApplication : Application() {
         recruitLockedPromiseRepository =
             dev.novux.dynasty.cbb.data.recruiting.RecruitLockedPromiseRepository(applicationContext)
         val recruitingInterestSpendRepository = RecruitingInterestSpendRepository(applicationContext)
+        val recruitingManualWeekSpendRepository =
+            dev.novux.dynasty.cbb.data.recruiting.RecruitingManualWeekSpendRepository(applicationContext)
         nilBudgetRepository = dev.novux.dynasty.cbb.data.nil.NilBudgetRepository(
             applicationContext,
             recruitingReservationRepository,
@@ -298,6 +300,7 @@ class DynastyApplication : Application() {
             database,
             packRepository,
             recruitingInterestSpendRepository,
+            recruitingManualWeekSpendRepository,
         )
         aiRecruitingRepository = AiRecruitingRepository(
             applicationContext,
@@ -432,6 +435,7 @@ class DynastyApplication : Application() {
             coachAchievementsRepository,
             seasonReviewProgressRepository,
             dashboardLastGameRepository,
+            recruitingManualWeekSpendRepository,
         )
         preseasonSeasonStartRepository = PreseasonSeasonStartRepository(
             saveSlotRepository,

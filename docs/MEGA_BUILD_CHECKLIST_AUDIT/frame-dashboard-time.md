@@ -204,12 +204,12 @@
 | MEGA-FRAME-107 | SHIP | Unplayed game copy | Opponent in `advance_confirm_line_fast_sim` via `stringFormatArgs` | `SimWeekAdvanceDialog.kt` |
 | MEGA-FRAME-108 | SHIP | Offseason lightweight confirm | `OffseasonAdvanceConfirmPolicy` forces `SimpleAdvance` dialog on milestone offseason weeks | `SimWeekAdvanceResolver`, `SaveSlotRepository` |
 | MEGA-FRAME-109 | SHIP | Portal line on advance | `PortalRecruitingWindowClosed` confirm line when portal window closed (week 6+) | `SimWeekAdvanceResolver.kt`, `SimWeekAdvanceDialog.kt` |
-| MEGA-FRAME-110 | GAP | Manual recruiting spend param | UI always calls `advanceDynastyWeek(slot)` with default **`userManualRecruitingSpent = 0`** — no hook from Recruiting hub | `DynastyShellScreen.kt`, `OffseasonScreen.kt` |
-| MEGA-FRAME-111 | PARTIAL | Advance failure UX | Discipline block shows snackbar (`WeekAdvanceBlocked`); other unreadable load paths still silent | `DynastyWeekAdvanceFeedback.kt` |
+| MEGA-FRAME-110 | SHIP | Manual recruiting spend param | Hub spends recorded in `RecruitingManualWeekSpendRepository`; confirm/advance pass total to sim-week input | `RecruitingEconomyRepository`, `SaveSlotRepository` |
+| MEGA-FRAME-111 | SHIP | Advance failure UX | `WeekAdvanceBlocked` + `Unreadable` snackbars; null confirm shows `advance_confirm_unavailable` | `DynastyWeekAdvanceFeedback.kt` |
 | MEGA-FRAME-112 | SHIP | Injury tick on bye | `InjuryWeeksTickByeWeek` explains no-game week; wired via `ByeWeekPolicy` + `userOnByeWeek` | `InjuryByeAdvanceConfirmPolicy`, `ByeWeekPolicy` |
 | MEGA-FRAME-113 | SHIP | Double-tap advance | Advance `Button` ignores clicks while in-flight (`weekAdvanceInProgress` / `dialogAdvanceInProgress`) before launching coroutine | `DynastyShellScreen.kt`, `OffseasonScreen.kt` |
 | MEGA-FRAME-114 | GAP | Advance work ordering | `advanceDynastyWeek` chains checkpoint, **AI recruiting**, league batch, injuries, fatigue, chemistry, coach Sunday — all on confirm path (lag source) | `SaveSlotRepository.advanceDynastyWeek` |
-| MEGA-FRAME-115 | PARTIAL | Simple advance line | Short “Advance to {label}?” exists when no optional work — in-season still may skip if `needsDialog` false | `SimWeekAdvanceResolver.buildConfirmation` |
+| MEGA-FRAME-115 | SHIP | Simple advance line | `InSeasonAdvanceConfirmPolicy` forces destination `SimpleAdvance` dialog in exhibition/RS/postseason | `SimWeekAdvanceResolver`, `SaveSlotRepository` |
 | MEGA-FRAME-116 | GAP | Sim-week vs Start season | Preseason uses **Start season** CTA only — no sim-week dialog (correct) but shares heavy `startSeason` repository path without progress UI | `PreseasonSeasonStartRepository` |
 
 ---
@@ -218,8 +218,8 @@
 
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
-| MEGA-FRAME-117 | GAP | Weeks 3–5 dashboard body | Only optional task panel + placeholder hint — no week theme recap / draft crunch copy on dashboard | `offseason_shell_placeholder`, `OffseasonWeekHeading` |
-| MEGA-FRAME-118 | PARTIAL | Theme line placement | `OffseasonWeekHeading.themeLine` on dashboard column — **not** in global `DynastyShellChrome` subtitle (extends MEGA-FRAME-015) | `OffseasonScreen.kt` |
+| MEGA-FRAME-117 | SHIP | Weeks 3–5 dashboard body | Week-specific portal recap copy (`offseason_dashboard_week3_body` … `_week5_body`) on dashboard | `OffseasonScreen.kt` |
+| MEGA-FRAME-118 | SHIP | Theme line placement | `OffseasonWeekHeading.themeLine` via `DynastyShellChrome.headerSubtitle` only (no duplicate dashboard title) | `OffseasonScreen.kt`, `DynastyShellChrome.kt` |
 | MEGA-FRAME-119 | SHIP | Week 7 workout optional task | Optional review dashboard card opens full report sheet (see MEGA-FRAME-063) | `OffseasonWeekSevenOptionalDashboardTasks` |
 | MEGA-FRAME-120 | PARTIAL | Week 8 scholarship gate | Advance enabled when `rosterPlayerCount <= 15` — may not match **scholarship** subset vs walk-ons | `OffseasonScreen` `SCHOLARSHIP_LIMIT` |
 | MEGA-FRAME-121 | SHIP | Week 9 fundraising tasks | Optional fundraising dashboard cards per `dashboard-tasks.md` week 9 table | `OffseasonWeekNineOptionalDashboardTasks` |

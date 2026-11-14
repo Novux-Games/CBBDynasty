@@ -77,7 +77,7 @@ object SimWeekAdvanceResolver {
         if (input.recruitingHubOpen || input.portalRecruitingWeekOpen) {
             lines.add(SimWeekConfirmationLine(SimWeekConfirmationLineKind.LeagueRecruitingBatch))
         }
-        if (input.offseasonMilestoneAdvance) {
+        if (input.offseasonMilestoneAdvance || input.inSeasonDestinationAcknowledgment) {
             if (lines.none { it.kind == SimWeekConfirmationLineKind.SimpleAdvance }) {
                 lines.add(
                     SimWeekConfirmationLine(
@@ -101,6 +101,7 @@ object SimWeekAdvanceResolver {
             input.portalRecruitingWeekOpen ||
             input.portalRecruitingWindowClosed ||
             input.offseasonMilestoneAdvance ||
+            input.inSeasonDestinationAcknowledgment ||
             input.injuredPlayersTicking > 0 ||
             input.simulatesLeagueWeekBatch
         return SimWeekConfirmation(
