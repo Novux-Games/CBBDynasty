@@ -127,7 +127,7 @@
 | MEGA-FRAME-065 | SHIP | Week 9 fundraising / upgrades | Optional cards per event / naming / upgrades + fundraising bottom sheet | `OffseasonWeekNineOptionalDashboardTasks`, `FundraisingWeekNinePanel` |
 | MEGA-FRAME-066 | SHIP | Week 10 conference offers Season 2+ | `ConferenceOffersWeekTenPanel` + advance block | `OffseasonScreen` |
 | MEGA-FRAME-067 | SHIP | Advance to preseason CTA | `OffseasonWeekAdvancePolicy.showsAdvanceToPreseasonCta` — week 9 (S1) or week 10 (S2+) | `OffseasonScreen`, `OffseasonWeekAdvancePolicy` |
-| MEGA-FRAME-068 | GAP | Offseason sim-week on optional portal spend | Offseason advance confirmation wiring lighter than in-season | compare `OffseasonScreen` vs `DynastyShellScreen` |
+| MEGA-FRAME-068 | SHIP | Offseason sim-week on optional portal spend | `OffseasonAdvanceOptionalTaskAggregator` + portal nudge/auto-spend confirm lines in `SimWeekAdvanceResolver` | `OffseasonPortalSimWeekPolicy`, `OffseasonScreen` |
 
 ---
 

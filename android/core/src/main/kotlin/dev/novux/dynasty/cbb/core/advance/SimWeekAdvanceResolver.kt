@@ -22,7 +22,9 @@ object SimWeekAdvanceResolver {
             input.recruitingHubOpen &&
             input.userManualRecruitingSpent == 0 &&
             input.recruitingPointsAvailable > 0
-        if (willAutoMaintain) {
+        val portalAutoSpendLine =
+            willAutoMaintain && OffseasonPortalSimWeekPolicy.usePortalSpendLineInsteadOfGenericAutoMaintain(input)
+        if (willAutoMaintain && !portalAutoSpendLine) {
             lines.add(
                 SimWeekConfirmationLine(
                     SimWeekConfirmationLineKind.UserRecruitingAutoMaintain,
@@ -32,6 +34,23 @@ object SimWeekAdvanceResolver {
         }
         if (input.portalRecruitingWeekOpen) {
             lines.add(SimWeekConfirmationLine(SimWeekConfirmationLineKind.PortalRecruitingWeek))
+        }
+        if (OffseasonPortalSimWeekPolicy.showPortalOptionalNudgeLine(input)) {
+            lines.add(
+                SimWeekConfirmationLine(
+                    SimWeekConfirmationLineKind.OffseasonPortalOptionalNudges,
+                    formatArgs = listOf(input.unresolvedOptionalTaskCount),
+                ),
+            )
+        }
+        if (portalAutoSpendLine) {
+            val spend = input.estimatedAutoRecruitingSpend.coerceAtLeast(1)
+            lines.add(
+                SimWeekConfirmationLine(
+                    SimWeekConfirmationLineKind.PortalUserSchoolAutoSpend,
+                    formatArgs = listOf(spend),
+                ),
+            )
         }
         if (input.injuredPlayersTicking > 0) {
             lines.add(

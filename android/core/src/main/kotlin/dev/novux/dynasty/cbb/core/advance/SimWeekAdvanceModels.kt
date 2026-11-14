@@ -7,6 +7,8 @@ enum class SimWeekConfirmationLineKind {
     UserRecruitingAutoMaintain,
     LeagueRecruitingBatch,
     PortalRecruitingWeek,
+    OffseasonPortalOptionalNudges,
+    PortalUserSchoolAutoSpend,
     InjuryWeeksTick,
     SimpleAdvance,
 }

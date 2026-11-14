@@ -551,6 +551,8 @@
     <string name="advance_confirm_line_recruiting">Recruiting: your program will auto-spend about %1$d points on the recommended board.</string>
     <string name="advance_confirm_line_league_recruiting">League programs will run their weekly recruiting pass.</string>
     <string name="advance_confirm_line_portal">Transfer portal: league portal recruiting runs this week.</string>
+    <string name="advance_confirm_portal_optional_nudges">Transfer portal: %1$d optional dashboard nudges will be dismissed when you advance.</string>
+    <string name="advance_confirm_portal_user_auto_spend">Your program will auto-spend about %1$d recruiting points on the transfer portal recommended board.</string>
     <string name="advance_confirm_line_simple">Advance to %1$s?</string>
     <string name="advance_confirm_line_injury_tick">Injuries: %1$d players\' recovery clocks tick down (byes included). Healthy returns restore lineup spots.</string>
     <string name="dynasty_shell_advance_week">Advance week</string>

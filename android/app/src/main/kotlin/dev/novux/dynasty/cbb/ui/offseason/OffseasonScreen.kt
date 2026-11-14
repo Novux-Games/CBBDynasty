@@ -32,6 +32,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.OffseasonWeekHeading
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
+import dev.novux.dynasty.cbb.core.dashboard.OffseasonAdvanceOptionalTaskAggregator
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonDashboardContext
 import dev.novux.dynasty.cbb.core.dashboard.DashboardAdvanceGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
@@ -636,38 +637,25 @@ fun OffseasonScreen(
                     ) {
                         return@launch
                     }
-                    val dashboardTasks = buildList {
-                        if (inOffseason && OffseasonPortalOptionalTasksPolicy.inPortalTaskWindow(position.weekIndex)) {
-                            addAll(
-                                buildOffseasonPortalOptionalTasks(
-                                    weekIndex = position.weekIndex,
-                                    ledger = ledger,
-                                    portalTop40Locked = portalTop40Locked,
-                                    openScholarshipSlots = openScholarshipSlots,
-                                    pipelineSpotlight = portalPipelineSpotlight,
-                                ),
-                            )
-                        }
-                        if (inOffseason && position.weekIndex == SummerWorkoutConstants.OFFSEASON_WEEK_INDEX) {
-                            addAll(
-                                OffseasonWeekSevenOptionalDashboardTasks.build(
-                                    offseasonWeekIndex = position.weekIndex,
-                                    reportAvailable = summerWorkoutReport != null,
-                                ),
-                            )
-                        }
-                        if (inOffseason && position.weekIndex == OffseasonWeekNineConstants.OFFSEASON_WEEK_INDEX) {
-                            addAll(
-                                OffseasonWeekNineOptionalDashboardTasks.build(
-                                    offseasonWeekIndex = position.weekIndex,
-                                    economy = weekNineEconomy,
-                                ),
-                            )
-                        }
+                    val dashboardTasks = if (inOffseason) {
+                        OffseasonAdvanceOptionalTaskAggregator.collect(
+                            offseasonWeekIndex = position.weekIndex,
+                            ledger = ledger,
+                            portalTop40Locked = portalTop40Locked,
+                            openScholarshipSlots = openScholarshipSlots,
+                            pipelineSpotlight = portalPipelineSpotlight,
+                            summerWorkoutReport = summerWorkoutReport,
+                            weekNineEconomy = weekNineEconomy,
+                        )
+                    } else {
+                        emptyList()
                     }
                     weekAdvanceInProgress = true
                     try {
-                        val unresolved = dashboardTasks.count { it.id !in dismissedTasks }
+                        val unresolved = OffseasonAdvanceOptionalTaskAggregator.unresolvedCount(
+                            dashboardTasks,
+                            dismissedTasks,
+                        )
                         val confirmation = SimWeekAdvanceConfirmationUiPerf.measure {
                             saveSlotRepository.buildSimWeekAdvanceConfirmation(
                                 loaded.slotIndex,
