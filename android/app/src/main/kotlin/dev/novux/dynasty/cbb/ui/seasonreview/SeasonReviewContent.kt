@@ -13,12 +13,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.seasonreview.SeasonReviewSnapshot
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun SeasonReviewScrollContent(
@@ -28,6 +31,7 @@ fun SeasonReviewScrollContent(
     showAcknowledgeAction: Boolean = false,
     onAcknowledge: () -> Unit = {},
 ) {
+    val currency = remember { NumberFormat.getCurrencyInstance(Locale.US) }
     Column(
         modifier = modifier
             .verticalScroll(scrollState)
@@ -82,6 +86,18 @@ fun SeasonReviewScrollContent(
             Text(
                 stringResource(R.string.season_review_recruiting_next_cycle, snapshot.nextCycleWeeklyPool),
                 fontWeight = FontWeight.Medium,
+            )
+            Text(
+                stringResource(
+                    R.string.season_review_nil_next_cycle,
+                    currency.format(snapshot.nextCycleNilPoolUsd),
+                ),
+                fontWeight = FontWeight.Medium,
+            )
+            Text(
+                stringResource(R.string.season_review_next_cycle_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
         if (snapshot.awardHighlights.isNotEmpty()) {

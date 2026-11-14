@@ -148,7 +148,12 @@ fun IdentityPackImportScreen(
                 modifier = Modifier.weight(1f),
             )
         }
-
+        Text(
+            text = stringResource(R.string.pack_import_disclaimer_required_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = 4.dp),
+        )
         Spacer(modifier = Modifier.height(16.dp))
         PrimaryTabRow(selectedTabIndex = tabIndex) {
             ImportTab.entries.forEachIndexed { index, tab ->

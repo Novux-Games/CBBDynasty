@@ -71,6 +71,12 @@ fun HsJucoTabBody(
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
                 )
+                Text(
+                    stringResource(R.string.recruiting_hs_top60_pool_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 4.dp),
+                )
             }
             items(top60, key = { it.prospect.prospectId }) { row ->
                 HsJucoProspectRow(

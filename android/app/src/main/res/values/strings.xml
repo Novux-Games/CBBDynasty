@@ -35,6 +35,7 @@
     <string name="pack_import_title">Import identity pack</string>
     <string name="pack_import_active_pack">Active overlay: %1$s · %2$s · %3$s</string>
     <string name="pack_import_attestation_label">I understand this content is unofficial and not affiliated with any real league or school.</string>
+    <string name="pack_import_disclaimer_required_hint">Imports that set disclaimerAcceptedRequired stay blocked until you check the attestation box.</string>
     <string name="pack_import_tab_paste">File / paste</string>
     <string name="pack_import_tab_url">HTTPS URL</string>
     <string name="pack_import_choose_file">Choose JSON or TXT file</string>
@@ -173,6 +174,8 @@
     <string name="season_review_recruiting_tier">Prestige tier: %1$s</string>
     <string name="season_review_recruiting_this_cycle">This cycle weekly pool: %1$d pts</string>
     <string name="season_review_recruiting_next_cycle">Next cycle weekly pool (preview): %1$d pts</string>
+    <string name="season_review_nil_next_cycle">Next cycle annual NIL pool (preview): %1$s</string>
+    <string name="season_review_next_cycle_hint">Previews use your prestige after this season — pools open when the next recruiting cycle starts.</string>
     <string name="season_review_job_security">Job security: %1$d — %2$s</string>
     <string name="season_review_ad_trust">Athletic director trust: %1$d</string>
     <string name="season_review_contract_years">Contract: %1$d years left</string>
@@ -688,6 +691,7 @@
     <string name="recruiting_hs_juco_empty">Seed the incoming class in preseason to publish the national HS/JUCO pool.</string>
     <string name="recruiting_hs_juco_pool_summary">%1$d high school · %2$d junior college prospects in this class</string>
     <string name="recruiting_hs_top60_heading">National Top 60</string>
+    <string name="recruiting_hs_top60_pool_hint">Rankings use your dynasty\'s seeded freshman class pool — not the legacy demo list.</string>
     <string name="recruiting_hs_rank_prefix">#%1$d</string>
     <string name="recruiting_hs_section">All high school prospects</string>
     <string name="recruiting_juco_section">Junior college prospects</string>
@@ -1169,6 +1173,7 @@
     <string name="rankings_hub_conf_row">%1$s — %2$d–%3$d</string>
     <string name="history_hub_title">History</string>
     <string name="history_hub_placeholder">Dynasty archive, GOAT, and the record book will live here once league history is online.</string>
+    <string name="history_hub_online_hint">GOAT ranks, season cards, and record book entries fill in after each End of Season archive.</string>
     <string name="history_hub_cadence_hint">GOAT ranks and year cards finalize after each End of Season week.</string>
     <string name="history_tab_records">Record book</string>
     <string name="history_records_empty">No program or player records logged yet this dynasty.</string>
@@ -1231,5 +1236,6 @@
     <string name="awards_no_rows">No honorees to show yet.</string>
     <string name="awards_weekly_offseason">Weekly honors update during the regular season.</string>
     <string name="awards_weekly_cadence_hint">Player of the Week and conference honors refresh each regular-season week you sim.</string>
+    <string name="awards_weekly_conference_hint">%1$s conference honors publish with national Player of the Week when you advance regular-season weeks.</string>
     <string name="awards_week_chip">Week %1$d</string>
 </resources>
