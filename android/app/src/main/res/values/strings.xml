@@ -206,6 +206,8 @@
     <string name="summer_workouts_subtitle">Workouts ran automatically on your returning roster.</string>
     <string name="summer_workouts_summary">Coach training grade %1$d · team avg +%2$d XP · %3$d players</string>
     <string name="summer_workouts_line">+%1$d XP · %2$s</string>
+    <string name="summer_workouts_sheet_title">Summer workout report</string>
+    <string name="dashboard_task_summer_workout_review">Review summer workout report — coach grade %1$d, %2$d players</string>
     <string name="roster_cuts_title">Roster cuts and walk-ons</string>
     <string name="roster_cuts_count">Roster %1$d / %2$d · walk-ons signed %3$d / %4$d</string>
     <string name="roster_cuts_over_cap">Cut players to 15 or fewer before advancing.</string>

@@ -38,6 +38,8 @@ import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonOptionalDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonPortalOptionalNudgeResolver
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonPortalOptionalTasksPolicy
+import dev.novux.dynasty.cbb.core.dashboard.OffseasonWeekSevenOptionalDashboardTasks
+import dev.novux.dynasty.cbb.core.offseason.weekseven.SummerWorkoutReport
 import dev.novux.dynasty.cbb.core.dashboard.PipelineEntrantSpotlight
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonConferenceOffersRequiredDashboardTasks
@@ -129,6 +131,8 @@ fun OffseasonScreen(
     var portalTop40Locked by remember { mutableStateOf(false) }
     var portalEntrants by remember { mutableStateOf<List<PortalEntrant>>(emptyList()) }
     var portalPipelineSpotlight by remember { mutableStateOf<PipelineEntrantSpotlight?>(null) }
+    var summerWorkoutReport by remember { mutableStateOf<SummerWorkoutReport?>(null) }
+    var summerWorkoutSheetOpen by remember { mutableStateOf(false) }
     var openScholarshipSlots by remember { mutableStateOf(0) }
     var rosterPlayerCount by remember { mutableStateOf(0) }
     var dismissedTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
@@ -226,6 +230,16 @@ fun OffseasonScreen(
             loaded.weekCheckpoint.activePosition.weekIndex == 1
         ) {
             weekOnePlayers = rosterRepository.prepareWeekOneLeaving(loaded.dynastyId)
+        }
+        if (loaded.weekCheckpoint.activePosition.phase == CalendarPhase.Offseason &&
+            loaded.weekCheckpoint.activePosition.weekIndex == SummerWorkoutConstants.OFFSEASON_WEEK_INDEX
+        ) {
+            summerWorkoutReport = summerWorkoutRepository.ensureSimulated(
+                loaded.dynastyId,
+                loaded.metadata.seasonIndex,
+            )
+        } else {
+            summerWorkoutReport = null
         }
     }
     val position = loaded.weekCheckpoint.activePosition
@@ -441,6 +455,8 @@ fun OffseasonScreen(
                 dynastyId = loaded.dynastyId,
                 seasonIndex = loaded.metadata.seasonIndex,
                 summerWorkoutRepository = summerWorkoutRepository,
+                report = summerWorkoutReport,
+                onOpenFullReport = { summerWorkoutSheetOpen = true },
                 modifier = Modifier.weight(1f),
             )
         } else if (inOffseason && position.weekIndex == SigningDayConstants.OFFSEASON_WEEK_INDEX) {
@@ -487,6 +503,24 @@ fun OffseasonScreen(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+        }
+
+        if (inOffseason && position.weekIndex == SummerWorkoutConstants.OFFSEASON_WEEK_INDEX) {
+            val weekSevenTasks = OffseasonWeekSevenOptionalDashboardTasks.build(
+                offseasonWeekIndex = position.weekIndex,
+                reportAvailable = summerWorkoutReport != null,
+                coachTrainingGrade = summerWorkoutReport?.coachTrainingGrade,
+                playerCount = summerWorkoutReport?.lines?.size,
+            )
+            if (weekSevenTasks.isNotEmpty()) {
+                DashboardOptionalTasksPanel(
+                    tasks = weekSevenTasks,
+                    dismissedIds = dismissedTasks,
+                    onDismiss = { dismissedTasks = dismissedTasks + it },
+                    onDeepLink = onOpenRecruiting,
+                    onSummerWorkoutReportOpen = { summerWorkoutSheetOpen = true },
+                )
+            }
         }
 
         if (inOffseason && OffseasonPortalOptionalTasksPolicy.inPortalTaskWindow(position.weekIndex)) {
@@ -569,18 +603,26 @@ fun OffseasonScreen(
                     ) {
                         return@launch
                     }
-                    val dashboardTasks = if (
-                        inOffseason && OffseasonPortalOptionalTasksPolicy.inPortalTaskWindow(position.weekIndex)
-                    ) {
-                        buildOffseasonPortalOptionalTasks(
-                            weekIndex = position.weekIndex,
-                            ledger = ledger,
-                            portalTop40Locked = portalTop40Locked,
-                            openScholarshipSlots = openScholarshipSlots,
-                            pipelineSpotlight = portalPipelineSpotlight,
-                        )
-                    } else {
-                        emptyList()
+                    val dashboardTasks = buildList {
+                        if (inOffseason && OffseasonPortalOptionalTasksPolicy.inPortalTaskWindow(position.weekIndex)) {
+                            addAll(
+                                buildOffseasonPortalOptionalTasks(
+                                    weekIndex = position.weekIndex,
+                                    ledger = ledger,
+                                    portalTop40Locked = portalTop40Locked,
+                                    openScholarshipSlots = openScholarshipSlots,
+                                    pipelineSpotlight = portalPipelineSpotlight,
+                                ),
+                            )
+                        }
+                        if (inOffseason && position.weekIndex == SummerWorkoutConstants.OFFSEASON_WEEK_INDEX) {
+                            addAll(
+                                OffseasonWeekSevenOptionalDashboardTasks.build(
+                                    offseasonWeekIndex = position.weekIndex,
+                                    reportAvailable = summerWorkoutReport != null,
+                                ),
+                            )
+                        }
                     }
                     weekAdvanceInProgress = true
                     try {
@@ -646,6 +688,13 @@ fun OffseasonScreen(
             }
         }
     }
+        summerWorkoutReport?.takeIf { summerWorkoutSheetOpen }?.let { report ->
+            SummerWorkoutReportBottomSheet(
+                report = report,
+                onDismiss = { summerWorkoutSheetOpen = false },
+            )
+        }
+
         SnackbarHost(
             hostState = snackbarHostState,
             modifier = Modifier

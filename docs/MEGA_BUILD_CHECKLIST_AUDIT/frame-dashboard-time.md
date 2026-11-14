@@ -122,7 +122,7 @@
 | MEGA-FRAME-060 | SHIP | Week 2 draft results panel | `DraftResultsWeekTwoPanel` | `OffseasonScreen` week 2 |
 | MEGA-FRAME-061 | SHIP | Weeks 2–5 portal optional tasks | Portal optional panel + pipeline entrant nudge, shared build helper, portal deep links | `OffseasonPortalOptionalNudgeResolver`, `OffseasonScreen` |
 | MEGA-FRAME-062 | SHIP | Week 6 Signing Day required tasks | `SigningDayRequiredDashboardTasks` + signing screen route | `SigningDayScreen` |
-| MEGA-FRAME-063 | PARTIAL | Week 7 summer workouts optional report | Core constants + repository; sheet UX thin on dashboard | `SummerWorkoutConstants` |
+| MEGA-FRAME-063 | SHIP | Week 7 summer workouts optional report | Optional review card + bottom sheet full report on Week 7 dashboard | `OffseasonWeekSevenOptionalDashboardTasks`, `SummerWorkoutReportPanel` |
 | MEGA-FRAME-064 | SHIP | Week 8 roster ≤15 gate | `RosterCutsWeekEightPanel` + advance gate | `OffseasonScreen` |
 | MEGA-FRAME-065 | PARTIAL | Week 9 fundraising / upgrades | `FundraisingWeekNinePanel` | Optional tasks tuning |
 | MEGA-FRAME-066 | SHIP | Week 10 conference offers Season 2+ | `ConferenceOffersWeekTenPanel` + advance block | `OffseasonScreen` |
@@ -220,7 +220,7 @@
 |----|--------|--------------|---------|--------------|
 | MEGA-FRAME-117 | GAP | Weeks 3–5 dashboard body | Only optional task panel + placeholder hint — no week theme recap / draft crunch copy on dashboard | `offseason_shell_placeholder`, `OffseasonWeekHeading` |
 | MEGA-FRAME-118 | PARTIAL | Theme line placement | `OffseasonWeekHeading.themeLine` on dashboard column — **not** in global `DynastyShellChrome` subtitle (extends MEGA-FRAME-015) | `OffseasonScreen.kt` |
-| MEGA-FRAME-119 | GAP | Week 7 workout optional task | Summer workouts auto-run in core; **optional “review report”** dashboard card not surfaced (spec `offseason.md` Week 7) | `SummerWorkoutReportPanel` only on week 7 body |
+| MEGA-FRAME-119 | SHIP | Week 7 workout optional task | Optional review dashboard card opens full report sheet (see MEGA-FRAME-063) | `OffseasonWeekSevenOptionalDashboardTasks` |
 | MEGA-FRAME-120 | PARTIAL | Week 8 scholarship gate | Advance enabled when `rosterPlayerCount <= 15` — may not match **scholarship** subset vs walk-ons | `OffseasonScreen` `SCHOLARSHIP_LIMIT` |
 | MEGA-FRAME-121 | PARTIAL | Week 9 fundraising tasks | `FundraisingWeekNinePanel` on dashboard — optional fundraising **dashboard task cards** thin vs spec table | `dashboard-tasks.md#offseason` |
 | MEGA-FRAME-122 | GAP | Week 10 → preseason CTA | Final week button label / routing via `SaveSlotRepository` — verify copy “Advance to preseason” after Week 9 (S1) vs Week 10 | `OffseasonWeekAdvancePolicy`, strings |

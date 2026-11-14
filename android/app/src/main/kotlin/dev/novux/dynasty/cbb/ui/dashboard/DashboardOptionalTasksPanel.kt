@@ -29,6 +29,7 @@ fun DashboardOptionalTasksPanel(
     onDeepLink: (RecruitingHubTab) -> Unit,
     onStrategyOpen: () -> Unit = {},
     onCoachCardOpen: () -> Unit = {},
+    onSummerWorkoutReportOpen: () -> Unit = {},
     headingRes: Int? = null,
     modifier: Modifier = Modifier,
 ) {
@@ -52,6 +53,7 @@ fun DashboardOptionalTasksPanel(
                         DashboardDeepLink.PlayWeekGame,
                         -> onStrategyOpen()
                         DashboardDeepLink.CoachCard -> onCoachCardOpen()
+                        DashboardDeepLink.SummerWorkoutReport -> onSummerWorkoutReportOpen()
                         else -> onDeepLink(task.deepLink.toHubTab())
                     }
                 },
@@ -160,6 +162,11 @@ private fun taskMessage(task: DashboardTask): String = when (task.id) {
         R.string.dashboard_task_team_discipline,
         task.stringFormatArgs.firstOrNull().orEmpty(),
     )
+    DashboardTaskId.SummerWorkoutReportReview -> stringResource(
+        R.string.dashboard_task_summer_workout_review,
+        task.formatArgs.getOrNull(0) ?: 0,
+        task.formatArgs.getOrNull(1) ?: 0,
+    )
     DashboardTaskId.PromiseAtRisk -> stringResource(
         R.string.dashboard_task_promise_at_risk,
         task.stringFormatArgs.firstOrNull().orEmpty(),
@@ -190,5 +197,6 @@ private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {
     DashboardDeepLink.PlayersLeavingProDays,
     DashboardDeepLink.CoachCard,
     DashboardDeepLink.DisciplineSheet,
+    DashboardDeepLink.SummerWorkoutReport,
     -> RecruitingHubTab.Recommended
 }
