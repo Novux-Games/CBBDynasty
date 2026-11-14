@@ -68,7 +68,8 @@ import dev.novux.dynasty.cbb.ui.hubs.buildDynastyHubMenu
 import dev.novux.dynasty.cbb.ui.hubs.notifyRecruitingCycleClosed
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
-import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTab
+import dev.novux.dynasty.cbb.ui.dynasty.rememberShellNewsHeadlines
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardNotificationFeedPanel
 import dev.novux.dynasty.cbb.ui.dashboard.CareerBlockNotificationDialog
@@ -108,6 +109,13 @@ fun PreseasonScreen(
     val context = LocalContext.current
     val app = context.requireDynastyApplication()
     val playerStatsRepository = app.playerStatsRepository
+    val newsHeadlines = rememberShellNewsHeadlines(
+        dynastyId = loaded.dynastyId,
+        seasonIndex = loaded.metadata.seasonIndex,
+        weekIndex = loaded.weekCheckpoint.activePosition.weekIndex,
+        newsFeedRepository = app.newsFeedRepository,
+        rosterRepository = rosterRepository,
+    )
     val recruitingEconomyRepository = app.recruitingEconomyRepository
     val scope = rememberCoroutineScope()
     val position = loaded.weekCheckpoint.activePosition
@@ -238,7 +246,7 @@ fun PreseasonScreen(
                 calendarRepository = userCalendarRepository,
                 contentPadding = padding,
             )
-            DynastyShellTab.News -> DynastyShellNewsTabPlaceholder(padding)
+            DynastyShellTab.News -> DynastyShellNewsTab(headlines = newsHeadlines, contentPadding = padding)
             DynastyShellTab.Dashboard -> {
                 val taskProgress = progress
                 if (taskProgress == null) {

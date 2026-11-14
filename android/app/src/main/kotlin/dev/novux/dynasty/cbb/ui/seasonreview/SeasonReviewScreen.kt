@@ -20,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -42,7 +43,9 @@ import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
-import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTab
+import dev.novux.dynasty.cbb.ui.dynasty.rememberShellNewsHeadlines
+import dev.novux.dynasty.cbb.requireDynastyApplication
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
 import kotlinx.coroutines.launch
 
@@ -58,6 +61,15 @@ fun SeasonReviewScreen(
     userCalendarRepository: UserCalendarRepository,
 ) {
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val app = context.requireDynastyApplication()
+    val newsHeadlines = rememberShellNewsHeadlines(
+        dynastyId = loaded.dynastyId,
+        seasonIndex = loaded.metadata.seasonIndex,
+        weekIndex = loaded.weekCheckpoint.activePosition.weekIndex,
+        newsFeedRepository = app.newsFeedRepository,
+        rosterRepository = app.dynastyRosterRepository,
+    )
     val weekHeader = CalendarWeekLabel.display(loaded.weekCheckpoint.activePosition)
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
@@ -100,7 +112,7 @@ fun SeasonReviewScreen(
                 calendarRepository = userCalendarRepository,
                 contentPadding = padding,
             )
-            DynastyShellTab.News -> DynastyShellNewsTabPlaceholder(padding)
+            DynastyShellTab.News -> DynastyShellNewsTab(headlines = newsHeadlines, contentPadding = padding)
             DynastyShellTab.Roster,
             DynastyShellTab.Dashboard,
             -> Column(

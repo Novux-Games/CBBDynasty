@@ -42,7 +42,8 @@ import dev.novux.dynasty.cbb.requireDynastyApplication
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
-import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTabPlaceholder
+import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTab
+import dev.novux.dynasty.cbb.ui.dynasty.rememberShellNewsHeadlines
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellRosterTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
 import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
@@ -71,7 +72,15 @@ fun CoachingCarouselScreen(
     var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     var fullScreenPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     val context = LocalContext.current
-    val playerStatsRepository = context.requireDynastyApplication().playerStatsRepository
+    val app = context.requireDynastyApplication()
+    val playerStatsRepository = app.playerStatsRepository
+    val newsHeadlines = rememberShellNewsHeadlines(
+        dynastyId = loaded.dynastyId,
+        seasonIndex = seasonIndex,
+        weekIndex = position.weekIndex,
+        newsFeedRepository = app.newsFeedRepository,
+        rosterRepository = rosterRepository,
+    )
     val scope = rememberCoroutineScope()
     val seasonIndex = loaded.metadata.seasonIndex
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
@@ -139,7 +148,7 @@ fun CoachingCarouselScreen(
                 calendarRepository = userCalendarRepository,
                 contentPadding = padding,
             )
-            DynastyShellTab.News -> DynastyShellNewsTabPlaceholder(padding)
+            DynastyShellTab.News -> DynastyShellNewsTab(headlines = newsHeadlines, contentPadding = padding)
             DynastyShellTab.Dashboard -> Column(
                 modifier = Modifier
                     .fillMaxSize()
