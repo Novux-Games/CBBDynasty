@@ -13,6 +13,8 @@ data class UserCalendarGameEntry(
     val homeGame: Boolean,
     val gameKind: ScheduleGameKind,
     val isPastWeek: Boolean,
+    /** Month/day display for calendar row ([planning/game-frame.md#calendar-tab]). */
+    val gameDateLabel: String,
 )
 
 data class UserCalendarWeekRow(

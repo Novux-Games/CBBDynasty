@@ -13,7 +13,7 @@ object CalendarWeekLabel {
             CalendarPhase.Exhibition -> "Exhibition Week ${position.weekIndex}"
             CalendarPhase.RegularSeason -> "Week ${position.weekIndex}"
             CalendarPhase.ConferenceTournament -> "Conference Tournament Week ${position.weekIndex}"
-            CalendarPhase.Postseason -> "Postseason Week ${position.weekIndex}"
+            CalendarPhase.Postseason -> PostseasonCalendar.displayWeekHeader(position.weekIndex)
             CalendarPhase.SeasonReview -> "End of Season — ${SeasonMembershipYear.label(position.seasonIndex)}"
         }
 }

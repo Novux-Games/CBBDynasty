@@ -40,8 +40,8 @@
 | MEGA-FRAME-013 | SHIP | End of Season label | `End of Season — {year}` | `CalendarWeekLabel.kt` |
 | MEGA-FRAME-014 | SHIP | Offseason week header 1–10 | `Offseason Week N` | `CalendarWeekLabel.kt` |
 | MEGA-FRAME-015 | SHIP | Offseason theme subtitles | `OffseasonWeekHeading.themeLine` in `DynastyShellChrome` header subtitle | `DynastyShellChrome.kt`, `OffseasonScreen.kt` |
-| MEGA-FRAME-016 | GAP | NCBA round names on calendar | Postseason rows do not show Opening Round / Super 16 labels per `ncba-branding` | `DynastyShellCalendarTab.kt` |
-| MEGA-FRAME-017 | PARTIAL | Calendar lists games by date | Rows are week-bucketed; game line has no calendar date field | `UserCalendarGameEntry`, `CalendarGameLine` |
+| MEGA-FRAME-016 | SHIP | NCBA round names on calendar | Postseason week headers use `PostseasonCalendar.displayWeekHeader` (Opening Round / Super 16, …) | `CalendarWeekLabel.kt`, `PostseasonCalendarRoundLabelPathTest` |
+| MEGA-FRAME-017 | SHIP | Calendar lists games by date | `UserCalendarGameEntry.gameDateLabel` + dated game line in calendar tab | `CalendarWeekDisplayDate.kt`, `CalendarGameDateLinePathTest` |
 | MEGA-FRAME-018 | SHIP | Bye week chip | `UserCalendarRowKind.Bye` shows bye chip | `DynastyShellCalendarTab.kt` |
 | MEGA-FRAME-019 | SHIP | Empty exhibition week advance UX | `shell_calendar_exhibition_empty` on exhibition `OffWeek` rows | `DynastyShellCalendarTab.kt` |
 
@@ -269,7 +269,7 @@
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
 | MEGA-FRAME-146 | GAP | Conf tournament week N in header | `CalendarWeekLabel` has conf tournament strings — verify **N** tracks pack max rounds in live save | `CalendarWeekLabel.kt`, `time-system.md#conference-tournaments` |
-| MEGA-FRAME-147 | GAP | Postseason round labels | Dashboard calendar rows lack **Opening Round / Super 16** copy (extends MEGA-FRAME-016) | `DynastyShellCalendarTab.kt`, `ncba-branding.md` |
+| MEGA-FRAME-147 | SHIP | Postseason round labels | Same as MEGA-FRAME-016 — round name in week header on calendar tab | `CalendarWeekLabel.kt` |
 | MEGA-FRAME-148 | GAP | Exhibition empty week copy | No dedicated empty-slot message when 0 exhibitions in a window | `time-system.md#exhibition-weeks` |
 | MEGA-FRAME-149 | GAP | Event bye after elimination | Eliminated early-event teams’ bye weeks not visually distinct from generic empty week | `time-system.md#byes-after-elimination` |
 | MEGA-FRAME-150 | PARTIAL | Preseason single-week label | `CalendarWeekLabel` → “Preseason” — does not echo “setup week” in calendar tab | `CalendarWeekLabel.kt` |

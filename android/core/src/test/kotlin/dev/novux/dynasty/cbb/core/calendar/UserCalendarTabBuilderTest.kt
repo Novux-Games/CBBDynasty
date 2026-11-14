@@ -47,7 +47,26 @@ class UserCalendarTabBuilderTest {
         val week4 = rows.first { it.phase == CalendarPhase.RegularSeason && it.weekIndex == 4 }
         assertEquals(UserCalendarRowKind.Game, week4.rowKind)
         assertEquals(1, week4.games.size)
+        assertEquals("Dec 4", week4.games.single().gameDateLabel)
         assertTrue(week4.isCurrentWeek)
+    }
+
+    @Test
+    fun postseasonWeekHeaderIncludesNcbaRoundName() {
+        val plan = PreseasonSchedulePlan(
+            exhibitions = emptyList(),
+            regularSeason = emptyList(),
+            conferenceGameCount = 0,
+            nonConferenceGameCount = 0,
+            earlyEventGameCount = 0,
+        )
+        val rows = UserCalendarTabBuilder.build(
+            activePosition = CalendarPosition(1, CalendarPhase.Postseason, 4),
+            plan = plan,
+            exhibitionCount = 0,
+        )
+        val week4 = rows.first { it.phase == CalendarPhase.Postseason && it.weekIndex == 4 }
+        assertTrue(week4.weekLabel.contains("Super 16"))
     }
 
     @Test

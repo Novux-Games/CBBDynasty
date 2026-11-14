@@ -885,7 +885,7 @@
     <string name="shell_calendar_played">Played</string>
     <string name="shell_calendar_open_week">No game on your schedule this week.</string>
     <string name="shell_calendar_exhibition_empty">Exhibition week — no games scheduled. Advance when ready.</string>
-    <string name="shell_calendar_game_line">%1$s (%2$s) · %3$s · %4$s</string>
+    <string name="shell_calendar_game_line">%1$s · %2$s (%3$s) · %4$s · %5$s</string>
     <string name="shell_calendar_kind_conf">Conference</string>
     <string name="shell_calendar_kind_nonconf">Non-conference</string>
     <string name="shell_calendar_kind_event">Event</string>

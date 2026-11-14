@@ -122,9 +122,11 @@ private fun CalendarGameLine(game: UserCalendarGameEntry) {
     } else {
         stringResource(R.string.dynasty_shell_away)
     }
+    val date = game.gameDateLabel.ifBlank { "—" }
     Text(
         text = stringResource(
             R.string.shell_calendar_game_line,
+            date,
             game.opponentDisplayName,
             location,
             gameKindLabel(game.gameKind),

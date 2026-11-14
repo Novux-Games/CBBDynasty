@@ -132,6 +132,7 @@ object UserCalendarTabBuilder {
                     homeGame = stub.homeGame,
                     gameKind = stub.kind,
                     isPastWeek = isPast,
+                    gameDateLabel = CalendarWeekDisplayDate.gameDateLabel(position).orEmpty(),
                 )
             },
             isCurrentWeek = position == active,
