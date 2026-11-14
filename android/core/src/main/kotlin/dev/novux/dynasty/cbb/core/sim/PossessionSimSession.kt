@@ -187,7 +187,7 @@ class PossessionSimSession(
         val shotClockAfterTrip = PossessionShotClock.remainingAfterTrip(shotClockBefore, used)
         totalPossessions++
 
-        val lateClockTrip = PossessionLateClockPolicy.isLateClockTrip(
+        val lateClockTrip = PossessionLateClockSimPolicy.isLateClockTrip(
             used,
             input.tuning.shotClock.full,
         )
@@ -219,7 +219,7 @@ class PossessionSimSession(
         )
         val offenseRosterForShooting = if (offenseHome) input.homeRoster else input.awayRoster
         val resolveEffects = FloorShootingEffects.merge(
-            if (lateClockTrip) PossessionLateClockPolicy.applyToEffects(effects) else effects,
+            if (lateClockTrip) PossessionLateClockSimPolicy.applyToEffects(effects) else effects,
             participantsOnFloor(offenseFloorEarly, offenseRosterForShooting),
         )
         val defenseFloorEarly = fallbackFloor(

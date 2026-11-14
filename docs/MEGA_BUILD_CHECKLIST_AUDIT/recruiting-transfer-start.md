@@ -208,14 +208,14 @@
 | MEGA-RECR-103 | P1 | PASS | Required task gating | `SigningDayHardSignUiGate` blocks confirm positions until rankings viewed; hard sign until both tasks + promises. | `SigningDayScreen.kt` |
 | MEGA-RECR-104 | P1 | SHIP | Admin week — no new drip | `RecruitingClosedCycleWeekGrantPolicy` — zero weekly grant when `cycleClosed`. | `RecruitingWeekGrant.applyWeekAdvanceGrant` |
 | MEGA-RECR-105 | P2 | GAP | Walk-ons after close | No in-app feed / board after hard sign per `recruiting-engine#walk-ons`. | spec; no UI |
-| MEGA-RECR-106 | P1 | GAP | Unsigned targets sim elsewhere | Hard sign finalizes offer-based class only; no league AI “sign elsewhere” for open elite targets. | `SigningDayHardSignEngine` |
+| MEGA-RECR-106 | P1 | SHIP | Unsigned targets sim elsewhere | `SigningDayUnsignedElsewhereEngine` + lost repo + News on hard sign | `SigningDayScreen.kt`, `SigningDayUnsignedElsewherePolicy.kt` |
 | MEGA-RECR-107 | P2 | GAP | Position editor depth | Positions tab **cycles enum** per signee — not bulk roster editor / flex validation from spec. | `SigningDayScreen` `onCyclePosition` |
 | MEGA-RECR-108 | P2 | GAP | Rankings task deep link | Dashboard opens Signing Day rankings tab — does not mirror **News → Recruits** full Top 60 context copy. | `DashboardOptionalTasksPanel` |
 | MEGA-RECR-109 | P1 | SHIP | Roster scholarship attach | `SigningDayRosterEnrollPolicy` on hard sign | `SigningDayRepository.hardSign` |
 | MEGA-RECR-110 | P1 | PASS | Soft vs hard commit semantics | Soft commits use `RecruitSoftCommitPolicy`; hard sign unchanged via `SigningDayHardSignEngine`. | `RecruitSoftCommitPolicy` |
 | MEGA-RECR-111 | P2 | PASS | Rankings tab uses seed when present | `SigningDayScreen` `loadPool` → `top60FromPool` — PASS when preseason task done. | `SigningDayScreen.kt` |
 | MEGA-RECR-112 | P2 | GAP | Prep before Signing Day | No **recruiting prep brief** / R1–R4 copy surface tying crunch multiplier to dashboard (offseason optional flavor only). | `OffseasonOptionalDashboardTasks` |
-| MEGA-RECR-113 | P2 | GAP | Signing close → hub read-only | `cycleClosed` set on hard sign; hub still navigable from shell — enforce read-only Committed-only not implemented. | `RecruitingCyclePolicy` |
+| MEGA-RECR-113 | P2 | SHIP | Signing close → hub read-only | `RecruitingHubReadOnlyCyclePolicy` Committed/Lost tabs; menu `hubViewable` | `RecruitingHubScreen.kt`, `DynastyHubMenu.kt` |
 
 ---
 

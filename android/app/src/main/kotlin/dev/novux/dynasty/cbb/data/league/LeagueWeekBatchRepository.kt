@@ -29,6 +29,7 @@ import dev.novux.dynasty.cbb.core.preseason.tournament.EarlySeasonBracketSeason
 import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
 import dev.novux.dynasty.cbb.core.schedule.ScheduleGameKind
 import dev.novux.dynasty.cbb.data.preseason.EarlySeasonBracketRepository
+import dev.novux.dynasty.cbb.core.news.PostseasonTournamentNewsEngine
 import dev.novux.dynasty.cbb.data.news.NewsFeedRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
@@ -177,6 +178,15 @@ class LeagueWeekBatchRepository(
             seed = seed,
         )
         persist(dynastyId, next)
+        val packIndex = packRepository.activeSession().index
+        PostseasonTournamentNewsEngine.headlineForPostseasonWeek(
+            standings = next,
+            postseasonWeek = postseasonWeek,
+            userTeamId = userTeamId,
+            teamDisplayName = { id -> packIndex.team(id)?.displayName ?: id },
+        )?.let { headline ->
+            newsFeedRepository.appendHeadlines(dynastyId, seasonIndex, listOf(headline))
+        }
     }
 
     private fun buildUserPostseasonResult(

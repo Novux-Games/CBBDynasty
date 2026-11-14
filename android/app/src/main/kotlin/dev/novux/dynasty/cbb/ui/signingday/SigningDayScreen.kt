@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -35,7 +36,9 @@ import dev.novux.dynasty.cbb.core.signingday.NationalRankRow
 import dev.novux.dynasty.cbb.core.signingday.NationalRecruitingRankings
 import dev.novux.dynasty.cbb.core.signingday.SigningDayClassBoardSummaryPolicy
 import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignBlockReason
+import dev.novux.dynasty.cbb.core.news.NewsHeadlinePublisher
 import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignUiGate
+import dev.novux.dynasty.cbb.core.signingday.SigningDayUnsignedElsewhereEngine
 import dev.novux.dynasty.cbb.core.signingday.SigningDayProgress
 import dev.novux.dynasty.cbb.core.signingday.SigningDayUiPolicy
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
@@ -48,6 +51,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitOfferPromise
 import dev.novux.dynasty.cbb.data.recruiting.RecruitOfferPromiseRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
 import dev.novux.dynasty.cbb.data.signingday.SigningDayRepository
+import dev.novux.dynasty.cbb.requireDynastyApplication
 import dev.novux.dynasty.cbb.ui.recruiting.RecruitPromisePickerSheet
 import kotlinx.coroutines.launch
 
@@ -82,6 +86,8 @@ fun SigningDayScreen(
     var offerPromises by remember { mutableStateOf<Map<String, RecruitOfferPromise>>(emptyMap()) }
     var promisePickerTarget by remember { mutableStateOf<Pair<String, String>?>(null) }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val dynastyApp = context.requireDynastyApplication()
 
     suspend fun refresh() {
         progress = signingDayRepository.loadProgress(loaded.dynastyId, loaded.metadata.seasonIndex)
@@ -171,7 +177,35 @@ fun SigningDayScreen(
                             loaded.metadata.seasonIndex,
                         ) ?: 0
                         val pool = nilAnnualPoolRepository.effectivePoolUsd(loaded, boost)
-                        signingDayRepository.hardSign(loaded, pool)
+                        val hardSignResult = signingDayRepository.hardSign(loaded, pool)
+                        val recruitPool = incomingClassSeedRepository.ensurePool(
+                            loaded.dynastyId,
+                            loaded.metadata.seasonIndex,
+                        )
+                        val aiSchools = dynastyApp.packRepository.activeSession().index
+                            .allTeamDisplays()
+                            .map { it.displayName }
+                        val elsewhere = SigningDayUnsignedElsewhereEngine.resolve(
+                            pool = recruitPool,
+                            signedProspectIds = hardSignResult.signed.map { it.prospectId }.toSet(),
+                            aiSchoolNames = aiSchools,
+                            seed = loaded.dynastyId.hashCode().toLong() + loaded.metadata.seasonIndex,
+                        )
+                        val season = loaded.metadata.seasonIndex
+                        elsewhere.forEach { commit ->
+                            dynastyApp.recruitingLostProspectsRepository.record(
+                                loaded.dynastyId,
+                                season,
+                                commit.prospectId,
+                            )
+                        }
+                        if (elsewhere.isNotEmpty()) {
+                            dynastyApp.newsFeedRepository.appendHeadlines(
+                                loaded.dynastyId,
+                                season,
+                                elsewhere.map { NewsHeadlinePublisher.recruitingElsewhereCommit(season, it) },
+                            )
+                        }
                         recruitingEconomyRepository.closeCycleAfterHardSign(loaded.dynastyId)
                         refresh()
                     }

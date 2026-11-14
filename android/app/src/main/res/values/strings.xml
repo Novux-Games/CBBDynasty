@@ -590,6 +590,7 @@
     <string name="ad_trust_meter">%1$d · %2$s</string>
     <string name="ad_trust_staff_hint">AD trust meter lives on the Staff tab for your program.</string>
     <string name="recruiting_hub_title">Recruiting</string>
+    <string name="recruiting_hub_read_only_banner">Signing is complete — Committed and Lost tabs are read-only.</string>
     <string name="recruiting_hub_cycle_hint">Year-long recruiting cycle — spend points any week the hub is open.</string>
     <string name="recruiting_points_pool">Points available: %1$d (weekly pool %2$d)</string>
     <string name="recruiting_carryover_cadence_hint">Unspent points carry over at 50%%. Offseason weeks 2–5 add a recruiting crunch multiplier.</string>
@@ -1147,6 +1148,8 @@
     <string name="shell_news_kind_portal_commit">Portal commit</string>
     <string name="shell_news_kind_portal_decommit">Portal decommit</string>
     <string name="shell_news_kind_portal_flip">Portal flip</string>
+    <string name="shell_news_kind_carousel">Coaching carousel</string>
+    <string name="shell_news_kind_postseason">Postseason</string>
     <string name="news_hub_story_week">Week %1$d</string>
     <string name="shell_menu_exit_home">Exit to home</string>
     <string name="shell_menu_news_hub">News hub</string>

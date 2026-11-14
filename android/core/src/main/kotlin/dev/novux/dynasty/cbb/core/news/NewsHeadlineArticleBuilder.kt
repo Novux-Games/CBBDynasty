@@ -73,6 +73,14 @@ object NewsHeadlineArticleBuilder {
                 "Synthetic media and coaches polls track the NET sheet as resumes update each week.",
                 weekNote,
             )
+            NewsHeadlineKind.CoachingCarousel -> listOf(
+                title,
+                "Programs league-wide finalized staff changes during the annual coaching carousel.",
+            )
+            NewsHeadlineKind.PostseasonTournament -> listOf(
+                title,
+                "NCBA, NCI, and Heritage brackets update after each postseason sim week.",
+            )
             NewsHeadlineKind.PortalEntry,
             NewsHeadlineKind.PortalCommit,
             NewsHeadlineKind.PortalDecommit,

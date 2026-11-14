@@ -285,11 +285,18 @@ object PossessionSimEngine {
             after.fieldGoalsAttempted > before.fieldGoalsAttempted -> "miss"
             else -> "possession"
         }
-        val foulSuffix = foulNote?.let { " | $it" }.orEmpty()
-        val lateSuffix = lateGameTag?.let { " | $it" }.orEmpty()
-        val phaseSuffix = subPhaseChain?.let { " | $it" }.orEmpty()
-        val playerSuffix = playerAttribution?.let { " | $it" }.orEmpty()
-        return "$clock | $offense | ${used}s trip | SC $shotClockBefore→$shotClockAfter | $scoreLine$playerSuffix$foulSuffix$lateSuffix$phaseSuffix"
+        return PossessionLogFormatPolicy.formatLine(
+            clockLabel = clock,
+            offenseLabel = offense,
+            usedSeconds = used,
+            shotClockBefore = shotClockBefore,
+            shotClockAfter = shotClockAfter,
+            scoreLine = scoreLine,
+            playerAttribution = playerAttribution,
+            foulNote = foulNote,
+            lateGameTag = lateGameTag,
+            subPhaseChain = subPhaseChain,
+        )
     }
 
     private fun formatClock(seconds: Int): String {

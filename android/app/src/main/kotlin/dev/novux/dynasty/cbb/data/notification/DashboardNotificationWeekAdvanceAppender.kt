@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.data.notification
 
+import dev.novux.dynasty.cbb.core.notification.NotificationRankingsMoveFeedPolicy
 import dev.novux.dynasty.cbb.core.notification.NotificationSnapshotInput
 import dev.novux.dynasty.cbb.core.notification.NotificationTaskFeedDedupPolicy
 import dev.novux.dynasty.cbb.core.notification.NotificationWeekAdvanceAppendPolicy
@@ -19,11 +20,7 @@ class DashboardNotificationWeekAdvanceAppender(
         disciplineHeadline: String?,
         hasRequiredCarouselApprovalTask: Boolean,
     ) {
-        val rankingsLine = when {
-            userNetRankBefore == null || userNetRankAfter == null -> null
-            userNetRankBefore == userNetRankAfter -> null
-            else -> "Your program moved from NET #$userNetRankBefore to #$userNetRankAfter."
-        }
+        val rankingsLine = NotificationRankingsMoveFeedPolicy.feedLine(userNetRankBefore, userNetRankAfter)
         val discipline = disciplineHeadline?.takeIf { NotificationTaskFeedDedupPolicy.includeDisciplineFeedRow() }
         if (!NotificationTaskFeedDedupPolicy.includeCarouselFeedRows(hasRequiredCarouselApprovalTask)) {
             // Carousel feed rows hydrate on dashboard load; week-advance path only appends deltas here.

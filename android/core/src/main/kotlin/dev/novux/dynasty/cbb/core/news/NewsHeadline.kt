@@ -17,6 +17,8 @@ enum class NewsHeadlineKind {
     PortalCommit,
     PortalDecommit,
     PortalFlip,
+    CoachingCarousel,
+    PostseasonTournament,
 }
 
 @Serializable

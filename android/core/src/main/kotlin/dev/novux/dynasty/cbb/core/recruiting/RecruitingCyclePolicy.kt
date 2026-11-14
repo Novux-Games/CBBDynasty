@@ -48,6 +48,14 @@ object RecruitingCyclePolicy {
         hubAccessible(phase, offseasonWeekIndex) &&
             !effectiveCycleClosed(phase, offseasonWeekIndex, ledgerCycleClosed)
 
+    fun hubViewable(
+        phase: CalendarPhase,
+        offseasonWeekIndex: Int? = null,
+        ledgerCycleClosed: Boolean,
+    ): Boolean =
+        hubNavigable(phase, offseasonWeekIndex, ledgerCycleClosed) ||
+            RecruitingHubReadOnlyCyclePolicy.isReadOnly(phase, offseasonWeekIndex, ledgerCycleClosed)
+
     /**
      * Hamburger / shell menus while the ledger is still loading: assume closed when the hub
      * would be reachable, so preseason does not flash an open Recruiting item ([MEGA-FRAME-090]).

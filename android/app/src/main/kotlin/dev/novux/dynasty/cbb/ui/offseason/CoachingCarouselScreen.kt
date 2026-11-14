@@ -33,6 +33,7 @@ import dev.novux.dynasty.cbb.core.dashboard.CarouselDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.carousel.CoachingCarouselPolicy
+import dev.novux.dynasty.cbb.core.news.CoachingCarouselLeagueNewsEngine
 import dev.novux.dynasty.cbb.core.qa.CoachingCarouselShellPath
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
@@ -228,6 +229,16 @@ private fun CoachingCarouselDashboardContent(
                         scope.launch {
                             val next = repository.runBackgroundSim(loaded.dynastyId, seasonIndex, state)
                             repository.save(loaded.dynastyId, seasonIndex, next)
+                            CoachingCarouselLeagueNewsEngine.headlineAfterBackgroundSim(
+                                seasonIndex,
+                                next.backgroundSimSummary,
+                            )?.let { headline ->
+                                app.newsFeedRepository.appendHeadlines(
+                                    loaded.dynastyId,
+                                    seasonIndex,
+                                    listOf(headline),
+                                )
+                            }
                             onStateChange(next)
                         }
                     },

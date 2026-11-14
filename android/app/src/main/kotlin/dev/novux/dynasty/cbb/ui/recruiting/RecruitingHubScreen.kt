@@ -57,6 +57,7 @@ import dev.novux.dynasty.cbb.core.recruiting.HsJucoRecruitBoard
 import dev.novux.dynasty.cbb.core.recruiting.RecruitProspect
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubReadOnlyCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.RecruitHubNotificationDeepLinkPolicy
 import dev.novux.dynasty.cbb.core.recruiting.RecruitOfficialVisitCampusBumpPolicy
 import dev.novux.dynasty.cbb.core.recruiting.RecruitSpendFeedbackPolicy
@@ -235,10 +236,24 @@ fun RecruitingHubScreen(
     var hsPoolReady by remember { mutableStateOf(false) }
     var portalEntrants by remember { mutableStateOf<List<PortalEntrant>>(emptyList()) }
     val calendarPosition = loaded.weekCheckpoint.activePosition
+    val hubOffseasonWeek = calendarPosition.weekIndex.takeIf { calendarPosition.phase == CalendarPhase.Offseason }
+    val ledgerCycleClosed = ledger?.cycleClosed == true
+    val hubReadOnly = ledger != null &&
+        RecruitingHubReadOnlyCyclePolicy.isReadOnly(
+            calendarPosition.phase,
+            hubOffseasonWeek,
+            ledgerCycleClosed,
+        )
+    val hubTabs = if (hubReadOnly) RecruitingHubReadOnlyCyclePolicy.tabs else RecruitingHubDefaults.tabs
     val portalWindowOpen = PortalRecruitingHub.isRecruitingWindowOpen(
         calendarPosition.phase,
         calendarPosition.weekIndex.takeIf { calendarPosition.phase == CalendarPhase.Offseason },
     )
+    LaunchedEffect(hubReadOnly, hubTabs) {
+        if (hubReadOnly) {
+            tabIndex = tabIndex.coerceIn(0, (hubTabs.size - 1).coerceAtLeast(0))
+        }
+    }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
         hsPoolReady = false
@@ -264,7 +279,8 @@ fun RecruitingHubScreen(
                 hsProspectIds = fullPool.map { it.prospectId }.toSet(),
                 portalEntrantIds = portalEntrants.map { it.entrantId }.toSet(),
             )
-            tabIndex = RecruitingHubDefaults.tabs.indexOf(tab)
+            val tabs = if (hubReadOnly) RecruitingHubReadOnlyCyclePolicy.tabs else RecruitingHubDefaults.tabs
+            tabIndex = tabs.indexOf(tab).takeIf { it >= 0 } ?: 0
             focusedProspectId = resolvedId
         }
     }
@@ -353,9 +369,7 @@ fun RecruitingHubScreen(
         )
     }
 
-    val activePosition = loaded.weekCheckpoint.activePosition
-    val hubOffseasonWeek = activePosition.weekIndex.takeIf { activePosition.phase == CalendarPhase.Offseason }
-    val ledgerCycleClosed = ledger?.cycleClosed == true
+    val activePosition = calendarPosition
     val hubNavigable = ledger != null &&
         RecruitingCyclePolicy.hubNavigable(
             activePosition.phase,
@@ -373,7 +387,7 @@ fun RecruitingHubScreen(
             }
             return
         }
-        !hubNavigable -> {
+        !hubNavigable && !hubReadOnly -> {
             RecruitingCycleClosedBody(onBack = onBack)
             return
         }
@@ -390,6 +404,14 @@ fun RecruitingHubScreen(
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
         )
+        if (hubReadOnly) {
+            Text(
+                text = stringResource(R.string.recruiting_hub_read_only_banner),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
         if (activePosition.phase == CalendarPhase.Preseason) {
             Text(
                 text = stringResource(R.string.recruiting_hub_preseason_setup_banner),
@@ -402,7 +424,7 @@ fun RecruitingHubScreen(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        ledger?.let { row ->
+        if (!hubReadOnly) ledger?.let { row ->
             Text(
                 text = stringResource(
                     R.string.recruiting_points_pool,
@@ -495,7 +517,7 @@ fun RecruitingHubScreen(
             }
         }
         ScrollableTabRow(selectedTabIndex = tabIndex) {
-            RecruitingHubDefaults.tabs.forEachIndexed { index, tab ->
+            hubTabs.forEachIndexed { index, tab ->
                 Tab(
                     selected = tabIndex == index,
                     onClick = { tabIndex = index },
@@ -505,7 +527,7 @@ fun RecruitingHubScreen(
         }
         val recommendedListState = rememberLazyListState()
         Column(modifier = Modifier.weight(1f)) {
-            when (RecruitingHubDefaults.tabs[tabIndex]) {
+            when (hubTabs[tabIndex]) {
                 RecruitingHubTab.Recommended -> RecommendedTabBody(
                     loaded = loaded,
                     rows = recommendedRows,

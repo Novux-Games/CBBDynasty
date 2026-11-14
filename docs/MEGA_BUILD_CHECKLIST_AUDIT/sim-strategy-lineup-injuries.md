@@ -40,11 +40,11 @@
 | MEGA-SIM-003 | PARTIAL | **30s** shot clock state + reset on change of possession / **20** after OReb | `SimTuning.shotClock`, `GameSimClock.MAX_TRIP_SECONDS` | JSON defines 30/20; engine caps trip at 30s only — no shot-clock state machine or OReb reset |
 | MEGA-SIM-004 | SHIP | Shot-clock **violation** turnover type | `PossessionShotClockViolationPolicy` in possession loop | `PossessionSimSession.kt` |
 | MEGA-SIM-005 | PARTIAL | Trip time bands: quick TO 3–6, quick shot 8–14, foul 12–18 | `SimTuning.timeUsedSeconds`, `sampleTripSeconds` | Bands loaded; pacing also scaled via `pacedTripSeconds` |
-| MEGA-SIM-006 | GAP | Late-clock (22–30s) contested shot / TO / foul bumps from tuning | — | No late-clock branch keyed on `used` |
+| MEGA-SIM-006 | SHIP | Late-clock (22–30s) contested shot / TO / foul bumps from tuning | `PossessionLateClockSimPolicy` in `PossessionSimSession` | `PossessionLateClockSimPolicy.kt` |
 | MEGA-SIM-007 | PASS | **Overtime** 5:00 until winner | `GameSimOvertime`, `PossessionSimSession` | OT periods until score breaks tie |
 | MEGA-SIM-008 | PARTIAL | **~60–70** possessions per team | `PossessionPaceGovernor`, paced trips | Trip pace scales when ahead/behind expected count |
 | MEGA-SIM-009 | PARTIAL | Terminal events: TO, 2PT/3PT, FT chains, rebounds, blocks, steals text | `resolvePossessionForSession` | Only coarse TO / FGA / score; no FTs, rebounds, blocks, steals in box |
-| MEGA-SIM-010 | GAP | Possession log format `14:32 \| HOME \| #12 3PT miss \| …` | `formatPossessionLog` | Generic `clock \| side \| Ns trip \| TO/+PTS/miss` — no jersey numbers |
+| MEGA-SIM-010 | SHIP | Possession log format `14:32 \| HOME \| #12 3PT miss \| …` | `PossessionLogFormatPolicy` + `PossessionLogPlayerLabel` miss branch | `PossessionSimEngine.kt` |
 | MEGA-SIM-011 | SHIP | Running score + clock in output | `GameSimResult`, watch UI score strings | Score lines updated in `GameWatchScreen` |
 | MEGA-SIM-012 | PASS | Full **player** box: MIN, PTS, FGM/A, … | `PlayerBoxScore`, `GameSimResult.homePlayerBox` | All standard columns + `BoxScoreCoherence` player sums |
 | MEGA-SIM-013 | SHIP | Team PTS = sum semantics / FGA bounds | `BoxScoreCoherence.assertValid` | Asserts scoreboard vs team box, FGM≤FGA, 3PM≤3PA |

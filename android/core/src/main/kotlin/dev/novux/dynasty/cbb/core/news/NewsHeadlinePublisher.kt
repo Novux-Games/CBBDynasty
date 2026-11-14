@@ -137,4 +137,16 @@ object NewsHeadlinePublisher {
         priority = 60,
         createdAtMs = createdAtMs,
     )
+
+    fun recruitingElsewhereCommit(
+        seasonIndex: Int,
+        commit: dev.novux.dynasty.cbb.core.signingday.SigningDayElsewhereCommit,
+    ): NewsHeadline = NewsHeadline(
+        id = "elsewhere-${commit.prospectId}-$seasonIndex",
+        seasonIndex = seasonIndex,
+        kind = NewsHeadlineKind.RecruitingSpotlight,
+        title = "${commit.displayName} (${commit.stars}★) signs with ${commit.schoolName}",
+        priority = 48,
+        createdAtMs = System.currentTimeMillis(),
+    )
 }

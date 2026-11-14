@@ -28,6 +28,19 @@ object PossessionLogPlayerLabel {
                 if (ast != null) "$make (ast $ast)" else make
             } ?: make
             parts += line
+        } else if (fga > 0 && fgm == 0 && credits.scorerId != null) {
+            val shooter = label(offenseRoster, credits.scorerId) ?: return null
+            val attempt = when {
+                blockedShot -> "$shooter blocked shot"
+                change == PossessionChange.DefenseTakesBall -> "$shooter miss"
+                else -> "$shooter miss"
+            }
+            val threeAtt = after.threePointsAttempted - before.threePointsAttempted
+            parts += if (threeMade > 0 || threeAtt > 0) {
+                attempt.replace("miss", "3PT miss")
+            } else {
+                attempt
+            }
         } else if (fga > 0 && fgm == 0 && !blockedShot && credits.rebounderId != null) {
             val rebounder = when (change) {
                 PossessionChange.OffenseRetainsOffensiveRebound ->

@@ -19,4 +19,6 @@ fun newsHeadlineKindLabel(kind: NewsHeadlineKind): String = when (kind) {
     NewsHeadlineKind.PortalCommit -> stringResource(R.string.shell_news_kind_portal_commit)
     NewsHeadlineKind.PortalDecommit -> stringResource(R.string.shell_news_kind_portal_decommit)
     NewsHeadlineKind.PortalFlip -> stringResource(R.string.shell_news_kind_portal_flip)
+    NewsHeadlineKind.CoachingCarousel -> stringResource(R.string.shell_news_kind_carousel)
+    NewsHeadlineKind.PostseasonTournament -> stringResource(R.string.shell_news_kind_postseason)
 }

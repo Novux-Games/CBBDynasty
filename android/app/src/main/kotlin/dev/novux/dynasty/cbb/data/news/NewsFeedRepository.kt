@@ -92,6 +92,14 @@ class NewsFeedRepository(
         appendAll(dynastyId, seasonIndex, tagged)
     }
 
+    suspend fun appendHeadlines(
+        dynastyId: String,
+        seasonIndex: Int,
+        headlines: List<NewsHeadline>,
+    ) {
+        appendAll(dynastyId, seasonIndex, headlines)
+    }
+
     suspend fun appendLeagueWeek(
         dynastyId: String,
         standings: LeagueStandingsState,

@@ -37,6 +37,8 @@ fun buildDynastyHubMenu(
         when {
             RecruitingCyclePolicy.hubNavigable(position.phase, offseasonWeek, recruitingCycleClosed) ->
                 add(DynastyShellMenuAction(R.string.shell_menu_recruiting_hub, callbacks.onOpenRecruiting))
+            RecruitingCyclePolicy.hubViewable(position.phase, offseasonWeek, recruitingCycleClosed) ->
+                add(DynastyShellMenuAction(R.string.shell_menu_recruiting_hub, callbacks.onOpenRecruiting))
             recruitingCycleClosed &&
                 RecruitingCyclePolicy.hubAccessible(position.phase, offseasonWeek) ->
                 add(
