@@ -18,7 +18,10 @@ class OffseasonWeekOneDashboardTasksPathTest {
         ).readText()
         assertTrue(tasks.contains("WeekOneProDay"))
         assertTrue(tasks.contains("WeekOneTransferRetention"))
-        assertTrue(screen.contains("OffseasonWeekOneRequiredDashboardTasks"))
+        assertTrue(
+            screen.contains("OffseasonWeekOneRequiredDashboardTasks") ||
+                screen.contains("OffseasonRequiredDashboardTasks"),
+        )
         assertTrue(screen.contains("DashboardRequiredTasksPanel"))
         assertTrue(screen.contains("weekOneNavigationFor"))
     }

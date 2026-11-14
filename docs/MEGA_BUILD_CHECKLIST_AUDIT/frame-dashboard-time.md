@@ -59,7 +59,7 @@
 | MEGA-FRAME-025 | SHIP | Preseason 8 required tasks | `PreseasonTaskId.entries` + `PreseasonStartGate` | `PreseasonScreen`, `dashboard-tasks.md#preseason` |
 | MEGA-FRAME-026 | SHIP | Preseason task deep links | `PreseasonTaskDeepLinks` + jump chips scroll/open hub per task | `PreseasonRequiredTaskChips.kt`, `PreseasonDeepLinkNavigation.kt` |
 | MEGA-FRAME-027 | SHIP | Preseason Start season gate | Button gated on all tasks complete (not “Advance week”) | `PreseasonScreen`, `preseason_start_season` |
-| MEGA-FRAME-028 | PARTIAL | Offseason required by week | Signing Day, roster lock, carousel cards wired in core — UI coverage uneven by week | `OffseasonScreen`, `dashboard-tasks.md#offseason` |
+| MEGA-FRAME-028 | SHIP | Offseason required by week | `OffseasonRequiredDashboardTasks` + required panels weeks 1, 6, 8, 10; advance gate unified | `OffseasonScreen.kt`, `OffseasonRequiredDashboardTasks.kt` |
 | MEGA-FRAME-029 | SHIP | Offseason Week 1 dashboard tasks | `OffseasonWeekOneRequiredDashboardTasks` + required panel → `PlayersLeavingPanel` deep links | `OffseasonScreen.kt` |
 | MEGA-FRAME-030 | SHIP | Coaching Carousel dashboard tasks | `CarouselDashboardTasks` + `DashboardRequiredTasksPanel` on carousel dashboard tab | `CarouselDashboardTasks.kt`, `CoachingCarouselScreen.kt` |
 | MEGA-FRAME-031 | SHIP | In-season play/sim optional task | `DashboardTaskGate.inSeason` optional game tasks | `DynastyShellScreen` |

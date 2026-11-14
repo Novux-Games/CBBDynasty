@@ -766,6 +766,8 @@
     <string name="dashboard_team_coaches_rank">Coaches #%1$d</string>
     <string name="dashboard_team_postseason_seed">Postseason %1$s</string>
     <string name="dashboard_task_season_review_acknowledge">Review season recap, then acknowledge before entering offseason</string>
+    <string name="dashboard_task_offseason_roster_lock">Trim roster to %2$s scholarships (%1$s on roster now)</string>
+    <string name="dashboard_task_offseason_conference_offer">Respond to conference offer — %1$s</string>
     <string name="season_review_acknowledge_recap">Acknowledge season recap</string>
     <string name="coach_skill_point_bank">Skill points in bank: %1$d</string>
     <string name="coach_skill_tree_title">Skill tree</string>

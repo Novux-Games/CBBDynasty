@@ -89,6 +89,15 @@ private fun requiredTaskMessage(task: DashboardTask): String = when (task.id) {
     )
     DashboardTaskId.SeasonReviewAcknowledge ->
         stringResource(R.string.dashboard_task_season_review_acknowledge)
+    DashboardTaskId.OffseasonRosterLock -> stringResource(
+        R.string.dashboard_task_offseason_roster_lock,
+        task.stringFormatArgs.getOrNull(0).orEmpty(),
+        task.stringFormatArgs.getOrNull(1).orEmpty(),
+    )
+    DashboardTaskId.OffseasonConferenceOffer -> stringResource(
+        R.string.dashboard_task_offseason_conference_offer,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+    )
     else -> task.id.name
 }
 

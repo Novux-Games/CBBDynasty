@@ -32,6 +32,8 @@ enum class DashboardDeepLink {
     SeasonReviewRecap,
     PlayWeekGame,
     CoachCard,
+    OffseasonRosterCuts,
+    OffseasonConferenceOffers,
 }
 
 enum class DashboardTaskId {
@@ -59,6 +61,8 @@ enum class DashboardTaskId {
     WeekOneProDay,
     WeekOneTransferRetention,
     SeasonReviewAcknowledge,
+    OffseasonRosterLock,
+    OffseasonConferenceOffer,
 }
 
 data class DashboardTask(
