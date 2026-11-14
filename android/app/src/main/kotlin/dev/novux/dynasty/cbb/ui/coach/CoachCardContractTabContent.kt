@@ -21,6 +21,7 @@ fun HeadCoachContractTab(
     contractDetail: HeadCoachContractDetail,
     userCoachSecurity: CoachSecuritySnapshot?,
     employmentStatus: CoachEmploymentStatus,
+    isUserCoach: Boolean = true,
     onViewAdTrustOnStaff: () -> Unit,
     onResignTap: () -> Unit,
     onTerminationTap: () -> Unit,
@@ -66,13 +67,21 @@ fun HeadCoachContractTab(
             CoachContractTabGoalsBlock(contractDetail.performanceGoals.displayLines())
         },
         footer = {
-            userCoachSecurity?.let {
-                AdTrustMeter(it)
-                OutlinedButton(onClick = onViewAdTrustOnStaff, modifier = Modifier.fillMaxWidth()) {
-                    Text(stringResource(R.string.coach_contract_view_staff_ad_trust))
+            if (isUserCoach) {
+                userCoachSecurity?.let {
+                    AdTrustMeter(it)
+                    OutlinedButton(onClick = onViewAdTrustOnStaff, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.coach_contract_view_staff_ad_trust))
+                    }
                 }
             }
-            if (employmentStatus == CoachEmploymentStatus.Unemployed) {
+            if (!isUserCoach) {
+                Text(
+                    stringResource(R.string.coach_contract_read_only_opponent),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            } else if (employmentStatus == CoachEmploymentStatus.Unemployed) {
                 Text(
                     stringResource(R.string.coach_contract_unemployed_notice),
                     color = MaterialTheme.colorScheme.error,

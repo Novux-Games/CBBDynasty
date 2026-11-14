@@ -55,18 +55,18 @@
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
 | MEGA-COACH-028 | P0 | PASS | Tap staff → **preview sheet** → View more → full card | `CoachPreviewBottomSheet` on staff tap; View more → `ShellCoachView` full card | `CoachPreviewSheet.kt`, `DynastyShellScreen.kt` |
-| MEGA-COACH-029 | P1 | GAP | Full card: persistent Back / Name / Edit chrome | Single scroll column in overlay; no top chrome |
-| MEGA-COACH-030 | P1 | GAP | Identity strip: **school + role** (no portrait per product lock) | Text-only headline; school name present; role string on HC |
+| MEGA-COACH-029 | P1 | PASS | Full card: persistent Back / Name / Edit chrome | `CoachCardPersistentHeader` on HC + assistant full cards | `CoachCardPersistentHeader.kt`, `DynastyShellScreen.kt` |
+| MEGA-COACH-030 | P1 | PASS | Identity strip: **school + role** (no portrait per product lock) | `CoachCardIdentityStrip` — school, role, record; no portrait | `CoachCardIdentityStrip.kt` |
 | MEGA-COACH-031 | P0 | PASS | Tab bar: Overview · Contract · History · HOF · Draft | `PrimaryTabRow` on `HeadCoachCardScreen` | `HeadCoachCardScreen.kt`, `CoachCardTabs.kt` |
-| MEGA-COACH-032 | P2 | GAP | Overview: school + season record | `seasonRecordLabel`, school name on `HeadCoachCardScreen` |
+| MEGA-COACH-032 | P2 | PASS | Overview: school + season record | Identity strip + `CoachOverviewTeamCard` on Overview | `CoachCardIdentityStrip.kt`, `CoachOverviewTeamCard.kt` |
 | MEGA-COACH-033 | P1 | PASS | Overview team card tap → School hub | `CoachOverviewTeamCard` on HC Overview; tap → `ShellCoachView.School` | `CoachOverviewTeamCardPathTest` |
 | MEGA-COACH-034 | P2 | GAP | Overview information: age, alma mater | Age + alma on HC; **no** career/school experience seasons |
 | MEGA-COACH-035 | P1 | PASS | Contract overview on Overview (years, years left, **prestige**) | `CoachOverviewContractCard` on HC Overview | `CoachOverviewContractCardPathTest` |
 | MEGA-COACH-036 | P1 | PASS | Overview achievements block (W–L, tourney, titles, NCI, Heritage) | `CoachAchievementEngine` + ledger; `CoachOverviewAchievementsCard` | `CoachAchievementEngineTest`, `CoachOverviewAchievementsPathTest` |
-| MEGA-COACH-037 | P2 | GAP | Overview strategy default O/D schemes | HC screen shows scheme labels |
+| MEGA-COACH-037 | P2 | PASS | Overview strategy default O/D schemes | `RatingCard` strategy block on user HC Overview | `HeadCoachCardScreen.kt` |
 | MEGA-COACH-038 | P1 | PASS | Headline HC ratings O/D/Training/Recruiting 0–99 | `HeadCoachRatings`, `RatingCard` |
-| MEGA-COACH-039 | P2 | GAP | Edit mode user HC (scheme, skill spend, contract) | Skill tree panel inline; no Edit affordance / gating |
-| MEGA-COACH-040 | P1 | GAP | Opponent / AI coach cards hide job security | `JobSecurityMeter` only if `userCoachSecurity` passed — caller must gate |
+| MEGA-COACH-039 | P2 | PASS | Edit mode user HC (scheme, skill spend, contract) | Edit affordance + hint dialog; skill spend on Overview for user HC | `CoachCardPersistentHeader.kt`, `HeadCoachCardScreen.kt` |
+| MEGA-COACH-040 | P1 | PASS | Opponent / AI coach cards hide job security | `CoachCardUserGate` + gated preview/full security + read-only contract | `CoachCardUserGate.kt`, `DynastyShellScreen.kt` |
 
 ---
 
@@ -196,7 +196,7 @@
 | MEGA-COACH-111 | P1 | PASS | History tab season list + expand | `CoachSeasonHistory` + `CoachSeasonHistoryList` tap-expand detail |
 | MEGA-COACH-112 | P2 | FAIL | HOF tab list (national + conference pools) | No coach-attributed HOF query |
 | MEGA-COACH-113 | P2 | FAIL | Draft tab coach résumé (players coached → NBA) | No coach-draft join UI |
-| MEGA-COACH-114 | P1 | GAP | Tab bar scrollable on small widths | Pattern exists elsewhere (`ScrollableTabRow` in hubs) — not reused |
+| MEGA-COACH-114 | P1 | PASS | Tab bar scrollable on small widths | `CoachCardTabRow` → `ScrollableTabRow` on HC + assistant cards | `CoachCardTabRow.kt` |
 | MEGA-COACH-115 | P1 | PASS | Overview → Contract deep-link from job security tap | Overview `JobSecurityMeter` tap → `CoachCardTab.Contract`; factors on Contract tab |
 | MEGA-COACH-116 | P2 | PASS | Assistant card tab subset (Overview/History/Contract) | Tab shell matches `coach-card.md` assistant section | `AssistantCoachCardScreen.kt` |
 | MEGA-COACH-117 | P2 | FAIL | Conditional HC tabs on assistant when `hasHeadCoachCareer` | No career flag on assistant model |
@@ -212,7 +212,7 @@
 | MEGA-COACH-120 | P1 | PASS | Performance goals list (win total, conf, postseason floor) | `HeadCoachPerformanceGoalsEngine`; Overview + Contract goals block |
 | MEGA-COACH-121 | P1 | PASS | Extension offer incoming UI | `CoachContractExtensionOfferCard` + accept/decline; `HeadCoachUserContractRepository` |
 | MEGA-COACH-122 | P2 | FAIL | Renegotiate / resign / retire actions | Not implemented on card |
-| MEGA-COACH-123 | P1 | GAP | Read-only contract mirror for opponent HC poach | Job Center shows offers; not tied to opponent Contract tab |
+| MEGA-COACH-123 | P1 | PASS | Read-only contract mirror for opponent HC poach | Non-user HC: salary/terms visible; resign/AD trust hidden; read-only copy | `CoachCardContractTabContent.kt` |
 | MEGA-COACH-124 | P2 | GAP | Contract tab job security duplicate + factor list | Factors on overview only |
 | MEGA-COACH-125 | P2 | FAIL | AD trust summary + link **View on School → Staff** | Not on coach card |
 | MEGA-COACH-126 | P2 | FAIL | Hot seat / Critical warning copy blocks | Tier strings exist in core; no narrative UI on Contract |

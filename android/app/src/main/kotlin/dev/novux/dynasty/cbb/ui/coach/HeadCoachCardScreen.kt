@@ -13,9 +13,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Switch
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -68,6 +66,10 @@ fun HeadCoachCardScreen(
     onDeclineExtension: () -> Unit = {},
     selectedTab: CoachCardTab = CoachCardTab.Overview,
     onSelectedTabChange: (CoachCardTab) -> Unit = {},
+    isUserCoach: Boolean = true,
+    onBack: () -> Unit = {},
+    allowEdit: Boolean = false,
+    onEdit: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val tabs = CoachCardTab.HEAD_COACH_ORDER
@@ -76,25 +78,27 @@ fun HeadCoachCardScreen(
     }
     var showResignConfirm by remember { mutableStateOf(false) }
     var showTerminationConfirm by remember { mutableStateOf(false) }
+    var showEditHint by remember { mutableStateOf(false) }
     val money = remember { NumberFormat.getCurrencyInstance(Locale.US) }
+    val securityForUi = userCoachSecurity?.takeIf { isUserCoach }
 
     Column(modifier = modifier.fillMaxSize()) {
-        CoachCardIdentityHeader(
+        CoachCardPersistentHeader(
             displayName = card.displayName,
-            schoolDisplayName = card.schoolDisplayName,
-            seasonRecordLabel = card.seasonRecordLabel,
-            roleLabel = stringResource(R.string.coach_card_role_head),
-            avatarPresetId = card.avatarPresetId,
+            allowEdit = allowEdit,
+            onBack = onBack,
+            onEdit = { showEditHint = true },
         )
-        PrimaryTabRow(selectedTabIndex = tabs.indexOf(selectedTab)) {
-            tabs.forEach { tab ->
-                Tab(
-                    selected = tab == selectedTab,
-                    onClick = { onSelectedTabChange(tab) },
-                    text = { Text(coachTabLabel(tab)) },
-                )
-            }
-        }
+        CoachCardIdentityStrip(
+            schoolDisplayName = card.schoolDisplayName,
+            roleLabel = stringResource(R.string.coach_card_role_head),
+            seasonRecordLabel = card.seasonRecordLabel,
+        )
+        CoachCardTabRow(
+            tabs = tabs,
+            selectedTab = selectedTab,
+            onTabSelected = onSelectedTabChange,
+        )
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -105,9 +109,9 @@ fun HeadCoachCardScreen(
             when (selectedTab) {
                 CoachCardTab.Overview -> HeadCoachOverviewTab(
                     card = card,
-                    userCoachSecurity = userCoachSecurity,
+                    userCoachSecurity = securityForUi,
                     skillPointBank = skillPointBank,
-                    skillState = skillState,
+                    skillState = skillState?.takeIf { isUserCoach },
                     displayRatings = displayRatings,
                     programPrestige = programPrestige,
                     schoolHubOverview = schoolHubOverview,
@@ -116,17 +120,19 @@ fun HeadCoachCardScreen(
                     onSpendSkill = onSpendSkill,
                     onAutoSpendChanged = onAutoSpendChanged,
                     onOpenContractTab = { onSelectedTabChange(CoachCardTab.Contract) },
+                    isUserCoach = isUserCoach,
                 )
                 CoachCardTab.Contract -> HeadCoachContractTab(
                     card = card,
                     contractDetail = contractDetail,
-                    userCoachSecurity = userCoachSecurity,
+                    userCoachSecurity = securityForUi,
                     employmentStatus = employmentStatus,
+                    isUserCoach = isUserCoach,
                     onViewAdTrustOnStaff = onOpenStaffTab,
                     onResignTap = { showResignConfirm = true },
                     onTerminationTap = { showTerminationConfirm = true },
                     onOpenJobCenter = onOpenJobCenter,
-                    extensionOffer = extensionOffer,
+                    extensionOffer = extensionOffer.takeIf { isUserCoach },
                     onAcceptExtension = onAcceptExtension,
                     onDeclineExtension = onDeclineExtension,
                 )
@@ -196,6 +202,22 @@ fun HeadCoachCardScreen(
             },
         )
     }
+
+    if (showEditHint) {
+        AlertDialog(
+            onDismissRequest = { showEditHint = false },
+            title = { Text(stringResource(R.string.coach_card_edit)) },
+            text = { Text(stringResource(R.string.coach_card_edit_hint)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showEditHint = false
+                    onEdit()
+                }) {
+                    Text(stringResource(R.string.coach_card_edit_ack))
+                }
+            },
+        )
+    }
 }
 
 @Composable
@@ -212,6 +234,7 @@ private fun HeadCoachOverviewTab(
     onSpendSkill: (CoachSkillBranch) -> Unit,
     onAutoSpendChanged: (Boolean) -> Unit,
     onOpenContractTab: () -> Unit,
+    isUserCoach: Boolean,
 ) {
     CoachOverviewTeamCard(
         schoolDisplayName = card.schoolDisplayName,
@@ -225,11 +248,6 @@ private fun HeadCoachOverviewTab(
             HeadCoachAchievements.fromSeasonRecordLabel(card.seasonRecordLabel)
         }
     CoachOverviewAchievementsCard(achievements = overviewAchievements)
-    Text(
-        stringResource(R.string.coach_card_role_head),
-        style = MaterialTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.primary,
-    )
     userCoachSecurity?.let { security ->
         JobSecurityMeter(
             snapshot = security,
@@ -254,6 +272,15 @@ private fun HeadCoachOverviewTab(
             stringResource(R.string.coach_rating_recruiting, displayRatings.recruiting),
         ),
     )
+    if (isUserCoach) {
+        RatingCard(
+            title = stringResource(R.string.coach_card_strategy),
+            lines = listOf(
+                stringResource(R.string.coach_scheme_offense, card.offensiveSchemeLabel),
+                stringResource(R.string.coach_scheme_defense, card.defensiveSchemeLabel),
+            ),
+        )
+    }
     skillState?.let { skills ->
         SkillTreePanel(
             state = skills,
@@ -262,13 +289,6 @@ private fun HeadCoachOverviewTab(
             onAutoSpendChanged = onAutoSpendChanged,
         )
     }
-    RatingCard(
-        title = stringResource(R.string.coach_card_strategy),
-        lines = listOf(
-            stringResource(R.string.coach_scheme_offense, card.offensiveSchemeLabel),
-            stringResource(R.string.coach_scheme_defense, card.defensiveSchemeLabel),
-        ),
-    )
     card.almaMaterLabel?.let {
         Text(stringResource(R.string.coach_alma_mater, it), style = MaterialTheme.typography.bodyMedium)
     }

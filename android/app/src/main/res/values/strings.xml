@@ -377,6 +377,11 @@
     <string name="coach_card_age">Age %1$d</string>
     <string name="coach_assistant_tenure">%1$d years in role · %2$d at school</string>
     <string name="coach_card_back_staff">Back to staff</string>
+    <string name="coach_card_back">Back</string>
+    <string name="coach_card_edit">Edit</string>
+    <string name="coach_card_edit_hint">Default offensive and defensive schemes are edited in Strategy each week. Spend skill points and adjust auto-spend on this card. Salary, buyout, and resign options live on the Contract tab.</string>
+    <string name="coach_card_edit_ack">Got it</string>
+    <string name="coach_contract_read_only_opponent">Read-only contract view — poach and offer flows use Job Center.</string>
     <string name="coach_preview_title">Coach preview</string>
     <string name="coach_preview_view_more">View more</string>
     <string name="coach_preview_headline_ratings">Off %1$d · Def %2$d · Rec %3$d</string>

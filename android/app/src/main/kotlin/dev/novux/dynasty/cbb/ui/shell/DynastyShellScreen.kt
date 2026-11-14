@@ -70,6 +70,7 @@ import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
 import dev.novux.dynasty.cbb.core.injuries.MedicalRedshirtPolicy
 import dev.novux.dynasty.cbb.core.coach.card.AssistantCoachCard
 import dev.novux.dynasty.cbb.core.coach.achievements.HeadCoachAchievements
+import dev.novux.dynasty.cbb.core.coach.card.CoachCardUserGate
 import dev.novux.dynasty.cbb.core.coach.card.HeadCoachCard
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
 import dev.novux.dynasty.cbb.core.coach.staff.SchoolStaffRoster
@@ -565,9 +566,16 @@ fun DynastyShellScreen(
         )
     }
 
+    val previewCoachSecurity = coachPreviewTarget?.let { target ->
+        when (target) {
+            is CoachPreviewTarget.HeadCoach ->
+                coachSecurity.takeIf { CoachCardUserGate.isUserHeadCoach(target.card, staffRoster) }
+            else -> null
+        }
+    }
     CoachPreviewBottomSheet(
         target = coachPreviewTarget,
-        userCoachSecurity = coachSecurity,
+        userCoachSecurity = previewCoachSecurity,
         sheetState = coachPreviewSheetState,
         onDismiss = { coachPreviewTarget = null },
         onViewMore = { target ->
@@ -660,14 +668,15 @@ fun DynastyShellScreen(
             return
         }
         is ShellCoachView.HeadCoach -> {
+            val isUserHeadCoach = CoachCardUserGate.isUserHeadCoach(view.card, staffRoster)
             Column(modifier = Modifier.fillMaxSize()) {
-                OutlinedButton(
-                    onClick = { coachView = ShellCoachView.Staff },
-                    modifier = Modifier.padding(16.dp),
-                ) { Text(stringResource(R.string.coach_card_back_staff)) }
                 HeadCoachCardScreen(
                     card = view.card,
                     userCoachSecurity = coachSecurity,
+                    isUserCoach = isUserHeadCoach,
+                    onBack = { coachView = ShellCoachView.Staff },
+                    allowEdit = isUserHeadCoach && coachSkillState != null,
+                    onEdit = {},
                     skillPointBank = coachSkillPointBank,
                     skillState = coachSkillState,
                     programPrestige = userSchool?.programPrestige ?: 50,
@@ -759,12 +768,9 @@ fun DynastyShellScreen(
         }
         is ShellCoachView.Assistant -> {
             Column(modifier = Modifier.fillMaxSize()) {
-                OutlinedButton(
-                    onClick = { coachView = ShellCoachView.Staff },
-                    modifier = Modifier.padding(16.dp),
-                ) { Text(stringResource(R.string.coach_card_back_staff)) }
                 AssistantCoachCardScreen(
                     card = view.card,
+                    onBack = { coachView = ShellCoachView.Staff },
                     seasonIndex = loaded.metadata.seasonIndex,
                     coachDeepTabs = if (view.card.hasHeadCoachCareer) coachDeepTabs else null,
                     selectedTab = view.route.selectedTab,

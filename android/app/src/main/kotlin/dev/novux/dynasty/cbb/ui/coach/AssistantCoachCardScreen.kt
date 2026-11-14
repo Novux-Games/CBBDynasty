@@ -10,8 +10,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PrimaryTabRow
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -33,6 +31,7 @@ fun AssistantCoachCardScreen(
     coachDeepTabs: CoachCardDeepTabsSnapshot? = null,
     selectedTab: CoachCardTab = CoachCardTab.Overview,
     onSelectedTabChange: (CoachCardTab) -> Unit = {},
+    onBack: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val tabs = remember(card.hasHeadCoachCareer) {
@@ -41,22 +40,22 @@ fun AssistantCoachCardScreen(
   val money = remember { NumberFormat.getCurrencyInstance(Locale.US) }
 
     Column(modifier = modifier.fillMaxSize()) {
-        CoachCardIdentityHeader(
+        CoachCardPersistentHeader(
             displayName = card.displayName,
-            schoolDisplayName = card.schoolDisplayName,
-            seasonRecordLabel = card.seasonRecordLabel,
-            roleLabel = card.role.label,
-            avatarPresetId = card.avatarPresetId,
+            allowEdit = false,
+            onBack = onBack,
+            onEdit = {},
         )
-        PrimaryTabRow(selectedTabIndex = tabs.indexOf(selectedTab).coerceAtLeast(0)) {
-            tabs.forEach { tab ->
-                Tab(
-                    selected = tab == selectedTab,
-                    onClick = { onSelectedTabChange(tab) },
-                    text = { Text(coachTabLabel(tab)) },
-                )
-            }
-        }
+        CoachCardIdentityStrip(
+            schoolDisplayName = card.schoolDisplayName,
+            roleLabel = card.role.label,
+            seasonRecordLabel = card.seasonRecordLabel,
+        )
+        CoachCardTabRow(
+            tabs = tabs,
+            selectedTab = selectedTab,
+            onTabSelected = onSelectedTabChange,
+        )
         Column(
             modifier = Modifier
                 .weight(1f)
