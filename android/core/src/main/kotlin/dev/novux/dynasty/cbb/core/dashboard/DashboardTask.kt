@@ -35,6 +35,7 @@ enum class DashboardDeepLink {
     OffseasonRosterCuts,
     OffseasonConferenceOffers,
     SummerWorkoutReport,
+    FundraisingWeekNine,
 }
 
 enum class DashboardTaskId {
@@ -66,6 +67,11 @@ enum class DashboardTaskId {
     OffseasonRosterLock,
     OffseasonConferenceOffer,
     SummerWorkoutReportReview,
+    FundraisingGala,
+    FundraisingAlumniGame,
+    FundraisingDonorDrive,
+    FundraisingNamingRights,
+    FundraisingFacilityUpgrades,
 }
 
 data class DashboardTask(

@@ -39,6 +39,8 @@ import dev.novux.dynasty.cbb.core.dashboard.OffseasonOptionalDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonPortalOptionalNudgeResolver
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonPortalOptionalTasksPolicy
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonWeekSevenOptionalDashboardTasks
+import dev.novux.dynasty.cbb.core.dashboard.OffseasonWeekNineOptionalDashboardTasks
+import dev.novux.dynasty.cbb.core.offseason.weeknine.ProgramEconomyState
 import dev.novux.dynasty.cbb.core.offseason.weekseven.SummerWorkoutReport
 import dev.novux.dynasty.cbb.core.dashboard.PipelineEntrantSpotlight
 import dev.novux.dynasty.cbb.core.dashboard.DashboardTaskId
@@ -133,6 +135,8 @@ fun OffseasonScreen(
     var portalPipelineSpotlight by remember { mutableStateOf<PipelineEntrantSpotlight?>(null) }
     var summerWorkoutReport by remember { mutableStateOf<SummerWorkoutReport?>(null) }
     var summerWorkoutSheetOpen by remember { mutableStateOf(false) }
+    var weekNineEconomy by remember { mutableStateOf<ProgramEconomyState?>(null) }
+    var fundraisingSheetOpen by remember { mutableStateOf(false) }
     var openScholarshipSlots by remember { mutableStateOf(0) }
     var rosterPlayerCount by remember { mutableStateOf(0) }
     var dismissedTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
@@ -240,6 +244,13 @@ fun OffseasonScreen(
             )
         } else {
             summerWorkoutReport = null
+        }
+        if (loaded.weekCheckpoint.activePosition.phase == CalendarPhase.Offseason &&
+            loaded.weekCheckpoint.activePosition.weekIndex == OffseasonWeekNineConstants.OFFSEASON_WEEK_INDEX
+        ) {
+            weekNineEconomy = weekNineRepository.loadEconomy(loaded.dynastyId, loaded.metadata.seasonIndex)
+        } else {
+            weekNineEconomy = null
         }
     }
     val position = loaded.weekCheckpoint.activePosition
@@ -421,6 +432,10 @@ fun OffseasonScreen(
                 dynastyId = loaded.dynastyId,
                 seasonIndex = loaded.metadata.seasonIndex,
                 weekNineRepository = weekNineRepository,
+                economyState = weekNineEconomy,
+                onEconomyLoaded = { weekNineEconomy = it },
+                onOpenFullHub = { fundraisingSheetOpen = true },
+                compactSummary = true,
                 modifier = Modifier.weight(1f),
             )
         } else if (inOffseason && position.weekIndex == OffseasonWeekTenConstants.OFFSEASON_WEEK_INDEX) {
@@ -519,6 +534,22 @@ fun OffseasonScreen(
                     onDismiss = { dismissedTasks = dismissedTasks + it },
                     onDeepLink = onOpenRecruiting,
                     onSummerWorkoutReportOpen = { summerWorkoutSheetOpen = true },
+                )
+            }
+        }
+
+        if (inOffseason && position.weekIndex == OffseasonWeekNineConstants.OFFSEASON_WEEK_INDEX) {
+            val weekNineTasks = OffseasonWeekNineOptionalDashboardTasks.build(
+                offseasonWeekIndex = position.weekIndex,
+                economy = weekNineEconomy,
+            )
+            if (weekNineTasks.isNotEmpty()) {
+                DashboardOptionalTasksPanel(
+                    tasks = weekNineTasks,
+                    dismissedIds = dismissedTasks,
+                    onDismiss = { dismissedTasks = dismissedTasks + it },
+                    onDeepLink = onOpenRecruiting,
+                    onFundraisingWeekNineOpen = { fundraisingSheetOpen = true },
                 )
             }
         }
@@ -623,6 +654,14 @@ fun OffseasonScreen(
                                 ),
                             )
                         }
+                        if (inOffseason && position.weekIndex == OffseasonWeekNineConstants.OFFSEASON_WEEK_INDEX) {
+                            addAll(
+                                OffseasonWeekNineOptionalDashboardTasks.build(
+                                    offseasonWeekIndex = position.weekIndex,
+                                    economy = weekNineEconomy,
+                                ),
+                            )
+                        }
                     }
                     weekAdvanceInProgress = true
                     try {
@@ -692,6 +731,17 @@ fun OffseasonScreen(
             SummerWorkoutReportBottomSheet(
                 report = report,
                 onDismiss = { summerWorkoutSheetOpen = false },
+            )
+        }
+
+        if (fundraisingSheetOpen) {
+            FundraisingWeekNineBottomSheet(
+                dynastyId = loaded.dynastyId,
+                seasonIndex = loaded.metadata.seasonIndex,
+                weekNineRepository = weekNineRepository,
+                programPrestige = RecruitingEconomyRepository.DEFAULT_PROGRAM_PRESTIGE,
+                onDismiss = { fundraisingSheetOpen = false },
+                onEconomyLoaded = { weekNineEconomy = it },
             )
         }
 

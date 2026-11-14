@@ -30,6 +30,7 @@ fun DashboardOptionalTasksPanel(
     onStrategyOpen: () -> Unit = {},
     onCoachCardOpen: () -> Unit = {},
     onSummerWorkoutReportOpen: () -> Unit = {},
+    onFundraisingWeekNineOpen: () -> Unit = {},
     headingRes: Int? = null,
     modifier: Modifier = Modifier,
 ) {
@@ -54,6 +55,7 @@ fun DashboardOptionalTasksPanel(
                         -> onStrategyOpen()
                         DashboardDeepLink.CoachCard -> onCoachCardOpen()
                         DashboardDeepLink.SummerWorkoutReport -> onSummerWorkoutReportOpen()
+                        DashboardDeepLink.FundraisingWeekNine -> onFundraisingWeekNineOpen()
                         else -> onDeepLink(task.deepLink.toHubTab())
                     }
                 },
@@ -162,6 +164,18 @@ private fun taskMessage(task: DashboardTask): String = when (task.id) {
         R.string.dashboard_task_team_discipline,
         task.stringFormatArgs.firstOrNull().orEmpty(),
     )
+    DashboardTaskId.FundraisingGala,
+    DashboardTaskId.FundraisingAlumniGame,
+    DashboardTaskId.FundraisingDonorDrive,
+    -> stringResource(
+        R.string.dashboard_task_fundraising_event,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+    )
+    DashboardTaskId.FundraisingNamingRights -> stringResource(R.string.dashboard_task_fundraising_naming)
+    DashboardTaskId.FundraisingFacilityUpgrades -> stringResource(
+        R.string.dashboard_task_fundraising_facilities,
+        task.formatArgs.firstOrNull() ?: 0,
+    )
     DashboardTaskId.SummerWorkoutReportReview -> stringResource(
         R.string.dashboard_task_summer_workout_review,
         task.formatArgs.getOrNull(0) ?: 0,
@@ -198,5 +212,6 @@ private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {
     DashboardDeepLink.CoachCard,
     DashboardDeepLink.DisciplineSheet,
     DashboardDeepLink.SummerWorkoutReport,
+    DashboardDeepLink.FundraisingWeekNine,
     -> RecruitingHubTab.Recommended
 }

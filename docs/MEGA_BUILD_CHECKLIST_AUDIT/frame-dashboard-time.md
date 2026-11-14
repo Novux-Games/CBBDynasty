@@ -124,7 +124,7 @@
 | MEGA-FRAME-062 | SHIP | Week 6 Signing Day required tasks | `SigningDayRequiredDashboardTasks` + signing screen route | `SigningDayScreen` |
 | MEGA-FRAME-063 | SHIP | Week 7 summer workouts optional report | Optional review card + bottom sheet full report on Week 7 dashboard | `OffseasonWeekSevenOptionalDashboardTasks`, `SummerWorkoutReportPanel` |
 | MEGA-FRAME-064 | SHIP | Week 8 roster ≤15 gate | `RosterCutsWeekEightPanel` + advance gate | `OffseasonScreen` |
-| MEGA-FRAME-065 | PARTIAL | Week 9 fundraising / upgrades | `FundraisingWeekNinePanel` | Optional tasks tuning |
+| MEGA-FRAME-065 | SHIP | Week 9 fundraising / upgrades | Optional cards per event / naming / upgrades + fundraising bottom sheet | `OffseasonWeekNineOptionalDashboardTasks`, `FundraisingWeekNinePanel` |
 | MEGA-FRAME-066 | SHIP | Week 10 conference offers Season 2+ | `ConferenceOffersWeekTenPanel` + advance block | `OffseasonScreen` |
 | MEGA-FRAME-067 | PARTIAL | Advance to preseason CTA | Week 9→10→preseason transition via `SaveSlotRepository` — label “Advance to preseason” on final week | strings.xml |
 | MEGA-FRAME-068 | GAP | Offseason sim-week on optional portal spend | Offseason advance confirmation wiring lighter than in-season | compare `OffseasonScreen` vs `DynastyShellScreen` |
@@ -222,7 +222,7 @@
 | MEGA-FRAME-118 | PARTIAL | Theme line placement | `OffseasonWeekHeading.themeLine` on dashboard column — **not** in global `DynastyShellChrome` subtitle (extends MEGA-FRAME-015) | `OffseasonScreen.kt` |
 | MEGA-FRAME-119 | SHIP | Week 7 workout optional task | Optional review dashboard card opens full report sheet (see MEGA-FRAME-063) | `OffseasonWeekSevenOptionalDashboardTasks` |
 | MEGA-FRAME-120 | PARTIAL | Week 8 scholarship gate | Advance enabled when `rosterPlayerCount <= 15` — may not match **scholarship** subset vs walk-ons | `OffseasonScreen` `SCHOLARSHIP_LIMIT` |
-| MEGA-FRAME-121 | PARTIAL | Week 9 fundraising tasks | `FundraisingWeekNinePanel` on dashboard — optional fundraising **dashboard task cards** thin vs spec table | `dashboard-tasks.md#offseason` |
+| MEGA-FRAME-121 | SHIP | Week 9 fundraising tasks | Optional fundraising dashboard cards per `dashboard-tasks.md` week 9 table | `OffseasonWeekNineOptionalDashboardTasks` |
 | MEGA-FRAME-122 | GAP | Week 10 → preseason CTA | Final week button label / routing via `SaveSlotRepository` — verify copy “Advance to preseason” after Week 9 (S1) vs Week 10 | `OffseasonWeekAdvancePolicy`, strings |
 | MEGA-FRAME-123 | GAP | Offseason calendar tab | `DynastyShellCalendarTab` during offseason likely **empty** — no “no games this phase” copy | `UserCalendarRepository` + shell tabs |
 | MEGA-FRAME-124 | GAP | Week 2 draft results + tasks | `DraftResultsWeekTwoPanel` present — optional **open scholarships** / portal tasks depend on context flags from `LaunchedEffect` | `OffseasonScreen` context builder |
