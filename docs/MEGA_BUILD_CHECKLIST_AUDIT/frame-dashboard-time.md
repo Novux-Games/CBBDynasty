@@ -96,7 +96,7 @@
 | MEGA-FRAME-048 | SHIP | Calendar tap → preview / box score | Tappable lines; upcoming → preview; played → box sheet + scores | `DynastyShellCalendarTab.kt`, `UserCalendarGameEnricher.kt`, `GamePreviewFromCalendar.kt` |
 | MEGA-FRAME-049 | SHIP | News tab shallow headlines | `rememberShellNewsHeadlines` + `DynastyShellNewsTab` in OS/preseason/carousel | `ShellShallowNewsFeed.kt`, phase shell screens |
 | MEGA-FRAME-050 | SHIP | News top N truncate policy | `ShallowNewsFeedSnapshot` + cap copy + “more in hub” / open hub CTA | `ShallowNewsFeed.kt`, `DynastyShellNewsTab` |
-| MEGA-FRAME-051 | GAP | News headline tap → detail / hub | Cards not clickable | `DynastyShellNewsTab` |
+| MEGA-FRAME-051 | SHIP | News headline tap → detail / hub | Clickable cards → mini-article sheet; hub CTA on recruiting/awards/bracketology | `NewsHeadlineArticleBuilder`, `DynastyShellNewsTab` |
 
 ---
 
