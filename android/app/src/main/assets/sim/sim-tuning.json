@@ -19,6 +19,10 @@
     "doubleBonusThreshold": 10,
     "oneAndOneUntilDouble": true
   },
+  "positionComfort": {
+    "eligibleInterchangePenalty": 1,
+    "ineligibleSlotPenalty": 3
+  },
   "eventWeights": {
     "tripBuckets": {
       "quickTurnover": 0.34,

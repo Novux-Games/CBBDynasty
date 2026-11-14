@@ -191,11 +191,6 @@ class PossessionSimSession(
             used,
             input.tuning.shotClock.full,
         )
-        val resolveEffects = if (lateClockTrip) {
-            PossessionLateClockPolicy.applyToEffects(effects)
-        } else {
-            effects
-        }
         val foulEarlyStopClock = FoulEarlyLateGamePolicy.isFoulToStopClock(tripSample)
         var foulStoppage = tripSample.foulStoppage || foulEarlyStopClock
         if (lateClockTrip && !foulStoppage && random.nextDouble() < PossessionLateClockPolicy.EXTRA_FOUL_STOPPAGE_RATE) {
@@ -221,6 +216,11 @@ class PossessionSimSession(
             if (offenseHome) input.homeRoster else input.awayRoster,
             if (offenseHome) homeFoulLedger else awayFoulLedger,
             if (offenseHome) homeDisqualifiedOut else awayDisqualifiedOut,
+        )
+        val offenseRosterForShooting = if (offenseHome) input.homeRoster else input.awayRoster
+        val resolveEffects = FloorShootingEffects.merge(
+            if (lateClockTrip) PossessionLateClockPolicy.applyToEffects(effects) else effects,
+            participantsOnFloor(offenseFloorEarly, offenseRosterForShooting),
         )
         val defenseFloorEarly = fallbackFloor(
             if (offenseHome) awayFloorIdsEarly else homeFloorIdsEarly,
@@ -560,6 +560,7 @@ class PossessionSimSession(
             gameClock,
             staminaLedger,
             input.fatigueTuning,
+            input.tuning.positionComfort,
         )
             ?: if (offenseIsHome) input.homeOffensive() else input.awayOffensive()
     }
@@ -575,8 +576,18 @@ class PossessionSimSession(
             gameClock,
             staminaLedger,
             input.fatigueTuning,
+            input.tuning.positionComfort,
         )
             ?: if (defenseIsHome) input.homeDefensive() else input.awayDefensive()
+    }
+
+    private fun participantsOnFloor(
+        playerIds: List<String>,
+        roster: GameSimRosterInput?,
+    ): List<GameSimParticipant> {
+        if (roster == null) return emptyList()
+        val byId = roster.participants.associateBy { it.playerId }
+        return playerIds.mapNotNull { byId[it] }
     }
 
     private fun fallbackFloor(

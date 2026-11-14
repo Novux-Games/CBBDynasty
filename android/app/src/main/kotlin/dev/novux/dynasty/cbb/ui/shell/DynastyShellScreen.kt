@@ -483,6 +483,7 @@ fun DynastyShellScreen(
         players = rosterPlayers,
         rsWeekIndex = loaded.weekCheckpoint.activePosition.weekIndex,
         medicalRules = medicalRules,
+        countsMedicalRedshirt = loaded.weekCheckpoint.activePosition.phase != CalendarPhase.Exhibition,
         onDismiss = {
             scope.launch {
                 if (postgameEvents.isNotEmpty()) {

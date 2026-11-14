@@ -55,6 +55,7 @@ import dev.novux.dynasty.cbb.core.strategy.DefensiveSchemePreset
 import dev.novux.dynasty.cbb.core.strategy.GameplanInput
 import dev.novux.dynasty.cbb.core.strategy.OffensiveSchemePreset
 import dev.novux.dynasty.cbb.core.balance.BalanceMedicalRedshirtRules
+import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
 import dev.novux.dynasty.cbb.ui.postgame.PostgameInjuryFlow
 import dev.novux.dynasty.cbb.ui.reports.ReportArticleView
@@ -451,6 +452,7 @@ fun GameWatchScreen(
         players = postgameInjuryRoster.ifEmpty { homeRosterPlayers },
         rsWeekIndex = rsWeekIndex,
         medicalRules = medicalRules,
+        countsMedicalRedshirt = injuryRoll?.phase != CalendarPhase.Exhibition,
         onDismiss = onDismissPostgameInjuries,
         onApplyMedicalRedshirt = onApplyMedicalRedshirt,
     )

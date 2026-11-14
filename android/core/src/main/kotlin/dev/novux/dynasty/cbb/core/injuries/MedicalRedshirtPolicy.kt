@@ -13,7 +13,9 @@ object MedicalRedshirtPolicy {
         player: RosterPlayer,
         rsWeekIndex: Int,
         rules: BalanceMedicalRedshirtRules,
+        countsTowardMedicalRedshirt: Boolean = true,
     ): Eligibility {
+        if (!countsTowardMedicalRedshirt) return Eligibility(false, "exhibition_game")
         if (!player.injuryActive) return Eligibility(false, "not_injured")
         if (player.medicalRedshirtSeason) return Eligibility(false, "already_medical_rs")
         val severity = player.injurySeverityWire?.let(InjurySeverity::fromWire)

@@ -22,6 +22,13 @@ data class SimTuning(
     val eventWeights: JsonElement,
     val homeNeutralModifiers: SimVenueModifiers,
     val teamFoulRules: SimTeamFoulRules = SimTeamFoulRules(),
+    val positionComfort: SimPositionComfortModifiers = SimPositionComfortModifiers(),
+)
+
+@Serializable
+data class SimPositionComfortModifiers(
+    val eligibleInterchangePenalty: Int = 1,
+    val ineligibleSlotPenalty: Int = 3,
 )
 
 @Serializable

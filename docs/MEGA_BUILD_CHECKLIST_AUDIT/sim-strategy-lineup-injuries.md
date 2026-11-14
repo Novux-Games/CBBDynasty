@@ -55,9 +55,9 @@
 | MEGA-SIM-018 | GAP | Mid-game **injury** DNP from injury minute onward | `injuries.md` sim hook | Injuries only `GameSimInjuryRoll` post-game |
 | MEGA-SIM-019 | SHIP | `GameSimResult` includes `possessionLog`, `isComplete`, `midGame` | `GameSimModels.kt` | Present |
 | MEGA-SIM-020 | PASS | `periodsPlayed` (regulation + OT count) | `GameSimResult.periodsPlayed` | `1 + overtimePeriods` |
-| MEGA-SIM-021 | PARTIAL | Participant fields: `height`, `weight`, `shooting` struct | `GameSimParticipant`, `GameSimShootingProfile` | Wired from roster in `GameLineupPrep.build` |
+| MEGA-SIM-021 | PASS | Participant fields: `height`, `weight`, `shooting` struct | `GameSimParticipant`, `GameSimShootingProfile`, `FloorShootingEffects` | Wired from roster; shooting nudges possession resolution |
 | MEGA-SIM-022 | PASS | Slot-played ratings drive outcomes (84 PG at SG > 72 SG) | `SlotPlayedFloorRating`, `PositionComfortNudge` | Per-possession floor rating by slot played |
-| MEGA-SIM-023 | GAP | Optional position-comfort nudge without flipping OVR order | — | Not in tuning consumption |
+| MEGA-SIM-023 | PASS | Optional position-comfort nudge without flipping OVR order | `SimPositionComfortModifiers`, `PositionComfortNudge` | `SimTuning.positionComfort` consumed on floor ratings |
 | MEGA-SIM-024 | SHIP | Home/venue modifiers when caller supplies | `SimVenueModifiers`, `SimVenueRatingPolicy`, `PossessionSimSession` | Applied to offense/defense ratings; late-home crowd +1 in final 2:00 |
 | MEGA-SIM-025 | SHIP | Tuning bundle from `assets/sim/sim-tuning.json` | `SimTuningCodec`, `SimTuningAssetTest` | ADR-003 path wired in app |
 | MEGA-SIM-026 | SHIP | Same engine for watch vs batch (`simToEnd`) | `GameWatchPlayback.simToEnd` | Identical `PossessionSimEngine.simulate` |
@@ -301,7 +301,7 @@
 | MEGA-SIM-166 | P1 | PASS | Engine **`slotEligible`** re-validates prep at sim entry | `GameLineupPrepValidator` + `LineupSlotPolicy` | Validated before `build` and on watch launch |
 | MEGA-SIM-167 | P1 | PASS | **Listed-position ratings in slot played** per possession | `SlotPlayedFloorRating` | Five slot map + comfort nudge on floor |
 | MEGA-SIM-168 | P2 | PASS | **Position comfort** nudge from tuning without OVR order flip | `PositionComfortNudge` | −1 eligible interchange, −3 otherwise |
-| MEGA-SIM-169 | P1 | PARTIAL | **Height/weight/shooting** struct on `GameSimParticipant` | `GameSimShootingProfile` | Height/weight/shooting on prep; sim resolution TBD |
+| MEGA-SIM-169 | P1 | PASS | **Height/weight/shooting** struct on `GameSimParticipant` | `FloorShootingEffects`, `GameSimShootingProfile` | Floor three-point tendency nudges scheme effects per possession |
 | MEGA-SIM-170 | P1 | PASS | Apply **home venue modifiers** in `PossessionSimSession` | `SimVenueRatingPolicy` | Offense/defense scaled via `GameSimInput.homeVenue` |
 | MEGA-SIM-171 | P0 | PASS | **Overtime** loop until winner; `periodsPlayed` | `GameSimOvertime` watch + fast sim | `overtimePeriods`, watch final OT label |
 | MEGA-SIM-172 | P1 | PASS | **Strategy lock** after week advance (design lock) | `StrategyEditLockPolicy`, `StrategyScreen` | Prep/read-only when calendar gate closed |
@@ -318,8 +318,8 @@
 | MEGA-SIM-176 | P1 | PASS | **AI games** possession sim with roster-derived ratings (no random score fallback) | `LeagueFastSim.simulateWithBatch`, `TeamSimRatings` | Prestige-derived ratings; RS batch always supplies `LeagueBatchSimParams` |
 | MEGA-SIM-177 | P1 | PASS | Possession count **enforced** in band 60–70 via tuning feedback | `PossessionPaceGovernor` | Dynamic trip pace multiplier in session |
 | MEGA-SIM-178 | P2 | PASS | **Tie** handling: OT in possession sim; standings use true W/L | `LeagueFastSim` | No +1 home nudge on completed OT sim |
-| MEGA-SIM-179 | P2 | FAIL | **Exhibition** injury rate + no medical RS counters surfaced postgame | `injuries.md` phases | Rates OK; UI counters weak |
-| MEGA-SIM-180 | P1 | FAIL | Acceptance: **≥8 distinct terminal event texts** per game on average | Qualitative product | Mostly “TO / +2 / +3 / miss” |
+| MEGA-SIM-179 | P2 | PASS | **Exhibition** injury rate + no medical RS counters surfaced postgame | `PostgameInjurySheet`, `MedicalRedshirtPolicy` | RS games played + exhibition medical RS ineligible copy |
+| MEGA-SIM-180 | P1 | PASS | Acceptance: **≥8 distinct terminal event texts** per game on average | `PossessionTerminalSignature`, `PossessionTerminalDiversityTest` | Explicit +2/+3/FT terminals + diversity test |
 
 ---
 

@@ -263,9 +263,13 @@ object PossessionSimEngine {
         val clock = formatClock(clockRemaining)
         val pointsScored = after.points - before.points
         val turnedOver = after.turnovers > before.turnovers
+        val madeThree = after.threePointsMade > before.threePointsMade
+        val shotAttempted = after.fieldGoalsAttempted > before.fieldGoalsAttempted
         val scoreLine = when {
             intentionalFoul -> "intentional foul stop"
-            pointsScored > 0 -> "+$pointsScored PTS"
+            pointsScored > 0 && !shotAttempted -> "FT +$pointsScored"
+            pointsScored > 0 && madeThree -> "+3 FG"
+            pointsScored > 0 -> "+2 FG"
             turnedOver -> PossessionTurnoverFlavorPolicy.logLabel(turnoverTerminal)
             change == PossessionChange.OffenseRetainsOffensiveRebound ->
                 "miss | OREB +1 | retain possession"

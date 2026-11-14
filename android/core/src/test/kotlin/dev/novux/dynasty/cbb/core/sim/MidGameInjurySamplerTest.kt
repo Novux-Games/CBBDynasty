@@ -45,23 +45,39 @@ class MidGameInjurySamplerTest {
         ),
     )
 
-    private fun starter(id: String) = RosterPlayer(
+    private fun player(
+        id: String,
+        position: PlayerPosition,
+        starter: Boolean,
+        depth: Int,
+        slotWire: String? = null,
+    ) = RosterPlayer(
         playerId = id,
         dynastyId = "d",
-        position = PlayerPosition.ShootingGuard,
+        position = position,
         classYear = PlayerClassYear.Junior,
-        isStarter = true,
-        depthOrder = 1,
+        isStarter = starter,
+        depthOrder = depth,
         inTransferPortal = false,
         displayName = id,
         ovr = 75,
         off = 75,
         def = 72,
+        starterSlotWire = slotWire,
     )
 
     @Test
     fun midGameInjuryStopsFurtherMinuteAccrual() {
-        val roster = (1..8).map { starter("p$it") }
+        val roster = listOf(
+            player("pg", PlayerPosition.PointGuard, starter = true, depth = 1, slotWire = "pg"),
+            player("sg", PlayerPosition.ShootingGuard, starter = true, depth = 1, slotWire = "sg"),
+            player("sf", PlayerPosition.SmallForward, starter = true, depth = 1, slotWire = "sf"),
+            player("pf", PlayerPosition.PowerForward, starter = true, depth = 1, slotWire = "pf"),
+            player("c", PlayerPosition.Center, starter = true, depth = 1, slotWire = "c"),
+            player("b6", PlayerPosition.ShootingGuard, starter = false, depth = 2),
+            player("b7", PlayerPosition.SmallForward, starter = false, depth = 3),
+            player("b8", PlayerPosition.PowerForward, starter = false, depth = 4),
+        )
         val simRoster = GameLineupPrep.build("h", roster)
         val rollInput = GameSimInjuryRollInput(
             phase = CalendarPhase.RegularSeason,

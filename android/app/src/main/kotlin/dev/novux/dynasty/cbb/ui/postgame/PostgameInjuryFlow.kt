@@ -19,17 +19,25 @@ fun PostgameInjuryFlow(
     players: List<RosterPlayer>,
     rsWeekIndex: Int,
     medicalRules: BalanceMedicalRedshirtRules,
+    countsMedicalRedshirt: Boolean = true,
     onDismiss: () -> Unit,
     onApplyMedicalRedshirt: (String) -> Unit,
 ) {
-  if (events.isEmpty()) return
+    if (events.isEmpty()) return
     var confirmPlayer by remember(events) { mutableStateOf<RosterPlayer?>(null) }
     PostgameInjurySheet(
         events = events,
         players = players,
-        medicalEligible = { playerId ->
-            val player = players.firstOrNull { it.playerId == playerId } ?: return@PostgameInjurySheet false
-            MedicalRedshirtPolicy.evaluate(player, rsWeekIndex, medicalRules).eligible
+        countsMedicalRedshirt = countsMedicalRedshirt,
+        medicalEligibility = { playerId ->
+            val player = players.firstOrNull { it.playerId == playerId }
+                ?: return@PostgameInjurySheet MedicalRedshirtPolicy.Eligibility(false, "player_not_found")
+            MedicalRedshirtPolicy.evaluate(
+                player,
+                rsWeekIndex,
+                medicalRules,
+                countsTowardMedicalRedshirt = countsMedicalRedshirt,
+            )
         },
         onDismiss = onDismiss,
         onApplyMedicalRedshirt = { playerId ->

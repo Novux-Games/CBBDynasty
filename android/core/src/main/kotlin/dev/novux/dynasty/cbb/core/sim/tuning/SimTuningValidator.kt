@@ -70,6 +70,14 @@ object SimTuningValidator {
             )
         }
 
+        val comfort = tuning.positionComfort
+        if (comfort.eligibleInterchangePenalty !in 0..15 || comfort.ineligibleSlotPenalty !in 0..15) {
+            return SimTuningValidationError.InvalidRange(
+                "positionComfort",
+                "penalties must be within 0..15",
+            )
+        }
+
         return null
     }
 

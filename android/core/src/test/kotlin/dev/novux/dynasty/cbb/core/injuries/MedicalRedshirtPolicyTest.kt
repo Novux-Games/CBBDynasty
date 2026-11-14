@@ -33,6 +33,19 @@ class MedicalRedshirtPolicyTest {
         assertFalse(result.eligible)
     }
 
+    @Test
+    fun exhibitionGameNeverEligible() {
+        val player = injuredPlayer(severity = "major", rsGames = 4, gameIndex = 6)
+        val result = MedicalRedshirtPolicy.evaluate(
+            player,
+            rsWeekIndex = 10,
+            rules,
+            countsTowardMedicalRedshirt = false,
+        )
+        assertFalse(result.eligible)
+        assertTrue(result.reason == "exhibition_game")
+    }
+
     private fun injuredPlayer(severity: String, rsGames: Int, gameIndex: Int): RosterPlayer =
         RosterPlayer(
             playerId = "p1",

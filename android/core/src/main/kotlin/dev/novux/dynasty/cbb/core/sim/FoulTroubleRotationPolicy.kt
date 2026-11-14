@@ -55,6 +55,8 @@ fun GameSimRosterInput.weightedOffensiveOnFloor(
     gameClockSeconds: Int,
     staminaLedger: SimStaminaLedger? = null,
     fatigueTuning: BalanceFatigue = BalanceFatigue.DEFAULT,
+    comfort: dev.novux.dynasty.cbb.core.sim.tuning.SimPositionComfortModifiers =
+        dev.novux.dynasty.cbb.core.sim.tuning.SimPositionComfortModifiers(),
 ): Int = weightedOnFloor(
     foulLedger,
     minutesLedger,
@@ -62,6 +64,7 @@ fun GameSimRosterInput.weightedOffensiveOnFloor(
     staminaLedger,
     fatigueTuning,
     offensiveSide = true,
+    comfort = comfort,
     fallback = ::weightedOffensive,
 )
 
@@ -71,6 +74,8 @@ fun GameSimRosterInput.weightedDefensiveOnFloor(
     gameClockSeconds: Int,
     staminaLedger: SimStaminaLedger? = null,
     fatigueTuning: BalanceFatigue = BalanceFatigue.DEFAULT,
+    comfort: dev.novux.dynasty.cbb.core.sim.tuning.SimPositionComfortModifiers =
+        dev.novux.dynasty.cbb.core.sim.tuning.SimPositionComfortModifiers(),
 ): Int = weightedOnFloor(
     foulLedger,
     minutesLedger,
@@ -78,6 +83,7 @@ fun GameSimRosterInput.weightedDefensiveOnFloor(
     staminaLedger,
     fatigueTuning,
     offensiveSide = false,
+    comfort = comfort,
     fallback = ::weightedDefensive,
 )
 
@@ -88,6 +94,7 @@ private fun GameSimRosterInput.weightedOnFloor(
     staminaLedger: SimStaminaLedger?,
     fatigueTuning: BalanceFatigue,
     offensiveSide: Boolean,
+    comfort: dev.novux.dynasty.cbb.core.sim.tuning.SimPositionComfortModifiers,
     fallback: () -> Int,
 ): Int {
     val floor = SimFloorRotationPolicy.floorParticipants(
@@ -99,9 +106,10 @@ private fun GameSimRosterInput.weightedOnFloor(
         fatigueTuning,
     )
     if (floor.isEmpty()) return fallback()
+    val fb = fallback()
     return if (offensiveSide) {
-        SlotPlayedFloorRating.offensiveFromFloor(floor, fallback())
+        SlotPlayedFloorRating.offensiveFromFloor(floor, fb, comfort)
     } else {
-        SlotPlayedFloorRating.defensiveFromFloor(floor, fallback())
+        SlotPlayedFloorRating.defensiveFromFloor(floor, fb, comfort)
     }
 }

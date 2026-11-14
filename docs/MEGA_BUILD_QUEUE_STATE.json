@@ -225,7 +225,12 @@
     "MEGA-SIM-177",
     "MEGA-SIM-178",
     "MEGA-SIM-164",
-    "MEGA-SIM-022"
+    "MEGA-SIM-022",
+    "MEGA-SIM-180",
+    "MEGA-SIM-179",
+    "MEGA-SIM-169",
+    "MEGA-SIM-023",
+    "MEGA-SIM-021"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
