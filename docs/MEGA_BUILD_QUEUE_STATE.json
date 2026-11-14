@@ -273,7 +273,8 @@
     "MEGA-FRAME-023",
     "MEGA-FRAME-107",
     "MEGA-FRAME-028",
-    "MEGA-FRAME-032"
+    "MEGA-FRAME-032",
+    "MEGA-FRAME-037"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

@@ -67,6 +67,10 @@ import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardOptionalTasksPanel
+import dev.novux.dynasty.cbb.ui.dashboard.DashboardNotificationFeedPanel
+import dev.novux.dynasty.cbb.ui.dashboard.CareerBlockNotificationDialog
+import dev.novux.dynasty.cbb.core.notification.NotificationFeedItem
+import dev.novux.dynasty.cbb.data.notification.DashboardNotificationSnapshotLoader
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
@@ -113,6 +117,7 @@ fun OffseasonScreen(
     onOpenRecruiting: (RecruitingHubTab) -> Unit = {},
     onOpenSigningDay: (DashboardDeepLink) -> Unit = {},
     userCalendarRepository: UserCalendarRepository,
+    showNotificationFeed: Boolean = true,
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     var ledger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
@@ -130,12 +135,42 @@ fun OffseasonScreen(
     var weekOnePlayers by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
     var weekOneLeavingNav by remember { mutableStateOf<WeekOneLeavingNavigation?>(null) }
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
+    var notificationFeed by remember { mutableStateOf<List<NotificationFeedItem>>(emptyList()) }
+    var careerModal by remember { mutableStateOf<NotificationFeedItem?>(null) }
     var fullRoster by remember { mutableStateOf<List<DynastyPlayer>>(emptyList()) }
     var cardPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     var fullScreenPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     val context = LocalContext.current
     val playerStatsRepository = context.requireDynastyApplication().playerStatsRepository
     val scope = rememberCoroutineScope()
+
+    val notificationFeedRepository = context.requireDynastyApplication().notificationFeedRepository
+    val coachEmploymentRepository = context.requireDynastyApplication().coachEmploymentRepository
+    val coachSkillPointRepository = context.requireDynastyApplication().coachSkillPointRepository
+    val scheduleRepository = context.requireDynastyApplication().preseasonScheduleRepository
+
+    LaunchedEffect(
+        loaded.dynastyId,
+        loaded.metadata.seasonIndex,
+        loaded.weekCheckpoint,
+        showNotificationFeed,
+    ) {
+        if (showNotificationFeed) {
+            val snapshot = DashboardNotificationSnapshotLoader.snapshotFor(
+                loaded = loaded,
+                rosterRepository = rosterRepository,
+                coachEmploymentRepository = coachEmploymentRepository,
+                coachSkillPointRepository = coachSkillPointRepository,
+                scheduleRepository = scheduleRepository,
+                signingDayRepository = signingDayRepository,
+            )
+            notificationFeed = notificationFeedRepository.refreshFromSnapshot(loaded.dynastyId, snapshot)
+            careerModal = notificationFeedRepository.pendingCareerModal(loaded.dynastyId)
+        } else {
+            notificationFeed = emptyList()
+            careerModal = null
+        }
+    }
 
     LaunchedEffect(loaded.dynastyId, loaded.weekCheckpoint) {
         signingProgress = signingDayRepository.loadProgress(loaded.dynastyId, loaded.metadata.seasonIndex)
@@ -211,6 +246,19 @@ fun OffseasonScreen(
         return
     }
 
+    careerModal?.let { modal ->
+        CareerBlockNotificationDialog(
+            item = modal,
+            onAcknowledge = {
+                scope.launch {
+                    notificationFeedRepository.acknowledgeCareerModal(loaded.dynastyId, modal.eventKey)
+                    careerModal = notificationFeedRepository.pendingCareerModal(loaded.dynastyId)
+                }
+            },
+            onOpenDestination = { hubMenuCallbacks.onExitHome() },
+        )
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
     DynastyShellChrome(
         schoolDisplayName = schoolName,
@@ -254,6 +302,15 @@ fun OffseasonScreen(
                 text = it,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
+            )
+        }
+        if (showNotificationFeed) {
+            DashboardNotificationFeedPanel(
+                feed = notificationFeed,
+                onDeepLink = onOpenRecruiting,
+                onStrategyOpen = hubMenuCallbacks.onOpenStrategy,
+                onCoachCardOpen = hubMenuCallbacks.onOpenSchool,
+                onSigningDayOpen = { onOpenSigningDay(DashboardDeepLink.SigningDayRankings) },
             )
         }
         val offseasonRequiredContext = OffseasonRequiredDashboardTasks.WeekContext(

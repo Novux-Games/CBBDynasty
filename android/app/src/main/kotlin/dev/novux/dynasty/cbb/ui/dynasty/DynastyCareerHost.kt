@@ -104,6 +104,7 @@ fun DynastyCareerHost(
                 onOpenRecruiting = onOpenRecruitingTab,
                 onOpenSigningDay = onOpenSigningDayFromOffseason,
                 userCalendarRepository = app.userCalendarRepository,
+                showNotificationFeed = showNotificationFeed,
             )
         }
         DynastyCareerPhaseResolver.CareerBody.Preseason -> {
@@ -120,6 +121,8 @@ fun DynastyCareerHost(
                 userCalendarRepository = app.userCalendarRepository,
                 onSeasonStarted = {},
                 hubMenuCallbacks = hubMenuCallbacks,
+                showNotificationFeed = showNotificationFeed,
+                onOpenRecruitingTab = onOpenRecruitingTab,
             )
         }
         DynastyCareerPhaseResolver.CareerBody.InSeason -> {

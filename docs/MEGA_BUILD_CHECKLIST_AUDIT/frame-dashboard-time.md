@@ -75,7 +75,7 @@
 | MEGA-FRAME-034 | SHIP | Team overview card | `DashboardTeamOverviewCard` — W–L, SOS, conf standing, T25 chips | `DynastyShellScreen.kt` |
 | MEGA-FRAME-035 | SHIP | NCBA NET tap → Rankings | NET row + poll line tap → `onOpenRankings` | `DashboardTeamOverviewCard.kt` |
 | MEGA-FRAME-036 | SHIP | Postseason seed row on dashboard | `DashboardPostseasonSeedResolver` when Selection Sunday set | `DynastyShellScreen.kt` |
-| MEGA-FRAME-037 | PARTIAL | Notifications feed | `DashboardNotificationFeedPanel` on in-season shell | Offseason/preseason use placeholder news, feed not always shown |
+| MEGA-FRAME-037 | SHIP | Notifications feed | `DashboardNotificationFeedPanel` on in-season, offseason, preseason when `showNotificationFeed` | `DashboardNotificationSnapshotLoader`, phase shells |
 | MEGA-FRAME-038 | GAP | Last game summary | No opponent/score/W–L + box score / postgame actions on dashboard | `game-frame.md#last-game` |
 | MEGA-FRAME-039 | SHIP | Next game card | Date + location line via `FirstPlayableGame.gameDateLabel` | `DynastyShellScreen.kt` `NextGameCard` |
 | MEGA-FRAME-040 | SHIP | Game preview from next game | Opens `GamePreviewScreen` with win %, score, pregame article | `GamePreviewScreen.kt` |
@@ -283,7 +283,7 @@
 
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
-| MEGA-FRAME-154 | GAP | Offseason/preseason notification feed | `DashboardNotificationFeedPanel` **in-season only** — offseason/preseason miss in-app injury/commit nudges on home tab | `DynastyShellScreen.kt` vs phase routes |
+| MEGA-FRAME-154 | SHIP | Offseason/preseason notification feed | Same feed panel + snapshot loader on `OffseasonScreen` / `PreseasonScreen` | `MEGA-FRAME-037` |
 | MEGA-FRAME-155 | PARTIAL | Session refresh after advance | `ActiveDynastySession.set` on success — child tabs may stale until manual recomposition triggers | Shell `loaded` state |
 | MEGA-FRAME-156 | PASS | Hub Recruiting when cycle closed | Menu shows **Recruiting (cycle closed)** with explanation toast when ledger `cycleClosed` | `buildDynastyHubMenu`, `notifyRecruitingCycleClosed` |
 | MEGA-FRAME-157 | SHIP | No Advance day control | Reconfirmed — no day-advance UI anywhere in shell/offseason/preseason | repo grep |

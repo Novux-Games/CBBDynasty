@@ -55,7 +55,7 @@ import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.signingday.NationalRecruitingRankings
 import dev.novux.dynasty.cbb.core.notification.NotificationFeedItem
-import dev.novux.dynasty.cbb.core.notification.NotificationSnapshotInput
+import dev.novux.dynasty.cbb.data.notification.DashboardNotificationSnapshotLoader
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
@@ -437,25 +437,16 @@ fun DynastyShellScreen(
         coachSkillState = skillState
         coachSkillPointBank = skillState.unspentBank
         if (showNotificationFeed) {
-            val weekGames = InSeasonWeekGames.forPosition(
-                loaded.weekCheckpoint.activePosition,
-                schedulePlan,
-                exhibitionCount,
-            )
-            val gameLabel = weekGames.firstOrNull()?.let { game ->
-                val prep = if (game.homeGame) "vs" else "at"
-                "Week ${loaded.weekCheckpoint.activePosition.weekIndex} — $prep ${game.opponentDisplayName}"
-            }
-            val injuryLines = rosterPlayers.filter { it.injuryActive }.map { player ->
-                "${player.displayName} is injured."
-            }
-            val employment = coachEmploymentRepository.loadState(loaded.dynastyId)
-            val snapshot = NotificationSnapshotInput(
-                asOfMs = System.currentTimeMillis(),
-                newInjurySummaries = injuryLines,
-                gameThisWeekLabel = gameLabel,
-                coachSkillPointsBank = skillState.unspentBank,
-                careerFired = employment.status == CoachEmploymentStatus.Unemployed,
+            val archetype = staffRoster?.headCoach?.archetype
+                ?: dev.novux.dynasty.cbb.core.coach.CoachArchetype.Balanced
+            val snapshot = DashboardNotificationSnapshotLoader.snapshotFor(
+                loaded = loaded,
+                rosterRepository = rosterRepository,
+                coachEmploymentRepository = coachEmploymentRepository,
+                coachSkillPointRepository = coachSkillPointRepository,
+                scheduleRepository = scheduleRepository,
+                signingDayRepository = context.requireDynastyApplication().signingDayRepository,
+                headCoachArchetype = archetype,
             )
             notificationFeed = notificationFeedRepository.refreshFromSnapshot(loaded.dynastyId, snapshot)
             careerModal = notificationFeedRepository.pendingCareerModal(loaded.dynastyId)
