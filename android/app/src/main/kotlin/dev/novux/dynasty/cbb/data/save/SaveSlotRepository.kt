@@ -49,6 +49,7 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.PhaseWeekPolicy
 import dev.novux.dynasty.cbb.core.advance.InSeasonAdvanceConfirmPolicy
 import dev.novux.dynasty.cbb.core.advance.OffseasonAdvanceConfirmPolicy
+import dev.novux.dynasty.cbb.core.advance.RegularSeasonWeekBatchPolicy
 import dev.novux.dynasty.cbb.core.portal.PortalCyclePolicy
 import dev.novux.dynasty.cbb.data.news.NewsFeedRepository
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
@@ -948,7 +949,7 @@ class SaveSlotRepository(
             userOnByeWeek = ByeWeekPolicy.isByeWeek(position.phase, hasScheduledGame),
             recruitingAutoMaintainEnabled = automation.recruitingAutoMaintain,
             userLeagueFastSim = userLeagueFastSim,
-            simulatesLeagueWeekBatch = position.phase == CalendarPhase.RegularSeason,
+            simulatesLeagueWeekBatch = RegularSeasonWeekBatchPolicy.isRegularSeasonWeek(position),
             offseasonMilestoneAdvance = OffseasonAdvanceConfirmPolicy.requiresLightweightDialog(
                 position.phase,
                 offseasonWeek,

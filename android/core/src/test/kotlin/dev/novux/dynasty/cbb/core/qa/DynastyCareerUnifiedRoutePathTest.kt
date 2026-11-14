@@ -16,6 +16,7 @@ class DynastyCareerUnifiedRoutePathTest {
             .readText()
         val app = root.resolve("android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/DynastyApp.kt").readText()
         assertTrue(launch.contains("AppRoute.DynastyCareer.route"))
+        assertTrue(launch.contains("UnemployedCoachShellPolicy"))
         assertTrue(launch.contains("DynastyCareerPhaseResolver"))
         assertTrue(host.contains("DynastyCareerPhaseResolver"))
         assertTrue(host.contains("onSeasonStarted = {}"))

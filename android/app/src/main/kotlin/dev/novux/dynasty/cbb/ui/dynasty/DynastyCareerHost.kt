@@ -5,10 +5,15 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentState
+import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentStatus
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.core.discipline.PendingDisciplineIncident
 import dev.novux.dynasty.cbb.core.navigation.DynastyCareerPhaseResolver
+import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
+import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import androidx.compose.runtime.LaunchedEffect
 import dev.novux.dynasty.cbb.data.coach.CoachEmploymentRepository
@@ -35,8 +40,11 @@ import dev.novux.dynasty.cbb.requireDynastyApplication
 import dev.novux.dynasty.cbb.ui.hubs.DynastyHubMenuCallbacks
 import dev.novux.dynasty.cbb.ui.offseason.OffseasonScreen
 import dev.novux.dynasty.cbb.ui.preseason.PreseasonScreen
+import dev.novux.dynasty.cbb.ui.coach.UnemployedCoachCareerScreen
+import dev.novux.dynasty.cbb.ui.dynasty.rememberShellNewsFeed
 import dev.novux.dynasty.cbb.ui.shell.DynastyShellScreen
 import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
 
 /** Single NavHost destination; body swaps by [CalendarPhase] only ([MEGA-FRAME-005]). */
 @Composable
@@ -72,8 +80,10 @@ fun DynastyCareerHost(
     onOpenGamePreview: () -> Unit,
     onOpenJobCenter: () -> Unit,
     onExitToHome: () -> Unit,
+    onAfterJobOfferAccepted: suspend (LoadedDynasty) -> Unit = {},
 ) {
     var session by remember { mutableStateOf(ActiveDynastySession.current) }
+    val scope = rememberCoroutineScope()
     DisposableEffect(Unit) {
         val remove = ActiveDynastySession.addListener { session = ActiveDynastySession.current }
         onDispose(remove)
@@ -84,6 +94,39 @@ fun DynastyCareerHost(
         return
     }
     val app = LocalContext.current.requireDynastyApplication()
+    var employment by remember { mutableStateOf<CoachEmploymentState?>(null) }
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
+        employment = coachEmploymentRepository.refreshOffersIfNeeded(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        )
+    }
+    val newsFeed = rememberShellNewsFeed(
+        dynastyId = loaded.dynastyId,
+        seasonIndex = loaded.metadata.seasonIndex,
+        weekIndex = loaded.weekCheckpoint.activePosition.weekIndex,
+        newsFeedRepository = app.newsFeedRepository,
+        rosterRepository = app.dynastyRosterRepository,
+    )
+    if (employment?.status == CoachEmploymentStatus.Unemployed) {
+        UnemployedCoachCareerScreen(
+            loaded = loaded,
+            offers = employment?.pendingOffers.orEmpty(),
+            newsFeed = newsFeed,
+            onAccept = { offer ->
+                scope.launch {
+                    coachEmploymentRepository.acceptOffer(loaded.dynastyId, offer)
+                    when (val result = saveSlotRepository.loadSlot(loaded.slotIndex)) {
+                        is DynastyLoadResult.Success -> onAfterJobOfferAccepted(result.loaded)
+                        else -> Unit
+                    }
+                }
+            },
+            onWait = onExitToHome,
+            onExitHome = onExitToHome,
+        )
+        return
+    }
     when (
         DynastyCareerPhaseResolver.careerBody(loaded.weekCheckpoint.activePosition.phase)
     ) {

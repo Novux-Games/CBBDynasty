@@ -260,13 +260,16 @@ fun DynastyApp(
                                 active.dynastyId,
                                 active.metadata.seasonIndex,
                             )
-                            navController.navigate(AppRoute.JobCenter.route) {
-                                popUpTo(AppRoute.DynastyCareer.route) { inclusive = true }
+                            navController.navigate(AppRoute.DynastyCareer.route) {
+                                launchSingleTop = true
                             }
                         }
                     },
                     onExitToHome = {
                         navController.popBackStack(AppRoute.Home.route, inclusive = false)
+                    },
+                    onAfterJobOfferAccepted = { reloaded ->
+                        scope.launch { onDynastyReady(reloaded) }
                     },
                 )
             }
@@ -401,30 +404,13 @@ fun DynastyApp(
                 }
                 composable(AppRoute.JobCenter.route) {
                     val session = ActiveDynastySession.current
-                    var employment by remember {
-                        mutableStateOf(dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentState())
-                    }
                     if (session != null) {
-                        LaunchedEffect(session.dynastyId, session.metadata.seasonIndex) {
-                            employment = coachEmploymentRepository.refreshOffersIfNeeded(
-                                session.dynastyId,
-                                session.metadata.seasonIndex,
-                            )
+                        LaunchedEffect(Unit) {
+                            navController.navigate(AppRoute.DynastyCareer.route) {
+                                launchSingleTop = true
+                                popUpTo(AppRoute.JobCenter.route) { inclusive = true }
+                            }
                         }
-                        dev.novux.dynasty.cbb.ui.coach.JobCenterScreen(
-                            offers = employment.pendingOffers,
-                            onAccept = { offer ->
-                                scope.launch {
-                                    coachEmploymentRepository.acceptOffer(session.dynastyId, offer)
-                                    onDynastyReady(session)
-                                }
-                            },
-                            onWait = {
-                                navController.navigate(AppRoute.Home.route) {
-                                    popUpTo(AppRoute.Home.route) { inclusive = true }
-                                }
-                            },
-                        )
                     } else {
                         LaunchedEffect(Unit) {
                             navController.popBackStack(AppRoute.Home.route, inclusive = false)

@@ -259,7 +259,7 @@
 | MEGA-FRAME-141 | SHIP | Players Leaving routing | Week 1 retention via in-shell `PlayersLeavingPanel` on `OffseasonScreen` (no separate route) | `WeekOneLeavingInShellPathTest` |
 | MEGA-FRAME-142 | SHIP | Recruiting hub during preseason | Preseason setup banner on hub explains checklist vs live chasing | `RecruitingHubScreen.kt` |
 | MEGA-FRAME-143 | SHIP | Carousel → Week 1 handoff | Carousel shell → offseason shell; shared bottom nav through handoff | `CoachingCarouselScreen.kt`, `DynastyLaunch.kt` |
-| MEGA-FRAME-144 | GAP | Job center unemployed | Unemployed coaches land **JobCenter** — outside dynasty shell until employed | `DynastyLaunch.kt` |
+| MEGA-FRAME-144 | SHIP | Job center unemployed | Unemployed flow uses `DynastyCareer` + `UnemployedCoachCareerScreen` in `DynastyShellChrome` | `UnemployedCoachShellPolicy`, `DynastyCareerHost.kt` |
 | MEGA-FRAME-145 | SHIP | Awards hub shell access | Shell menu → `AwardsHub` route with back + `awards_hub_shell_access_hint` | `DynastyHubMenu.kt`, `AwardsHubScreen.kt` |
 
 ---
@@ -274,7 +274,7 @@
 | MEGA-FRAME-149 | SHIP | Event bye after elimination | Shared with 081 — Event bye chip + event detail copy on calendar | `DynastyShellCalendarTab.kt` |
 | MEGA-FRAME-150 | SHIP | Preseason single-week label | Header displays **Preseason — setup week** | `CalendarWeekLabel.kt` |
 | MEGA-FRAME-151 | SHIP | End of Season vs review | Dashboard headline matches shell `CalendarWeekLabel` (**End of Season — {year}**) | `SeasonReviewScreen.kt` |
-| MEGA-FRAME-152 | PARTIAL | RS week 1–32 batching | UI week index matches save checkpoint — league-wide batch invisible (expected) | `WeekCheckpointRepository.advanceWeek` |
+| MEGA-FRAME-152 | SHIP | RS week 1–32 batching | Shell week header = checkpoint; RS batch gated by `RegularSeasonWeekBatchPolicy` on confirm only | `RegularSeasonWeekBatchPolicy`, `SaveSlotRepository` |
 | MEGA-FRAME-153 | SHIP | NCBA top-52 bye week 1 | `NcbaOpeningRoundBye` row + copy when user bid skips Opening Round | `PostseasonUserCalendar.kt`, `UserCalendarRepository.kt` |
 
 ---

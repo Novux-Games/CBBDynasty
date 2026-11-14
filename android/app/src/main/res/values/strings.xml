@@ -883,6 +883,9 @@
     <string name="job_center_offer_meta">Prestige %1$d · %2$s</string>
     <string name="job_center_accept">Accept offer</string>
     <string name="job_center_decline_wait">Decline all and wait</string>
+    <string name="job_center_shell_header_hint">Unemployed — the league keeps simming. Accept an offer to return to your dynasty shell.</string>
+    <string name="job_center_shell_tab_locked">Not available while unemployed. Browse offers on Dashboard or read league News.</string>
+    <string name="job_center_no_program">No program</string>
     <string name="discipline_dismiss_player">Dismiss from team</string>
     <string name="discipline_suspend_games_label">Suspend for games (1–10)</string>
     <string name="discipline_suspend_games">Suspend player</string>
