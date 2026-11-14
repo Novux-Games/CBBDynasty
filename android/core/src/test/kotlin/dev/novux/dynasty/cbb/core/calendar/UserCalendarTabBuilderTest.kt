@@ -70,6 +70,29 @@ class UserCalendarTabBuilderTest {
     }
 
     @Test
+    fun sameWeek_multipleGamesKeepPlanOrder() {
+        val plan = PreseasonSchedulePlan(
+            exhibitions = emptyList(),
+            regularSeason = listOf(
+                stub(ScheduleGameKind.NonConference, "First", rsWeek = 2),
+                stub(ScheduleGameKind.Conference, "Second", rsWeek = 2),
+            ),
+            conferenceGameCount = 1,
+            nonConferenceGameCount = 1,
+            earlyEventGameCount = 0,
+        )
+        val rows = UserCalendarTabBuilder.build(
+            activePosition = CalendarPosition(1, CalendarPhase.RegularSeason, 2),
+            plan = plan,
+            exhibitionCount = 0,
+        )
+        val week2 = rows.first { it.phase == CalendarPhase.RegularSeason && it.weekIndex == 2 }
+        assertEquals(2, week2.games.size)
+        assertEquals(ScheduleGameKind.NonConference, week2.games[0].gameKind)
+        assertEquals(ScheduleGameKind.Conference, week2.games[1].gameKind)
+    }
+
+    @Test
     fun conferenceTournament_structuralByeWeekMarked() {
         val plan = PreseasonSchedulePlan(
             exhibitions = emptyList(),

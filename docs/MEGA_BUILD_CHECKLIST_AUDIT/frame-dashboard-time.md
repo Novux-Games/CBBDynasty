@@ -91,7 +91,7 @@
 |----|--------|--------------|---------|--------------|
 | MEGA-FRAME-044 | SHIP | Roster starters / reserves / bench | `ShellRosterSectionPartition` + section headers on shell roster tab | `DynastyShellTabContent.kt`, `ShellRosterSectionPartition.kt` |
 | MEGA-FRAME-045 | SHIP | Roster tap → player card | Preview sheet + full card from shell roster tab (in-season, OS, preseason, carousel) | `OffseasonScreen.kt`, `PreseasonScreen.kt`, `CoachingCarouselScreen.kt` |
-| MEGA-FRAME-046 | PARTIAL | Calendar your games only | Week cards from `UserCalendarRepository` — scope OK | `DynastyShellCalendarTab.kt` |
+| MEGA-FRAME-046 | SHIP | Calendar your games only | User `PreseasonSchedulePlan` via `UserCalendarRepository`; header copy; plan-order rows | `UserCalendarSchedulePolicy.kt`, `DynastyShellCalendarTab.kt` |
 | MEGA-FRAME-047 | SHIP | Calendar conf vs non-conf distinction | Kind `AssistChip` per row; section headers when week has multiple games | `DynastyShellCalendarTab.kt` |
 | MEGA-FRAME-048 | GAP | Calendar tap → preview / box score | Game lines are non-clickable `Text` | `CalendarGameLine` |
 | MEGA-FRAME-049 | PARTIAL | News tab shallow headlines | In-season `DynastyShellNewsTab` with headlines | Offseason/preseason: `DynastyShellNewsTabPlaceholder` |

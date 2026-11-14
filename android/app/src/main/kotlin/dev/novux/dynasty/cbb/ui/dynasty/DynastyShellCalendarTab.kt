@@ -29,6 +29,7 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarGameEntry
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarRowKind
+import dev.novux.dynasty.cbb.core.calendar.UserCalendarSchedulePolicy
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarWeekRow
 import dev.novux.dynasty.cbb.core.schedule.ScheduleGameKind
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
@@ -53,8 +54,32 @@ fun DynastyShellCalendarTab(
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(rows, key = { "${it.phase}:${it.weekIndex}" }) { row ->
-            CalendarWeekCard(row = row)
+        item(key = "calendar_header") {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = stringResource(R.string.shell_tab_calendar),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = stringResource(R.string.shell_calendar_your_games_only),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+        if (rows.isEmpty()) {
+            item(key = "calendar_empty") {
+                Text(
+                    text = stringResource(R.string.shell_calendar_no_schedule),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        } else {
+            items(rows, key = { "${it.phase}:${it.weekIndex}" }) { row ->
+                CalendarWeekCard(row = row)
+            }
         }
     }
 }
@@ -101,21 +126,19 @@ private fun CalendarWeekCard(row: UserCalendarWeekRow) {
                     )
                 }
                 UserCalendarRowKind.Game -> {
-                    val byBucket = row.games.groupBy { it.gameKind.calendarKindBucket() }
-                    CalendarKindBucket.entries.forEach { bucket ->
-                        val games = byBucket[bucket].orEmpty()
-                        if (games.isEmpty()) return@forEach
-                        if (row.games.size > 1 && bucket != CalendarKindBucket.Other) {
+                    val ordered = UserCalendarSchedulePolicy.gamesInChronologicalPlanOrder(row.games)
+                    ordered.forEachIndexed { index, game ->
+                        val kindChanged = UserCalendarSchedulePolicy.sectionBreakBefore(index, ordered) != null
+                        val showSection = row.games.size > 1 && (index == 0 || kindChanged)
+                        if (showSection) {
                             Text(
-                                text = calendarSectionTitle(bucket),
+                                text = calendarSectionTitle(game.gameKind.calendarKindBucket()),
                                 style = MaterialTheme.typography.labelLarge,
                                 fontWeight = FontWeight.SemiBold,
                                 color = MaterialTheme.colorScheme.primary,
                             )
                         }
-                        games.forEach { game ->
-                            CalendarGameLine(game)
-                        }
+                        CalendarGameLine(game)
                     }
                 }
             }

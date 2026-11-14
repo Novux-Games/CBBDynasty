@@ -22,7 +22,7 @@ class UserCalendarRepository(
         seasonIndex: Int,
         activePosition: CalendarPosition,
     ): List<UserCalendarWeekRow> {
-        val plan = scheduleRepository.loadPlan(dynastyId, seasonIndex)
+        val plan = scheduleRepository.loadPlan(dynastyId, seasonIndex) ?: return emptyList()
         val exhibitionCount = scheduleRepository.loadExhibitionCount(dynastyId, seasonIndex)
         val coach = database.dynastyCoachDao().getByDynastyId(dynastyId)
         val session = packRepository.activeSession()
