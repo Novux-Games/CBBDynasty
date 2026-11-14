@@ -53,12 +53,12 @@
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-026 | P1 | GAP | Interest weights in balance JSON | Weights live in `RecruitInterestConfig` hardcoded; ADR-002 `recruiting.interest.*` not in bundle. | `RecruitInterestWeights.kt`, `balance-2026.json` |
 | MEGA-RECR-027 | P1 | PASS | Point spend → interest meter | `interestDelta` in balance; persisted `spendDelta` per prospect; hub meter uses `liveInterest`. | `RecruitingInterestSpendRepository.kt` |
-| MEGA-RECR-028 | P2 | GAP | signLikelihood zero-spend | `SignLikelihoodEngine` uses baseline interest — PASS pattern; undermined by wrong pool/prestige inputs. | `SignLikelihoodBadge.kt` |
+| MEGA-RECR-028 | P2 | SHIP | signLikelihood zero-spend | Hub builds Recommended from persisted class pool; baseline interest on seeded prospects. | `SignLikelihoodSeededPoolPolicy.kt`, `RecruitingHubScreen.kt` |
 | MEGA-RECR-029 | P1 | PASS | Soft commit = influence #1 + closeness | `RecruitSoftCommitPolicy` gates soft commits on rank #1, closeness ≥ 70, and scholarship offer. | `SigningDaySoftCommitResolver`, `RecruitSoftCommitPolicy` |
-| MEGA-RECR-030 | P2 | GAP | Influence board UI | Row shows rank/closeness from engine; board not updated by spends/commits league-wide. | `RecruitingHubScreen`, `InfluenceBoardEngine` |
+| MEGA-RECR-030 | P2 | SHIP | Influence board UI | Recommended rows surface competition rank + closeness; copy documents influence board. | `InfluenceBoardSurfacePolicy.kt`, `recruiting_influence_row` |
 | MEGA-RECR-031 | P2 | PASS | Recommended default tab | Hub lands on Recommended; ~list cap from balance recommended parser. | `RecruitingHubScreen`, `RecommendedRecruitList` |
-| MEGA-RECR-032 | P1 | GAP | Elite hidden on Recommended | `SignLikelihoodEngine.hiddenOnRecommendedTab` exists — behavior depends on demo pool/stars distribution. | core tests |
-| MEGA-RECR-033 | P2 | GAP | NIL assign / 3× cap | Assign NIL from recommended row; uses `NilBudgetRepository` — partial; interest NIL factor uses offer map. | Hub NIL buttons |
+| MEGA-RECR-032 | P1 | SHIP | Elite hidden on Recommended | `hiddenOnRecommendedTab` + unit test on seeded prospect; hub elite-hide hint. | `EliteHiddenOnRecommendedPolicy.kt`, `SignLikelihoodEngineTest` |
+| MEGA-RECR-033 | P2 | SHIP | NIL assign / 3× cap | Recommended tab documents 3× assign cap; policy delegates to `NilAssignCapLinePolicy`. | `RecommendedNilAssignHubPolicy.kt`, `RecruitNilAssignCapLine.kt` |
 | MEGA-RECR-034 | P2 | PASS | Promises at offer | `RecruitPromisePickerSheet` on scholarship offer in recruiting hub | `RecruitPromisePickerPathTest` |
 
 ---
@@ -72,7 +72,7 @@
 | MEGA-RECR-037 | P1 | PASS | Tab set vs spec | Eight hub tabs: Recommended, All/HS/JUCO, Portal, Board, Committed, Lost. | `RecruitingHubTab`, `RecruitingHubTabPolicy` |
 | MEGA-RECR-038 | P1 | PASS | Hub open offseason week 1 | `hubAccessible(Offseason)` from week 1 (retention week; shared points economy). | `RecruitingCyclePolicy.kt` |
 | MEGA-RECR-039 | P1 | PASS | NIL budget strip | Strip + tap sheet committed/reserved by prospect. | `RecruitingNilBudgetDrillDownSheet` |
-| MEGA-RECR-040 | P2 | GAP | Official visit window RS→R4 | Gating in `RecruitingRefundableActionSpend` / gates — exists in core; full calendar integration untested in UI. | core recruiting gates |
+| MEGA-RECR-040 | P2 | SHIP | Official visit window RS→R4 | `OfficialVisitWindowPolicy` mirrors `RecruitingActionWindows`; hub visit-window copy. | `RecruitingHubActionGate.kt`, `OfficialVisitWindowPolicy.kt` |
 | MEGA-RECR-041 | P2 | GAP | Walk-ons after Signing Day | Not implemented in UI/data. | spec `recruiting-engine#walk-ons` |
 
 ---
@@ -82,7 +82,7 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-042 | P0 | PASS | In-season optional recruiting tasks | `InSeasonRecruitingOptionalDashboardTasks` adds spend + watchlist nudges when cycle open. | `DashboardTaskGate.kt`, `DynastyShellScreen.kt` |
-| MEGA-RECR-043 | P1 | GAP | Offseason W2–5 portal tasks | `OffseasonOptionalDashboardTasks` implements spend/portal/crunch/scholarships — PASS for subset. | `OffseasonOptionalDashboardTasks.kt` |
+| MEGA-RECR-043 | P1 | SHIP | Offseason W2–5 portal tasks | `OffseasonPortalDashboardTasksPolicy` + dashboard cadence hint on portal weeks. | `OffseasonScreen.kt`, `OffseasonOptionalDashboardTasks.kt` |
 | MEGA-RECR-044 | P2 | RISK | Portal Top 40 task trigger | Task when `offseasonWeekIndex == 2 && portalTop40Locked`; verify caller sets flag when week 2 starts. | `OffseasonScreen` context builder |
 | MEGA-RECR-045 | P1 | PASS | Recruiting never blocks advance | Optional kinds only for recruiting; signing day has required tasks separate. | `DashboardTask.kt` |
 | MEGA-RECR-046 | P1 | GAP | Signing Day required tasks | Rankings + positions + hard sign tasks exist — PASS shell; rankings data may be demo pool (RECR-005). | `SigningDayRequiredDashboardTasks`, `SigningDayScreen` |

@@ -647,6 +647,7 @@
     <string name="dashboard_task_portal_top40">Portal Top 40 published</string>
     <string name="dashboard_task_portal_pipeline_entrant">%1$s in portal (%2$s)</string>
     <string name="dashboard_offseason_portal_optional_heading">Portal window — optional tasks (weeks 2–5)</string>
+    <string name="dashboard_offseason_portal_tasks_cadence_hint">Optional cards nudge portal spends, Top 40 unlock, signing crunch, and open scholarships — dismiss any you skip.</string>
     <string name="dashboard_offseason_portal_window_closed_heading">Portal recruiting window closed</string>
     <string name="dashboard_offseason_portal_window_closed_body">Weeks 2–5 optional portal tasks are done. Finish signing and roster moves from the recruiting hub or advance the week.</string>
     <string name="dashboard_task_signing_crunch">Signing week R%1$d — 1.5× recruiting points</string>
@@ -685,6 +686,10 @@
     <string name="recruiting_recommended_empty_title">No recommended targets</string>
     <string name="recruiting_recommended_empty_body">No recruits currently fit your program on this tab. Browse the full HS/JUCO class or spend recruiting points to build interest elsewhere.</string>
     <string name="recruiting_recommended_empty_cta">Open HS/JUCO board</string>
+    <string name="recruiting_recommended_elite_hide_hint">Top national targets may be hidden here unless your pipeline or interest is strong enough.</string>
+    <string name="recruiting_influence_board_hint">Competition rank and closeness come from the influence board for this prospect.</string>
+    <string name="recruiting_nil_recommended_assign_hint">Meet Ask books reserved NIL on open scholarship offers — capped at %1$s× the recruit\'s ask.</string>
+    <string name="recruiting_official_visit_window_hint">Official visits unlock in regular season and postseason through the sweet 16, and in offseason weeks 2–5.</string>
     <string name="recruiting_placeholder_hs_juco">High school and junior college pools appear here.</string>
     <string name="recruiting_placeholder_portal">Transfer portal entrants appear here during the portal window.</string>
     <string name="recruiting_hs_juco_loading">Loading class pool…</string>

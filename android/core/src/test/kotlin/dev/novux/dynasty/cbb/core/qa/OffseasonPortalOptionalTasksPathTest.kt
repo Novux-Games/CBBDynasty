@@ -1,7 +1,9 @@
 package dev.novux.dynasty.cbb.core.qa
 
+import dev.novux.dynasty.cbb.core.dashboard.OffseasonPortalDashboardTasksPolicy
 import java.nio.file.Paths
 import kotlin.io.path.readText
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -9,6 +11,7 @@ import org.junit.Test
 class OffseasonPortalOptionalTasksPathTest {
     @Test
     fun offseasonPortalOptionalTasks_wiredOnOffseasonScreen() {
+        assertEquals("MEGA-RECR-043", OffseasonPortalDashboardTasksPolicy.MEGA_ID)
         val root = repoRoot()
         val screen = root.resolve(
             "android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/offseason/OffseasonScreen.kt",
@@ -19,6 +22,7 @@ class OffseasonPortalOptionalTasksPathTest {
         assertTrue(screen.contains("OffseasonPortalOptionalTasksPolicy"))
         assertTrue(screen.contains("buildOffseasonPortalOptionalTasks"))
         assertTrue(screen.contains("dashboard_offseason_portal_optional_heading"))
+        assertTrue(screen.contains("dashboard_offseason_portal_tasks_cadence_hint"))
         assertTrue(screen.contains("PortalCyclePolicy.portalWindowClosed"))
         assertTrue(screen.contains("dashboard_offseason_portal_window_closed_body"))
         assertTrue(screen.contains("OffseasonPortalOptionalNudgeResolver"))

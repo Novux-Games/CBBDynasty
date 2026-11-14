@@ -658,6 +658,11 @@ fun OffseasonScreen(
         }
 
         if (inOffseason && OffseasonPortalOptionalTasksPolicy.inPortalTaskWindow(position.weekIndex)) {
+            Text(
+                text = stringResource(R.string.dashboard_offseason_portal_tasks_cadence_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
             val dashboardTasks = buildOffseasonPortalOptionalTasks(
                 weekIndex = position.weekIndex,
                 ledger = ledger,
