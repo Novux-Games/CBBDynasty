@@ -78,7 +78,9 @@ import dev.novux.dynasty.cbb.core.preseason.FirstPlayableGame
 import dev.novux.dynasty.cbb.core.preview.GamePreviewEngine
 import dev.novux.dynasty.cbb.core.preview.GamePreviewRequest
 import dev.novux.dynasty.cbb.core.preview.GamePreviewVenue
+import dev.novux.dynasty.cbb.core.preview.GamePreviewScoutingBuilder
 import dev.novux.dynasty.cbb.core.preview.HeadToHeadHistory
+import dev.novux.dynasty.cbb.core.preview.HeadToHeadHistoryResolver
 import dev.novux.dynasty.cbb.core.preview.TeamPreviewSide
 import dev.novux.dynasty.cbb.ui.preview.GamePreviewLaunch
 import dev.novux.dynasty.cbb.core.preseason.PreseasonSeasonStartPolicy
@@ -1021,13 +1023,47 @@ fun DynastyShellScreen(
                                 } else {
                                     GamePreviewVenue.Away
                                 }
+                                val app = context.requireDynastyApplication()
+                                val userTeamId = user.teamId
+                                val seasonIndex = loaded.metadata.seasonIndex
+                                val seasonResultsByIndex = buildMap {
+                                    for (season in 1..seasonIndex) {
+                                        val st = app.leagueWeekBatchRepository.loadStandings(
+                                            loaded.dynastyId,
+                                            season,
+                                        ) ?: continue
+                                        if (st.seasonResults.isNotEmpty()) {
+                                            put(season, st.seasonResults)
+                                        }
+                                    }
+                                }
+                                val meetings = HeadToHeadHistoryResolver.collectDynastyMeetings(
+                                    userTeamId = userTeamId,
+                                    opponentTeamId = game.opponentTeamId,
+                                    seasonResultsByIndex = seasonResultsByIndex,
+                                )
+                                val currentStandings = app.leagueWeekBatchRepository.loadStandings(
+                                    loaded.dynastyId,
+                                    seasonIndex,
+                                )
+                                val userScouting = GamePreviewScoutingBuilder.fromOverview(user, currentStandings)
+                                val opponentScouting = oppOverview?.let {
+                                    GamePreviewScoutingBuilder.fromOverview(it, currentStandings)
+                                } ?: GamePreviewScoutingBuilder.fromPrestige(
+                                    game.opponentTeamId,
+                                    game.opponentDisplayName,
+                                    58,
+                                )
                                 val preview = GamePreviewEngine.predict(
                                     GamePreviewRequest(
                                         user = TeamPreviewSide.fromOverview(user),
                                         opponent = opponent,
                                         venue = venue,
-                                        headToHead = HeadToHeadHistory.summarize(emptyList()),
+                                        headToHead = HeadToHeadHistory.summarize(meetings),
                                     ),
+                                ).copy(
+                                    userScouting = userScouting,
+                                    opponentScouting = opponentScouting,
                                 )
                                 val loc = if (game.homeGame) {
                                     context.getString(R.string.dynasty_shell_home)

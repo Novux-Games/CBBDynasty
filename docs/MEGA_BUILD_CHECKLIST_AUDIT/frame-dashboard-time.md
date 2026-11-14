@@ -79,7 +79,7 @@
 | MEGA-FRAME-038 | SHIP | Last game summary | `DashboardLastGameCard` — W/L line, box score sheet, stats links, postgame report | `DashboardLastUserGameResolver`, `DynastyShellScreen.kt` |
 | MEGA-FRAME-039 | SHIP | Next game card | Date + location line via `FirstPlayableGame.gameDateLabel` | `DynastyShellScreen.kt` `NextGameCard` |
 | MEGA-FRAME-040 | SHIP | Game preview from next game | Opens `GamePreviewScreen` with win %, score, pregame article | `GamePreviewScreen.kt` |
-| MEGA-FRAME-041 | PARTIAL | Game preview sections | Win %, predicted score, pregame report — team side-by-side / matchup history thin | `HeadToHeadHistory.summarize(emptyList())` in shell |
+| MEGA-FRAME-041 | SHIP | Game preview sections | Team scouting table + dynasty H2H from standings | `GamePreviewScoutingBuilder.kt`, `HeadToHeadHistoryResolver.kt`, `GamePreviewScreen.kt` |
 | MEGA-FRAME-042 | SHIP | Primary CTA lineup/gameplan from preview | Filled Strategy CTA above H2H; Play game secondary | `GamePreviewScreen.kt` |
 | MEGA-FRAME-043 | SHIP | Dashboard roster teaser vs spec | Removed 6-player preview strip; roster tab hint only | `DynastyShellScreen.kt` |
 

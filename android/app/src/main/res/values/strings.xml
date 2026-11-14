@@ -879,6 +879,16 @@
     <string name="game_preview_venue">Location: %1$s</string>
     <string name="game_preview_win_pct">Win chance %1$d%%</string>
     <string name="game_preview_predicted_score">Predicted score %1$d–%2$d</string>
+    <string name="game_preview_team_heading">Team preview</string>
+    <string name="game_preview_stat_ppg">PPG</string>
+    <string name="game_preview_stat_rpg">RPG</string>
+    <string name="game_preview_stat_off_eff">Off eff</string>
+    <string name="game_preview_stat_pace">Pace</string>
+    <string name="game_preview_stat_net">NET</string>
+    <string name="game_preview_stat_poll">AP</string>
+    <string name="game_preview_rank_value">#%1$d</string>
+    <string name="game_preview_rank_unranked">—</string>
+    <string name="game_preview_stat_decimal">%1$.1f</string>
     <string name="game_preview_h2h_heading">Head-to-head</string>
     <string name="game_preview_h2h_empty">No prior meetings in this dynasty.</string>
     <string name="game_preview_h2h_record">Series %1$d–%2$d</string>
