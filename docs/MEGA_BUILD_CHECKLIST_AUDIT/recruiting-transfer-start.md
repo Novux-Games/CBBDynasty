@@ -85,8 +85,8 @@
 | MEGA-RECR-043 | P1 | SHIP | Offseason W2–5 portal tasks | `OffseasonPortalDashboardTasksPolicy` + dashboard cadence hint on portal weeks. | `OffseasonScreen.kt`, `OffseasonOptionalDashboardTasks.kt` |
 | MEGA-RECR-044 | P2 | RISK | Portal Top 40 task trigger | Task when `offseasonWeekIndex == 2 && portalTop40Locked`; verify caller sets flag when week 2 starts. | `OffseasonScreen` context builder |
 | MEGA-RECR-045 | P1 | PASS | Recruiting never blocks advance | Optional kinds only for recruiting; signing day has required tasks separate. | `DashboardTask.kt` |
-| MEGA-RECR-046 | P1 | GAP | Signing Day required tasks | Rankings + positions + hard sign tasks exist — PASS shell; rankings data may be demo pool (RECR-005). | `SigningDayRequiredDashboardTasks`, `SigningDayScreen` |
-| MEGA-RECR-047 | P2 | GAP | Dismiss / skip week nudges | Optional panel supports dismiss set; in-season recruiting ids not emitted. | `DashboardOptionalTasksPanel` |
+| MEGA-RECR-046 | P1 | SHIP | Signing Day required tasks | Rankings from `ensurePool`; required-task policy + dashboard hint. | `SigningDayRequiredTasksPolicy.kt`, `SigningDayScreen.kt` |
+| MEGA-RECR-047 | P2 | SHIP | Dismiss / skip week nudges | Recruiting nudges carry `dismissScopeKey`; shell uses `DashboardTaskDismissal`. | `InSeasonRecruitingOptionalDismissPolicy.kt`, `RecruitingDashboardNudge.kt` |
 | MEGA-RECR-048 | P2 | PASS | Week 1 no portal dashboard cards | Portal week-1 on Players Leaving, not dashboard — aligns with transfer-portal doc. | `transfer-portal.md` |
 
 ---
@@ -96,11 +96,11 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-049 | P1 | PASS | Signing rankings data source | Screen rankings and `loadIncomingClass` both use persisted `ensurePool`. | `SigningDayRepository.kt` |
-| MEGA-RECR-050 | P1 | GAP | Position editor Signing Day | Tab exists; bulk position edit engine partial — verify against `SigningDayScreen` positions tab. | `ui/signingday` |
-| MEGA-RECR-051 | P1 | GAP | Cycle close after hard sign | `closeCycleAfterHardSign` on confirm — wired from screen; ensure advance from OS W6 respects closed hub. | `SigningDayScreen` |
+| MEGA-RECR-050 | P1 | SHIP | Position editor Signing Day | Cycle position per signee + confirm gate; editor hint on positions tab. | `SigningDayPositionEditorPolicy.kt`, `SigningDayScreen.kt` |
+| MEGA-RECR-051 | P1 | SHIP | Cycle close after hard sign | Hard sign calls `closeCycleAfterHardSign`; cycle-close hint after sign. | `SigningDayCycleClosePolicy.kt`, `SigningDayScreen.kt` |
 | MEGA-RECR-052 | P1 | GAP | Preseason Incoming Class Seed | Manual panel seeds 3900-player pool — PASS when user completes task; **not auto** on new dynasty before season. | `IncomingClassSeedPanel` |
 | MEGA-RECR-053 | P0 | PASS | Season 1 Top 60 from tipoff | `bootstrapSeasonOneRecruitingAfterSign` persists class + Top 60 news + prestige-bound recruiting/NIL at wizard sign; preseason panel confirms pre-seeded class before exhibitions. | `SaveSlotRepository`, `SeasonOneRecruitingBootstrap` |
-| MEGA-RECR-054 | P2 | GAP | News Recruits vs Rankings hub | News shows Top 60 from seed when present; Rankings hub is **team** NET/Media/Coaches — correct separation, easy user confusion. | `NewsHubScreen`, `RankingsHubScreen` |
+| MEGA-RECR-054 | P2 | SHIP | News Recruits vs Rankings hub | Recruits tab scope copy; Rankings hub already labels team NET/polls. | `RecruitNewsVsTeamRankingsPolicy.kt`, `NewsHubScreen.kt` |
 
 ---
 
@@ -109,7 +109,7 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-055 | P1 | RISK | Preseason task “Rankings” | `PreseasonTaskId.RankingsReview` gates **team** poll publication (`RankingsHubRepository`), not recruit Top 60 — label overlap with Signing Day “View Recruiting Rankings”. | `PreseasonTaskId`, `RankingsHubRepository` |
-| MEGA-RECR-056 | P2 | FAIL | RankingsReview completion UX | Checklist allows **tap Complete** with no Rankings Hub visit (no dedicated panel). | `PreseasonScreen.kt` generic card |
+| MEGA-RECR-056 | P2 | SHIP | RankingsReview completion UX | Dedicated panel + no generic Complete; shortcut hint documents flow. | `PreseasonRankingsReviewNoShortcutPolicy.kt`, `PreseasonFeatureTaskPanels.kt` |
 | MEGA-RECR-057 | P1 | PASS | Media/Coaches T25 = programs | `RankingsHubScreen` tabs NET/Media/Coaches/Conference — team-level. | `ui/rankings` |
 | MEGA-RECR-058 | P1 | PASS | Recruit Top 60 ≠ top 25 crop | UI strings reference #1–#60 in seed panel/news. | `strings.xml`, seed panel |
 | MEGA-RECR-059 | P2 | GAP | School hub rankings unpublished | Until RankingsReview complete — intentional; unrelated to recruit board. | `SchoolHubRepository` |

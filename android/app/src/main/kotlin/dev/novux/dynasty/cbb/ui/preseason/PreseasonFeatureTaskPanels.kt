@@ -183,6 +183,11 @@ fun PreseasonRankingsReviewPanel(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        Text(
+            text = stringResource(R.string.preseason_rankings_no_shortcut_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         OutlinedButton(onClick = onOpenReviewSheet, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.preseason_rankings_open_review))
         }

@@ -77,27 +77,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
   },
   {
-    "id": "MEGA-RECR-046",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-050",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-051",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
     "id": "MEGA-RECR-052",
     "pri": "P1",
     "status": "GAP",
@@ -1785,13 +1764,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
   },
   {
-    "id": "MEGA-RECR-056",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
     "id": "MEGA-RECR-088",
     "pri": "P2",
     "status": "FAIL",
@@ -2192,20 +2164,6 @@
   },
   {
     "id": "MEGA-RECR-041",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-047",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-054",
     "pri": "P2",
     "status": "GAP",
     "shard": "recruiting-transfer-start.md",

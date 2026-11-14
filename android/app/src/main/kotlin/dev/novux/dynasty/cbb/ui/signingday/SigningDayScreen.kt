@@ -118,6 +118,11 @@ fun SigningDayScreen(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        Text(
+            text = stringResource(R.string.signing_day_required_dashboard_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         PrimaryTabRow(selectedTabIndex = tabIndex) {
             Tab(
                 selected = tabIndex == 0,
@@ -302,6 +307,11 @@ private fun PositionsBody(
             )
         }
         Text(
+            text = stringResource(R.string.signing_day_position_editor_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
             text = stringResource(R.string.signing_day_promise_locked_note),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -376,6 +386,13 @@ private fun PositionsBody(
             enabled = canConfirm,
         ) {
             Text(stringResource(R.string.signing_day_confirm_positions))
+        }
+        if (progress?.hardSignComplete == true) {
+            Text(
+                text = stringResource(R.string.signing_day_cycle_close_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
         Button(
             onClick = onHardSign,

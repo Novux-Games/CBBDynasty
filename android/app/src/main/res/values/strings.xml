@@ -338,6 +338,7 @@
     <string name="preseason_coach_open_strategy">Open Strategy</string>
     <string name="preseason_coach_bank_season">Bank for season</string>
     <string name="preseason_rankings_review_body">Open the review sheet, check your NET and poll ranks, then tap Continue to publish.</string>
+    <string name="preseason_rankings_no_shortcut_hint">This task finishes only after you Continue on the review sheet — not the generic Complete button.</string>
     <string name="preseason_rankings_open_hub">Open full rankings hub</string>
     <string name="preseason_rankings_open_review">Review NET and polls</string>
     <string name="preseason_rankings_review_sheet_title">Preseason NET and poll review</string>
@@ -720,6 +721,9 @@
     <string name="offseason_week_one_recruiting_body">Season 1 opens with roster retention only. HS/JUCO chasing and recruiting points unlock in Offseason Week 2.</string>
     <string name="signing_day_title">Signing Day</string>
     <string name="signing_day_subtitle">Review recruit national ranks (Top 60), set positions, then hard sign your class — not team NET or polls.</string>
+    <string name="signing_day_required_dashboard_hint">Complete recruit rankings, position confirm, and hard sign — shell dashboard tasks mirror these steps.</string>
+    <string name="signing_day_position_editor_hint">Tap Position to cycle each signee\'s role, then confirm before hard sign.</string>
+    <string name="signing_day_cycle_close_hint">Hard sign closed this recruiting cycle — the hub is administration-only until next offseason.</string>
     <string name="signing_day_tab_rankings">Recruit rankings</string>
     <string name="signing_day_recruit_rankings_heading">National recruiting Top 60 — players in this class</string>
     <string name="signing_day_tab_positions">Positions</string>
@@ -1131,6 +1135,7 @@
     <string name="news_hub_portal_top40_heading">Portal Top 40</string>
     <string name="news_hub_portal_row">#%1$d %2$s · %3$s · %4$d★</string>
     <string name="news_hub_recruits_heading">National Top 60</string>
+    <string name="news_hub_recruits_scope">Player class ranks from your seeded pool — not team NET or poll standings.</string>
     <string name="news_hub_draft_empty">Draft results publish in offseason week 2 after the pro day.</string>
     <string name="news_hub_draft_row">%1$s · %2$s — %3$s</string>
     <string name="shell_menu_recruiting_hub">Recruiting</string>

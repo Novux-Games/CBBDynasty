@@ -166,6 +166,11 @@ private fun RecruitsTab(rows: List<NationalRankRow>) {
         style = MaterialTheme.typography.titleMedium,
         fontWeight = FontWeight.SemiBold,
     )
+    Text(
+        stringResource(R.string.news_hub_recruits_scope),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
     rows.forEach { row ->
         val p = row.prospect
         Text(

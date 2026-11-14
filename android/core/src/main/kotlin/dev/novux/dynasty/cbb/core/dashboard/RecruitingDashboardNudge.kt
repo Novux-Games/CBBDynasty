@@ -38,5 +38,6 @@ fun RecruitingDashboardNudge.toDashboardTask(): DashboardTask {
         deepLink = deepLink,
         formatArgs = formatArgs,
         stringFormatArgs = stringArgs,
+        dismissScopeKey = "${kind.name}:$prospectName",
     )
 }
