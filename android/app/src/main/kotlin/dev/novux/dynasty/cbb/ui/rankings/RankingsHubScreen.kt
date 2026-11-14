@@ -57,30 +57,10 @@ fun RankingsHubScreen(
             Text(stringResource(R.string.dynasty_shell_back))
         }
         if (!snapshot.published) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                Text(
-                    stringResource(R.string.rankings_hub_scope),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Text(
-                    stringResource(R.string.rankings_hub_preseason_review),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                NationalRankList(snapshot.net.take(25))
-                Button(
-                    onClick = { onPublishPreseason?.invoke() },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = onPublishPreseason != null,
-                ) {
-                    Text(stringResource(R.string.rankings_hub_preseason_continue))
-                }
-            }
+            RankingsHubUnpublishedPlaceholder(
+                snapshot = snapshot,
+                onPublishPreseason = onPublishPreseason,
+            )
             return
         }
         PrimaryTabRow(selectedTabIndex = tabIndex) {
@@ -97,6 +77,38 @@ fun RankingsHubScreen(
             RankingsHubTab.Media -> NationalRankList(snapshot.media)
             RankingsHubTab.Coaches -> NationalRankList(snapshot.coaches)
             RankingsHubTab.Conference -> ConferenceStandingsList(snapshot.conferences)
+        }
+    }
+}
+
+@Composable
+private fun RankingsHubUnpublishedPlaceholder(
+    snapshot: RankingsHubSnapshot,
+    onPublishPreseason: (() -> Unit)?,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.rankings_hub_placeholder),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        if (onPublishPreseason != null) {
+            Text(
+                text = stringResource(R.string.rankings_hub_preseason_review),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            NationalRankList(snapshot.net.take(RankingsHubUiPolicy.UNPUBLISHED_PREVIEW_CAP))
+            Button(
+                onClick = onPublishPreseason,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(R.string.rankings_hub_preseason_continue))
+            }
         }
     }
 }

@@ -107,7 +107,7 @@
 | MEGA-FRAME-052 | SHIP | Core hub menu items | School, Recruiting, Strategy, Statistics, Rankings, News, History, Awards | `buildDynastyHubMenu` |
 | MEGA-FRAME-053 | SHIP | March Mayhem visibility | Hub item when `Postseason` and `selectionSunday` published on standings | `DynastyHubMenuPolicy`, `DynastyShellScreen` |
 | MEGA-FRAME-054 | SHIP | Conf tournament menu in phase | Extra item in conf tournament phase | `DynastyHubMenuPolicy` |
-| MEGA-FRAME-055 | PARTIAL | Rankings hub 365 + polls | `RankingsHubScreen` tabs when `published` | Placeholder when unpublished |
+| MEGA-FRAME-055 | SHIP | Rankings hub 365 + polls | Full NET/Media/Coaches/Conf tabs when published; placeholder + preseason preview slice before | `RankingsHubPublishPolicy`, `RankingsHubScreen` |
 | MEGA-FRAME-056 | SHIP | Dashboard default after load | `DynastyLaunch` navigates `DynastyCareer` for offseason/preseason/in-season | `DynastyLaunch.kt`, `DynastyCareerPhaseResolver.kt` |
 
 ---
