@@ -139,6 +139,9 @@ class DynastyApplication : Application() {
     lateinit var notificationFeedRepository: dev.novux.dynasty.cbb.data.notification.NotificationFeedRepository
         private set
 
+    lateinit var dashboardLastGameRepository: dev.novux.dynasty.cbb.data.dashboard.DashboardLastGameRepository
+        private set
+
     lateinit var dynastyAutomationRepository: dev.novux.dynasty.cbb.data.settings.DynastyAutomationRepository
         private set
 
@@ -249,6 +252,9 @@ class DynastyApplication : Application() {
         super.onCreate()
         appSettingsRepository = AppSettingsRepository(applicationContext)
         notificationFeedRepository = dev.novux.dynasty.cbb.data.notification.NotificationFeedRepository(
+            applicationContext,
+        )
+        dashboardLastGameRepository = dev.novux.dynasty.cbb.data.dashboard.DashboardLastGameRepository(
             applicationContext,
         )
         dynastyAutomationRepository = dev.novux.dynasty.cbb.data.settings.DynastyAutomationRepository(
@@ -416,6 +422,7 @@ class DynastyApplication : Application() {
             userLeagueGameSimFactory,
             coachAchievementsRepository,
             seasonReviewProgressRepository,
+            dashboardLastGameRepository,
         )
         preseasonSeasonStartRepository = PreseasonSeasonStartRepository(
             saveSlotRepository,

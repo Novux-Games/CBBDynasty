@@ -96,7 +96,10 @@ import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
 import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
 import dev.novux.dynasty.cbb.core.dashboard.DashboardPostseasonSeedResolver
+import dev.novux.dynasty.cbb.ui.dashboard.DashboardLastGameCard
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
+import dev.novux.dynasty.cbb.core.dashboard.DashboardLastGameSummary
+import dev.novux.dynasty.cbb.core.dashboard.DashboardLastUserGameResolver
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardTeamOverviewCard
 import dev.novux.dynasty.cbb.data.school.SchoolHubRepository
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
@@ -223,6 +226,7 @@ fun DynastyShellScreen(
         mutableStateOf(dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointState())
     }
     var notificationFeed by remember { mutableStateOf<List<NotificationFeedItem>>(emptyList()) }
+    var lastGameSummary by remember { mutableStateOf<DashboardLastGameSummary?>(null) }
     var careerModal by remember { mutableStateOf<NotificationFeedItem?>(null) }
     var coachPreviewTarget by remember { mutableStateOf<CoachPreviewTarget?>(null) }
     var coachEmploymentStatus by remember { mutableStateOf(CoachEmploymentStatus.Employed) }
@@ -436,6 +440,26 @@ fun DynastyShellScreen(
         )
         coachSkillState = skillState
         coachSkillPointBank = skillState.unspentBank
+        val app = context.requireDynastyApplication()
+        val savedLast = app.dashboardLastGameRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
+        val standingsForLast = app.leagueWeekBatchRepository.loadStandings(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        )
+        val userTeamId = userSchool?.teamId
+        val displaySchool = loaded.summary.schoolDisplayName.orEmpty().ifBlank { "Your program" }
+        val teamName: (String) -> String = { teamId ->
+            app.packRepository.teamDisplay(teamId)?.displayName ?: teamId
+        }
+        lastGameSummary = DashboardLastUserGameResolver.fromSnapshot(savedLast)
+            ?: userTeamId?.let { teamId ->
+                DashboardLastUserGameResolver.fromStandings(
+                    userTeamId = teamId,
+                    userTeamDisplayName = displaySchool,
+                    standings = standingsForLast,
+                    teamDisplayName = teamName,
+                )
+            }
         if (showNotificationFeed) {
             val archetype = staffRoster?.headCoach?.archetype
                 ?: dev.novux.dynasty.cbb.core.coach.CoachArchetype.Balanced
@@ -916,6 +940,14 @@ fun DynastyShellScreen(
                         overview = overview,
                         postseasonSeedLabel = dashboardPostseasonSeed,
                         onOpenRankings = hubMenuCallbacks.onOpenRankings,
+                    )
+                }
+                lastGameSummary?.let { summary ->
+                    DashboardLastGameCard(
+                        summary = summary,
+                        rosterPlayers = rosterPlayers,
+                        onOpenTeamStats = hubMenuCallbacks.onOpenStatistics,
+                        onOpenPlayerStats = hubMenuCallbacks.onOpenStatistics,
                     )
                 }
                 Text(

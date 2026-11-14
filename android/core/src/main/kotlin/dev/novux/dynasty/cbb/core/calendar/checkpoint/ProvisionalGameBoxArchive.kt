@@ -20,6 +20,41 @@ data class ProvisionalGameBoxArchive(
     val overtimePeriods: Int = 0,
     val userTeamInjuries: List<ArchivedGameInjuryEvent> = emptyList(),
 ) {
+    fun toGameSimResult(homeScore: Int, awayScore: Int): GameSimResult = GameSimResult(
+        homeScore = homeScore,
+        awayScore = awayScore,
+        homeBox = homeBox.toTeamBoxScore(),
+        awayBox = awayBox.toTeamBoxScore(),
+        totalPossessions = homeBox.possessions + awayBox.possessions,
+        possessionLog = emptyList(),
+        homeInjuries = emptyList(),
+        awayInjuries = emptyList(),
+        homePlayerBox = homePlayerBox.map { it.toPlayerBoxScore() },
+        awayPlayerBox = awayPlayerBox.map { it.toPlayerBoxScore() },
+        periodsPlayed = periodsPlayed,
+        overtimePeriods = overtimePeriods,
+    )
+
+    private fun injuriesForUserHome(userTeamIsHome: Boolean): List<GameSimInjuryEvent> =
+        if (userTeamIsHome) {
+            userTeamInjuries.map { ArchivedGameInjuryEvent.toDomain(it) }
+        } else {
+            emptyList()
+        }
+
+    fun toGameSimResultForUser(
+        userTeamIsHome: Boolean,
+        homeScore: Int,
+        awayScore: Int,
+    ): GameSimResult {
+        val base = toGameSimResult(homeScore, awayScore)
+        return if (userTeamIsHome) {
+            base.copy(homeInjuries = injuriesForUserHome(true))
+        } else {
+            base.copy(awayInjuries = userTeamInjuries.map { ArchivedGameInjuryEvent.toDomain(it) })
+        }
+    }
+
     companion object {
         fun fromResult(
             result: GameSimResult,
@@ -123,6 +158,25 @@ data class ArchivedPlayerBoxScore(
             personalFouls = line.personalFouls,
         )
     }
+
+    fun toPlayerBoxScore(): PlayerBoxScore = PlayerBoxScore(
+        playerId = playerId,
+        minutesSeconds = minutesSeconds,
+        points = points,
+        fieldGoalsMade = fieldGoalsMade,
+        fieldGoalsAttempted = fieldGoalsAttempted,
+        threePointsMade = threePointsMade,
+        threePointsAttempted = threePointsAttempted,
+        freeThrowsMade = freeThrowsMade,
+        freeThrowsAttempted = freeThrowsAttempted,
+        offensiveRebounds = offensiveRebounds,
+        defensiveRebounds = defensiveRebounds,
+        assists = assists,
+        steals = steals,
+        blocks = blocks,
+        turnovers = turnovers,
+        personalFouls = personalFouls,
+    )
 }
 
 @Serializable

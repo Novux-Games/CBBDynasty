@@ -61,7 +61,9 @@ import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
+import dev.novux.dynasty.cbb.core.dashboard.DashboardLastGameSnapshotBuilder
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogArchiveEngine
+import dev.novux.dynasty.cbb.data.dashboard.DashboardLastGameRepository
 import dev.novux.dynasty.cbb.core.player.games.PlayerGameLogEntry
 import dev.novux.dynasty.cbb.data.player.PlayerPromiseStatusRepository
 import dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
@@ -121,6 +123,7 @@ class SaveSlotRepository(
     private val userLeagueGameSimFactory: UserLeagueGameSimFactory,
     private val coachAchievementsRepository: CoachAchievementsRepository,
     private val seasonReviewProgressRepository: SeasonReviewProgressRepository,
+    private val dashboardLastGameRepository: DashboardLastGameRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -800,6 +803,17 @@ class SaveSlotRepository(
                 seasonIndex = loaded.metadata.seasonIndex,
                 entriesByPlayerId = byPlayer,
             )
+        }
+        marksWithBox.firstOrNull()?.let { mark ->
+            val school = loaded.summary.schoolDisplayName.orEmpty().ifBlank { "Your program" }
+            val snapshot = DashboardLastGameSnapshotBuilder.fromCommittedMark(
+                mark = mark,
+                committedWeek = committedWeek,
+                userTeamIsHome = ctx.userTeamIsHome,
+                opponentDisplayName = ctx.opponentLabel,
+                userTeamDisplayName = school,
+            )
+            dashboardLastGameRepository.save(loaded.dynastyId, loaded.metadata.seasonIndex, snapshot)
         }
     }
 

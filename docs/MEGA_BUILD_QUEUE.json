@@ -1,12 +1,5 @@
 [
   {
-    "id": "MEGA-FRAME-037",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "frame-dashboard-time.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
-  },
-  {
     "id": "MEGA-FRAME-038",
     "pri": "P1",
     "status": "GAP",
@@ -519,13 +512,6 @@
   },
   {
     "id": "MEGA-FRAME-153",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "frame-dashboard-time.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/frame-dashboard-time.md"
-  },
-  {
-    "id": "MEGA-FRAME-154",
     "pri": "P1",
     "status": "GAP",
     "shard": "frame-dashboard-time.md",
