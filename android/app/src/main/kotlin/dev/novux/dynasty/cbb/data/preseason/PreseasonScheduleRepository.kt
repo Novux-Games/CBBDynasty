@@ -10,6 +10,9 @@ import androidx.datastore.preferences.preferencesDataStore
 import dev.novux.dynasty.cbb.core.preseason.tournament.RegularSeasonSlotBudget
 import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
 import dev.novux.dynasty.cbb.core.schedule.PreseasonScheduleSolver
+import dev.novux.dynasty.cbb.core.schedule.PreseasonScheduleValidator
+import dev.novux.dynasty.cbb.core.schedule.RegularSeasonScheduleBuilderUxPolicy
+import dev.novux.dynasty.cbb.core.schedule.RegularSeasonScheduleSolveResult
 import dev.novux.dynasty.cbb.core.schedule.ScheduleGameKind
 import dev.novux.dynasty.cbb.core.schedule.ScheduledGameStub
 import dev.novux.dynasty.cbb.core.schedule.ExhibitionGameDraft
@@ -82,7 +85,46 @@ class PreseasonScheduleRepository(
         }
     }
 
-    suspend fun solveAndSaveRegularSeason(dynastyId: String, seasonIndex: Int): PreseasonSchedulePlan? {
+    suspend fun loadRegularSeasonBuilderContext(
+        dynastyId: String,
+        seasonIndex: Int,
+    ): RegularSeasonScheduleBuilderUxPolicy.BuilderContext? {
+        val coach = database.dynastyCoachDao().getByDynastyId(dynastyId) ?: return null
+        val userTeam = packRepository.activeSession().index.team(coach.userTeamId) ?: return null
+        val conference = packRepository.activeSession().index.conference(userTeam.conferenceId) ?: return null
+        val inviteState = tournamentInvitesRepository.loadState(dynastyId, seasonIndex)
+        return RegularSeasonScheduleBuilderUxPolicy.BuilderContext(
+            budget = inviteState.slotBudget,
+            conferenceTemplateGames = conference.leagueGameCount,
+            exhibitionCount = loadExhibitionCount(dynastyId, seasonIndex),
+        )
+    }
+
+    suspend fun buildRegularSeasonSchedule(
+        dynastyId: String,
+        seasonIndex: Int,
+    ): RegularSeasonScheduleSolveResult = when (val plan = solveRegularSeasonPlan(dynastyId, seasonIndex)) {
+        null -> RegularSeasonScheduleSolveResult.MissingContext
+        else -> {
+            val budget = tournamentInvitesRepository.loadState(dynastyId, seasonIndex).slotBudget
+            val validation = PreseasonScheduleValidator.validate(plan, budget)
+            if (!validation.isValid) {
+                RegularSeasonScheduleSolveResult.Invalid(validation)
+            } else {
+                persistPlan(dynastyId, seasonIndex, plan)
+                leagueScheduleRepository.generateAndPersist(dynastyId, seasonIndex)
+                RegularSeasonScheduleSolveResult.Saved(plan)
+            }
+        }
+    }
+
+    suspend fun solveAndSaveRegularSeason(dynastyId: String, seasonIndex: Int): PreseasonSchedulePlan? =
+        when (val outcome = buildRegularSeasonSchedule(dynastyId, seasonIndex)) {
+            is RegularSeasonScheduleSolveResult.Saved -> outcome.plan
+            else -> null
+        }
+
+    private suspend fun solveRegularSeasonPlan(dynastyId: String, seasonIndex: Int): PreseasonSchedulePlan? {
         val coach = database.dynastyCoachDao().getByDynastyId(dynastyId) ?: return null
         val index = packRepository.activeSession().index
         val userTeam = index.team(coach.userTeamId) ?: return null
@@ -107,12 +149,13 @@ class PreseasonScheduleRepository(
             seed = dynastyId.hashCode().toLong() xor seasonIndex.toLong(),
             exhibitionStubs = exhibitionStubs,
         )
-        if (!plan.isValidFor(budget)) return null
+        return plan
+    }
+
+    private suspend fun persistPlan(dynastyId: String, seasonIndex: Int, plan: PreseasonSchedulePlan) {
         context.preseasonScheduleStore.edit { prefs ->
             prefs[planKey(dynastyId, seasonIndex)] = encodePlan(plan)
         }
-        leagueScheduleRepository.generateAndPersist(dynastyId, seasonIndex)
-        return plan
     }
 
     private fun exhibitionKey(dynastyId: String, seasonIndex: Int) =
