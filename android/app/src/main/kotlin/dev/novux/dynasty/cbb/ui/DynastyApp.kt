@@ -132,6 +132,7 @@ fun DynastyApp(
                 mutableStateOf<dev.novux.dynasty.cbb.core.discipline.PendingDisciplineIncident?>(null)
             }
             var postgameInjuryRefreshKey by remember { mutableIntStateOf(0) }
+            var disciplineDashboardRefreshKey by remember { mutableIntStateOf(0) }
             var watchPostgameEvents by remember {
                 mutableStateOf<List<dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent>>(emptyList())
             }
@@ -231,6 +232,7 @@ fun DynastyApp(
                     coachEmploymentRepository = coachEmploymentRepository,
                     hubMenuCallbacks = hubMenuCallbacks,
                     postgameInjuryRefreshKey = postgameInjuryRefreshKey,
+                    disciplineDashboardRefreshKey = disciplineDashboardRefreshKey,
                     showNotificationFeed = appSettings.showDashboardNotificationFeed,
                     onOpenRecruitingTab = { tab ->
                         recruitingLaunchTab = tab
@@ -444,6 +446,7 @@ fun DynastyApp(
                             disciplineRepository = app.disciplineRepository,
                             onResolved = {
                                 disciplineIncident = null
+                                disciplineDashboardRefreshKey++
                                 navController.popBackToInShellDashboard()
                             },
                             onBack = { navController.popBackStack() },

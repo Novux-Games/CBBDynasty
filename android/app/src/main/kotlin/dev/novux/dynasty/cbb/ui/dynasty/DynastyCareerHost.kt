@@ -62,6 +62,7 @@ fun DynastyCareerHost(
     coachEmploymentRepository: CoachEmploymentRepository,
     hubMenuCallbacks: DynastyHubMenuCallbacks,
     postgameInjuryRefreshKey: Int,
+    disciplineDashboardRefreshKey: Int,
     showNotificationFeed: Boolean,
     onOpenRecruitingTab: (RecruitingHubTab) -> Unit,
     onOpenSigningDayFromOffseason: (DashboardDeepLink) -> Unit,
@@ -147,6 +148,7 @@ fun DynastyCareerHost(
                 onOpenGamePreview = onOpenGamePreview,
                 onOpenJobCenter = onOpenJobCenter,
                 postgameInjuryRefreshKey = postgameInjuryRefreshKey,
+                disciplineDashboardRefreshKey = disciplineDashboardRefreshKey,
             )
         }
         null -> Unit

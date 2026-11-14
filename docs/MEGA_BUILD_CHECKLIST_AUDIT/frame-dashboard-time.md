@@ -63,7 +63,7 @@
 | MEGA-FRAME-029 | SHIP | Offseason Week 1 dashboard tasks | `OffseasonWeekOneRequiredDashboardTasks` + required panel → `PlayersLeavingPanel` deep links | `OffseasonScreen.kt` |
 | MEGA-FRAME-030 | SHIP | Coaching Carousel dashboard tasks | `CarouselDashboardTasks` + `DashboardRequiredTasksPanel` on carousel dashboard tab | `CarouselDashboardTasks.kt`, `CoachingCarouselScreen.kt` |
 | MEGA-FRAME-031 | SHIP | In-season play/sim optional task | `DashboardTaskGate.inSeason` optional game tasks | `DynastyShellScreen` |
-| MEGA-FRAME-032 | PARTIAL | Discipline required task | Panel hooks exist; end-to-end sheet flow depends on discipline route | `DashboardRequiredTasksPanel` |
+| MEGA-FRAME-032 | SHIP | Discipline required task | Required card → `DisciplineDecisionBottomSheet`; dedicated pending load + refresh on resolve | `DynastyShellScreen.kt`, `DisciplineDecisionBottomSheet.kt` |
 | MEGA-FRAME-033 | SHIP | End of Season required acknowledge | `SeasonReviewRequiredDashboardTasks` + recap acknowledge gate on Enter offseason | `SeasonReviewScreen.kt` |
 
 ---

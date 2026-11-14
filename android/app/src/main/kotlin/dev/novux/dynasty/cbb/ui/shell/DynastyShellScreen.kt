@@ -112,6 +112,8 @@ import dev.novux.dynasty.cbb.ui.player.PlayerLoyaltyChips
 import dev.novux.dynasty.cbb.ui.postgame.PostgameInjuryFlow
 import dev.novux.dynasty.cbb.ui.coach.AssistantCoachCardScreen
 import dev.novux.dynasty.cbb.ui.coach.CoachPreviewBottomSheet
+import dev.novux.dynasty.cbb.ui.discipline.DisciplineDecisionBottomSheet
+import dev.novux.dynasty.cbb.ui.discipline.rememberDisciplineDecisionSheetState
 import dev.novux.dynasty.cbb.ui.coach.CoachPreviewTarget
 import dev.novux.dynasty.cbb.ui.coach.CoachCardRoute
 import dev.novux.dynasty.cbb.ui.coach.CoachCardTab
@@ -181,6 +183,7 @@ fun DynastyShellScreen(
     onOpenAutomation: () -> Unit = {},
     onOpenJobCenter: () -> Unit = {},
     postgameInjuryRefreshKey: Int = 0,
+    disciplineDashboardRefreshKey: Int = 0,
 ) {
     var loaded by remember(initial) { mutableStateOf(initial) }
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
@@ -207,6 +210,8 @@ fun DynastyShellScreen(
     var postgameEvents by remember { mutableStateOf<List<GameSimInjuryEvent>>(emptyList()) }
     var dismissedInjuryTasks by remember { mutableStateOf(setOf<DashboardTaskId>()) }
     var disciplinePending by remember { mutableStateOf<PendingDisciplineIncident?>(null) }
+    var disciplineSheetTarget by remember { mutableStateOf<PendingDisciplineIncident?>(null) }
+    val disciplineSheetState = rememberDisciplineDecisionSheetState()
     var teamChemistry by remember { mutableStateOf<Int?>(null) }
     var schedulePlan by remember { mutableStateOf<PreseasonSchedulePlan?>(null) }
     var exhibitionCount by remember { mutableStateOf(0) }
@@ -268,6 +273,20 @@ fun DynastyShellScreen(
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint, postgameInjuryRefreshKey) {
         recruitingLedger = recruitingEconomyRepository.loadOrOpenCycle(loaded)
+    }
+
+    // disciplinePendingLoadEffect — [DisciplineDashboardFirstPaint.SHELL_DEDICATED_EFFECT_MARKER]
+    LaunchedEffect(
+        loaded.dynastyId,
+        loaded.metadata.seasonIndex,
+        loaded.weekCheckpoint,
+        postgameInjuryRefreshKey,
+        disciplineDashboardRefreshKey,
+    ) {
+        disciplinePending = disciplineRepository.loadState(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        ).pending
     }
 
     val incomingClassSeedRepository = context.requireDynastyApplication().incomingClassSeedRepository
@@ -401,7 +420,6 @@ fun DynastyShellScreen(
         rosterPlayers = rosterRepository.listPlayers(loaded.dynastyId)
         fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
         rosterPreview = fullRoster.take(6)
-        disciplinePending = disciplineRepository.loadState(loaded.dynastyId, loaded.metadata.seasonIndex).pending
         postgameEvents = rosterRepository.peekPostgameInjuries(loaded.dynastyId)
         newsHeadlines = newsFeedRepository.shallowFeed(
             loaded.dynastyId,
@@ -557,6 +575,18 @@ fun DynastyShellScreen(
         }
     }
 
+    val refreshDisciplineAndRoster: suspend () -> Unit = {
+        disciplinePending = disciplineRepository.loadState(loaded.dynastyId, loaded.metadata.seasonIndex).pending
+        rosterPlayers = rosterRepository.listPlayers(loaded.dynastyId)
+        fullRoster = rosterRepository.listDynastyPlayers(loaded.dynastyId)
+    }
+
+    LaunchedEffect(disciplineSheetTarget) {
+        if (disciplineSheetTarget != null) {
+            disciplineSheetState.show()
+        }
+    }
+
     careerModal?.let { modal ->
         CareerBlockNotificationDialog(
             item = modal,
@@ -592,6 +622,21 @@ fun DynastyShellScreen(
             when (target) {
                 is CoachPreviewTarget.HeadCoach -> openHeadCoachFull(target.card)
                 is CoachPreviewTarget.Assistant -> openAssistantFull(target.card)
+            }
+        },
+    )
+
+    DisciplineDecisionBottomSheet(
+        incident = disciplineSheetTarget,
+        dynastyId = loaded.dynastyId,
+        seasonIndex = loaded.metadata.seasonIndex,
+        disciplineRepository = disciplineRepository,
+        sheetState = disciplineSheetState,
+        onDismiss = { disciplineSheetTarget = null },
+        onResolved = {
+            scope.launch {
+                refreshDisciplineAndRoster()
+                disciplineSheetTarget = null
             }
         },
     )
@@ -904,7 +949,7 @@ fun DynastyShellScreen(
                 DashboardRequiredTasksPanel(
                     tasks = dashboardTasks.required,
                     onOpenSigningDay = onOpenSigningDay,
-                    onOpenDiscipline = { disciplinePending?.let(onOpenDiscipline) },
+                    onOpenDiscipline = { disciplinePending?.let { disciplineSheetTarget = it } },
                 )
                 DashboardOptionalTasksPanel(
                     tasks = dashboardTasks.optional,
