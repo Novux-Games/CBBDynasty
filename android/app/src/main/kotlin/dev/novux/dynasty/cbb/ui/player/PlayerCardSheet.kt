@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
+import dev.novux.dynasty.cbb.core.player.PlayerCardMultiTabPolicy
 import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
 import dev.novux.dynasty.cbb.ui.portrait.PlayerPortraitSlot
 
@@ -68,6 +69,15 @@ fun PlayerCardPreviewSheet(
                 modifier = Modifier.padding(bottom = 8.dp),
                 compact = true,
                 nationalTop60RankByPlayerId = nationalTop60RankByPlayerId,
+            )
+            Text(
+                text = stringResource(
+                    R.string.player_card_multi_tab_hint,
+                    PlayerCardMultiTabPolicy.tabCount,
+                ),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 8.dp),
             )
             Button(
                 onClick = {

@@ -96,6 +96,7 @@
     <string name="new_settings_unlimited_age">Unlimited coach age</string>
     <string name="new_settings_unlimited_age_summary">When off, head coach retires at 75.</string>
     <string name="new_settings_import_stub">After you start a dynasty, open Home → Settings → Import identity pack to load a custom JSON or TXT overlay (attestation required).</string>
+    <string name="new_settings_starting_season">First season %1$s — you start in offseason week 1.</string>
     <string name="new_step_coach_title">Coach</string>
     <string name="new_step_coach_subtitle">Name, age, and appearance presets.</string>
     <string name="new_step_archetype_title">Archetype</string>
@@ -734,6 +735,7 @@
     <string name="player_card_headline_ratings">OVR %1$d · OFF %2$d · DEF %3$d</string>
     <string name="player_card_scout_ovr">Scout OVR: %1$s</string>
     <string name="player_card_preview_title">Player preview</string>
+    <string name="player_card_multi_tab_hint">View more opens %1$d tabs — overview, ratings, stats, games, and history.</string>
     <string name="player_card_back">Back</string>
     <string name="player_card_edit">Edit</string>
     <string name="player_card_edit_hint">Rotation, redshirt, and promise edits stay on Strategy and roster flows until dedicated edit mode ships.</string>
@@ -1139,6 +1141,7 @@
     <string name="statistics_hub_cat_bpg">Blocks per game</string>
     <string name="statistics_hub_leader_line">#%1$d %2$s · %3$s — %4$s (%5$d GP)</string>
     <string name="statistics_hub_empty_season">Stat leaders update after your team completes a few regular-season games.</string>
+    <string name="statistics_hub_cadence_hint">National and conference leaders refresh from your simmed game box scores.</string>
     <string name="statistics_hub_no_qualifiers">No qualifiers yet.</string>
     <string name="statistics_hub_no_conference">Conference not found.</string>
     <string name="rankings_hub_title">Team rankings</string>
@@ -1152,6 +1155,9 @@
     <string name="rankings_hub_conf_row">%1$s — %2$d–%3$d</string>
     <string name="history_hub_title">History</string>
     <string name="history_hub_placeholder">Dynasty archive, GOAT, and the record book will live here once league history is online.</string>
+    <string name="history_hub_cadence_hint">GOAT ranks and year cards finalize after each End of Season week.</string>
+    <string name="history_tab_records">Record book</string>
+    <string name="history_records_empty">No program or player records logged yet this dynasty.</string>
     <string name="history_tab_goat">GOAT</string>
     <string name="history_tab_archive">Year archive</string>
     <string name="history_goat_empty">Complete an End of Season week to publish GOAT ranks.</string>

@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.statistics.StatisticsHubFramePolicy
 import dev.novux.dynasty.cbb.core.statistics.StatLeaderRow
 import dev.novux.dynasty.cbb.core.statistics.StatisticsHubSnapshot
 import dev.novux.dynasty.cbb.core.statistics.StatisticsLeaderboards
@@ -50,7 +51,7 @@ fun StatisticsHubScreen(
         OutlinedButton(onClick = onBack, modifier = Modifier.padding(horizontal = 16.dp)) {
             Text(stringResource(R.string.dynasty_shell_back))
         }
-        if (!snapshot.hasStats) {
+        if (!StatisticsHubFramePolicy.showLiveLeaderboards(snapshot)) {
             Text(
                 text = stringResource(R.string.statistics_hub_empty_season),
                 style = MaterialTheme.typography.bodyLarge,
@@ -58,6 +59,12 @@ fun StatisticsHubScreen(
             )
             return
         }
+        Text(
+            text = stringResource(R.string.statistics_hub_cadence_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+        )
         PrimaryTabRow(selectedTabIndex = tabIndex) {
             StatisticsHubTab.entries.forEachIndexed { index, tab ->
                 Tab(

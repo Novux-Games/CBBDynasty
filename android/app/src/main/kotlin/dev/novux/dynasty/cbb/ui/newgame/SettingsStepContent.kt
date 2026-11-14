@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.save.NewGameDynastySettings
+import dev.novux.dynasty.cbb.core.save.NewGameWizardSeasonPolicy
 
 @Composable
 fun SettingsStepContent(
@@ -21,6 +22,14 @@ fun SettingsStepContent(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
+        Text(
+            text = stringResource(
+                R.string.new_settings_starting_season,
+                NewGameWizardSeasonPolicy.startingMembershipYearLabel(),
+            ),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(bottom = 16.dp),
+        )
         DynastyToggleRow(
             title = stringResource(R.string.new_settings_auto_upgrade),
             summary = stringResource(R.string.new_settings_auto_upgrade_summary),

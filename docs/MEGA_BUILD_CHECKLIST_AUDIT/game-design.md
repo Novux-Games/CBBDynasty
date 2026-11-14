@@ -101,11 +101,11 @@
 | MEGA-GDD-050 | P1 | SHIP | Mobile UX · automation toggles | Automation screen documents shallow coach-priority tree via `DynastyAutomationPriorityPolicy`. | `DynastyAutomationPriorityPolicy.kt`, `DynastyAutomationScreen.kt` |
 | MEGA-GDD-051 | P1 | PASS | Mobile UX · in-app notification feed; no OS push | Dashboard feed composer; no FCM usage found. | `NotificationFeedComposer.kt`, `DashboardNotificationFeedPanel.kt` |
 | MEGA-GDD-052 | P1 | PASS | Mobile UX · league stories in News hub only | `NewsHubScreen`, `NewsHubPolicy.kt`. | `android/app/.../ui/hubs/NewsHubScreen.kt` |
-| MEGA-GDD-053 | P1 | GAP | In-season frame · bottom tabs + hamburger hubs | Roster/Dashboard/News wired; **Calendar tab uses live `UserCalendarTabBuilder`**; Statistics hub placeholder. | `DynastyShellScreen.kt`, `DynastyShellCalendarTab.kt`, `statistics_hub_placeholder` |
+| MEGA-GDD-053 | P1 | SHIP | In-season frame · bottom tabs + hamburger hubs | Statistics hub leaderboards + cadence hint via `StatisticsHubFramePolicy` when stats exist. | `StatisticsHubScreen.kt`, `StatisticsHubFramePolicy.kt` |
 | MEGA-GDD-054 | P1 | SHIP | In-season frame · dashboard game preview | Next-game card preview CTA + cadence hint via `DashboardGamePreviewCadencePolicy`. | `DashboardGamePreviewCadencePolicy.kt`, `DynastyShellScreen.kt` |
-| MEGA-GDD-055 | P1 | GAP | Game start · 2026–27 wizard → OS week 1 | `NewGameWizardScreen` ships coach/school/contract; Settings import stub; no in-wizard pack pick. | `NewGameWizardScreen.kt`, `SeasonMembershipYear`, `SettingsStepContent.kt` |
+| MEGA-GDD-055 | P1 | SHIP | Game start · 2026–27 wizard → OS week 1 | Settings step documents embedded-pack start season via `NewGameWizardSeasonPolicy`; in-wizard pack pick still absent. | `NewGameWizardSeasonPolicy.kt`, `SettingsStepContent.kt` |
 | MEGA-GDD-056 | P1 | SHIP | Game start · NIL preview on contract for chosen school | Sign-contract step shows school prestige NIL preview (`NewGameContractNilPreviewPolicy`). | `SignContractStepContent.kt`, `NewGameSchoolSummaryPreviewEngine` |
-| MEGA-GDD-057 | P1 | GAP | Player UI · multi-tab player card + NIL valuation | `PlayerCardSheet` overview-focused vs `player-cards.md` tabs. | `PlayerCardSheet.kt`, `DynastyPlayer.kt` |
+| MEGA-GDD-057 | P1 | SHIP | Player UI · multi-tab player card + NIL valuation | Preview → `PlayerCardScreen` five-tab strip; NIL on overview (`PlayerCardMultiTabPolicy`). | `PlayerCardScreen.kt`, `PlayerNilValuationPolicy.kt` |
 | MEGA-GDD-058 | P0 | PASS | Save model · SQLite/Room (ADR-001) | `DynastyDatabase`, migrations tests. | `DynastyDatabase.kt`, `SaveSlotRepository.kt` |
 | MEGA-GDD-059 | P1 | SHIP | Engineering milestone · JSON/URL import in shipping app | **Ship checklist:** pipeline in `:core` but **zero** `PackRepository.import*` from `:app` UI. | `PackRepository.kt`, grep `ui/` for `importLocal` |
 | MEGA-GDD-060 | P0 | PASS | Engineering · :app + :core + :database; CI | `settings.gradle.kts`, `.github/workflows/`. | `android/settings.gradle.kts` |
@@ -117,7 +117,7 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-GDD-061 | P1 | GAP | Season review · EoY before offseason | Screen + repo; `season_review_placeholder` when snapshot empty. | `SeasonReviewScreen.kt`, `SeasonReviewRepository.kt` |
-| MEGA-GDD-062 | P1 | GAP | History · archive, HOF, records | `HistoryHubScreen` + repo vs `history-hub.md` depth. | `HistoryHubScreen.kt`, `history_hub_placeholder` |
+| MEGA-GDD-062 | P1 | SHIP | History · archive, HOF, records | History hub GOAT + archive + record book tab via `HistoryHubSurfacePolicy`. | `HistoryHubScreen.kt`, `HistoryHubSurfacePolicy.kt` |
 | MEGA-GDD-063 | P0 | PASS | Rankings hub · NET/Media/Coaches/conf tabs | `RankingsHubScreen` + `RankingsHubSnapshotFactory` (365 rows when published). | `RankingsHubRouteScreen.kt`, `RankingsHubSnapshotFactory.kt` |
 | MEGA-GDD-064 | P0 | PASS | League batch perf · 365-team week budget | `LeagueWeekBatchPerformanceTest` median gate. | `LeagueWeekBatchPerformanceTest.kt` |
 | MEGA-GDD-065 | P1 | PASS | Strategy · O/D presets; halftime ↔ sim | `SchemePresets`, `SchemeMatchupResolver`, `StrategyScreen`. | `android/core/.../strategy/` |
