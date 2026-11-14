@@ -154,7 +154,7 @@
 |----|--------|--------------|---------|--------------|
 | MEGA-FRAME-079 | SHIP | Bye week advance allowed | `ByeWeekPolicy.canAdvanceWeek` always true in-season | core tests |
 | MEGA-FRAME-080 | SHIP | Injury weeks tick on bye advance | `InjuryByeAdvanceConfirmPolicy` — bye copy + simple advance tail; `userOnByeWeek` in repository | `InjuryByeAdvanceConfirmPolicy`, `SimWeekAdvanceDialog` |
-| MEGA-FRAME-081 | GAP | Early-event bye weeks on calendar | Calendar may not mark eliminated-team event bye weeks distinctly | `time-system.md#byes-after-elimination` |
+| MEGA-FRAME-081 | SHIP | Early-event bye weeks on calendar | `EarlySeasonUserCalendarByes` + `UserCalendarRowKind.EventEliminationBye` in shell calendar tab | `UserCalendarRepository`, `DynastyShellCalendarTab.kt` |
 | MEGA-FRAME-082 | GAP | Conf tourney shorter-bracket bye | Cross-conference bye weeks not called out in UI | `time-system.md#conference-tournaments` |
 | MEGA-FRAME-083 | PARTIAL | Week advance league batch sim | Repository advances checkpoint — full league batch visibility N/A in UI | `SaveSlotRepository.advanceDynastyWeek` |
 | MEGA-FRAME-084 | GAP | Season review week no bottom-tab games | Season review screen — confirm calendar empty / copy | `SeasonReviewScreen` |
@@ -271,7 +271,7 @@
 | MEGA-FRAME-146 | GAP | Conf tournament week N in header | `CalendarWeekLabel` has conf tournament strings — verify **N** tracks pack max rounds in live save | `CalendarWeekLabel.kt`, `time-system.md#conference-tournaments` |
 | MEGA-FRAME-147 | SHIP | Postseason round labels | Same as MEGA-FRAME-016 — round name in week header on calendar tab | `CalendarWeekLabel.kt` |
 | MEGA-FRAME-148 | GAP | Exhibition empty week copy | No dedicated empty-slot message when 0 exhibitions in a window | `time-system.md#exhibition-weeks` |
-| MEGA-FRAME-149 | GAP | Event bye after elimination | Eliminated early-event teams’ bye weeks not visually distinct from generic empty week | `time-system.md#byes-after-elimination` |
+| MEGA-FRAME-149 | SHIP | Event bye after elimination | Shared with 081 — Event bye chip + event detail copy on calendar | `DynastyShellCalendarTab.kt` |
 | MEGA-FRAME-150 | PARTIAL | Preseason single-week label | `CalendarWeekLabel` → “Preseason” — does not echo “setup week” in calendar tab | `CalendarWeekLabel.kt` |
 | MEGA-FRAME-151 | GAP | End of Season vs review | Label **End of Season — {year}** exists — season review screen phase copy alignment check | `SeasonReviewGate`, `CalendarWeekLabel` |
 | MEGA-FRAME-152 | PARTIAL | RS week 1–32 batching | UI week index matches save checkpoint — league-wide batch invisible (expected) | `WeekCheckpointRepository.advanceWeek` |

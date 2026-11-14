@@ -6,6 +6,8 @@ import dev.novux.dynasty.cbb.core.schedule.ScheduleGameKind
 enum class UserCalendarRowKind {
     Game,
     Bye,
+    /** Eliminated from early-season event — remaining event weeks with no game ([planning/time-system.md]). */
+    EventEliminationBye,
     OffWeek,
 }
 
@@ -38,4 +40,5 @@ data class UserCalendarWeekRow(
     val rowKind: UserCalendarRowKind,
     val games: List<UserCalendarGameEntry>,
     val isCurrentWeek: Boolean,
+    val eventEliminationByeEventName: String? = null,
 )

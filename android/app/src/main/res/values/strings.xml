@@ -804,7 +804,7 @@
     <string name="postgame_medical_redshirt_confirm_cancel">Not now</string>
     <string name="postgame_medical_redshirt_ineligible">Medical redshirt not available for this injury.</string>
     <string name="postgame_medical_redshirt_exhibition">Medical redshirt is not available after exhibition games.</string>
-    <string name="postgame_medical_redshirt_too_many_games">Medical redshirt unavailable (%1$d regular-season games already played).</string>
+    <string name="postgame_medical_redshirt_too_many_games">Medical redshirt not offered (%1$d regular-season games already played).</string>
     <string name="strategy_title">Strategy</string>
     <string name="strategy_starters">Starting five</string>
     <string name="strategy_bench">Rotation</string>
@@ -987,6 +987,8 @@
     <string name="shell_roster_empty">No players on roster yet.</string>
     <string name="shell_calendar_placeholder">Full schedule and bye weeks arrive in the calendar tab update.</string>
     <string name="shell_calendar_bye">Bye</string>
+    <string name="shell_calendar_event_elimination_bye">Event bye</string>
+    <string name="shell_calendar_event_elimination_bye_detail">Out of %1$s — no game this week.</string>
     <string name="shell_calendar_current">This week</string>
     <string name="shell_calendar_upcoming">Upcoming</string>
     <string name="shell_calendar_played">Played</string>

@@ -200,6 +200,22 @@ private fun CalendarWeekCard(
                 UserCalendarRowKind.Bye -> {
                     AssistChip(onClick = {}, label = { Text(stringResource(R.string.shell_calendar_bye)) })
                 }
+                UserCalendarRowKind.EventEliminationBye -> {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        AssistChip(
+                            onClick = {},
+                            label = { Text(stringResource(R.string.shell_calendar_event_elimination_bye)) },
+                        )
+                        Text(
+                            text = stringResource(
+                                R.string.shell_calendar_event_elimination_bye_detail,
+                                row.eventEliminationByeEventName.orEmpty(),
+                            ),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
                 UserCalendarRowKind.OffWeek -> {
                     val copy = if (row.phase == CalendarPhase.Exhibition) {
                         stringResource(R.string.shell_calendar_exhibition_empty)

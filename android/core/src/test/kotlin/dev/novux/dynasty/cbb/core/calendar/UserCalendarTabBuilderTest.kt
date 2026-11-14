@@ -1,5 +1,8 @@
 package dev.novux.dynasty.cbb.core.calendar
 
+import dev.novux.dynasty.cbb.core.preseason.tournament.EarlySeasonBracketSeason
+import dev.novux.dynasty.cbb.core.preseason.tournament.EarlySeasonBracketSnapshot
+import dev.novux.dynasty.cbb.core.preseason.tournament.EarlySeasonEventCatalog
 import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
 import dev.novux.dynasty.cbb.core.schedule.ScheduleGameKind
 import dev.novux.dynasty.cbb.core.schedule.ScheduledGameStub
@@ -90,6 +93,41 @@ class UserCalendarTabBuilderTest {
         assertEquals(2, week2.games.size)
         assertEquals(ScheduleGameKind.NonConference, week2.games[0].gameKind)
         assertEquals(ScheduleGameKind.Conference, week2.games[1].gameKind)
+    }
+
+    @Test
+    fun regularSeason_eventEliminationByeDistinctFromGenericBye() {
+        val event = EarlySeasonEventCatalog.blueBloodTipOff
+        val snapshot = EarlySeasonBracketSnapshot(
+            eventTemplateId = event.templateId,
+            seasonIndex = 1,
+            seeds = listOf("user", "b", "c", "d"),
+            eliminatedAtRsWeek = mapOf("user" to 1),
+            completedRsWeeks = setOf(1),
+        )
+        val season = EarlySeasonBracketSeason(1, mapOf(event.templateId to snapshot))
+        val eventByes = EarlySeasonUserCalendarByes.eliminationByeWeekLabels(season, "user")
+        assertEquals(event.displayName, eventByes[2])
+
+        val plan = PreseasonSchedulePlan(
+            exhibitions = emptyList(),
+            regularSeason = emptyList(),
+            conferenceGameCount = 0,
+            nonConferenceGameCount = 0,
+            earlyEventGameCount = 0,
+        )
+        val rows = UserCalendarTabBuilder.build(
+            activePosition = CalendarPosition(1, CalendarPhase.RegularSeason, 2),
+            plan = plan,
+            exhibitionCount = 0,
+            eventEliminationByeWeeks = eventByes,
+        )
+        val week2 = rows.first { it.phase == CalendarPhase.RegularSeason && it.weekIndex == 2 }
+        assertEquals(UserCalendarRowKind.EventEliminationBye, week2.rowKind)
+        assertEquals(event.displayName, week2.eventEliminationByeEventName)
+
+        val week3 = rows.first { it.phase == CalendarPhase.RegularSeason && it.weekIndex == 3 }
+        assertEquals(UserCalendarRowKind.Bye, week3.rowKind)
     }
 
     @Test

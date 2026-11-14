@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb.data.calendar
 
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.calendar.ConferenceTournamentCalendar
+import dev.novux.dynasty.cbb.core.calendar.EarlySeasonUserCalendarByes
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarGameEnricher
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarTabBuilder
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarWeekRow
@@ -20,6 +21,7 @@ class UserCalendarRepository(
     private val database: DynastyDatabase,
     private val weekCheckpointRepository: dev.novux.dynasty.cbb.data.calendar.WeekCheckpointRepository,
     private val dashboardLastGameRepository: DashboardLastGameRepository,
+    private val earlySeasonBracketRepository: dev.novux.dynasty.cbb.data.preseason.EarlySeasonBracketRepository,
 ) {
     suspend fun loadCalendarRows(
         dynastyId: String,
@@ -51,6 +53,13 @@ class UserCalendarRepository(
         } else {
             ConferenceCalendarContext()
         }
+        val userTeamId = coach?.userTeamId
+        val eventEliminationByes = if (userTeamId != null) {
+            val bracketSeason = earlySeasonBracketRepository.load(dynastyId, seasonIndex)
+            EarlySeasonUserCalendarByes.eliminationByeWeekLabels(bracketSeason, userTeamId)
+        } else {
+            emptyMap()
+        }
         val built = UserCalendarTabBuilder.build(
             activePosition = activePosition,
             plan = plan,
@@ -59,8 +68,9 @@ class UserCalendarRepository(
             conferenceTourneyGamesByWeek = confContext.gamesByWeek,
             conferenceTourneyQualified = confContext.qualified,
             conferenceTourneySimmed = confContext.bracketSimmed,
+            eventEliminationByeWeeks = eventEliminationByes,
         )
-        val userTeamId = coach?.userTeamId ?: return built
+        if (userTeamId == null) return built
         val checkpoint = weekCheckpointRepository.loadCheckpoint(dynastyId)
         val lastGame = dashboardLastGameRepository.load(dynastyId, seasonIndex)
         return UserCalendarGameEnricher.enrichRows(
