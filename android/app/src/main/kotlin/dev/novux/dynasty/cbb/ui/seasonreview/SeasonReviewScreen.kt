@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.gestures.animateScrollTo
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -26,13 +28,17 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.calendar.OffseasonEntryKind
 import dev.novux.dynasty.cbb.core.calendar.OffseasonEntryRouter
 import dev.novux.dynasty.cbb.core.calendar.SeasonReviewGate
+import dev.novux.dynasty.cbb.core.dashboard.SeasonReviewRequiredDashboardTasks
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
+import dev.novux.dynasty.cbb.core.seasonreview.SeasonReviewProgress
 import dev.novux.dynasty.cbb.core.seasonreview.SeasonReviewSnapshot
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.data.save.ActiveDynastySession
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
+import dev.novux.dynasty.cbb.data.seasonreview.SeasonReviewProgressRepository
 import dev.novux.dynasty.cbb.data.seasonreview.SeasonReviewRepository
+import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellCalendarTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
@@ -46,6 +52,7 @@ fun SeasonReviewScreen(
     loaded: LoadedDynasty,
     saveSlotRepository: SaveSlotRepository,
     seasonReviewRepository: SeasonReviewRepository,
+    seasonReviewProgressRepository: SeasonReviewProgressRepository,
     onReturnedHome: () -> Unit,
     onEnteredOffseason: (LoadedDynasty) -> Unit = { onReturnedHome() },
     userCalendarRepository: UserCalendarRepository,
@@ -57,11 +64,25 @@ fun SeasonReviewScreen(
     val menu = listOf(DynastyShellMenuAction(R.string.shell_menu_exit_home, onReturnedHome))
     var snapshot by remember { mutableStateOf<SeasonReviewSnapshot?>(null) }
     var loading by remember { mutableStateOf(true) }
+    var reviewProgress by remember { mutableStateOf(SeasonReviewProgress()) }
+    val recapScrollState = rememberScrollState()
+    var scrollToRecap by remember { mutableStateOf(false) }
+    val requiredTasks = SeasonReviewRequiredDashboardTasks.build(reviewProgress)
+    val canEnterOffseason =
+        SeasonReviewGate.canEnterOffseason(loaded.weekCheckpoint, reviewProgress.acknowledged)
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
         loading = true
+        reviewProgress = seasonReviewProgressRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
         snapshot = seasonReviewRepository.loadSnapshot(loaded)
         loading = false
+    }
+
+    LaunchedEffect(scrollToRecap) {
+        if (scrollToRecap) {
+            recapScrollState.animateScrollTo(0)
+            scrollToRecap = false
+        }
     }
 
     DynastyShellChrome(
@@ -98,6 +119,11 @@ fun SeasonReviewScreen(
                     text = stringResource(R.string.season_review_subtitle),
                     style = MaterialTheme.typography.bodyLarge,
                 )
+                DashboardRequiredTasksPanel(
+                    tasks = requiredTasks,
+                    onOpenSigningDay = {},
+                    onOpenSeasonReviewRecap = { scrollToRecap = true },
+                )
                 when {
                     loading -> {
                         Column(
@@ -119,6 +145,16 @@ fun SeasonReviewScreen(
                         SeasonReviewScrollContent(
                             snapshot = snapshot!!,
                             modifier = Modifier.weight(1f, fill = false),
+                            scrollState = recapScrollState,
+                            showAcknowledgeAction = !reviewProgress.acknowledged,
+                            onAcknowledge = {
+                                scope.launch {
+                                    reviewProgress = seasonReviewProgressRepository.acknowledge(
+                                        loaded.dynastyId,
+                                        loaded.metadata.seasonIndex,
+                                    )
+                                }
+                            },
                         )
                     }
                     else -> {
@@ -146,7 +182,7 @@ fun SeasonReviewScreen(
                 Button(
                     onClick = {
                         scope.launch {
-                            if (!SeasonReviewGate.canEnterOffseason(loaded.weekCheckpoint)) return@launch
+                            if (!canEnterOffseason) return@launch
                             when (
                                 val result = saveSlotRepository.completeSeasonReviewEnterOffseason(loaded.slotIndex)
                             ) {
@@ -159,7 +195,7 @@ fun SeasonReviewScreen(
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = SeasonReviewGate.canEnterOffseason(loaded.weekCheckpoint),
+                    enabled = canEnterOffseason,
                 ) {
                     Text(stringResource(R.string.season_review_enter_offseason))
                 }

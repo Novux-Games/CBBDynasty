@@ -25,6 +25,7 @@ fun DashboardRequiredTasksPanel(
     tasks: List<DashboardTask>,
     onOpenSigningDay: (DashboardDeepLink) -> Unit,
     onOpenDiscipline: () -> Unit = {},
+    onOpenSeasonReviewRecap: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     if (tasks.isEmpty()) return
@@ -49,10 +50,10 @@ fun DashboardRequiredTasksPanel(
                     Text(text = requiredTaskMessage(task), style = MaterialTheme.typography.bodyLarge)
                     OutlinedButton(
                         onClick = {
-                            if (task.deepLink == DashboardDeepLink.DisciplineSheet) {
-                                onOpenDiscipline()
-                            } else {
-                                onOpenSigningDay(task.deepLink)
+                            when (task.deepLink) {
+                                DashboardDeepLink.DisciplineSheet -> onOpenDiscipline()
+                                DashboardDeepLink.SeasonReviewRecap -> onOpenSeasonReviewRecap()
+                                else -> onOpenSigningDay(task.deepLink)
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
@@ -86,6 +87,8 @@ private fun requiredTaskMessage(task: DashboardTask): String = when (task.id) {
         R.string.dashboard_task_week_one_transfer,
         task.stringFormatArgs.firstOrNull().orEmpty(),
     )
+    DashboardTaskId.SeasonReviewAcknowledge ->
+        stringResource(R.string.dashboard_task_season_review_acknowledge)
     else -> task.id.name
 }
 

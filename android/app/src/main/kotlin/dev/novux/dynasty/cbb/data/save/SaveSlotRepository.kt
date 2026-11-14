@@ -72,6 +72,7 @@ import dev.novux.dynasty.cbb.data.coach.CoachAchievementsRepository
 import dev.novux.dynasty.cbb.data.coach.CoachSkillPointRepository
 import dev.novux.dynasty.cbb.data.recruiting.AiRecruitingRepository
 import dev.novux.dynasty.cbb.data.recruiting.RecruitingEconomyRepository
+import dev.novux.dynasty.cbb.data.seasonreview.SeasonReviewProgressRepository
 import dev.novux.dynasty.cbb.data.sim.SimTuningRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
 import dev.novux.dynasty.cbb.database.dynasty.toCoachEntity
@@ -119,6 +120,7 @@ class SaveSlotRepository(
     private val newsFeedRepository: NewsFeedRepository,
     private val userLeagueGameSimFactory: UserLeagueGameSimFactory,
     private val coachAchievementsRepository: CoachAchievementsRepository,
+    private val seasonReviewProgressRepository: SeasonReviewProgressRepository,
 ) {
     private val slotDao = database.saveSlotDao()
     private val metadataDao = database.dynastyMetadataDao()
@@ -939,10 +941,20 @@ class SaveSlotRepository(
             is DynastyLoadResult.Success -> initial.loaded
             else -> return initial
         }
-        if (!SeasonReviewGate.canEnterOffseason(loaded.weekCheckpoint)) {
+        val reviewProgress = seasonReviewProgressRepository.load(
+            loaded.dynastyId,
+            loaded.metadata.seasonIndex,
+        )
+        if (!SeasonReviewGate.canEnterOffseason(loaded.weekCheckpoint, reviewProgress.acknowledged)) {
             return DynastyLoadResult.Unreadable(
                 slotIndex,
-                DynastyLoadFailure.InvalidCalendar("dynasty is not in End of Season week"),
+                DynastyLoadFailure.InvalidCalendar(
+                    if (SeasonReviewGate.isActive(loaded.weekCheckpoint) && !reviewProgress.acknowledged) {
+                        "acknowledge season recap before entering offseason"
+                    } else {
+                        "dynasty is not in End of Season week"
+                    },
+                ),
             )
         }
         val advancePlan = SeasonYearAdvanceEngine.planEnterOffseason(loaded.weekCheckpoint)

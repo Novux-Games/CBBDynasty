@@ -344,6 +344,8 @@ fun DynastyApp(
                             loaded = session,
                             saveSlotRepository = saveSlotRepository,
                             seasonReviewRepository = LocalContext.current.requireDynastyApplication().seasonReviewRepository,
+                            seasonReviewProgressRepository =
+                                LocalContext.current.requireDynastyApplication().seasonReviewProgressRepository,
                             onReturnedHome = {
                                 navController.popBackStack(AppRoute.Home.route, inclusive = false)
                             },

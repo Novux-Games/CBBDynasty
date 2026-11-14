@@ -40,7 +40,7 @@
 | MEGA-NOTES-018 | P2 | GAP | Time system — NCBA round names on calendar | Postseason calendar rows lack Opening Round / Super 16 copy from `ncba-branding`. | `MEGA-FRAME-016`; `DynastyShellCalendarTab.kt` |
 | MEGA-NOTES-019 | P1 | PARTIAL | Offseason calendar **Done** | `OffseasonScreen` + week headings 1–10; dashboard required cards uneven by week. | `MEGA-FRAME-028`–`030`; `OffseasonScreen.kt` |
 | MEGA-NOTES-020 | P1 | PARTIAL | Preseason setup **Done** | Eight required tasks + Start season gate; deep links from task cards thin. | `MEGA-FRAME-025`–`027`; `PreseasonScreen.kt` |
-| MEGA-NOTES-021 | P1 | GAP | End of Season week **Done** | `SeasonReviewScreen` in shell; required acknowledge UX vs `season-review.md` incomplete. | `MEGA-FRAME-033`; `SeasonReviewScreen.kt` |
+| MEGA-NOTES-021 | P1 | SHIP | End of Season week **Done** | Required recap acknowledge + Enter offseason gate wired per `season-review.md`. | `MEGA-FRAME-033`; `SeasonReviewScreen.kt` |
 | MEGA-NOTES-022 | P1 | PARTIAL | Dashboard tasks (master index) **Done** | Gate logic exists for in-season/preseason/offseason subsets; many optional/discipline flows partial. | `dashboard-tasks.md` shard; `DashboardTaskGate.kt` |
 | MEGA-NOTES-023 | P1 | PARTIAL | Notifications **Done** | In-app feed composer; not always on offseason/preseason dashboard. | `MEGA-GDD-134`; `NotificationFeedComposer.kt`, `MEGA-FRAME-037` |
 | MEGA-NOTES-024 | P1 | PARTIAL | News hub (portal) **Done** | News tab + headlines route; depth vs `news-hub.md` story tiers partial. | `news-shell-branding.md` shard; `NewsHubScreen.kt` |

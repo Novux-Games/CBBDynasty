@@ -29,6 +29,7 @@ enum class DashboardDeepLink {
     PlayersLeavingRoster,
     PlayersLeavingTransfer,
     PlayersLeavingProDays,
+    SeasonReviewRecap,
     PlayWeekGame,
     CoachCard,
 }
@@ -57,6 +58,7 @@ enum class DashboardTaskId {
     CarouselUserApproval,
     WeekOneProDay,
     WeekOneTransferRetention,
+    SeasonReviewAcknowledge,
 }
 
 data class DashboardTask(

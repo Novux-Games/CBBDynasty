@@ -217,6 +217,9 @@ class DynastyApplication : Application() {
     lateinit var seasonReviewRepository: dev.novux.dynasty.cbb.data.seasonreview.SeasonReviewRepository
         private set
 
+    lateinit var seasonReviewProgressRepository: dev.novux.dynasty.cbb.data.seasonreview.SeasonReviewProgressRepository
+        private set
+
     lateinit var playerStatsRepository: dev.novux.dynasty.cbb.data.player.PlayerStatsRepository
         private set
 
@@ -386,6 +389,8 @@ class DynastyApplication : Application() {
             dynastyRosterRepository,
             dynastyStrategyPrepRepository,
         )
+        seasonReviewProgressRepository =
+            dev.novux.dynasty.cbb.data.seasonreview.SeasonReviewProgressRepository(applicationContext)
         saveSlotRepository = SaveSlotRepository(
             database,
             weekCheckpointRepository,
@@ -410,6 +415,7 @@ class DynastyApplication : Application() {
             newsFeedRepository,
             userLeagueGameSimFactory,
             coachAchievementsRepository,
+            seasonReviewProgressRepository,
         )
         preseasonSeasonStartRepository = PreseasonSeasonStartRepository(
             saveSlotRepository,

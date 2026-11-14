@@ -758,6 +758,8 @@
     <string name="dashboard_task_coach_sunday_points">Sunday coach skill points — %1$d in bank</string>
     <string name="dashboard_task_week_one_pro_day">Run pro day — %1$s</string>
     <string name="dashboard_task_week_one_transfer">Resolve transfer intent — %1$s</string>
+    <string name="dashboard_task_season_review_acknowledge">Review season recap, then acknowledge before entering offseason</string>
+    <string name="season_review_acknowledge_recap">Acknowledge season recap</string>
     <string name="coach_skill_point_bank">Skill points in bank: %1$d</string>
     <string name="coach_skill_tree_title">Skill tree</string>
     <string name="coach_skill_branch_level">%1$s — level %2$d / %3$d</string>

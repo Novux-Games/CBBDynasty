@@ -64,7 +64,7 @@
 | MEGA-FRAME-030 | SHIP | Coaching Carousel dashboard tasks | `CarouselDashboardTasks` + `DashboardRequiredTasksPanel` on carousel dashboard tab | `CarouselDashboardTasks.kt`, `CoachingCarouselScreen.kt` |
 | MEGA-FRAME-031 | SHIP | In-season play/sim optional task | `DashboardTaskGate.inSeason` optional game tasks | `DynastyShellScreen` |
 | MEGA-FRAME-032 | PARTIAL | Discipline required task | Panel hooks exist; end-to-end sheet flow depends on discipline route | `DashboardRequiredTasksPanel` |
-| MEGA-FRAME-033 | GAP | End of Season required acknowledge | Season review advance — verify single required task UX vs season-review spec | `SeasonReviewScreen` |
+| MEGA-FRAME-033 | SHIP | End of Season required acknowledge | `SeasonReviewRequiredDashboardTasks` + recap acknowledge gate on Enter offseason | `SeasonReviewScreen.kt` |
 
 ---
 
