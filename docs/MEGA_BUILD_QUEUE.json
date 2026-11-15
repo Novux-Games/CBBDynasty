@@ -252,27 +252,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
   },
   {
-    "id": "MEGA-SHELL-150",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "news-shell-branding.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
-    "id": "MEGA-SHELL-155",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "news-shell-branding.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
-    "id": "MEGA-SHELL-159",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "news-shell-branding.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
     "id": "MEGA-SHELL-160",
     "pri": "P1",
     "status": "GAP",
@@ -311,13 +290,6 @@
     "id": "MEGA-SHELL-170",
     "pri": "P1",
     "status": "GAP",
-    "shard": "news-shell-branding.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
-    "id": "MEGA-SHELL-175",
-    "pri": "P1",
-    "status": "PARTIAL",
     "shard": "news-shell-branding.md",
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
   },
@@ -1687,28 +1659,7 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
   },
   {
-    "id": "MEGA-RECR-114",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-115",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
     "id": "MEGA-RECR-122",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-123",
     "pri": "P2",
     "status": "GAP",
     "shard": "recruiting-transfer-start.md",

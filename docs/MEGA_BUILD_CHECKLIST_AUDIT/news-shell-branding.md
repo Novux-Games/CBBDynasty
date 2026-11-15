@@ -238,12 +238,12 @@
 | MEGA-SHELL-147 | SHIP | Weekly NET attach on RS advance | `attachWeeklyNet` in league week batch | `LeagueWeekBatchRepository.kt` |
 | MEGA-SHELL-148 | SHIP | NET/poll movement as News stories | `Top25NetMovementNewsEngine` on RS week batch | `NewsFeedRepository.kt` |
 | MEGA-SHELL-149 | SHIP | Rankings hub NET / Media / Coaches tabs | Full hub when polls published | `RankingsHubScreen.kt` |
-| MEGA-SHELL-150 | PARTIAL | Rankings vs News Recruits disambiguation | Separate hubs — no cross-link from hamburger Rankings to recruit Top 60 | `MEGA-RECR-123` |
+| MEGA-SHELL-150 | SHIP | Rankings vs News Recruits disambiguation | `RankingsHubRecruitsCrossLinkPolicy` CTA on team rankings hub | `RankingsHubScreen.kt` |
 | MEGA-SHELL-151 | SHIP | Statistics hub national leaders | `StatisticsHubNationalLeadersPolicy` + live route | `StatisticsHubRouteScreen.kt` |
 | MEGA-SHELL-152 | SHIP | Preseason rankings review vs News | `PreseasonRankingsReviewNewsEngine` on publish | `RankingsHubRepository.kt` |
 | MEGA-SHELL-153 | SHIP | User-team large NET move → low-priority feed | `NotificationRankingsMoveFeedPolicy` on week advance | `DashboardNotificationWeekAdvanceAppender.kt` |
 | MEGA-SHELL-154 | N/A | In-season portal stats in News | Portal tab hidden in-season — by design | `NewsHubPolicy` |
-| MEGA-SHELL-155 | PARTIAL | Draft tab dynamic in-season board | Loads `offseasonWeekTwoRepository` published lines — RS weeks usually empty | `NewsHubScreen.kt` `DraftTab` |
+| MEGA-SHELL-155 | SHIP | Draft tab dynamic in-season board | `NewsHubDraftInSeasonBoardPolicy` fallback watch list | `NewsHubScreen.kt` |
 
 ---
 
@@ -254,7 +254,7 @@
 | MEGA-SHELL-156 | SHIP | `brand_background` `#181A25` in resources | Matches branding lock | `colors.xml`, `branding.md#color` |
 | MEGA-SHELL-157 | SHIP | On-surface tokens in colors + theme | `#E8EAED`, `#A8AEB8` mirrored in `Theme.kt` | `colors.xml`, `Theme.kt` |
 | MEGA-SHELL-158 | SHIP | `GameConstants.BRAND_BACKGROUND_HEX` single source | Theme references constant | `GameConstants.kt`, `Theme.kt` |
-| MEGA-SHELL-159 | GAP | Studio splash tap hint not in strings | Hard-coded English in `StudioScreen` | `MEGA-SHELL-007` |
+| MEGA-SHELL-159 | SHIP | Studio splash tap hint not in strings | `StudioSplashTapHintPolicy` + `studio_tap_to_continue` | `StudioScreen.kt` |
 | MEGA-SHELL-160 | GAP | Notification composer copy not in strings | All titles/bodies inline English in core | `NotificationFeedComposer.kt` |
 | MEGA-SHELL-161 | PARTIAL | Shell header product framing | `shell_dynasty_school` = “Dynasty: {school}” — not full official title on chrome | `strings.xml` vs store title |
 | MEGA-SHELL-162 | SHIP | `PackDisplayNames` for league labels | Core helper for pack-facing names | `branding.md#ui-copy` |
@@ -284,7 +284,7 @@
 |----|--------|--------------|---------|--------------|
 | MEGA-SHELL-173 | SHIP | Bottom nav four tabs + icons | Roster, Calendar, Dashboard, News | `DynastyShellChrome.kt` |
 | MEGA-SHELL-174 | SHIP | Top bar school + phase/week subtitle | Two-line title block | `DynastyShellChrome.kt` |
-| MEGA-SHELL-175 | PARTIAL | Brand field on shell scaffold | Material `Scaffold` theme — not explicit `#181a25` on all shell surfaces | `Theme.kt` |
+| MEGA-SHELL-175 | SHIP | Brand field on shell scaffold | `DynastyShellBrandSurfacePolicy` on `DynastyShellChrome` scaffold | `DynastyShellChrome.kt` |
 | MEGA-SHELL-176 | GAP | Resume from background skip studio | No `ProcessLifecycle` path — cold start only audited | `app-shell.md#launch-flow`, `DynastyApp.kt` |
 | MEGA-SHELL-177 | PARTIAL | News hub chrome vs in-shell News tab | Hub uses standalone `TopAppBar` — different from dynasty chrome | `NewsHubScreen.kt` |
 | MEGA-SHELL-178 | SHIP | Settings skip studio affects `startRoute` | `skipStudioIntro` → Splash not Studio | `DynastyApp.kt` |

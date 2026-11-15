@@ -967,6 +967,10 @@ fun DynastyApp(
                             seasonIndex = session.metadata.seasonIndex,
                             rankingsHubRepository = app.rankingsHubRepository,
                             onBack = { navController.popBackToInShellDashboard() },
+                            onOpenNewsRecruits = {
+                                newsHubLaunchTab = dev.novux.dynasty.cbb.ui.news.NewsHubTab.Recruits
+                                navController.navigate(AppRoute.NewsHub.route)
+                            },
                         )
                     } else {
                         LaunchedEffect(Unit) {

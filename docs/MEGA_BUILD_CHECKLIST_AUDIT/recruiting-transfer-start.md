@@ -223,8 +223,8 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-114 | P2 | GAP | Preseason report × recruiting | `PreseasonReportPanel` article does not reference **Top 60** / class outlook from seed headline. | `PreseasonReportRepository` |
-| MEGA-RECR-115 | P2 | GAP | Incoming seed progress UX | `IncomingClassSeedPanel` toggles `seeding` boolean — no stepped progress / cancel for **~3.9k** player generation. | `IncomingClassSeedPanel.kt` |
+| MEGA-RECR-114 | P2 | SHIP | Preseason report × recruiting | `PreseasonReportRecruitingOutlookPolicy` paragraph in generator | `PreseasonReportRepository.kt` |
+| MEGA-RECR-115 | P2 | SHIP | Incoming seed progress UX | Phased progress + `IncomingClassSeedCancelPolicy` cancel control | `IncomingClassSeedPanel.kt` |
 | MEGA-RECR-116 | P1 | GAP | Season 1 prep brief timing | Spec: Top 60 from tipoff year one; wizard lands **Offseason W1** with no class narrative until later preseason week — missing “class preview” brief at all. | `game-start.md`, RECR-053 |
 | MEGA-RECR-117 | P2 | PASS | Top 60 preview in seed task | Panel lists **60** rows after `runSeed` — PASS local preview. | `IncomingClassSeedPanel` |
 | MEGA-RECR-118 | P3 | GAP | Workouts task recruiting cross-link | Preseason workouts task does not nudge open Recruiting for new commits on roster. | `preseason.md` task 2 |
@@ -239,7 +239,7 @@
 | MEGA-RECR-120 | P1 | RISK | Preseason task 4 label | `preseason_task_rankings` = NET + **Media & Coaches** — same word “rankings” as recruit national list. | `PreseasonScreen.kt` |
 | MEGA-RECR-121 | P2 | PASS | News Recruits tab separation | `NewsHubScreen` loads seed Top 60 when seeded — distinct from team polls. | `NewsHubScreen.kt` |
 | MEGA-RECR-122 | P2 | GAP | Signing Day disclaimer | Rankings tab lacks helper text “**Player** Top 60 — not team poll”. | `SigningDayScreen` |
-| MEGA-RECR-123 | P2 | GAP | Rankings hub route naming | Hamburger **Rankings** → NET/Media/Coaches only; no link to recruit list for confused users. | `RankingsHubScreen` |
+| MEGA-RECR-123 | P2 | SHIP | Rankings hub route naming | Cross-link to News Recruits from team rankings hub | `RankingsHubRecruitsCrossLinkPolicy.kt` |
 | MEGA-RECR-124 | P3 | GAP | In-app glossary | No coach-tip explaining Media T25 vs Recruit #1–#60. | product copy |
 
 ---

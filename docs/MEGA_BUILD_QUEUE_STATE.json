@@ -483,7 +483,14 @@
     "MEGA-SHELL-145",
     "MEGA-SHELL-146",
     "MEGA-SHELL-148",
-    "MEGA-SHELL-152"
+    "MEGA-SHELL-152",
+    "MEGA-RECR-114",
+    "MEGA-RECR-115",
+    "MEGA-RECR-123",
+    "MEGA-SHELL-150",
+    "MEGA-SHELL-155",
+    "MEGA-SHELL-159",
+    "MEGA-SHELL-175"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",

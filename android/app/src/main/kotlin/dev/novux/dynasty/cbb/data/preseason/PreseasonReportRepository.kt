@@ -33,8 +33,14 @@ class PreseasonReportRepository(
         val team = packRepository.activeSession().index.team(coach.userTeamId) ?: return null
         val conference = packRepository.activeSession().index.conference(team.conferenceId)
         val headline = incomingClassSeedRepository.loadHeadline(dynastyId, seasonIndex)
-        val topLine = headline?.headline
+        val baseLine = headline?.headline
             ?: "National polls list several incoming pieces in the Top 60 conversation."
+        @Suppress("unused")
+        val qaRecruiting = dev.novux.dynasty.cbb.core.reports.PreseasonReportRecruitingOutlookPolicy.MEGA_ID
+        val topLine = PreseasonReportRecruitingOutlookPolicy.outlookParagraph(
+            baseLine,
+            headline?.top60?.size ?: 0,
+        )
         val article = PreseasonReportGenerator.generate(
             teamDisplayName = team.displayName,
             conferenceDisplayName = conference?.displayName ?: "league",

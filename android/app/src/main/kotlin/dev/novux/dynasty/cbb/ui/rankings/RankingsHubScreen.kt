@@ -28,6 +28,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.rankings.ConferenceStandingsGroup
 import dev.novux.dynasty.cbb.core.rankings.RankingsHubSnapshot
 import dev.novux.dynasty.cbb.core.rankings.RankingsHubTeamRow
+import dev.novux.dynasty.cbb.core.rankings.RankingsHubRecruitsCrossLinkPolicy
 import dev.novux.dynasty.cbb.core.rankings.RankingsHubUiPolicy
 
 private enum class RankingsHubTab { Net, Media, Coaches, Conference }
@@ -38,6 +39,7 @@ fun RankingsHubScreen(
     snapshot: RankingsHubSnapshot,
     onBack: () -> Unit,
     onPublishPreseason: (() -> Unit)? = null,
+    onOpenNewsRecruits: (() -> Unit)? = null,
 ) {
     var tabIndex by remember { mutableIntStateOf(RankingsHubUiPolicy.DEFAULT_TAB_INDEX) }
     Column(modifier = Modifier.fillMaxSize()) {
@@ -55,6 +57,25 @@ fun RankingsHubScreen(
         )
         OutlinedButton(onClick = onBack, modifier = Modifier.padding(horizontal = 16.dp)) {
             Text(stringResource(R.string.dynasty_shell_back))
+        }
+        if (
+            RankingsHubRecruitsCrossLinkPolicy.showNewsRecruitsLink(snapshot.published) &&
+            onOpenNewsRecruits != null
+        ) {
+            Text(
+                text = stringResource(R.string.rankings_hub_recruits_disambiguation),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+            OutlinedButton(
+                onClick = onOpenNewsRecruits,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            ) {
+                Text(stringResource(R.string.rankings_hub_open_news_recruits))
+            }
         }
         if (!snapshot.published) {
             RankingsHubUnpublishedPlaceholder(

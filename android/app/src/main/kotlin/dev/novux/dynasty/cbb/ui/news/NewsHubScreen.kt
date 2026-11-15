@@ -36,6 +36,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.news.NewsHeadline
+import dev.novux.dynasty.cbb.core.news.NewsHubDraftInSeasonBoardPolicy
 import dev.novux.dynasty.cbb.core.news.NewsHubPolicy
 import dev.novux.dynasty.cbb.core.news.NewsHubStoriesRowPolicy
 import dev.novux.dynasty.cbb.core.news.NewsHubPortalFiltersPolicy
@@ -124,7 +125,15 @@ fun NewsHubScreen(
         if (portalVisible) {
             portalState = portalCycleRepository.loadOrSimulate(dynastyId, seasonIndex)
         }
-        draftLines = offseasonWeekTwoRepository.loadPublishedResults(dynastyId, seasonIndex)
+        val publishedDraft = offseasonWeekTwoRepository.loadPublishedResults(dynastyId, seasonIndex)
+        val recruitRows = incomingClassSeedRepository.loadHeadline(dynastyId, seasonIndex)?.top60.orEmpty()
+        val inSeason = position.phase != CalendarPhase.Offseason &&
+            position.phase != CalendarPhase.Preseason
+        draftLines = NewsHubDraftInSeasonBoardPolicy.fallbackLines(
+            publishedResults = publishedDraft,
+            topRecruits = recruitRows,
+            inRegularSeason = inSeason,
+        )
     }
 
     Column(modifier = Modifier.fillMaxSize()) {

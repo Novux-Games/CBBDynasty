@@ -1,6 +1,7 @@
 package dev.novux.dynasty.cbb.ui.dynasty
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,7 +29,9 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import dev.novux.dynasty.cbb.core.shell.DynastyShellBrandSurfacePolicy
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
@@ -56,7 +59,7 @@ fun DynastyShellChrome(
     val scope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
@@ -88,6 +91,7 @@ fun DynastyShellChrome(
         },
     ) {
         Scaffold(
+            containerColor = Color(DynastyShellBrandSurfacePolicy.shellBackgroundArgb()),
             topBar = {
                 TopAppBar(
                     navigationIcon = {

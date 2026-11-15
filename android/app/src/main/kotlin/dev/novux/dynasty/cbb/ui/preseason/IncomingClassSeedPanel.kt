@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.preseason.IncomingClassSeedCancelPolicy
 import dev.novux.dynasty.cbb.core.preseason.IncomingClassSeedRunPhase
 import dev.novux.dynasty.cbb.core.preseason.IncomingClassSeedRunProgress
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskId
@@ -48,6 +49,7 @@ fun IncomingClassSeedPanel(
 ) {
     var headline by remember { mutableStateOf<Top60NewsHeadline?>(null) }
     var seeding by remember { mutableStateOf(false) }
+    var seedCancelled by remember { mutableStateOf(false) }
     var runPhase by remember { mutableStateOf<IncomingClassSeedRunPhase?>(null) }
     val scope = rememberCoroutineScope()
 
@@ -80,6 +82,18 @@ fun IncomingClassSeedPanel(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+            if (IncomingClassSeedCancelPolicy.allowCancel(seeding)) {
+                OutlinedButton(
+                    onClick = {
+                        seedCancelled = true
+                        seeding = false
+                        runPhase = null
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(stringResource(R.string.incoming_seed_cancel))
+                }
+            }
         }
         headline?.let { news ->
             Text(
@@ -106,9 +120,11 @@ fun IncomingClassSeedPanel(
         OutlinedButton(
             onClick = {
                 scope.launch {
+                    seedCancelled = false
                     seeding = true
                     runPhase = IncomingClassSeedRunPhase.RollingHighSchoolPool
                     try {
+                        if (seedCancelled) return@launch
                         if (headline == null) {
                             headline = withContext(Dispatchers.IO) {
                                 seedRepository.runSeed(dynastyId, seasonIndex) { phase ->
@@ -118,6 +134,7 @@ fun IncomingClassSeedPanel(
                                 }
                             }
                         }
+                        if (seedCancelled) return@launch
                         withContext(Dispatchers.IO) {
                             progressRepository.completeTask(dynastyId, seasonIndex, PreseasonTaskId.IncomingClassSeed)
                         }

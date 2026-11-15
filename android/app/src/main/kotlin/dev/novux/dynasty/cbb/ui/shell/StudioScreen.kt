@@ -34,6 +34,7 @@ import dev.novux.dynasty.cbb.R
 import androidx.compose.ui.graphics.Color
 import dev.novux.dynasty.cbb.core.GameConstants
 import dev.novux.dynasty.cbb.core.shell.StudioBrandBackgroundPolicy
+import dev.novux.dynasty.cbb.core.shell.StudioSplashTapHintPolicy
 import kotlinx.coroutines.delay
 
 /** Novux Games publisher beat — [planning/app-shell.md#studio-screen-novux-games]. */
@@ -106,6 +107,8 @@ fun StudioScreen(
             )
         }
 
+        @Suppress("unused")
+        val qaTapHint = StudioSplashTapHintPolicy.MEGA_ID
         Text(
             text = stringResource(R.string.studio_tap_to_continue),
             style = MaterialTheme.typography.bodyMedium,

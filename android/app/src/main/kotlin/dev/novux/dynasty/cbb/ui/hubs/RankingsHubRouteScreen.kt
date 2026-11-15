@@ -21,6 +21,7 @@ fun RankingsHubRouteScreen(
     seasonIndex: Int,
     rankingsHubRepository: RankingsHubRepository,
     onBack: () -> Unit,
+    onOpenNewsRecruits: () -> Unit = {},
 ) {
     var snapshot by remember { mutableStateOf<RankingsHubSnapshot?>(null) }
     LaunchedEffect(dynastyId, seasonIndex) {
@@ -34,6 +35,7 @@ fun RankingsHubRouteScreen(
             snapshot = data,
             onBack = onBack,
             onPublishPreseason = null,
+            onOpenNewsRecruits = onOpenNewsRecruits,
         )
     }
 }
