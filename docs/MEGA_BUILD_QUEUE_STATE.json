@@ -514,7 +514,29 @@
     "MEGA-RECR-116",
     "MEGA-RECR-125",
     "MEGA-RECR-126",
-    "MEGA-RECR-129"
+    "MEGA-RECR-129",
+    "MEGA-GDD-009",
+    "MEGA-GDD-105",
+    "MEGA-GDD-120",
+    "MEGA-GDD-122",
+    "MEGA-GDD-125",
+    "MEGA-GDD-129",
+    "MEGA-GDD-145",
+    "MEGA-SHELL-016",
+    "MEGA-SHELL-163",
+    "MEGA-SHELL-018",
+    "MEGA-SHELL-021",
+    "MEGA-SHELL-023",
+    "MEGA-SHELL-024",
+    "MEGA-SHELL-025",
+    "MEGA-WORLD-041",
+    "MEGA-WORLD-092",
+    "MEGA-WORLD-110",
+    "MEGA-WORLD-111",
+    "MEGA-WORLD-112",
+    "MEGA-POST-005",
+    "MEGA-POST-006",
+    "MEGA-POST-054"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
@@ -525,6 +547,6 @@
     "openImplementation": 208,
     "remaining": 208,
     "shardPassShipDone": 1089,
-    "completedIdsRecorded": 513
+    "completedIdsRecorded": 535
   }
 }
