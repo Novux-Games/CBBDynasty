@@ -117,6 +117,7 @@ fun GameWatchScreen(
     var postgameArticle by remember { mutableStateOf<ReportArticle?>(null) }
     var finalResult by remember { mutableStateOf<GameSimResult?>(null) }
     val listState = rememberLazyListState()
+    var watchInProgress by remember { mutableStateOf(true) }
     var followLive by remember { mutableStateOf(true) }
     val atLiveEdge by remember {
         derivedStateOf {
@@ -148,7 +149,6 @@ fun GameWatchScreen(
         mutableStateOf(GameWatchPlayback.DEFAULT_WATCH_SPEED_MULTIPLIER)
     }
     var simToEnd by remember { mutableStateOf(false) }
-    var watchInProgress by remember { mutableStateOf(true) }
     val pauseGate = remember { GameWatchPauseGate() }
     var watchPaused by remember { mutableStateOf(false) }
 

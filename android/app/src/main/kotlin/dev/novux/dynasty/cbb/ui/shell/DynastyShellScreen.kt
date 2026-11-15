@@ -390,6 +390,7 @@ fun DynastyShellScreen(
 
     // shellDashboardHydrationEffect — [DisciplineDashboardFirstPaint.SHELL_HYDRATION_EFFECT_MARKER] ([MEGA-FRAME-104])
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, loaded.weekCheckpoint, showNotificationFeed) {
+        val app = context.requireDynastyApplication()
         disciplinePending = disciplineRepository.loadState(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
@@ -409,7 +410,7 @@ fun DynastyShellScreen(
             schedulePlan,
         )
         staffRoster = staffRepository.loadStaffRoster(loaded.dynastyId)
-        coachAchievements = context.requireDynastyApplication().coachAchievementsRepository.snapshot(
+        coachAchievements = app.coachAchievementsRepository.snapshot(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
         )
@@ -417,7 +418,6 @@ fun DynastyShellScreen(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
         )
-        val app = context.requireDynastyApplication()
         val standings = app.leagueWeekBatchRepository.loadStandings(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
@@ -465,7 +465,6 @@ fun DynastyShellScreen(
         )
         coachSkillState = skillState
         coachSkillPointBank = skillState.unspentBank
-        val app = context.requireDynastyApplication()
         val savedLast = app.dashboardLastGameRepository.load(loaded.dynastyId, loaded.metadata.seasonIndex)
         val standingsForLast = app.leagueWeekBatchRepository.loadStandings(
             loaded.dynastyId,
@@ -473,8 +472,9 @@ fun DynastyShellScreen(
         )
         val userTeamId = userSchool?.teamId
         val displaySchool = loaded.summary.schoolDisplayName.orEmpty().ifBlank { "Your program" }
+        val packIndex = app.packRepository.activeSession().index
         val teamName: (String) -> String = { teamId ->
-            app.packRepository.teamDisplay(teamId)?.displayName ?: teamId
+            packIndex.team(teamId)?.displayName ?: teamId
         }
         lastGameSummary = DashboardLastUserGameResolver.fromSnapshot(savedLast)
             ?: userTeamId?.let { teamId ->
@@ -936,10 +936,10 @@ fun DynastyShellScreen(
     }
 
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
-    val leagueMaxConfWeeks = remember(loaded.dynastyId) {
-        ConferenceTournamentCalendar.leagueMaxConfTourneyWeeks(
-            context.requireDynastyApplication().packRepository.activeSession().index.source,
-        )
+    var leagueMaxConfWeeks by remember(loaded.dynastyId) { mutableStateOf(1) }
+    LaunchedEffect(loaded.dynastyId) {
+        val session = context.requireDynastyApplication().packRepository.activeSession()
+        leagueMaxConfWeeks = ConferenceTournamentCalendar.leagueMaxConfTourneyWeeks(session.index.source)
     }
     val phaseLabel = CalendarWeekLabel.display(position, leagueMaxConfWeeks)
     val shellOffseasonWeek = position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason }
@@ -1100,7 +1100,7 @@ fun DynastyShellScreen(
                     dismissedKeys = dismissedOptionalTaskKeys,
                     onDismiss = { dismissedOptionalTaskKeys = dismissedOptionalTaskKeys + it },
                     taskDismissKey = optionalTaskDismissKey,
-                    onDeepLink = onOpenRecruitingTab,
+                    onDeepLink = { tab -> onOpenRecruitingTab(tab, null) },
                     onStrategyOpen = hubMenuCallbacks.onOpenStrategy,
                     onCoachCardOpen = { staffRoster?.headCoach?.let { openHeadCoachPreview(it) } },
                     onReplayStagedGame = {

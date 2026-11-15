@@ -200,6 +200,8 @@ private fun CoachingCarouselDashboardContent(
     modifier: Modifier = Modifier,
 ) {
     val seasonIndex = loaded.metadata.seasonIndex
+    val context = LocalContext.current
+    val app = context.requireDynastyApplication()
 
     Column(
         modifier = modifier.fillMaxWidth(),

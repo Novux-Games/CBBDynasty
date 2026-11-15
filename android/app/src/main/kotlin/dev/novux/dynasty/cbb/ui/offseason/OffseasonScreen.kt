@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.balance.BalanceNilParser
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
@@ -175,7 +176,7 @@ fun OffseasonScreen(
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
         weekOneNilRetentionHost = WeekOneNilRetentionHost(
             loaded = loaded,
-            nilRules = app.balanceRulesetRepository.activeRuleset().nil,
+            nilRules = BalanceNilParser.parse(app.balanceRulesetRepository.activeRuleset().nil),
             nilBudgetRepository = app.nilBudgetRepository,
             nilAnnualPoolRepository = app.nilAnnualPoolRepository,
         )
@@ -634,7 +635,7 @@ fun OffseasonScreen(
         val ledgerCycleClosed = ledger?.cycleClosed == true
         if (RecruitingCyclePolicy.hubNavigable(position.phase, offseasonWeek, ledgerCycleClosed)) {
             OutlinedButton(
-                onClick = { onOpenRecruiting(RecruitingHubTab.Recommended) },
+                onClick = { onOpenRecruiting(RecruitingHubTab.Recommended, null) },
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(stringResource(R.string.recruiting_open_hub))
@@ -688,7 +689,7 @@ fun OffseasonScreen(
                     dismissedKeys = dismissedTaskKeys,
                     onDismiss = onDismissOptionalTask,
                     taskDismissKey = taskDismissKey,
-                    onDeepLink = onOpenRecruiting,
+                    onDeepLink = { tab -> onOpenRecruiting(tab, null) },
                     onSummerWorkoutReportOpen = { summerWorkoutSheetOpen = true },
                 )
             }
@@ -705,7 +706,7 @@ fun OffseasonScreen(
                     dismissedKeys = dismissedTaskKeys,
                     onDismiss = onDismissOptionalTask,
                     taskDismissKey = taskDismissKey,
-                    onDeepLink = onOpenRecruiting,
+                    onDeepLink = { tab -> onOpenRecruiting(tab, null) },
                     onFundraisingWeekNineOpen = { fundraisingSheetOpen = true },
                 )
             }
@@ -729,7 +730,7 @@ fun OffseasonScreen(
                 dismissedKeys = dismissedTaskKeys,
                 onDismiss = onDismissOptionalTask,
                 taskDismissKey = taskDismissKey,
-                onDeepLink = onOpenRecruiting,
+                onDeepLink = { tab -> onOpenRecruiting(tab, null) },
                 headingRes = R.string.dashboard_offseason_portal_optional_heading,
             )
         } else if (inOffseason && PortalCyclePolicy.portalWindowClosed(position.weekIndex)) {
@@ -756,7 +757,7 @@ fun OffseasonScreen(
                     dismissedKeys = dismissedTaskKeys,
                     onDismiss = onDismissOptionalTask,
                     taskDismissKey = taskDismissKey,
-                    onDeepLink = onOpenRecruiting,
+                    onDeepLink = { tab -> onOpenRecruiting(tab, null) },
                     onOffseasonRosterCutsOpen = { selectedTab = DynastyShellTab.Dashboard },
                     headingRes = R.string.dashboard_offseason_walkon_optional_heading,
                 )

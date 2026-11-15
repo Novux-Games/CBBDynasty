@@ -23,6 +23,7 @@ import dev.novux.dynasty.cbb.core.balance.BalanceNilRules
 import dev.novux.dynasty.cbb.core.nil.NilAssignCapLinePolicy
 import dev.novux.dynasty.cbb.core.nil.NilAssignRejectReason
 import dev.novux.dynasty.cbb.core.offseason.weekone.WeekOneNilRetentionPolicy
+import dev.novux.dynasty.cbb.ui.recruiting.RecruitNilAssignCapLine
 import dev.novux.dynasty.cbb.core.qa.WeekOneNilRetentionPath
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty

@@ -279,7 +279,6 @@ fun StrategyScreen(
     }
 }
 
-@Composable
 private fun eligibleForSlot(players: List<RosterPlayer>, slot: PlayerPosition): List<RosterPlayer> =
     players
         .filter { RotationMinutesAllocator.isLineupEligible(it) }

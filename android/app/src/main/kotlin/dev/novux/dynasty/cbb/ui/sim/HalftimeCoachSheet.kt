@@ -191,7 +191,6 @@ fun HalftimeCoachSheet(
 }
 
 @Composable
-@Composable
 private fun HalftimeOpponentScoutingStrip(scouting: HalftimeScoutingSnapshot) {
     val display = TeamBoxScoreDisplay.from(scouting.opponentBox, emptyList())
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {

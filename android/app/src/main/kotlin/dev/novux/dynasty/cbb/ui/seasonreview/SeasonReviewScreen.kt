@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.gestures.animateScrollTo
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -124,7 +123,7 @@ fun SeasonReviewScreen(
 
     LaunchedEffect(scrollToRecap) {
         if (scrollToRecap) {
-            recapScrollState.animateScrollTo(0)
+            recapScrollState.scrollTo(0)
             scrollToRecap = false
         }
     }

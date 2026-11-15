@@ -86,8 +86,6 @@ import dev.novux.dynasty.cbb.data.notification.DashboardNotificationSnapshotSide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import androidx.compose.foundation.lazy.animateScrollToItem
-
 @Composable
 fun PreseasonScreen(
     initial: LoadedDynasty,
@@ -159,14 +157,13 @@ fun PreseasonScreen(
         val target = scrollToTask ?: return@LaunchedEffect
         val index = PreseasonTaskId.entries.indexOf(target)
         if (index >= 0) {
-            checklistState.animateScrollToItem(index)
+            checklistState.scrollToItem(index)
         }
         scrollToTask = null
     }
 
     val notificationFeedRepository = app.notificationFeedRepository
     val coachEmploymentRepository = app.coachEmploymentRepository
-    val coachSkillPointRepository = app.coachSkillPointRepository
     val signingDayRepository = app.signingDayRepository
 
     DisposableEffect(Unit) {
@@ -753,7 +750,6 @@ private fun PreseasonDashboardLoadingBody(
 }
 
 @Composable
-@Composable
 private fun preseasonBuilderStatusBanner(
     exhibitionDraftIssue: ExhibitionDraftIssue?,
     regularSeasonValidation: PreseasonScheduleValidation?,
@@ -802,6 +798,7 @@ private fun preseasonRsValidationLine(validation: PreseasonScheduleValidation): 
         else -> stringResource(R.string.preseason_rs_error_generic)
     }
 
+@Composable
 private fun preseasonTaskTitle(taskId: PreseasonTaskId): String = when (taskId) {
     PreseasonTaskId.IncomingClassSeed -> stringResource(R.string.preseason_task_incoming_class)
     PreseasonTaskId.PreseasonWorkouts -> stringResource(R.string.preseason_task_workouts)

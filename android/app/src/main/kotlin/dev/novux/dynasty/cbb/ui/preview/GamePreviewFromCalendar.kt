@@ -107,7 +107,7 @@ object GamePreviewFromCalendar {
         GamePreviewLaunch.result = preview
     }
 
-    private fun packRepositoryTeamPrestige(
+    private suspend fun packRepositoryTeamPrestige(
         app: dev.novux.dynasty.cbb.DynastyApplication,
         teamId: String,
     ): Int =

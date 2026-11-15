@@ -143,7 +143,7 @@ private fun TournamentInviteEventCard(
     useElevated: Boolean,
     onAccept: () -> Unit,
 ) {
-    val body: @Composable () -> Unit = {
+    val cardContent: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit = {
         Column(
             modifier = Modifier.padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -171,9 +171,9 @@ private fun TournamentInviteEventCard(
         }
     }
     if (useElevated) {
-        ElevatedCard(modifier = Modifier.fillMaxWidth(), content = body)
+        ElevatedCard(modifier = Modifier.fillMaxWidth(), content = cardContent)
     } else {
-        Card(modifier = Modifier.fillMaxWidth(), content = body)
+        Card(modifier = Modifier.fillMaxWidth(), content = cardContent)
     }
 }
 
