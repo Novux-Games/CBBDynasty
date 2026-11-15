@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
 import dev.novux.dynasty.cbb.core.reports.PreseasonReportGenerator
+import dev.novux.dynasty.cbb.core.reports.PreseasonReportRecruitingOutlookPolicy
 import dev.novux.dynasty.cbb.core.reports.ReportArticle
 import dev.novux.dynasty.cbb.core.reports.ReportArticleType
 import dev.novux.dynasty.cbb.data.pack.PackRepository
@@ -36,7 +37,7 @@ class PreseasonReportRepository(
         val baseLine = headline?.headline
             ?: "National polls list several incoming pieces in the Top 60 conversation."
         @Suppress("unused")
-        val qaRecruiting = dev.novux.dynasty.cbb.core.reports.PreseasonReportRecruitingOutlookPolicy.MEGA_ID
+        val qaRecruiting = PreseasonReportRecruitingOutlookPolicy.MEGA_ID
         val topLine = PreseasonReportRecruitingOutlookPolicy.outlookParagraph(
             baseLine,
             headline?.top60?.size ?: 0,
