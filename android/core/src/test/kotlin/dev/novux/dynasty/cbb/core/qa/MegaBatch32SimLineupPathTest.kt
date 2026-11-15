@@ -8,7 +8,7 @@ import dev.novux.dynasty.cbb.core.gdd.PreseasonNonConferenceCapPolicy
 import dev.novux.dynasty.cbb.core.march.PostseasonBracketMonitorPolicy
 import dev.novux.dynasty.cbb.core.pack.ReclassTransitionUxPolicy
 import dev.novux.dynasty.cbb.core.preview.OpponentRotationPreviewBuilder
-import dev.novux.dynasty.cbb.core.recruiting.NewGameWizardStepsPolicy
+import dev.novux.dynasty.cbb.core.save.NewGameWizardStepsPolicy
 import dev.novux.dynasty.cbb.core.recruiting.PortalConsideringPoolUxPolicy
 import dev.novux.dynasty.cbb.core.recruiting.RecruitInterestConfig
 import dev.novux.dynasty.cbb.core.recruiting.RecruitNextCyclePoolPolicy

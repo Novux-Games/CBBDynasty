@@ -536,7 +536,18 @@
     "MEGA-WORLD-112",
     "MEGA-POST-005",
     "MEGA-POST-006",
-    "MEGA-POST-054"
+    "MEGA-POST-054",
+    "MEGA-SIM-003",
+    "MEGA-SIM-005",
+    "MEGA-SIM-008",
+    "MEGA-SIM-009",
+    "MEGA-SIM-014",
+    "MEGA-SIM-016",
+    "MEGA-SIM-017",
+    "MEGA-SIM-018",
+    "MEGA-SIM-028",
+    "MEGA-SIM-035",
+    "MEGA-SIM-036"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
@@ -547,6 +558,6 @@
     "openImplementation": 208,
     "remaining": 208,
     "shardPassShipDone": 1089,
-    "completedIdsRecorded": 535
+    "completedIdsRecorded": 545
   }
 }
