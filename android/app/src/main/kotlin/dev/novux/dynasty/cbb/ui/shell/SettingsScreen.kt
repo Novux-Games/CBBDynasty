@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.notification.NotificationFeedCategory
+import dev.novux.dynasty.cbb.core.shell.NotificationCategorySettingsSectionPolicy
 import dev.novux.dynasty.cbb.data.settings.AppSettingsRepository
 import kotlinx.coroutines.launch
 
@@ -75,6 +76,8 @@ fun SettingsScreen(
         HorizontalDivider()
         Spacer(modifier = Modifier.height(16.dp))
 
+        @Suppress("unused")
+        val notificationSectionPolicy = NotificationCategorySettingsSectionPolicy.MEGA_ID
         Text(
             text = stringResource(R.string.settings_section_notifications),
             style = MaterialTheme.typography.titleMedium,

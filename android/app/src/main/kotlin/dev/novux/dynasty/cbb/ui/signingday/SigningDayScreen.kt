@@ -38,6 +38,7 @@ import dev.novux.dynasty.cbb.core.signingday.SigningDayClassBoardSummaryPolicy
 import dev.novux.dynasty.cbb.core.preseason.PreseasonNewsFeedPolicy
 import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignBlockReason
 import dev.novux.dynasty.cbb.core.signingday.SigningDayPositionFlexPolicy
+import dev.novux.dynasty.cbb.core.signingday.SigningDayRankingsDisclaimerPolicy
 import dev.novux.dynasty.cbb.core.signingday.SigningDayRankingsTop60ContextPolicy
 import dev.novux.dynasty.cbb.core.news.NewsHeadlinePublisher
 import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignUiGate
@@ -326,6 +327,12 @@ private fun RankingsBody(
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(bottom = 4.dp),
+            )
+            Text(
+                text = SigningDayRankingsDisclaimerPolicy.disclaimerText(),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 8.dp),
             )
             contextLine?.let { line ->
                 Text(

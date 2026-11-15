@@ -37,6 +37,7 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.news.NewsHeadline
 import dev.novux.dynasty.cbb.core.news.NewsHubDraftInSeasonBoardPolicy
+import dev.novux.dynasty.cbb.core.news.NewsHubShellNewsTabHintPolicy
 import dev.novux.dynasty.cbb.core.news.NewsHubPolicy
 import dev.novux.dynasty.cbb.core.news.NewsHubStoriesRowPolicy
 import dev.novux.dynasty.cbb.core.news.NewsHubPortalFiltersPolicy
@@ -137,7 +138,15 @@ fun NewsHubScreen(
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
+        @Suppress("unused")
+        val shellNewsHintPolicy = NewsHubShellNewsTabHintPolicy.MEGA_ID
         TopAppBar(title = { Text(stringResource(R.string.news_hub_title)) })
+        Text(
+            text = NewsHubShellNewsTabHintPolicy.HINT,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+        )
         OutlinedButton(onClick = onBack, modifier = Modifier.padding(horizontal = 16.dp)) {
             Text(stringResource(R.string.dynasty_shell_back))
         }

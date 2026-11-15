@@ -104,12 +104,14 @@ fun DynastyCareerHost(
             loaded.metadata.seasonIndex,
         )
     }
+    val careerPosition = loaded.weekCheckpoint.activePosition
     val newsFeed = rememberShellNewsFeed(
         dynastyId = loaded.dynastyId,
         seasonIndex = loaded.metadata.seasonIndex,
-        weekIndex = loaded.weekCheckpoint.activePosition.weekIndex,
+        weekIndex = careerPosition.weekIndex,
         newsFeedRepository = app.newsFeedRepository,
         rosterRepository = app.dynastyRosterRepository,
+        calendarPhase = careerPosition.phase,
     )
     if (employment?.status == CoachEmploymentStatus.Unemployed) {
         UnemployedCoachCareerScreen(

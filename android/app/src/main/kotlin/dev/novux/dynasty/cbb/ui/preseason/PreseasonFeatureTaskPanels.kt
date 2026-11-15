@@ -24,6 +24,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.offseason.weekseven.SummerWorkoutReport
 import dev.novux.dynasty.cbb.core.offseason.weekseven.SummerWorkoutSimulator
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskId
+import dev.novux.dynasty.cbb.core.preseason.PreseasonWorkoutsRecruitingNudgePolicy
 import dev.novux.dynasty.cbb.data.coach.CoachSkillPointRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonProgressRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
@@ -36,13 +37,18 @@ fun PreseasonWorkoutsPanel(
     rosterRepository: DynastyRosterRepository,
     progressRepository: PreseasonProgressRepository,
     onComplete: () -> Unit,
+    onOpenRecruitingHub: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
+    @Suppress("unused")
+    val recruitingNudgePolicy = PreseasonWorkoutsRecruitingNudgePolicy.MEGA_ID
     var report by remember { mutableStateOf<SummerWorkoutReport?>(null) }
+    var rosterPlayers by remember { mutableStateOf(emptyList<dev.novux.dynasty.cbb.core.roster.RosterPlayer>()) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(dynastyId, seasonIndex) {
         val players = rosterRepository.listPlayers(dynastyId)
+        rosterPlayers = players
         report = SummerWorkoutSimulator.simulate(
             players = players,
             dynastySeed = dynastyId.hashCode().toLong() + seasonIndex,
@@ -65,6 +71,19 @@ fun PreseasonWorkoutsPanel(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        if (PreseasonWorkoutsRecruitingNudgePolicy.showRecruitingNudge(rosterPlayers)) {
+            Text(
+                text = stringResource(R.string.preseason_workouts_recruiting_nudge),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            OutlinedButton(
+                onClick = onOpenRecruitingHub,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(R.string.recruiting_open_hub))
+            }
+        }
         report?.let { row ->
             Text(
                 text = stringResource(

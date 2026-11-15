@@ -286,12 +286,12 @@
 | MEGA-SHELL-174 | SHIP | Top bar school + phase/week subtitle | Two-line title block | `DynastyShellChrome.kt` |
 | MEGA-SHELL-175 | SHIP | Brand field on shell scaffold | `DynastyShellBrandSurfacePolicy` on `DynastyShellChrome` scaffold | `DynastyShellChrome.kt` |
 | MEGA-SHELL-176 | GAP | Resume from background skip studio | No `ProcessLifecycle` path — cold start only audited | `app-shell.md#launch-flow`, `DynastyApp.kt` |
-| MEGA-SHELL-177 | PARTIAL | News hub chrome vs in-shell News tab | Hub uses standalone `TopAppBar` — different from dynasty chrome | `NewsHubScreen.kt` |
+| MEGA-SHELL-177 | PARTIAL | News hub chrome vs in-shell News tab | Hub still uses standalone `TopAppBar`; shell News tab hint added via `NewsHubShellNewsTabHintPolicy` | `NewsHubScreen.kt` |
 | MEGA-SHELL-178 | SHIP | Settings skip studio affects `startRoute` | `skipStudioIntro` → Splash not Studio | `DynastyApp.kt` |
 | MEGA-SHELL-179 | GAP | Splash loading spinner vs ready gate | Fixed delay — not tied to pack index | `MEGA-SHELL-011` |
-| MEGA-SHELL-180 | PARTIAL | Offseason/preseason News tab | Placeholder empty feed — should show shallow slice when archive has OS portal headlines | `DynastyShellNewsTabPlaceholder` |
+| MEGA-SHELL-180 | SHIP | Offseason/preseason News tab | `rememberShellNewsFeed` passes `calendarPhase` + OS week into `shallowFeedSnapshot` on OS/preseason screens | `ShellShallowNewsFeed.kt`, `PhaseShellNewsFeedPolicy.kt` |
 | MEGA-SHELL-181 | SHIP | In-season dashboard panels stack | Tasks + optional notification feed + news on dashboard tab | `DynastyShellScreen.kt` |
-| MEGA-SHELL-182 | GAP | Per-category notification settings UI section | Settings has notifications section — only master toggle | `SettingsScreen.kt` |
+| MEGA-SHELL-182 | SHIP | Per-category notification settings UI section | Master feed toggle + per-category mute rows under `NotificationCategorySettingsSectionPolicy` | `SettingsScreen.kt` |
 
 ---
 

@@ -74,17 +74,18 @@ fun SeasonReviewScreen(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val app = context.requireDynastyApplication()
+    val position = loaded.weekCheckpoint.activePosition
     val newsFeed = rememberShellNewsFeed(
         dynastyId = loaded.dynastyId,
         seasonIndex = loaded.metadata.seasonIndex,
-        weekIndex = loaded.weekCheckpoint.activePosition.weekIndex,
+        weekIndex = position.weekIndex,
         newsFeedRepository = app.newsFeedRepository,
         rosterRepository = app.dynastyRosterRepository,
+        calendarPhase = position.phase,
     )
-    val weekHeader = CalendarWeekLabel.display(loaded.weekCheckpoint.activePosition)
+    val weekHeader = CalendarWeekLabel.display(position)
     var selectedTab by remember { mutableStateOf(DynastyShellTab.Dashboard) }
     val schoolName = loaded.summary.schoolDisplayName.orEmpty()
-    val position = loaded.weekCheckpoint.activePosition
     var recruitingLedger by remember { mutableStateOf<RecruitingCycleLedger?>(null) }
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
         recruitingLedger = recruitingEconomyRepository.loadOrOpenCycle(loaded)

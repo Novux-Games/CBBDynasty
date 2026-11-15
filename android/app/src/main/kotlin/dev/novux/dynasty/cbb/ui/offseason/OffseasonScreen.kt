@@ -39,6 +39,7 @@ import dev.novux.dynasty.cbb.core.dashboard.OffseasonDashboardContext
 import dev.novux.dynasty.cbb.core.dashboard.DashboardAdvanceGate
 import dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonOptionalDashboardTasks
+import dev.novux.dynasty.cbb.core.dashboard.OffseasonWalkOnOptionalDashboardTasks
 import dev.novux.dynasty.cbb.core.dashboard.PortalPipelineEntrantDashboardPolicy
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonPortalOptionalTasksPolicy
 import dev.novux.dynasty.cbb.core.dashboard.OffseasonWeekSevenOptionalDashboardTasks
@@ -178,12 +179,14 @@ fun OffseasonScreen(
         )
     }
     val playerStatsRepository = app.playerStatsRepository
+    val shellPosition = loaded.weekCheckpoint.activePosition
     val newsFeed = rememberShellNewsFeed(
         dynastyId = loaded.dynastyId,
         seasonIndex = loaded.metadata.seasonIndex,
-        weekIndex = loaded.weekCheckpoint.activePosition.weekIndex,
+        weekIndex = shellPosition.weekIndex,
         newsFeedRepository = app.newsFeedRepository,
         rosterRepository = rosterRepository,
+        calendarPhase = shellPosition.phase,
     )
     val scope = rememberCoroutineScope()
 
@@ -721,6 +724,24 @@ fun OffseasonScreen(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+        }
+
+        if (inOffseason) {
+            val walkOnTasks = OffseasonWalkOnOptionalDashboardTasks.build(
+                recruitingCycleClosed = ledgerCycleClosed,
+                offseasonWeekIndex = position.weekIndex,
+            )
+            if (walkOnTasks.isNotEmpty()) {
+                DashboardOptionalTasksPanel(
+                    tasks = walkOnTasks,
+                    dismissedKeys = dismissedTaskKeys,
+                    onDismiss = onDismissOptionalTask,
+                    taskDismissKey = taskDismissKey,
+                    onDeepLink = onOpenRecruiting,
+                    onOffseasonRosterCutsOpen = { selectedTab = DynastyShellTab.Dashboard },
+                    headingRes = R.string.dashboard_offseason_walkon_optional_heading,
+                )
+            }
         }
 
         pendingAdvanceConfirmation?.let { confirmation ->

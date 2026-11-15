@@ -78,17 +78,18 @@ fun CoachingCarouselScreen(
     val context = LocalContext.current
     val app = context.requireDynastyApplication()
     val playerStatsRepository = app.playerStatsRepository
+    val scope = rememberCoroutineScope()
+    val seasonIndex = loaded.metadata.seasonIndex
+    val schoolName = loaded.summary.schoolDisplayName.orEmpty()
+    val position = loaded.weekCheckpoint.activePosition
     val newsFeed = rememberShellNewsFeed(
         dynastyId = loaded.dynastyId,
         seasonIndex = seasonIndex,
         weekIndex = position.weekIndex,
         newsFeedRepository = app.newsFeedRepository,
         rosterRepository = rosterRepository,
+        calendarPhase = position.phase,
     )
-    val scope = rememberCoroutineScope()
-    val seasonIndex = loaded.metadata.seasonIndex
-    val schoolName = loaded.summary.schoolDisplayName.orEmpty()
-    val position = loaded.weekCheckpoint.activePosition
 
     LaunchedEffect(loaded.dynastyId, seasonIndex) {
         carousel = repository.loadOrCreate(loaded.dynastyId, seasonIndex)

@@ -315,20 +315,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
   },
   {
-    "id": "MEGA-SHELL-180",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "news-shell-branding.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
-    "id": "MEGA-SHELL-182",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "news-shell-branding.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
     "id": "MEGA-SIM-003",
     "pri": "P1",
     "status": "PARTIAL",
@@ -1652,28 +1638,7 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
   },
   {
-    "id": "MEGA-RECR-105",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-122",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
     "id": "MEGA-RECR-127",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-128",
     "pri": "P2",
     "status": "GAP",
     "shard": "recruiting-transfer-start.md",
@@ -1923,13 +1888,6 @@
     "status": "GAP",
     "shard": "coach-player-ui.md",
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-RECR-118",
-    "pri": "P3",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
   },
   {
     "id": "MEGA-RECR-124",

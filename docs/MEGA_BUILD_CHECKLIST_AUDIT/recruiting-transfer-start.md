@@ -207,7 +207,7 @@
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-103 | P1 | PASS | Required task gating | `SigningDayHardSignUiGate` blocks confirm positions until rankings viewed; hard sign until both tasks + promises. | `SigningDayScreen.kt` |
 | MEGA-RECR-104 | P1 | SHIP | Admin week — no new drip | `RecruitingClosedCycleWeekGrantPolicy` — zero weekly grant when `cycleClosed`. | `RecruitingWeekGrant.applyWeekAdvanceGrant` |
-| MEGA-RECR-105 | P2 | GAP | Walk-ons after close | No in-app feed / board after hard sign per `recruiting-engine#walk-ons`. | spec; no UI |
+| MEGA-RECR-105 | P2 | SHIP | Walk-ons after close | Optional OS week 8 dashboard task → roster lock / walk-on panel after cycle closed (`WalkOnAfterSigningClosePolicy`). | `OffseasonWalkOnOptionalDashboardTasks.kt` |
 | MEGA-RECR-106 | P1 | SHIP | Unsigned targets sim elsewhere | `SigningDayUnsignedElsewhereEngine` + lost repo + News on hard sign | `SigningDayScreen.kt`, `SigningDayUnsignedElsewherePolicy.kt` |
 | MEGA-RECR-107 | P2 | SHIP | Position editor depth | `SigningDayPositionFlexPolicy` + position picker sheet | `SigningDayPositionPickerSheet.kt` |
 | MEGA-RECR-108 | P2 | SHIP | Rankings task deep link | Top 60 context + News Recruits CTA on rankings tab | `SigningDayRankingsTop60ContextPolicy.kt` |
@@ -227,7 +227,7 @@
 | MEGA-RECR-115 | P2 | SHIP | Incoming seed progress UX | Phased progress + `IncomingClassSeedCancelPolicy` cancel control | `IncomingClassSeedPanel.kt` |
 | MEGA-RECR-116 | P1 | GAP | Season 1 prep brief timing | Spec: Top 60 from tipoff year one; wizard lands **Offseason W1** with no class narrative until later preseason week — missing “class preview” brief at all. | `game-start.md`, RECR-053 |
 | MEGA-RECR-117 | P2 | PASS | Top 60 preview in seed task | Panel lists **60** rows after `runSeed` — PASS local preview. | `IncomingClassSeedPanel` |
-| MEGA-RECR-118 | P3 | GAP | Workouts task recruiting cross-link | Preseason workouts task does not nudge open Recruiting for new commits on roster. | `preseason.md` task 2 |
+| MEGA-RECR-118 | P3 | SHIP | Workouts task recruiting cross-link | Preseason workouts panel nudges Recruiting when freshmen on roster (`PreseasonWorkoutsRecruitingNudgePolicy`). | `PreseasonFeatureTaskPanels.kt` |
 
 ---
 
@@ -238,7 +238,7 @@
 | MEGA-RECR-119 | P1 | RISK | Signing dashboard copy | `dashboard_task_signing_rankings` = “View **recruiting** rankings (Top 60)” while Rankings hub tab is **programs**. | `strings.xml` |
 | MEGA-RECR-120 | P1 | RISK | Preseason task 4 label | `preseason_task_rankings` = NET + **Media & Coaches** — same word “rankings” as recruit national list. | `PreseasonScreen.kt` |
 | MEGA-RECR-121 | P2 | PASS | News Recruits tab separation | `NewsHubScreen` loads seed Top 60 when seeded — distinct from team polls. | `NewsHubScreen.kt` |
-| MEGA-RECR-122 | P2 | GAP | Signing Day disclaimer | Rankings tab lacks helper text “**Player** Top 60 — not team poll”. | `SigningDayScreen` |
+| MEGA-RECR-122 | P2 | SHIP | Signing Day disclaimer | Rankings tab shows recruit-board disclaimer (`SigningDayRankingsDisclaimerPolicy`). | `SigningDayScreen.kt` |
 | MEGA-RECR-123 | P2 | SHIP | Rankings hub route naming | Cross-link to News Recruits from team rankings hub | `RankingsHubRecruitsCrossLinkPolicy.kt` |
 | MEGA-RECR-124 | P3 | GAP | In-app glossary | No coach-tip explaining Media T25 vs Recruit #1–#60. | product copy |
 
@@ -251,7 +251,7 @@
 | MEGA-RECR-125 | P1 | GAP | Next cycle open timing | `openNextCycleAfterSeasonReview` sets **next** weekly pool from recap prestige — must align with **preseason Incoming Class Seed** opening same enrolling class index. | `SeasonReviewRepository`, recruiting doc |
 | MEGA-RECR-126 | P1 | GAP | Enrolling season index | Seed repository keys `seasonIndex` on metadata; hard sign same index — next class seed season bump not audited in one helper. | `IncomingClassSeedRepository` |
 | MEGA-RECR-127 | P2 | GAP | Offseason W8 → Preseason gate | Advance into preseason does not auto-close prior recruiting UI state / reservations cleanup. | `enterInSeasonFromPreseason` path |
-| MEGA-RECR-128 | P2 | GAP | Walk-on window calendar | Spec places walk-ons after Signing Day; calendar phase after OS W6 advance not wired to walk-on feed. | `recruiting-engine#walk-ons` |
+| MEGA-RECR-128 | P2 | SHIP | Walk-on window calendar | Walk-on nudge gated on closed recruiting cycle + OS week 8 (`WalkOnAfterSigningClosePolicy.CALENDAR_MEGA_ID`). | `WalkOnAfterSigningClosePolicy.kt` |
 | MEGA-RECR-129 | P1 | GAP | Preseason without re-seed | Re-entering preseason year 2+ must run **new** 2k–4k draw; no guard preventing duplicate `runSeed` on same key. | `IncomingClassSeedPanel` `enabled = headline == null` |
 | MEGA-RECR-130 | P2 | PASS | Hub open RS + OS W2+ | `RecruitingCyclePolicy` year-long access in RS — PASS in tests. | `RecruitingHubDefaultsTest` |
 | MEGA-RECR-131 | P0 | PASS | **Lag:** main-thread seed | `runSeed` on UI button coroutine generates **3900** prospects + `encodePool` string in DataStore on device thread — frame drops / ANR risk. | `IncomingClassSeedIoPolicy`; all repository entry points `Dispatchers.IO`; seed/encode/decode `Default`; `IncomingClassSeederPerformanceTest` |

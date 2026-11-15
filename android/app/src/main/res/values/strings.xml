@@ -669,6 +669,9 @@
     <string name="dashboard_task_portal_top40">Portal Top 40 published</string>
     <string name="dashboard_task_portal_pipeline_entrant">%1$s in portal (%2$s)</string>
     <string name="dashboard_offseason_portal_optional_heading">Portal window — optional tasks (weeks 2–5)</string>
+    <string name="dashboard_offseason_walkon_optional_heading">Roster lock — walk-on tryouts</string>
+    <string name="dashboard_task_walkon_tryouts">Offer walk-on tryouts after Signing Day (week 8 roster lock panel)</string>
+    <string name="preseason_workouts_recruiting_nudge">New freshmen are on your roster — review commits and promises in Recruiting.</string>
     <string name="dashboard_offseason_portal_tasks_cadence_hint">Optional cards nudge portal spends, Top 40 unlock, signing crunch, and open scholarships — dismiss any you skip.</string>
     <string name="dashboard_offseason_portal_window_closed_heading">Portal recruiting window closed</string>
     <string name="dashboard_offseason_portal_window_closed_body">Weeks 2–5 optional portal tasks are done. Finish signing and roster moves from the recruiting hub or advance the week.</string>

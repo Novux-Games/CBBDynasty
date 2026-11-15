@@ -78,6 +78,7 @@ enum class DashboardTaskId {
     FundraisingDonorDrive,
     FundraisingNamingRights,
     FundraisingFacilityUpgrades,
+    WalkOnTryouts,
 }
 
 data class DashboardTask(
