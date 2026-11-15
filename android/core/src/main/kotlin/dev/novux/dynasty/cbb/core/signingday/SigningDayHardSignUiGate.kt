@@ -5,7 +5,11 @@ package dev.novux.dynasty.cbb.core.signingday
  * ([planning/offseason.md], [MEGA-RECR-103]).
  */
 object SigningDayHardSignUiGate {
-    fun canConfirmPositions(progress: SigningDayProgress?): Boolean {
+    fun canConfirmPositions(
+        progress: SigningDayProgress?,
+        positionsValid: Boolean = true,
+    ): Boolean {
+        if (!positionsValid) return false
         val p = progress ?: return false
         return p.rankingsViewed && !p.positionsConfirmed && !p.hardSignComplete
     }

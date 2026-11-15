@@ -221,13 +221,13 @@
 | MEGA-SHELL-137 | SHIP | Poll / NET movement headlines | `PollNetMovementNewsEngine` in `appendLeagueWeek` | `NewsFeedRepository.kt` |
 | MEGA-SHELL-138 | PASS | Bracketology (February) stories | `BracketologyNewsEngine` on league week advance | `NewsFeedRepository.kt`, `MEGA-GDD-130` |
 | MEGA-SHELL-139 | SHIP | Coaching carousel league headlines | `CoachingCarouselLeagueNewsEngine` after background sim | `CoachingCarouselScreen.kt` |
-| MEGA-SHELL-140 | PARTIAL | Awards headlines kind | `appendAwardsHeadlines` + `NewsHeadlineKind.Awards` | postseason awards wiring |
+| MEGA-SHELL-140 | SHIP | Awards headlines kind | `AwardsNewsPublishPolicy` + `YearlyAwardsRepository` publish | `YearlyAwardsRepository.kt` |
 | MEGA-SHELL-141 | SHIP | User vs league injury kinds split | `UserInjury` vs `LeagueInjury` | `NewsHeadlinePublisher.kt` |
-| MEGA-SHELL-142 | PARTIAL | Recruiting spotlight / Top 60 story | Single seeded `top60-{season}` headline | `ensureRecruitingSpotlight` |
+| MEGA-SHELL-142 | SHIP | Recruiting spotlight / Top 60 story | `RecruitingSpotlightTop60Policy` id on seed | `NewsFeedRepository.kt` |
 | MEGA-SHELL-143 | SHIP | Tournament / postseason story lines | `PostseasonTournamentNewsEngine` in postseason batch | `LeagueWeekBatchRepository.kt` |
 | MEGA-SHELL-144 | SHIP | Archive cap ~200 headlines | `takeLast(200)` on merge | `NewsFeedRepository.kt` |
-| MEGA-SHELL-145 | PARTIAL | Shallow cap vs spec 8–12 | `SHALLOW_FEED_CAP = 10` within range | `NewsHeadlinePublisher.kt` |
-| MEGA-SHELL-146 | GAP | Priority boost user-school / portal window | Sort uses priority field — portal boost generators absent | `ShallowNewsFeed.kt` |
+| MEGA-SHELL-145 | SHIP | Shallow cap vs spec 8–12 | `ShallowNewsFeedCapPolicy` clamps merge cap | `ShallowNewsFeed.kt` |
+| MEGA-SHELL-146 | SHIP | Priority boost user-school / portal window | `ShallowNewsFeedPriorityBoostPolicy` on shallow sort | `NewsFeedRepository.shallowFeedSnapshot` |
 
 ---
 
@@ -236,11 +236,11 @@
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
 | MEGA-SHELL-147 | SHIP | Weekly NET attach on RS advance | `attachWeeklyNet` in league week batch | `LeagueWeekBatchRepository.kt` |
-| MEGA-SHELL-148 | GAP | NET/poll movement as News stories | Rankings engine runs; **no** headline publisher for T25 moves | `news-hub.md` mixed feed |
+| MEGA-SHELL-148 | SHIP | NET/poll movement as News stories | `Top25NetMovementNewsEngine` on RS week batch | `NewsFeedRepository.kt` |
 | MEGA-SHELL-149 | SHIP | Rankings hub NET / Media / Coaches tabs | Full hub when polls published | `RankingsHubScreen.kt` |
 | MEGA-SHELL-150 | PARTIAL | Rankings vs News Recruits disambiguation | Separate hubs — no cross-link from hamburger Rankings to recruit Top 60 | `MEGA-RECR-123` |
 | MEGA-SHELL-151 | SHIP | Statistics hub national leaders | `StatisticsHubNationalLeadersPolicy` + live route | `StatisticsHubRouteScreen.kt` |
-| MEGA-SHELL-152 | PARTIAL | Preseason rankings review vs News | Team poll publication task — not reflected in News feed | `PreseasonTaskId.RankingsReview` |
+| MEGA-SHELL-152 | SHIP | Preseason rankings review vs News | `PreseasonRankingsReviewNewsEngine` on publish | `RankingsHubRepository.kt` |
 | MEGA-SHELL-153 | SHIP | User-team large NET move → low-priority feed | `NotificationRankingsMoveFeedPolicy` on week advance | `DashboardNotificationWeekAdvanceAppender.kt` |
 | MEGA-SHELL-154 | N/A | In-season portal stats in News | Portal tab hidden in-season — by design | `NewsHubPolicy` |
 | MEGA-SHELL-155 | PARTIAL | Draft tab dynamic in-season board | Loads `offseasonWeekTwoRepository` published lines — RS weeks usually empty | `NewsHubScreen.kt` `DraftTab` |

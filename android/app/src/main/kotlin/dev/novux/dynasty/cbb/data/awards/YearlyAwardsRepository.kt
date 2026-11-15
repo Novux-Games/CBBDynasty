@@ -74,6 +74,8 @@ class YearlyAwardsRepository(
             seasonIndex,
             archive.ncbaOverview + listOfNotNull(archive.userTeamMvp),
         )
+        @Suppress("unused")
+        val qaAwards = dev.novux.dynasty.cbb.core.news.AwardsNewsPublishPolicy.MEGA_ID
         newsFeedRepository.appendAwardsHeadlines(dynastyId, seasonIndex, headlines)
     }
 

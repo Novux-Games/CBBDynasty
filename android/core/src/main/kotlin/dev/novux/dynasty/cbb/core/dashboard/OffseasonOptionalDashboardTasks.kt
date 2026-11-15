@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb.core.dashboard
 
 import dev.novux.dynasty.cbb.core.portal.PortalConstants
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
+import dev.novux.dynasty.cbb.core.signingday.SigningDayPrepBriefPolicy
 
 data class OffseasonDashboardContext(
     val offseasonWeekIndex: Int,
@@ -62,6 +63,16 @@ object OffseasonOptionalDashboardTasks {
                     kind = DashboardTaskKind.Optional,
                     deepLink = DashboardDeepLink.RecruitingRecommended,
                     formatArgs = listOf(context.offseasonWeekIndex),
+                ),
+            )
+        }
+        if (SigningDayPrepBriefPolicy.showPrepBrief(context.offseasonWeekIndex, context.signingCrunchActive)) {
+            tasks.add(
+                DashboardTask(
+                    id = DashboardTaskId.SigningDayPrepBrief,
+                    kind = DashboardTaskKind.Optional,
+                    deepLink = DashboardDeepLink.SigningDayRankings,
+                    formatArgs = SigningDayPrepBriefPolicy.briefFormatArgs(context.offseasonWeekIndex),
                 ),
             )
         }

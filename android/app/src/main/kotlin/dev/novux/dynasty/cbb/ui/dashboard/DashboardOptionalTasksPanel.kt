@@ -132,6 +132,11 @@ private fun taskMessage(task: DashboardTask): String = when (task.id) {
         R.string.dashboard_task_signing_crunch,
         task.formatArgs.firstOrNull() ?: 2,
     )
+    DashboardTaskId.SigningDayPrepBrief -> stringResource(
+        R.string.dashboard_task_signing_prep_brief,
+        task.formatArgs.firstOrNull() ?: 5,
+        task.formatArgs.getOrNull(1) ?: 6,
+    )
     DashboardTaskId.OpenScholarships -> stringResource(
         R.string.dashboard_task_open_scholarships,
         task.formatArgs.firstOrNull() ?: 0,

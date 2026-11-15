@@ -672,6 +672,7 @@
     <string name="dashboard_offseason_portal_window_closed_heading">Portal recruiting window closed</string>
     <string name="dashboard_offseason_portal_window_closed_body">Weeks 2–5 optional portal tasks are done. Finish signing and roster moves from the recruiting hub or advance the week.</string>
     <string name="dashboard_task_signing_crunch">Signing week R%1$d — 1.5× recruiting points</string>
+    <string name="dashboard_task_signing_prep_brief">Signing Day prep — week %1$d before lock (week %2$d)</string>
     <string name="dashboard_task_open_scholarships">%1$d scholarship slots open</string>
     <string name="advance_confirm_title">Advance week?</string>
     <string name="advance_confirm_confirm">Advance</string>
@@ -742,7 +743,14 @@
     <string name="signing_day_title">Signing Day</string>
     <string name="signing_day_subtitle">Review recruit national ranks (Top 60), set positions, then hard sign your class — not team NET or polls.</string>
     <string name="signing_day_required_dashboard_hint">Complete recruit rankings, position confirm, and hard sign — shell dashboard tasks mirror these steps.</string>
-    <string name="signing_day_position_editor_hint">Tap Position to cycle each signee\'s role, then confirm before hard sign.</string>
+    <string name="signing_day_position_editor_hint">Choose listed positions (PG↔SG, SF↔PF) before confirm — centers lock to C.</string>
+    <string name="signing_day_position_board_invalid">Fix listed positions: each signee must use an allowed flex slot.</string>
+    <string name="signing_day_choose_position">Listed position</string>
+    <string name="signing_day_position_picker_title">Listed position — %1$s</string>
+    <string name="signing_day_position_picker_scouted">Scouted: %1$s</string>
+    <string name="signing_day_position_picker_option">Set listed position: %1$s</string>
+    <string name="signing_day_position_picker_option_selected">%1$s (current)</string>
+    <string name="signing_day_open_news_recruits">Open News hub — Recruits</string>
     <string name="signing_day_cycle_close_hint">Hard sign closed this recruiting cycle — the hub is administration-only until next offseason.</string>
     <string name="signing_day_tab_rankings">Recruit rankings</string>
     <string name="signing_day_recruit_rankings_heading">National recruiting Top 60 — players in this class</string>

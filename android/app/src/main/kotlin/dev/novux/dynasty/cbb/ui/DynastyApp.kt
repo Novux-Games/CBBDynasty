@@ -838,6 +838,10 @@ fun DynastyApp(
                             recruitOfferPromiseRepository = LocalContext.current.requireDynastyApplication()
                                 .recruitOfferPromiseRepository,
                             initialTab = signingDayInitialTab,
+                            onOpenNewsRecruits = {
+                                newsHubLaunchTab = dev.novux.dynasty.cbb.ui.news.NewsHubTab.Recruits
+                                navController.navigate(AppRoute.NewsHub.route)
+                            },
                             onBack = { navController.popBackToInShellDashboard() },
                         )
                     }

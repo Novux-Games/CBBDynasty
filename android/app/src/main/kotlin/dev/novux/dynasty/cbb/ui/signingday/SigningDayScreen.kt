@@ -10,8 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -35,7 +35,10 @@ import dev.novux.dynasty.cbb.core.signingday.IncomingSignee
 import dev.novux.dynasty.cbb.core.signingday.NationalRankRow
 import dev.novux.dynasty.cbb.core.signingday.NationalRecruitingRankings
 import dev.novux.dynasty.cbb.core.signingday.SigningDayClassBoardSummaryPolicy
+import dev.novux.dynasty.cbb.core.preseason.PreseasonNewsFeedPolicy
 import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignBlockReason
+import dev.novux.dynasty.cbb.core.signingday.SigningDayPositionFlexPolicy
+import dev.novux.dynasty.cbb.core.signingday.SigningDayRankingsTop60ContextPolicy
 import dev.novux.dynasty.cbb.core.news.NewsHeadlinePublisher
 import dev.novux.dynasty.cbb.core.signingday.SigningDayHardSignUiGate
 import dev.novux.dynasty.cbb.core.signingday.SigningDayUnsignedElsewhereEngine
@@ -72,6 +75,7 @@ fun SigningDayScreen(
     incomingClassSeedRepository: IncomingClassSeedRepository,
     recruitOfferPromiseRepository: RecruitOfferPromiseRepository,
     initialTab: SigningDayInitialTab = SigningDayInitialTab.Rankings,
+    onOpenNewsRecruits: () -> Unit = {},
     onBack: () -> Unit,
 ) {
     var tabIndex by remember(initialTab) {
@@ -85,6 +89,11 @@ fun SigningDayScreen(
     var rankings by remember { mutableStateOf<List<NationalRankRow>>(emptyList()) }
     var offerPromises by remember { mutableStateOf<Map<String, RecruitOfferPromise>>(emptyMap()) }
     var promisePickerTarget by remember { mutableStateOf<Pair<String, String>?>(null) }
+    var positionPickerTarget by remember {
+        mutableStateOf<Pair<IncomingSignee, PlayerPosition>?>(null)
+    }
+    var scoutedByProspectId by remember { mutableStateOf<Map<String, PlayerPosition>>(emptyMap()) }
+    var top60HeadlineTitle by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val dynastyApp = context.requireDynastyApplication()
@@ -100,7 +109,13 @@ fun SigningDayScreen(
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
         val pool = incomingClassSeedRepository.ensurePool(loaded.dynastyId, loaded.metadata.seasonIndex)
+        scoutedByProspectId = pool.associate { it.prospectId to it.position }
         rankings = NationalRecruitingRankings.top60FromPool(pool)
+        val storyId = PreseasonNewsFeedPolicy.top60StoryId(loaded.metadata.seasonIndex)
+        top60HeadlineTitle = dynastyApp.newsFeedRepository
+            .loadArchive(loaded.dynastyId, loaded.metadata.seasonIndex)
+            .firstOrNull { it.id == storyId }
+            ?.title
         refresh()
         if (tabIndex == 0) {
             signingDayRepository.markRankingsViewed(loaded.dynastyId, loaded.metadata.seasonIndex)
@@ -149,20 +164,23 @@ fun SigningDayScreen(
         }
         Column(modifier = Modifier.weight(1f)) {
             when (tabIndex) {
-                0 -> RankingsBody(rankings)
+                0 -> RankingsBody(
+                    rows = rankings,
+                    contextLine = SigningDayRankingsTop60ContextPolicy.contextLine(
+                        top60HeadlineTitle,
+                        rankings.size,
+                    ),
+                    onOpenNewsRecruits = onOpenNewsRecruits,
+                )
                 else -> PositionsBody(
                 signees = incoming,
                 progress = progress,
                 offerPromises = offerPromises,
+                scoutedByProspectId = scoutedByProspectId,
                 onSetPromise = { signee -> promisePickerTarget = signee.prospectId to signee.displayName },
-                onCyclePosition = { signee ->
-                    scope.launch {
-                        val next = PlayerPosition.entries[
-                            (PlayerPosition.entries.indexOf(signee.position) + 1) % PlayerPosition.entries.size
-                        ]
-                        signingDayRepository.savePositionOverride(loaded.dynastyId, signee.prospectId, next)
-                        refresh()
-                    }
+                onChoosePosition = { signee ->
+                    val scouted = scoutedByProspectId[signee.prospectId] ?: signee.position
+                    positionPickerTarget = signee to scouted
                 },
                 onConfirmPositions = {
                     scope.launch {
@@ -212,6 +230,24 @@ fun SigningDayScreen(
                 },
                 )
             }
+        }
+        positionPickerTarget?.let { (signee, scouted) ->
+            SigningDayPositionPickerSheet(
+                displayName = signee.displayName,
+                scoutedPosition = scouted,
+                currentPosition = signee.position,
+                onDismiss = { positionPickerTarget = null },
+                onSelect = { chosen ->
+                    scope.launch {
+                        signingDayRepository.savePositionOverride(
+                            loaded.dynastyId,
+                            signee.prospectId,
+                            chosen,
+                        )
+                        refresh()
+                    }
+                },
+            )
         }
         promisePickerTarget?.let { (prospectId, displayName) ->
             RecruitPromisePickerSheet(
@@ -275,7 +311,11 @@ private fun SigningDayGatingHints(
 }
 
 @Composable
-private fun RankingsBody(rows: List<NationalRankRow>) {
+private fun RankingsBody(
+    rows: List<NationalRankRow>,
+    contextLine: String?,
+    onOpenNewsRecruits: () -> Unit,
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -287,6 +327,17 @@ private fun RankingsBody(rows: List<NationalRankRow>) {
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(bottom = 4.dp),
             )
+            contextLine?.let { line ->
+                Text(
+                    text = line,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 8.dp),
+                )
+                OutlinedButton(onClick = onOpenNewsRecruits, modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.signing_day_open_news_recruits))
+                }
+            }
         }
         items(rows, key = { it.prospect.prospectId }) { row ->
             Row(
@@ -313,8 +364,9 @@ private fun PositionsBody(
     signees: List<IncomingSignee>,
     progress: SigningDayProgress?,
     offerPromises: Map<String, RecruitOfferPromise>,
+    scoutedByProspectId: Map<String, PlayerPosition>,
     onSetPromise: (IncomingSignee) -> Unit,
-    onCyclePosition: (IncomingSignee) -> Unit,
+    onChoosePosition: (IncomingSignee) -> Unit,
     onConfirmPositions: () -> Unit,
     onHardSign: () -> Unit,
 ) {
@@ -345,6 +397,14 @@ private fun PositionsBody(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        val boardValid = SigningDayPositionFlexPolicy.boardValid(signees, scoutedByProspectId)
+        if (!boardValid && signees.isNotEmpty()) {
+            Text(
+                text = stringResource(R.string.signing_day_position_board_invalid),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
+            )
+        }
         Text(
             text = stringResource(R.string.signing_day_promise_locked_note),
             style = MaterialTheme.typography.bodySmall,
@@ -400,15 +460,15 @@ private fun PositionsBody(
                                     Text(stringResource(R.string.signing_day_promise_set))
                                 }
                             }
-                            OutlinedButton(onClick = { onCyclePosition(signee) }) {
-                                Text(stringResource(R.string.signing_day_cycle_position))
+                            OutlinedButton(onClick = { onChoosePosition(signee) }) {
+                                Text(stringResource(R.string.signing_day_choose_position))
                             }
                         }
                     }
                 }
             }
         }
-        val canConfirm = SigningDayHardSignUiGate.canConfirmPositions(progress)
+        val canConfirm = SigningDayHardSignUiGate.canConfirmPositions(progress, boardValid)
         val canHardSign = SigningDayHardSignUiGate.canHardSign(progress, allPromisesSet)
         SigningDayGatingHints(
             progress = progress,
