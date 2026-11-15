@@ -577,7 +577,22 @@
     "MEGA-SIM-085",
     "MEGA-WORLD-006",
     "MEGA-WORLD-010",
-    "MEGA-WORLD-017"
+    "MEGA-WORLD-017",
+    "MEGA-COACH-053",
+    "MEGA-COACH-071",
+    "MEGA-COACH-076",
+    "MEGA-COACH-078",
+    "MEGA-COACH-085",
+    "MEGA-COACH-101",
+    "MEGA-COACH-105",
+    "MEGA-COACH-112",
+    "MEGA-COACH-117",
+    "MEGA-COACH-147",
+    "MEGA-COACH-161",
+    "MEGA-COACH-162",
+    "MEGA-COACH-164",
+    "MEGA-COACH-165",
+    "MEGA-COACH-166"
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
@@ -588,6 +603,6 @@
     "openImplementation": 178,
     "remaining": 178,
     "shardPassShipDone": 1119,
-    "completedIdsRecorded": 576
+    "completedIdsRecorded": 591
   }
 }
