@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.player.PlayerCardMultiTabPolicy
+import dev.novux.dynasty.cbb.core.player.archetype.PlayerArchetypeFlavorEngine
+import dev.novux.dynasty.cbb.core.player.card.PlayerCardEditGatePolicy
 import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
 import dev.novux.dynasty.cbb.ui.portrait.PlayerPortraitSlot
 
@@ -36,7 +38,8 @@ fun PlayerCardPreviewSheet(
     player: DynastyPlayer?,
     onDismiss: () -> Unit,
     onViewMore: (DynastyPlayer) -> Unit,
-    allowEdit: Boolean = true,
+    allowEdit: Boolean = false,
+    isOnUserRoster: Boolean = true,
     nationalTop60RankByPlayerId: Map<String, Int> = emptyMap(),
 ) {
     if (player == null) return
@@ -49,7 +52,7 @@ fun PlayerCardPreviewSheet(
         ) {
             PlayerCardPersistentHeader(
                 displayName = player.identity.displayName,
-                allowEdit = allowEdit,
+                allowEdit = allowEdit || PlayerCardEditGatePolicy.allowEditOnPreview(isOnUserRoster),
                 onBack = onDismiss,
                 onEdit = { showEditHint = true },
             )
@@ -138,11 +141,7 @@ fun PlayerCardOverviewContent(
         PlayerCardIdentityStripChips(player = player)
         PlayerRosterStatusChips(player = player)
         PlayerEligibilityStatusLines(player = player)
-        Text(
-            text = player.archetype.displayName,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        PlayerArchetypeBadgeChip(archetype = player.archetype)
         PlayerLoyaltyChips(player)
         HorizontalDivider()
         Text(
@@ -193,6 +192,16 @@ fun PlayerCardOverviewContent(
             )
         } else {
             PlayerRatingAttributesPanel(ratings = player.ratings)
+            val archetypeFlavor = PlayerArchetypeFlavorEngine.flavorLine(player.archetype)
+            if (archetypeFlavor.isNotBlank()) {
+                @Suppress("unused")
+                val qaFlavor = PlayerArchetypeFlavorEngine.MEGA_ID_SHEET
+                Text(
+                    text = archetypeFlavor,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
             PlayerLoyaltyRatingsRow(player)
         }
         Text(

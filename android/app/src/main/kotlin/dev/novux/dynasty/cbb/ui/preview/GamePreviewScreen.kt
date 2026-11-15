@@ -97,6 +97,9 @@ fun GamePreviewScreen(
             )
             GamePreviewScoutingTable(userScout, oppScout)
         }
+        preview.opponentRotation?.let { rotation ->
+            GamePreviewRotationPanel(rotation)
+        }
         Text(
             text = stringResource(R.string.game_preview_primary_cta_heading),
             style = MaterialTheme.typography.titleMedium,

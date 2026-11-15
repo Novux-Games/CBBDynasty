@@ -648,6 +648,7 @@ fun DynastyApp(
                             homeName = GameWatchLaunch.homeName,
                             awayName = GameWatchLaunch.awayName,
                             homeGameplan = GameWatchLaunch.homeGameplan,
+                            homeHalftimeGameplan = GameWatchLaunch.homeHalftimeGameplan,
                             homeOffensiveScheme = GameWatchLaunch.homeOffensiveScheme,
                             homeDefensiveScheme = GameWatchLaunch.homeDefensiveScheme,
                             homeRosterPlayers = GameWatchLaunch.homeRosterPlayers,
@@ -800,7 +801,14 @@ fun DynastyApp(
                     )
                 }
                 composable(AppRoute.Credits.route) {
-                    CreditsScreen(onBack = { navController.popBackStack() })
+                    CreditsScreen(
+                        onBack = { navController.popBackStack() },
+                        onVisitStudio = {
+                            navController.navigate(AppRoute.Studio.route) {
+                                popUpTo(AppRoute.Credits.route) { inclusive = true }
+                            }
+                        },
+                    )
                 }
                 composable(AppRoute.Recruiting.route) {
                     val active = ActiveDynastySession.current

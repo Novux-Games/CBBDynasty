@@ -19,6 +19,7 @@ object SchoolHubSnapshotFactory {
         coachesPollRankings: Map<String, Int>? = null,
         facilitySummary: FacilityGradeSummary? = null,
         programAcademics: ProgramAcademicsSnapshot? = null,
+        seasonIndex: Int = 1,
     ): SchoolHubOverview {
         val conference = packIndex.conference(team.conferenceId)
         val mates = packIndex.allTeamDisplays().filter {
@@ -74,6 +75,13 @@ object SchoolHubSnapshotFactory {
             } else {
                 null
             },
+            homeCity = team.homeCity.takeIf { it.isNotBlank() },
+            homeState = team.homeState.takeIf { it.isNotBlank() },
+            arenaBaseName = team.arenaBaseName.takeIf { it.isNotBlank() },
+            primaryColorHex = team.primaryColorHex,
+            secondaryColorHex = team.secondaryColorHex,
+            reclassTransitionYear = team.reclassTransitionYear,
+            seasonIndex = seasonIndex,
         )
     }
 }

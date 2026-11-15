@@ -61,8 +61,12 @@ class DynastyApplication : Application() {
         private set
 
     lateinit var dynastyStrategyPrepRepository: dev.novux.dynasty.cbb.data.strategy.DynastyStrategyPrepRepository
+        private set
+
     lateinit var userCalendarGameWatchBootstrap: dev.novux.dynasty.cbb.data.sim.UserCalendarGameWatchBootstrap
         private set
+
+    lateinit var dynastyDatabase: DynastyDatabase
         private set
 
     lateinit var scrimmageGameRecordRepository: dev.novux.dynasty.cbb.data.scrimmage.ScrimmageGameRecordRepository
@@ -281,7 +285,8 @@ class DynastyApplication : Application() {
             applicationContext,
             recruitingReservationRepository,
         )
-        val database = DynastyDatabase.build(applicationContext)
+        dynastyDatabase = DynastyDatabase.build(applicationContext)
+        val database = dynastyDatabase
         nilAnnualPoolRepository = dev.novux.dynasty.cbb.data.nil.NilAnnualPoolRepository(
             database,
             packRepository,
@@ -327,8 +332,8 @@ class DynastyApplication : Application() {
             recruitOfferPromiseRepository,
             recruitLockedPromiseRepository,
             recruitingEconomyRepository,
-            nilAnnualPoolRepository,
             dynastyRosterRepository,
+            nilAnnualPoolRepository,
         )
         disciplineRepository = DisciplineRepository(applicationContext, database, balanceRulesetRepository)
         chemistryRepository = ChemistryRepository(applicationContext, balanceRulesetRepository)
@@ -494,6 +499,7 @@ class DynastyApplication : Application() {
         conferenceTournamentRepository = dev.novux.dynasty.cbb.data.conference.ConferenceTournamentRepository(
             packRepository,
             leagueWeekBatchRepository,
+            selectionSundayRepository,
         )
         conferenceTournamentHubRepository = dev.novux.dynasty.cbb.data.conference.ConferenceTournamentHubRepository(
             packRepository,

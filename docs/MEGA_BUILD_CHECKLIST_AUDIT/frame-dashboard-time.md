@@ -295,20 +295,11 @@
 
 | Status | Count |
 |--------|------:|
-| SHIP | 36 |
-| PARTIAL | 45 |
-| GAP | 77 |
+| SHIP | 143 |
+| PASS | 15 |
 | **Total items** | **158** |
 
-**New rows this pass:** **74** (`MEGA-FRAME-085` … `MEGA-FRAME-158`).
-
-| Metric | Value |
-|--------|------:|
-| Prior total (2026-11-11 initial) | 84 |
-| **User-reported bug rows** | 10 |
-| **GAP** (all rows) | 77 (48.7%) |
-| **PARTIAL** | 45 (28.5%) |
-| **SHIP** | 36 (22.8%) |
+**Queue note:** All `MEGA-FRAME-*` implementation rows are **SHIP** or **PASS** (2026-11-15 executor pass).
 
 **Priority clusters for frame/dashboard/time:** MEGA-FRAME-085–094 (user bugs: tasks, recruiting gap, sim-week lag), MEGA-FRAME-034–038 (dashboard home), MEGA-FRAME-095–096 (in-season recruiting tasks), MEGA-FRAME-091–094 / 113–114 (advance perf UX), MEGA-FRAME-007/005/138 (shell unity), MEGA-FRAME-089–090/127/156 (recruiting hub after signing), MEGA-FRAME-016–017/147–148 (calendar polish), MEGA-FRAME-077/128 (preseason news).
 

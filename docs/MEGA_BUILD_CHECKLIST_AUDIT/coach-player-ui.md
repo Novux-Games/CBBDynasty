@@ -93,7 +93,7 @@
 | MEGA-COACH-050 | P1 | PASS | Assistant tabs History · Contract (HC conditional Achievements/HOF/Draft) | `PrimaryTabRow` on `AssistantCoachCardScreen` | `AssistantCoachCardScreen.kt`, `CoachCardTabs.kt` |
 | MEGA-COACH-051 | P1 | PASS | Support staff rows not tappable / no card | `SchoolStaffTabPanel` `clickable = false` |
 | MEGA-COACH-052 | P2 | PASS | Policy: coach-track eligible for card | `CoachCardPolicy`, test |
-| MEGA-COACH-053 | P2 | FAIL | Staff grade aggregate chip | No staff grade on staff panel |
+| MEGA-COACH-053 | P2 | PASS | Staff grade aggregate chip | `SchoolStaffGradeEngine` + `AssistChip` on `SchoolStaffTabPanel` | `SchoolStaffGradeEngineTest`, `MegaCoachBatch32PathTest` |
 | MEGA-COACH-054 | P1 | PASS | Staff Manage hire/fire/poach (user school) | `SchoolStaffTabPanel` Manage → `StaffManageBottomSheet`; `SchoolStaffRepository` hire/fire/poach | `StaffManagePanelPathTest`, `StaffCandidatePoolTest` |
 | MEGA-COACH-055 | P2 | GAP | Shell navigation Staff → HC / Assistant | `ShellCoachView` in `DynastyShellScreen` |
 | MEGA-COACH-056 | P2 | GAP | `HeadCoachCard` model career/contract depth | Data class lacks achievements, HOF list, season history DTOs |
@@ -118,7 +118,7 @@
 | MEGA-COACH-068 | P0 | PASS | Games tab game log + box score drill-in | `PlayerGameLogPanel` rows + `PlayerGameBoxScoreSheet`; `PlayerGameLogSynth` + `PlayerStatsRepository.gameLogFor` | `core/player/games/*`, `PlayerGameLogPanel.kt`, `PlayerGameBoxScoreSheet.kt` |
 | MEGA-COACH-069 | P1 | PASS | History tab prior seasons | `PlayerPriorSeasonList` + `PlayerStatsRepository.priorSeasonsForPlayer` | `PlayerCardHistoryPanel.kt`, `PlayerCardScreen.kt` |
 | MEGA-COACH-070 | P2 | GAP | Injury chip on card identity | `PlayerInjuryOverviewBlock` text line — not `OUT` chip in strip |
-| MEGA-COACH-071 | P2 | FAIL | Edit mode user roster only | No Edit on sheet |
+| MEGA-COACH-071 | P2 | PASS | Edit mode user roster only | `PlayerCardEditGatePolicy`; shell/offseason/preseason user roster only | `MegaCoachBatch32PathTest` |
 
 ---
 
@@ -130,9 +130,9 @@
 | MEGA-COACH-073 | P1 | PASS | Archetype catalog guards/forwards/centers | `PlayerArchetype` enum |
 | MEGA-COACH-074 | P1 | PASS | Assignment from position + rating skew | `PlayerArchetypeAssigner`, tests |
 | MEGA-COACH-075 | P2 | PASS | Archetype on player card Overview information row | `player_card_identity` string |
-| MEGA-COACH-076 | P2 | FAIL | Ratings tab archetype flavor text | Not in `PlayerCardSheet` |
+| MEGA-COACH-076 | P2 | PASS | Ratings tab archetype flavor text | `PlayerArchetypeFlavorEngine` on preview sheet ratings block | `PlayerCardSheet.kt`, `MegaCoachBatch32PathTest` |
 | MEGA-COACH-077 | P1 | PASS | Draft rank from national Top 60 when eligible | `NationalDraftTop60Pool` + `DraftProjection` on card via `DynastyShellScreen` ranks | `NationalDraftTop60PoolTest` |
-| MEGA-COACH-078 | P2 | FAIL | Rank labels Lottery / First round / Early second / Late second | No UI |
+| MEGA-COACH-078 | P2 | PASS | Rank labels Lottery / First round / Early second / Late second | `PlayerDraftProjectionEngine.tierForRank` + `player_card_draft_tier_sublabel` | `PlayerDraftTierPolicy`, `MegaCoachBatch32PathTest` |
 | MEGA-COACH-079 | P2 | PASS | Top 60 pool exists for recruits/news | HS pool + `NationalDraftTop60Pool` on roster player card Overview |
 
 ---
@@ -146,7 +146,7 @@
 | MEGA-COACH-082 | P1 | PASS | Promise evaluation + declare intent roll in core | `PromiseEvaluator`, `DeclareIntentRoll` tests |
 | MEGA-COACH-083 | P1 | PASS | Balance JSON `player.loyalty` tuning codec | `BalanceLoyaltyTuning` |
 | MEGA-COACH-084 | P2 | GAP | Overview loyalty + active promise chips | `PlayerLoyaltyChips` |
-| MEGA-COACH-085 | P2 | GAP | Ratings tab loyalty row | `PlayerLoyaltyRatingsRow` (in sheet, not tab) |
+| MEGA-COACH-085 | P2 | PASS | Ratings tab loyalty row | `PlayerLoyaltyRatingsRow` on full card Ratings tab | `PlayerCardRatingsTab.kt` |
 | MEGA-COACH-086 | P1 | PASS | History tab locked promise + per-season Kept/Broken | `PlayerPromiseHistoryPanel` + `promiseHistoryWire` persistence | `PlayerPromiseHistoryPathTest` |
 | MEGA-COACH-087 | P1 | PASS | Recruit sheet promise picker at offer | `RecruitPromisePickerSheet` before scholarship offer + `RecruitOfferPromiseRepository` | `RecruitPromisePickerPathTest` |
 | MEGA-COACH-088 | P2 | GAP | Offseason Week 1 declare UI shows loyalty | `PlayersLeavingScreen` loyalty line |
@@ -176,11 +176,11 @@
 | MEGA-COACH-098 | P0 | PASS | Shared `PresetPortrait` / headshot composable | `PresetHeadshot`, `PortraitSlots` (player + coach) | `ui/portrait/PresetHeadshot.kt`, `PortraitSlots.kt` |
 | MEGA-COACH-099 | P1 | PASS | Deterministic render from preset id (repro across devices) | `PresetPortraitRenderer` + tests | `core/portrait/PresetPortraitRenderer.kt` |
 | MEGA-COACH-100 | P1 | PASS | Player card identity strip hosts headshot | `PlayerIdentityStrip` + `PlayerPortraitSlot` | `PlayerCardScreen.kt`, `PortraitSlots.kt` |
-| MEGA-COACH-101 | P2 | FAIL | Roster row optional thumbnail (density mode) | `DynastyShellRosterTab` — name + chips only |
+| MEGA-COACH-101 | P2 | PASS | Roster row optional thumbnail (density mode) | `ShellRosterPlayerRow` + `PresetHeadshot` 40dp on shell roster | `ShellRosterThumbnailPath`, `MegaCoachBatch32PathTest` |
 | MEGA-COACH-102 | P2 | PASS | Preview sheet shows headshot when renderer ships | `PlayerCardPreviewSheet` + coach preview row | `PlayerCardSheet.kt`, `CoachPreviewSheet.kt` |
 | MEGA-COACH-103 | P2 | FAIL | Recruit / portal sheet headshot when on roster rules allow | Recruiting UI not audited here — no shared portrait |
 | MEGA-COACH-104 | P3 | GAP | Pack JSON avatar tables (not hardcoded coach-only) | `CoachAvatarPresets` hardcoded; no pack slice |
-| MEGA-COACH-105 | P2 | FAIL | Unit test: same preset id → same drawable key/hash | No renderer tests |
+| MEGA-COACH-105 | P2 | PASS | Unit test: same preset id → same drawable key/hash | `PresetPortraitRendererTest` + `PresetPortraitRendererPolicy` | `PresetPortraitRenderer.kt` |
 | MEGA-COACH-106 | P2 | GAP | Accessibility: headshot decorative vs initials fallback | No fallback composable |
 | MEGA-COACH-107 | P3 | GAP | GPU/memory budget doc for portrait cache | Not present |
 
@@ -194,12 +194,12 @@
 | MEGA-COACH-109 | P0 | PASS | Overview tab default selected | Default `CoachCardTab.Overview` on route | `CoachCardRoute.HeadCoach` |
 | MEGA-COACH-110 | P1 | PASS | Contract tab hosts salary/buyout/goals blocks | `CoachCardContractTabShell` + terms/goals blocks; HC + assistant Contract tab |
 | MEGA-COACH-111 | P1 | PASS | History tab season list + expand | `CoachSeasonHistory` + `CoachSeasonHistoryList` tap-expand detail |
-| MEGA-COACH-112 | P2 | FAIL | HOF tab list (national + conference pools) | No coach-attributed HOF query |
+| MEGA-COACH-112 | P2 | PASS | HOF tab list (national + conference pools) | `CoachCardHofDeepTab` + `CoachCardDeepTabsEngine.hallOfFame` | `CoachCardDeepTabsPathTest` |
 | MEGA-COACH-113 | P2 | FAIL | Draft tab coach résumé (players coached → NBA) | No coach-draft join UI |
 | MEGA-COACH-114 | P1 | PASS | Tab bar scrollable on small widths | `CoachCardTabRow` → `ScrollableTabRow` on HC + assistant cards | `CoachCardTabRow.kt` |
 | MEGA-COACH-115 | P1 | PASS | Overview → Contract deep-link from job security tap | Overview `JobSecurityMeter` tap → `CoachCardTab.Contract`; factors on Contract tab |
 | MEGA-COACH-116 | P2 | PASS | Assistant card tab subset (Overview/History/Contract) | Tab shell matches `coach-card.md` assistant section | `AssistantCoachCardScreen.kt` |
-| MEGA-COACH-117 | P2 | FAIL | Conditional HC tabs on assistant when `hasHeadCoachCareer` | No career flag on assistant model |
+| MEGA-COACH-117 | P2 | PASS | Conditional HC tabs on assistant when `hasHeadCoachCareer` | `AssistantCoachCard.hasHeadCoachCareer`; associate HC seeded true | `StaffMappers.kt`, `MegaCoachBatch32PathTest` |
 
 ---
 
@@ -250,7 +250,7 @@
 | MEGA-COACH-144 | P2 | PASS | **Perimeter** spelling in perimeter defense label | `player_rating_perimeter_def_label` | `strings.xml` |
 | MEGA-COACH-145 | P2 | GAP | Scout depth gates attribute visibility | `ScoutDepth.Light` on sheet — full card should respect depth rules |
 | MEGA-COACH-146 | P2 | GAP | Opponent player card view-only (no Edit) | No full card — N/A until route exists |
-| MEGA-COACH-147 | P2 | FAIL | Experience row (eligibility used / remaining) | Not on sheet |
+| MEGA-COACH-147 | P2 | PASS | Experience row (eligibility used / remaining) | `PlayerEligibilityStatusLines` on preview Overview | `PlayerCardSheet.kt` |
 | MEGA-COACH-148 | P1 | PASS | NIL `↑` chip season deal changes | `nilDealRaisedThisSeason` + `PlayerNilSeasonDealEngine` + Overview `↑` chip | `PlayerNilValuationLine.kt` |
 
 ---
@@ -278,12 +278,12 @@
 
 | ID | Pri | Status | Requirement | Evidence / finding |
 |----|-----|--------|-------------|-------------------|
-| MEGA-COACH-161 | P2 | FAIL | **Archetype badge** chip on roster row (compact) | Roster shows text in card body only |
-| MEGA-COACH-162 | P2 | FAIL | Archetype badge on player identity strip | Plain text in identity string |
+| MEGA-COACH-161 | P2 | PASS | **Archetype badge** chip on roster row (compact) | `PlayerArchetypeBadgeChip` on `ShellRosterPlayerRow` | `MegaCoachBatch32PathTest` |
+| MEGA-COACH-162 | P2 | PASS | Archetype badge on player identity strip | `PlayerArchetypeBadgeChip` on `PlayerCardIdentityStrip` | `PlayerArchetypeBadgePath` |
 | MEGA-COACH-163 | P1 | PASS | Draft line `Draft: #N` when Top 60 + eligible | `nationalTop60DraftRank` on `DynastyPlayer`; `PlayerDraftProjectionLine` + shell enrich | `DynastyPlayer.kt`, `PlayerDraftProjectionLine.kt` |
-| MEGA-COACH-164 | P2 | FAIL | Tier sublabel Lottery / First round / … | No mapper |
-| MEGA-COACH-165 | P2 | FAIL | `N/A` when undrafted / ineligible | No UI branch |
-| MEGA-COACH-166 | P2 | FAIL | Ratings tab archetype flavor one-liner | Spec in `player-archetypes.md` — missing |
+| MEGA-COACH-164 | P2 | PASS | Tier sublabel Lottery / First round / … | `PlayerDraftTierPolicy.tierLabelForRank` → Overview subline | `PlayerDraftProjectionLine.kt` |
+| MEGA-COACH-165 | P2 | PASS | `N/A` when undrafted / ineligible | `player_card_draft_na` branch in `PlayerDraftProjectionLine` | `PlayerDraftProjectionEngineTest` |
+| MEGA-COACH-166 | P2 | PASS | Ratings tab archetype flavor one-liner | `PlayerArchetypeFlavorEngine` on Ratings tab | `PlayerCardRatingsTab.kt` |
 | MEGA-COACH-167 | P3 | GAP | Archetype color/icon per position group | No design tokens |
 | MEGA-COACH-168 | P2 | GAP | News Top 60 ↔ card same rank source | `NationalRecruitingRankings` vs roster rank gap (RECR audit) |
 

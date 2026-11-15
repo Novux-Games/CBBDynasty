@@ -32,6 +32,7 @@ object SignLikelihoodEngine {
         nilRules: BalanceNilRules? = null,
         spendDelta: Int = 0,
         promiseDelta: Int = 0,
+        leagueWeeksElapsed: Int = 0,
     ): RecommendedProspectRow {
         val baselineSnapshot = RecruitInterestTwoSurfaces.baselineSnapshotForSignLikelihood(
             prospect,
@@ -68,6 +69,7 @@ object SignLikelihoodEngine {
             userSchool = school,
             userProgramId = "user-program",
             recommended = recommended,
+            leagueWeeksElapsed = leagueWeeksElapsed,
         )
         return RecommendedProspectRow(
             prospect = prospect,

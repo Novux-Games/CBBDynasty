@@ -103,7 +103,7 @@ fun CoachingCarouselScreen(
         callbacks = hubMenuCallbacks,
         recruitingCycleClosed = RecruitingCyclePolicy.recruitingMenuTreatsCycleClosed(
             CalendarPhase.Offseason,
-            weekIndex = null,
+            offseasonWeekIndex = position.weekIndex.takeIf { position.phase == CalendarPhase.Offseason },
             ledger = null,
         ),
         onRecruitingCycleClosed = {},
@@ -116,7 +116,10 @@ fun CoachingCarouselScreen(
             cardPlayer = null
             fullScreenPlayer = player
         },
-        allowEdit = false,
+        isOnUserRoster = true,
+        allowEdit = dev.novux.dynasty.cbb.core.player.card.PlayerCardEditGatePolicy.allowEditOnPreview(
+            isOnUserRoster = true,
+        ),
     )
 
     fullScreenPlayer?.let { player ->
@@ -126,7 +129,9 @@ fun CoachingCarouselScreen(
             seasonRecordLabel = "0-0",
             seasonIndex = seasonIndex,
             playerStatsRepository = playerStatsRepository,
-            allowEdit = false,
+            allowEdit = dev.novux.dynasty.cbb.core.player.card.PlayerCardEditGatePolicy.allowEditOnFullCard(
+                isOnUserRoster = true,
+            ),
             onBack = { fullScreenPlayer = null },
         )
         return

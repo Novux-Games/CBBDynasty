@@ -554,6 +554,17 @@
       }
     ],
     "weeklyPointsInterpolation": "linear_within_tier",
+    "interest": {
+      "priorityMultiplier": 2.0,
+      "baseWeights": {
+        "nil": 0.25,
+        "playingTimeFit": 0.2,
+        "prestigeWinning": 0.2,
+        "coachRelationship": 0.15,
+        "proximity": 0.1,
+        "campusLife": 0.1
+      }
+    },
     "signingDayOffseasonWeek": 6,
     "actions": {
       "scholarshipOffer": {

@@ -63,4 +63,5 @@ data class GamePreviewResult(
     val headToHead: HeadToHeadRecord,
     val userScouting: GamePreviewTeamScouting? = null,
     val opponentScouting: GamePreviewTeamScouting? = null,
+    val opponentRotation: GamePreviewRotationSnapshot? = null,
 )

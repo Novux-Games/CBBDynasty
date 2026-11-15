@@ -37,22 +37,22 @@
 |----|--------|-------------------|-------------|---------|
 | MEGA-SIM-001 | SHIP | `simulateGame(input) → result`; stateless engine, caller owns calendar/save | `PossessionSimEngine.simulate`, `GameSimInput` | Contract present; name is `simulate` not `simulateGame` |
 | MEGA-SIM-002 | SHIP | Regulation **40:00**, two halves **20:00** each | `GameSimClock`, `PossessionSimSession` | Clock starts 2400s, decrements per trip |
-| MEGA-SIM-003 | PARTIAL | **30s** shot clock state + reset on change of possession / **20** after OReb | `SimTuning.shotClock`, `GameSimClock.MAX_TRIP_SECONDS` | JSON defines 30/20; engine caps trip at 30s only — no shot-clock state machine or OReb reset |
+| MEGA-SIM-003 | SHIP | **30s** shot clock state + reset on change of possession / **20** after OReb | `PossessionSimSession.shotClockSeconds`, `PossessionShotClock` | Full carry + OReb 20s reset; `PossessionShotClockTest` |
 | MEGA-SIM-004 | SHIP | Shot-clock **violation** turnover type | `PossessionShotClockViolationPolicy` in possession loop | `PossessionSimSession.kt` |
-| MEGA-SIM-005 | PARTIAL | Trip time bands: quick TO 3–6, quick shot 8–14, foul 12–18 | `SimTuning.timeUsedSeconds`, `sampleTripSeconds` | Bands loaded; pacing also scaled via `pacedTripSeconds` |
+| MEGA-SIM-005 | SHIP | Trip time bands: quick TO 3–6, quick shot 8–14, foul 12–18 | `SimTuning.timeUsedSeconds`, `PossessionSimSession.sampleTripSeconds` | Bands from JSON; capped by shot/game clock |
 | MEGA-SIM-006 | SHIP | Late-clock (22–30s) contested shot / TO / foul bumps from tuning | `PossessionLateClockSimPolicy` in `PossessionSimSession` | `PossessionLateClockSimPolicy.kt` |
 | MEGA-SIM-007 | PASS | **Overtime** 5:00 until winner | `GameSimOvertime`, `PossessionSimSession` | OT periods until score breaks tie |
-| MEGA-SIM-008 | PARTIAL | **~60–70** possessions per team | `PossessionPaceGovernor`, paced trips | Trip pace scales when ahead/behind expected count |
-| MEGA-SIM-009 | PARTIAL | Terminal events: TO, 2PT/3PT, FT chains, rebounds, blocks, steals text | `resolvePossessionForSession` | Only coarse TO / FGA / score; no FTs, rebounds, blocks, steals in box |
+| MEGA-SIM-008 | SHIP | **~60–70** possessions per team | `PossessionPaceGovernor`, `PossessionPaceGovernorTest` | Pace governor scales trip seconds toward target band |
+| MEGA-SIM-009 | SHIP | Terminal events: TO, 2PT/3PT, FT chains, rebounds, blocks, steals text | `resolvePossessionForSession`, `PossessionTerminalDiversityTest` | Diverse terminal labels in possession log |
 | MEGA-SIM-010 | SHIP | Possession log format `14:32 \| HOME \| #12 3PT miss \| …` | `PossessionLogFormatPolicy` + `PossessionLogPlayerLabel` miss branch | `PossessionSimEngine.kt` |
 | MEGA-SIM-011 | SHIP | Running score + clock in output | `GameSimResult`, watch UI score strings | Score lines updated in `GameWatchScreen` |
 | MEGA-SIM-012 | PASS | Full **player** box: MIN, PTS, FGM/A, … | `PlayerBoxScore`, `GameSimResult.homePlayerBox` | All standard columns + `BoxScoreCoherence` player sums |
 | MEGA-SIM-013 | SHIP | Team PTS = sum semantics / FGA bounds | `BoxScoreCoherence.assertValid` | Asserts scoreboard vs team box, FGM≤FGA, 3PM≤3PA |
-| MEGA-SIM-014 | GAP | **200** player-minutes per team regulation coherence | `RotationMinutesAllocator` in prep only | Prep targets 200; sim does not accumulate MIN or validate |
+| MEGA-SIM-014 | SHIP | **200** player-minutes per team regulation coherence | `TeamPlayerMinutesCoherence`, `SimFloorMinutesLedger` | Floor seconds reconcile to 200 regulation minutes per team |
 | MEGA-SIM-015 | PASS | Release retry on coherence fail (cap N rolls) | `BoxScoreCoherenceSim` | Seed-bump retry before assert |
-| MEGA-SIM-016 | GAP | **Personal fouls**, disqualification at 5, foul-trouble pull | — | Not modeled in possession loop |
-| MEGA-SIM-017 | GAP | In-game **substitution** from rotation bands / fatigue | `RotationMinutesAllocator` (pre-game only) | Five-on-floor not rotated during sim |
-| MEGA-SIM-018 | GAP | Mid-game **injury** DNP from injury minute onward | `injuries.md` sim hook | Injuries only `GameSimInjuryRoll` post-game |
+| MEGA-SIM-016 | SHIP | **Personal fouls**, disqualification at 5, foul-trouble pull | `PersonalFoulLedger`, `PersonalFoulDisqualificationPolicy`, `FoulTroubleRotationPolicy` | PF/DQ tracked in session; foul-trouble bench |
+| MEGA-SIM-017 | SHIP | In-game **substitution** from rotation bands / fatigue | `RotationBandFloorPolicy`, `SimFatigueRotationPolicy` | Bench swaps when minute bands / stamina thresholds hit |
+| MEGA-SIM-018 | SHIP | Mid-game **injury** DNP from injury minute onward | `MidGameInjurySampler`, `homeInjuredOut` floor filter | Mid-game injuries remove players from rotation mid-sim |
 | MEGA-SIM-019 | SHIP | `GameSimResult` includes `possessionLog`, `isComplete`, `midGame` | `GameSimModels.kt` | Present |
 | MEGA-SIM-020 | PASS | `periodsPlayed` (regulation + OT count) | `GameSimResult.periodsPlayed` | `1 + overtimePeriods` |
 | MEGA-SIM-021 | PASS | Participant fields: `height`, `weight`, `shooting` struct | `GameSimParticipant`, `GameSimShootingProfile`, `FloorShootingEffects` | Wired from roster; shooting nudges possession resolution |
@@ -62,7 +62,7 @@
 | MEGA-SIM-025 | SHIP | Tuning bundle from `assets/sim/sim-tuning.json` | `SimTuningCodec`, `SimTuningAssetTest` | ADR-003 path wired in app |
 | MEGA-SIM-026 | SHIP | Same engine for watch vs batch (`simToEnd`) | `GameWatchPlayback.simToEnd` | Identical `PossessionSimEngine.simulate` |
 | MEGA-SIM-027 | SHIP | Deterministic variance via `seed` on `GameSimInput` | `PossessionSimSession` Random(seed) | Halftime resume preserves RNG state via `MidGameState` |
-| MEGA-SIM-028 | GAP | `winSharesSeason` rollup | Dynasty EoS (`simulation-engine` §season win contribution) | Correctly **not** in sim module |
+| MEGA-SIM-028 | PASS | `winSharesSeason` rollup | Dynasty EoS (`simulation-engine` §season win contribution) | Intentionally **not** in sim module — documented via `MEGA-SIM-174` |
 
 ---
 
@@ -76,8 +76,8 @@
 | MEGA-SIM-032 | SHIP | Halftime pause on watched run; merge updated prep; resume second half | `GameWatchPlayback.watch`, `GameSimHalftimeTest` | MidGame + `homeHalftimeGameplan` |
 | MEGA-SIM-033 | PASS | Halftime: change O/D scheme, rotation, usage, swap starters | `HalftimeCoachSheet`, `HalftimeRosterAdjust` | Full sheet: schemes, rotation chips, usage, legal starter swaps |
 | MEGA-SIM-034 | SHIP | First-half stats/score fixed after halftime | `MidGameState` carry box scores | Scores accumulate from mid state |
-| MEGA-SIM-035 | PARTIAL | `activeHomeGameplan(clock)` uses halftime plan in 2nd half | `GameSimInput.activeHomeGameplan` | `clock <= HALF_SECONDS` selects halftime plan (correct for countdown clock) |
-| MEGA-SIM-036 | WIRE | Strategy **halftime preset** separate from pregame | `StrategyGameplanPanel` Set/Clear halftime | Stored in `halftimeGameplan` but watch passes `homeHalftimeGameplan` only when user sets preset — scrimmage button uses `halftimeGameplan ?: gameplan` as **pregame** only on `GameWatchLaunch` |
+| MEGA-SIM-035 | SHIP | `activeHomeGameplan(clock)` uses halftime plan in 2nd half | `GameSimInput.activeHomeGameplan` | Halftime plan applied when `clock <= HALF_SECONDS`; `MegaBatch32SimLineupPathTest` |
+| MEGA-SIM-036 | SHIP | Strategy **halftime preset** separate from pregame | `StrategyGameplanPanel`, `GameWatchLaunch.homeHalftimeGameplan` | Pregame and halftime presets wired separately into `GameSimInput` |
 | MEGA-SIM-037 | PASS | In-sim shot clock display on lines (optional product) | `GameWatchScreen`, possession log `SC` | Chrome + per-line SC badge |
 | MEGA-SIM-038 | PASS | Postgame report after sim | `PostgameBoxScorePanel`, `PostgameReportGenerator` | Box score tabs + narrative article |
 

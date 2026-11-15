@@ -23,9 +23,9 @@ import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekEightRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekNineRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekTenRepository
 import dev.novux.dynasty.cbb.data.offseason.OffseasonWeekTwoRepository
-import dev.novux.dynasty.cbb.data.offseason.PortalCycleRepository
-import dev.novux.dynasty.cbb.data.offseason.SigningDayRepository
-import dev.novux.dynasty.cbb.data.offseason.SummerWorkoutRepository
+import dev.novux.dynasty.cbb.data.portal.PortalCycleRepository
+import dev.novux.dynasty.cbb.data.signingday.SigningDayRepository
+import dev.novux.dynasty.cbb.data.offseason.OffseasonSummerWorkoutRepository
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonProgressRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonReportRepository
@@ -55,7 +55,7 @@ fun DynastyCareerHost(
     portalCycleRepository: PortalCycleRepository,
     signingDayRepository: SigningDayRepository,
     offseasonWeekTwoRepository: OffseasonWeekTwoRepository,
-    summerWorkoutRepository: SummerWorkoutRepository,
+    summerWorkoutRepository: OffseasonSummerWorkoutRepository,
     offseasonWeekEightRepository: OffseasonWeekEightRepository,
     offseasonWeekNineRepository: OffseasonWeekNineRepository,
     offseasonWeekTenRepository: OffseasonWeekTenRepository,

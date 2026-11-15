@@ -16,12 +16,13 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.calendar.CalendarWeekLabel
 import dev.novux.dynasty.cbb.core.coach.employment.JobOfferCard
+import dev.novux.dynasty.cbb.core.coach.employment.UnemployedSpectateGamePolicy
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellChrome
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellMenuAction
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellNewsTab
 import dev.novux.dynasty.cbb.ui.dynasty.DynastyShellTab
-import dev.novux.dynasty.cbb.ui.dynasty.ShallowNewsFeedSnapshot
+import dev.novux.dynasty.cbb.core.news.ShallowNewsFeedSnapshot
 
 @Composable
 fun UnemployedCoachCareerScreen(
@@ -55,9 +56,33 @@ fun UnemployedCoachCareerScreen(
                     .padding(padding),
             )
             DynastyShellTab.News -> DynastyShellNewsTab(feed = newsFeed, contentPadding = padding)
-            DynastyShellTab.Calendar,
-            DynastyShellTab.Roster,
-            -> Column(
+            DynastyShellTab.Calendar -> if (UnemployedSpectateGamePolicy.calendarSpectateWhileUnemployed()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                        .padding(24.dp),
+                ) {
+                    Text(
+                        text = stringResource(R.string.job_center_spectate_calendar_hint),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                        .padding(24.dp),
+                ) {
+                    Text(
+                        text = stringResource(R.string.job_center_shell_tab_locked),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+            DynastyShellTab.Roster -> Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)

@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskId
+import dev.novux.dynasty.cbb.core.schedule.PreseasonNonConfCapPolicy
 import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
 import dev.novux.dynasty.cbb.core.schedule.PreseasonScheduleValidation
 import dev.novux.dynasty.cbb.core.schedule.RegularSeasonScheduleBuilderUxPolicy
@@ -64,6 +65,14 @@ fun RegularSeasonSchedulePanel(
             text = stringResource(R.string.preseason_rs_schedule_title),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
+        )
+        Text(
+            text = stringResource(
+                R.string.preseason_rs_cap_hint,
+                PreseasonNonConfCapPolicy.regularSeasonCap,
+            ),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         builderContext?.let { ctx ->
             val slots = RegularSeasonScheduleBuilderUxPolicy.previewSlotSummary(ctx)

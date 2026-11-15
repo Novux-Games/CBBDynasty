@@ -20,4 +20,11 @@ data class SchoolHubOverview(
     val programAcademicsGrade: Int? = null,
     val recruitingBudgetMultiplier: Double? = null,
     val nilCycleSummary: SchoolHubNilCycleSummary? = null,
+    val homeCity: String? = null,
+    val homeState: String? = null,
+    val arenaBaseName: String? = null,
+    val primaryColorHex: String? = null,
+    val secondaryColorHex: String? = null,
+    val reclassTransitionYear: Int? = null,
+    val seasonIndex: Int = 1,
 )

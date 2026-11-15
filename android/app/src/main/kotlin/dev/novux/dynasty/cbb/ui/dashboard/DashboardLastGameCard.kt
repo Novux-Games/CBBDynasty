@@ -112,12 +112,13 @@ fun DashboardLastGameCard(
         }
     }
 
-    if (showBox && snap.boxArchive != null) {
+    val boxArchive = snap.boxArchive
+    if (showBox && boxArchive != null) {
         val homeName = if (snap.userTeamIsHome) snap.userTeamDisplayName else snap.opponentDisplayName
         val awayName = if (snap.userTeamIsHome) snap.opponentDisplayName else snap.userTeamDisplayName
         val homeScore = if (snap.userTeamIsHome) snap.userScore else snap.opponentScore
         val awayScore = if (snap.userTeamIsHome) snap.opponentScore else snap.userScore
-        val result = snap.boxArchive.toGameSimResultForUser(
+        val result = boxArchive.toGameSimResultForUser(
             userTeamIsHome = snap.userTeamIsHome,
             homeScore = homeScore,
             awayScore = awayScore,

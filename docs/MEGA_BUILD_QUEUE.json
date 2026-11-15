@@ -1,173 +1,5 @@
 [
   {
-    "id": "MEGA-GDD-009",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
-    "id": "MEGA-GDD-105",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
-    "id": "MEGA-GDD-120",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
-    "id": "MEGA-GDD-122",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
-    "id": "MEGA-GDD-125",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
-    "id": "MEGA-GDD-129",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
-    "id": "MEGA-GDD-145",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "game-design.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
-    "id": "MEGA-RECR-007",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-011",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-025",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-026",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-052",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-062",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-071",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-116",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-125",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-126",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-129",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-SHELL-016",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "news-shell-branding.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
-    "id": "MEGA-SHELL-018",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "news-shell-branding.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
-    "id": "MEGA-SHELL-021",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "news-shell-branding.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
-    "id": "MEGA-SHELL-023",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "news-shell-branding.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
-    "id": "MEGA-SHELL-024",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "news-shell-branding.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
-    "id": "MEGA-SHELL-025",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "news-shell-branding.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
     "id": "MEGA-SHELL-037",
     "pri": "P1",
     "status": "PARTIAL",
@@ -266,13 +98,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
   },
   {
-    "id": "MEGA-SHELL-163",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "news-shell-branding.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
     "id": "MEGA-SHELL-165",
     "pri": "P1",
     "status": "GAP",
@@ -313,76 +138,6 @@
     "status": "GAP",
     "shard": "news-shell-branding.md",
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/news-shell-branding.md"
-  },
-  {
-    "id": "MEGA-SIM-003",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
-    "id": "MEGA-SIM-005",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
-    "id": "MEGA-SIM-008",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
-    "id": "MEGA-SIM-009",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
-    "id": "MEGA-SIM-014",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
-    "id": "MEGA-SIM-016",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
-    "id": "MEGA-SIM-017",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
-    "id": "MEGA-SIM-018",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
-    "id": "MEGA-SIM-028",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
-    "id": "MEGA-SIM-035",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
   },
   {
     "id": "MEGA-SIM-047",
@@ -511,13 +266,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
   },
   {
-    "id": "MEGA-WORLD-041",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "league-world-pack.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
-  },
-  {
     "id": "MEGA-WORLD-046",
     "pri": "P1",
     "status": "GAP",
@@ -623,13 +371,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
   },
   {
-    "id": "MEGA-WORLD-092",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "league-world-pack.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
-  },
-  {
     "id": "MEGA-WORLD-104",
     "pri": "P1",
     "status": "PARTIAL",
@@ -640,27 +381,6 @@
     "id": "MEGA-WORLD-109",
     "pri": "P1",
     "status": "PARTIAL",
-    "shard": "league-world-pack.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
-  },
-  {
-    "id": "MEGA-WORLD-110",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "league-world-pack.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
-  },
-  {
-    "id": "MEGA-WORLD-111",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "league-world-pack.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
-  },
-  {
-    "id": "MEGA-WORLD-112",
-    "pri": "P1",
-    "status": "GAP",
     "shard": "league-world-pack.md",
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
   },
@@ -896,41 +616,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
   },
   {
-    "id": "MEGA-COACH-053",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-071",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-076",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-078",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-101",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
     "id": "MEGA-COACH-103",
     "pri": "P2",
     "status": "FAIL",
@@ -938,28 +623,7 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
   },
   {
-    "id": "MEGA-COACH-105",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-112",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
     "id": "MEGA-COACH-113",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-117",
     "pri": "P2",
     "status": "FAIL",
     "shard": "coach-player-ui.md",
@@ -1036,49 +700,7 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
   },
   {
-    "id": "MEGA-COACH-147",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
     "id": "MEGA-COACH-160",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-161",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-162",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-164",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-165",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-166",
     "pri": "P2",
     "status": "FAIL",
     "shard": "coach-player-ui.md",
@@ -1160,13 +782,6 @@
     "status": "MISSING",
     "shard": "game-design.md",
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
-  },
-  {
-    "id": "MEGA-RECR-088",
-    "pri": "P2",
-    "status": "FAIL",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
   },
   {
     "id": "MEGA-SIM-096",
@@ -1345,13 +960,6 @@
   },
   {
     "id": "MEGA-COACH-084",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "coach-player-ui.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/coach-player-ui.md"
-  },
-  {
-    "id": "MEGA-COACH-085",
     "pri": "P2",
     "status": "GAP",
     "shard": "coach-player-ui.md",
@@ -1540,27 +1148,6 @@
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/game-design.md"
   },
   {
-    "id": "MEGA-RECR-009",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-012",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-021",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
     "id": "MEGA-RECR-041",
     "pri": "P2",
     "status": "GAP",
@@ -1590,27 +1177,6 @@
   },
   {
     "id": "MEGA-RECR-069",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-070",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-073",
-    "pri": "P2",
-    "status": "GAP",
-    "shard": "recruiting-transfer-start.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-RECR-074",
     "pri": "P2",
     "status": "GAP",
     "shard": "recruiting-transfer-start.md",
@@ -1790,13 +1356,6 @@
     "status": "RISK",
     "shard": "recruiting-transfer-start.md",
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/recruiting-transfer-start.md"
-  },
-  {
-    "id": "MEGA-SIM-036",
-    "pri": "P2",
-    "status": "WIRE",
-    "shard": "sim-strategy-lineup-injuries.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
   },
   {
     "id": "MEGA-SIM-053",

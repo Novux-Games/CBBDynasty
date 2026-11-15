@@ -63,6 +63,7 @@ fun DynastyStaffMemberEntity.toAssistant(schoolDisplayName: String, record: Stri
         avatarPresetId = CoachTrackPortraitIds.forStaffId(staffId),
         annualSalaryUsd = salary,
         buyoutUsd = salary / 2,
+        hasHeadCoachCareer = role == CoachTrackRole.AssociateHeadCoach,
     )
 }
 

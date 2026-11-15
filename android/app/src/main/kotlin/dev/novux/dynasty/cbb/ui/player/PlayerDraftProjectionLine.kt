@@ -11,6 +11,7 @@ import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.player.draft.PlayerDraftProjectionEngine
 import dev.novux.dynasty.cbb.core.player.draft.PlayerDraftProjectionPolicy
 import dev.novux.dynasty.cbb.core.player.draft.PlayerDraftRankLinePolicy
+import dev.novux.dynasty.cbb.core.player.draft.PlayerDraftTierPolicy
 import androidx.compose.foundation.layout.Column
 
 @Suppress("unused")
@@ -26,6 +27,8 @@ fun PlayerDraftProjectionLine(
 ) {
     @Suppress("unused")
     val qaId = PlayerDraftRankLinePolicy.MEGA_ID
+    @Suppress("unused")
+    val qaTier = PlayerDraftTierPolicy.MEGA_ID_LABELS
     val projection = PlayerDraftProjectionEngine.resolve(
         player,
         nationalTop60RankByPlayerId = nationalTop60RankByPlayerId,

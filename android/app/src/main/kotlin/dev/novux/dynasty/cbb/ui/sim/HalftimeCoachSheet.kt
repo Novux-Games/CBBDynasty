@@ -23,6 +23,7 @@ import dev.novux.dynasty.cbb.core.lineup.LineupSlotPolicy
 import dev.novux.dynasty.cbb.core.lineup.RotationMinutesAllocator
 import dev.novux.dynasty.cbb.core.roster.PlayerPosition
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
+import dev.novux.dynasty.cbb.core.sim.GameWatchHalftimeRotationPolicy
 import dev.novux.dynasty.cbb.core.sim.HalftimeCoachAdjustments
 import dev.novux.dynasty.cbb.core.sim.HalftimeScoutingSnapshot
 import dev.novux.dynasty.cbb.core.sim.TeamBoxScoreDisplay
@@ -66,6 +67,7 @@ fun HalftimeCoachSheet(
                     onOffensiveChange = { onStateChange(state.copy(offensiveScheme = it)) },
                     onDefensiveChange = { onStateChange(state.copy(defensiveScheme = it)) },
                 )
+                if (GameWatchHalftimeRotationPolicy.showRotationEmphasisInHalftimeSheet()) {
                 Text(
                     text = stringResource(R.string.game_watch_halftime_rotation),
                     style = MaterialTheme.typography.titleSmall,
@@ -95,6 +97,7 @@ fun HalftimeCoachSheet(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+                }
                 Text(
                     text = stringResource(R.string.game_watch_halftime_starters),
                     style = MaterialTheme.typography.titleSmall,

@@ -206,6 +206,28 @@ private fun taskMessage(task: DashboardTask): String = when (task.id) {
         task.stringFormatArgs.getOrNull(1).orEmpty(),
     )
     DashboardTaskId.WalkOnTryouts -> stringResource(R.string.dashboard_task_walkon_tryouts)
+    DashboardTaskId.SigningDayShellLauncher ->
+        stringResource(R.string.dashboard_task_signing_day_shell_launcher)
+    DashboardTaskId.CarouselLeagueSim -> stringResource(R.string.carousel_sim_league)
+    DashboardTaskId.CarouselUserApproval -> stringResource(R.string.dashboard_task_carousel_approval)
+    DashboardTaskId.WeekOneProDay -> stringResource(
+        R.string.dashboard_task_week_one_pro_day,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+    )
+    DashboardTaskId.WeekOneTransferRetention -> stringResource(
+        R.string.dashboard_task_week_one_transfer,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+    )
+    DashboardTaskId.SeasonReviewAcknowledge -> stringResource(R.string.dashboard_task_season_review_acknowledge)
+    DashboardTaskId.OffseasonRosterLock -> stringResource(
+        R.string.dashboard_task_offseason_roster_lock,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+        task.stringFormatArgs.getOrNull(1).orEmpty(),
+    )
+    DashboardTaskId.OffseasonConferenceOffer -> stringResource(
+        R.string.dashboard_task_offseason_conference_offer,
+        task.stringFormatArgs.firstOrNull().orEmpty(),
+    )
 }
 
 private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {
@@ -234,5 +256,10 @@ private fun DashboardDeepLink.toHubTab(): RecruitingHubTab = when (this) {
     DashboardDeepLink.DisciplineSheet,
     DashboardDeepLink.SummerWorkoutReport,
     DashboardDeepLink.FundraisingWeekNine,
+    DashboardDeepLink.SeasonReviewRecap,
+    DashboardDeepLink.OffseasonRosterCuts,
+    DashboardDeepLink.OffseasonConferenceOffers,
+    DashboardDeepLink.MarchMayhemHub,
+    DashboardDeepLink.HistoryHub,
     -> RecruitingHubTab.Recommended
 }

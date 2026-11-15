@@ -29,7 +29,13 @@ import dev.novux.dynasty.cbb.core.preseason.tournament.EarlySeasonBracketSeason
 import dev.novux.dynasty.cbb.core.schedule.PreseasonSchedulePlan
 import dev.novux.dynasty.cbb.core.schedule.ScheduleGameKind
 import dev.novux.dynasty.cbb.data.preseason.EarlySeasonBracketRepository
+import dev.novux.dynasty.cbb.core.league.PostseasonBatchSelectionBootstrapPolicy
 import dev.novux.dynasty.cbb.core.news.PostseasonTournamentNewsEngine
+import dev.novux.dynasty.cbb.core.selection.ConferenceChampionResolver
+import dev.novux.dynasty.cbb.core.selection.NcbaConferenceAutoBidPolicy
+import dev.novux.dynasty.cbb.core.selection.SelectionSundayEngine
+import dev.novux.dynasty.cbb.core.selection.SelectionSundayInput
+import dev.novux.dynasty.cbb.core.selection.SelectionSundaySnapshot
 import dev.novux.dynasty.cbb.data.news.NewsFeedRepository
 import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
@@ -152,7 +158,10 @@ class LeagueWeekBatchRepository(
                 LeagueWeekBatchSimEngine.bootstrap(seasonIndex, it.schedules.map { s -> s.teamId })
             }
             ?: return
-        if (standings.selectionSunday == null) return
+        if (standings.selectionSunday == null) {
+            if (PostseasonBatchSelectionBootstrapPolicy.mayAdvanceWithoutSelection()) return
+            standings = bootstrapSelectionSunday(dynastyId, seasonIndex, standings) ?: return
+        }
         val selection = standings.selectionSunday!!
         standings = standings.copy(
             ncbaOpeningRound = standings.ncbaOpeningRound ?: NcbaOpeningRoundEngine.planFromSelection(selection),
@@ -210,6 +219,44 @@ class LeagueWeekBatchRepository(
             awayScore = awayScore,
             rsWeekIndex = postseasonWeek,
         )
+    }
+
+    private suspend fun bootstrapSelectionSunday(
+        dynastyId: String,
+        seasonIndex: Int,
+        standings: LeagueStandingsState,
+    ): LeagueStandingsState? {
+        if (standings.netRankByTeam.isEmpty()) return null
+        val index = packRepository.activeSession().index
+        val teams = index.allTeamDisplays()
+        val tuning = balanceRulesetRepository.activeRuleset().selectionTuning()
+        val net = standings.netRankByTeam
+        val snapshot = SelectionSundayEngine.run(
+            SelectionSundayInput(
+                seasonIndex = seasonIndex,
+                netRankByTeam = net,
+                postseasonEligible = teams.associate { it.teamId to it.postseasonEligible },
+                heritageEligible = teams.associate { it.teamId to true },
+                conferenceChampions = standings.conferenceTournaments?.let {
+                    ConferenceChampionResolver.ncbaAutoBidsFromTournaments(it)
+                } ?: NcbaConferenceAutoBidPolicy.fromStandings(
+                    teams = teams,
+                    records = standings.records,
+                    seasonResults = standings.seasonResults,
+                    tiebreakersByConference = { confId ->
+                        index.conference(confId)?.standingsTiebreakers ?: emptyList()
+                    },
+                    netRankByTeam = net,
+                ),
+                programPrestige = teams.associate { it.teamId to it.programPrestige },
+                records = standings.records,
+                results = standings.seasonResults,
+                tuning = tuning,
+            ),
+        )
+        val next = standings.copy(selectionSunday = snapshot)
+        persist(dynastyId, next)
+        return next
     }
 
     private suspend fun attachWeeklyNet(

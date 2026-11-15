@@ -543,6 +543,10 @@ fun DynastyShellScreen(
             fullScreenPlayer = player.withNationalTop60DraftRank(nationalTop60RankByPlayerId)
         },
         nationalTop60RankByPlayerId = nationalTop60RankByPlayerId,
+        isOnUserRoster = true,
+        allowEdit = dev.novux.dynasty.cbb.core.player.card.PlayerCardEditGatePolicy.allowEditOnPreview(
+            isOnUserRoster = true,
+        ),
     )
 
     fullScreenPlayer?.let { player ->
@@ -552,7 +556,9 @@ fun DynastyShellScreen(
             seasonRecordLabel = staffRoster?.headCoach?.seasonRecordLabel ?: "0-0",
             seasonIndex = loaded.metadata.seasonIndex,
             playerStatsRepository = context.requireDynastyApplication().playerStatsRepository,
-            allowEdit = true,
+            allowEdit = dev.novux.dynasty.cbb.core.player.card.PlayerCardEditGatePolicy.allowEditOnFullCard(
+                isOnUserRoster = true,
+            ),
             schoolHubOverview = userSchool,
             onOpenSchoolHub = userSchool?.let { overview ->
                 {

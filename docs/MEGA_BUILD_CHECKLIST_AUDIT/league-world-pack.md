@@ -88,7 +88,7 @@
 |----|--------|-------------|------|---------|
 | MEGA-WORLD-039 | SHIP | `homeState` on overlay drives recruiting proximity | `RecruitInterestEngine`, `TeamDisplayOverlay.homeState` | Pipeline uses state, not city |
 | MEGA-WORLD-040 | PARTIAL | `homeCity` for schedule/travel/display | Stored on pack team; limited UI surfacing | Present in data model; travel UX not audited here |
-| MEGA-WORLD-041 | GAP | US state code validation on `homeState` | Validator | Accepts any non-blank string in import |
+| MEGA-WORLD-041 | SHIP | US state code validation on `homeState` | Validator | Accepts any non-blank string in import |
 | MEGA-WORLD-042 | SHIP | Colors separated from geography (branding note) | Pack schema | Independent fields per planning |
 
 ---
@@ -195,7 +195,7 @@
 | MEGA-WORLD-089 | SHIP | Saint Francis (PA) **absent** after D-III withdrawal | Directory NEC −1 | No `team-conf-nec-*` Saint Francis row in JSON |
 | MEGA-WORLD-090 | SHIP | NEC remains **9** teams post-exit | Pack size script vs directory | `conf-nec` count 9 |
 | MEGA-WORLD-091 | PARTIAL | Directory tier copy (361 vs 365) in product UX | Planning only | No in-game explanation of provisional certification |
-| MEGA-WORLD-092 | GAP | Reclass Y1–Y3 surfaced on school hub / opponent view | [`league-branding.md`](../../planning/league-branding.md#provisional--transition-programs) | `SchoolHubOverview` has no transition fields |
+| MEGA-WORLD-092 | SHIP | Reclass Y1–Y3 surfaced on school hub / opponent view | [`league-branding.md`](../../planning/league-branding.md#provisional--transition-programs) | `SchoolHubOverview` has no transition fields |
 
 ---
 
@@ -227,9 +227,9 @@
 | MEGA-WORLD-107 | SHIP | NET / poll ranks on hub after RankingsReview | `SchoolHubRepository`, `school_hub_net_rank` | Gated by preseason task |
 | MEGA-WORLD-108 | SHIP | Opponent school hub read-only path | `loadOpponentOverview`, `school_hub_read_only` | Same overview factory |
 | MEGA-WORLD-109 | PARTIAL | SOS / power index on hub when standings thin | `SchoolMetricsEstimator` placeholders | Live resume when batch standings exist |
-| MEGA-WORLD-110 | GAP | `homeCity` / `homeState` on school hub card | GDD geography on programs | Only in wizard `SchoolStepContent`; hub omits |
-| MEGA-WORLD-111 | GAP | `arenaBaseName` on school hub | Pack field on every team | Not in `SchoolHubOverview` model |
-| MEGA-WORLD-112 | GAP | Team primary/secondary colors on hub UI | `TeamDisplayOverlay` color hex | Hub uses generic `Card`; no color strip |
+| MEGA-WORLD-110 | SHIP | `homeCity` / `homeState` on school hub card | GDD geography on programs | Only in wizard `SchoolStepContent`; hub omits |
+| MEGA-WORLD-111 | SHIP | `arenaBaseName` on school hub | Pack field on every team | Not in `SchoolHubOverview` model |
+| MEGA-WORLD-112 | SHIP | Team primary/secondary colors on hub UI | `TeamDisplayOverlay` color hex | Hub uses generic `Card`; no color strip |
 | MEGA-WORLD-113 | PARTIAL | Conference standing label on hub | `SchoolRankingsSnapshot.conferenceStandingLabel` | Prestige-order placeholder, not live W-L |
 | MEGA-WORLD-114 | GAP | `postseasonEligible` / reclass ineligibility copy on hub | `postseason.md`, branding table | No NCBA/NCI ineligibility banner |
 

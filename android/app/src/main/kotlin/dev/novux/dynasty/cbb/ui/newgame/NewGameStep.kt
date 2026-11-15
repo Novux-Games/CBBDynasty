@@ -2,9 +2,10 @@ package dev.novux.dynasty.cbb.ui.newgame
 
 import androidx.annotation.StringRes
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.save.NewGameWizardStepsPolicy
 
 /**
- * Wizard steps 1–6 — [planning/game-start.md#new-game-wizard-overview].
+ * Wizard steps 1–6 — [planning/game-start.md#new-game-wizard-overview], [NewGameWizardStepsPolicy].
  */
 enum class NewGameStep(
     val index: Int,
@@ -54,6 +55,10 @@ enum class NewGameStep(
     val previous: NewGameStep? get() = entries.getOrNull(ordinal - 1)
 
     companion object {
+        init {
+            require(entries.size == NewGameWizardStepsPolicy.STEP_COUNT)
+        }
+
         const val ROUTE_PREFIX = "new_game_step"
 
         fun routeFor(step: NewGameStep): String = "$ROUTE_PREFIX/${step.routeSegment}"

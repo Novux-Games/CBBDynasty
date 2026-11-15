@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.preseason.IncomingClassSeedCancelPolicy
+import dev.novux.dynasty.cbb.core.preseason.IncomingClassSeedReseedGuardPolicy
 import dev.novux.dynasty.cbb.core.preseason.IncomingClassSeedRunPhase
 import dev.novux.dynasty.cbb.core.preseason.IncomingClassSeedRunProgress
 import dev.novux.dynasty.cbb.core.preseason.PreseasonTaskId
@@ -48,13 +49,15 @@ fun IncomingClassSeedPanel(
     modifier: Modifier = Modifier,
 ) {
     var headline by remember { mutableStateOf<Top60NewsHeadline?>(null) }
+    var poolSeeded by remember { mutableStateOf(false) }
     var seeding by remember { mutableStateOf(false) }
     var seedCancelled by remember { mutableStateOf(false) }
     var runPhase by remember { mutableStateOf<IncomingClassSeedRunPhase?>(null) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(dynastyId, seasonIndex) {
-        if (withContext(Dispatchers.IO) { seedRepository.isSeeded(dynastyId, seasonIndex) }) {
+        poolSeeded = withContext(Dispatchers.IO) { seedRepository.isSeeded(dynastyId, seasonIndex) }
+        if (poolSeeded) {
             headline = withContext(Dispatchers.IO) { seedRepository.loadHeadline(dynastyId, seasonIndex) }
         }
     }
@@ -125,7 +128,10 @@ fun IncomingClassSeedPanel(
                     runPhase = IncomingClassSeedRunPhase.RollingHighSchoolPool
                     try {
                         if (seedCancelled) return@launch
-                        if (headline == null) {
+                        if (
+                            headline == null &&
+                            IncomingClassSeedReseedGuardPolicy.mayRunInitialSeed(poolSeeded)
+                        ) {
                             headline = withContext(Dispatchers.IO) {
                                 seedRepository.runSeed(dynastyId, seasonIndex) { phase ->
                                     scope.launch(Dispatchers.Main.immediate) {
@@ -133,6 +139,7 @@ fun IncomingClassSeedPanel(
                                     }
                                 }
                             }
+                            poolSeeded = true
                         }
                         if (seedCancelled) return@launch
                         withContext(Dispatchers.IO) {
@@ -145,7 +152,14 @@ fun IncomingClassSeedPanel(
                     }
                 }
             },
-            enabled = !seeding,
+            enabled = when {
+                seeding -> false
+                headline != null -> IncomingClassSeedReseedGuardPolicy.mayConfirmExistingHeadline(
+                    headlinePresent = true,
+                    seedingInFlight = false,
+                )
+                else -> IncomingClassSeedReseedGuardPolicy.mayRunInitialSeed(poolSeeded)
+            },
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
@@ -153,6 +167,8 @@ fun IncomingClassSeedPanel(
                     stringResource(R.string.incoming_seed_running)
                 } else if (headline != null) {
                     stringResource(R.string.incoming_seed_confirm)
+                } else if (!IncomingClassSeedReseedGuardPolicy.mayRunInitialSeed(poolSeeded)) {
+                    stringResource(R.string.incoming_seed_already_seeded)
                 } else {
                     stringResource(R.string.incoming_seed_run)
                 },

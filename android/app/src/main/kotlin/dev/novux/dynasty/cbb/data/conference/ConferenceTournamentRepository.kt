@@ -2,12 +2,15 @@ package dev.novux.dynasty.cbb.data.conference
 
 import dev.novux.dynasty.cbb.core.conference.ConferenceTournamentEngine
 import dev.novux.dynasty.cbb.core.conference.ConferenceTournamentSeason
+import dev.novux.dynasty.cbb.core.selection.SelectionSundayConfTourneyHandoffPolicy
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
+import dev.novux.dynasty.cbb.data.selection.SelectionSundayRepository
 
 class ConferenceTournamentRepository(
     private val packRepository: PackRepository,
     private val leagueWeekBatchRepository: LeagueWeekBatchRepository,
+    private val selectionSundayRepository: SelectionSundayRepository,
 ) {
     suspend fun load(dynastyId: String, seasonIndex: Int): ConferenceTournamentSeason? =
         leagueWeekBatchRepository.loadStandings(dynastyId, seasonIndex)?.conferenceTournaments
@@ -35,6 +38,9 @@ class ConferenceTournamentRepository(
             dynastyId,
             standings.copy(conferenceTournaments = season),
         )
+        if (SelectionSundayConfTourneyHandoffPolicy.shouldPublishAfterConfTourneySim()) {
+            selectionSundayRepository.computeAndPersist(dynastyId, seasonIndex)
+        }
         return season
     }
 }

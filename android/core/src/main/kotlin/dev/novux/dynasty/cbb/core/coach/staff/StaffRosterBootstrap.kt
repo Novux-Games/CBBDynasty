@@ -41,6 +41,7 @@ object StaffRosterBootstrap {
                 avatarPresetId = CoachTrackPortraitIds.forStaffId(staffId),
                 annualSalaryUsd = salary,
                 buyoutUsd = salary / 2,
+                hasHeadCoachCareer = role == CoachTrackRole.AssociateHeadCoach,
             )
         }
     }

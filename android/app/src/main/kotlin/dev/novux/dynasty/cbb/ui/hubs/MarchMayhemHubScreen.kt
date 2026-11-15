@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.march.MarchMayhemGameRow
+import dev.novux.dynasty.cbb.core.march.MarchMayhemHubMonitorPolicy
 import dev.novux.dynasty.cbb.core.march.MarchMayhemHubSnapshot
 import dev.novux.dynasty.cbb.core.march.MarchMayhemInvitationalPanel
 import dev.novux.dynasty.cbb.core.march.MarchMayhemNcbaPanel
@@ -50,6 +51,8 @@ fun MarchMayhemHubScreen(
 ) {
     var tabIndex by remember { mutableIntStateOf(0) }
     val tabs = MarchMayhemTab.entries
+    @Suppress("unused")
+    val monitorPolicy = MarchMayhemHubMonitorPolicy.MEGA_ID
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(

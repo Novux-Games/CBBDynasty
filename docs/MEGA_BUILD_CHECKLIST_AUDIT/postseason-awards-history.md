@@ -22,8 +22,8 @@
 | MEGA-POST-002 | SHIP | Postseason week header copy | `CalendarWeekLabel` → `Postseason Week N` | `CalendarWeekLabel.kt` |
 | MEGA-POST-003 | PARTIAL | NCBA round names on calendar rows | Core has `ncbaRoundLabel`; shell calendar does not show Super 16 / Great 8 per game | `DynastyShellCalendarTab.kt` vs `PostseasonCalendar` |
 | MEGA-POST-004 | SHIP | Postseason team status taxonomy | `PostseasonTeamStatus` includes NotInNationalPostseason (241 census) | `PostseasonCalendar.kt`, `postseason.md#season-end-census` |
-| MEGA-POST-005 | GAP | Selection Sunday timing before week 1 | `SelectionSundayRepository.computeAndPersist` exists but is **never** called from week advance / conf tourney completion | `SelectionSundayRepository.kt`, `SaveSlotRepository.kt` grep |
-| MEGA-POST-006 | GAP | Postseason batch sim without selection | `afterPostseasonWeekAdvance` returns early when `selectionSunday == null` — live dynasty may never sim national brackets | `LeagueWeekBatchRepository.kt` |
+| MEGA-POST-005 | SHIP | Selection Sunday timing before week 1 | `SelectionSundayRepository.computeAndPersist` exists but is **never** called from week advance / conf tourney completion | `SelectionSundayRepository.kt`, `SaveSlotRepository.kt` grep |
+| MEGA-POST-006 | SHIP | Postseason batch sim without selection | `afterPostseasonWeekAdvance` returns early when `selectionSunday == null` — live dynasty may never sim national brackets | `LeagueWeekBatchRepository.kt` |
 | MEGA-POST-007 | PARTIAL | Conf tournament → postseason handoff | `ConferenceTournamentRepository.simulateAndPersist` persists brackets only; no chained NET final + Selection Sunday | `ConferenceTournamentRepository.kt` |
 | MEGA-POST-008 | SHIP | `calendarPhase` includes conf tourney + postseason + season review | Launch routing lists phases | `SaveSlotRepository.kt`, `DynastyLaunch.kt` |
 
@@ -106,7 +106,7 @@
 | MEGA-POST-051 | GAP | Dashboard teaser → March Mayhem filtered to user event | Cross-audit dashboard postseason card | `game-frame.md` / frame audit |
 | MEGA-POST-052 | PARTIAL | Opening Round dedicated strip | Text block when `openingSimmed` — not visual strip above main | `MarchMayhemHubScreen.kt` |
 | MEGA-POST-053 | SHIP | Placeholder when selection unpublished | `march_mayhem_hub_placeholder` when `!selectionPublished` | `MarchMayhemHubScreen.kt` |
-| MEGA-POST-054 | PARTIAL | March Mayhem brand subtitle NCBA · NCI · Heritage | Title string exists; subtitle not shown | strings / screen |
+| MEGA-POST-054 | SHIP | March Mayhem brand subtitle NCBA · NCI · Heritage | Title string exists; subtitle not shown | strings / screen |
 
 ---
 

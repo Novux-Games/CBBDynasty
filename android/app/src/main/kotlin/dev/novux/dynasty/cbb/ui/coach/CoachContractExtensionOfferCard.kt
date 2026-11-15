@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.core.carousel.CarouselExtensionOfferSurfacePolicy
 import dev.novux.dynasty.cbb.core.coach.contract.HeadCoachExtensionOffer
 import dev.novux.dynasty.cbb.core.coach.contract.HeadCoachExtensionOfferEngine
 import java.text.NumberFormat
@@ -32,6 +33,9 @@ fun CoachContractExtensionOfferCard(
 ) {
     @Suppress("unused")
     val qaId = HeadCoachExtensionOfferEngine.MEGA_ID
+    @Suppress("unused")
+    val carouselQa = CarouselExtensionOfferSurfacePolicy.MEGA_ID
+    check(CarouselExtensionOfferSurfacePolicy.showExtensionOfferCard(isUserCoach = true, hasOffer = true))
     val money = remember { NumberFormat.getCurrencyInstance(Locale.US) }
     Card(
         modifier = modifier.fillMaxWidth(),

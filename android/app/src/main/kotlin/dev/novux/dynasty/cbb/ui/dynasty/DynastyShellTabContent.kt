@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.news.NewsHeadline
 import dev.novux.dynasty.cbb.core.news.NewsStoryDrillInPolicy
+import dev.novux.dynasty.cbb.core.news.ShellNewsFeedDateChipPolicy
+import dev.novux.dynasty.cbb.core.news.ShellNewsHeadlineTapPolicy
 import dev.novux.dynasty.cbb.ui.news.NewsHeadlineStoryDetailSheet
 import dev.novux.dynasty.cbb.core.news.NewsHeadlineKindChipPolicy
 import dev.novux.dynasty.cbb.ui.news.newsHeadlineKindLabel
@@ -33,8 +35,7 @@ import dev.novux.dynasty.cbb.core.news.ShallowNewsFeedSnapshot
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.roster.ShellRosterSection
 import dev.novux.dynasty.cbb.core.roster.ShellRosterSectionPartition
-import dev.novux.dynasty.cbb.ui.player.PlayerInjuryRosterRow
-import dev.novux.dynasty.cbb.ui.player.PlayerLoyaltyChips
+import dev.novux.dynasty.cbb.ui.player.ShellRosterPlayerRow
 
 @Composable
 fun DynastyShellRosterTab(
@@ -78,12 +79,11 @@ fun DynastyShellRosterTab(
                             .fillMaxWidth()
                             .clickable { onPlayerClick(player) },
                     ) {
-                        Column(
-                            modifier = Modifier.padding(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(6.dp),
-                        ) {
-                            PlayerInjuryRosterRow(player = rosterPlayer)
-                            PlayerLoyaltyChips(player)
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            ShellRosterPlayerRow(
+                                player = player,
+                                rosterPlayer = rosterPlayer,
+                            )
                         }
                     }
                 }
@@ -172,7 +172,7 @@ fun DynastyShellNewsTab(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            if (NewsStoryDrillInPolicy.opensMiniArticleDetail()) {
+                            if (ShellNewsHeadlineTapPolicy.opensStoryDetail()) {
                                 selectedHeadline = headline
                             }
                         },
@@ -186,6 +186,16 @@ fun DynastyShellNewsTab(
                             )
                         }
                         Text(text = headline.title, style = MaterialTheme.typography.bodyLarge)
+                        if (ShellNewsFeedDateChipPolicy.showChip(headline.createdAtMs, headline.rsWeekIndex)) {
+                            Text(
+                                text = ShellNewsFeedDateChipPolicy.dateChip(
+                                    headline.createdAtMs,
+                                    headline.rsWeekIndex,
+                                ),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
                     }
                 }
             }

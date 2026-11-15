@@ -15,6 +15,11 @@
     <string name="menu_load">Load</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_credits">Credits</string>
+    <string name="credits_visit_studio">Visit Novux studio</string>
+    <string name="home_menu_logo_content_description">Dynasty CBB app mark</string>
+    <string name="school_hub_arena">Home arena: %1$s</string>
+    <string name="preseason_rs_cap_hint">Regular season capped at %1$d games (including conference template).</string>
+    <string name="job_center_spectate_calendar_hint">Watch any league game from Calendar while you hunt for your next job.</string>
     <string name="settings_section_startup">Startup</string>
     <string name="settings_skip_studio_intro">Skip studio intro</string>
     <string name="settings_skip_studio_intro_summary">Open the title screen without the Novux Games intro.</string>
@@ -133,6 +138,7 @@
     <string name="new_school_summary_conference">Conference</string>
     <string name="new_school_summary_location">Location</string>
     <string name="new_school_summary_pipeline">Pipeline states</string>
+    <string name="new_school_summary_demeanor">School demeanor (AD)</string>
     <string name="new_school_summary_weekly_points">Weekly recruiting points (preview)</string>
     <string name="new_school_summary_annual_nil">Annual NIL pool (preview)</string>
     <string name="new_school_summary_recruiting_nil_hint">Recruiting and NIL values lock when you sign.</string>
@@ -187,6 +193,7 @@
     <string name="offseason_shell_placeholder">Use optional tasks and the recruiting hub for this week.</string>
     <string name="offseason_shell_chrome_hint">Same bottom tabs and menu as in-season — calendar and news stay available.</string>
     <string name="offseason_ai_recruit_batch_hint">Advancing a week simulates every program\'s recruiting pass while you are away.</string>
+    <string name="offseason_season_one_class_preview">Your enrolling class was seeded when you signed — complete Preseason Incoming Class Seed for the Top 60 headline, then chase targets from Offseason Week 2.</string>
     <string name="offseason_dashboard_week3_body">Portal window week 3: finalize interest on transfer targets and balance class needs before Week 4 crunch.</string>
     <string name="offseason_dashboard_week4_body">Portal window week 4: signing crunch approaches — lock key targets or keep points for Signing Day.</string>
     <string name="offseason_dashboard_week5_body">Portal window week 5 — last week of portal recruiting. Close gaps on scholarships and portal offers before Signing Day.</string>
@@ -360,6 +367,7 @@
     <string name="preseason_task_exhibitions">Schedule exhibition games</string>
     <string name="preseason_task_regular_schedule">Schedule regular season</string>
     <string name="incoming_seed_title">Incoming class seed</string>
+    <string name="incoming_seed_already_seeded">Class pool already seeded for this season — confirm to complete the task.</string>
     <string name="incoming_seed_run">Run class seed</string>
     <string name="incoming_seed_running">Seeding class pools…</string>
     <string name="incoming_seed_cancel">Cancel seeding</string>
@@ -443,6 +451,8 @@
     <string name="dynasty_shell_back">Back to dashboard</string>
     <string name="staff_open_tab">School staff</string>
     <string name="staff_tab_title">Staff</string>
+    <string name="staff_aggregate_grade_chip">Staff grade: %1$d</string>
+    <string name="shell_roster_compact_line">%1$s · OVR %2$d</string>
     <string name="staff_tab_hint">Assistants open coach cards; support staff are list-only.</string>
     <string name="staff_tab_hint_manage">Tap a coach card or Manage to hire, fire, or poach staff.</string>
     <string name="staff_manage_cta">Manage</string>
@@ -723,6 +733,8 @@
     <string name="recruiting_hs_juco_pool_summary">%1$d high school · %2$d junior college prospects in this class</string>
     <string name="recruiting_hs_top60_heading">National Top 60</string>
     <string name="recruiting_hs_top60_pool_hint">Rankings use your dynasty\'s seeded freshman class pool — not the legacy demo list.</string>
+    <string name="recruiting_hs_top60_combined_hint">Top 60 ranks HS and JUCO together from that seeded pool.</string>
+    <string name="recruiting_portal_considering_pool">Portal simulation: ~%1$d players considering transfer this cycle.</string>
     <string name="recruiting_hs_rank_prefix">#%1$d</string>
     <string name="recruiting_hs_section">All high school prospects</string>
     <string name="recruiting_juco_section">Junior college prospects</string>
@@ -1067,6 +1079,9 @@
     <string name="game_watch_opponent_scrimmage">Scrimmage foe</string>
     <string name="game_preview_title">Game preview</string>
     <string name="game_preview_surface_hint">Win chance, predicted score, team compare, and head-to-head on this screen.</string>
+    <string name="game_preview_opponent_rotation_heading">%1$s rotation (scouting)</string>
+    <string name="game_preview_opponent_rotation_hint">Projected minutes from program prestige — mirrors in-game sim bands.</string>
+    <string name="game_preview_rotation_minutes">%1$d MIN</string>
     <string name="game_preview_venue">Location: %1$s</string>
     <string name="game_preview_win_pct">Win chance %1$d%%</string>
     <string name="game_preview_predicted_score">Predicted score %1$d–%2$d</string>

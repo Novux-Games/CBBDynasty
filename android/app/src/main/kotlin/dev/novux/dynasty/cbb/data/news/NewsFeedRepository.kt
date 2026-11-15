@@ -18,7 +18,7 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.portal.PortalRecruitingHub
 import dev.novux.dynasty.cbb.core.news.NewsHeadline
 import dev.novux.dynasty.cbb.core.news.NewsHeadlinePublisher
-import dev.novux.dynasty.cbb.core.news.ShallowNewsFeed
+import dev.novux.dynasty.cbb.core.news.ShallowNewsFeedDashboardMergePolicy
 import dev.novux.dynasty.cbb.core.news.ShallowNewsFeedSnapshot
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
@@ -70,7 +70,7 @@ class NewsFeedRepository(
             NewsHeadlinePublisher.userInjuryFromRoster(seasonIndex, rsWeekIndex, player)
         }
         val portalOpen = PortalRecruitingHub.isRecruitingWindowOpen(calendarPhase, offseasonWeekIndex)
-        return ShallowNewsFeed.snapshot(
+        return ShallowNewsFeedDashboardMergePolicy.mergedSnapshot(
             archive,
             liveUser,
             sortContext = ShallowNewsFeedSortContext(portalWindowOpen = portalOpen),

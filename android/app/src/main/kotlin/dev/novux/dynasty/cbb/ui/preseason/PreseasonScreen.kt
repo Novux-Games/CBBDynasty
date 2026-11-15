@@ -267,7 +267,10 @@ fun PreseasonScreen(
             cardPlayer = null
             fullScreenPlayer = player
         },
-        allowEdit = false,
+        isOnUserRoster = true,
+        allowEdit = dev.novux.dynasty.cbb.core.player.card.PlayerCardEditGatePolicy.allowEditOnPreview(
+            isOnUserRoster = true,
+        ),
     )
 
     fullScreenPlayer?.let { player ->
@@ -277,7 +280,9 @@ fun PreseasonScreen(
             seasonRecordLabel = "0-0",
             seasonIndex = loaded.metadata.seasonIndex,
             playerStatsRepository = playerStatsRepository,
-            allowEdit = false,
+            allowEdit = dev.novux.dynasty.cbb.core.player.card.PlayerCardEditGatePolicy.allowEditOnFullCard(
+                isOnUserRoster = true,
+            ),
             onBack = { fullScreenPlayer = null },
         )
         return

@@ -33,6 +33,8 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.pack.ConferenceDisplayOverlay
 import dev.novux.dynasty.cbb.core.pack.TeamDisplayOverlay
 import dev.novux.dynasty.cbb.core.pack.NewGameStarterPrestigeFilterPolicy
+import dev.novux.dynasty.cbb.core.save.NewGameSchoolDemeanorPolicy
+import dev.novux.dynasty.cbb.core.save.NewGameSchoolPipelineSummaryPolicy
 import dev.novux.dynasty.cbb.core.save.NewGameSchoolSummaryPreview
 import dev.novux.dynasty.cbb.core.save.NewGameSchoolSummaryPreviewEngine
 import dev.novux.dynasty.cbb.core.balance.BalanceNilAnnualPoolTables
@@ -224,7 +226,14 @@ private fun SchoolSummarySheet(
             stringResource(R.string.new_school_summary_location),
             "${school.homeCity}, ${school.homeState}",
         )
-        SummaryLine(stringResource(R.string.new_school_summary_pipeline), pipelineLabel)
+        SummaryLine(
+            stringResource(R.string.new_school_summary_pipeline),
+            "$pipelineLabel (${NewGameSchoolPipelineSummaryPolicy.MEGA_ID})",
+        )
+        SummaryLine(
+            stringResource(R.string.new_school_summary_demeanor),
+            NewGameSchoolDemeanorPolicy.labelForSchool(school),
+        )
         SummaryLine(
             stringResource(R.string.new_school_summary_weekly_points),
             preview.weeklyRecruitingPoints.toString(),

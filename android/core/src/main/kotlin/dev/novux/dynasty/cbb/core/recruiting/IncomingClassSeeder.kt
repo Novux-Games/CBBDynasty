@@ -25,7 +25,7 @@ object IncomingClassSeeder {
     private val lastNames = listOf(
         "Walker", "Brooks", "Hayes", "Carter", "Mills", "Foster", "Reed", "Shaw", "Parks", "Lang",
     )
-    private val states = listOf("TX", "OH", "FL", "CA", "NC", "IN", "KY", "VA", "IL", "GA", "MI", "PA")
+    private val states = NationalPoolGeographyPolicy.usStates
 
     fun seed(
         enrollingSeasonIndex: Int,

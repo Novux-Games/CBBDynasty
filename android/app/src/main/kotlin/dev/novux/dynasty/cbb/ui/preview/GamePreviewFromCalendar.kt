@@ -5,6 +5,7 @@ import dev.novux.dynasty.cbb.core.calendar.UserCalendarGameEntry
 import dev.novux.dynasty.cbb.core.preview.GamePreviewEngine
 import dev.novux.dynasty.cbb.core.preview.GamePreviewRequest
 import dev.novux.dynasty.cbb.core.preview.GamePreviewScoutingBuilder
+import dev.novux.dynasty.cbb.core.preview.OpponentRotationPreviewBuilder
 import dev.novux.dynasty.cbb.core.preview.GamePreviewVenue
 import dev.novux.dynasty.cbb.core.preview.HeadToHeadHistory
 import dev.novux.dynasty.cbb.core.preview.HeadToHeadHistoryResolver
@@ -62,6 +63,8 @@ object GamePreviewFromCalendar {
             seasonResultsByIndex = seasonResultsByIndex,
         )
         val currentStandings = app.leagueWeekBatchRepository.loadStandings(dynastyId, seasonIndex)
+        val oppPrestige = oppOverview?.programPrestige
+            ?: packRepositoryTeamPrestige(app, game.opponentTeamId)
         val preview = GamePreviewEngine.predict(
             GamePreviewRequest(
                 user = TeamPreviewSide.fromOverview(userSchool),
@@ -75,8 +78,13 @@ object GamePreviewFromCalendar {
                 ?: GamePreviewScoutingBuilder.fromPrestige(
                     game.opponentTeamId,
                     game.opponentDisplayName,
-                    58,
+                    oppPrestige,
                 ),
+            opponentRotation = OpponentRotationPreviewBuilder.build(
+                teamId = game.opponentTeamId,
+                displayName = game.opponentDisplayName,
+                programPrestige = oppPrestige,
+            ),
         )
         val loc = if (game.homeGame) {
             context.getString(dev.novux.dynasty.cbb.R.string.dynasty_shell_home)
@@ -98,6 +106,12 @@ object GamePreviewFromCalendar {
         }
         GamePreviewLaunch.result = preview
     }
+
+    private fun packRepositoryTeamPrestige(
+        app: dev.novux.dynasty.cbb.DynastyApplication,
+        teamId: String,
+    ): Int =
+        app.packRepository.activeSession().index.team(teamId)?.programPrestige ?: 58
 
     private fun UserCalendarGameEntry.toStub() = ScheduledGameStub(
         kind = gameKind,

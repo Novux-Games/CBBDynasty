@@ -50,7 +50,6 @@ suspend fun applyWeekAdvanceResult(
         }
         else -> false
     }
-}
 
 suspend fun showWeekAdvanceConfirmationUnavailable(
     snackbarHostState: SnackbarHostState,

@@ -57,6 +57,8 @@ import dev.novux.dynasty.cbb.data.notification.NotificationFeedRepository
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
 import dev.novux.dynasty.cbb.core.recruiting.SeasonOneRecruitingBootstrap
+import dev.novux.dynasty.cbb.core.recruiting.SimWeekAutoMaintainSeededPoolPolicy
+import dev.novux.dynasty.cbb.core.recruiting.RecruitingNextCycleSeasonReviewPolicy
 import dev.novux.dynasty.cbb.core.recruiting.SigningDayPreseasonRecruitingTransition
 import dev.novux.dynasty.cbb.core.recruiting.SchoolRecruitingContext
 import dev.novux.dynasty.cbb.core.recruiting.ai.AiRecruitingWeekRunner
@@ -812,7 +814,7 @@ class SaveSlotRepository(
         )
         val pos = afterAdvance.weekCheckpoint.activePosition
         if (SigningDayPreseasonRecruitingTransition.enteringPreseason(pos)) {
-            val nextPoolSeason = SigningDayPreseasonRecruitingTransition.nextEnrollingClassSeasonIndex(
+            val nextPoolSeason = RecruitingNextCycleSeasonReviewPolicy.enrollingPoolSeasonAfterPreseasonAdvance(
                 afterAdvance.metadata.seasonIndex,
             )
             incomingClassSeedRepository.ensurePool(afterAdvance.dynastyId, nextPoolSeason)
@@ -948,7 +950,7 @@ class SaveSlotRepository(
                 incomingClassSeedRepository.loadPool(loaded.dynastyId, loaded.metadata.seasonIndex)
             } else {
                 incomingClassSeedRepository.ensurePool(loaded.dynastyId, loaded.metadata.seasonIndex)
-            }
+            } // [SimWeekAutoMaintainSeededPoolPolicy.MEGA_ID]
             if (pool != null) {
                 val economy = BalanceRecruitingParser.parse(loaded.balanceRuleset.recruiting)
                 val recommended = BalanceRecruitingRecommendedParser.parse(loaded.balanceRuleset.recruiting)
@@ -1064,7 +1066,7 @@ class SaveSlotRepository(
         )
         val coach = coachDao.getByDynastyId(loaded.dynastyId)
         val team = coach?.let { packRepository.activeSession().index.team(it.userTeamId) }
-        recruitingEconomyRepository.openNextCycleAfterSeasonReview(
+        recruitingEconomyRepository.openNextCycleAfterSeasonReview( // MEGA-RECR-025
             dynastyId = loaded.dynastyId,
             balance = loaded.balanceRuleset,
             nextSeasonIndex = meta.seasonIndex,

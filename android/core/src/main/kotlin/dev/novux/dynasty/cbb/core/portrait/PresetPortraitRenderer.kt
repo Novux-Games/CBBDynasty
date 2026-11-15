@@ -13,6 +13,8 @@ data class PortraitRenderSpec(
 )
 
 object PresetPortraitRenderer {
+    @Suppress("unused")
+    private val qaPortraitSig = PresetPortraitRendererPolicy.MEGA_ID
     private val skinArgb = mapOf(
         "skin_1" to 0xFFE8C4A0L,
         "skin_2" to 0xFFD4A574L,

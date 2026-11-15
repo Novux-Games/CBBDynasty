@@ -43,6 +43,7 @@ import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.ui.sim.PostgameBoxScorePanel
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun DynastyShellCalendarTab(
     dynastyId: String,
     seasonIndex: Int,

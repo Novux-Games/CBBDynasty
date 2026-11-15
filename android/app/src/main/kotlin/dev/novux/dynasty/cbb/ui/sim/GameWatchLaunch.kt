@@ -13,6 +13,7 @@ import dev.novux.dynasty.cbb.core.sim.SimHomeVenueType
 /** In-memory launch payload for watch sim (same dynasty session). */
 object GameWatchLaunch {
     var homeGameplan: GameplanInput = GameplanInput()
+    var homeHalftimeGameplan: GameplanInput? = null
     var homeName: String = "Home"
     var awayName: String = "Away"
     var homeSimRoster: GameSimRosterInput? = null

@@ -19,10 +19,12 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.coach.card.CoachCardPolicy
 import dev.novux.dynasty.cbb.core.coach.security.CoachSecuritySnapshot
+import dev.novux.dynasty.cbb.core.coach.staff.SchoolStaffGradeEngine
 import dev.novux.dynasty.cbb.core.coach.staff.SchoolStaffRoster
 import dev.novux.dynasty.cbb.core.coach.staff.StaffFourthAssistantSlotPolicy
 import dev.novux.dynasty.cbb.core.coach.staff.StaffKind
 import dev.novux.dynasty.cbb.ui.portrait.CoachPortraitSlot
+import androidx.compose.material3.AssistChip
 
 @Composable
 fun SchoolStaffTabPanel(
@@ -37,6 +39,19 @@ fun SchoolStaffTabPanel(
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         adTrust?.let { AdTrustMeter(it) }
+        @Suppress("unused")
+        val staffGradeQa = SchoolStaffGradeEngine.MEGA_ID
+        AssistChip(
+            onClick = {},
+            label = {
+                Text(
+                    stringResource(
+                        R.string.staff_aggregate_grade_chip,
+                        SchoolStaffGradeEngine.aggregateGrade(roster),
+                    ),
+                )
+            },
+        )
         Text(
             stringResource(R.string.staff_tab_title),
             style = MaterialTheme.typography.titleLarge,

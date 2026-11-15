@@ -77,6 +77,11 @@ fun HsJucoTabBody(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 4.dp),
                 )
+                Text(
+                    stringResource(R.string.recruiting_hs_top60_combined_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
             items(top60, key = { it.prospect.prospectId }) { row ->
                 HsJucoProspectRow(
@@ -201,6 +206,7 @@ private fun HsJucoProspectRow(
 @Composable
 fun PortalRecruitingTabBody(
     windowOpen: Boolean,
+    consideringPoolSize: Int = 0,
     modifier: Modifier = Modifier,
     top40Content: @Composable () -> Unit = {},
     recommendedContent: @Composable () -> Unit = {},
@@ -214,6 +220,13 @@ fun PortalRecruitingTabBody(
         return
     }
     Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        if (consideringPoolSize > 0) {
+            Text(
+                stringResource(R.string.recruiting_portal_considering_pool, consideringPoolSize),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
         top40Content()
         recommendedContent()
     }

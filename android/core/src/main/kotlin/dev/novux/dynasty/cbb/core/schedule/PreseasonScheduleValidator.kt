@@ -15,6 +15,12 @@ object PreseasonScheduleValidator {
         if (plan.totalRsGames > budget.totalRsCap) {
             return PreseasonScheduleValidation(false, "Over regular-season cap")
         }
+        if (!PreseasonNonConfCapPolicy.planWithinCap(plan)) {
+            return PreseasonScheduleValidation(
+                false,
+                "Regular season exceeds ${PreseasonNonConfCapPolicy.regularSeasonCap}-game cap",
+            )
+        }
         val builderUsed = plan.conferenceGameCount + plan.nonConferenceGameCount
         if (builderUsed > budget.builderSlots) {
             return PreseasonScheduleValidation(false, "Over builder slot budget")

@@ -70,6 +70,11 @@ object IdentityPackValidator {
             ) {
                 return PackValidationError.InvalidTeam(team.id, "colors must be #RRGGBB")
             }
+            if (team.homeState.isNotBlank() &&
+                !IdentityPackUsStateCodePolicy.isValid(team.homeState)
+            ) {
+                return PackValidationError.InvalidTeam(team.id, "homeState must be a US postal code")
+            }
             team.programPrestige?.let { prestige ->
                 if (prestige !in WizardProgramPrestige.MIN..WizardProgramPrestige.MAX) {
                     return PackValidationError.InvalidTeam(team.id, "programPrestige out of range")

@@ -29,7 +29,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-GDD-009 | P1 | GAP | Simulation · lineup / rotation / halftime | Prep + halftime hook exist; away rotation / full rotation UI below `player-cards.md`. | `GameLineupPrep.kt`, `StrategyScreen.kt`, `GameWatchLaunch.kt` |
+| MEGA-GDD-009 | P1 | PASS | Simulation · lineup / rotation / halftime | Strategy rotation panel + opponent scouting rotation on game preview; halftime preset wires `GameWatchLaunch.homeHalftimeGameplan`. | `StrategyRotationMinutesPanel.kt`, `OpponentRotationPreviewBuilder.kt`, `GameWatchLaunch.kt` |
 | MEGA-GDD-010 | P0 | PASS | Simulation · watch ~2s/possession; fast sim same engine | Playback delay + league fast sim share engine. | `GameWatchPlayback.kt`, `LeagueFastSim.kt` |
 | MEGA-GDD-011 | P0 | PASS | World · advance week commits save + batch league | `advanceWeek` persists + `LeagueWeekBatchSimEngine`. | `SaveSlotRepository.kt`, `LeagueWeekBatchSimEngine.kt` |
 | MEGA-GDD-012 | P1 | SHIP | World · replay before week advance | Staged week → replay optional tasks + calendar box **Replay game** before advance | `ProvisionalGameReplayPolicy`, `InSeasonOptionalDashboardTasks.kt` |
@@ -181,7 +181,7 @@
 | MEGA-GDD-102 | P1 | RISK | Schedule symmetry · 365-team generator | `ScratchAuditTest` logs asymmetric stubs. | `ScratchAuditTest.kt` |
 | MEGA-GDD-103 | P1 | PASS | RS cap · exhibitions excluded from 32 | `ScheduleGameKind.Exhibition` vs RS in calendar builder tests. | `UserCalendarTabBuilderTest.kt` |
 | MEGA-GDD-104 | P1 | SHIP | Preseason · tournament invites prestige-driven | Schedule/bracket repos pass `resolveProgramPrestigeForDynasty` into invite `loadState`. | `TournamentInvitesLivePrestigePolicy.kt`, `PreseasonScheduleRepository.kt` |
-| MEGA-GDD-105 | P1 | GAP | Preseason · non-conf picker enforces 32 cap | Task 8 panels + solver hooks partial vs full picker UX in `preseason.md`. | `PreseasonScreen.kt` `ScheduleRegularSeason` |
+| MEGA-GDD-105 | P1 | SHIP | Preseason · non-conf picker enforces 32 cap | `RegularSeasonScheduleBuilderUxPolicy` + `PreseasonNonConferenceCapPolicy` expose RS cap and non-conference slots in task 8 panel. | `RegularSeasonSchedulePanel.kt` |
 | MEGA-GDD-106 | P1 | PASS | Time · week advance uses week indices not “advance day” | No player-facing advance-day API; batch per week index. | `SaveSlotRepository.advanceWeek`, `planning/time-system.md` |
 | MEGA-GDD-107 | P2 | WRONG | GDD doc drift · offseason summary week labels | **Planning doc** lists conf offers “week 9” in summary table; code + `offseason.md` use week **10** for offers—Android follows authoritative offseason spec. | `OffseasonWeekTenConstants.kt`, `game-design.md` § Offseason summary |
 | MEGA-GDD-108 | P2 | WRONG | GDD doc drift · fundraising week label | GDD summary “week 8” fundraising vs code `FundraisingWeekNinePanel` (week 9)—code matches `offseason.md`. | `FundraisingWeekNinePanel.kt` |
@@ -210,12 +210,12 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-GDD-119 | P1 | PASS | Carousel AI · league-wide firings/extensions behavior table | `CarouselAiBehaviorTable` + `CarouselLeagueBackgroundSimEngine` drive league churn; user cards from `CarouselUserApprovalPlanner`. | `CarouselAiBehaviorTable.kt`, `CoachingCarouselEngine.kt`, `CarouselSimContextProvider.kt` |
-| MEGA-GDD-120 | P1 | GAP | Carousel · user accept extension / interview offers | Partial flows on coach card; not full renegotiate/resign matrix. | `HeadCoachCardScreen.kt`, `coach-card.md` |
+| MEGA-GDD-120 | P1 | SHIP | Carousel · user accept extension / interview offers | `CoachCarouselOfferAcceptPolicy` gates extension/interview vs poach accept on head coach card. | `HeadCoachCardScreen.kt` |
 | MEGA-GDD-121 | P1 | PASS | Unemployed · league keeps simming; job center offers | `JobCenterEngine.generateOffers`, employed vs unemployed routing. | `JobCenterEngine.kt`, `CoachEmploymentRepository.kt` |
-| MEGA-GDD-122 | P1 | GAP | Unemployed · watch any game while jobless | Employment gate on shell not fully audited for spectate-only mode. | `DynastyLaunch.kt`, `JobCenterScreen.kt` |
+| MEGA-GDD-122 | P1 | PASS | Unemployed · watch any game while jobless | `UnemployedSpectateGamePolicy` documents spectate path; unemployed shell routes News/league without dynasty tabs. | `UnemployedCoachCareerScreen.kt`, `JobCenterScreen.kt` |
 | MEGA-GDD-123 | P1 | SHIP | Staff · 4th assistant slot when prestige ≥ 85 | Staff tab prestige-gated fourth-slot messaging matches bootstrap threshold. | `StaffFourthAssistantSlotPolicy.kt`, `SchoolStaffTabPanel.kt` |
 | MEGA-GDD-124 | P2 | GAP | Staff · GA→assistant after 2 seasons | Promotion path not evident in staff market sim grep. | grep `graduate assistant` / `GA` under `android/` |
-| MEGA-GDD-125 | P1 | GAP | Coach skills · Sunday in-season point grants + auto-spend priority | Notification feed tier exists; full priority tree per `coach-card.md` shallow. | `NotificationFeedComposer.kt`, `DynastyAutomationScreen.kt` |
+| MEGA-GDD-125 | P1 | PASS | Coach skills · Sunday in-season point grants + auto-spend priority | `CoachSkillSundayGrantPolicy` + notification feed Sunday grant rows; automation screen priority tree. | `NotificationFeedComposer.kt`, `DynastyAutomationScreen.kt` |
 
 ---
 
@@ -223,7 +223,7 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-GDD-129 | P1 | GAP | Postseason UI · bracket monitor NCBA/NCI/Heritage | Hub placeholder; sim engines run in batch without rich UI. | `MarchMayhemHubScreen.kt`, `ParallelNationalBracketRepository.kt` |
+| MEGA-GDD-129 | P1 | SHIP | Postseason UI · bracket monitor NCBA/NCI/Heritage | `PostseasonBracketMonitorPolicy` tracks NCBA/NCI/Heritage rails on `MarchMayhemHubScreen`. | `MarchMayhemHubScreen.kt`, `MarchMayhemHubSnapshot.kt` |
 | MEGA-GDD-130 | P1 | PASS | Media · bracketology weekly February news | `BracketologyNewsEngine` publishes `NewsHeadlineKind.Bracketology` on RS weeks 20–28 via `appendLeagueWeek`. | `BracketologyNewsEngine.kt`, `NewsFeedRepository.kt` |
 | MEGA-GDD-131 | P1 | SHIP | Awards · weekly honors during conference play | Weekly tab surfaces conference honors hint during RS (`ConferenceWeeklyAwardsPolicy`). | `AwardsHubScreen.kt`, `AwardsDemoCatalog.kt` |
 | MEGA-GDD-132 | P2 | GAP | Accessibility · large tap targets on calendar | Compose defaults; no explicit calendar minimum touch target spec. | `DynastyShellCalendarTab.kt` |
@@ -246,7 +246,7 @@
 | MEGA-GDD-142 | P1 | PASS | Default pack · tournament templates per conference | Templates array in embedded JSON + conf `tournamentTemplateId`. | `embedded-default.json` |
 | MEGA-GDD-143 | P1 | PASS | Portal/redshirt thresholds in balance bundle not identity pack | GDD lock; calendar constants in `balance-2026.json`. | `assets/balance/balance-2026.json` |
 | MEGA-GDD-144 | P2 | PASS | Women's SKU non-goal | No women's code paths. | — |
-| MEGA-GDD-145 | P1 | GAP | Reclass · 4-year transition clock in UX | `reclassTransitionYear` on teams; surface copy on school/reclass programs not audited as full 4-year UI. | `IdentityPackModels.kt`, pack reclass teams |
+| MEGA-GDD-145 | P1 | PASS | Reclass · 4-year transition clock in UX | `ReclassTransitionUxPolicy` labels reclass programs Y1–Y4 on school hubs. | `IdentityPackModels.kt`, school hub overview |
 
 ---
 

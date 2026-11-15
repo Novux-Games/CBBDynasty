@@ -43,11 +43,7 @@ fun PlayerCardIdentityStrip(
         }
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             PlayerCardIdentityStripChips(player = player)
-            Text(
-                player.archetype.displayName,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+            PlayerArchetypeBadgeChip(archetype = player.archetype)
         }
     }
 }

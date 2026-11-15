@@ -74,6 +74,7 @@ import dev.novux.dynasty.cbb.ui.dashboard.SigningDayRequiredTasksSkeleton
 import dev.novux.dynasty.cbb.core.portal.PortalConstants
 import dev.novux.dynasty.cbb.core.portal.PortalEntrant
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCycleLedger
+import dev.novux.dynasty.cbb.core.recruiting.SeasonOneRecruitingClassPreviewPolicy
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingHubTab
 import dev.novux.dynasty.cbb.core.save.DynastyLoadResult
 import dev.novux.dynasty.cbb.core.save.LoadedDynasty
@@ -170,8 +171,9 @@ fun OffseasonScreen(
     var fullScreenPlayer by remember { mutableStateOf<DynastyPlayer?>(null) }
     val context = LocalContext.current
     val app = context.requireDynastyApplication()
-    val weekOneNilRetentionHost = remember(loaded.dynastyId, loaded.metadata.seasonIndex) {
-        WeekOneNilRetentionHost(
+    var weekOneNilRetentionHost by remember { mutableStateOf<WeekOneNilRetentionHost?>(null) }
+    LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
+        weekOneNilRetentionHost = WeekOneNilRetentionHost(
             loaded = loaded,
             nilRules = app.balanceRulesetRepository.activeRuleset().nil,
             nilBudgetRepository = app.nilBudgetRepository,
@@ -269,7 +271,7 @@ fun OffseasonScreen(
         portalTop40Locked = portal.top40Locked
         portalEntrants = portal.entrants
         val packIndex = app.packRepository.activeSession().index
-        val userTeamId = app.database.dynastyCoachDao().getByDynastyId(loaded.dynastyId)?.userTeamId
+        val userTeamId = app.dynastyDatabase.dynastyCoachDao().getByDynastyId(loaded.dynastyId)?.userTeamId
         val pipelineStates = buildSet {
             userTeamId?.let { id ->
                 packIndex.team(id)?.homeState?.takeIf { it.isNotBlank() }?.let(::add)
@@ -352,7 +354,10 @@ fun OffseasonScreen(
             cardPlayer = null
             fullScreenPlayer = player
         },
-        allowEdit = false,
+        isOnUserRoster = true,
+        allowEdit = dev.novux.dynasty.cbb.core.player.card.PlayerCardEditGatePolicy.allowEditOnPreview(
+            isOnUserRoster = true,
+        ),
     )
 
     fullScreenPlayer?.let { player ->
@@ -362,7 +367,9 @@ fun OffseasonScreen(
             seasonRecordLabel = "0-0",
             seasonIndex = loaded.metadata.seasonIndex,
             playerStatsRepository = playerStatsRepository,
-            allowEdit = false,
+            allowEdit = dev.novux.dynasty.cbb.core.player.card.PlayerCardEditGatePolicy.allowEditOnFullCard(
+                isOnUserRoster = true,
+            ),
             onBack = { fullScreenPlayer = null },
         )
         return
@@ -458,6 +465,18 @@ fun OffseasonScreen(
             emptyList()
         }
         if (inOffseason && position.weekIndex == 1) {
+            if (SeasonOneRecruitingClassPreviewPolicy.showOffseasonWeekOneBrief(
+                    loaded.metadata.seasonIndex,
+                    position,
+                )
+            ) {
+                Text(
+                    text = stringResource(R.string.offseason_season_one_class_preview),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 8.dp),
+                )
+            }
             DashboardRequiredTasksPanel(
                 tasks = offseasonRequiredTasks,
                 onOpenSigningDay = { link ->

@@ -42,8 +42,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.balance.BalanceNilParser
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitInterestParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingActionsParser
 import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingRecommendedParser
+import dev.novux.dynasty.cbb.core.portal.PortalConsideringPoolHubPolicy
+import dev.novux.dynasty.cbb.core.recruiting.RecruitInterestConfig
+import dev.novux.dynasty.cbb.core.signingday.Top60HsJucoCombinedPoolPolicy
 import dev.novux.dynasty.cbb.core.nil.NilBudgetDrillDown
 import dev.novux.dynasty.cbb.core.nil.NilBudgetLedger
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
@@ -235,7 +239,17 @@ fun RecruitingHubScreen(
     var hsTop60 by remember { mutableStateOf<List<NationalRankRow>>(emptyList()) }
     var hsPoolReady by remember { mutableStateOf(false) }
     var portalEntrants by remember { mutableStateOf<List<PortalEntrant>>(emptyList()) }
+    var portalConsideringPoolSize by remember { mutableStateOf(0) }
     val calendarPosition = loaded.weekCheckpoint.activePosition
+    val leagueWeeksElapsed = remember(calendarPosition) {
+        when (calendarPosition.phase) {
+            CalendarPhase.Offseason,
+            CalendarPhase.RegularSeason,
+            CalendarPhase.Exhibition,
+            -> calendarPosition.weekIndex.coerceAtLeast(1)
+            else -> 0
+        }
+    }
     val hubOffseasonWeek = calendarPosition.weekIndex.takeIf { calendarPosition.phase == CalendarPhase.Offseason }
     val ledgerCycleClosed = ledger?.cycleClosed == true
     val hubReadOnly = ledger != null &&
@@ -253,6 +267,12 @@ fun RecruitingHubScreen(
         if (hubReadOnly) {
             tabIndex = tabIndex.coerceIn(0, (hubTabs.size - 1).coerceAtLeast(0))
         }
+    }
+
+    LaunchedEffect(loaded.balanceRuleset) {
+        RecruitInterestConfig.bindFromBalance(
+            BalanceRecruitInterestParser.parse(loaded.balanceRuleset.recruiting),
+        )
     }
 
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex) {
@@ -299,12 +319,14 @@ fun RecruitingHubScreen(
     LaunchedEffect(loaded.dynastyId, loaded.metadata.seasonIndex, portalWindowOpen) {
         if (!portalWindowOpen) {
             portalEntrants = emptyList()
+            portalConsideringPoolSize = 0
             return@LaunchedEffect
         }
         val state: PortalCycleState = portalCycleRepository.loadOrSimulate(
             loaded.dynastyId,
             loaded.metadata.seasonIndex,
         )
+        portalConsideringPoolSize = state.consideringPoolSize
         portalEntrants = if (state.top40Locked) {
             state.entrants
         } else {
@@ -342,6 +364,7 @@ fun RecruitingHubScreen(
             nilRules = nilRules,
             spendDeltaByProspect = interestSpendByProspect,
             offerPromisesByProspect = offerPromises,
+            leagueWeeksElapsed = leagueWeeksElapsed,
         )
     }
 
@@ -354,6 +377,7 @@ fun RecruitingHubScreen(
         interestSpendByProspect,
         offerPromises,
         gateRefresh,
+        leagueWeeksElapsed,
     ) {
         if (RecruitingHubTestHooks.forceEmptyRecommendedPool) return@remember emptyList()
         val pool = recruitingPool ?: return@remember emptyList()
@@ -366,6 +390,7 @@ fun RecruitingHubScreen(
             nilRules = nilRules,
             spendDeltaByProspect = interestSpendByProspect,
             offerPromisesByProspect = offerPromises,
+            leagueWeeksElapsed = leagueWeeksElapsed,
         )
     }
 
@@ -706,6 +731,7 @@ fun RecruitingHubScreen(
                 )
                 RecruitingHubTab.TransferPortal -> PortalRecruitingTabBody(
                     windowOpen = portalWindowOpen,
+                    consideringPoolSize = portalConsideringPoolSize,
                     modifier = Modifier.weight(1f),
                     top40Content = {
                         PortalTop40Section(

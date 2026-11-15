@@ -31,6 +31,8 @@ class IdentityPackIndex private constructor(
             logoUri = team.logoUri,
             postseasonEligible = team.postseasonEligible,
             programPrestige = WizardProgramPrestige.effective(team),
+            arenaBaseName = team.arenaBaseName,
+            reclassTransitionYear = team.reclassTransitionYear,
         )
     }
 

@@ -73,6 +73,7 @@ fun GameWatchScreen(
     homeName: String,
     awayName: String,
     homeGameplan: GameplanInput,
+    homeHalftimeGameplan: GameplanInput? = null,
     homeOffensiveScheme: OffensiveSchemePreset = OffensiveSchemePreset.Balanced,
     homeDefensiveScheme: DefensiveSchemePreset = DefensiveSchemePreset.ManToMan,
     homeRosterPlayers: List<RosterPlayer> = emptyList(),
@@ -155,6 +156,7 @@ fun GameWatchScreen(
         tuning,
         seed,
         homeGameplan,
+        homeHalftimeGameplan,
         homeName,
         awayName,
         homeSimRoster,
@@ -180,6 +182,7 @@ fun GameWatchScreen(
                 tuning = tuning,
                 seed = seed,
                 homeGameplan = homeGameplan,
+                homeHalftimeGameplan = homeHalftimeGameplan,
                 homeRoster = homeSimRoster,
                 homeVenue = homeVenue,
             )
@@ -196,6 +199,7 @@ fun GameWatchScreen(
                 tuning = tuning,
                 seed = seed,
                 awayGameplan = homeGameplan,
+                awayHalftimeGameplan = homeHalftimeGameplan,
                 awayRoster = homeSimRoster,
                 homeVenue = SimHomeVenueType.Home,
             )

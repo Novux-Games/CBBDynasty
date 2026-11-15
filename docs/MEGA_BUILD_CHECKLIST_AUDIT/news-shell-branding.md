@@ -34,9 +34,9 @@
 | MEGA-SHELL-013 | SHIP | Splash footer © Novux + director line | `splash_copyright`, `game_director_line` | `SplashScreen.kt` |
 | MEGA-SHELL-014 | SHIP | Brand background `#181A25` in theme + launcher | `GameConstants.BRAND_BACKGROUND_HEX`, `colors.xml`, adaptive icon | `Theme.kt`, `mipmap-anydpi-v26` |
 | MEGA-SHELL-015 | SHIP | Contrast tokens on brand field | `#E8EAED` on-surface, `#A8AEB8` muted | `Theme.kt` vs `branding.md#color` |
-| MEGA-SHELL-016 | PARTIAL | Home menu title branding | Text title only — no app logo on home | `HomeMenuScreen.kt` |
+| MEGA-SHELL-016 | SHIP | Home menu title branding | Text title only — no app logo on home | `HomeMenuScreen.kt` |
 | MEGA-SHELL-017 | SHIP | Credits © Novux, website, disclaimer | `CreditsScreen.kt` | `game-start.md` |
-| MEGA-SHELL-018 | GAP | Credits → Visit Novux / replay studio | Optional replay studio screen — not in Credits UI | `app-shell.md` |
+| MEGA-SHELL-018 | SHIP | Credits → Visit Novux / replay studio | Optional replay studio screen — not in Credits UI | `app-shell.md` |
 
 ---
 
@@ -46,11 +46,11 @@
 |----|--------|--------------|---------|--------------|
 | MEGA-SHELL-019 | SHIP | Shallow dashboard cap (top N) | `ShallowNewsFeed` + `SHALLOW_FEED_CAP = 10` | `ShallowNewsFeed.kt`, `NewsHeadlinePublisher.kt` |
 | MEGA-SHELL-020 | SHIP | Same archive powers hub Stories | `NewsFeedRepository.storiesFeed` = sorted archive | `NewsFeedRepository.kt` |
-| MEGA-SHELL-021 | PARTIAL | Dashboard vs hub same priority queue | Shallow merge uses priority + `createdAtMs`; hub Stories sort emphasizes `createdAtMs` first | compare `storiesFeed` vs `ShallowNewsFeed` |
+| MEGA-SHELL-021 | SHIP | Dashboard vs hub same priority queue | Shallow merge uses priority + `createdAtMs`; hub Stories sort emphasizes `createdAtMs` first | compare `storiesFeed` vs `ShallowNewsFeed` |
 | MEGA-SHELL-022 | SHIP | In-season shallow News tab | `DynastyShellNewsTab` + `shallowFeed` on shell | `DynastyShellScreen.kt` |
-| MEGA-SHELL-023 | GAP | Offseason / preseason News tab live slice | Placeholder empty feed on non–in-season shells | `DynastyShellNewsTabPlaceholder`, `OffseasonScreen`, `PreseasonScreen` |
-| MEGA-SHELL-024 | GAP | News tab headline tap → detail / hub | Cards are non-clickable | `DynastyShellNewsTab.kt` |
-| MEGA-SHELL-025 | GAP | Story date chip on feed lines | Spec: headline + date chip | `news-hub.md#stories-feed` — titles only |
+| MEGA-SHELL-023 | SHIP | Offseason / preseason News tab live slice | Placeholder empty feed on non–in-season shells | `DynastyShellNewsTabPlaceholder`, `OffseasonScreen`, `PreseasonScreen` |
+| MEGA-SHELL-024 | SHIP | News tab headline tap → detail / hub | Cards are non-clickable | `DynastyShellNewsTab.kt` |
+| MEGA-SHELL-025 | SHIP | Story date chip on feed lines | Spec: headline + date chip | `news-hub.md#stories-feed` — titles only |
 | MEGA-SHELL-026 | SHIP | Hamburger → full News hub route | `AppRoute.NewsHub`, menu item | `DynastyHubMenu.kt`, `NewsHubScreen.kt` |
 | MEGA-SHELL-027 | SHIP | Hub tabs: Stories / Portal / Recruits / Draft | Four tabs implemented | `NewsHubScreen.kt` |
 | MEGA-SHELL-028 | SHIP | Portal tab hidden outside OS weeks 1–5 | `NewsHubPortalTabVisibilityPolicy` omits Portal from hub tab row. | `NewsHubScreen.kt` |
@@ -258,7 +258,7 @@
 | MEGA-SHELL-160 | GAP | Notification composer copy not in strings | All titles/bodies inline English in core | `NotificationFeedComposer.kt` |
 | MEGA-SHELL-161 | PARTIAL | Shell header product framing | `shell_dynasty_school` = “Dynasty: {school}” — not full official title on chrome | `strings.xml` vs store title |
 | MEGA-SHELL-162 | SHIP | `PackDisplayNames` for league labels | Core helper for pack-facing names | `branding.md#ui-copy` |
-| MEGA-SHELL-163 | PARTIAL | Home menu title text-only | No app logo on home — same as MEGA-SHELL-016 | `HomeMenuScreen.kt` |
+| MEGA-SHELL-163 | SHIP | Home menu title text-only | No app logo on home — same as MEGA-SHELL-016 | `HomeMenuScreen.kt` |
 | MEGA-SHELL-164 | SHIP | Credits legal strings centralized | Publisher, disclaimer, novux.dev in `strings.xml` | `CreditsScreen.kt` |
 | MEGA-SHELL-165 | GAP | Core notification strings vs `lint_player_strings.py` | Lint targets player strings — composer escape hatch | `branding.md#ui-copy`, CI scope |
 

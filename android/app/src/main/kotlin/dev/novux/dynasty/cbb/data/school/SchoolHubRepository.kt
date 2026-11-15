@@ -91,6 +91,7 @@ class SchoolHubRepository(
             coachesPollRankings = coachesPoll,
             facilitySummary = facilitySummary,
             programAcademics = programAcademics,
+            seasonIndex = seasonIndex,
         ).copy(nilCycleSummary = nilSummary)
     }
 

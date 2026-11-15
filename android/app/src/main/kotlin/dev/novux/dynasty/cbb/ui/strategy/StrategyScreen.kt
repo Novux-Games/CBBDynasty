@@ -255,7 +255,8 @@ fun StrategyScreen(
             onClick = {
                 val normalizedRotation = RotationMinutesBalancer.normalize(rotationMinutes)
                 rotationMinutes = normalizedRotation
-                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeGameplan = halftimeGameplan ?: gameplan
+                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeGameplan = gameplan
+                dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeHalftimeGameplan = halftimeGameplan
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeName = homeTeamLabel
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.awayName = awayTeamLabel
                 dev.novux.dynasty.cbb.ui.sim.GameWatchLaunch.homeRosterPlayers = players
@@ -293,6 +294,7 @@ private fun cycleStarter(options: List<RosterPlayer>, currentId: String?): Strin
     return options[index].playerId
 }
 
+@Composable
 private fun StrategyLineupCard(
     title: String,
     player: RosterPlayer?,
