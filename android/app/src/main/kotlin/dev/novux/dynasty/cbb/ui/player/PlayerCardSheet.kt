@@ -32,6 +32,7 @@ import dev.novux.dynasty.cbb.core.player.card.PlayerCardEditGatePolicy
 import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
 import dev.novux.dynasty.cbb.ui.portrait.PlayerPortraitSlot
 
+/** Quick preview sheet before full card ([MEGA-COACH-076]). */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayerCardPreviewSheet(

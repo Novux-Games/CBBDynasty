@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.Column
 @Suppress("unused")
 private val draftProjectionPoolAnchor: String = PlayerDraftProjectionPolicy.NATIONAL_POOL
 
-/** Draft rank line `Draft: #N` when Top 60 + eligible ([MEGA-COACH-163]). */
+/** Draft rank line `Draft: #N` when Top 60 + eligible ([MEGA-COACH-163], [MEGA-COACH-078]). */
 @Composable
 fun PlayerDraftProjectionLine(
     player: DynastyPlayer,

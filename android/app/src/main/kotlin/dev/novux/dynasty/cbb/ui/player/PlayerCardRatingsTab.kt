@@ -18,7 +18,7 @@ import dev.novux.dynasty.cbb.core.player.scout.ScoutDepth
 @Suppress("unused")
 private val playerRatingsTabQaId: String = PlayerRatingsTabPolicy.QA_ID
 
-/** Ratings tab body: headline, full attributes, loyalty, scout. */
+/** Ratings tab body: headline, full attributes, loyalty, scout ([MEGA-COACH-166]). */
 @Composable
 fun PlayerCardRatingsTabContent(
     player: DynastyPlayer,

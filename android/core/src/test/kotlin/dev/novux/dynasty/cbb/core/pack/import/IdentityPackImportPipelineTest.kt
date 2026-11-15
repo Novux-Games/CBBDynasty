@@ -78,7 +78,7 @@ class IdentityPackImportPipelineTest {
             displayName=Renamed University
             shortName=RN
             homeCity=Springfield
-            homeState=ST
+            homeState=TX
             colors.primary=#003366
             colors.secondary=#CCCCCC
             arenaBaseName=Arena

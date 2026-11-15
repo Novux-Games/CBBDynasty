@@ -86,6 +86,7 @@ import dev.novux.dynasty.cbb.data.notification.DashboardNotificationSnapshotSide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 @Composable
 fun PreseasonScreen(
     initial: LoadedDynasty,
@@ -157,7 +158,7 @@ fun PreseasonScreen(
         val target = scrollToTask ?: return@LaunchedEffect
         val index = PreseasonTaskId.entries.indexOf(target)
         if (index >= 0) {
-            checklistState.scrollToItem(index)
+            checklistState.animateScrollToItem(index)
         }
         scrollToTask = null
     }

@@ -26,6 +26,7 @@ import dev.novux.dynasty.cbb.core.coach.staff.StaffKind
 import dev.novux.dynasty.cbb.ui.portrait.CoachPortraitSlot
 import androidx.compose.material3.AssistChip
 
+/** School hub Staff tab ([MEGA-COACH-053]). */
 @Composable
 fun SchoolStaffTabPanel(
     roster: SchoolStaffRoster,

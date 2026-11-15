@@ -3,7 +3,7 @@ package dev.novux.dynasty.cbb.core.portrait
 import dev.novux.dynasty.cbb.core.coach.CoachAvatarPresets
 import dev.novux.dynasty.cbb.core.player.appearance.PlayerAvatarPresets
 
-/** Pure preset → palette (repro across devices; no bitmap assets). */
+/** Pure preset → palette (repro across devices; no bitmap assets) ([MEGA-COACH-105]). */
 data class PortraitRenderSpec(
     val presetId: String,
     val skinToneArgb: Long,
