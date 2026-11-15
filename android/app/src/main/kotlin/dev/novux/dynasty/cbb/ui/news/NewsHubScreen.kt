@@ -37,6 +37,7 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.news.NewsHeadline
 import dev.novux.dynasty.cbb.core.news.NewsHubDraftInSeasonBoardPolicy
+import dev.novux.dynasty.cbb.core.news.NewsHubShellChromeParityPolicy
 import dev.novux.dynasty.cbb.core.news.NewsHubShellNewsTabHintPolicy
 import dev.novux.dynasty.cbb.core.news.NewsHubPolicy
 import dev.novux.dynasty.cbb.core.news.NewsHubStoriesRowPolicy
@@ -140,6 +141,8 @@ fun NewsHubScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         @Suppress("unused")
         val shellNewsHintPolicy = NewsHubShellNewsTabHintPolicy.MEGA_ID
+        @Suppress("unused")
+        val shellChromeParity = NewsHubShellChromeParityPolicy.MEGA_ID
         TopAppBar(title = { Text(stringResource(R.string.news_hub_title)) })
         Text(
             text = NewsHubShellNewsTabHintPolicy.HINT,

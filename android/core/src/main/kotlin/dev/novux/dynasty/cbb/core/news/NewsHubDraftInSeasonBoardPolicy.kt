@@ -7,6 +7,7 @@ import dev.novux.dynasty.cbb.core.signingday.NationalRankRow
 /** In-season Draft tab shows watch-list board until week-2 results publish ([MEGA-SHELL-155]). */
 object NewsHubDraftInSeasonBoardPolicy {
     const val MEGA_ID: String = "MEGA-SHELL-155"
+    const val DYNAMIC_BOARD_MEGA_ID: String = "MEGA-SHELL-037"
 
     const val IN_SEASON_MOCK_TIER: String = "Watch list"
 

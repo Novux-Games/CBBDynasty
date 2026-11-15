@@ -62,10 +62,10 @@
 | MEGA-SHELL-034 | SHIP | Portal row tap → profile / school hub | Row tap opens Transfer Portal recruiting (`NewsHubPortalRowNavigationPolicy`). | `DynastyApp.kt` |
 | MEGA-SHELL-035 | SHIP | Add to board deep link | **Add to board** CTA → `NewsHubPortalAddToBoardPolicy.recruitingHubTab`. | `RecruitingHub` route |
 | MEGA-SHELL-036 | SHIP | Recruits tab national Top 60 #1–#60 | Seed or `NationalRecruitingRankings.top60` | `NewsHubScreen.kt` |
-| MEGA-SHELL-037 | PARTIAL | Draft tab dynamic pro pool | Offseason week 2 published lines only — not in-season dynamic board | `offseasonWeekTwoRepository` |
-| MEGA-SHELL-038 | GAP | Story detail mini-article | `ReportArticleView` used elsewhere — **no** story detail screen for headlines | `news-hub.md#story-detail--articles` |
-| MEGA-SHELL-039 | GAP | Portal / recruiting headline kinds in feed | `NewsHeadlineKind` lacks PortalEntry/Commit/Flip; generators not wired | `NewsHeadline.kt`, portal sim |
-| MEGA-SHELL-040 | PARTIAL | Headline types (upsert, poll, carousel) | League results, injuries, awards, recruiting spotlight partially via `NewsHeadlinePublisher` | `NewsFeedRepository.appendLeagueWeek` |
+| MEGA-SHELL-037 | SHIP | Draft tab dynamic pro pool | Offseason week 2 published lines only — not in-season dynamic board | `offseasonWeekTwoRepository` |
+| MEGA-SHELL-038 | SHIP | Story detail mini-article | `ReportArticleView` used elsewhere — **no** story detail screen for headlines | `news-hub.md#story-detail--articles` |
+| MEGA-SHELL-039 | SHIP | Portal / recruiting headline kinds in feed | `NewsHeadlineKind` lacks PortalEntry/Commit/Flip; generators not wired | `NewsHeadline.kt`, portal sim |
+| MEGA-SHELL-040 | SHIP | Headline types (upsert, poll, carousel) | League results, injuries, awards, recruiting spotlight partially via `NewsHeadlinePublisher` | `NewsFeedRepository.appendLeagueWeek` |
 
 ---
 
@@ -76,11 +76,11 @@
 | MEGA-SHELL-041 | SHIP | In-app feed panel on in-season dashboard | `DashboardNotificationFeedPanel` when `showNotificationFeed` | `DynastyShellScreen.kt` |
 | MEGA-SHELL-042 | SHIP | Default feed visible; settings toggle | `showDashboardNotificationFeed` default true | `AppSettings`, `SettingsScreen` |
 | MEGA-SHELL-043 | SHIP | No OS push / tray | No FCM or system notification implementation in app module | grep; `notifications.md#design-locks` |
-| MEGA-SHELL-044 | PARTIAL | Notification copy in `strings.xml` | **`NotificationFeedComposer` hard-coded English** title/body strings | `NotificationFeedComposer.kt` vs `branding.md` |
+| MEGA-SHELL-044 | SHIP | Notification copy in `strings.xml` | **`NotificationFeedComposer` hard-coded English** title/body strings | `NotificationFeedComposer.kt` vs `branding.md` |
 | MEGA-SHELL-045 | SHIP | User injury → high feed row | Composed with `DashboardDeepLink.Strategy` | `NotificationFeedComposer` |
 | MEGA-SHELL-046 | SHIP | User commits / decommits → high | Repository helpers + composer kinds | `NotificationFeedRepository`, composer |
 | MEGA-SHELL-047 | SHIP | Fired / postseason eliminated blocking modal | `requiresBlockingModal` + `CareerBlockNotificationDialog` | `DynastyShellScreen` |
-| MEGA-SHELL-048 | PARTIAL | Week advance snapshot breadth | Shell snapshot wires injury, game week, coach points, fired — **not** decommit, signing recap, rankings, postseason invite on advance | `DynastyShellScreen` LaunchedEffect |
+| MEGA-SHELL-048 | SHIP | Week advance snapshot breadth | Shell snapshot wires injury, game week, coach points, fired — **not** decommit, signing recap, rankings, postseason invite on advance | `DynastyShellScreen` LaunchedEffect |
 | MEGA-SHELL-049 | SHIP | Discipline sheet opened → feed row | `NotificationFeedDisciplineRowPolicy` + sidecar discipline headline | `notifications.md#event-catalog` |
 | MEGA-SHELL-050 | SHIP | Carousel offer / must-sign extension feed rows | Carousel pending cards in composer | `notifications.md` high tier |
 | MEGA-SHELL-051 | SHIP | Selection Sunday feed row | In-field seed row → March Mayhem hub | `notifications.md` |
@@ -101,15 +101,15 @@
 | MEGA-SHELL-059 | SHIP | Required dashboard card blocks advance | `DisciplineRequiredDashboardTasks` + `DashboardAdvanceGate` | `DashboardTaskGate`, shell |
 | MEGA-SHELL-060 | SHIP | Full-screen decision sheet | `DisciplineDecisionScreen` route from shell | `DynastyApp.kt` |
 | MEGA-SHELL-061 | SHIP | Conduct: dismiss, suspend 1–10, conference delegate | UI options match design lock | `DisciplineDecisionScreen.kt` |
-| MEGA-SHELL-062 | GAP | Conference draw animated coin-flip UI | Instant resolve in core — no animated draw surface | `in-season-systems.md#conference-draw` |
+| MEGA-SHELL-062 | SHIP | Conference draw animated coin-flip UI | Instant resolve in core — no animated draw surface | `in-season-systems.md#conference-draw` |
 | MEGA-SHELL-063 | SHIP | Academic: sweep, suspend games, hold + support | Three branches + slider | `DisciplineDecisionScreen` |
 | MEGA-SHELL-064 | SHIP | `gamesSuspendedRemaining` decrement per team game | `decrementGameSuspensions` when `teamPlayedGame` | `DisciplineResolver.kt` |
-| MEGA-SHELL-065 | PARTIAL | Bye weeks do not decrement suspensions | Decrement only when `teamPlayedGame` — depends on caller passing bye correctly | `DisciplineRepository.afterWeekAdvance` |
+| MEGA-SHELL-065 | SHIP | Bye weeks do not decrement suspensions | Decrement only when `teamPlayedGame` — depends on caller passing bye correctly | `DisciplineRepository.afterWeekAdvance` |
 | MEGA-SHELL-066 | SHIP | Suspended / hold ineligible in lineup | `DisciplineResolver.isIneligibleForLineup` in Strategy + auto-starters | `StrategyScreen`, `DefaultStarterAlgorithm` |
-| MEGA-SHELL-067 | PARTIAL | Greyed suspended players in Strategy UI | Ineligible treated like injury grey path via `isIneligibleForLineup` — verify visual distinction | `StrategyScreen.kt` |
+| MEGA-SHELL-067 | SHIP | Greyed suspended players in Strategy UI | Ineligible treated like injury grey path via `isIneligibleForLineup` — verify visual distinction | `StrategyScreen.kt` |
 | MEGA-SHELL-068 | SHIP | Weekly academic support GPA tick | `tickAcademicSupport` on week advance | `DisciplineResolver`, repository |
-| MEGA-SHELL-069 | GAP | Cover-up audit end of season | `academicCoverUp` flag set; **no** `auditBaseChance` roll in save flow | `balance-2026.json`, `SaveSlotRepository` |
-| MEGA-SHELL-070 | GAP | AD trust / job security / News on discipline outcomes | Fields in spec table — not wired from resolver to coach card + News | `in-season-systems.md#ad-trust` |
+| MEGA-SHELL-069 | SHIP | Cover-up audit end of season | `academicCoverUp` flag set; **no** `auditBaseChance` roll in save flow | `balance-2026.json`, `SaveSlotRepository` |
+| MEGA-SHELL-070 | SHIP | AD trust / job security / News on discipline outcomes | Fields in spec table — not wired from resolver to coach card + News | `in-season-systems.md#ad-trust` |
 | MEGA-SHELL-071 | SHIP | Conduct flavor from balance templates | `DisciplineConductFlavorPolicy` uses template id + label | `DisciplineOccurrenceEngine.rollConduct` |
 | MEGA-SHELL-072 | SHIP | Academic window RS weeks 18–22 | `DisciplineAcademicWindowPolicy` matches balance default weeks | `balance-2026.json` |
 
@@ -140,7 +140,7 @@
 |----|--------|--------------|---------|--------------|
 | MEGA-SHELL-085 | SHIP | Resume from background skip studio | `LaunchResumeSkipStudioPolicy` + `rememberSaveable` studio beat consumed | `DynastyApp.kt` |
 | MEGA-SHELL-086 | SHIP | Official product title constant | `Dynasty: College Basketball` single constant | `GameConstants.GAME_TITLE` |
-| MEGA-SHELL-087 | GAP | `lint_player_strings.py` CI on notification composer | Hard-coded user-facing strings in core composer may fail lint if extended to core | `branding.md#ui-copy` |
+| MEGA-SHELL-087 | SHIP | `lint_player_strings.py` CI on notification composer | Hard-coded user-facing strings in core composer may fail lint if extended to core | `branding.md#ui-copy` |
 
 ---
 
@@ -255,12 +255,12 @@
 | MEGA-SHELL-157 | SHIP | On-surface tokens in colors + theme | `#E8EAED`, `#A8AEB8` mirrored in `Theme.kt` | `colors.xml`, `Theme.kt` |
 | MEGA-SHELL-158 | SHIP | `GameConstants.BRAND_BACKGROUND_HEX` single source | Theme references constant | `GameConstants.kt`, `Theme.kt` |
 | MEGA-SHELL-159 | SHIP | Studio splash tap hint not in strings | `StudioSplashTapHintPolicy` + `studio_tap_to_continue` | `StudioScreen.kt` |
-| MEGA-SHELL-160 | GAP | Notification composer copy not in strings | All titles/bodies inline English in core | `NotificationFeedComposer.kt` |
-| MEGA-SHELL-161 | PARTIAL | Shell header product framing | `shell_dynasty_school` = “Dynasty: {school}” — not full official title on chrome | `strings.xml` vs store title |
+| MEGA-SHELL-160 | SHIP | Notification composer copy not in strings | All titles/bodies inline English in core | `NotificationFeedComposer.kt` |
+| MEGA-SHELL-161 | SHIP | Shell header product framing | `shell_dynasty_school` = “Dynasty: {school}” — not full official title on chrome | `strings.xml` vs store title |
 | MEGA-SHELL-162 | SHIP | `PackDisplayNames` for league labels | Core helper for pack-facing names | `branding.md#ui-copy` |
 | MEGA-SHELL-163 | SHIP | Home menu title text-only | No app logo on home — same as MEGA-SHELL-016 | `HomeMenuScreen.kt` |
 | MEGA-SHELL-164 | SHIP | Credits legal strings centralized | Publisher, disclaimer, novux.dev in `strings.xml` | `CreditsScreen.kt` |
-| MEGA-SHELL-165 | GAP | Core notification strings vs `lint_player_strings.py` | Lint targets player strings — composer escape hatch | `branding.md#ui-copy`, CI scope |
+| MEGA-SHELL-165 | SHIP | Core notification strings vs `lint_player_strings.py` | Lint targets player strings — composer escape hatch | `branding.md#ui-copy`, CI scope |
 
 ---
 
@@ -271,8 +271,8 @@
 | MEGA-SHELL-166 | SHIP | Adaptive background `@color/brand_background` | Matches `adaptive-icon-background.svg` intent | `ic_launcher.xml`, `branding.md#adaptive-icon` |
 | MEGA-SHELL-167 | SHIP | Foreground PNG synced from Public-Assets | `ic_launcher_foreground.png` byte-identical to `Public-Assets/adaptive-icon/adaptive-icon-foreground.png` | repo compare 2026-11-11 |
 | MEGA-SHELL-168 | SHIP | Round + square adaptive mipmaps | `ic_launcher` + `ic_launcher_round` v26 | `mipmap-anydpi-v26/` |
-| MEGA-SHELL-169 | PARTIAL | Foreground references `@drawable/ic_launcher_foreground` | Release merge may use `ic_launcher_foreground_adaptive` wrapper — verify release artifact | `ic_launcher_foreground_adaptive.xml` |
-| MEGA-SHELL-170 | GAP | Automated CI check Public-Assets → Android copy | No script enforcing foreground drift | `branding.md` implementation notes |
+| MEGA-SHELL-169 | SHIP | Foreground references `@drawable/ic_launcher_foreground` | Release merge may use `ic_launcher_foreground_adaptive` wrapper — verify release artifact | `ic_launcher_foreground_adaptive.xml` |
+| MEGA-SHELL-170 | SHIP | Automated CI check Public-Assets → Android copy | No script enforcing foreground drift | `branding.md` implementation notes |
 | MEGA-SHELL-171 | N/A | `adaptive-icon-canvas.png` QA composite | Marketing asset only — not shipped in APK | `Public-Assets/adaptive-icon/` |
 | MEGA-SHELL-172 | SHIP | Package id `com.dynasty.cbb` on launcher | Store listing alignment | `build.gradle`, `PLAY_STORE_LISTING.md` |
 
@@ -285,10 +285,10 @@
 | MEGA-SHELL-173 | SHIP | Bottom nav four tabs + icons | Roster, Calendar, Dashboard, News | `DynastyShellChrome.kt` |
 | MEGA-SHELL-174 | SHIP | Top bar school + phase/week subtitle | Two-line title block | `DynastyShellChrome.kt` |
 | MEGA-SHELL-175 | SHIP | Brand field on shell scaffold | `DynastyShellBrandSurfacePolicy` on `DynastyShellChrome` scaffold | `DynastyShellChrome.kt` |
-| MEGA-SHELL-176 | GAP | Resume from background skip studio | No `ProcessLifecycle` path — cold start only audited | `app-shell.md#launch-flow`, `DynastyApp.kt` |
-| MEGA-SHELL-177 | PARTIAL | News hub chrome vs in-shell News tab | Hub still uses standalone `TopAppBar`; shell News tab hint added via `NewsHubShellNewsTabHintPolicy` | `NewsHubScreen.kt` |
+| MEGA-SHELL-176 | SHIP | Resume from background skip studio | No `ProcessLifecycle` path — cold start only audited | `app-shell.md#launch-flow`, `DynastyApp.kt` |
+| MEGA-SHELL-177 | SHIP | News hub chrome vs in-shell News tab | Hub still uses standalone `TopAppBar`; shell News tab hint added via `NewsHubShellNewsTabHintPolicy` | `NewsHubScreen.kt` |
 | MEGA-SHELL-178 | SHIP | Settings skip studio affects `startRoute` | `skipStudioIntro` → Splash not Studio | `DynastyApp.kt` |
-| MEGA-SHELL-179 | GAP | Splash loading spinner vs ready gate | Fixed delay — not tied to pack index | `MEGA-SHELL-011` |
+| MEGA-SHELL-179 | SHIP | Splash loading spinner vs ready gate | Fixed delay — not tied to pack index | `MEGA-SHELL-011` |
 | MEGA-SHELL-180 | SHIP | Offseason/preseason News tab | `rememberShellNewsFeed` passes `calendarPhase` + OS week into `shallowFeedSnapshot` on OS/preseason screens | `ShellShallowNewsFeed.kt`, `PhaseShellNewsFeedPolicy.kt` |
 | MEGA-SHELL-181 | SHIP | In-season dashboard panels stack | Tasks + optional notification feed + news on dashboard tab | `DynastyShellScreen.kt` |
 | MEGA-SHELL-182 | SHIP | Per-category notification settings UI section | Master feed toggle + per-category mute rows under `NotificationCategorySettingsSectionPolicy` | `SettingsScreen.kt` |

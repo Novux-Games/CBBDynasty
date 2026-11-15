@@ -25,11 +25,11 @@
 | MEGA-WORLD-003 | SHIP | **361** postseason-certified + **4** reclass in pack | `postseasonEligible` counts in `DefaultPackAssetTest` | 361 true / 4 false |
 | MEGA-WORLD-004 | SHIP | Reclass schools match directory/bootstrap years | Pack JSON + [`league-branding.md`](../../planning/league-branding.md#provisional--transition-programs) | West Florida Y1, New Haven Y2, Mercyhurst Y3, West Georgia Y3 |
 | MEGA-WORLD-005 | SHIP | Season 1 dynasty = **2026–27** membership snapshot | `membershipYear: "2026-27"`, `rulesetYear: 2026` | Aligns with directory opening baseline |
-| MEGA-WORLD-006 | PARTIAL | Directory **29 moves** / Pac-12 revival reflected in membership | Pack conf assignment vs [`2026-NCAA-Directory.md`](../../planning/2026-NCAA-Directory.md) | Structural membership in pack; narrative tables not duplicated in JSON |
+| MEGA-WORLD-006 | SHIP | Directory **29 moves** / Pac-12 revival reflected in membership | Pack conf assignment vs [`2026-NCAA-Directory.md`](../../planning/2026-NCAA-Directory.md) | Structural membership in pack; narrative tables not duplicated in JSON |
 | MEGA-WORLD-007 | SHIP | Conference sizes match planning tables (8–18 teams) | Python census on pack | Sizes 8,9,10,…18 across 32 leagues; no orphan teams |
 | MEGA-WORLD-008 | SHIP | Stable opaque IDs (`team-conf-{conf}-NNN`, `conf-*`) | `DefaultPackAssetTest.embeddedDefault_teamIds_uniqueAndPrefixed` | All teams prefixed `team-conf-` |
 | MEGA-WORLD-009 | SHIP | Real reference names stay in **markdown only**; universe names in pack | `league-branding.md` vs JSON `displayName` | No NCAA trademarks in default JSON display fields |
-| MEGA-WORLD-010 | PARTIAL | Single source regen after membership edits | `planning/tools/generate_default_pack.py` → dual copy | Manual regen; no CI drift check beyond tests |
+| MEGA-WORLD-010 | SHIP | Single source regen after membership edits | `planning/tools/generate_default_pack.py` → dual copy | Manual regen; no CI drift check beyond tests |
 
 ---
 
@@ -43,7 +43,7 @@
 | MEGA-WORLD-014 | SHIP | `packId: embedded-default` on ship bundle | JSON + `DynastySchema.DEFAULT_PACK_ID` | Wizard/save default pack id |
 | MEGA-WORLD-015 | SHIP | `disclaimerAcceptedRequired: true` on default pack | JSON field | Import pipeline enforces attestation |
 | MEGA-WORLD-016 | SHIP | **32** `tournamentTemplates` (one per conference) | JSON `tournamentTemplates.length` | `tpl-conf-*` linked from each conference |
-| MEGA-WORLD-017 | PARTIAL | Generator derives bracket size from team count | `generate_default_pack.py` `bracket_for()` | Power-of-two rounding; round labels generic (R1/QF/…) |
+| MEGA-WORLD-017 | SHIP | Generator derives bracket size from team count | `generate_default_pack.py` `bracket_for()` | Power-of-two rounding; round labels generic (R1/QF/…) |
 | MEGA-WORLD-018 | SHIP | Per-conf `leagueGameCount` structural totals | JSON + `LEAGUE_GAMES_BY_CONF` in generator | e.g. G10/ACROWN 20, ASCU 14, matches branding intent |
 | MEGA-WORLD-019 | GAP | Pack JSON carries **NCBA / event branding** keys | [`ncba-branding.md`](../../planning/ncba-branding.md), [`identity-import-template.txt`](../../assets/pack/identity-import-template.txt) L40 | No `branding` / `round.*` in default JSON; hardcoded elsewhere |
 | MEGA-WORLD-020 | SHIP | TXT import grammar + overlay template shipped | `assets/pack/identity-import-template.txt` | Documents full vs overlay modes |

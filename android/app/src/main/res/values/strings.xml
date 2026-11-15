@@ -630,6 +630,12 @@
     <string name="recruiting_badge_long_shot">Long shot</string>
     <string name="dashboard_optional_heading">Optional tasks</string>
     <string name="dashboard_notification_heading">Notifications</string>
+    <string name="notification_injury_title">Injury report</string>
+    <string name="notification_game_week_title">This week\'s game</string>
+    <string name="notification_coach_skill_title">Coach skill points</string>
+    <string name="notification_signing_day_title">Signing Day</string>
+    <string name="notification_career_fired_title">Career update</string>
+    <string name="notification_selection_sunday_title">Selection Sunday</string>
     <string name="dashboard_notification_modal_continue">Continue</string>
     <string name="settings_section_notifications">Notifications</string>
     <string name="settings_dashboard_notification_feed">Show dashboard notification feed</string>

@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.preview.GamePreviewResult
+import dev.novux.dynasty.cbb.core.preview.GamePreviewWinPctSurfacePolicy
 import dev.novux.dynasty.cbb.core.preview.GamePreviewTeamScouting
 import dev.novux.dynasty.cbb.core.preview.GamePreviewVenue
 import dev.novux.dynasty.cbb.core.reports.PregameReportGenerator
@@ -74,11 +75,13 @@ fun GamePreviewScreen(
             fontWeight = FontWeight.SemiBold,
         )
         ReportArticleView(article = pregameArticle)
-        Text(
-            text = stringResource(R.string.game_preview_win_pct, preview.userWinPercent),
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.SemiBold,
-        )
+        if (GamePreviewWinPctSurfacePolicy.showPrimaryMetrics()) {
+            Text(
+                text = stringResource(R.string.game_preview_win_pct, preview.userWinPercent),
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
         Text(
             text = stringResource(
                 R.string.game_preview_predicted_score,

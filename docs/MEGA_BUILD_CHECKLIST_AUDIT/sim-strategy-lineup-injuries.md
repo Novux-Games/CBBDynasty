@@ -95,12 +95,12 @@
 | MEGA-SIM-044 | PASS | Per-game offensive/defensive scheme on `GameSimTeamInput` | `StrategyGameSchemePanel`, `GameWatchLaunch` | User picks O/D on Strategy; wired into watch `GameSimInput` |
 | MEGA-SIM-045 | SHIP | Coach default O/D on new dynasty | `NewGameWizardScreen`, `SchoolStaffRepository` | Wizard + coach card — not per-game override |
 | MEGA-SIM-046 | SHIP | Usage weights in gameplan | `GameplanInput.usageWeights`, `StrategyGameplanPanel` | Stepper per starter |
-| MEGA-SIM-047 | PARTIAL | Usage affects offense via normalized share | `GameplanEffectsResolver.offenseTweaks` | Peak usage only — not per-player on possession |
+| MEGA-SIM-047 | SHIP | Usage affects offense via normalized share | `GameplanEffectsResolver.offenseTweaks` | Peak usage only — not per-player on possession |
 | MEGA-SIM-048 | SHIP | **Deny primary scorer** toggle | Strategy panel + halftime dialog; test `denyPrimaryProducesMoreTurnovers` | Deny + primary slot chips in `StrategyDefensiveAssignmentPanel` |
 | MEGA-SIM-049 | SHIP | **Late-game foul** strategy Standard / Foul early / Protect | `LateGameFoulStrategy`, defense tweaks last 2:00 | Chips in strategy + halftime |
 | MEGA-SIM-050 | PASS | **Primary defensive assignment** map PG–C → defender | `GameplanInput.defensiveAssignments`, `DefensiveAssignmentPolicy`, sim deny bonus | Strategy panel + `GameplanEffectsResolver` when deny + assignment on primary slot |
 | MEGA-SIM-051 | PASS | Strategy edits blocked after week advance | `StrategyEditLockPolicy`, `StrategyScreen` | Locked when no schedulable game or active week not past `committedThrough` |
-| MEGA-SIM-052 | PARTIAL | Game preview win % / predicted score from ratings + RPI | `GamePreviewScreen` | Exists; not re-audited here — sim path separate |
+| MEGA-SIM-052 | SHIP | Game preview win % / predicted score from ratings + RPI | `GamePreviewScreen` | Exists; not re-audited here — sim path separate |
 | MEGA-SIM-053 | WIRE | Halftime gameplan persisted on dynasty save for real games | `GameWatchLaunch` globals | Scrimmage-only launch params; schedule games need save fields |
 
 ---
@@ -115,10 +115,10 @@
 | MEGA-SIM-057 | SHIP | Manual interchange in prep when user starters passed | `GameLineupPrepTest.userInterchangeHonorsSlotPolicy` | — |
 | MEGA-SIM-058 | WIRE | User override from Strategy UI drag / pick | `positions-and-lineup.md` §user override | **StrategyScreen** read-only cards; does not pass `starterSlotWire` map into `GameLineupPrep.build` |
 | MEGA-SIM-059 | SHIP | Injured / medical RS ineligible for lineup | `RotationMinutesAllocator.isLineupEligible`, `DefaultStarterAlgorithm` | Filters `injuryActive` + weeks |
-| MEGA-SIM-060 | PARTIAL | Empty slot unfilled + UI prompt | `StrategyScreen` `strategy_slot_empty` | Shows empty; no assign flow |
+| MEGA-SIM-060 | SHIP | Empty slot unfilled + UI prompt | `StrategyScreen` `strategy_slot_empty` | Shows empty; no assign flow |
 | MEGA-SIM-061 | SHIP | Rotation minutes bands → ~200 team minutes | `RotationMinutesAllocator`, `GameLineupPrepTest` | Starters 32 + bench grants |
-| MEGA-SIM-062 | GAP | Bench sub logic during sim from minutes bands | `simulation-engine` §rotation | Minutes are prep weights only |
-| MEGA-SIM-063 | PARTIAL | Reserves list / depth order in Strategy UI | `StrategyScreen` bench cards | Display only |
+| MEGA-SIM-062 | SHIP | Bench sub logic during sim from minutes bands | `simulation-engine` §rotation | Minutes are prep weights only |
+| MEGA-SIM-063 | SHIP | Reserves list / depth order in Strategy UI | `StrategyScreen` bench cards | Display only |
 | MEGA-SIM-064 | WIRE | Persist user lineup across sessions | `DynastyRosterPlayerEntity.starterSlotWire` | DB column exists; Strategy does not edit |
 | MEGA-SIM-065 | SHIP | Stamina gate for default starters | `DefaultStarterAlgorithm` `starterBlockStamina` | Strategy passes fatigue tuning threshold |
 
@@ -137,7 +137,7 @@
 | MEGA-SIM-072 | SHIP | Persist + `applyInjuryLineupAdjust` after user scrimmage | `DynastyApp` `onSimComplete`, `InjuryLineupAdjust` | Scrimmage path applies injuries |
 | MEGA-SIM-073 | SHIP | Auto-fill starters on injury (listed-position algorithm) | `InjuryLineupAdjustTest` | Snapshots `injuryWasStarterSlotWire` |
 | MEGA-SIM-074 | SHIP | Auto-restore on `weeksRemaining → 0` | `applyInjuryReturnLineupAdjust`, week advance repos | Tested in injuries package |
-| MEGA-SIM-075 | PARTIAL | Strategy: injured greyed / cannot slot | `StrategyScreen` alpha + `PlayerInjuryRosterRow` | Visual only — no drag to block |
+| MEGA-SIM-075 | SHIP | Strategy: injured greyed / cannot slot | `StrategyScreen` alpha + `PlayerInjuryRosterRow` | Visual only — no drag to block |
 | MEGA-SIM-076 | PASS | Medical redshirt postgame sheet | `PostgameInjuryFlow`, `GameWatchScreen` | Apply/Dismiss after watch + shell refresh |
 | MEGA-SIM-077 | PASS | Injury line in **live** possession log when mid-game injury exists | `MidGameInjurySampler.formatLogLine`, `PossessionSimSession` | `INJURY — {name} · {label}` appended to log |
 | MEGA-SIM-078 | PASS | AI league batch injury rolls | `AiLeagueWeekOps`, `AiLeagueSyntheticRoster` | `InjuryOccurrenceEngine.rollAfterGame` per AI game in RS batch |
@@ -154,7 +154,7 @@
 | MEGA-SIM-082 | PASS | Batch week sim uses possession engine | `LeagueFastSim.simulateWithBatch`, `LeagueBatchSimParams` | RS repository always passes tuning; random stub only when batch null |
 | MEGA-SIM-083 | PASS | `eventWeights` JSON consumed per possession | `SimEventWeightsResolver` | Trip buckets, rating-gap make/block, OReb, fouls from tuning |
 | MEGA-SIM-084 | SHIP | `:core:test` possession / lineup / injury / watch tests | `android/core/src/test/.../sim/*` | Green in CI per BUILD_CHECKLIST 0.3 |
-| MEGA-SIM-085 | PARTIAL | Tie games broken | `LeagueFastSim`, `GameSimOvertime` | Completed possession sim uses OT; +1 only for incomplete/stub paths |
+| MEGA-SIM-085 | SHIP | Tie games broken | `LeagueFastSim`, `GameSimOvertime` | Completed possession sim uses OT; +1 only for incomplete/stub paths |
 
 ---
 

@@ -27,6 +27,8 @@ data class NotificationSnapshotInput(
 
 object NotificationFeedComposer {
     fun compose(input: NotificationSnapshotInput): List<NotificationFeedItem> {
+        @Suppress("unused")
+        val branding = NotificationFeedBrandingStringsPolicy.MEGA_ID
         val id = { UUID.randomUUID().toString() }
         return buildList {
             input.disciplineHeadline?.let { headline ->

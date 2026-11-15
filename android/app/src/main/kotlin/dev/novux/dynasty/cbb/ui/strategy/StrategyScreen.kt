@@ -28,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.discipline.DisciplineResolver
+import dev.novux.dynasty.cbb.core.discipline.StrategySuspendedVisualPolicy
+import dev.novux.dynasty.cbb.core.lineup.StrategyInjuredGreyPolicy
 import dev.novux.dynasty.cbb.core.lineup.DefaultStarterAlgorithm
 import dev.novux.dynasty.cbb.core.lineup.LineupSlotPolicy
 import dev.novux.dynasty.cbb.core.lineup.RosterStarterWireResolver
@@ -302,7 +304,9 @@ private fun StrategyLineupCard(
     onCycle: () -> Unit,
     onAssign: (() -> Unit)? = null,
 ) {
-    val injured = player != null && (player.injuryActive || DisciplineResolver.isIneligibleForLineup(player))
+    val ineligible = player != null && DisciplineResolver.isIneligibleForLineup(player)
+    val injured = player != null &&
+        (StrategyInjuredGreyPolicy.dimCard(player, ineligible) || StrategySuspendedVisualPolicy.greyOutPlayer(player))
     val exhausted = player != null && player.stamina < 20
     val dimmed = injured || exhausted
     Card(
