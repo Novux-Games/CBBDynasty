@@ -152,6 +152,7 @@ object IdentityPackTxtCodec {
         byes = byes,
         reseedingAfterRound = fields["reseedingAfterRound"]?.toBooleanStrictOrNull() ?: false,
         sitePolicy = fields["sitePolicy"] ?: throw TxtParseException("tournament $id: sitePolicy required"),
+        championshipVenue = fields["championshipVenue"],
         qualificationPolicy = fields["qualificationPolicy"]
             ?: throw TxtParseException("tournament $id: qualificationPolicy required"),
         rounds = rounds,

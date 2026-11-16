@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.core.coach.card.deep
 
+import dev.novux.dynasty.cbb.core.coach.card.history.CoachSeasonHistoryChampionshipHighlightPolicy
 import dev.novux.dynasty.cbb.core.coach.card.history.CoachSeasonHistoryDetail
 import dev.novux.dynasty.cbb.core.coach.card.history.CoachSeasonHistoryResolver
 import dev.novux.dynasty.cbb.core.coach.card.history.CoachSeasonHistoryRow
@@ -113,7 +114,15 @@ object CoachCardDeepTabsEngine {
             if (yearCard?.ncbaChampionSchool == schoolDisplayName) {
                 add("NCBA champion")
             }
-        }
+            addAll(
+                CoachSeasonHistoryChampionshipHighlightPolicy.highlightChips(
+                    standings = standings,
+                    userTeamId = userTeamId,
+                    conferenceId = userConferenceId,
+                    conferenceTeamIds = conferenceTeamIds,
+                ),
+            )
+        }.distinct()
         val postseason = yearCard?.ncbaMvpLine
             ?: yearCard?.recordsNoted?.firstOrNull()
             ?: "—"

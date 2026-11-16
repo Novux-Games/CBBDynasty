@@ -777,7 +777,7 @@
   "queueMetrics": {
     "openImplementation": 0,
     "remaining": 0,
-    "shardPassShipDone": 1349,
+    "shardPassShipDone": 1284,
     "completedIdsRecorded": 766
   }
 }

@@ -60,6 +60,8 @@ data class TournamentTemplatePack(
     val byes: List<Int> = emptyList(),
     val reseedingAfterRound: Boolean = false,
     val sitePolicy: String,
+    /** Directory championship column when present ([MEGA-WORLD-144]). */
+    val championshipVenue: String? = null,
     val qualificationPolicy: String,
     /** Optional directory venue label for conf championship site ([MEGA-WORLD-144]). */
     val championshipVenueName: String? = null,

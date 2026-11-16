@@ -35,6 +35,7 @@ object PossessionTurnoverFlavorPolicy {
             TurnoverTerminal.BadPass -> "TO bad pass"
             TurnoverTerminal.Travel -> "TO travel"
             TurnoverTerminal.OffensiveFoul -> "TO offensive foul"
+            TurnoverTerminal.JumpBall -> "held ball | jump ball"
             TurnoverTerminal.Generic,
             null,
             -> "TO"

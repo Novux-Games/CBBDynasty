@@ -13,6 +13,7 @@ enum class TurnoverTerminal {
     BadPass,
     Travel,
     OffensiveFoul,
+    JumpBall,
 }
 
 data class PossessionResolveResult(
