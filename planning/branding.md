@@ -68,7 +68,7 @@ python3 planning/tools/generate_adaptive_icon.py
 # or: bash scripts/sync_android_brand_assets.sh
 ```
 
-Requires `pip install cairosvg pillow` (maintainer / CI only). CI **check**: `python3 planning/tools/generate_adaptive_icon.py --check`.
+Requires `pip install pillow` (maintainer / CI only). CI **check**: `python3 planning/tools/generate_adaptive_icon.py --check`.
 
 **Android:** copy of `adaptive-icon-foreground.png` → `android/app/.../drawable-nodpi/ic_launcher_foreground.png`; background `@color/brand_background` (`#181A25`). Adaptive XML references the foreground **directly** (no runtime inset hacks).
 
