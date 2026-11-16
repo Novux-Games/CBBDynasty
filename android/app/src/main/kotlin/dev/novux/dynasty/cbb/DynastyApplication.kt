@@ -423,6 +423,31 @@ class DynastyApplication : Application() {
             dev.novux.dynasty.cbb.data.seasonreview.SeasonReviewProgressRepository(applicationContext)
         packDynastyIdentityRepository =
             dev.novux.dynasty.cbb.data.pack.PackDynastyIdentityRepository(applicationContext)
+        headCoachUserContractRepository = dev.novux.dynasty.cbb.data.coach.HeadCoachUserContractRepository(
+            applicationContext,
+        )
+        schoolStaffRepository = SchoolStaffRepository(
+            database,
+            packRepository,
+            headCoachUserContractRepository,
+        )
+        coachSecurityRepository = CoachSecurityRepository(applicationContext, database)
+        coachEmploymentRepository = dev.novux.dynasty.cbb.data.coach.CoachEmploymentRepository(
+            applicationContext,
+            database,
+            packRepository,
+        )
+        coachingCarouselRepository = CoachingCarouselRepository(
+            applicationContext,
+            dev.novux.dynasty.cbb.data.carousel.CarouselSimContextProvider(
+                database,
+                packRepository,
+                leagueWeekBatchRepository,
+                schoolStaffRepository,
+                coachSecurityRepository,
+                coachEmploymentRepository,
+            )::load,
+        )
         saveSlotRepository = SaveSlotRepository(
             database,
             weekCheckpointRepository,
@@ -459,14 +484,6 @@ class DynastyApplication : Application() {
             preseasonScheduleRepository,
             leagueScheduleRepository,
             earlySeasonBracketRepository,
-        )
-        headCoachUserContractRepository = dev.novux.dynasty.cbb.data.coach.HeadCoachUserContractRepository(
-            applicationContext,
-        )
-        schoolStaffRepository = SchoolStaffRepository(
-            database,
-            packRepository,
-            headCoachUserContractRepository,
         )
         schoolHubRepository = SchoolHubRepository(
             database,
@@ -521,23 +538,6 @@ class DynastyApplication : Application() {
             packRepository,
             leagueWeekBatchRepository,
             database,
-        )
-        coachSecurityRepository = CoachSecurityRepository(applicationContext, database)
-        coachEmploymentRepository = dev.novux.dynasty.cbb.data.coach.CoachEmploymentRepository(
-            applicationContext,
-            database,
-            packRepository,
-        )
-        coachingCarouselRepository = CoachingCarouselRepository(
-            applicationContext,
-            dev.novux.dynasty.cbb.data.carousel.CarouselSimContextProvider(
-                database,
-                packRepository,
-                leagueWeekBatchRepository,
-                schoolStaffRepository,
-                coachSecurityRepository,
-                coachEmploymentRepository,
-            )::load,
         )
         historyRepository = dev.novux.dynasty.cbb.data.history.HistoryRepository(
             applicationContext,
