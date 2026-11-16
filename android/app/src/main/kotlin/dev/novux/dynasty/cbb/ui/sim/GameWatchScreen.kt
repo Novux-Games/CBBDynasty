@@ -96,6 +96,7 @@ fun GameWatchScreen(
     userDefensiveRating: Int = 74,
     awayOffensiveRating: Int = 76,
     awayDefensiveRating: Int = 75,
+    watchPhaseBadge: String = "",
 ) {
     val context = LocalContext.current
     val lines = remember { mutableStateListOf<GameWatchFeedRow>() }
@@ -348,6 +349,13 @@ fun GameWatchScreen(
             text = stringResource(R.string.game_watch_subtitle, homeName, awayName),
             style = MaterialTheme.typography.bodyMedium,
         )
+        if (watchPhaseBadge.isNotBlank()) {
+            Text(
+                text = stringResource(R.string.game_watch_phase_badge, watchPhaseBadge),
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
         Text(text = scoreLine, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
         watchChrome?.let { chrome ->
             Text(

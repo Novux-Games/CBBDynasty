@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.ui.strategy
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,6 +32,8 @@ import dev.novux.dynasty.cbb.core.discipline.DisciplineResolver
 import dev.novux.dynasty.cbb.core.discipline.StrategySuspendedVisualPolicy
 import dev.novux.dynasty.cbb.core.lineup.StrategyInjuredGreyPolicy
 import dev.novux.dynasty.cbb.core.lineup.DefaultStarterAlgorithm
+import dev.novux.dynasty.cbb.core.lineup.StrategyResetStartersPolicy
+import dev.novux.dynasty.cbb.core.lineup.StrategyTargetMinutesDisplayPolicy
 import dev.novux.dynasty.cbb.core.lineup.LineupSlotPolicy
 import dev.novux.dynasty.cbb.core.lineup.RosterStarterWireResolver
 import dev.novux.dynasty.cbb.core.lineup.RotationMinutesAllocator
@@ -162,6 +165,7 @@ fun StrategyScreen(
             StrategyLineupCard(
                 title = slot.label,
                 player = player,
+                targetMinutes = player?.playerId?.let { rotationMinutes[it] },
                 selected = assignTargetSlot == slot,
                 onSelect = {
                     if (!editsEnabled) return@StrategyLineupCard
@@ -178,17 +182,31 @@ fun StrategyScreen(
                 },
             )
         }
-        OutlinedButton(
-            enabled = editsEnabled,
-            onClick = {
-                scope.launch {
-                    players = rosterRepository.applyStarterLineup(dynastyId, userStarters)
-                    userStarters = RosterStarterWireResolver.resolve(players, fatigueTuning.starterBlockThreshold)
-                }
-            },
+        Row(
             modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Text(stringResource(R.string.strategy_save_lineup))
+            OutlinedButton(
+                enabled = editsEnabled,
+                onClick = {
+                    userStarters = StrategyResetStartersPolicy.reset(players, fatigueTuning.starterBlockThreshold)
+                },
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(stringResource(R.string.strategy_reset_starters))
+            }
+            OutlinedButton(
+                enabled = editsEnabled,
+                onClick = {
+                    scope.launch {
+                        players = rosterRepository.applyStarterLineup(dynastyId, userStarters)
+                        userStarters = RosterStarterWireResolver.resolve(players, fatigueTuning.starterBlockThreshold)
+                    }
+                },
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(stringResource(R.string.strategy_save_lineup))
+            }
         }
         Text(
             text = stringResource(R.string.strategy_bench),
@@ -199,6 +217,7 @@ fun StrategyScreen(
             StrategyLineupCard(
                 title = player.position.label,
                 player = player,
+                targetMinutes = rotationMinutes[player.playerId],
                 selected = false,
                 onSelect = {},
                 onCycle = {},
@@ -299,6 +318,7 @@ private fun cycleStarter(options: List<RosterPlayer>, currentId: String?): Strin
 private fun StrategyLineupCard(
     title: String,
     player: RosterPlayer?,
+    targetMinutes: Int? = null,
     selected: Boolean,
     onSelect: () -> Unit,
     onCycle: () -> Unit,
@@ -339,6 +359,14 @@ private fun StrategyLineupCard(
                 PlayerInjuryRosterRow(player)
             } else {
                 Text(text = player.displayLabel(), style = MaterialTheme.typography.bodyLarge)
+                val targetLine = StrategyTargetMinutesDisplayPolicy.label(targetMinutes)
+                if (targetLine.isNotEmpty()) {
+                    Text(
+                        text = targetLine,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
                 Text(
                     text = stringResource(R.string.strategy_stamina, player.stamina),
                     style = MaterialTheme.typography.labelMedium,

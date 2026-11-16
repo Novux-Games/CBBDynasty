@@ -34,6 +34,7 @@ data class MidGameState(
     val awayTeamFoulsFirstHalf: Int = 0,
     val homeStaminaByPlayer: Map<String, Int> = emptyMap(),
     val awayStaminaByPlayer: Map<String, Int> = emptyMap(),
+    val loggedSecondHalfOpening: Boolean = false,
 )
 
 data class SimulateOptions(

@@ -13,6 +13,7 @@ import dev.novux.dynasty.cbb.core.sim.GameSimInjuryRollInput
 import dev.novux.dynasty.cbb.core.sim.SimHomeVenueType
 import dev.novux.dynasty.cbb.core.strategy.DefensiveAssignmentPolicy
 import dev.novux.dynasty.cbb.core.strategy.GameplanInput
+import dev.novux.dynasty.cbb.core.strategy.HalftimeGameplanPersistPolicy
 import dev.novux.dynasty.cbb.core.strategy.GameplanUsageNormalizer
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
@@ -79,6 +80,8 @@ class UserCalendarGameWatchBootstrap(
         GameWatchLaunch.homeOffensiveScheme = offensive
         GameWatchLaunch.homeDefensiveScheme = defensive
         GameWatchLaunch.homeGameplan = gameplan
+        GameWatchLaunch.homeHalftimeGameplan =
+            HalftimeGameplanPersistPolicy.calendarBootstrapHalftime(gameplan)
         GameWatchLaunch.homeRosterPlayers = players
         GameWatchLaunch.homeStarters = starters
         GameWatchLaunch.rotationMinutes = rotation

@@ -645,6 +645,10 @@ fun DynastyApp(
                     if (ready != null) {
                         GameWatchScreen(
                             tuning = ready,
+                            watchPhaseBadge = dev.novux.dynasty.cbb.core.sim.GameWatchPhaseBadgePolicy.badge(
+                                session?.metadata?.phase,
+                                GameWatchLaunch.isScrimmage,
+                            ),
                             homeName = GameWatchLaunch.homeName,
                             awayName = GameWatchLaunch.awayName,
                             homeGameplan = GameWatchLaunch.homeGameplan,

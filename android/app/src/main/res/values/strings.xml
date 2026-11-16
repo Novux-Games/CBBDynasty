@@ -955,6 +955,9 @@
     <string name="strategy_slot_empty">Unfilled</string>
     <string name="strategy_tap_slot_to_assign">Tap a starter slot, then tap a bench player to assign.</string>
     <string name="strategy_save_lineup">Save starting lineup</string>
+    <string name="strategy_reset_starters">Reset to defaults</string>
+    <string name="game_watch_phase_badge">%1$s</string>
+    <string name="game_watch_win_shares_hint">Win shares roll at season end, not in this box score.</string>
     <string name="strategy_save_game_prep">Save game prep (schemes)</string>
     <string name="strategy_coach_default_schemes">Coach defaults: %1$s offense · %2$s defense</string>
     <string name="strategy_pick_starter">Pick player</string>
@@ -1084,7 +1087,7 @@
     <string name="game_watch_box_team_score">PTS %1$d</string>
     <string name="game_watch_box_team_shooting">FG %1$d–%2$d · 3PT %3$d–%4$d · FT %5$d–%6$d</string>
     <string name="game_watch_box_team_misc">TO %1$d · PF %2$d · Poss %3$d</string>
-    <string name="game_watch_box_player_header">Player       MIN PTS   FG  3PT  FT REB AST STL BLK  TO PF</string>
+    <string name="game_watch_box_player_header">Player       MIN PTS   FG  3PT  FT REB AST STL BLK  TO PF PM</string>
     <string name="game_watch_box_players_unavailable">Player lines appear when roster prep is loaded for this game.</string>
     <string name="game_watch_injury_log">INJURY — %1$s (%2$d wk)</string>
     <string name="game_watch_opponent_scrimmage">Scrimmage foe</string>

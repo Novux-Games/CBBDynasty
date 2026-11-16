@@ -697,9 +697,9 @@
   "pullRequestNumber": 30,
   "pullRequestUrl": "https://github.com/Novux-Games/CBBDynasty/pull/30",
   "queueMetrics": {
-    "openImplementation": 133,
-    "remaining": 133,
-    "shardPassShipDone": 1216,
+    "openImplementation": 78,
+    "remaining": 78,
+    "shardPassShipDone": 1271,
     "completedIdsRecorded": 688
   }
 }

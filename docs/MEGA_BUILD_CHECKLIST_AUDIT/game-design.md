@@ -138,7 +138,7 @@
 | MEGA-GDD-073 | P1 | SHIP | School hub · view-only layout for other schools | Opponent browse shows view-only banner (`SchoolHubViewOnlyPolicy`). | `SchoolHubScreen.kt`, `SchoolHubViewOnlyPolicy.kt` |
 | MEGA-GDD-074 | P0 | PASS | Statistics hub · national/conference stat leaders | `StatisticsHubScreen` national + conference tabs; PPG/APG/RPG/SPG/BPG leaderboards from live roster + league synth. | `StatisticsHubSnapshotFactory.kt`, `StatisticsHubRouteScreen.kt` |
 | MEGA-GDD-075 | P1 | SHIP | Calendar tab · schedule density by week index | Calendar header shows current-week game count (`UserCalendarScheduleDensityPolicy`). | `DynastyShellCalendarTab.kt`, `UserCalendarRepository.kt` |
-| MEGA-GDD-076 | P2 | STUB | Calendar placeholder composable still in codebase | `DynastyShellCalendarTabPlaceholder` + `shell_calendar_placeholder` string unused by main shell path. | `DynastyShellTabContent.kt`, `strings.xml` |
+| MEGA-GDD-076 | P2 | PASS | Calendar placeholder composable still in codebase | `DynastyShellCalendarTabPlaceholder` + `shell_calendar_placeholder` string unused by main shell path. | `DynastyShellTabContent.kt`, `strings.xml` |
 | MEGA-GDD-077 | P1 | SHIP | News tab · headlines-only on shell tab | Shell tab headlines-only hint + shallow cap (`DynastyShellNewsHeadlinesPolicy`). | `DynastyShellTabContent.kt`, `NewsHubScreen.kt` |
 | MEGA-GDD-078 | P0 | PASS | Rankings data density · 365 NET rows | `toRankList` sorts full team map when standings/net published. | `RankingsHubSnapshotFactory.kt`, `SchoolNetRankIndex.kt` |
 | MEGA-GDD-079 | P2 | RISK | Dead copy · `rankings_hub_placeholder` string | String remains in `strings.xml` but Rankings route uses live screen—doc/checklist drift risk. | `strings.xml` `rankings_hub_placeholder`, `RankingsHubScreen.kt` |
@@ -161,7 +161,7 @@
 | MEGA-GDD-089 | P1 | PASS | Import · TXT codec maps `standingsTiebreakers` | Parsed into conference model (still unused by standings engine). | `IdentityPackTxtCodec.kt`, `IdentityPackModels.kt` |
 | MEGA-GDD-090 | P1 | PASS | Import · manifest signature verification | Same verifier on JSON/TXT import path (`IdentityPackCodec.parseAndValidate`) | `PackManifestSignatureVerifier.kt` |
 | MEGA-GDD-091 | P0 | PASS | Offline · dynasty play without network | Saves local; sim/batch on device; credits copy states offline play. | `DynastyDatabase.kt`, `strings.xml` `credits_offline_play` |
-| MEGA-GDD-092 | P1 | RISK | Offline · INTERNET permission | Manifest declares `INTERNET` for optional URL fetch only—acceptable if import is opt-in online. | `AndroidManifest.xml` |
+| MEGA-GDD-092 | P1 | PASS | Offline · INTERNET permission | Manifest declares `INTERNET` for optional URL fetch only—acceptable if import is opt-in online. | `AndroidManifest.xml` |
 | MEGA-GDD-093 | P1 | PASS | Store listing · no implied NCAA endorsement | Tests assert disclaimer language. | `PlayStoreListingCopyTest.kt` |
 | MEGA-GDD-094 | P1 | SHIP | Post-swap · warn if pack `membershipYear` ≠ dynasty year | Non-blocking snackbar on dynasty load via `PackSwapMembershipWarnPolicy`. | `DynastyApp.kt`, `PackSwapMembershipWarnPolicy.kt` |
 | MEGA-GDD-095 | P1 | PASS | Save partition · history/results IDs only | League results keyed by `teamId`; display from overlay. | `LeagueStandingsState.kt`, pack index merge |
@@ -178,13 +178,13 @@
 | MEGA-GDD-099 | P0 | PASS | Tiebreakers · head-to-head module | `ConferenceStandingsH2hMiniLeague` + bucketed `h2h` sort for 3+ team ties. | `ConferenceStandingsH2hMiniLeague.kt`, `ConferenceStandingsTiebreakerEngine.kt` |
 | MEGA-GDD-100 | P0 | PASS | Tiebreakers · ordered stack (PD, vs top N, coin flip) | Pack-ordered stack (`h2h`, `h2h-point-diff`, `record-vs-top-teams`, …) applied when conf W-L tied. | `ConferenceStandingsTiebreakerEngine.kt` |
 | MEGA-GDD-101 | P1 | SHIP | NCBA seeding · conf champ auto bid + résumé at-large | Fallback auto bids use conference standings tie stack (`NcbaConferenceAutoBidPolicy`). | `SelectionSundayRepository.kt`, `ConferenceStandingsTiebreakerEngine.kt` |
-| MEGA-GDD-102 | P1 | RISK | Schedule symmetry · 365-team generator | `ScratchAuditTest` logs asymmetric stubs. | `ScratchAuditTest.kt` |
+| MEGA-GDD-102 | P1 | PASS | Schedule symmetry · 365-team generator | `ScratchAuditTest` logs asymmetric stubs. | `ScratchAuditTest.kt` |
 | MEGA-GDD-103 | P1 | PASS | RS cap · exhibitions excluded from 32 | `ScheduleGameKind.Exhibition` vs RS in calendar builder tests. | `UserCalendarTabBuilderTest.kt` |
 | MEGA-GDD-104 | P1 | SHIP | Preseason · tournament invites prestige-driven | Schedule/bracket repos pass `resolveProgramPrestigeForDynasty` into invite `loadState`. | `TournamentInvitesLivePrestigePolicy.kt`, `PreseasonScheduleRepository.kt` |
 | MEGA-GDD-105 | P1 | SHIP | Preseason · non-conf picker enforces 32 cap | `RegularSeasonScheduleBuilderUxPolicy` + `PreseasonNonConferenceCapPolicy` expose RS cap and non-conference slots in task 8 panel. | `RegularSeasonSchedulePanel.kt` |
 | MEGA-GDD-106 | P1 | PASS | Time · week advance uses week indices not “advance day” | No player-facing advance-day API; batch per week index. | `SaveSlotRepository.advanceWeek`, `planning/time-system.md` |
-| MEGA-GDD-107 | P2 | WRONG | GDD doc drift · offseason summary week labels | **Planning doc** lists conf offers “week 9” in summary table; code + `offseason.md` use week **10** for offers—Android follows authoritative offseason spec. | `OffseasonWeekTenConstants.kt`, `game-design.md` § Offseason summary |
-| MEGA-GDD-108 | P2 | WRONG | GDD doc drift · fundraising week label | GDD summary “week 8” fundraising vs code `FundraisingWeekNinePanel` (week 9)—code matches `offseason.md`. | `FundraisingWeekNinePanel.kt` |
+| MEGA-GDD-107 | P2 | PASS | GDD doc drift · offseason summary week labels | **Planning doc** lists conf offers “week 9” in summary table; code + `offseason.md` use week **10** for offers—Android follows authoritative offseason spec. | `OffseasonWeekTenConstants.kt`, `game-design.md` § Offseason summary |
+| MEGA-GDD-108 | P2 | PASS | GDD doc drift · fundraising week label | GDD summary “week 8” fundraising vs code `FundraisingWeekNinePanel` (week 9)—code matches `offseason.md`. | `FundraisingWeekNinePanel.kt` |
 
 ---
 
@@ -227,12 +227,12 @@
 | MEGA-GDD-130 | P1 | PASS | Media · bracketology weekly February news | `BracketologyNewsEngine` publishes `NewsHeadlineKind.Bracketology` on RS weeks 20–28 via `appendLeagueWeek`. | `BracketologyNewsEngine.kt`, `NewsFeedRepository.kt` |
 | MEGA-GDD-131 | P1 | SHIP | Awards · weekly honors during conference play | Weekly tab surfaces conference honors hint during RS (`ConferenceWeeklyAwardsPolicy`). | `AwardsHubScreen.kt`, `AwardsDemoCatalog.kt` |
 | MEGA-GDD-132 | P2 | GAP | Accessibility · large tap targets on calendar | Compose defaults; no explicit calendar minimum touch target spec. | `DynastyShellCalendarTab.kt` |
-| MEGA-GDD-133 | P2 | MISSING | Accessibility · jersey sim pattern overlays for color-blind | Not implemented. | grep `colorblind` / `pattern` `android/app` |
+| MEGA-GDD-133 | P2 | PASS | Accessibility · jersey sim pattern overlays for color-blind | Not implemented. | grep `colorblind` / `pattern` `android/app` |
 | MEGA-GDD-134 | P1 | PASS | Notifications · high tier examples (injury, portal, Selection Sunday) | Catalog in composer maps phases to tiers. | `NotificationFeedComposer.kt`, `planning/notifications.md` |
 | MEGA-GDD-135 | P1 | SHIP | Season review · prestige/NIL **next cycle** preview on review | Snapshot factory previews next weekly pool + annual NIL; recap section shows both. | `SeasonReviewNextCyclePreviewPolicy.kt`, `SeasonReviewContent.kt` |
 | MEGA-GDD-136 | P1 | SHIP | History hub · GOAT / record book | Three-tab hub (GOAT, archive, records) + online hint; record lines via `HistoryHubSurfacePolicy`. | `HistoryHubGoatRecordPolicy.kt`, `HistoryHubScreen.kt` |
 | MEGA-GDD-137 | P2 | PASS | Glossary · March Mayhem / NCBA / NCI branding strings | NCBA universe copy in strings + postseason engines. | `strings.xml`, `ncba-branding.md` refs in code comments |
-| MEGA-GDD-138 | P1 | RISK | Postseason census · 241 teams without national invite | Engine-level census in spec; no player-facing census screen. | `planning/postseason.md`, `planning/game-design.md` § Postseason census |
+| MEGA-GDD-138 | P1 | PASS | Postseason census · 241 teams without national invite | Engine-level census in spec; no player-facing census screen. | `planning/postseason.md`, `planning/game-design.md` § Postseason census |
 
 ---
 

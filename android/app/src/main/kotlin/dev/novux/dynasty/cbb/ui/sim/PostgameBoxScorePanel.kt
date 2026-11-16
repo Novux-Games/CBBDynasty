@@ -30,6 +30,7 @@ import dev.novux.dynasty.cbb.core.sim.PlayerBoxScore
 import dev.novux.dynasty.cbb.core.sim.TeamBoxScore
 import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
 import dev.novux.dynasty.cbb.core.sim.PlayerBoxScoreMinutesLabel
+import dev.novux.dynasty.cbb.core.sim.PlayerBoxPlusMinusPolicy
 import dev.novux.dynasty.cbb.core.sim.TeamBoxScoreDisplay
 
 @Composable
@@ -48,6 +49,11 @@ fun PostgameBoxScorePanel(
       text = stringResource(R.string.game_watch_postgame_box_title),
       style = MaterialTheme.typography.titleMedium,
       fontWeight = FontWeight.SemiBold,
+    )
+    Text(
+      text = stringResource(R.string.game_watch_win_shares_hint),
+      style = MaterialTheme.typography.bodySmall,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
     TabRow(selectedTabIndex = tab) {
       Tab(
@@ -75,6 +81,8 @@ fun PostgameBoxScorePanel(
         awayName = awayName,
         homeLines = result.homePlayerBox,
         awayLines = result.awayPlayerBox,
+        homeTeamBox = result.homeBox,
+        awayTeamBox = result.awayBox,
         homeInjuryIds = PlayerBoxScoreMinutesLabel.midGameInjuredIds(result.homeInjuries),
         awayInjuryIds = PlayerBoxScoreMinutesLabel.midGameInjuredIds(result.awayInjuries),
         nameById = nameById,
@@ -172,16 +180,32 @@ private fun PlayerBoxScoreTab(
     awayName: String,
     homeLines: List<PlayerBoxScore>,
     awayLines: List<PlayerBoxScore>,
+    homeTeamBox: TeamBoxScore,
+    awayTeamBox: TeamBoxScore,
     homeInjuryIds: Set<String>,
     awayInjuryIds: Set<String>,
     nameById: Map<String, String>,
 ) {
   Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
     if (homeLines.isNotEmpty()) {
-      PlayerBoxTable(teamLabel = homeName, lines = homeLines, injuryIds = homeInjuryIds, nameById = nameById)
+      PlayerBoxTable(
+        teamLabel = homeName,
+        lines = homeLines,
+        teamBox = homeTeamBox,
+        oppBox = awayTeamBox,
+        injuryIds = homeInjuryIds,
+        nameById = nameById,
+      )
     }
     if (awayLines.isNotEmpty()) {
-      PlayerBoxTable(teamLabel = awayName, lines = awayLines, injuryIds = awayInjuryIds, nameById = nameById)
+      PlayerBoxTable(
+        teamLabel = awayName,
+        lines = awayLines,
+        teamBox = awayTeamBox,
+        oppBox = homeTeamBox,
+        injuryIds = awayInjuryIds,
+        nameById = nameById,
+      )
     }
     if (homeLines.isEmpty() && awayLines.isEmpty()) {
       Text(
@@ -197,6 +221,8 @@ private fun PlayerBoxScoreTab(
 private fun PlayerBoxTable(
     teamLabel: String,
     lines: List<PlayerBoxScore>,
+    teamBox: TeamBoxScore,
+    oppBox: TeamBoxScore,
     injuryIds: Set<String>,
     nameById: Map<String, String>,
 ) {
@@ -215,6 +241,8 @@ private fun PlayerBoxTable(
           line,
           nameById[line.playerId] ?: line.playerId,
           injuryIds,
+          teamBox,
+          oppBox,
         ),
         style = MaterialTheme.typography.bodySmall,
         fontFamily = FontFamily.Monospace,
@@ -230,6 +258,8 @@ private fun formatPlayerLine(
     line: PlayerBoxScore,
     label: String,
     midGameInjuryIds: Set<String>,
+    teamBox: TeamBoxScore,
+    oppBox: TeamBoxScore,
 ): String {
     val name = label.take(12).padEnd(12)
   val min = PlayerBoxScoreMinutesLabel.format(line, midGameInjuryIds).padStart(2)
@@ -243,5 +273,6 @@ private fun formatPlayerLine(
   val blk = line.blocks.toString().padStart(2)
   val to = line.turnovers.toString().padStart(2)
   val pf = line.personalFouls.toString().padStart(2)
-  return "$name $min $pts $fg $three $ft $reb $ast $stl $blk $to $pf"
+  val pm = PlayerBoxPlusMinusPolicy.estimate(line, teamBox, oppBox).toString().padStart(3)
+  return "$name $min $pts $fg $three $ft $reb $ast $stl $blk $to $pf $pm"
 }
