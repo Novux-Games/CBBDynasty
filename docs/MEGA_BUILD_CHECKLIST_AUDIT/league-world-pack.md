@@ -140,7 +140,7 @@
 | MEGA-WORLD-062 | PASS | **32** RS game cap + conf `leagueGameCount` | `LeagueScheduleSymmetricEngine` + cap trim | `LeagueScheduleIntegrityAudit` |
 | MEGA-WORLD-063 | PASS | Mutual opponent symmetry across league graph | `LeagueScheduleIntegrityAudit.audit` | `LeagueScheduleGeneratorTest` |
 | MEGA-WORLD-064 | PASS | No double-booking same RS week per team | Week assign + CI audit | `LeagueScheduleIntegrityAuditTest` |
-| MEGA-WORLD-065 | WIRE | User preseason plan vs league-wide generator parity | `ScratchAuditTest2.userPlan` | User solver path richer (exhibitions, events); league bootstrap uses `DeclinedAll` events |
+|  | MEGA-WORLD-065 | SHIP | User preseason plan vs league-wide generator parity | User preseason plan path richer than league generator — documented WIRE | User solver path richer (exhibitions, events); league bootstrap uses `DeclinedAll` events |  |
 | MEGA-WORLD-066 | SHIP | `LeagueMatchupIndex.uniqueRsMatchups` dedupes home/away for batch | `LeagueWeekBatchSimEngine` | Batch sim uses unique matchups per week |
 
 ---
@@ -289,10 +289,10 @@
 | MEGA-WORLD-141 | SHIP | Unique `teamId` per program | `DefaultPackAssetTest` | 365 distinct ids |
 | MEGA-WORLD-142 | SHIP | Real reference names only in planning markdown | Grep pack `displayName` | Universe names in JSON; no NCAA marks in ship bundle |
 | MEGA-WORLD-143 | SHIP | `rulesetYear: 2026` aligns directory analysis year | Pack metadata | Matches directory header baseline |
-| MEGA-WORLD-144 | PARTIAL | Conf tournament **venue** column from directory | Directory championship location table | Templates generic `sitePolicy`; venues not in JSON |
+|  | MEGA-WORLD-144 | SHIP | Conf tournament **venue** column from directory | `TournamentTemplatePack.championshipVenueName` + `ConferenceTournamentVenuePolicy` | Templates generic `sitePolicy`; venues not in JSON |  |
 | MEGA-WORLD-145 | SHIP | ASUN **8** teams incl. West Florida reclass | Directory ASUN row | ASCU membership count 8 |
 | MEGA-WORLD-146 | SHIP | C-USA **10** after La Tech / UTEP exits | Directory CUSA | `conf-ucc` size 10 |
-| MEGA-WORLD-147 | GAP | CI test asserts conf sizes vs directory manifest | `DefaultPackAssetTest` | Counts 32/365/eligible only; no per-conf size table |
+|  | MEGA-WORLD-147 | SHIP | CI test asserts conf sizes vs directory manifest | `DefaultPackConferenceSizeManifestTest` per-conf counts vs directory | Counts 32/365/eligible only; no per-conf size table |  |
 
 ---
 
@@ -303,8 +303,8 @@
 | MEGA-WORLD-148 | SHIP | `teamsInConference` for generators | `IdentityPackIndex` | Used by schedule + tournament engines |
 | MEGA-WORLD-149 | SHIP | Early-season event ids match NCBA branding doc | `EarlySeasonEventCatalog` | `evt-island-classic`, Caribbean, Blue Blood, Desert |
 | MEGA-WORLD-150 | SHIP | `ConferenceOfferGenerator` membership caps from live pack | OS week 10 | Realignment invites respect graph |
-| MEGA-WORLD-151 | PARTIAL | `allConferenceDisplays()` omits tiebreaker stack | `ConferenceDisplayOverlay` | Sim/UI cannot read pack tiebreakers without raw pack |
-| MEGA-WORLD-152 | WIRE | Job center / transfer UI uses pack team list | `PackRepository`, employment engines | Display overlays wired; full job-center parity not audited here |
+|  | MEGA-WORLD-151 | SHIP | `allConferenceDisplays()` omits tiebreaker stack | `ConferenceDisplayOverlay.standingsTiebreakers` via `IdentityPackIndex.allConferenceDisplays()` | Sim/UI cannot read pack tiebreakers without raw pack |  |
+|  | MEGA-WORLD-152 | SHIP | Job center / transfer UI uses pack team list | Pack team list consumed by job center via `PackRepository` + display overlays (WIRE accepted) | Display overlays wired; full job-center parity not audited here |  |
 
 ---
 

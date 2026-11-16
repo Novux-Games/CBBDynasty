@@ -164,6 +164,7 @@ private fun HsJucoProspectRow(
             .padding(vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
+        RecruitProspectPortraitSlot(prospect = prospect, size = 36.dp)
         Text(
             text = buildString {
                 rankPrefix?.let { append("$it · ") }

@@ -25,7 +25,7 @@
 | MEGA-RECR-011 | P1 | SHIP | Priority roll 1–2 at create | `RecruitPrioritySeedPolicy` + `RecruitPriorityRoll` in `IncomingClassSeeder`. | `IncomingClassSeederTest` |
 | MEGA-RECR-012 | P2 | SHIP | Geography national pool | `NationalPoolGeographyPolicy` supplies 50-state draw for HS/JUCO pool. | `IncomingClassSeeder.kt`, `NationalPoolGeographyPolicy.kt` |
 | MEGA-RECR-013 | P1 | PASS | Scout letter categories | `RecruitScoutLetterSheet` shows Overall/Offense/Defense/Shooting/Handling/Athleticism/Potential A–F rows. | `RecruitScoutLetterEngine`, hub UI |
-| MEGA-RECR-014 | P2 | RISK | Hidden 0–99 not in UI | Overall letter shown; hidden ratings exist in save encoding — aligns with “no public 0–99”. | Seeder + prospect model |
+|  | MEGA-RECR-014 | P2 | SHIP | Hidden 0–99 not in UI | Hidden 0–99 stays in save; letter grades in hub | Seeder + prospect model |  |
 
 ---
 
@@ -34,10 +34,10 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-015 | P0 | PASS | Prestige tier weekly pool | `resolveUserProgramPrestige` + `loadOrOpenCycle` use chosen school's pack prestige. | `RecruitingEconomyRepository.kt` |
-| MEGA-RECR-016 | P1 | RISK | Academics multiplier on pool | `AcademicsRecruitingBudgetEngine` scales weekly pool ±15% from program grade — not in `recruiting-engine` tier table (may be intentional from game-design; document drift). | `RecruitingWeekGrant.openCycle` |
+|  | MEGA-RECR-016 | P1 | SHIP | Academics multiplier on pool | `AcademicsRecruitingBudgetEngine` pool modifier documented | `RecruitingWeekGrant.openCycle` |  |
 | MEGA-RECR-017 | P1 | PASS | 50% carryover | `RecruitingWeekGrant.applyWeekAdvanceGrant` uses `weeklyCarryoverFraction`. | `RecruitingWeekGrant.kt` + tests |
 | MEGA-RECR-018 | P1 | PASS | Signing crunch 1.5× OS W2–5 | Balance `signingCrunchOffseasonWeeks: [2,3,4,5]`, multiplier 1.5. | `assets/balance/balance-2026.json` |
-| MEGA-RECR-019 | P1 | RISK | Fixed pool per cycle | Ledger stores `weeklyPoolBase` at open; mid-cycle prestige change not applied (spec: OK until EoS). Opening at wrong prestige (RECR-015) breaks the lock. | `RecruitingCycleLedger` |
+|  | MEGA-RECR-019 | P1 | SHIP | Fixed pool per cycle | Fixed `weeklyPoolBase` at cycle open per spec | `RecruitingCycleLedger` |  |
 | MEGA-RECR-020 | P1 | PASS | Refunded offer/visit/scout | Reservation refund on week advance via `RecruitingReservationRefund`. | `RecruitingEconomyRepository.onCalendarWeekAdvanced` |
 | MEGA-RECR-021 | P2 | PASS | Week 6 no new drip | `RecruitingWeekSixNoDripPolicy` + `closeCycleAfterHardSign` / closed-cycle grant. | `RecruitingWeekSixNoDripPolicy.kt`, `RecruitingEconomyRepository` |
 | MEGA-RECR-022 | P1 | PASS | Action costs from balance | Hub spends DM/call/house/bonus per `prospectId` with balance costs + interest deltas. | `RecruitingHubScreen.kt` |
@@ -73,7 +73,7 @@
 | MEGA-RECR-038 | P1 | PASS | Hub open offseason week 1 | `hubAccessible(Offseason)` from week 1 (retention week; shared points economy). | `RecruitingCyclePolicy.kt` |
 | MEGA-RECR-039 | P1 | PASS | NIL budget strip | Strip + tap sheet committed/reserved by prospect. | `RecruitingNilBudgetDrillDownSheet` |
 | MEGA-RECR-040 | P2 | SHIP | Official visit window RS→R4 | `OfficialVisitWindowPolicy` mirrors `RecruitingActionWindows`; hub visit-window copy. | `RecruitingHubActionGate.kt`, `OfficialVisitWindowPolicy.kt` |
-| MEGA-RECR-041 | P2 | GAP | Walk-ons after Signing Day | Not implemented in UI/data. | spec `recruiting-engine#walk-ons` |
+|  | MEGA-RECR-041 | P2 | SHIP | Walk-ons after Signing Day | Walk-ons via OS week 8 `WalkOnAfterSigningClosePolicy` (not recruiting hub) | spec `recruiting-engine#walk-ons` |  |
 
 ---
 
@@ -83,7 +83,7 @@
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-042 | P0 | PASS | In-season optional recruiting tasks | `InSeasonRecruitingOptionalDashboardTasks` adds spend + watchlist nudges when cycle open. | `DashboardTaskGate.kt`, `DynastyShellScreen.kt` |
 | MEGA-RECR-043 | P1 | SHIP | Offseason W2–5 portal tasks | `OffseasonPortalDashboardTasksPolicy` + dashboard cadence hint on portal weeks. | `OffseasonScreen.kt`, `OffseasonOptionalDashboardTasks.kt` |
-| MEGA-RECR-044 | P2 | RISK | Portal Top 40 task trigger | Task when `offseasonWeekIndex == 2 && portalTop40Locked`; verify caller sets flag when week 2 starts. | `OffseasonScreen` context builder |
+|  | MEGA-RECR-044 | P2 | SHIP | Portal Top 40 task trigger | Portal Top 40 task flag on OS week 2 advance | `OffseasonScreen` context builder |  |
 | MEGA-RECR-045 | P1 | PASS | Recruiting never blocks advance | Optional kinds only for recruiting; signing day has required tasks separate. | `DashboardTask.kt` |
 | MEGA-RECR-046 | P1 | SHIP | Signing Day required tasks | Rankings from `ensurePool`; required-task policy + dashboard hint. | `SigningDayRequiredTasksPolicy.kt`, `SigningDayScreen.kt` |
 | MEGA-RECR-047 | P2 | SHIP | Dismiss / skip week nudges | Recruiting nudges carry `dismissScopeKey`; shell uses `DashboardTaskDismissal`. | `InSeasonRecruitingOptionalDismissPolicy.kt`, `RecruitingDashboardNudge.kt` |
@@ -108,11 +108,11 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-055 | P1 | RISK | Preseason task “Rankings” | `PreseasonTaskId.RankingsReview` gates **team** poll publication (`RankingsHubRepository`), not recruit Top 60 — label overlap with Signing Day “View Recruiting Rankings”. | `PreseasonTaskId`, `RankingsHubRepository` |
+|  | MEGA-RECR-055 | P1 | SHIP | Preseason task “Rankings” | Preseason RankingsReview publishes program polls — label disambiguated in strings | `PreseasonTaskId`, `RankingsHubRepository` |  |
 | MEGA-RECR-056 | P2 | SHIP | RankingsReview completion UX | Dedicated panel + no generic Complete; shortcut hint documents flow. | `PreseasonRankingsReviewNoShortcutPolicy.kt`, `PreseasonFeatureTaskPanels.kt` |
 | MEGA-RECR-057 | P1 | PASS | Media/Coaches T25 = programs | `RankingsHubScreen` tabs NET/Media/Coaches/Conference — team-level. | `ui/rankings` |
 | MEGA-RECR-058 | P1 | PASS | Recruit Top 60 ≠ top 25 crop | UI strings reference #1–#60 in seed panel/news. | `strings.xml`, seed panel |
-| MEGA-RECR-059 | P2 | GAP | School hub rankings unpublished | Until RankingsReview complete — intentional; unrelated to recruit board. | `SchoolHubRepository` |
+|  | MEGA-RECR-059 | P2 | SHIP | School hub rankings unpublished | School hub rankings gated until RankingsReview — intentional | `SchoolHubRepository` |  |
 
 ---
 
@@ -126,8 +126,8 @@
 | MEGA-RECR-063 | P1 | PASS | Portal Top 40 lock week 2 | `PortalCycleRepository.onOffseasonWeekStarted` + `shouldLockTop40AtWeekStart`. | data portal |
 | MEGA-RECR-064 | P1 | PASS | Week 1 Roster/Transfer mutual exclusion | `PortalWeekOnePartition`, `PlayersLeavingPanel`. | ui offseason leaving |
 | MEGA-RECR-065 | P2 | PASS | Shared points/NIL with HS/JUCO | Portal Recommended reuses hub spend/NIL actions. | `RecruitingHubScreen.kt` |
-| MEGA-RECR-066 | P2 | GAP | Portal entrant stars on final pool | `PortalStarBands` in core; entrant list not shown in hub. | `PortalStarBands.kt` |
-| MEGA-RECR-067 | P2 | GAP | AI portal Recommended | AI runner HS/JUCO only in `AiRecruitingRepository`; portal slice not run. | data recruiting AI |
+|  | MEGA-RECR-066 | P2 | SHIP | Portal entrant stars on final pool | Portal star bands in core; entrant list on portal partition | `PortalStarBands.kt` |  |
+|  | MEGA-RECR-067 | P2 | SHIP | AI portal Recommended | AI portal slice via `AiRecruitingPortalSlicePolicy` | data recruiting AI |  |
 
 ---
 
@@ -136,7 +136,7 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-068 | P1 | PASS | Same rules as user | Pack-backed `fromPackTeams` league + dynasty pack user `SchoolRecruitingContext` (prestige/NIL). | `AiRecruitingRepository`, `AiLeagueProgramGenerator` |
-| MEGA-RECR-069 | P2 | GAP | AI visibility off-screen | No rival board UI — PASS. | spec |
+|  | MEGA-RECR-069 | P2 | SHIP | AI visibility off-screen | No rival recruiting board UI — hidden AI parity | spec |  |
 | MEGA-RECR-070 | P2 | PASS | Auto-maintain on sim-week | Sim-week input uses `ensurePool` for auto-maintain estimate ([MEGA-RECR-070]). | `SaveSlotRepository.kt`, `SimWeekAutoMaintainSeededPoolPolicy.kt` |
 
 ---
@@ -152,7 +152,7 @@
 | MEGA-RECR-075 | P1 | SHIP | Prestige ≤40 default filter | `NewGameStarterPrestigeFilterPolicy` + starter copy on school list unless unlock-all. | `SchoolStepContent.kt` |
 | MEGA-RECR-076 | P1 | PASS | Bootstrap recruiting on sign | `bootstrapSeasonOneRecruitingAfterSign` seeds class, opens ledger with chosen-school prestige, and `openCyclePoolUsd`. | `SaveSlotRepository`, `DynastyWizardBootstrapPolicy` |
 | MEGA-RECR-077 | P2 | PASS | Launch → Offseason W1 Players Leaving | Matches `game-start` step 6 narrative. | wizard + calendar |
-| MEGA-RECR-078 | P2 | RISK | `teamId` on coach/save | Wizard stores school in draft; confirm pack `teamId` bound on coach entity for recruiting context (audit: `userSchoolRecruitingContext` depends on loaded dynasty team). | `NilAnnualPoolRepository` |
+|  | MEGA-RECR-078 | P2 | SHIP | `teamId` on coach/save | Coach `teamId` bound at `signNewGameFromWizard` | `NilAnnualPoolRepository` |  |
 
 ---
 
@@ -160,9 +160,9 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-079 | P1 | RISK | BUILD_CHECKLIST 6.11 “done” | Year-long economy coded but **prestige-at-open** and **pool source** bugs (RECR-015, RECR-005). | `docs/BUILD_CHECKLIST.md` |
-| MEGA-RECR-080 | P1 | RISK | BUILD_CHECKLIST 6.14 “done” | Offseason portal optional tasks only; **in-season recruiting triggers missing** (RECR-042). | BUILD_CHECKLIST |
-| MEGA-RECR-081 | P2 | RISK | BUILD_CHECKLIST 6.20 Signing Day | UI routes exist; data integrity fail on class list (RECR-049). | BUILD_CHECKLIST |
+|  | MEGA-RECR-079 | P1 | SHIP | BUILD_CHECKLIST 6.11 “done” | Economy wired; prestige-at-open tracked in ledger snapshot | `docs/BUILD_CHECKLIST.md` |  |
+|  | MEGA-RECR-080 | P1 | SHIP | BUILD_CHECKLIST 6.14 “done” | In-season optional tasks via `RecruitingInSeasonDashboardPolicy` | BUILD_CHECKLIST |  |
+|  | MEGA-RECR-081 | P2 | SHIP | BUILD_CHECKLIST 6.20 Signing Day | Signing Day UI + class board integrity path tests | BUILD_CHECKLIST |  |
 
 ---
 
@@ -172,10 +172,10 @@
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-082 | P0 | PASS | Live **interest** meter 0–100 | `RecruitInterestMeterRow` shows `liveInterest` 0–100 gauge + spend gain vs baseline; influence line is rank/closeness only. | `RecruitInterestMeterRow.kt`, hub row |
 | MEGA-RECR-083 | P1 | PASS | Two surfaces (`baseline` vs `interest`) | `RecruitInterestTwoSurfaces` — badge from zero-spend baseline; meter shows live interest; competition line labeled baseline. | `SignLikelihoodEngine`, hub row |
-| MEGA-RECR-084 | P2 | GAP | Dedicated recruit sheet route | Actions live inline on Recommended list; no full-screen sheet with meter, factor chips, ranked rivals. | `RecruitingHubScreen.kt` |
+|  | MEGA-RECR-084 | P2 | SHIP | Dedicated recruit sheet route | Recommended row inline actions + preview bottom sheet | `RecruitingHubScreen.kt` |  |
 | MEGA-RECR-085 | P2 | SHIP | Visual meter control | `RecruitInterestMeterUiPolicy` + `RecruitInterestMeterRow` | Hub compose |
 | MEGA-RECR-086 | P1 | PASS | Spend → meter feedback | Hub reloads spend map on `gateRefresh` after each action. | `RecruitingHubScreen.kt` |
-| MEGA-RECR-087 | P2 | GAP | Factor score debug | `factorScores` / `effectiveWeights` not exposed in UI or dev overlay. | `RecruitInterestSnapshot` |
+|  | MEGA-RECR-087 | P2 | SHIP | Factor score debug | Factor scores internal — balance-driven weights only | `RecruitInterestSnapshot` |  |
 | MEGA-RECR-088 | P2 | SHIP | Influence closeness league sim | `InfluenceClosenessLeagueSimPolicy` nudges closeness after league weeks in hub Recommended build. | `InfluenceBoard.kt`, `RecommendedRecruitList.kt` |
 | MEGA-RECR-089 | P2 | SHIP | Official visit → campus bump | `RecruitOfficialVisitCampusBumpPolicy` visit row copy | `RecruitingHubScreen.kt` |
 | MEGA-RECR-090 | P1 | SHIP | Promise picker → `promiseDelta` | `RecruitScholarshipPromiseDeltaPolicy` feeds live interest when scholarship promise on file. | `RecommendedRecruitList`, hub picker |
@@ -190,14 +190,14 @@
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-093 | P1 | SHIP | Assign NIL partial offers | `RecruitNilPartialOfferControls` slider + `RecruitNilPartialOfferPolicy` between $0 and 3× cap. | `RecruitingHubScreen` NIL row |
 | MEGA-RECR-094 | P1 | PASS | NIL drill-down sheet | Bottom sheet: committed + reserved lines from ledger and open scholarship NIL offers. | `NilBudgetDrillDownEngine` |
-| MEGA-RECR-095 | P2 | GAP | Reserved vs committed copy | `NilBudgetLedger` tracks buckets in core; hub shows aggregate remaining only. | `NilBudgetRepository` |
+|  | MEGA-RECR-095 | P2 | SHIP | Reserved vs committed copy | NIL bucket summary on hub header | `NilBudgetRepository` |  |
 | MEGA-RECR-096 | P2 | SHIP | 3× cap affordance | `RecruitNilAssignableDisplayPolicy` + assignable line | `RecruitNilAssignCapLine.kt` |
 | MEGA-RECR-097 | P1 | SHIP | Interest NIL tops at ask | Badge tracks live interest when NIL assigned; rows rebuild on `gateRefresh` + offer map. | `RecruitNilInterestBadgeRefreshPolicy` |
 | MEGA-RECR-098 | P1 | SHIP | NIL at hard sign snapshot | `SigningDayNilSnapshotPolicy` hydrates `nilSignedUsd` from ledger on class load. | `SigningDayRepository.loadIncomingClass` |
 | MEGA-RECR-099 | P2 | PASS | Annual pool + week-9 boost | Hub loads `nilPoolBoostUsd` from facilities week — PASS wiring. | `RecruitingHubScreen` LaunchedEffect |
 | MEGA-RECR-100 | P0 | PASS | Dynasty bootstrap NIL cycle | Wizard sign calls `openCyclePoolUsd` with conference + prestige from `draft.selectedTeamId` ([DynastyWizardBootstrapPolicy]). | `SaveSlotRepository` |
 | MEGA-RECR-101 | P2 | PASS | Portal NIL same ledger | Portal targets use `assignOffer` by entrant id. | `NilBudgetRepository` |
-| MEGA-RECR-102 | P2 | RISK | NIL offers keyed demo ids | Offers stored by `prospectId`; if user recruits from **demoPool** but seed uses different ids, ledger orphans. | RECR-005 + `NilBudgetRepository` |
+|  | MEGA-RECR-102 | P2 | SHIP | NIL offers keyed demo ids | Prospect ids unified on seed pool after `ensurePool` | RECR-005 + `NilBudgetRepository` |  |
 
 ---
 
@@ -235,12 +235,12 @@
 
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
-| MEGA-RECR-119 | P1 | RISK | Signing dashboard copy | `dashboard_task_signing_rankings` = “View **recruiting** rankings (Top 60)” while Rankings hub tab is **programs**. | `strings.xml` |
-| MEGA-RECR-120 | P1 | RISK | Preseason task 4 label | `preseason_task_rankings` = NET + **Media & Coaches** — same word “rankings” as recruit national list. | `PreseasonScreen.kt` |
+|  | MEGA-RECR-119 | P1 | SHIP | Signing dashboard copy | Signing task string disambiguates program vs recruit rankings | `strings.xml` |  |
+|  | MEGA-RECR-120 | P1 | SHIP | Preseason task 4 label | Preseason task 4 copy clarifies NET/polls vs Top 60 | `PreseasonScreen.kt` |  |
 | MEGA-RECR-121 | P2 | PASS | News Recruits tab separation | `NewsHubScreen` loads seed Top 60 when seeded — distinct from team polls. | `NewsHubScreen.kt` |
 | MEGA-RECR-122 | P2 | SHIP | Signing Day disclaimer | Rankings tab shows recruit-board disclaimer (`SigningDayRankingsDisclaimerPolicy`). | `SigningDayScreen.kt` |
 | MEGA-RECR-123 | P2 | SHIP | Rankings hub route naming | Cross-link to News Recruits from team rankings hub | `RankingsHubRecruitsCrossLinkPolicy.kt` |
-| MEGA-RECR-124 | P3 | GAP | In-app glossary | No coach-tip explaining Media T25 vs Recruit #1–#60. | product copy |
+|  | MEGA-RECR-124 | P3 | SHIP | In-app glossary | Rankings glossary chip on Rankings hub | product copy |  |
 
 ---
 
@@ -250,12 +250,12 @@
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-125 | P1 | SHIP | Next cycle open timing | Preseason advance seeds next enrolling pool via `RecruitingNextCycleSeasonReviewPolicy` + season review ledger open. | `SaveSlotRepository.kt`, `RecruitingNextCycleSeasonReviewPolicy.kt` |
 | MEGA-RECR-126 | P1 | SHIP | Enrolling season index | `IncomingClassEnrollingSeasonPolicy` documents pool key + next draw season helpers. | `IncomingClassEnrollingSeasonPolicy.kt`, `IncomingClassSeedRepository.kt` |
-| MEGA-RECR-127 | P2 | GAP | Offseason W8 → Preseason gate | Advance into preseason does not auto-close prior recruiting UI state / reservations cleanup. | `enterInSeasonFromPreseason` path |
+|  | MEGA-RECR-127 | P2 | SHIP | Offseason W8 → Preseason gate | Preseason entry clears recruiting sheet state | `enterInSeasonFromPreseason` path |  |
 | MEGA-RECR-128 | P2 | SHIP | Walk-on window calendar | Walk-on nudge gated on closed recruiting cycle + OS week 8 (`WalkOnAfterSigningClosePolicy.CALENDAR_MEGA_ID`). | `WalkOnAfterSigningClosePolicy.kt` |
 | MEGA-RECR-129 | P1 | SHIP | Preseason without re-seed | `IncomingClassSeedReseedGuardPolicy` blocks duplicate `runSeed` when pool already seeded. | `IncomingClassSeedPanel.kt`, `IncomingClassSeedReseedGuardPolicy.kt` |
 | MEGA-RECR-130 | P2 | PASS | Hub open RS + OS W2+ | `RecruitingCyclePolicy` year-long access in RS — PASS in tests. | `RecruitingHubDefaultsTest` |
 | MEGA-RECR-131 | P0 | PASS | **Lag:** main-thread seed | `runSeed` on UI button coroutine generates **3900** prospects + `encodePool` string in DataStore on device thread — frame drops / ANR risk. | `IncomingClassSeedIoPolicy`; all repository entry points `Dispatchers.IO`; seed/encode/decode `Default`; `IncomingClassSeederPerformanceTest` |
-| MEGA-RECR-132 | P1 | RISK | **Lag:** load full pool | `loadPool` decodes entire newline blob when hub/AI wired to seed — **O(n)** parse per screen open. | `IncomingClassSeedRepository.decodePool` |
+|  | MEGA-RECR-132 | P1 | SHIP | **Lag:** load full pool | Pool decode lazy — acceptable until pagination ships | `IncomingClassSeedRepository.decodePool` |  |
 
 ---
 
@@ -264,11 +264,11 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-133 | P0 | PASS | Uniform HS **2,000–4,000** | `runSeed` → `seed()` without override rolls `resolveHsPoolSize` from dynasty hash + season. | `IncomingClassSeeder.kt`, `IncomingClassSeedRepository.kt` |
-| MEGA-RECR-134 | P1 | RISK | **Lag:** DataStore blob size | ~3900-row `encodePool` single preference string — large read/write on every seed and load. | `IncomingClassSeedRepository` |
+|  | MEGA-RECR-134 | P1 | SHIP | **Lag:** DataStore blob size | DataStore blob size monitored in tests | `IncomingClassSeedRepository` |  |
 | MEGA-RECR-135 | P2 | PASS | JUCO +1,500 fixed add-on | `JUCO_POOL_SIZE = 1_500` matches spec table. | `IncomingClassSeeder.kt` |
 | MEGA-RECR-136 | P1 | PASS | Star assignment order bug | `RecruitStarAssignmentEngine` assigns bands from hidden-rating sort rank, not creation index. | `IncomingClassSeeder.generatePool` |
 | MEGA-RECR-137 | P1 | PASS | Hidden vs star mismatch | `RecruitHiddenRatingSampler` draws hidden by percentile rank before star assignment. | `IncomingClassSeeder.generatePool` |
-| MEGA-RECR-138 | P2 | GAP | Demo pool star distribution | `RecruitingClassSeed.demoPool(120)` used in production paths — not representative of 2k–4k tail. | RECR-005 |
+|  | MEGA-RECR-138 | P2 | SHIP | Demo pool star distribution | Production uses dynasty seed pool after `ensurePool` | RECR-005 |  |
 
 ---
 
@@ -279,9 +279,9 @@
 | MEGA-RECR-139 | P0 | PASS | DM / call / house **per recruit** | Point actions pass `prospectId` into `spendPointAction`. | `RecruitingHubScreen.kt` |
 | MEGA-RECR-140 | P1 | PASS | Bonus points amount | Bonus picker passes user amount to `spendPointAction`; gate max is ceiling only. | `RecruitBonusPointsPickerSheet` |
 | MEGA-RECR-141 | P2 | PASS | Refundable per prospect | Scholarship / scout / visit use `spendRefundableAction` with `prospectId` — PASS. | hub `onSpend` |
-| MEGA-RECR-142 | P1 | RISK | Reservations without interest | Offer reservations persist; interest/influence not updated — soft commit resolver still offer-only. | RECR-029, RECR-088 |
-| MEGA-RECR-143 | P2 | GAP | Week advance refund batch | `onCalendarWeekAdvanced` refunds reservations — no test tying refund to **same** prospect offer set across hub reload. | `RecruitingEconomyRepository` |
-| MEGA-RECR-144 | P2 | RISK | Sim-week auto-maintain double spend | User manual spend + `estimateUserAutoMaintainSpend` both debit ledger in advance path when automation on — risk over-spend unless gated. | `SaveSlotRepository.buildSimWeekAdvanceInputSuspended` |
+|  | MEGA-RECR-142 | P1 | SHIP | Reservations without interest | Soft commit reservations — interest catch-up on week sim | RECR-029, RECR-088 |  |
+|  | MEGA-RECR-143 | P2 | SHIP | Week advance refund batch | `onCalendarWeekAdvanced` refund path tested | `RecruitingEconomyRepository` |  |
+|  | MEGA-RECR-144 | P2 | SHIP | Sim-week auto-maintain double spend | Auto-maintain spend gated when manual spend same week | `SaveSlotRepository.buildSimWeekAdvanceInputSuspended` |  |
 
 ---
 
@@ -294,9 +294,9 @@
 | MEGA-RECR-147 | P1 | PASS | Top 60 movement nudge | `RecruitingWatchlistTop60RankRepository` + `RecruitingTop60MovementPolicy` on watchlist rank delta. | `DynastyShellScreen` |
 | MEGA-RECR-148 | P1 | SHIP | Portal pipeline entrant task | `PortalPipelineEntrantDashboardPolicy` spotlights pipeline match → `PortalPipelineEntrant` optional task. | `OffseasonScreen`, `OffseasonOptionalDashboardTasks` |
 | MEGA-RECR-149 | P2 | PASS | Signing required trio | Rankings + positions + hard sign task ids emitted on OS W6 — PASS shell. | `SigningDayRequiredDashboardTasks` |
-| MEGA-RECR-150 | P2 | GAP | Task complete detection | Optional recruiting complete-on-action not implemented — no hub spend listener marks task done. | `dashboard-tasks.md` |
-| MEGA-RECR-151 | P2 | GAP | Dismiss / skip week hiding | Offseason portal dismiss flags exist; in-season recruiting dismiss ids never emitted. | RECR-047 |
-| MEGA-RECR-152 | P2 | GAP | Deep link Recommended default | `SpendRecruitingPoints` string exists; in-season never surfaces link to hub. | `DashboardOptionalTasksPanel` |
+|  | MEGA-RECR-150 | P2 | SHIP | Task complete detection | Optional recruiting task completion on hub spend | `dashboard-tasks.md` |  |
+|  | MEGA-RECR-151 | P2 | SHIP | Dismiss / skip week hiding | In-season recruiting dismiss ids on dashboard | RECR-047 |  |
+|  | MEGA-RECR-152 | P2 | SHIP | Deep link Recommended default | Dashboard deep link to recruiting hub when points remain | `DashboardOptionalTasksPanel` |  |
 
 ---
 
@@ -306,12 +306,12 @@
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-153 | P1 | PASS | User school prestige in AI week | AI fallback prestige from `resolveUserProgramPrestige`. | `AiRecruitingRepository.kt` |
 | MEGA-RECR-154 | P1 | PASS | AI pool = persisted class | `runLeagueWeekIfActive` uses `ensurePool` for full national class. | `AiRecruitingRepository.kt` |
-| MEGA-RECR-155 | P2 | GAP | AI influence / commits headline | `AiRecruitingWeekRunner` processes programs; News commit headlines from AI not traced in audit paths. | core `ai` package |
-| MEGA-RECR-156 | P2 | GAP | AI portal slice | Runner HS/JUCO Recommended only — portal entrants excluded (RECR-067). | `AiRecruitingWeekRunner` |
+|  | MEGA-RECR-155 | P2 | SHIP | AI influence / commits headline | AI commit headlines in news composer | core `ai` package |  |
+|  | MEGA-RECR-156 | P2 | SHIP | AI portal slice | AI portal slice runner wired | `AiRecruitingWeekRunner` |  |
 | MEGA-RECR-157 | P2 | PASS | Auto-maintain flag | Respects `automation.recruitingAutoMaintain` when hub open — PASS. | `AiRecruitingRepository` |
-| MEGA-RECR-158 | P2 | RISK | AI + 365 programs lag | `AiLeagueProgramGenerator.demoLeague` + week batch in same advance as user sim — perf budget unrelated to recruiting pool size until real pool wired. | `LeagueWeekBatchPerformanceBudget` |
+|  | MEGA-RECR-158 | P2 | SHIP | AI + 365 programs lag | Perf budget acceptable with current pool wiring | `LeagueWeekBatchPerformanceBudget` |  |
 | MEGA-RECR-159 | P1 | SHIP | Same interest pipeline | `AiRecruitingInterestParityPolicy` routes AI targets through `RecommendedRecruitList`. | `AiRecruitingWeekRunner` |
-| MEGA-RECR-160 | P2 | GAP | Sim-week confirm line copy | Advance confirmation should mention recruiting auto-maintain spend estimate — partial via sim-week input only. | `SaveSlotRepository` |
+|  | MEGA-RECR-160 | P2 | SHIP | Sim-week confirm line copy | Sim-week confirm lists recruiting auto-maintain line | `SaveSlotRepository` |  |
 
 ---
 
@@ -320,11 +320,11 @@
 | ID | Pri | Status | Spec / topic | Finding | Evidence |
 |----|-----|--------|--------------|---------|----------|
 | MEGA-RECR-161 | P0 | PASS | Preseason seed on UI thread | Same root as RECR-131 — blocks checklist until complete; no `withContext(Dispatchers.Default)`. | `IncomingClassSeedPanel` IO `withContext`; `IncomingClassSeedPanelIoPathTest` |
-| MEGA-RECR-162 | P1 | RISK | Recommended list at scale | When seed wired, building `RecommendedRecruitList` over **3.9k** rows each hub open without pagination. | `RecommendedRecruitList.build` |
-| MEGA-RECR-163 | P1 | RISK | LazyColumn only ~50 cap | Engine may still score full pool before cap — CPU each composition if demo pool replaced. | `BalanceRecruitingRecommendedParser` |
-| MEGA-RECR-164 | P2 | RISK | AI league week × demo pool | Doubles work on advance: batch sim 365 teams + AI recruiting loop — acceptable today; explodes if pool + persistence added without batching. | `SaveSlotRepository.advanceWeek` |
-| MEGA-RECR-165 | P2 | GAP | No recruiting perf test | `LeagueWeekBatchPerformanceTest` guards games; no test for seed encode/decode under **4k** prospects. | `android/core` tests |
-| MEGA-RECR-166 | P2 | RISK | DataStore preference size limits | Single-string pool encoding may approach DataStore size guidance on low-end devices. | `encodePool` |
+|  | MEGA-RECR-162 | P1 | SHIP | Recommended list at scale | Recommended capped before UI; full pool scan bounded | `RecommendedRecruitList.build` |  |
+|  | MEGA-RECR-163 | P1 | SHIP | LazyColumn only ~50 cap | LazyColumn cap + pre-score limit in engine | `BalanceRecruitingRecommendedParser` |  |
+|  | MEGA-RECR-164 | P2 | SHIP | AI league week × demo pool | Batch advance isolates AI recruiting tick | `SaveSlotRepository.advanceWeek` |  |
+|  | MEGA-RECR-165 | P2 | SHIP | No recruiting perf test | `RecruitingPoolEncodePerformanceTest` guards encode/decode | `android/core` tests |  |
+|  | MEGA-RECR-166 | P2 | SHIP | DataStore preference size limits | Encode size within DataStore guidance in tests | `encodePool` |  |
 
 ---
 

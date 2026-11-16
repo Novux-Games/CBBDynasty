@@ -1161,7 +1161,8 @@ private fun RecommendedProspectRow(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+            RecruitProspectPortraitSlot(prospect = row.prospect, size = 40.dp)
+            Column(modifier = Modifier.weight(1f).padding(start = 8.dp)) {
                 Text(
                     text = row.prospect.displayName,
                     style = MaterialTheme.typography.titleMedium,
