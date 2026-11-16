@@ -27,6 +27,7 @@ import dev.novux.dynasty.cbb.core.qa.SchoolHubAcademicsPath
 import dev.novux.dynasty.cbb.core.school.ReclassTransitionClockUxPolicy
 import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
 import dev.novux.dynasty.cbb.core.school.SchoolHubPackIdentityPolicy
+import dev.novux.dynasty.cbb.core.school.SchoolHubPostseasonEligibilityPolicy
 
 @Composable
 fun SchoolHubOverviewCard(
@@ -83,6 +84,9 @@ fun SchoolHubOverviewCard(
                 overview.seasonIndex,
             )?.let { reclass ->
                 Text(reclass, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+            }
+            SchoolHubPostseasonEligibilityPolicy.statusLine(overview)?.let { ineligible ->
+                Text(ineligible, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.error)
             }
             if (!overview.isUserSchool) {
                 Text(

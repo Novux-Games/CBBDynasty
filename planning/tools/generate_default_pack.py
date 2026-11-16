@@ -121,6 +121,7 @@ def build_pack() -> dict:
             {
                 "id": conf_id,
                 "displayName": uni_display,
+                "shortCode": conf_short,
                 "leagueGameCount": default_league_games(conf_id, team_count),
                 "standingsTiebreakers": [
                     "h2h",
@@ -151,12 +152,28 @@ def build_pack() -> dict:
                 }
             )
 
+    branding = {
+        "nationalBodyShort": "NCBA",
+        "marchPostseasonTitle": "March Mayhem",
+        "ncbaTournamentName": "NCBA Men's BB Tournament",
+        "nciName": "National College Invitational",
+        "heritageClassicName": "National Heritage Classic",
+        "roundOpening": "Opening Round",
+        "round1": "Round 1",
+        "round2": "Round 2",
+        "roundSuper16": "Super 16",
+        "roundGreat8": "Great 8",
+        "roundChampionship4": "Championship 4",
+        "roundNationalChampionship": "National Championship",
+    }
+
     return {
         "packVersion": 1,
         "packId": PACK_ID,
         "membershipYear": MEMBERSHIP_YEAR,
         "disclaimerAcceptedRequired": True,
         "rulesetYear": RULESET_YEAR,
+        "branding": branding,
         "conferences": conferences,
         "teams": teams,
         "tournamentTemplates": templates,

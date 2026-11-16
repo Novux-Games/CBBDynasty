@@ -4,10 +4,25 @@
   "membershipYear": "2026-27",
   "disclaimerAcceptedRequired": true,
   "rulesetYear": 2026,
+  "branding": {
+    "nationalBodyShort": "NCBA",
+    "marchPostseasonTitle": "March Mayhem",
+    "ncbaTournamentName": "NCBA Men's BB Tournament",
+    "nciName": "National College Invitational",
+    "heritageClassicName": "National Heritage Classic",
+    "roundOpening": "Opening Round",
+    "round1": "Round 1",
+    "round2": "Round 2",
+    "roundSuper16": "Super 16",
+    "roundGreat8": "Great 8",
+    "roundChampionship4": "Championship 4",
+    "roundNationalChampionship": "National Championship"
+  },
   "conferences": [
     {
       "id": "conf-nac",
       "displayName": "Northern Atlantic Collegiate Conference",
+      "shortCode": "NAC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -20,6 +35,7 @@
     {
       "id": "conf-aucc",
       "displayName": "American Unified Collegiate Conference",
+      "shortCode": "AUCC",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -32,6 +48,7 @@
     {
       "id": "conf-cat10",
       "displayName": "Colonial Atlantic Ten",
+      "shortCode": "CAT10",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -44,6 +61,7 @@
     {
       "id": "conf-acrown",
       "displayName": "Atlantic Crown Conference",
+      "shortCode": "ACROWN",
       "leagueGameCount": 20,
       "standingsTiebreakers": [
         "h2h",
@@ -56,6 +74,7 @@
     {
       "id": "conf-ascu",
       "displayName": "Atlantic Sun Collegiate Union",
+      "shortCode": "ASC-U",
       "leagueGameCount": 14,
       "standingsTiebreakers": [
         "h2h",
@@ -68,6 +87,7 @@
     {
       "id": "conf-c12",
       "displayName": "Central Twelve Conference",
+      "shortCode": "C12",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -80,6 +100,7 @@
     {
       "id": "conf-epc",
       "displayName": "Eastern Premier Conference",
+      "shortCode": "EPC",
       "leagueGameCount": 20,
       "standingsTiebreakers": [
         "h2h",
@@ -92,6 +113,7 @@
     {
       "id": "conf-nsc",
       "displayName": "Northern Sky Conference",
+      "shortCode": "NSC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -104,6 +126,7 @@
     {
       "id": "conf-psc",
       "displayName": "Piedmont South Conference",
+      "shortCode": "PSC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -116,6 +139,7 @@
     {
       "id": "conf-g10",
       "displayName": "Great Ten Conference",
+      "shortCode": "G10",
       "leagueGameCount": 20,
       "standingsTiebreakers": [
         "h2h",
@@ -128,6 +152,7 @@
     {
       "id": "conf-gwc",
       "displayName": "Golden West Conference",
+      "shortCode": "GWC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -140,6 +165,7 @@
     {
       "id": "conf-cca",
       "displayName": "Coastal Colonial Association",
+      "shortCode": "CCA",
       "leagueGameCount": 14,
       "standingsTiebreakers": [
         "h2h",
@@ -152,6 +178,7 @@
     {
       "id": "conf-ucc",
       "displayName": "United Continental Conference",
+      "shortCode": "UCC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -164,6 +191,7 @@
     {
       "id": "conf-lhl",
       "displayName": "Lakefront Horizon League",
+      "shortCode": "LHL",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -176,6 +204,7 @@
     {
       "id": "conf-fel",
       "displayName": "Founding Eight League",
+      "shortCode": "FEL",
       "leagueGameCount": 14,
       "standingsTiebreakers": [
         "h2h",
@@ -188,6 +217,7 @@
     {
       "id": "conf-metro",
       "displayName": "Metro Collegiate Conference",
+      "shortCode": "METRO",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -200,6 +230,7 @@
     {
       "id": "conf-mac",
       "displayName": "Midland American Circuit",
+      "shortCode": "MAC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -212,6 +243,7 @@
     {
       "id": "conf-meac",
       "displayName": "Mid-Eastern Alliance Conference",
+      "shortCode": "MEAC",
       "leagueGameCount": 14,
       "standingsTiebreakers": [
         "h2h",
@@ -224,6 +256,7 @@
     {
       "id": "conf-pvc",
       "displayName": "Prairie Valley Conference",
+      "shortCode": "PVC",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -236,6 +269,7 @@
     {
       "id": "conf-rmwc",
       "displayName": "Rocky Mountain West Conference",
+      "shortCode": "RMWC",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -248,6 +282,7 @@
     {
       "id": "conf-nec",
       "displayName": "Northeastern Exchange Conference",
+      "shortCode": "NEC",
       "leagueGameCount": 14,
       "standingsTiebreakers": [
         "h2h",
@@ -260,6 +295,7 @@
     {
       "id": "conf-ova",
       "displayName": "Ohio Valley Alliance",
+      "shortCode": "OVA",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -272,6 +308,7 @@
     {
       "id": "conf-pr12",
       "displayName": "Pacific Rim Twelve",
+      "shortCode": "PR12",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -284,6 +321,7 @@
     {
       "id": "conf-psl",
       "displayName": "Patriot Scholar League",
+      "shortCode": "PSL",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -296,6 +334,7 @@
     {
       "id": "conf-sedc",
       "displayName": "Southeastern Dominion Conference",
+      "shortCode": "SEDC",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -308,6 +347,7 @@
     {
       "id": "conf-scf",
       "displayName": "Southern Collegiate Federation",
+      "shortCode": "SCF",
       "leagueGameCount": 20,
       "standingsTiebreakers": [
         "h2h",
@@ -320,6 +360,7 @@
     {
       "id": "conf-gcc",
       "displayName": "Gulf Coastland Conference",
+      "shortCode": "GCC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -332,6 +373,7 @@
     {
       "id": "conf-scal",
       "displayName": "Southwest Collegiate Athletic League",
+      "shortCode": "SCAL",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -344,6 +386,7 @@
     {
       "id": "conf-summit",
       "displayName": "Prairie Summit League",
+      "shortCode": "PSL",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -356,6 +399,7 @@
     {
       "id": "conf-sbc",
       "displayName": "Solar Belt Conference",
+      "shortCode": "SBC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -368,6 +412,7 @@
     {
       "id": "conf-uac",
       "displayName": "United Athletic Collegiate",
+      "shortCode": "UAC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -380,6 +425,7 @@
     {
       "id": "conf-wcc",
       "displayName": "Western Coast Collegiate",
+      "shortCode": "WCC",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",

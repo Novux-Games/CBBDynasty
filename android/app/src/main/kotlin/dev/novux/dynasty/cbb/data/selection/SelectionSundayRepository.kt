@@ -8,6 +8,7 @@ import dev.novux.dynasty.cbb.core.selection.SelectionSundayInput
 import dev.novux.dynasty.cbb.core.selection.SelectionSundaySnapshot
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
+import dev.novux.dynasty.cbb.core.pack.ReclassTransitionEligibilityEngine
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 
 class SelectionSundayRepository(
@@ -38,7 +39,9 @@ class SelectionSundayRepository(
             SelectionSundayInput(
                 seasonIndex = seasonIndex,
                 netRankByTeam = net,
-                postseasonEligible = teams.associate { it.teamId to it.postseasonEligible },
+                postseasonEligible = teams.associate {
+                    it.teamId to ReclassTransitionEligibilityEngine.effectivePostseasonEligible(it, seasonIndex)
+                },
                 heritageEligible = teams.associate { it.teamId to true },
                 conferenceChampions = standings.conferenceTournaments?.let {
                     ConferenceChampionResolver.ncbaAutoBidsFromTournaments(it)

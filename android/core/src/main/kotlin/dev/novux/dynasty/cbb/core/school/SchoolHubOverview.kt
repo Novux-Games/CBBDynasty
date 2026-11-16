@@ -27,4 +27,5 @@ data class SchoolHubOverview(
     val secondaryColorHex: String? = null,
     val reclassTransitionYear: Int? = null,
     val seasonIndex: Int = 1,
+    val nationalPostseasonEligible: Boolean = true,
 )

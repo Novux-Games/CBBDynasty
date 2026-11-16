@@ -36,6 +36,8 @@ class IdentityPackIndex private constructor(
         )
     }
 
+    fun branding(): PackBrandingPack = source.branding ?: PackBrandingDefaults.embeddedDefault()
+
     fun conference(confId: String): ConferenceDisplayOverlay? {
         val conf = conferencesById[confId] ?: return null
         return ConferenceDisplayOverlay(
@@ -44,6 +46,7 @@ class IdentityPackIndex private constructor(
             leagueGameCount = conf.leagueGameCount,
             tournamentTemplateId = conf.tournamentTemplateId,
             standingsTiebreakers = conf.standingsTiebreakers,
+            shortCode = ConferenceShortCodePolicy.shortCode(conf.id, conf.displayName, conf.shortCode),
         )
     }
 

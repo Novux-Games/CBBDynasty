@@ -65,6 +65,9 @@ object IdentityPackValidator {
             if (team.displayName.isBlank() || team.shortName.isBlank()) {
                 return PackValidationError.InvalidTeam(team.id, "display/short name required")
             }
+            if (team.homeCity.isBlank() || team.homeState.isBlank()) {
+                return PackValidationError.InvalidTeam(team.id, "homeCity and homeState required")
+            }
             if (!HEX_COLOR_PATTERN.matches(team.colors.primary) ||
                 !HEX_COLOR_PATTERN.matches(team.colors.secondary)
             ) {

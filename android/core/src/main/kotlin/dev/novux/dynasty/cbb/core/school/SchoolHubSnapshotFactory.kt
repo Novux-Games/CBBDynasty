@@ -1,6 +1,7 @@
 package dev.novux.dynasty.cbb.core.school
 
 import dev.novux.dynasty.cbb.core.pack.IdentityPackIndex
+import dev.novux.dynasty.cbb.core.pack.ReclassTransitionEligibilityEngine
 import dev.novux.dynasty.cbb.core.pack.TeamDisplayOverlay
 import dev.novux.dynasty.cbb.core.academics.ProgramAcademicsSnapshot
 import dev.novux.dynasty.cbb.core.facilities.FacilityGradeSummary
@@ -29,9 +30,11 @@ object SchoolHubSnapshotFactory {
             ?: SchoolNetRankIndex.build(packIndex.allTeamDisplays())
         val netRank = netMap[team.teamId]
         val confRanks = mates.plus(team).sortedByDescending { it.programPrestige }
-        val confStanding = confRanks.indexOfFirst { it.teamId == team.teamId }.let { idx ->
-            if (idx < 0) null else SchoolMetricsEstimator.conferenceStandingPlaceholder(idx + 1, confRanks.size)
-        }
+        val confStanding = SchoolHubConferenceStandingPolicy.label(
+            record = record,
+            prestigeOrderIndex = confRanks.indexOfFirst { it.teamId == team.teamId },
+            conferenceSize = confRanks.size,
+        )
         val sos = resume?.sosRating
             ?: SchoolMetricsEstimator.strengthOfSchedule(team, mates)
         val (off, def) = SchoolMetricsEstimator.teamRatings(team)
@@ -59,7 +62,9 @@ object SchoolHubSnapshotFactory {
         return SchoolHubOverview(
             teamId = team.teamId,
             displayName = team.displayName,
-            conferenceName = conference?.displayName ?: team.conferenceId,
+            conferenceName = conference?.let { conf ->
+                conf.shortCode?.let { code -> "${conf.displayName} ($code)" } ?: conf.displayName
+            } ?: team.conferenceId,
             isUserSchool = team.teamId == userTeamId,
             programPrestige = team.programPrestige,
             sosRating = sos,
@@ -82,6 +87,10 @@ object SchoolHubSnapshotFactory {
             secondaryColorHex = team.secondaryColorHex,
             reclassTransitionYear = team.reclassTransitionYear,
             seasonIndex = seasonIndex,
+            nationalPostseasonEligible = ReclassTransitionEligibilityEngine.effectivePostseasonEligible(
+                team,
+                seasonIndex,
+            ),
         )
     }
 }

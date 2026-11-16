@@ -15,6 +15,7 @@ data class IdentityPack(
     val packId: String? = null,
     val manifestSignerId: String? = null,
     val manifestSignature: String? = null,
+    val branding: PackBrandingPack? = null,
 )
 
 @Serializable
@@ -25,6 +26,7 @@ data class ConferencePack(
     val standingsTiebreakers: List<String> = emptyList(),
     val tournamentTemplateId: String? = null,
     val ncaaAutoBidSlot: Int = 1,
+    val shortCode: String? = null,
 )
 
 @Serializable
