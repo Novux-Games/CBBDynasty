@@ -14,6 +14,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import dev.novux.dynasty.cbb.core.portrait.PortraitAccessibilityFallbackPolicy
 import dev.novux.dynasty.cbb.core.portrait.PresetPortraitRenderer
 
 @Composable
@@ -22,7 +23,16 @@ fun PresetPortrait(
     modifier: Modifier = Modifier,
     size: Dp = 56.dp,
     contentDescription: String? = null,
+    initialsFallbackName: String? = null,
 ) {
+    if (PortraitAccessibilityFallbackPolicy.useInitialsFallback(presetId)) {
+        PortraitInitialsFallback(
+            displayName = initialsFallbackName.orEmpty(),
+            modifier = modifier,
+            size = size,
+        )
+        return
+    }
     val spec = remember(presetId) { PresetPortraitRenderer.specFor(presetId) }
     val skin = Color(spec.skinToneArgb)
     val hair = Color(spec.hairColorArgb)

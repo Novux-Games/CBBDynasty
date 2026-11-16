@@ -15,11 +15,13 @@ fun PresetHeadshot(
     modifier: Modifier = Modifier,
     size: Dp = 56.dp,
     contentDescription: String? = null,
+    initialsFallbackName: String? = null,
 ) {
     PresetPortrait(
         presetId = avatarPresetId,
         modifier = modifier,
         size = size,
         contentDescription = contentDescription,
+        initialsFallbackName = initialsFallbackName,
     )
 }

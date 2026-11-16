@@ -42,7 +42,12 @@ fun HeadCoachContractTab(
     )
     CoachCardContractTabShell(
         header = {
-            userCoachSecurity?.let { JobSecurityMeter(it) }
+            userCoachSecurity?.let {
+                JobSecurityMeter(
+                    snapshot = it,
+                    showFactorDetails = true,
+                )
+            }
             contractDetail.firingRiskCopy?.let {
                 Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
             }

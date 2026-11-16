@@ -48,10 +48,14 @@ class CoachSkillPointRepository(private val context: Context) {
         return next
     }
 
-    suspend fun seedArchetypeBiasAtSign(dynastyId: String, archetype: CoachArchetype): CoachSkillPointState {
+    suspend fun seedArchetypeBiasAtSign(
+        dynastyId: String,
+        archetype: CoachArchetype,
+        autoSpendFromSettings: Boolean = false,
+    ): CoachSkillPointState {
         @Suppress("unused")
         val qa = CoachArchetypeStartingSkillBiasPolicy.MEGA_ID
-        val state = CoachArchetypeStartingSkillBiasPolicy.seedAtSign(archetype)
+        val state = CoachArchetypeStartingSkillBiasPolicy.seedAtSign(archetype, autoSpendFromSettings)
         persist(dynastyId, state)
         return state
     }

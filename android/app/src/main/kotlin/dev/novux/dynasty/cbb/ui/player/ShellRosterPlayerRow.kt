@@ -18,14 +18,17 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.player.DynastyPlayer
 import dev.novux.dynasty.cbb.core.qa.ShellRosterThumbnailPath
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
+import dev.novux.dynasty.cbb.core.roster.RosterRowDensity
+import dev.novux.dynasty.cbb.core.roster.RosterRowDensityPolicy
 import dev.novux.dynasty.cbb.ui.portrait.PresetHeadshot
 
-/** Shell roster row with optional headshot thumbnail ([MEGA-COACH-101], [MEGA-COACH-161]). */
+/** Shell roster row with optional headshot thumbnail ([MEGA-COACH-101], [MEGA-COACH-161], [MEGA-COACH-177]). */
 @Composable
 fun ShellRosterPlayerRow(
     player: DynastyPlayer,
     rosterPlayer: RosterPlayer,
     modifier: Modifier = Modifier,
+    density: RosterRowDensity = RosterRowDensity.Compact,
 ) {
     @Suppress("unused")
     val megaTrace_RosterLoyaltyChipDensityPolicy = RosterLoyaltyChipDensityPolicy.MEGA_ID
@@ -33,6 +36,10 @@ fun ShellRosterPlayerRow(
     @Suppress("unused")
     val megaTrace_RosterRowCompactDensityPolicy = RosterRowCompactDensityPolicy.MEGA_ID
 
+    @Suppress("unused")
+    val qaCompact = RosterRowDensityPolicy.MEGA_COMPACT
+    @Suppress("unused")
+    val qaToggle = RosterRowDensityPolicy.MEGA_TOGGLE
     @Suppress("unused")
     val qaId = ShellRosterThumbnailPath.MEGA_ID
     Row(
@@ -44,6 +51,7 @@ fun ShellRosterPlayerRow(
             avatarPresetId = player.appearance.avatarPresetId,
             size = 40.dp,
             contentDescription = null,
+            initialsFallbackName = player.identity.displayName,
         )
         Column(
             modifier = Modifier.weight(1f),
@@ -66,7 +74,9 @@ fun ShellRosterPlayerRow(
                 )
                 PlayerArchetypeBadgeChip(archetype = player.archetype)
             }
-            if (RosterLoyaltyChipDensityPolicy.showOnRoster(compact = true)) {
+            if (RosterRowDensityPolicy.showLoyaltyChipsOnRoster(density) &&
+                RosterLoyaltyChipDensityPolicy.showOnRoster(compact = density == RosterRowDensity.Compact)
+            ) {
                 PlayerLoyaltyChips(player)
             }
         }

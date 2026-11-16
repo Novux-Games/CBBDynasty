@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.save.NewGameContractNilPreviewPolicy
 import dev.novux.dynasty.cbb.core.save.NewGameDraft
+import dev.novux.dynasty.cbb.core.save.SignContractRecapPolicy
 import dev.novux.dynasty.cbb.core.save.NewGameSchoolSummaryPreview
 import dev.novux.dynasty.cbb.core.save.NewGameSignRecapPolicy
 import androidx.compose.material3.Card
@@ -24,6 +26,7 @@ import androidx.compose.material3.CardDefaults
 import java.text.NumberFormat
 import java.util.Locale
 
+/** Sign-contract step including structured recap ([MEGA-COACH-027]). */
 @Composable
 fun SignContractStepContent(
     draft: NewGameDraft,
@@ -74,6 +77,38 @@ fun SignContractStepContent(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(top = 8.dp),
         )
+        @Suppress("unused")
+        val qaRecap = SignContractRecapPolicy.MEGA_ID
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = stringResource(R.string.new_sign_recap_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = stringResource(R.string.new_sign_recap_archetype, draft.archetype.label),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(top = 8.dp),
+                )
+                Text(
+                    text = stringResource(
+                        R.string.new_sign_recap_schemes,
+                        draft.offensiveScheme.label,
+                        draft.defensiveScheme.label,
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Text(
+                    text = stringResource(R.string.new_sign_recap_school, schoolDisplayName),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+        }
         contractNilPreview?.let { preview ->
             val currency = remember { NumberFormat.getCurrencyInstance(Locale.US) }
             val nilUsd = NewGameContractNilPreviewPolicy.annualNilUsd(preview)

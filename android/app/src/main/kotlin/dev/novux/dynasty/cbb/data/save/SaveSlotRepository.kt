@@ -516,10 +516,11 @@ class SaveSlotRepository(
         )
         val appDefaults = appSettingsRepository.currentSettings()
         dynastyAutomationRepository.seedFromAppDefaults(dynastyId, appDefaults)
-        coachSkillPointRepository.seedArchetypeBiasAtSign(dynastyId, draft.archetype)
-        if (appDefaults.defaultCoachAutoSpend) {
-            coachSkillPointRepository.setAutoSpend(dynastyId, true, draft.archetype)
-        }
+        coachSkillPointRepository.seedArchetypeBiasAtSign(
+            dynastyId = dynastyId,
+            archetype = draft.archetype,
+            autoSpendFromSettings = appDefaults.defaultCoachAutoSpend,
+        )
         bootstrapSeasonOneRecruitingAfterSign(loaded, draft)
         packDynastyIdentityRepository.recordMembershipYearAtSign(
             dynastyId,
