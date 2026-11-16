@@ -1,58 +1,90 @@
 #!/usr/bin/env python3
-"""Build Android adaptive icon layers from Public-Assets/app-logo.svg.
+"""Compose Android adaptive icon layers from Public-Assets/adaptive-icon/.
 
-Authoritative outputs: Public-Assets/adaptive-icon/
-Android sync: android/app/src/main/res/drawable-nodpi/ic_launcher_foreground.png
+Inputs (do not regenerate from app-logo):
+  - adaptive-icon-foreground.png  — authored transparent logo layer (432×432, 100%)
+  - adaptive-icon-background.svg  — brand fill (#181a25), full 108×108 dp layer
 
-Spec: planning/branding.md § Adaptive icon (Android) — foreground fits ~66dp safe zone on 108dp layer.
+Outputs:
+  - adaptive-icon-canvas.png      — QA preview (full background + scaled foreground)
+  - android/.../ic_launcher_foreground.png — shipped foreground (logo at 70% scale)
+
+Foreground scales to 70%; background does not — keeps the mark inside the adaptive safe zone.
 """
 from __future__ import annotations
 
 import argparse
 import io
-import shutil
 import sys
 from pathlib import Path
 
 CANVAS_PX = 432
-SAFE_ZONE_RATIO = 0.58  # central mark vs 108dp adaptive canvas (~66dp safe diameter)
-BRAND_BG = (0x18, 0x1A, 0x25, 0xFF)
+FOREGROUND_SCALE = 0.7
+BRAND_BG_HEX = "#181a25"
+BRAND_BG_RGBA = (0x18, 0x1A, 0x25, 0xFF)
 
 
 def repo_root() -> Path:
     return Path(__file__).resolve().parents[2]
 
 
-def generate(svg: Path, out_dir: Path, android_fg: Path) -> None:
+def raster_background(svg_path: Path, px: int):
+    from PIL import Image
+
+    if svg_path.is_file():
+        try:
+            import cairosvg
+        except ImportError:
+            pass
+        else:
+            text = svg_path.read_text(encoding="utf-8")
+            if BRAND_BG_HEX.lower() in text.lower():
+                return Image.new("RGBA", (px, px), BRAND_BG_RGBA)
+            png = cairosvg.svg2png(url=str(svg_path), output_width=px, output_height=px)
+            return Image.open(io.BytesIO(png)).convert("RGBA")
+    return Image.new("RGBA", (px, px), BRAND_BG_RGBA)
+
+
+def scale_foreground_layer(foreground, scale: float):
+    from PIL import Image
+
+    nw = max(1, int(round(foreground.width * scale)))
+    nh = max(1, int(round(foreground.height * scale)))
+    scaled = foreground.resize((nw, nh), Image.Resampling.LANCZOS)
+    layer = Image.new("RGBA", (CANVAS_PX, CANVAS_PX), (0, 0, 0, 0))
+    ox = (CANVAS_PX - nw) // 2
+    oy = (CANVAS_PX - nh) // 2
+    layer.paste(scaled, (ox, oy), scaled)
+    return layer
+
+
+def compose(icon_dir: Path, android_fg: Path) -> None:
     try:
-        import cairosvg
         from PIL import Image
     except ImportError as err:
         raise SystemExit(
-            "Missing deps for icon generation. Run: pip install cairosvg pillow\n"
+            "Missing deps for icon generation. Run: pip install pillow\n"
             f"({err})",
         ) from err
 
-    logo_px = int(CANVAS_PX * SAFE_ZONE_RATIO)
-    png_bytes = cairosvg.svg2png(url=str(svg), output_width=logo_px, output_height=logo_px)
-    logo = Image.open(io.BytesIO(png_bytes)).convert("RGBA")
-    foreground = Image.new("RGBA", (CANVAS_PX, CANVAS_PX), (0, 0, 0, 0))
-    ox = (CANVAS_PX - logo.width) // 2
-    oy = (CANVAS_PX - logo.height) // 2
-    foreground.paste(logo, (ox, oy), logo)
+    source_fg = icon_dir / "adaptive-icon-foreground.png"
+    bg_svg = icon_dir / "adaptive-icon-background.svg"
+    if not source_fg.is_file():
+        raise SystemExit(f"Missing authored foreground: {source_fg}")
 
-    out_dir.mkdir(parents=True, exist_ok=True)
-    fg_path = out_dir / "adaptive-icon-foreground.png"
-    foreground.save(fg_path)
+    authored = Image.open(source_fg).convert("RGBA")
+    shipped_fg = scale_foreground_layer(authored, FOREGROUND_SCALE)
 
-    bg = Image.new("RGBA", (CANVAS_PX, CANVAS_PX), BRAND_BG)
-    preview = Image.alpha_composite(bg, foreground)
-    preview.save(out_dir / "adaptive-icon-canvas.png")
+    background = raster_background(bg_svg, CANVAS_PX)
+    canvas = Image.alpha_composite(background, shipped_fg)
+    canvas_path = icon_dir / "adaptive-icon-canvas.png"
+    canvas.save(canvas_path)
 
     android_fg.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(fg_path, android_fg)
-    print(f"Wrote {fg_path}")
-    print(f"Wrote {out_dir / 'adaptive-icon-canvas.png'}")
+    shipped_fg.save(android_fg)
+
+    print(f"Foreground scale: {FOREGROUND_SCALE:.0%} (background {CANVAS_PX}px)")
+    print(f"Wrote {canvas_path}")
     print(f"Synced {android_fg}")
 
 
@@ -65,18 +97,15 @@ def main() -> int:
     )
     args = parser.parse_args()
     root = repo_root()
-    svg = root / "Public-Assets/app-logo.svg"
-    out_dir = root / "Public-Assets/adaptive-icon"
+    icon_dir = root / "Public-Assets/adaptive-icon"
     android_fg = root / "android/app/src/main/res/drawable-nodpi/ic_launcher_foreground.png"
-    if not svg.is_file():
-        print(f"Missing {svg}", file=sys.stderr)
-        return 1
+
     if args.check:
         import tempfile
 
         with tempfile.TemporaryDirectory() as tmp:
-            tmp_fg = Path(tmp) / "fg.png"
-            generate(svg, Path(tmp), tmp_fg)
+            tmp_fg = Path(tmp) / "ic_launcher_foreground.png"
+            compose(icon_dir, tmp_fg)
             if not android_fg.exists() or android_fg.read_bytes() != tmp_fg.read_bytes():
                 print(
                     "Android ic_launcher_foreground.png is out of date. "
@@ -86,7 +115,8 @@ def main() -> int:
                 return 1
         print("Brand icon assets in sync.")
         return 0
-    generate(svg, out_dir, android_fg)
+
+    compose(icon_dir, android_fg)
     return 0
 
 

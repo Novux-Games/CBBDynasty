@@ -28,7 +28,7 @@ jobs:
       - name: Check adaptive launcher icon sync
         working-directory: ${{ github.workspace }}
         run: |
-          pip install -q cairosvg pillow
+          pip install -q pillow
           python3 planning/tools/generate_adaptive_icon.py --check
 
       - name: Set up JDK 21
