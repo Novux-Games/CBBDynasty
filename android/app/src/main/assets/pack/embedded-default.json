@@ -6304,7 +6304,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Northern Atlantic Collegiate Conference Championship Center"
     },
     {
       "id": "tpl-conf-aucc",
@@ -6331,7 +6332,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "American Unified Collegiate Conference Championship Center"
     },
     {
       "id": "tpl-conf-cat10",
@@ -6358,7 +6360,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Colonial Atlantic Ten Championship Center"
     },
     {
       "id": "tpl-conf-acrown",
@@ -6389,7 +6392,8 @@
           "name": "F2",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Atlantic Crown Conference Championship Center"
     },
     {
       "id": "tpl-conf-ascu",
@@ -6412,7 +6416,8 @@
           "name": "SF",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Atlantic Sun Collegiate Union Championship Center"
     },
     {
       "id": "tpl-conf-c12",
@@ -6439,7 +6444,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Central Twelve Conference Championship Center"
     },
     {
       "id": "tpl-conf-epc",
@@ -6466,7 +6472,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Eastern Premier Conference Championship Center"
     },
     {
       "id": "tpl-conf-nsc",
@@ -6493,7 +6500,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Northern Sky Conference Championship Center"
     },
     {
       "id": "tpl-conf-psc",
@@ -6520,7 +6528,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Piedmont South Conference Championship Center"
     },
     {
       "id": "tpl-conf-g10",
@@ -6551,7 +6560,8 @@
           "name": "F2",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Great Ten Conference Championship Center"
     },
     {
       "id": "tpl-conf-gwc",
@@ -6578,7 +6588,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Golden West Conference Championship Center"
     },
     {
       "id": "tpl-conf-cca",
@@ -6605,7 +6616,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Coastal Colonial Association Championship Center"
     },
     {
       "id": "tpl-conf-ucc",
@@ -6632,7 +6644,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "United Continental Conference Championship Center"
     },
     {
       "id": "tpl-conf-lhl",
@@ -6659,7 +6672,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Lakefront Horizon League Championship Center"
     },
     {
       "id": "tpl-conf-fel",
@@ -6682,7 +6696,8 @@
           "name": "SF",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Founding Eight League Championship Center"
     },
     {
       "id": "tpl-conf-metro",
@@ -6709,7 +6724,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Metro Collegiate Conference Championship Center"
     },
     {
       "id": "tpl-conf-mac",
@@ -6736,7 +6752,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Midland American Circuit Championship Center"
     },
     {
       "id": "tpl-conf-meac",
@@ -6759,7 +6776,8 @@
           "name": "SF",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Mid-Eastern Alliance Conference Championship Center"
     },
     {
       "id": "tpl-conf-pvc",
@@ -6786,7 +6804,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Prairie Valley Conference Championship Center"
     },
     {
       "id": "tpl-conf-rmwc",
@@ -6813,7 +6832,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Rocky Mountain West Conference Championship Center"
     },
     {
       "id": "tpl-conf-nec",
@@ -6840,7 +6860,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Northeastern Exchange Conference Championship Center"
     },
     {
       "id": "tpl-conf-ova",
@@ -6867,7 +6888,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Ohio Valley Alliance Championship Center"
     },
     {
       "id": "tpl-conf-pr12",
@@ -6894,7 +6916,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Pacific Rim Twelve Championship Center"
     },
     {
       "id": "tpl-conf-psl",
@@ -6921,7 +6944,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Patriot Scholar League Championship Center"
     },
     {
       "id": "tpl-conf-sedc",
@@ -6948,7 +6972,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Southeastern Dominion Conference Championship Center"
     },
     {
       "id": "tpl-conf-scf",
@@ -6975,7 +7000,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Southern Collegiate Federation Championship Center"
     },
     {
       "id": "tpl-conf-gcc",
@@ -7002,7 +7028,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Gulf Coastland Conference Championship Center"
     },
     {
       "id": "tpl-conf-scal",
@@ -7029,7 +7056,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Southwest Collegiate Athletic League Championship Center"
     },
     {
       "id": "tpl-conf-summit",
@@ -7052,7 +7080,8 @@
           "name": "SF",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Prairie Summit League Championship Center"
     },
     {
       "id": "tpl-conf-sbc",
@@ -7079,7 +7108,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Solar Belt Conference Championship Center"
     },
     {
       "id": "tpl-conf-uac",
@@ -7106,7 +7136,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "United Athletic Collegiate Championship Center"
     },
     {
       "id": "tpl-conf-wcc",
@@ -7133,7 +7164,8 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Western Coast Collegiate Championship Center"
     }
   ]
 }

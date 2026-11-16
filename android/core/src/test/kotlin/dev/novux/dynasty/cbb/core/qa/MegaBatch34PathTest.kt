@@ -7,7 +7,11 @@ import dev.novux.dynasty.cbb.core.calendar.PostseasonCalendar
 import dev.novux.dynasty.cbb.core.calendar.PostseasonCalendarGameRoundPolicy
 import dev.novux.dynasty.cbb.core.dashboard.DashboardMarchMayhemTeaserPolicy
 import dev.novux.dynasty.cbb.core.history.HistoryGoatByPositionSurfacePolicy
+import dev.novux.dynasty.cbb.core.coach.employment.JobCenterPackTeamListPolicy
 import dev.novux.dynasty.cbb.core.league.LeagueFastSimTuningPolicy
+import dev.novux.dynasty.cbb.core.league.LeagueScheduleBootstrapParityPolicy
+import dev.novux.dynasty.cbb.core.pack.ConferenceTournamentVenueManifestPolicy
+import dev.novux.dynasty.cbb.core.pack.IdentityPackConferenceOverlayPolicy
 import dev.novux.dynasty.cbb.core.march.MarchMayhemHubSurfacePolicy
 import dev.novux.dynasty.cbb.core.pack.ConferenceShortCodePolicy
 import dev.novux.dynasty.cbb.core.pack.DefaultPackConferenceSizeManifestPolicy
@@ -45,6 +49,10 @@ class MegaBatch34PathTest {
         assertEquals("MEGA-WORLD-113", SchoolHubConferenceStandingPolicy.MEGA_ID)
         assertEquals("MEGA-WORLD-114", SchoolHubPostseasonEligibilityPolicy.MEGA_ID)
         assertEquals("MEGA-WORLD-147", DefaultPackConferenceSizeManifestPolicy.MEGA_ID)
+        assertEquals("MEGA-WORLD-144", ConferenceTournamentVenueManifestPolicy.MEGA_ID)
+        assertEquals("MEGA-WORLD-151", IdentityPackConferenceOverlayPolicy.MEGA_ID)
+        assertEquals("MEGA-WORLD-065", LeagueScheduleBootstrapParityPolicy.MEGA_ID)
+        assertEquals("MEGA-WORLD-152", JobCenterPackTeamListPolicy.MEGA_ID)
         assertEquals("MEGA-WORLD-025", PackWorldBatch34TracePolicy.PROGRAM_PRESTIGE_OPTIONAL_MEGA_ID)
         assertEquals("MEGA-WORLD-119", PackWorldBatch34TracePolicy.IMPORT_SETTINGS_MEGA_ID)
 

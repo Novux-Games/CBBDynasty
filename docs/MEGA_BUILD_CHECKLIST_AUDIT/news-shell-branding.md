@@ -299,31 +299,14 @@
 
 | Status | Count |
 |--------|------:|
-| SHIP | 79 |
-| PARTIAL | 39 |
-| GAP | 62 |
+| SHIP | 179 |
+| PARTIAL | 0 |
+| GAP | 0 |
 | N/A | 2 |
+| PASS | 1 |
 | **Total items** | **182** |
 
-### P0 backlog (ship blockers)
-
-| ID | Topic |
-|----|--------|
-| MEGA-SHELL-012 | Splash pack fail + Retry — blocks clean first run |
-| MEGA-SHELL-023 | Offseason/preseason News tab live shallow feed |
-| MEGA-SHELL-031 | Portal Top 40 human-readable rows |
-| MEGA-SHELL-038 | Story detail mini-article |
-| MEGA-SHELL-039 | Portal headline kinds + generators |
-| MEGA-SHELL-044 | Notification copy → `strings.xml` |
-| MEGA-SHELL-049–051 | Discipline / carousel / Selection Sunday feed rows |
-| MEGA-SHELL-056 | Notification feed on offseason dashboard |
-| MEGA-SHELL-096 | Statistics hub placeholder behind live menu item |
-| MEGA-SHELL-106–110 | Notification + news deep links (Rankings, game preview, discipline, Selection Sunday) |
-| MEGA-SHELL-112–113 | News headline drill-in + portal story CTAs |
-| MEGA-SHELL-137–138 | Poll / bracketology News headlines |
-| MEGA-SHELL-160 | Hard-coded notification strings (branding CI) |
-
-**Priority clusters:** MEGA-SHELL-031–035 (News portal product depth), MEGA-SHELL-038–039 / 112–113 (stories + drill-in), MEGA-SHELL-044–056 / 119–133 (notification catalog + advance + strings), MEGA-SHELL-088–102 (hamburger hubs + Statistics placeholder), MEGA-SHELL-106–118 (deep links), MEGA-SHELL-134–146 (headline taxonomy), MEGA-SHELL-147–155 (NET/polls vs News), MEGA-SHELL-062/069–070 (discipline UX + consequences), MEGA-SHELL-077–078 (chemistry sim), MEGA-SHELL-011–012 / 176 (splash + lifecycle).
+**Shard executor queue:** all implementation rows **SHIP** / **PASS** / **N/A**; summary aligned 2026-11-16 after shell/news burn-down batches 30–34.
 
 ---
 

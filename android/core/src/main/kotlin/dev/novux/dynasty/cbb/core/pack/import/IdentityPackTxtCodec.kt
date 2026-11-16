@@ -155,6 +155,7 @@ object IdentityPackTxtCodec {
         qualificationPolicy = fields["qualificationPolicy"]
             ?: throw TxtParseException("tournament $id: qualificationPolicy required"),
         rounds = rounds,
+        championshipVenueLabel = fields["championshipVenueLabel"]?.takeIf { it.isNotBlank() },
     )
   }
 

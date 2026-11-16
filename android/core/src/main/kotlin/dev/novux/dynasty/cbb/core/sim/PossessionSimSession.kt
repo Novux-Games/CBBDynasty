@@ -67,6 +67,7 @@ class PossessionSimSession(
     private val awayMidInjuries = (resume?.awayMidGameInjuries ?: emptyList()).toMutableList()
     private var inOvertime: Boolean = resume?.inOvertime ?: false
     private var overtimePeriods: Int = resume?.overtimePeriods ?: 0
+    private var loggedSecondHalfOpening: Boolean = resume?.loggedSecondHalfOpening ?: false
     private val teamFoulLedger = TeamFoulGameLedger(resume = resume)
     private val eventWeights = SimEventWeightsResolver.resolve(input.tuning.eventWeights)
     private val homeStaminaLedger = SimStaminaLedger(
@@ -108,6 +109,23 @@ class PossessionSimSession(
 
     fun step(): PossessionStep {
         check(hasNext()) { "No possessions remaining" }
+        if (HalftimeOpeningFivePolicy.shouldApplyAtSecondHalfStart(gameClock, inOvertime) && !loggedSecondHalfOpening) {
+            HalftimeOpeningFivePolicy.logLineFromRoster(input.homeRoster)?.let { log += it }
+            HalftimeOpeningFivePolicy.logLineFromRoster(input.awayRoster)?.let { log += it }
+            loggedSecondHalfOpening = true
+        }
+        PossessionRareEventPolicy.maybeSample(random, totalPossessions)?.let { rare ->
+            totalPossessions++
+            val prefix = GameWatchChromeFactory.formatGameClock(gameClock)
+            val line = "$prefix | ${if (offenseHome) "HOME" else "AWAY"} | ${rare.logLine}"
+            log += line
+            if (rare.flipPossession) offenseHome = !offenseHome
+            return PossessionStep(
+                line,
+                haltedAtHalftime = false,
+                chrome = currentWatchChrome(),
+            )
+        }
         val sides = if (offenseHome) {
             PossessionSimEngine.Sides(input.home, input.away, homeBox, "HOME")
         } else {
@@ -472,6 +490,7 @@ class PossessionSimSession(
             else -> null
         }
         val lateTags = listOfNotNull(
+            PossessionClutchLogPolicy.logTag(gameClock, offenseScore, defenseScore),
             ScoreDifferentialSituationPolicy.logTag(offenseSituation),
             if (ProtectLeadLateGamePolicy.isActive(lateDecision)) ProtectLeadLateGamePolicy.logTag() else null,
             FoulEarlyLateGamePolicy.logTag(tripSample),
@@ -740,6 +759,7 @@ class PossessionSimSession(
         awayTeamFoulsFirstHalf = teamFoulFields.awayTeamFoulsFirstHalf,
         homeStaminaByPlayer = homeStaminaLedger.snapshot(),
         awayStaminaByPlayer = awayStaminaLedger.snapshot(),
+        loggedSecondHalfOpening = loggedSecondHalfOpening,
     )
     }
 
