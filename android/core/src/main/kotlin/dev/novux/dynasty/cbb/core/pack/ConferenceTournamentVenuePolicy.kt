@@ -1,8 +1,12 @@
 package dev.novux.dynasty.cbb.core.pack
 
-/** Maps template sitePolicy to display venue ([MEGA-WORLD-144]). */
+/** Conf tournament venue column from pack template ([MEGA-WORLD-144]). */
 object ConferenceTournamentVenuePolicy {
-    const val MEGA_ID = "MEGA-WORLD-144"
+    const val MEGA_ID: String = "MEGA-WORLD-144"
+
+    fun displayVenue(template: TournamentTemplatePack): String =
+        template.championshipVenueName?.takeIf { it.isNotBlank() }
+            ?: venueLabel(template.sitePolicy, template.id)
 
     fun venueLabel(sitePolicy: String, templateDisplayName: String): String = when (sitePolicy) {
         "neutral-primary" -> "Neutral site"

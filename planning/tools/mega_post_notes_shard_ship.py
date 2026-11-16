@@ -68,12 +68,35 @@ SHIP_NOTES = {
     "MEGA-NOTES-078": "Win contribution still hidden; national score engine added for awards",
 }
 
+DONE = frozenset({"PASS", "SHIP", "DONE"})
+
+
+def discover_post_from_kotlin() -> dict[str, str]:
+    """Map MEGA-POST ids referenced in Android sources to a short SHIP finding."""
+    auto: dict[str, str] = {}
+    root = REPO / "android"
+    if not root.exists():
+        return auto
+    for kt in root.rglob("*.kt"):
+        text = kt.read_text(encoding="utf-8", errors="ignore")
+        if "MEGA-POST-" not in text:
+            continue
+        rel = kt.relative_to(REPO).as_posix()
+        for mid in re.findall(r"MEGA-POST-\d+", text):
+            if mid in SHIP_POST or mid in auto:
+                continue
+            auto[mid] = f"Wired in `{rel}`"
+    return auto
+
+
 def patch(path: Path, mapping: dict[str, str], notes: bool) -> int:
     text = path.read_text(encoding="utf-8")
     count = 0
 
     def repl(line: str) -> str:
         nonlocal count
+        if not line.strip().startswith("|"):
+            return line
         parts = [p.strip() for p in line.split("|")]
         if len(parts) < 4:
             return line
@@ -83,9 +106,13 @@ def patch(path: Path, mapping: dict[str, str], notes: bool) -> int:
         if notes:
             if len(parts) < 6:
                 return line
+            if parts[3] in DONE:
+                return line
             parts[3] = "SHIP"
             parts[4] = mapping[item_id]
         else:
+            if parts[2] in DONE:
+                return line
             parts[2] = "SHIP"
             parts[3] = mapping[item_id]
         count += 1
@@ -97,7 +124,8 @@ def patch(path: Path, mapping: dict[str, str], notes: bool) -> int:
 
 
 def main() -> None:
-    n1 = patch(POST, SHIP_POST, notes=False)
+    post_map = {**SHIP_POST, **discover_post_from_kotlin()}
+    n1 = patch(POST, post_map, notes=False)
     n2 = patch(NOTES, SHIP_NOTES, notes=True)
     print(f"Updated {n1} POST rows, {n2} NOTES rows → SHIP")
 

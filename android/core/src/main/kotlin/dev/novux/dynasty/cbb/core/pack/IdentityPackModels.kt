@@ -61,6 +61,8 @@ data class TournamentTemplatePack(
     val reseedingAfterRound: Boolean = false,
     val sitePolicy: String,
     val qualificationPolicy: String,
+    /** Optional directory venue label for conf championship site ([MEGA-WORLD-144]). */
+    val championshipVenueName: String? = null,
     val rounds: List<TournamentRoundPack>,
     /** Universe championship site label from directory column ([MEGA-WORLD-144]). */
     val championshipVenueLabel: String? = null,
