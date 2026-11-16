@@ -9,6 +9,16 @@ enum class NewsHeadlineKind {
     RecruitingSpotlight,
     General,
     Awards,
+    /** Weekly February NET bracketology ([MEGA-GDD-130]). */
+    Bracketology,
+    /** Weekly NET / poll movement summary ([MEGA-SHELL-137]). */
+    PollNetMovement,
+    PortalEntry,
+    PortalCommit,
+    PortalDecommit,
+    PortalFlip,
+    CoachingCarousel,
+    PostseasonTournament,
 }
 
 @Serializable

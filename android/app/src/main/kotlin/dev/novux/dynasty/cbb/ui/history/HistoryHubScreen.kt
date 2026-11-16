@@ -28,6 +28,9 @@ import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
 import dev.novux.dynasty.cbb.core.history.HistoryHubSnapshot
+import dev.novux.dynasty.cbb.core.history.HistoryHubDepthPolicy
+import dev.novux.dynasty.cbb.core.history.HistoryGoatByPositionSurfacePolicy
+import dev.novux.dynasty.cbb.core.history.HistoryHubSurfacePolicy
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,9 +44,22 @@ fun HistoryHubScreen(
         OutlinedButton(onClick = onBack, modifier = Modifier.padding(horizontal = 16.dp)) {
             Text(stringResource(R.string.dynasty_shell_back))
         }
+        Text(
+            text = stringResource(R.string.history_hub_cadence_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        )
+        Text(
+            text = stringResource(R.string.history_hub_online_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 0.dp),
+        )
         ScrollableTabRow(selectedTabIndex = tab) {
             Tab(selected = tab == 0, onClick = { tab = 0 }, text = { Text(stringResource(R.string.history_tab_goat)) })
             Tab(selected = tab == 1, onClick = { tab = 1 }, text = { Text(stringResource(R.string.history_tab_archive)) })
+            Tab(selected = tab == 2, onClick = { tab = 2 }, text = { Text(stringResource(R.string.history_tab_records)) })
         }
         Column(
             modifier = Modifier
@@ -53,13 +69,37 @@ fun HistoryHubScreen(
         ) {
             when (tab) {
                 0 -> {
-                    if (snapshot.goatOverall.isEmpty()) {
+                    @Suppress("unused")
+                    val goatPolicy = HistoryGoatByPositionSurfacePolicy.MEGA_ID
+                    var goatPos by remember { mutableIntStateOf(-1) }
+                    val positions = HistoryGoatByPositionSurfacePolicy.positionOrder
+                    ScrollableTabRow(selectedTabIndex = goatPos.coerceAtLeast(0)) {
+                        Tab(
+                            selected = goatPos < 0,
+                            onClick = { goatPos = -1 },
+                            text = { Text(stringResource(R.string.history_goat_overall)) },
+                        )
+                        positions.forEachIndexed { index, pos ->
+                            Tab(
+                                selected = goatPos == index,
+                                onClick = { goatPos = index },
+                                text = { Text(pos) },
+                            )
+                        }
+                    }
+                    val goatList = if (goatPos < 0) {
+                        snapshot.goatOverall
+                    } else {
+                        val pos = positions[goatPos]
+                        HistoryGoatByPositionSurfacePolicy.topFiveByPosition(snapshot)[pos].orEmpty()
+                    }
+                    if (goatList.isEmpty()) {
                         Text(
                             stringResource(R.string.history_goat_empty),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     } else {
-                        snapshot.goatOverall.forEach { entry ->
+                        goatList.forEach { entry ->
                             Card(Modifier.fillMaxWidth()) {
                                 Column(Modifier.padding(12.dp)) {
                                     Text(
@@ -116,6 +156,25 @@ fun HistoryHubScreen(
                                         )
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+                2 -> {
+                    val lines = HistoryHubDepthPolicy.majorRecordFeedLines(snapshot)
+                    if (lines.isEmpty()) {
+                        Text(
+                            stringResource(R.string.history_records_empty),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    } else {
+                        lines.forEach { line ->
+                            Card(Modifier.fillMaxWidth()) {
+                                Text(
+                                    line,
+                                    modifier = Modifier.padding(12.dp),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
                             }
                         }
                     }

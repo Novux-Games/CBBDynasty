@@ -13,6 +13,9 @@ data class IdentityPack(
     val tournamentTemplates: List<TournamentTemplatePack> = emptyList(),
     val rulesetYear: Int,
     val packId: String? = null,
+    val manifestSignerId: String? = null,
+    val manifestSignature: String? = null,
+    val branding: PackBrandingPack? = null,
 )
 
 @Serializable
@@ -23,6 +26,7 @@ data class ConferencePack(
     val standingsTiebreakers: List<String> = emptyList(),
     val tournamentTemplateId: String? = null,
     val ncaaAutoBidSlot: Int = 1,
+    val shortCode: String? = null,
 )
 
 @Serializable
@@ -56,8 +60,14 @@ data class TournamentTemplatePack(
     val byes: List<Int> = emptyList(),
     val reseedingAfterRound: Boolean = false,
     val sitePolicy: String,
+    /** Directory championship column when present ([MEGA-WORLD-144]). */
+    val championshipVenue: String? = null,
     val qualificationPolicy: String,
+    /** Optional directory venue label for conf championship site ([MEGA-WORLD-144]). */
+    val championshipVenueName: String? = null,
     val rounds: List<TournamentRoundPack>,
+    /** Universe championship site label from directory column ([MEGA-WORLD-144]). */
+    val championshipVenueLabel: String? = null,
 )
 
 @Serializable

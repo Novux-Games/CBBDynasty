@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.ui.shell
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,7 +31,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import androidx.compose.ui.graphics.Color
 import dev.novux.dynasty.cbb.core.GameConstants
+import dev.novux.dynasty.cbb.core.shell.StudioBrandBackgroundPolicy
+import dev.novux.dynasty.cbb.core.shell.StudioSplashTapHintPolicy
 import kotlinx.coroutines.delay
 
 /** Novux Games publisher beat — [planning/app-shell.md#studio-screen-novux-games]. */
@@ -72,6 +76,7 @@ fun StudioScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(StudioBrandBackgroundPolicy.backgroundArgb))
             .clickable(enabled = skipEnabled, onClick = advance)
             .alpha(logoAlpha),
     ) {
@@ -102,8 +107,10 @@ fun StudioScreen(
             )
         }
 
+        @Suppress("unused")
+        val qaTapHint = StudioSplashTapHintPolicy.MEGA_ID
         Text(
-            text = "Tap to continue",
+            text = stringResource(R.string.studio_tap_to_continue),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier

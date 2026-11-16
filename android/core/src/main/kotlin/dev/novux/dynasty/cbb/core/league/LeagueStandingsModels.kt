@@ -4,6 +4,7 @@ import dev.novux.dynasty.cbb.core.brackets.NationalBracketSnapshot
 import dev.novux.dynasty.cbb.core.brackets.NcbaMainBracketSnapshot
 import dev.novux.dynasty.cbb.core.brackets.NcbaOpeningRoundSnapshot
 import dev.novux.dynasty.cbb.core.conference.ConferenceTournamentSeason
+import dev.novux.dynasty.cbb.core.awards.AwardWeekRow
 import dev.novux.dynasty.cbb.core.selection.SelectionSundaySnapshot
 import kotlinx.serialization.Serializable
 
@@ -42,6 +43,7 @@ data class LeagueStandingsState(
     val nciBracket: NationalBracketSnapshot? = null,
     val heritageBracket: NationalBracketSnapshot? = null,
     val aiInjuryRollsLastWeek: Int = 0,
+    val weeklyPotwArchive: List<AwardWeekRow> = emptyList(),
 ) {
     fun recordFor(teamId: String): LeagueTeamRecord =
         records[teamId] ?: LeagueTeamRecord(teamId = teamId)

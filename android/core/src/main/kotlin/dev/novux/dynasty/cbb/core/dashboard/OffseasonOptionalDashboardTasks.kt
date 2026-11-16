@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb.core.dashboard
 
 import dev.novux.dynasty.cbb.core.portal.PortalConstants
 import dev.novux.dynasty.cbb.core.recruiting.RecruitingCyclePolicy
+import dev.novux.dynasty.cbb.core.signingday.SigningDayPrepBriefPolicy
 
 data class OffseasonDashboardContext(
     val offseasonWeekIndex: Int,
@@ -9,6 +10,7 @@ data class OffseasonDashboardContext(
     val portalTop40Locked: Boolean,
     val openScholarshipSlots: Int,
     val signingCrunchActive: Boolean,
+    val pipelineSpotlight: PipelineEntrantSpotlight? = null,
 )
 
 /**
@@ -64,6 +66,16 @@ object OffseasonOptionalDashboardTasks {
                 ),
             )
         }
+        if (SigningDayPrepBriefPolicy.showPrepBrief(context.offseasonWeekIndex, context.signingCrunchActive)) {
+            tasks.add(
+                DashboardTask(
+                    id = DashboardTaskId.SigningDayPrepBrief,
+                    kind = DashboardTaskKind.Optional,
+                    deepLink = DashboardDeepLink.SigningDayRankings,
+                    formatArgs = SigningDayPrepBriefPolicy.briefFormatArgs(context.offseasonWeekIndex),
+                ),
+            )
+        }
         if (context.openScholarshipSlots > 0) {
             tasks.add(
                 DashboardTask(
@@ -71,6 +83,19 @@ object OffseasonOptionalDashboardTasks {
                     kind = DashboardTaskKind.Optional,
                     deepLink = DashboardDeepLink.RecruitingPortal,
                     formatArgs = listOf(context.openScholarshipSlots),
+                ),
+            )
+        }
+        context.pipelineSpotlight?.let { spotlight ->
+            tasks.add(
+                DashboardTask(
+                    id = DashboardTaskId.PortalPipelineEntrant,
+                    kind = DashboardTaskKind.Optional,
+                    deepLink = DashboardDeepLink.RecruitingPortal,
+                    stringFormatArgs = listOf(
+                        spotlight.entrantDisplayName,
+                        spotlight.priorSchoolDisplayName,
+                    ),
                 ),
             )
         }

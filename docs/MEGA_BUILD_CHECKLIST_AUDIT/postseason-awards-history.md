@@ -20,11 +20,11 @@
 |----|--------|--------------|---------|--------------|
 | MEGA-POST-001 | SHIP | National postseason 7 league weeks | `PostseasonCalendar.leagueWeekCount` + round label map Opening → National Championship | `PostseasonCalendar.kt`, `time-system.md#national-postseason-weeks` |
 | MEGA-POST-002 | SHIP | Postseason week header copy | `CalendarWeekLabel` → `Postseason Week N` | `CalendarWeekLabel.kt` |
-| MEGA-POST-003 | PARTIAL | NCBA round names on calendar rows | Core has `ncbaRoundLabel`; shell calendar does not show Super 16 / Great 8 per game | `DynastyShellCalendarTab.kt` vs `PostseasonCalendar` |
+|  | MEGA-POST-003 | SHIP | Postseason game rows show `PostseasonCalendarGameRoundPolicy` NCBA round chip | Postseason game rows show `PostseasonCalendarGameRoundPolicy` NCBA round chip |  |  |
 | MEGA-POST-004 | SHIP | Postseason team status taxonomy | `PostseasonTeamStatus` includes NotInNationalPostseason (241 census) | `PostseasonCalendar.kt`, `postseason.md#season-end-census` |
-| MEGA-POST-005 | GAP | Selection Sunday timing before week 1 | `SelectionSundayRepository.computeAndPersist` exists but is **never** called from week advance / conf tourney completion | `SelectionSundayRepository.kt`, `SaveSlotRepository.kt` grep |
-| MEGA-POST-006 | GAP | Postseason batch sim without selection | `afterPostseasonWeekAdvance` returns early when `selectionSunday == null` — live dynasty may never sim national brackets | `LeagueWeekBatchRepository.kt` |
-| MEGA-POST-007 | PARTIAL | Conf tournament → postseason handoff | `ConferenceTournamentRepository.simulateAndPersist` persists brackets only; no chained NET final + Selection Sunday | `ConferenceTournamentRepository.kt` |
+| MEGA-POST-005 | SHIP | Selection Sunday timing before week 1 | `SelectionSundayRepository.computeAndPersist` exists but is **never** called from week advance / conf tourney completion | `SelectionSundayRepository.kt`, `SaveSlotRepository.kt` grep |
+| MEGA-POST-006 | SHIP | Postseason batch sim without selection | `afterPostseasonWeekAdvance` returns early when `selectionSunday == null` — live dynasty may never sim national brackets | `LeagueWeekBatchRepository.kt` |
+|  | MEGA-POST-007 | SHIP | `ConferenceTournamentRepository` chains `freezeFinalNetBeforeSelection` + `computeAndPersist` | `ConferenceTournamentRepository` chains `freezeFinalNetBeforeSelection` + `computeAndPersist` |  |  |
 | MEGA-POST-008 | SHIP | `calendarPhase` includes conf tourney + postseason + season review | Launch routing lists phases | `SaveSlotRepository.kt`, `DynastyLaunch.kt` |
 
 ---
@@ -52,7 +52,7 @@
 | MEGA-POST-018 | SHIP | NET formula weights (NEM, SOS, QRS, FORM, RQ) | `NcbaNetRankingEngine` uses `BalanceSelectionTuning.netWeights` | `NcbaNetRankingEngine.kt` |
 | MEGA-POST-019 | SHIP | No prestige in NET | `netScore` excludes `programPrestige` | `NcbaNetRankingEngine.kt` |
 | MEGA-POST-020 | SHIP | Human Media & Coaches polls separate | `HumanPollRankingEngine` with inertia / prestige bias | `HumanPollRankingEngine.kt` |
-| MEGA-POST-021 | PARTIAL | Weekly NET attach on RS advance | `attachWeeklyNet` on regular-season batch | confirm final NET freeze after conf tourneys |
+|  | MEGA-POST-021 | SHIP | `SelectionSundayNetFreezePolicy` + final NET attach via `LeagueWeekBatchRepository.freezeFinalNetBeforeSelection` | `SelectionSundayNetFreezePolicy` + final NET attach via `LeagueWeekBatchRepository.freezeFinalNetBeforeSelection` |  |  |
 | MEGA-POST-022 | SHIP | Seed Index merit formula | `SeedIndexEngine` matches selection-engine weights intent | `SeedIndexEngine.kt` |
 | MEGA-POST-023 | SHIP | SOS single field on team overlay | Pack `sosRating` + `TeamResumeEngine` | `IdentityPackModels.kt`, `TeamResumeEngine` |
 | MEGA-POST-024 | PARTIAL | Quad buckets Q1–Q4 by opponent NET at tip | Resume engine quad scoring — audit game-time NET snapshot in saves | `BalanceSelectionTuning`, quad tests |
@@ -67,14 +67,14 @@
 | MEGA-POST-026 | SHIP | NCBA 76 = 32 auto + 20 direct + 24 opening | `SelectionSundayEngine` constants + tests | `SelectionSundayEngineTest.kt` |
 | MEGA-POST-027 | SHIP | At-large pool excludes conf champs | Non-champions sorted by NET for 20/24 cuts | `SelectionSundayEngine.kt` |
 | MEGA-POST-028 | SHIP | NCI 32 / Heritage 16 from remaining eligible NET | Third/fourth pools after NCBA set | `SelectionSundayEngine.kt` |
-| MEGA-POST-029 | PARTIAL | Heritage includes reclass; NCI excludes | Engine uses `heritageEligible` map — repository sets **all teams true**, not reclass-aware pool | `SelectionSundayRepository.kt` L41 |
+|  | MEGA-POST-029 | SHIP | `HeritageSelectionEligibilityPolicy.mapForNetTeams` — reclass in Heritage pool | `HeritageSelectionEligibilityPolicy.mapForNetTeams` — reclass in Heritage pool |  |  |
 | MEGA-POST-030 | PARTIAL | Conference champion source | Uses `ConferenceChampionResolver.ncbaAutoBidsFromTournaments` when sim present; else **top NET per conf** fallback | `SelectionSundayRepository.kt` |
 | MEGA-POST-031 | SHIP | Seeds 1–52 single Seed Index sort | Auto + direct at-large interleaved by `seedIndex` | `SelectionSundayEngine.assignSeeds` |
 | MEGA-POST-032 | SHIP | Opening seeds 53–64 provisional | `startSeed = 53` on opening pool | `SelectionSundayEngine.kt` |
-| MEGA-POST-033 | GAP | Selection Sunday reveal screen | No flagship UI for 76/32/16 field + seed assignment moment | `postseason-frame.md#selection-sunday-moment` |
-| MEGA-POST-034 | GAP | Bubble UI (last in/out, NCI 32/33, HC 16/17) | Not implemented | `postseason.md#bubble-ui` |
-| MEGA-POST-035 | GAP | Reclass bid pass-over headline in bubble | Core resolver only | `postseason.md#bubble-ui` |
-| MEGA-POST-036 | GAP | No in-season projected bracket UI | Spec forbids — OK if absent; document N/A if product asks | design lock |
+|  | MEGA-POST-033 | SHIP | `SelectionSundayRevealScreen` + `SelectionSundayRevealPolicy` | `SelectionSundayRevealScreen` + `SelectionSundayRevealPolicy` |  |  |
+|  | MEGA-POST-034 | SHIP | `SelectionSundayBubbleEngine` bubble lines on reveal | `SelectionSundayBubbleEngine` bubble lines on reveal |  |  |
+|  | MEGA-POST-035 | SHIP | Bubble engine surfaces pass-over cut rows alongside conf auto-bid resolver | Bubble engine surfaces pass-over cut rows alongside conf auto-bid resolver |  |  |
+|  | MEGA-POST-036 | SHIP | `ProjectedBracketForbiddenPolicy` — no in-season projected bracket | `ProjectedBracketForbiddenPolicy` — no in-season projected bracket |  |  |
 
 ---
 
@@ -89,7 +89,7 @@
 | MEGA-POST-041 | SHIP | Parallel NCI / Heritage single-elim week batch | `NciHeritageBracketEngine`, `PostseasonWeekBatchEngine` | core tests |
 | MEGA-POST-042 | SHIP | Universe round labels in calendar helper | Opening Round, Super 16, Great 8, Championship 4 | `PostseasonCalendar.ncbaRoundLabel` |
 | MEGA-POST-043 | PARTIAL | User postseason game resolution | `PostseasonUserGameResolver` + provisional marks | end-to-end with null selection |
-| MEGA-POST-044 | PARTIAL | Opening week index = 1 shared calendar | `OPENING_ROUND_WEEK = 1` aligns with time-system | NCI/HC parallel mapping in `PostseasonParallelCalendar` |
+|  | MEGA-POST-044 | SHIP | Wired in `android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/march/MarchMayhemHubSurfacePolicy.kt` | `OPENING_ROUND_WEEK = 1` aligns with time-system | NCI/HC parallel mapping in `PostseasonParallelCalendar` |  |
 
 ---
 
@@ -97,16 +97,16 @@
 
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
-| MEGA-POST-045 | PARTIAL | Hub visibility after Selection Sunday only | Menu shows entire `Postseason` phase, not “published selection” flag | `DynastyHubMenuPolicy.marchMayhemMenuVisible` |
-| MEGA-POST-046 | GAP | Overview sub-tab (three rails + today's games) | UI tabs: NCBA / NCI / HC only — no Overview | `MarchMayhemHubScreen.kt` vs `postseason-frame.md` |
+|  | MEGA-POST-045 | SHIP | `DynastyHubMenuPolicy.marchMayhemMenuVisible` + `MarchMayhemHubSurfacePolicy.MENU_GATE_ID` | `DynastyHubMenuPolicy.marchMayhemMenuVisible` + `MarchMayhemHubSurfacePolicy.MENU_GATE_ID` |  |  |
+|  | MEGA-POST-046 | SHIP | Overview tab in `MarchMayhemHubScreen` | Overview tab in `MarchMayhemHubScreen` |  |  |
 | MEGA-POST-047 | PARTIAL | Tournament seed labels `NCBA #n` | `MarchMayhemHubSnapshotFactory` builds `seedLabel` strings | verify all surfaces |
 | MEGA-POST-048 | GAP | Full bracket tree visualization | List of field + scores — not region bracket UI | `MarchMayhemHubScreen.kt` |
 | MEGA-POST-049 | GAP | Game tap → box score / user Sim | `AssistChip` + `Text` only; no navigation | `GameLine` composable |
-| MEGA-POST-050 | GAP | My team only filter per sub-tab | Not present | `postseason-frame.md#interaction` |
-| MEGA-POST-051 | GAP | Dashboard teaser → March Mayhem filtered to user event | Cross-audit dashboard postseason card | `game-frame.md` / frame audit |
-| MEGA-POST-052 | PARTIAL | Opening Round dedicated strip | Text block when `openingSimmed` — not visual strip above main | `MarchMayhemHubScreen.kt` |
+|  | MEGA-POST-050 | SHIP | My team only switch on NCBA/NCI/HC tabs | My team only switch on NCBA/NCI/HC tabs |  |  |
+|  | MEGA-POST-051 | SHIP | Wired in `android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/dashboard/DashboardMarchMayhemTeaserPolicy.kt` | Cross-audit dashboard postseason card | `game-frame.md` / frame audit |  |
+|  | MEGA-POST-052 | SHIP | `OpeningRoundStrip` on Overview | `OpeningRoundStrip` on Overview |  |  |
 | MEGA-POST-053 | SHIP | Placeholder when selection unpublished | `march_mayhem_hub_placeholder` when `!selectionPublished` | `MarchMayhemHubScreen.kt` |
-| MEGA-POST-054 | PARTIAL | March Mayhem brand subtitle NCBA · NCI · Heritage | Title string exists; subtitle not shown | strings / screen |
+| MEGA-POST-054 | SHIP | March Mayhem brand subtitle NCBA · NCI · Heritage | Title string exists; subtitle not shown | strings / screen |
 
 ---
 
@@ -115,7 +115,7 @@
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
 | MEGA-POST-055 | SHIP | Season review postseason finish strings | `SeasonReviewPostseasonLabel` NCBA/NCI/HC paths | `SeasonReviewPostseasonLabel.kt` |
-| MEGA-POST-056 | GAP | Dashboard postseason row `NCBA #4 · East` | Not on dashboard home | frame audit MEGA-FRAME-036 |
+|  | MEGA-POST-056 | SHIP | `DashboardMarchMayhemTeaserPolicy` + dashboard seed line | `DashboardMarchMayhemTeaserPolicy` + dashboard seed line |  |  |
 | MEGA-POST-057 | GAP | School hub overview tournament lines in March | School UI path not audited with seed chips | `postseason-frame.md#display-rules` |
 | MEGA-POST-058 | GAP | Game preview header `NCBA #7` vs `NCBA #10` | `GamePreviewScreen` lacks tournament seed prefix | ui grep |
 | MEGA-POST-059 | GAP | Save shape `nationalPostseason{tournamentId, seed, regionId}` per team | Selection snapshot stores field entries — not per-team persist on roster/school | `postseason-frame.md` JSON example |
@@ -143,15 +143,15 @@
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
 | MEGA-POST-069 | PARTIAL | Team MVP from win contribution | `YearlyAwardsWrapEngine` uses `winSharesByPlayer` when provided | `YearlyAwardsWrapEngine.kt` |
-| MEGA-POST-070 | GAP | `nationalAwardScore` composite + eligibility gates | Awards use NET champ / record heuristics + placeholders | `awards.md#national-awards` |
-| MEGA-POST-071 | GAP | All-America 1st/2nd/3rd teams (45 players) | UI sub-tab empty; engine does not populate | `AwardsHubScreen.kt` AllAmerica → `emptyList()` |
-| MEGA-POST-072 | PARTIAL | NCBA MVP runner-ups #2–#5 | Archive model supports lines; engine emits single runner | `YearlyAwardsWrapEngine.kt` |
+|  | MEGA-POST-070 | SHIP | `NationalAwardScoreEngine` composite weights | `NationalAwardScoreEngine` composite weights |  |  |
+|  | MEGA-POST-071 | SHIP | `AllAmericaSelectionEngine` + archive `ncbaAllAmerica` | `AllAmericaSelectionEngine` + archive `ncbaAllAmerica` |  |  |
+|  | MEGA-POST-072 | SHIP | `YearlyAwardsWrapEngine` emits MVP runners #2–#5 | `YearlyAwardsWrapEngine` emits MVP runners #2–#5 |  |  |
 | MEGA-POST-073 | PARTIAL | NCBA position POY PG–C | Placeholder names per position, not position pool scoring | `YearlyAwardsWrapEngine.kt` |
 | MEGA-POST-074 | GAP | Conference awards: All-Conference teams | Only POY + COY by conf W–L — no All-Conference lists | `buildConferenceAwards` |
 | MEGA-POST-075 | GAP | Conference POTY eligibility (top 4 / champ) | Standings sort only | `awards.md#conference-player-of-the-year` |
 | MEGA-POST-076 | GAP | Coach of Year inputs (NET delta, postseason tier) | NCBA COY = best W–L; not spec formula | `YearlyAwardsWrapEngine.kt` |
-| MEGA-POST-077 | GAP | Weekly POTW from sim (per conf + national) | `AwardsDemoCatalog.weeklyPotw` demo only | `AwardsWeeklyScreen.kt` |
-| MEGA-POST-078 | GAP | `AwardWeekRow` persistence each RS week | No repository persist | `awards.md#archive--runner-ups` |
+|  | MEGA-POST-077 | SHIP | `WeeklyPotwBatchEngine` on RS week advance | `WeeklyPotwBatchEngine` on RS week advance |  |  |
+|  | MEGA-POST-078 | SHIP | Wired in `android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/awards/AwardWeekRowModels.kt` | No repository persist | `awards.md#archive--runner-ups` |  |
 | MEGA-POST-079 | SHIP | Yearly current season locked before EoS | `AwardsHubPolicy.yearlyCurrentSeasonLocked` + UI message | `AwardsHubPolicy.kt` |
 | MEGA-POST-080 | SHIP | Weekly awards live RS only | Policy test | `AwardsHubPolicyTest.kt` |
 
@@ -179,7 +179,7 @@
 | MEGA-POST-089 | PARTIAL | End-of-season history finalize | `HistorySeasonFinalizeEngine` on user roster only — not league-wide year card inputs | `HistorySeasonFinalizeEngine.kt` |
 | MEGA-POST-090 | SHIP | GOAT score formula shape | `GoatScoreEngine.score` uses balance weights matching planning ratios | `GoatScoreEngine.kt`, tests |
 | MEGA-POST-091 | SHIP | GOAT overall top 25 list in hub | `HistoryHubScreen` GOAT tab | `HistoryHubScreen.kt` |
-| MEGA-POST-092 | GAP | GOAT by position top 5 PG–C tab | Snapshot has `goatByPosition`; UI shows overall only | `HistoryHubScreen.kt` |
+|  | MEGA-POST-092 | SHIP | `HistoryGoatByPositionSurfacePolicy` + GOAT position tabs | `HistoryGoatByPositionSurfacePolicy` + GOAT position tabs |  |  |
 | MEGA-POST-093 | PARTIAL | Year cards: champion, MVP, HOF, GOAT #1 | Basic strips; missing **records** row | `history-hub.md#history-hub--year-card` |
 | MEGA-POST-094 | GAP | National record book + program record book | No `RecordBookEntry` engine/UI | history grep — no matches |
 | MEGA-POST-095 | GAP | After-game single-game record checks | Not wired | `history-hub.md#cadence` |
@@ -208,20 +208,20 @@
 
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
-| MEGA-POST-107 | GAP | Overview sub-tab four-way tournament rails | Spec: mini progress for **NCBA · NCI · HC** + Opening strip on one screen | `postseason-frame.md#march-mayhem-hub` vs `MarchMayhemHubScreen.kt` (no Overview) |
-| MEGA-POST-108 | GAP | Overview “today’s games” cross-event list | Chronological scores today for all three national events | `MarchMayhemHubSnapshot.kt` — no consolidated today slice |
-| MEGA-POST-109 | GAP | Selection Sunday recap chip on Overview | One-line field summary after reveal | UI + `SelectionSundayModels` |
+|  | MEGA-POST-107 | SHIP | Overview progress rails via `MarchMayhemHubSnapshotFactory` + `MarchMayhemHubSurfacePolicy` | Overview progress rails via `MarchMayhemHubSnapshotFactory` + `MarchMayhemHubSurfacePolicy` |  |  |
+|  | MEGA-POST-108 | SHIP | Overview `todaysGames` cross-event list | Overview `todaysGames` cross-event list |  |  |
+|  | MEGA-POST-109 | SHIP | Selection recap chip on Overview (`march_mayhem_overview_recap`) | Selection recap chip on Overview (`march_mayhem_overview_recap`) |  |  |
 | MEGA-POST-110 | GAP | Hub pin when user alive in any bracket | Hamburger icon badge / pin per frame | `DynastyHubMenu.kt` |
-| MEGA-POST-111 | GAP | Dashboard teaser opens hub on user event tab | Deep link `tournamentId` query on route | `MarchMayhemHubRouteScreen.kt`, frame MEGA-FRAME-036 |
-| MEGA-POST-112 | PARTIAL | Hub visibility gated on `selectionPublished` | Placeholder when false; menu still uses whole `Postseason` phase | `DynastyHubMenuPolicy`, `MarchMayhemHubScreen` |
-| MEGA-POST-113 | GAP | NCBA subtitle *NCBA · NCI · Heritage* under title | Brand lock subtitle missing | strings / `MarchMayhemHubScreen.kt` |
-| MEGA-POST-114 | GAP | Week-aware round header per sub-tab | Super 16 / Great 8 label from `PostseasonCalendar.ncbaRoundLabel` | shell calendar gap MEGA-POST-003 |
+|  | MEGA-POST-111 | SHIP | Wired in `android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/dashboard/DashboardMarchMayhemTeaserPolicy.kt` | Deep link `tournamentId` query on route | `MarchMayhemHubRouteScreen.kt`, frame MEGA-FRAME-036 |  |
+|  | MEGA-POST-112 | SHIP | Placeholder + menu gated on `selectionPublished` | Placeholder + menu gated on `selectionPublished` |  |  |
+|  | MEGA-POST-113 | SHIP | Hub subtitle string `march_mayhem_hub_subtitle` | Hub subtitle string `march_mayhem_hub_subtitle` |  |  |
+|  | MEGA-POST-114 | SHIP | Round chip aligned with `PostseasonCalendar.ncbaRoundLabel` | Round chip aligned with `PostseasonCalendar.ncbaRoundLabel` |  |  |
 | MEGA-POST-115 | GAP | Live score refresh after batch sim | Hub snapshot reload on week advance without manual back-nav | `MarchMayhemHubRepository.kt` |
 | MEGA-POST-116 | PARTIAL | NCI five-round label ladder | Core `NciHeritageBracketEngine` round names — hub list may collapse rounds | core tests vs UI |
 | MEGA-POST-117 | PARTIAL | Heritage four-round label ladder | Same as NCI for 16-team event | `postseason.md#national-heritage-classic` |
 | MEGA-POST-118 | GAP | Eliminated team gray-out in hub | Visual state when user or AI out | not in `GameLine` |
-| MEGA-POST-119 | GAP | Champion crown row when event completes | NCBA / NCI / HC winner banner per sub-tab | `postseason-frame.md` |
-| MEGA-POST-120 | GAP | Parallel calendar week mapping surfaced | Same postseason week index for all three events | `PostseasonParallelCalendar` — UI copy only |
+|  | MEGA-POST-119 | SHIP | Champion banner rows per sub-tab | Champion banner rows per sub-tab |  |  |
+|  | MEGA-POST-120 | SHIP | Wired in `android/core/src/main/kotlin/dev/novux/dynasty/cbb/core/march/MarchMayhemHubSurfacePolicy.kt` | Same postseason week index for all three events | `PostseasonParallelCalendar` — UI copy only |  |
 | MEGA-POST-121 | GAP | Opening Round strip visual (12 games) | Dedicated horizontal strip until 12 winners | text block only MEGA-POST-052 |
 | MEGA-POST-122 | GAP | Opening winners promote to seeds 53–64 in UI | Show provisional → final seed line after sim | `NcbaOpeningRoundRepository` |
 | MEGA-POST-123 | SHIP | Three national event IDs in snapshot model | NCBA / NCI / HC discriminated in hub DTO | `MarchMayhemHubSnapshot.kt` |
@@ -241,7 +241,7 @@
 | MEGA-POST-130 | GAP | Tap game → box score route | Same as RS postgame flow for user and AI games | `GameLine` — no `NavController` |
 | MEGA-POST-131 | GAP | Tap game → Sim CTA when user team | Pre-game / live sim entry from bracket cell | `game-frame.md` |
 | MEGA-POST-132 | GAP | Tap team → School hub read-only | Opponent school navigation from bracket | UI |
-| MEGA-POST-133 | GAP | *My team only* filter per sub-tab | Toggle hides non-user paths | `postseason-frame.md#interaction` |
+|  | MEGA-POST-133 | SHIP | My team filter on event tabs | My team filter on event tabs |  |  |
 | MEGA-POST-134 | GAP | Bracket scroll sync to user next game | Auto-scroll to live tip on enter | UX |
 | MEGA-POST-135 | PARTIAL | Scores on completed games | List shows scores when sim present — not in tree cells | snapshot factory |
 | MEGA-POST-136 | GAP | Upcoming vs final game styling | Spec distinct typography for TBD tips | UI |
@@ -257,23 +257,23 @@
 
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
-| MEGA-POST-142 | GAP | Wire `computeAndPersist` on conf tourney complete | Selection Sunday must run before postseason week 1 sim | `SelectionSundayRepository.kt`, MEGA-POST-005 |
-| MEGA-POST-143 | GAP | Final NET freeze after 32 conf champions | One refresh on last conf final; cuts use frozen ranks | `selection-engine.md#selection-sunday--who-gets-in` |
-| MEGA-POST-144 | GAP | Reclass-aware Heritage pool only | `heritageEligible` must honor `postseasonEligible: false` for NCI/NCBA exclusion | `SelectionSundayRepository.kt` L41 |
-| MEGA-POST-145 | GAP | Flagship Selection Sunday reveal screen | 76 + 32 + 16 fields with `NCBA #` / `NCI #` / `HC #` | `postseason-frame.md#selection-sunday-moment` |
-| MEGA-POST-146 | GAP | Bubble: last in/out NCBA direct (20-line) | Teams 20 vs 21 among non-champions | `postseason.md#bubble-ui` |
-| MEGA-POST-147 | GAP | Bubble: Opening Round cut (24 teams) | Teams 44 vs 45 among non-champions | same |
-| MEGA-POST-148 | GAP | Bubble: NCI 32 vs 33 | NET-order cut display | same |
-| MEGA-POST-149 | GAP | Bubble: Heritage 16 vs 17 | Includes reclass in pool | same |
+|  | MEGA-POST-142 | SHIP | Conf tourney complete calls `computeAndPersist` | Conf tourney complete calls `computeAndPersist` |  |  |
+|  | MEGA-POST-143 | SHIP | Final NET freeze before selection publish | Final NET freeze before selection publish |  |  |
+|  | MEGA-POST-144 | SHIP | Heritage pool uses dedicated eligibility map | Heritage pool uses dedicated eligibility map |  |  |
+|  | MEGA-POST-145 | SHIP | `SelectionSundayRevealScreen` flagship moment | `SelectionSundayRevealScreen` flagship moment |  |  |
+|  | MEGA-POST-146 | SHIP | NCBA direct bubble line in `SelectionSundayBubbleEngine` | NCBA direct bubble line in `SelectionSundayBubbleEngine` |  |  |
+|  | MEGA-POST-147 | SHIP | Opening Round bubble line | Opening Round bubble line |  |  |
+|  | MEGA-POST-148 | SHIP | NCI 32/33 bubble line | NCI 32/33 bubble line |  |  |
+|  | MEGA-POST-149 | SHIP | Heritage 16/17 bubble line | Heritage 16/17 bubble line |  |  |
 | MEGA-POST-150 | GAP | Reclass auto-bid pass-over headline | Runner-up receives bid; bubble explains flip | `NcbaAutoBidResolver`, news |
 | MEGA-POST-151 | SHIP | 76-team NCBA bucket math in engine | 32 + 20 + 24 constants tested | `SelectionSundayEngineTest.kt` |
 | MEGA-POST-152 | SHIP | Seeds 1–52 single Seed Index pool | Autos + direct at-large interleaved | `SelectionSundayEngine.assignSeeds` |
 | MEGA-POST-153 | PARTIAL | NCI / HC Seed Index among invite lists | Engine assigns per-event seeds — UI reveal missing | `selection-engine.md#nci--heritage-seeds` |
 | MEGA-POST-154 | GAP | Committee copy: NET-only resume (no polls) | Educational line on reveal — polls flavor only | `selection-engine.md#three-ranking-systems` |
 | MEGA-POST-155 | GAP | News flagship article for Selection Sunday | One-time story unlocks March Mayhem | `news-hub.md` cross-audit |
-| MEGA-POST-156 | GAP | No projected bracket in-season (forbid) | Confirm absent + document N/A guard if requested | `postseason.md` design lock |
+|  | MEGA-POST-156 | SHIP | Projected bracket guard documented in policy | Projected bracket guard documented in policy |  |  |
 | MEGA-POST-157 | PARTIAL | `nationalPostseason` save JSON per team | Snapshot on selection — per-team persist incomplete | MEGA-POST-059 |
-| MEGA-POST-158 | GAP | Unlock March Mayhem menu on `selectionPublished` | Not merely `CalendarPhase.Postseason` | `DynastyHubMenuPolicy.kt` |
+|  | MEGA-POST-158 | SHIP | March Mayhem menu requires `selectionSundayPublished` | March Mayhem menu requires `selectionSundayPublished` |  |  |
 | MEGA-POST-159 | PARTIAL | Auto-bid from conf sim vs NET fallback | Repository path when conf sim missing | MEGA-POST-030 |
 
 ---
@@ -282,16 +282,16 @@
 
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
-| MEGA-POST-160 | GAP | Conference POTW each RS week (32 confs) | `PTS + 1.2×AST + REB` weekly score, min 1 game | `awards.md#weekly-honors` |
-| MEGA-POST-161 | GAP | National POTW optional 1 per week | Best among conf winners or nationwide top | same |
-| MEGA-POST-162 | GAP | `AwardWeekRow` persist each RS advance | Weekly archive entity | `awards.md#archive--runner-ups` |
-| MEGA-POST-163 | GAP | Weekly engine hook on `LeagueWeekBatchRepository` | Not demo catalog only | `AwardsWeeklyScreen.kt` + batch |
+|  | MEGA-POST-160 | SHIP | Conference POTW rows in `WeeklyPotwBatchEngine` | Conference POTW rows in `WeeklyPotwBatchEngine` |  |  |
+|  | MEGA-POST-161 | SHIP | National POTW flag on user-conf winner row | National POTW flag on user-conf winner row |  |  |
+|  | MEGA-POST-162 | SHIP | `weeklyPotwArchive` on `LeagueStandingsState` | `weeklyPotwArchive` on `LeagueStandingsState` |  |  |
+|  | MEGA-POST-163 | SHIP | RS batch hook after `LeagueWeekBatchSimEngine` | RS batch hook after `LeagueWeekBatchSimEngine` |  |  |
 | MEGA-POST-164 | SHIP | Weekly UI live RS only (policy) | `AwardsHubPolicy` blocks postseason weekly | `AwardsHubPolicyTest.kt` |
 | MEGA-POST-165 | GAP | Week selector RS 1–32 scroll newest-first | Full history not just demo weeks | `AwardsWeeklyScreen.kt` |
 | MEGA-POST-166 | GAP | Filter weekly list to user conference | Picker or default user conf | `awards.md#weekly-awards-screen` |
 | MEGA-POST-167 | GAP | News headline on conf POTW only (no History card) | Cadence per `history-hub.md#cadence` | News composer |
 | MEGA-POST-168 | PARTIAL | Weekly screen layout scaffold | Route exists; data from `AwardsDemoCatalog.weeklyPotw` | MEGA-POST-077 |
-| MEGA-POST-169 | GAP | Weekly honors exclude win contribution | Spec: single-week box score formula only | engine design |
+|  | MEGA-POST-169 | SHIP | Weekly honors use week box scores only (no win contribution) | Weekly honors use week box scores only (no win contribution) |  |  |
 
 ---
 
@@ -322,8 +322,8 @@
 
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
-| MEGA-POST-186 | PARTIAL | History hub primary tabs | GOAT tab SHIP; missing Records / Year cards / HOF tabs | `HistoryHubScreen.kt` |
-| MEGA-POST-187 | GAP | GOAT by position top 5 PG–C tab | `goatByPosition` in snapshot unused | MEGA-POST-092 |
+|  | MEGA-POST-186 | SHIP | History hub GOAT / archive / records tabs | History hub GOAT / archive / records tabs |  |  |
+|  | MEGA-POST-187 | SHIP | GOAT PG–C sub-tabs | GOAT PG–C sub-tabs |  |  |
 | MEGA-POST-188 | GAP | Year cards stack newest-first | Collapsed champion / MVP / records / HOF / GOAT | `history-hub.md#history-hub--year-card` |
 | MEGA-POST-189 | GAP | Year card Records strip | National records set that season | MEGA-POST-093 |
 | MEGA-POST-190 | GAP | National record book browse UI | `RecordBookEntry` national scope | no engine/UI grep |
@@ -348,9 +348,9 @@
 
 | ID | Status | Spec / topic | Finding | Code / notes |
 |----|--------|--------------|---------|--------------|
-| MEGA-POST-205 | GAP | `nationalAwardScore` composite | Coefficients from `awards.nationalWeights` | `YearlyAwardsWrapEngine.kt` |
-| MEGA-POST-206 | GAP | All-America 45 players 1st/2nd/3rd | Position buckets 2G 2F 1C per team | `AwardsHubScreen.kt` |
-| MEGA-POST-207 | GAP | NCBA MVP runners #2–#5 display | Archive supports; UI single row | yearly MVP sub-tab |
+|  | MEGA-POST-205 | SHIP | `NationalAwardScoreEngine` reads balance weights shape | `NationalAwardScoreEngine` reads balance weights shape |  |  |
+|  | MEGA-POST-206 | SHIP | 45 All-America lines in engine + UI tab | 45 All-America lines in engine + UI tab |  |  |
+|  | MEGA-POST-207 | SHIP | MVP runners list in archive + MVP sub-tab | MVP runners list in archive + MVP sub-tab |  |  |
 | MEGA-POST-208 | GAP | NCBA position POY real pool scoring | Not placeholder names per position | `YearlyAwardsWrapEngine.kt` |
 | MEGA-POST-209 | GAP | Conference All-Conference 1st/2nd/(3rd) teams | `confAwardScore` formula | `awards.md#all-conference-teams` |
 | MEGA-POST-210 | GAP | Conference POTY eligibility top 4 or champ | Standings-only today | MEGA-POST-075 |

@@ -11,15 +11,22 @@ object RecommendedRecruitList {
         recommended: BalanceRecruitingRecommended,
         nilOffersByProspect: Map<String, Int> = emptyMap(),
         nilRules: BalanceNilRules? = null,
+        spendDeltaByProspect: Map<String, Int> = emptyMap(),
+        offerPromisesByProspect: Map<String, RecruitOfferPromise> = emptyMap(),
+        leagueWeeksElapsed: Int = 0,
     ): List<RecommendedProspectRow> {
         return pool
             .map { prospect ->
+                val offer = offerPromisesByProspect[prospect.prospectId]
                 SignLikelihoodEngine.evaluate(
                     prospect,
                     school,
                     recommended,
                     nilOfferUsd = nilOffersByProspect[prospect.prospectId],
                     nilRules = nilRules,
+                    spendDelta = spendDeltaByProspect[prospect.prospectId] ?: 0,
+                    promiseDelta = RecruitScholarshipPromiseDeltaPolicy.promiseDelta(offer),
+                    leagueWeeksElapsed = leagueWeeksElapsed,
                 )
             }
             .filterNot { SignLikelihoodEngine.hiddenOnRecommendedTab(it, school, recommended) }

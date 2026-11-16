@@ -1,0 +1,33 @@
+package dev.novux.dynasty.cbb.core.recruiting
+
+/** Final MEGA queue recruiting trace ids (batch 36). */
+object MegaRecruitBatch36TracePolicy {
+    const val MEGA_014 = "MEGA-RECR-014"
+    const val MEGA_041 = "MEGA-RECR-041"
+    const val MEGA_044 = "MEGA-RECR-044"
+    const val MEGA_059 = "MEGA-RECR-059"
+    const val MEGA_066 = "MEGA-RECR-066"
+    const val MEGA_067 = "MEGA-RECR-067"
+    const val MEGA_069 = "MEGA-RECR-069"
+    const val MEGA_078 = "MEGA-RECR-078"
+    const val MEGA_081 = "MEGA-RECR-081"
+    const val MEGA_084 = "MEGA-RECR-084"
+    const val MEGA_087 = "MEGA-RECR-087"
+    const val MEGA_095 = "MEGA-RECR-095"
+    const val MEGA_102 = "MEGA-RECR-102"
+    const val MEGA_124 = "MEGA-RECR-124"
+    const val MEGA_127 = "MEGA-RECR-127"
+    const val MEGA_138 = "MEGA-RECR-138"
+    const val MEGA_143 = "MEGA-RECR-143"
+    const val MEGA_144 = "MEGA-RECR-144"
+    const val MEGA_150 = "MEGA-RECR-150"
+    const val MEGA_151 = "MEGA-RECR-151"
+    const val MEGA_152 = "MEGA-RECR-152"
+    const val MEGA_155 = "MEGA-RECR-155"
+    const val MEGA_156 = "MEGA-RECR-156"
+    const val MEGA_158 = "MEGA-RECR-158"
+    const val MEGA_160 = "MEGA-RECR-160"
+    const val MEGA_164 = "MEGA-RECR-164"
+    const val MEGA_165 = "MEGA-RECR-165"
+    const val MEGA_166 = "MEGA-RECR-166"
+}

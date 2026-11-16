@@ -15,12 +15,22 @@ object PreseasonScheduleValidator {
         if (plan.totalRsGames > budget.totalRsCap) {
             return PreseasonScheduleValidation(false, "Over regular-season cap")
         }
+        if (!PreseasonNonConfCapPolicy.planWithinCap(plan)) {
+            return PreseasonScheduleValidation(
+                false,
+                "Regular season exceeds ${PreseasonNonConfCapPolicy.regularSeasonCap}-game cap",
+            )
+        }
         val builderUsed = plan.conferenceGameCount + plan.nonConferenceGameCount
         if (builderUsed > budget.builderSlots) {
             return PreseasonScheduleValidation(false, "Over builder slot budget")
         }
         if (plan.earlyEventGameCount + builderUsed > budget.totalRsCap) {
             return PreseasonScheduleValidation(false, "Event plus builder exceeds cap")
+        }
+        val rsWeeks = plan.regularSeason.mapNotNull { it.rsWeekIndex }
+        if (rsWeeks.size != rsWeeks.toSet().size) {
+            return PreseasonScheduleValidation(false, "Double-booked regular-season week")
         }
         return PreseasonScheduleValidation(true)
     }

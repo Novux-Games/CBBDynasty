@@ -4,10 +4,25 @@
   "membershipYear": "2026-27",
   "disclaimerAcceptedRequired": true,
   "rulesetYear": 2026,
+  "branding": {
+    "nationalBodyShort": "NCBA",
+    "marchPostseasonTitle": "March Mayhem",
+    "ncbaTournamentName": "NCBA Men's BB Tournament",
+    "nciName": "National College Invitational",
+    "heritageClassicName": "National Heritage Classic",
+    "roundOpening": "Opening Round",
+    "round1": "Round 1",
+    "round2": "Round 2",
+    "roundSuper16": "Super 16",
+    "roundGreat8": "Great 8",
+    "roundChampionship4": "Championship 4",
+    "roundNationalChampionship": "National Championship"
+  },
   "conferences": [
     {
       "id": "conf-nac",
       "displayName": "Northern Atlantic Collegiate Conference",
+      "shortCode": "NAC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -20,6 +35,7 @@
     {
       "id": "conf-aucc",
       "displayName": "American Unified Collegiate Conference",
+      "shortCode": "AUCC",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -32,6 +48,7 @@
     {
       "id": "conf-cat10",
       "displayName": "Colonial Atlantic Ten",
+      "shortCode": "CAT10",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -44,6 +61,7 @@
     {
       "id": "conf-acrown",
       "displayName": "Atlantic Crown Conference",
+      "shortCode": "ACROWN",
       "leagueGameCount": 20,
       "standingsTiebreakers": [
         "h2h",
@@ -56,6 +74,7 @@
     {
       "id": "conf-ascu",
       "displayName": "Atlantic Sun Collegiate Union",
+      "shortCode": "ASC-U",
       "leagueGameCount": 14,
       "standingsTiebreakers": [
         "h2h",
@@ -68,6 +87,7 @@
     {
       "id": "conf-c12",
       "displayName": "Central Twelve Conference",
+      "shortCode": "C12",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -80,6 +100,7 @@
     {
       "id": "conf-epc",
       "displayName": "Eastern Premier Conference",
+      "shortCode": "EPC",
       "leagueGameCount": 20,
       "standingsTiebreakers": [
         "h2h",
@@ -92,6 +113,7 @@
     {
       "id": "conf-nsc",
       "displayName": "Northern Sky Conference",
+      "shortCode": "NSC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -104,6 +126,7 @@
     {
       "id": "conf-psc",
       "displayName": "Piedmont South Conference",
+      "shortCode": "PSC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -116,6 +139,7 @@
     {
       "id": "conf-g10",
       "displayName": "Great Ten Conference",
+      "shortCode": "G10",
       "leagueGameCount": 20,
       "standingsTiebreakers": [
         "h2h",
@@ -128,6 +152,7 @@
     {
       "id": "conf-gwc",
       "displayName": "Golden West Conference",
+      "shortCode": "GWC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -140,6 +165,7 @@
     {
       "id": "conf-cca",
       "displayName": "Coastal Colonial Association",
+      "shortCode": "CCA",
       "leagueGameCount": 14,
       "standingsTiebreakers": [
         "h2h",
@@ -152,6 +178,7 @@
     {
       "id": "conf-ucc",
       "displayName": "United Continental Conference",
+      "shortCode": "UCC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -164,6 +191,7 @@
     {
       "id": "conf-lhl",
       "displayName": "Lakefront Horizon League",
+      "shortCode": "LHL",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -176,6 +204,7 @@
     {
       "id": "conf-fel",
       "displayName": "Founding Eight League",
+      "shortCode": "FEL",
       "leagueGameCount": 14,
       "standingsTiebreakers": [
         "h2h",
@@ -188,6 +217,7 @@
     {
       "id": "conf-metro",
       "displayName": "Metro Collegiate Conference",
+      "shortCode": "METRO",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -200,6 +230,7 @@
     {
       "id": "conf-mac",
       "displayName": "Midland American Circuit",
+      "shortCode": "MAC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -212,6 +243,7 @@
     {
       "id": "conf-meac",
       "displayName": "Mid-Eastern Alliance Conference",
+      "shortCode": "MEAC",
       "leagueGameCount": 14,
       "standingsTiebreakers": [
         "h2h",
@@ -224,6 +256,7 @@
     {
       "id": "conf-pvc",
       "displayName": "Prairie Valley Conference",
+      "shortCode": "PVC",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -236,6 +269,7 @@
     {
       "id": "conf-rmwc",
       "displayName": "Rocky Mountain West Conference",
+      "shortCode": "RMWC",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -248,6 +282,7 @@
     {
       "id": "conf-nec",
       "displayName": "Northeastern Exchange Conference",
+      "shortCode": "NEC",
       "leagueGameCount": 14,
       "standingsTiebreakers": [
         "h2h",
@@ -260,6 +295,7 @@
     {
       "id": "conf-ova",
       "displayName": "Ohio Valley Alliance",
+      "shortCode": "OVA",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -272,6 +308,7 @@
     {
       "id": "conf-pr12",
       "displayName": "Pacific Rim Twelve",
+      "shortCode": "PR12",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -284,6 +321,7 @@
     {
       "id": "conf-psl",
       "displayName": "Patriot Scholar League",
+      "shortCode": "PSL",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -296,6 +334,7 @@
     {
       "id": "conf-sedc",
       "displayName": "Southeastern Dominion Conference",
+      "shortCode": "SEDC",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -308,6 +347,7 @@
     {
       "id": "conf-scf",
       "displayName": "Southern Collegiate Federation",
+      "shortCode": "SCF",
       "leagueGameCount": 20,
       "standingsTiebreakers": [
         "h2h",
@@ -320,6 +360,7 @@
     {
       "id": "conf-gcc",
       "displayName": "Gulf Coastland Conference",
+      "shortCode": "GCC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -332,6 +373,7 @@
     {
       "id": "conf-scal",
       "displayName": "Southwest Collegiate Athletic League",
+      "shortCode": "SCAL",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -344,6 +386,7 @@
     {
       "id": "conf-summit",
       "displayName": "Prairie Summit League",
+      "shortCode": "PSL",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -356,6 +399,7 @@
     {
       "id": "conf-sbc",
       "displayName": "Solar Belt Conference",
+      "shortCode": "SBC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -368,6 +412,7 @@
     {
       "id": "conf-uac",
       "displayName": "United Athletic Collegiate",
+      "shortCode": "UAC",
       "leagueGameCount": 16,
       "standingsTiebreakers": [
         "h2h",
@@ -380,6 +425,7 @@
     {
       "id": "conf-wcc",
       "displayName": "Western Coast Collegiate",
+      "shortCode": "WCC",
       "leagueGameCount": 18,
       "standingsTiebreakers": [
         "h2h",
@@ -6258,7 +6304,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Northern Atlantic Collegiate Conference Championship Center",
+      "championshipVenue": "Campus Sites"
     },
     {
       "id": "tpl-conf-aucc",
@@ -6285,7 +6333,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "American Unified Collegiate Conference Championship Center",
+      "championshipVenue": "Dickies Arena (Fort Worth, TX)"
     },
     {
       "id": "tpl-conf-cat10",
@@ -6312,7 +6362,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Colonial Atlantic Ten Championship Center",
+      "championshipVenue": "Barclays Center (Brooklyn, NY)"
     },
     {
       "id": "tpl-conf-acrown",
@@ -6343,7 +6395,9 @@
           "name": "F2",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Atlantic Crown Conference Championship Center",
+      "championshipVenue": "Greensboro Coliseum (Greensboro, NC)"
     },
     {
       "id": "tpl-conf-ascu",
@@ -6366,7 +6420,9 @@
           "name": "SF",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Atlantic Sun Collegiate Union Championship Center",
+      "championshipVenue": "Campus Sites"
     },
     {
       "id": "tpl-conf-c12",
@@ -6393,7 +6449,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Central Twelve Conference Championship Center",
+      "championshipVenue": "T-Mobile Center (Kansas City, MO)"
     },
     {
       "id": "tpl-conf-epc",
@@ -6420,7 +6478,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Eastern Premier Conference Championship Center",
+      "championshipVenue": "Madison Square Garden (New York, NY)"
     },
     {
       "id": "tpl-conf-nsc",
@@ -6447,7 +6507,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Northern Sky Conference Championship Center",
+      "championshipVenue": "Idaho Central Arena (Boise, ID)"
     },
     {
       "id": "tpl-conf-psc",
@@ -6474,7 +6536,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Piedmont South Conference Championship Center",
+      "championshipVenue": "Freedom Hall (Johnson City, TN)"
     },
     {
       "id": "tpl-conf-g10",
@@ -6505,7 +6569,9 @@
           "name": "F2",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Great Ten Conference Championship Center",
+      "championshipVenue": "Gainbridge Fieldhouse (Indianapolis, IN)"
     },
     {
       "id": "tpl-conf-gwc",
@@ -6532,7 +6598,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Golden West Conference Championship Center",
+      "championshipVenue": "Lee's Family Forum (Henderson, NV)"
     },
     {
       "id": "tpl-conf-cca",
@@ -6559,7 +6627,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Coastal Colonial Association Championship Center",
+      "championshipVenue": "CareFirst Arena (Washington, DC)"
     },
     {
       "id": "tpl-conf-ucc",
@@ -6586,7 +6656,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "United Continental Conference Championship Center",
+      "championshipVenue": "Propst Arena (Huntsville, AL)"
     },
     {
       "id": "tpl-conf-lhl",
@@ -6613,7 +6685,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Lakefront Horizon League Championship Center",
+      "championshipVenue": "Riverview Health Arena (Noblesville, IN)"
     },
     {
       "id": "tpl-conf-fel",
@@ -6636,7 +6710,9 @@
           "name": "SF",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Founding Eight League Championship Center",
+      "championshipVenue": "The Palestra (Philadelphia, PA)"
     },
     {
       "id": "tpl-conf-metro",
@@ -6663,7 +6739,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Metro Collegiate Conference Championship Center",
+      "championshipVenue": "Boardwalk Hall (Atlantic City, NJ)"
     },
     {
       "id": "tpl-conf-mac",
@@ -6690,7 +6768,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Midland American Circuit Championship Center",
+      "championshipVenue": "Rocket Arena (Cleveland, OH)"
     },
     {
       "id": "tpl-conf-meac",
@@ -6713,7 +6793,9 @@
           "name": "SF",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Mid-Eastern Alliance Conference Championship Center",
+      "championshipVenue": "Norfolk Scope (Norfolk, VA)"
     },
     {
       "id": "tpl-conf-pvc",
@@ -6740,7 +6822,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Prairie Valley Conference Championship Center",
+      "championshipVenue": "Enterprise Center (St. Louis, MO)"
     },
     {
       "id": "tpl-conf-rmwc",
@@ -6767,7 +6851,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Rocky Mountain West Conference Championship Center",
+      "championshipVenue": "Thomas & Mack Center (Paradise, NV)"
     },
     {
       "id": "tpl-conf-nec",
@@ -6794,7 +6880,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Northeastern Exchange Conference Championship Center",
+      "championshipVenue": "Campus Sites"
     },
     {
       "id": "tpl-conf-ova",
@@ -6821,7 +6909,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Ohio Valley Alliance Championship Center",
+      "championshipVenue": "Ford Center (Evansville, IN)"
     },
     {
       "id": "tpl-conf-pr12",
@@ -6848,7 +6938,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Pacific Rim Twelve Championship Center",
+      "championshipVenue": "MGM Grand Garden Arena (Paradise, NV)"
     },
     {
       "id": "tpl-conf-psl",
@@ -6875,7 +6967,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Patriot Scholar League Championship Center",
+      "championshipVenue": "Campus Sites"
     },
     {
       "id": "tpl-conf-sedc",
@@ -6902,7 +6996,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Southeastern Dominion Conference Championship Center",
+      "championshipVenue": "Bridgestone Arena (Nashville, TN)"
     },
     {
       "id": "tpl-conf-scf",
@@ -6929,7 +7025,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Southern Collegiate Federation Championship Center",
+      "championshipVenue": "Harrah's Cherokee Center (Asheville, NC)"
     },
     {
       "id": "tpl-conf-gcc",
@@ -6956,7 +7054,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Gulf Coastland Conference Championship Center",
+      "championshipVenue": "The Legacy Center (Lake Charles, LA)"
     },
     {
       "id": "tpl-conf-scal",
@@ -6983,7 +7083,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Southwest Collegiate Athletic League Championship Center",
+      "championshipVenue": "Bartow Arena (Birmingham, AL)"
     },
     {
       "id": "tpl-conf-summit",
@@ -7006,7 +7108,9 @@
           "name": "SF",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Prairie Summit League Championship Center",
+      "championshipVenue": "Denny Sanford Center (Sioux Falls, SD)"
     },
     {
       "id": "tpl-conf-sbc",
@@ -7033,7 +7137,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Solar Belt Conference Championship Center",
+      "championshipVenue": "Pensacola Bay Center (Pensacola, FL)"
     },
     {
       "id": "tpl-conf-uac",
@@ -7060,7 +7166,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "United Athletic Collegiate Championship Center",
+      "championshipVenue": "Credit Union of Texas Center (Allen, TX)"
     },
     {
       "id": "tpl-conf-wcc",
@@ -7087,7 +7195,9 @@
           "name": "F",
           "games": 1
         }
-      ]
+      ],
+      "championshipVenueLabel": "Western Coast Collegiate Championship Center",
+      "championshipVenue": "Orleans Arena (Paradise, NV)"
     }
   ]
 }

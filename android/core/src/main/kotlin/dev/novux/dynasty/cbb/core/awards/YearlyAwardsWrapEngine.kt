@@ -43,18 +43,30 @@ object YearlyAwardsWrapEngine {
                 teamMvp.displayName.ifBlank { teamMvp.playerId }
             else -> AwardPlaceholderNames.leadingScorer(mvpTeamId, mvpSchool)
         }
-        val runnerTeam = input.standings.netRankByTeam
-            .entries
-            .sortedBy { it.value }
-            .map { it.key }
-            .firstOrNull { it != mvpTeamId }
-        val runnerSchool = runnerTeam?.let { schoolName(input.packIndex, it) }
-        val runnerPlayer = runnerTeam?.let { AwardPlaceholderNames.leadingScorer(it, runnerSchool!!) }
+        val netOrder = input.standings.netRankByTeam.entries.sortedBy { it.value }.map { it.key }
+        val mvpRunners = netOrder
+            .filter { it != mvpTeamId }
+            .take(4)
+            .mapIndexed { index, teamId ->
+                val school = schoolName(input.packIndex, teamId)
+                AwardHonorLine(
+                    awardLabel = "NCBA MVP #${index + 2}",
+                    winnerName = AwardPlaceholderNames.leadingScorer(teamId, school),
+                    schoolName = school,
+                )
+            }
+        val runnerPlayer = mvpRunners.firstOrNull()?.winnerName
         val ncbaMvp = AwardHonorLine(
             awardLabel = "NCBA MVP",
             winnerName = mvpPlayerName,
             schoolName = mvpSchool,
             runnerUpName = runnerPlayer,
+        )
+        val topTeams = netOrder.take(15)
+        val allAmerica = AllAmericaSelectionEngine.buildLines(
+            packIndex = input.packIndex,
+            winSharesByPlayer = input.winSharesByPlayer,
+            topTeamIds = topTeams,
         )
         val coachTeamId = input.standings.records
             .maxWithOrNull(compareBy<Map.Entry<String, dev.novux.dynasty.cbb.core.league.LeagueTeamRecord>> { it.value.wins }
@@ -99,6 +111,8 @@ object YearlyAwardsWrapEngine {
             ncbaCoaches = listOf(ncbaCoach),
             ncbaByPosition = byPosition,
             conferenceAwards = conferenceAwards,
+            ncbaAllAmerica = allAmerica,
+            ncbaMvpRunners = mvpRunners,
             userTeamMvp = userTeamMvp,
         )
     }

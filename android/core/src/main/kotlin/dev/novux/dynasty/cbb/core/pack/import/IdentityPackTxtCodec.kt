@@ -88,6 +88,8 @@ object IdentityPackTxtCodec {
         tournamentTemplates = templates,
         rulesetYear = rulesetYear,
         packId = packId,
+        manifestSignerId = meta["manifestSignerId"],
+        manifestSignature = meta["manifestSignature"],
     )
     return pack to mode
   }
@@ -150,9 +152,11 @@ object IdentityPackTxtCodec {
         byes = byes,
         reseedingAfterRound = fields["reseedingAfterRound"]?.toBooleanStrictOrNull() ?: false,
         sitePolicy = fields["sitePolicy"] ?: throw TxtParseException("tournament $id: sitePolicy required"),
+        championshipVenue = fields["championshipVenue"],
         qualificationPolicy = fields["qualificationPolicy"]
             ?: throw TxtParseException("tournament $id: qualificationPolicy required"),
         rounds = rounds,
+        championshipVenueLabel = fields["championshipVenueLabel"]?.takeIf { it.isNotBlank() },
     )
   }
 

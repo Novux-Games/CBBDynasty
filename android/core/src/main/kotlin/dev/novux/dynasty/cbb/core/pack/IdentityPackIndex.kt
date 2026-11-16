@@ -31,8 +31,12 @@ class IdentityPackIndex private constructor(
             logoUri = team.logoUri,
             postseasonEligible = team.postseasonEligible,
             programPrestige = WizardProgramPrestige.effective(team),
+            arenaBaseName = team.arenaBaseName,
+            reclassTransitionYear = team.reclassTransitionYear,
         )
     }
+
+    fun branding(): PackBrandingPack = source.branding ?: PackBrandingDefaults.embeddedDefault()
 
     fun conference(confId: String): ConferenceDisplayOverlay? {
         val conf = conferencesById[confId] ?: return null
@@ -41,6 +45,8 @@ class IdentityPackIndex private constructor(
             displayName = conf.displayName,
             leagueGameCount = conf.leagueGameCount,
             tournamentTemplateId = conf.tournamentTemplateId,
+            standingsTiebreakers = conf.standingsTiebreakers,
+            shortCode = ConferenceShortCodePolicy.shortCode(conf.id, conf.displayName, conf.shortCode),
         )
     }
 

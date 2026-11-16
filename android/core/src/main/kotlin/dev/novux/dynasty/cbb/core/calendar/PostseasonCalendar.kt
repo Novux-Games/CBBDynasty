@@ -3,6 +3,9 @@ package dev.novux.dynasty.cbb.core.calendar
 import dev.novux.dynasty.cbb.core.GameConstants
 import dev.novux.dynasty.cbb.core.calendar.bye.ByeWeekPolicy
 import dev.novux.dynasty.cbb.core.calendar.checkpoint.WeekCheckpointState
+import dev.novux.dynasty.cbb.core.pack.PackBrandingDefaults
+import dev.novux.dynasty.cbb.core.pack.PackBrandingPack
+import dev.novux.dynasty.cbb.core.pack.PackBrandingRoundResolver
 
 /**
  * National postseason runs **7** league-wide weeks for every dynasty ([planning/time-system.md]).
@@ -24,19 +27,13 @@ object PostseasonCalendar {
     fun leagueWeekIndices(): IntRange = 1..leagueWeekCount
 
     /** NCBA-primary round labels on shared week indices ([planning/time-system.md#national-postseason-weeks]). */
-    fun ncbaRoundLabel(weekIndex: Int): String =
-        when (weekIndex) {
-            1 -> "Opening Round"
-            2 -> "Round 1"
-            3 -> "Round 2"
-            4 -> "Super 16"
-            5 -> "Great 8"
-            6 -> "Championship 4"
-            7 -> "National Championship"
-            else -> error("postseason week $weekIndex out of range 1–$leagueWeekCount")
-        }
+    fun ncbaRoundLabel(weekIndex: Int, branding: PackBrandingPack = PackBrandingDefaults.embeddedDefault()): String =
+        PackBrandingRoundResolver.ncbaRoundLabel(weekIndex, branding)
 
-    fun displayWeekHeader(weekIndex: Int): String = "Postseason Week $weekIndex — ${ncbaRoundLabel(weekIndex)}"
+    fun displayWeekHeader(
+        weekIndex: Int,
+        branding: PackBrandingPack = PackBrandingDefaults.embeddedDefault(),
+    ): String = "Postseason Week $weekIndex — ${ncbaRoundLabel(weekIndex, branding)}"
 
     /** Non-participants and eliminated teams may still advance and follow live brackets ([planning/postseason.md]). */
     fun mayViewLeagueBrackets(status: PostseasonTeamStatus): Boolean = true

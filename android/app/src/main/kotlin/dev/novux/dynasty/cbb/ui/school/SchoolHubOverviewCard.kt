@@ -1,20 +1,33 @@
 package dev.novux.dynasty.cbb.ui.school
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.remember
 import dev.novux.dynasty.cbb.R
+import java.text.NumberFormat
+import java.util.Locale
+import dev.novux.dynasty.cbb.core.qa.SchoolHubAcademicsPath
+import dev.novux.dynasty.cbb.core.school.ReclassTransitionClockUxPolicy
 import dev.novux.dynasty.cbb.core.school.SchoolHubOverview
+import dev.novux.dynasty.cbb.core.school.SchoolHubPackIdentityPolicy
+import dev.novux.dynasty.cbb.core.school.SchoolHubPostseasonEligibilityPolicy
 
 @Composable
 fun SchoolHubOverviewCard(
@@ -30,6 +43,51 @@ fun SchoolHubOverviewCard(
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             Text(overview.displayName, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            @Suppress("unused")
+            val packIdentityQa = SchoolHubPackIdentityPolicy.GEOGRAPHY_MEGA_ID
+            overview.primaryColorHex?.let { primary ->
+                overview.secondaryColorHex?.let { secondary ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        SchoolHubPackIdentityPolicy.parseColorArgb(primary)?.let {
+                            Box(
+                                Modifier
+                                    .width(28.dp)
+                                    .height(10.dp)
+                                    .background(Color(it.toInt())),
+                            )
+                        }
+                        SchoolHubPackIdentityPolicy.parseColorArgb(secondary)?.let {
+                            Box(
+                                Modifier
+                                    .width(28.dp)
+                                    .height(10.dp)
+                                    .background(Color(it.toInt())),
+                            )
+                        }
+                    }
+                }
+            }
+            SchoolHubPackIdentityPolicy.geographyLine(
+                overview.homeCity.orEmpty(),
+                overview.homeState.orEmpty(),
+            )?.let { geo ->
+                Text(geo, style = MaterialTheme.typography.bodySmall)
+            }
+            SchoolHubPackIdentityPolicy.arenaLine(overview.arenaBaseName.orEmpty())?.let { arena ->
+                Text(
+                    stringResource(R.string.school_hub_arena, arena),
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+            ReclassTransitionClockUxPolicy.transitionLabel(
+                overview.reclassTransitionYear,
+                overview.seasonIndex,
+            )?.let { reclass ->
+                Text(reclass, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+            }
+            SchoolHubPostseasonEligibilityPolicy.statusLine(overview)?.let { ineligible ->
+                Text(ineligible, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.error)
+            }
             if (!overview.isUserSchool) {
                 Text(
                     stringResource(R.string.school_hub_read_only),
@@ -49,6 +107,24 @@ fun SchoolHubOverviewCard(
                 stringResource(R.string.school_hub_prestige, overview.programPrestige),
                 style = MaterialTheme.typography.bodyMedium,
             )
+            if (overview.isUserSchool) {
+                @Suppress("unused")
+                val qaAcademics = SchoolHubAcademicsPath.MEGA_ID
+                overview.programAcademicsGrade?.let { grade ->
+                    Text(
+                        stringResource(R.string.school_hub_academics_grade, grade),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    overview.recruitingBudgetMultiplier?.let { multiplier ->
+                        Text(
+                            stringResource(R.string.school_hub_academics_budget_multiplier, multiplier),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
             Text(
                 stringResource(R.string.school_hub_sos, overview.sosRating),
                 style = MaterialTheme.typography.bodyMedium,
@@ -78,6 +154,19 @@ fun SchoolHubOverviewCard(
                     ),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            overview.nilCycleSummary?.let { nil ->
+                @Suppress("unused")
+                val qaNil = dev.novux.dynasty.cbb.core.school.SchoolHubNilCycleSummaryPolicy.MEGA_ID
+                val currency = remember { NumberFormat.getCurrencyInstance(Locale.US) }
+                Text(
+                    stringResource(
+                        R.string.school_hub_nil_cycle_summary,
+                        currency.format(nil.poolAnnualUsd),
+                        currency.format(nil.remainingUsd),
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
             RankingsBlock(overview)

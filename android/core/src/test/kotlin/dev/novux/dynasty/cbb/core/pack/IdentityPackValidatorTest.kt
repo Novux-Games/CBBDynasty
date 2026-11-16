@@ -36,4 +36,14 @@ class IdentityPackValidatorTest {
         val empty = basePack.copy(teams = emptyList())
         assertEquals(PackValidationError.EmptyCollection("teams"), IdentityPackValidator.validate(empty))
     }
+
+    @Test
+    fun rejects_invalidHomeState() {
+        val team = basePack.teams.first().copy(homeState = "XX")
+        val bad = basePack.copy(teams = listOf(team) + basePack.teams.drop(1))
+        assertEquals(
+            PackValidationError.InvalidTeam(team.id, "homeState must be a US postal code"),
+            IdentityPackValidator.validate(bad),
+        )
+    }
 }

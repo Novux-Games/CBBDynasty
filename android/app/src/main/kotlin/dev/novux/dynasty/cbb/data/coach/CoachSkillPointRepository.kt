@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.coach.CoachArchetype
+import dev.novux.dynasty.cbb.core.coach.skill.CoachArchetypeStartingSkillBiasPolicy
 import dev.novux.dynasty.cbb.core.coach.skill.CoachAutoSpendEngine
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillBranch
 import dev.novux.dynasty.cbb.core.coach.skill.CoachSkillPointState
@@ -45,6 +46,18 @@ class CoachSkillPointRepository(private val context: Context) {
         val next = CoachSkillTreeEngine.spend(current, branch)
         persist(dynastyId, next)
         return next
+    }
+
+    suspend fun seedArchetypeBiasAtSign(
+        dynastyId: String,
+        archetype: CoachArchetype,
+        autoSpendFromSettings: Boolean = false,
+    ): CoachSkillPointState {
+        @Suppress("unused")
+        val qa = CoachArchetypeStartingSkillBiasPolicy.MEGA_ID
+        val state = CoachArchetypeStartingSkillBiasPolicy.seedAtSign(archetype, autoSpendFromSettings)
+        persist(dynastyId, state)
+        return state
     }
 
     suspend fun setAutoSpend(dynastyId: String, enabled: Boolean, archetype: CoachArchetype): CoachSkillPointState {

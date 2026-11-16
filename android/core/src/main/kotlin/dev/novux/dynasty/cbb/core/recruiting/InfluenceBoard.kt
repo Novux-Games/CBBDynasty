@@ -28,6 +28,7 @@ object InfluenceBoardEngine {
         userProgramId: String,
         recommended: BalanceRecruitingRecommended,
         userHasScholarshipOffer: Boolean = false,
+        leagueWeeksElapsed: Int = 0,
     ): ProspectInfluenceBoard {
         val competitors = demoCompetitors(prospect.prospectId)
         val scores = competitors.map { competitor ->
@@ -57,12 +58,13 @@ object InfluenceBoardEngine {
         val userRank = leaders.firstOrNull { it.programId == userProgramId }?.rank
         val top = leaders.firstOrNull()?.influenceScore ?: 0
         val closeness = (top * 0.85 + if (userHasScholarshipOffer) 12 else 0).roundToInt().coerceIn(0, 100)
-        return ProspectInfluenceBoard(
+        val board = ProspectInfluenceBoard(
             closeness = closeness,
             userProgramId = userProgramId,
             userRank = userRank,
             leaders = leaders.take(5),
         )
+        return InfluenceClosenessLeagueSimPolicy.adjustAfterLeagueWeek(board, leagueWeeksElapsed)
     }
 
     private data class CompetitorProgram(

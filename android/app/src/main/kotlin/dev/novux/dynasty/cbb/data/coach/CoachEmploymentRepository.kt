@@ -8,7 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentState
 import dev.novux.dynasty.cbb.core.coach.employment.CoachEmploymentStatus
-import dev.novux.dynasty.cbb.core.coach.employment.JobCenterEngine
+import dev.novux.dynasty.cbb.core.coach.employment.JobCenterPackTeamListPolicy
 import dev.novux.dynasty.cbb.core.coach.employment.JobOfferCard
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.database.DynastyDatabase
@@ -74,7 +74,7 @@ class CoachEmploymentRepository(
         coachReputation: Int,
     ): List<JobOfferCard> {
         val teams = packRepository.activeSession().index.allTeamDisplays()
-        return JobCenterEngine.generateOffers(teams, seasonIndex, dynastyId, coachReputation)
+        return JobCenterPackTeamListPolicy.generateFromPack(teams, seasonIndex, dynastyId, coachReputation)
     }
 
     private suspend fun persist(dynastyId: String, state: CoachEmploymentState) {

@@ -13,6 +13,8 @@ data class TeamDisplayOverlay(
     val logoUri: String?,
     val postseasonEligible: Boolean,
     val programPrestige: Int,
+    val arenaBaseName: String = "",
+    val reclassTransitionYear: Int? = null,
 )
 
 data class ConferenceDisplayOverlay(
@@ -20,4 +22,6 @@ data class ConferenceDisplayOverlay(
     val displayName: String,
     val leagueGameCount: Int,
     val tournamentTemplateId: String?,
+    val standingsTiebreakers: List<String> = emptyList(),
+    val shortCode: String? = null,
 )

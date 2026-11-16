@@ -9,9 +9,17 @@ import androidx.datastore.preferences.preferencesDataStore
 import dev.novux.dynasty.cbb.core.injuries.GameSimInjuryEvent
 import dev.novux.dynasty.cbb.core.league.LeagueGameResult
 import dev.novux.dynasty.cbb.core.league.LeagueStandingsState
+import dev.novux.dynasty.cbb.core.news.BracketologyNewsEngine
+import dev.novux.dynasty.cbb.core.news.PollNetMovementNewsEngine
+import dev.novux.dynasty.cbb.core.news.RecruitingSpotlightTop60Policy
+import dev.novux.dynasty.cbb.core.news.ShallowNewsFeedSortContext
+import dev.novux.dynasty.cbb.core.news.Top25NetMovementNewsEngine
+import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
+import dev.novux.dynasty.cbb.core.portal.PortalRecruitingHub
 import dev.novux.dynasty.cbb.core.news.NewsHeadline
 import dev.novux.dynasty.cbb.core.news.NewsHeadlinePublisher
-import dev.novux.dynasty.cbb.core.news.ShallowNewsFeed
+import dev.novux.dynasty.cbb.core.news.ShallowNewsFeedDashboardMergePolicy
+import dev.novux.dynasty.cbb.core.news.ShallowNewsFeedSnapshot
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.data.preseason.IncomingClassSeedRepository
 import kotlinx.coroutines.flow.first
@@ -29,6 +37,11 @@ class NewsFeedRepository(
         return Json.decodeFromString(raw)
     }
 
+    /** Publishes the Top 60 spotlight when the enrolling class pool exists (MEGA-RECR-053). */
+    suspend fun publishRecruitingSpotlightWhenPoolReady(dynastyId: String, seasonIndex: Int) {
+        ensureRecruitingSpotlight(dynastyId, seasonIndex)
+    }
+
     suspend fun storiesFeed(dynastyId: String, seasonIndex: Int): List<NewsHeadline> {
         ensureRecruitingSpotlight(dynastyId, seasonIndex)
         return loadArchive(dynastyId, seasonIndex)
@@ -40,13 +53,28 @@ class NewsFeedRepository(
         seasonIndex: Int,
         rsWeekIndex: Int,
         userRoster: List<RosterPlayer>,
-    ): List<NewsHeadline> {
+    ): List<NewsHeadline> =
+        shallowFeedSnapshot(dynastyId, seasonIndex, rsWeekIndex, userRoster).headlines
+
+    suspend fun shallowFeedSnapshot(
+        dynastyId: String,
+        seasonIndex: Int,
+        rsWeekIndex: Int,
+        userRoster: List<RosterPlayer>,
+        calendarPhase: CalendarPhase = CalendarPhase.RegularSeason,
+        offseasonWeekIndex: Int? = null,
+    ): ShallowNewsFeedSnapshot {
         ensureRecruitingSpotlight(dynastyId, seasonIndex)
         val archive = loadArchive(dynastyId, seasonIndex)
         val liveUser = userRoster.mapNotNull { player ->
             NewsHeadlinePublisher.userInjuryFromRoster(seasonIndex, rsWeekIndex, player)
         }
-        return ShallowNewsFeed.select(archive, liveUser)
+        val portalOpen = PortalRecruitingHub.isRecruitingWindowOpen(calendarPhase, offseasonWeekIndex)
+        return ShallowNewsFeedDashboardMergePolicy.mergedSnapshot(
+            archive,
+            liveUser,
+            sortContext = ShallowNewsFeedSortContext(portalWindowOpen = portalOpen),
+        )
     }
 
     suspend fun appendUserInjuries(
@@ -76,9 +104,19 @@ class NewsFeedRepository(
         appendAll(dynastyId, seasonIndex, tagged)
     }
 
+    suspend fun appendHeadlines(
+        dynastyId: String,
+        seasonIndex: Int,
+        headlines: List<NewsHeadline>,
+    ) {
+        appendAll(dynastyId, seasonIndex, headlines)
+    }
+
     suspend fun appendLeagueWeek(
         dynastyId: String,
         standings: LeagueStandingsState,
+        userTeamId: String? = null,
+        teamDisplayName: (String) -> String = { it },
     ) {
         val week = standings.lastCommittedRsWeek
         val headlines = mutableListOf<NewsHeadline>()
@@ -93,18 +131,38 @@ class NewsFeedRepository(
             .forEach { result ->
                 headlines += NewsHeadlinePublisher.leagueGameResult(standings.seasonIndex, result)
             }
+        BracketologyNewsEngine.headlineForWeek(
+            standings = standings,
+            rsWeekIndex = week,
+            teamDisplayName = teamDisplayName,
+            userTeamId = userTeamId,
+        )?.let { headlines += NewsHeadlinePublisher.bracketology(it) }
+        PollNetMovementNewsEngine.headlineForWeek(
+            standings = standings,
+            rsWeekIndex = week,
+            teamDisplayName = teamDisplayName,
+            userTeamId = userTeamId,
+        )?.let { headlines += it }
+        Top25NetMovementNewsEngine.headlineForWeek(
+            standings = standings,
+            rsWeekIndex = week,
+            teamDisplayName = teamDisplayName,
+            userTeamId = userTeamId,
+        )?.let { headline ->
+            if (headlines.none { it.id == headline.id }) headlines += headline
+        }
         appendAll(dynastyId, seasonIndex = standings.seasonIndex, headlines)
     }
 
     private suspend fun ensureRecruitingSpotlight(dynastyId: String, seasonIndex: Int) {
+        val storyId = dev.novux.dynasty.cbb.core.preseason.PreseasonNewsFeedPolicy.top60StoryId(seasonIndex)
         val archive = loadArchive(dynastyId, seasonIndex)
-        if (archive.any { it.id == "top60-$seasonIndex" }) return
+        if (archive.any { it.id == storyId }) return
+        if (!incomingClassSeedRepository.isSeeded(dynastyId, seasonIndex)) return
         val headline = incomingClassSeedRepository.loadHeadline(dynastyId, seasonIndex)?.headline ?: return
-        appendAll(
-            dynastyId,
-            seasonIndex,
-            listOf(NewsHeadlinePublisher.recruitingSpotlight(seasonIndex, headline)),
-        )
+        val story = NewsHeadlinePublisher.recruitingSpotlight(seasonIndex, headline)
+        val top60 = story.copy(id = RecruitingSpotlightTop60Policy.storyId(seasonIndex))
+        appendAll(dynastyId, seasonIndex, listOf(top60))
     }
 
     private suspend fun appendAll(dynastyId: String, seasonIndex: Int, headlines: List<NewsHeadline>) {

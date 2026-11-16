@@ -18,11 +18,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.GameConstants
+import dev.novux.dynasty.cbb.core.shell.CreditsReplayStudioLinkPolicy
 import java.time.Year
 
 /** Home credits — [planning/game-start.md#home-settings--credits]. */
 @Composable
-fun CreditsScreen(onBack: () -> Unit) {
+fun CreditsScreen(
+    onBack: () -> Unit,
+    onVisitStudio: (() -> Unit)? = null,
+) {
     val copyrightYear = Year.now().value
 
     Column(
@@ -90,6 +94,17 @@ fun CreditsScreen(onBack: () -> Unit) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 12.dp),
         )
+
+        if (CreditsReplayStudioLinkPolicy.showVisitStudioAction()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedButton(
+                onClick = { onVisitStudio?.invoke() },
+                enabled = onVisitStudio != null,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(R.string.credits_visit_studio))
+            }
+        }
 
         Spacer(modifier = Modifier.height(32.dp))
         OutlinedButton(

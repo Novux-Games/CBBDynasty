@@ -1,12 +1,17 @@
 package dev.novux.dynasty.cbb.core.recruiting
 
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitInterest
+import dev.novux.dynasty.cbb.core.balance.BalanceRecruitInterestParser
+
 /**
- * Proposed defaults until `recruiting.interest.*` lands in balance JSON ([planning/recruiting-engine.md]).
+ * Base weights load from `balance-2026.json` → `recruiting.interest.*` when bound ([MEGA-RECR-026]).
  */
 object RecruitInterestConfig {
-    const val PRIORITY_MULTIPLIER: Double = 2.0
+    const val MEGA_ID: String = "MEGA-RECR-026"
 
-    val baseWeights: Map<RecruitingInterestFactor, Double> = mapOf(
+    private const val DEFAULT_PRIORITY_MULTIPLIER: Double = 2.0
+
+    private val defaultBaseWeights: Map<RecruitingInterestFactor, Double> = mapOf(
         RecruitingInterestFactor.Nil to 0.25,
         RecruitingInterestFactor.PlayingTimeFit to 0.20,
         RecruitingInterestFactor.PrestigeWinning to 0.20,
@@ -14,6 +19,26 @@ object RecruitInterestConfig {
         RecruitingInterestFactor.Proximity to 0.10,
         RecruitingInterestFactor.CampusLife to 0.10,
     )
+
+    private var boundPriorityMultiplier: Double? = null
+    private var boundBaseWeights: Map<RecruitingInterestFactor, Double>? = null
+
+    val PRIORITY_MULTIPLIER: Double
+        get() = boundPriorityMultiplier ?: DEFAULT_PRIORITY_MULTIPLIER
+
+    val baseWeights: Map<RecruitingInterestFactor, Double>
+        get() = boundBaseWeights ?: defaultBaseWeights
+
+    fun bindFromBalance(interest: BalanceRecruitInterest?) {
+        if (interest == null) {
+            boundPriorityMultiplier = null
+            boundBaseWeights = null
+            return
+        }
+        boundPriorityMultiplier = interest.priorityMultiplier
+        boundBaseWeights = BalanceRecruitInterestParser.toFactorWeights(interest)
+            .takeIf { it.isNotEmpty() }
+    }
 }
 
 object RecruitInterestWeights {
