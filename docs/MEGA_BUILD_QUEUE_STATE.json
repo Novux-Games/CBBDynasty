@@ -593,7 +593,6 @@
     "MEGA-COACH-164",
     "MEGA-COACH-165",
     "MEGA-COACH-166",
-<<<<<<< HEAD
     "MEGA-WORLD-019",
     "MEGA-WORLD-023",
     "MEGA-WORLD-025",
@@ -633,8 +632,7 @@
     "MEGA-WORLD-132",
     "MEGA-WORLD-135",
     "MEGA-WORLD-136",
-    "MEGA-WORLD-142"
-=======
+    "MEGA-WORLD-142",
     "MEGA-POST-003",
     "MEGA-POST-007",
     "MEGA-POST-021",
@@ -687,7 +685,6 @@
     "MEGA-NOTES-052",
     "MEGA-NOTES-054",
     "MEGA-NOTES-078"
->>>>>>> 154a10ca (MEGA batch 34: postseason selection, March Mayhem, awards, history (46 POST + 6 NOTES))
   ],
   "subscriptionName": "mega-build-queue",
   "integrationBranch": "cursor/mega-build-executor-cb09",
@@ -695,16 +692,9 @@
   "pullRequestNumber": 30,
   "pullRequestUrl": "https://github.com/Novux-Games/CBBDynasty/pull/30",
   "queueMetrics": {
-<<<<<<< HEAD
     "openImplementation": 138,
     "remaining": 138,
-    "shardPassShipDone": 1159,
-    "completedIdsRecorded": 631
-=======
-    "openImplementation": 178,
-    "remaining": 178,
-    "shardPassShipDone": 1171,
-    "completedIdsRecorded": 643
->>>>>>> 154a10ca (MEGA batch 34: postseason selection, March Mayhem, awards, history (46 POST + 6 NOTES))
+    "shardPassShipDone": 1211,
+    "completedIdsRecorded": 683
   }
 }
