@@ -59,7 +59,7 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 | `adaptive-icon-foreground.png` | Foreground layer — transparent logo (432×432); mark centered in **safe zone** |
 | `adaptive-icon-canvas.png` | `#181A25` + `adaptive-icon-foreground.png` composited (QA preview) |
 
-**Safe zone (design lock):** On the 108×108 dp adaptive layer, logo art must fit the central **~66 dp** circle. Generator scales `app-logo.svg` to **58%** of 432 px and centers it — do not ship a full-bleed 432 px raster.
+**Safe zone (design lock):** On the 108×108 dp adaptive layer, logo art must fit the central **~66 dp** circle. Generator knocks out the brand fill from `app-logo.png`, scales the mark to **58%** of 432 px (preserving aspect ratio), and centers it on a **transparent** foreground — do not ship a full-bleed 432 px raster or bake `#181A25` into the PNG (`app-logo.svg` is not the adaptive source; it is an opaque C2PA export).
 
 **Generate & sync (source of truth → Android):**
 
