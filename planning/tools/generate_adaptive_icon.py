@@ -16,6 +16,8 @@ from pathlib import Path
 
 CANVAS_PX = 432
 SAFE_ZONE_RATIO = 0.58  # central mark vs 108dp adaptive canvas (~66dp safe diameter)
+# app-logo.svg is C2PA-heavy; cairosvg omits most paths below ~500px — raster high, then downscale.
+MIN_RASTER_PX = 1024
 BRAND_BG = (0x18, 0x1A, 0x25, 0xFF)
 
 
@@ -34,8 +36,11 @@ def generate(svg: Path, out_dir: Path, android_fg: Path) -> None:
         ) from err
 
     logo_px = int(CANVAS_PX * SAFE_ZONE_RATIO)
-    png_bytes = cairosvg.svg2png(url=str(svg), output_width=logo_px, output_height=logo_px)
+    raster_px = max(logo_px, MIN_RASTER_PX)
+    png_bytes = cairosvg.svg2png(url=str(svg), output_width=raster_px, output_height=raster_px)
     logo = Image.open(io.BytesIO(png_bytes)).convert("RGBA")
+    if logo.width != logo_px or logo.height != logo_px:
+        logo = logo.resize((logo_px, logo_px), Image.Resampling.LANCZOS)
     foreground = Image.new("RGBA", (CANVAS_PX, CANVAS_PX), (0, 0, 0, 0))
     ox = (CANVAS_PX - logo.width) // 2
     oy = (CANVAS_PX - logo.height) // 2
