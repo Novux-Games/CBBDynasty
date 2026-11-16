@@ -3,8 +3,15 @@ name: Android release bundle (AAB)
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
     tags:
       - "v*"
+    paths:
+      - "android/**"
+      - ".github/workflows/android-bundle-release.yml"
+      - "scripts/verify_play_aab_signing.sh"
+      - "scripts/install_android_sdk.sh"
 
 concurrency:
   group: android-bundle-release-${{ github.workflow }}-${{ github.ref }}

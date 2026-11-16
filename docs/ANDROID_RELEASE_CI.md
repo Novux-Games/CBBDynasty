@@ -44,8 +44,9 @@ The workflow strips spaces and line breaks from the secret before decoding, but 
 
 ## Run a build
 
-1. **Actions** → **Android release bundle (AAB)** → **Run workflow** (branch `main`),  
-   **or** push a tag: `git tag v0.1.0 && git push origin v0.1.0`
+1. **Automatic:** every push to **`main`** that touches `android/**` runs this workflow (AAB artifact on the Actions run).  
+2. **Manual:** **Actions** → **Android release bundle (AAB)** → **Run workflow** (branch `main`),  
+   **or** push a tag: `git tag v0.1.2 && git push origin v0.1.2`
 2. Open the completed run → **Artifacts**:
    - **app-release-aab** → upload to Play
    - **play-mapping-txt** → `mapping.txt` for **Deobfuscation file** (R8)
