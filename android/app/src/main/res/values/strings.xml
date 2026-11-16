@@ -124,7 +124,6 @@
     <string name="new_sign_school_label">Program: %1$s</string>
     <string name="new_sign_coach_label">Head coach: %1$s</string>
     <string name="new_sign_nil_preview">Projected annual NIL pool (chosen school): %1$s</string>
-    <string name="new_sign_recap_title">Contract recap</string>
     <string name="new_sign_recap_archetype">Archetype: %1$s</string>
     <string name="new_sign_recap_schemes">Offense %1$s · Defense %2$s</string>
     <string name="new_sign_recap_school">School: %1$s</string>
