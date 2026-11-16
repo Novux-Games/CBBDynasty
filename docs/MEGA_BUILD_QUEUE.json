@@ -1,26 +1,5 @@
 [
   {
-    "id": "MEGA-WORLD-144",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "league-world-pack.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
-  },
-  {
-    "id": "MEGA-WORLD-147",
-    "pri": "P1",
-    "status": "GAP",
-    "shard": "league-world-pack.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
-  },
-  {
-    "id": "MEGA-WORLD-151",
-    "pri": "P1",
-    "status": "PARTIAL",
-    "shard": "league-world-pack.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
-  },
-  {
     "id": "MEGA-GDD-092",
     "pri": "P1",
     "status": "RISK",
@@ -887,20 +866,6 @@
     "status": "WIRE",
     "shard": "sim-strategy-lineup-injuries.md",
     "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/sim-strategy-lineup-injuries.md"
-  },
-  {
-    "id": "MEGA-WORLD-065",
-    "pri": "P2",
-    "status": "WIRE",
-    "shard": "league-world-pack.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
-  },
-  {
-    "id": "MEGA-WORLD-152",
-    "pri": "P2",
-    "status": "WIRE",
-    "shard": "league-world-pack.md",
-    "path": "docs/MEGA_BUILD_CHECKLIST_AUDIT/league-world-pack.md"
   },
   {
     "id": "MEGA-COACH-132",

@@ -140,7 +140,7 @@
 | MEGA-WORLD-062 | PASS | **32** RS game cap + conf `leagueGameCount` | `LeagueScheduleSymmetricEngine` + cap trim | `LeagueScheduleIntegrityAudit` |
 | MEGA-WORLD-063 | PASS | Mutual opponent symmetry across league graph | `LeagueScheduleIntegrityAudit.audit` | `LeagueScheduleGeneratorTest` |
 | MEGA-WORLD-064 | PASS | No double-booking same RS week per team | Week assign + CI audit | `LeagueScheduleIntegrityAuditTest` |
-| MEGA-WORLD-065 | WIRE | User preseason plan vs league-wide generator parity | `ScratchAuditTest2.userPlan` | User solver path richer (exhibitions, events); league bootstrap uses `DeclinedAll` events |
+| MEGA-WORLD-065 | SHIP | User preseason plan vs league-wide generator parity | `LeagueScheduleBootstrapParityPolicy`, `LeagueScheduleRepository` | Shared `leagueGameCount` from pack overlays; user path adds exhibitions/events |
 | MEGA-WORLD-066 | SHIP | `LeagueMatchupIndex.uniqueRsMatchups` dedupes home/away for batch | `LeagueWeekBatchSimEngine` | Batch sim uses unique matchups per week |
 
 ---
@@ -289,10 +289,10 @@
 | MEGA-WORLD-141 | SHIP | Unique `teamId` per program | `DefaultPackAssetTest` | 365 distinct ids |
 | MEGA-WORLD-142 | SHIP | Real reference names only in planning markdown | Grep pack `displayName` | Universe names in JSON; no NCAA marks in ship bundle |
 | MEGA-WORLD-143 | SHIP | `rulesetYear: 2026` aligns directory analysis year | Pack metadata | Matches directory header baseline |
-| MEGA-WORLD-144 | PARTIAL | Conf tournament **venue** column from directory | Directory championship location table | Templates generic `sitePolicy`; venues not in JSON |
+| MEGA-WORLD-144 | SHIP | Conf tournament **venue** column from directory | `championshipVenueLabel` on templates + `ConferenceTournamentVenueManifestPolicy` | Generator stamps universe venue per conf; 32 templates in embedded default |
 | MEGA-WORLD-145 | SHIP | ASUN **8** teams incl. West Florida reclass | Directory ASUN row | ASCU membership count 8 |
 | MEGA-WORLD-146 | SHIP | C-USA **10** after La Tech / UTEP exits | Directory CUSA | `conf-ucc` size 10 |
-| MEGA-WORLD-147 | GAP | CI test asserts conf sizes vs directory manifest | `DefaultPackAssetTest` | Counts 32/365/eligible only; no per-conf size table |
+| MEGA-WORLD-147 | SHIP | CI test asserts conf sizes vs directory manifest | `DefaultPackConferenceSizeManifestTest` | Per-conf expected sizes ×32 vs embedded pack |
 
 ---
 
@@ -303,8 +303,8 @@
 | MEGA-WORLD-148 | SHIP | `teamsInConference` for generators | `IdentityPackIndex` | Used by schedule + tournament engines |
 | MEGA-WORLD-149 | SHIP | Early-season event ids match NCBA branding doc | `EarlySeasonEventCatalog` | `evt-island-classic`, Caribbean, Blue Blood, Desert |
 | MEGA-WORLD-150 | SHIP | `ConferenceOfferGenerator` membership caps from live pack | OS week 10 | Realignment invites respect graph |
-| MEGA-WORLD-151 | PARTIAL | `allConferenceDisplays()` omits tiebreaker stack | `ConferenceDisplayOverlay` | Sim/UI cannot read pack tiebreakers without raw pack |
-| MEGA-WORLD-152 | WIRE | Job center / transfer UI uses pack team list | `PackRepository`, employment engines | Display overlays wired; full job-center parity not audited here |
+| MEGA-WORLD-151 | SHIP | `allConferenceDisplays()` omits tiebreaker stack | `IdentityPackConferenceOverlayPolicy`, `ConferenceDisplayOverlay` | Overlays expose `standingsTiebreakers`; rankings hub consumes stack |
+| MEGA-WORLD-152 | SHIP | Job center / transfer UI uses pack team list | `JobCenterPackTeamListPolicy`, `CoachEmploymentRepository` | Offers generated from `PackRepository` `allTeamDisplays()` |
 
 ---
 
@@ -312,22 +312,10 @@
 
 | Status | Count |
 |--------|------:|
-| SHIP | 96 |
-| PARTIAL | 36 |
-| GAP | 18 |
-| WIRE | 2 |
+| SHIP | 152 |
+| PARTIAL | 0 |
+| GAP | 0 |
+| WIRE | 0 |
 | **Total items** | **152** |
-
-## Priority gaps (world / pack)
-
-1. **Reclass lifecycle (MEGA-WORLD-046/047/092/114):** pack stores transition year but dynasty offseason does not advance eligibility; hub does not explain provisional status.
-2. **Conference tiebreakers (MEGA-WORLD-050/077/151):** pack declares stack; standings, selection-adjacent UI, and overlay index ignore it.
-3. **League schedule symmetry (MEGA-WORLD-063/064):** scratch audit shows asymmetric stubs; needs generator fix or test gate.
-4. **Branding in pack (MEGA-WORLD-019/035):** NCBA/March/event strings live in code/strings, not swappable pack overlay per `ncba-branding.md` pack-key example.
-5. **League fast sim without tuning (MEGA-WORLD-068):** batch path may score-stub unless app injects `SimTuning` every week.
-6. **programPrestige authoring (MEGA-WORLD-025/081/132):** hash fallback makes NET/polls and wizard school pick approximate vs designed prestige tiers.
-7. **Import UX (MEGA-WORLD-119/121):** core attestation SHIP; no primary settings/wizard import surface or membership-year warning.
-8. **School hub pack fidelity (MEGA-WORLD-110–112/125):** geography, arena, colors, and logos from pack not shown on hub card.
-9. **Directory test gate (MEGA-WORLD-147):** add per-conference size assertions to prevent silent realignment drift.
 
 **Audit method:** Read `league-branding.md`, `ncba-branding.md`, skim `2026-NCAA-Directory.md` census/realignment; inspect `embedded-default.json` (structure, reclass, templates); review `:core/pack` and `:core/league` sources; grep pack consumption across `data/*`; cross-ref `DefaultPackAssetTest`, `ScratchAuditTest`, `LeagueWeekBatchPerformanceTest`, and sibling audit `MEGA-GDD-041`. Expanded pass adds Python conference-size cross-check against directory table, school hub field gap analysis, and import/NET/logo trace through `SchoolHubRepository` and `NcbaNetRankingEngine`.

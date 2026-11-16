@@ -115,6 +115,7 @@ def build_pack() -> dict:
                 "sitePolicy": "neutral-primary",
                 "qualificationPolicy": "all-members",
                 "rounds": rounds,
+                "championshipVenueLabel": f"{uni_display} Championship Center",
             }
         )
         conferences.append(

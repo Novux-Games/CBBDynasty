@@ -62,6 +62,8 @@ data class TournamentTemplatePack(
     val sitePolicy: String,
     val qualificationPolicy: String,
     val rounds: List<TournamentRoundPack>,
+    /** Universe championship site label from directory column ([MEGA-WORLD-144]). */
+    val championshipVenueLabel: String? = null,
 )
 
 @Serializable
