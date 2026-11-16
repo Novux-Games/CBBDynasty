@@ -56,10 +56,10 @@ Android adaptive layers in [`Public-Assets/adaptive-icon/`](../Public-Assets/ada
 | File | Role |
 |------|------|
 | `adaptive-icon-background.svg` | Background layer — `#181a25` |
-| `adaptive-icon-foreground.png` | Foreground layer — transparent logo (432×432); mark centered in **safe zone** |
-| `adaptive-icon-canvas.png` | `#181A25` + `adaptive-icon-foreground.png` composited (QA preview) |
+| `adaptive-icon-foreground.png` | Foreground **source** — transparent logo on 432×432 (100%; hand-authored) |
+| `adaptive-icon-canvas.png` | `adaptive-icon-background.svg` + foreground at **70%** (QA preview) |
 
-**Safe zone (design lock):** On the 108×108 dp adaptive layer, logo art must fit the central **~66 dp** circle. Generator knocks out the brand fill from `app-logo.png`, scales the mark to **58%** of 432 px (preserving aspect ratio), and centers it on a **transparent** foreground — do not ship a full-bleed 432 px raster or bake `#181A25` into the PNG (`app-logo.svg` is not the adaptive source; it is an opaque C2PA export).
+**Safe zone (design lock):** On the 108×108 dp adaptive layer, logo art must fit the central **~66 dp** circle. **Author** `adaptive-icon-foreground.png` (transparent, 432×432). `generate_adaptive_icon.py` scales that layer to **70%**, centers it, and syncs to Android — do not bake `#181A25` into the foreground PNG. **`adaptive-icon-background.svg`** stays full size; **`adaptive-icon-canvas.png`** is background + scaled foreground for QA.
 
 **Generate & sync (source of truth → Android):**
 
