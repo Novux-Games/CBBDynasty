@@ -3,6 +3,7 @@ package dev.novux.dynasty.cbb.data.conference
 import dev.novux.dynasty.cbb.core.conference.ConferenceTournamentEngine
 import dev.novux.dynasty.cbb.core.conference.ConferenceTournamentSeason
 import dev.novux.dynasty.cbb.core.selection.SelectionSundayConfTourneyHandoffPolicy
+import dev.novux.dynasty.cbb.core.selection.SelectionSundayNetFreezePolicy
 import dev.novux.dynasty.cbb.data.league.LeagueWeekBatchRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
 import dev.novux.dynasty.cbb.data.selection.SelectionSundayRepository
@@ -39,6 +40,9 @@ class ConferenceTournamentRepository(
             standings.copy(conferenceTournaments = season),
         )
         if (SelectionSundayConfTourneyHandoffPolicy.shouldPublishAfterConfTourneySim()) {
+            if (SelectionSundayNetFreezePolicy.refreshNetBeforeSelectionSunday()) {
+                leagueWeekBatchRepository.freezeFinalNetBeforeSelection(dynastyId, seasonIndex)
+            }
             selectionSundayRepository.computeAndPersist(dynastyId, seasonIndex)
         }
         return season

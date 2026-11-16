@@ -105,6 +105,7 @@ import dev.novux.dynasty.cbb.data.preseason.PreseasonScheduleRepository
 import dev.novux.dynasty.cbb.data.chemistry.ChemistryRepository
 import dev.novux.dynasty.cbb.data.discipline.DisciplineRepository
 import dev.novux.dynasty.cbb.data.roster.DynastyRosterRepository
+import dev.novux.dynasty.cbb.core.dashboard.DashboardMarchMayhemTeaserPolicy
 import dev.novux.dynasty.cbb.core.dashboard.DashboardPostseasonSeedResolver
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardLastGameCard
 import dev.novux.dynasty.cbb.ui.dashboard.DashboardRequiredTasksPanel
@@ -424,7 +425,8 @@ fun DynastyShellScreen(
         )
         selectionSundayPublished = standings?.selectionSunday != null
         dashboardPostseasonSeed = userSchool?.let { school ->
-            DashboardPostseasonSeedResolver.label(school.teamId, standings?.selectionSunday)
+            DashboardMarchMayhemTeaserPolicy.seedLabel(school.teamId, standings?.selectionSunday)
+                ?: DashboardPostseasonSeedResolver.label(school.teamId, standings?.selectionSunday)
         }
         val contractState = app.headCoachUserContractRepository.load(loaded.dynastyId)
         coachDeepTabs = app.coachCardDeepTabsRepository.loadDeepTabs(

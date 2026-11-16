@@ -35,6 +35,8 @@ data class UserCalendarGameEntry(
     val gamePosition: CalendarPosition,
     val gameIndexInWeek: Int = 0,
     val playedResult: UserCalendarGameResult? = null,
+    /** NCBA round name on postseason rows ([PostseasonCalendarGameRoundPolicy]). */
+    val postseasonRoundLabel: String? = null,
 ) {
     val isTappable: Boolean = playedResult != null || !isPastWeek
 }

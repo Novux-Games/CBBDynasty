@@ -1,19 +1,31 @@
 package dev.novux.dynasty.cbb.core.qa
 
+import dev.novux.dynasty.cbb.core.awards.AllAmericaSelectionEngine
+import dev.novux.dynasty.cbb.core.awards.NationalAwardScoreEngine
+import dev.novux.dynasty.cbb.core.awards.WeeklyPotwBatchEngine
 import dev.novux.dynasty.cbb.core.calendar.PostseasonCalendar
+import dev.novux.dynasty.cbb.core.calendar.PostseasonCalendarGameRoundPolicy
+import dev.novux.dynasty.cbb.core.dashboard.DashboardMarchMayhemTeaserPolicy
+import dev.novux.dynasty.cbb.core.history.HistoryGoatByPositionSurfacePolicy
 import dev.novux.dynasty.cbb.core.league.LeagueFastSimTuningPolicy
+import dev.novux.dynasty.cbb.core.march.MarchMayhemHubSurfacePolicy
 import dev.novux.dynasty.cbb.core.pack.ConferenceShortCodePolicy
+import dev.novux.dynasty.cbb.core.pack.DefaultPackConferenceSizeManifestPolicy
 import dev.novux.dynasty.cbb.core.pack.IdentityPackCodec
 import dev.novux.dynasty.cbb.core.pack.PackBrandingEmbeddedPolicy
 import dev.novux.dynasty.cbb.core.pack.PackBrandingRoundResolver
 import dev.novux.dynasty.cbb.core.pack.PackLoadResult
-import dev.novux.dynasty.cbb.core.pack.DefaultPackConferenceSizeManifestPolicy
 import dev.novux.dynasty.cbb.core.pack.PackWorldBatch34TracePolicy
 import dev.novux.dynasty.cbb.core.pack.ReclassTransitionEligibilityEngine
 import dev.novux.dynasty.cbb.core.rankings.RankingsHubPlaceholderPolicy
 import dev.novux.dynasty.cbb.core.school.SchoolHubConferenceStandingPolicy
 import dev.novux.dynasty.cbb.core.school.SchoolHubPostseasonEligibilityPolicy
 import dev.novux.dynasty.cbb.core.school.SchoolSeasonRecord
+import dev.novux.dynasty.cbb.core.selection.HeritageSelectionEligibilityPolicy
+import dev.novux.dynasty.cbb.core.selection.ProjectedBracketForbiddenPolicy
+import dev.novux.dynasty.cbb.core.selection.SelectionSundayBubbleEngine
+import dev.novux.dynasty.cbb.core.selection.SelectionSundayNetFreezePolicy
+import dev.novux.dynasty.cbb.core.selection.SelectionSundayRevealPolicy
 import java.nio.file.Paths
 import kotlin.io.path.readText
 import org.junit.Assert.assertEquals
@@ -61,6 +73,43 @@ class MegaBatch34PathTest {
         val pack = (IdentityPackCodec.parseAndValidate(raw) as PackLoadResult.Success).pack
         assertTrue(PackBrandingEmbeddedPolicy.hasRoundKeys(pack.branding))
         assertTrue(pack.conferences.all { !it.shortCode.isNullOrBlank() })
+    }
+
+    @Test
+    fun batch34PostseasonAwardsPoliciesWired() {
+        assertEquals("MEGA-POST-029", HeritageSelectionEligibilityPolicy.MEGA_ID)
+        assertEquals("MEGA-POST-144", HeritageSelectionEligibilityPolicy.RECLASS_AWARE_ID)
+        assertEquals("MEGA-POST-021", SelectionSundayNetFreezePolicy.MEGA_ID)
+        assertEquals("MEGA-POST-142", SelectionSundayNetFreezePolicy.WIRE_COMPUTE_ID)
+        assertFalse(ProjectedBracketForbiddenPolicy.allowsInSeasonProjectedBracket())
+        assertEquals("MEGA-POST-033", SelectionSundayRevealPolicy.MEGA_ID)
+        assertEquals("MEGA-POST-034", SelectionSundayBubbleEngine.MEGA_ID)
+        assertEquals("MEGA-POST-003", PostseasonCalendarGameRoundPolicy.MEGA_ID)
+        assertEquals("MEGA-NOTES-018", PostseasonCalendarGameRoundPolicy.NOTES_CALENDAR_ID)
+        assertEquals("MEGA-POST-046", MarchMayhemHubSurfacePolicy.OVERVIEW_ID)
+        assertEquals("MEGA-POST-050", MarchMayhemHubSurfacePolicy.MY_TEAM_FILTER_ID)
+        assertEquals("MEGA-POST-056", DashboardMarchMayhemTeaserPolicy.SEED_ROW_ID)
+        assertEquals("MEGA-POST-071", AllAmericaSelectionEngine.MEGA_ID)
+        assertEquals("MEGA-POST-070", NationalAwardScoreEngine.MEGA_ID)
+        assertEquals("MEGA-POST-160", WeeklyPotwBatchEngine.CONF_POTW_ID)
+        assertEquals("MEGA-POST-092", HistoryGoatByPositionSurfacePolicy.MEGA_ID)
+
+        val root = repoRoot()
+        assertTrue(
+            root.resolve(
+                "android/app/src/main/kotlin/dev/novux/dynasty/cbb/data/conference/ConferenceTournamentRepository.kt",
+            ).readText().contains("freezeFinalNetBeforeSelection"),
+        )
+        assertTrue(
+            root.resolve(
+                "android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/history/HistoryHubScreen.kt",
+            ).readText().contains("HistoryGoatByPositionSurfacePolicy"),
+        )
+        assertTrue(
+            root.resolve(
+                "android/app/src/main/kotlin/dev/novux/dynasty/cbb/ui/selection/SelectionSundayRevealScreen.kt",
+            ).readText().contains("SelectionSundayBubbleEngine"),
+        )
     }
 
     private fun repoRoot() =

@@ -636,6 +636,11 @@
     <string name="notification_signing_day_title">Signing Day</string>
     <string name="notification_career_fired_title">Career update</string>
     <string name="notification_selection_sunday_title">Selection Sunday</string>
+    <string name="selection_sunday_title">Selection Sunday</string>
+    <string name="selection_sunday_summary">Field published: %1$s</string>
+    <string name="selection_sunday_bubble_summary">%1$s</string>
+    <string name="selection_sunday_bubble_line">In: %1$s · Out: %2$s</string>
+    <string name="selection_sunday_continue">Continue to March Mayhem</string>
     <string name="dashboard_notification_modal_continue">Continue</string>
     <string name="settings_section_notifications">Notifications</string>
     <string name="settings_dashboard_notification_feed">Show dashboard notification feed</string>
@@ -1262,6 +1267,7 @@
     <string name="history_tab_goat">GOAT</string>
     <string name="history_tab_archive">Year archive</string>
     <string name="history_goat_empty">Complete an End of Season week to publish GOAT ranks.</string>
+    <string name="history_goat_overall">Overall</string>
     <string name="history_archive_empty">Season year cards appear after each End of Season recap.</string>
     <string name="history_goat_line">GOAT %1$.1f · Win shares %2$.1f</string>
     <string name="history_ncba_champion">NCBA champion: %1$s</string>

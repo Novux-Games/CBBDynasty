@@ -170,6 +170,11 @@ object UserCalendarTabBuilder {
                     gameDateLabel = CalendarWeekDisplayDate.gameDateLabel(position).orEmpty(),
                     gamePosition = position,
                     gameIndexInWeek = index,
+                    postseasonRoundLabel = if (position.phase == CalendarPhase.Postseason) {
+                        PostseasonCalendarGameRoundPolicy.roundLabelForPostseasonWeek(position.weekIndex)
+                    } else {
+                        null
+                    },
                 )
             },
             isCurrentWeek = position == active,

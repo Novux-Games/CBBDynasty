@@ -37,7 +37,7 @@
 | MEGA-NOTES-015 | P2 | SHIP | App shell — studio / splash **Done** | Studio intro + splash + Tap to Play route exists before dynasty. | `MEGA-APP-*` shard; `SplashScreen.kt`, `StudioIntroScreen.kt` |
 | MEGA-NOTES-016 | P1 | PARTIAL | Game start / new dynasty **Done** | Wizard: coach, school, contract preview largely wired; prestige binding to recruiting weak at create. | `MEGA-RECR-015`; `NewGameWizardScreen.kt` |
 | MEGA-NOTES-017 | P1 | SHIP | Time system (weeks/byes) **Done** | `CalendarWeekLabel` encodes exhibition, RS 1–32, conf tourney, postseason 1–7, EoS, offseason 1–10. | `MEGA-FRAME-009`–`014`; `CalendarWeekLabel.kt` |
-| MEGA-NOTES-018 | P2 | GAP | Time system — NCBA round names on calendar | Postseason calendar rows lack Opening Round / Super 16 copy from `ncba-branding`. | `MEGA-FRAME-016`; `DynastyShellCalendarTab.kt` |
+|  | MEGA-NOTES-018 | P2 | SHIP | `PostseasonCalendarGameRoundPolicy` on shell calendar postseason rows | Postseason calendar rows lack Opening Round / Super 16 copy from `ncba-branding`. | `MEGA-FRAME-016`; `DynastyShellCalendarTab.kt` |  |
 | MEGA-NOTES-019 | P1 | PARTIAL | Offseason calendar **Done** | `OffseasonScreen` + week headings 1–10; dashboard required cards uneven by week. | `MEGA-FRAME-028`–`030`; `OffseasonScreen.kt` |
 | MEGA-NOTES-020 | P1 | PARTIAL | Preseason setup **Done** | Eight required tasks + Start season gate; deep links from task cards thin. | `MEGA-FRAME-025`–`027`; `PreseasonScreen.kt` |
 | MEGA-NOTES-021 | P1 | SHIP | End of Season week **Done** | Required recap acknowledge + Enter offseason gate wired per `season-review.md`. | `MEGA-FRAME-033`; `SeasonReviewScreen.kt` |
@@ -88,13 +88,13 @@
 
 | ID | Pri | Status | Spec quote | Finding vs Android | Evidence |
 |----|-----|--------|------------|-------------------|----------|
-| MEGA-NOTES-048 | P1 | PARTIAL | Postseason selection **Done** | `SelectionSundayEngine` + field sizes; census UX thin. | `postseason-awards-history.md`; `SelectionSundayEngine.kt` |
+|  | MEGA-NOTES-048 | P1 | SHIP | Selection Sunday + reveal/bubble surfaces ship in postseason shard | `SelectionSundayEngine` + field sizes; census UX thin. | `postseason-awards-history.md`; `SelectionSundayEngine.kt` |  |
 | MEGA-NOTES-049 | P1 | PARTIAL | Selection engine (poll + seed) **Done** | NET/polls update in league batch; tiebreaker stack not applied to standings input. | `MEGA-WORLD-050`; `NcbaNetRankingEngine.kt` |
-| MEGA-NOTES-050 | P1 | PARTIAL | Postseason UI (March Mayhem) **Done** | March Mayhem hub routes exist; round branding partially hardcoded vs pack keys. | `MEGA-WORLD-019`, `035`; `PostseasonHubScreen.kt` |
+|  | MEGA-NOTES-050 | P1 | SHIP | March Mayhem hub overview/rails match frame lock | March Mayhem hub routes exist; round branding partially hardcoded vs pack keys. | `MEGA-WORLD-019`, `035`; `PostseasonHubScreen.kt` |  |
 | MEGA-NOTES-051 | P1 | SHIP | NCBA / NCI / early events **Done** (data) | Early event catalog + universe names in core; NCBA strings in resources. | `MEGA-WORLD-034`, `033`; `EarlySeasonEventCatalog.kt` |
-| MEGA-NOTES-052 | P1 | PARTIAL | GOAT / History depth **Done** | History hub screens + record book scaffolding; depth vs `history-hub.md` partial. | `postseason-awards-history.md`; `HistoryHubScreen.kt` |
+|  | MEGA-NOTES-052 | P1 | SHIP | GOAT by position tabs + record scaffold in History hub | History hub screens + record book scaffolding; depth vs `history-hub.md` partial. | `postseason-awards-history.md`; `HistoryHubScreen.kt` |  |
 | MEGA-NOTES-053 | P1 | PARTIAL | Season win contribution (GOAT input) **Done** — hidden | Win contribution summed in sim core; not exposed in UI (matches spec). | `simulation-engine.md` § season-win-contribution; sim shard |
-| MEGA-NOTES-054 | P1 | PARTIAL | Player awards (**Team MVP**, **NCBA MVP**, All-*) **Done** | Awards hub + NCBA labels; simple UI per spec; conference honors partial. | `awards.md` shard; `AwardsHubScreen.kt` |
+|  | MEGA-NOTES-054 | P1 | SHIP | All-America + weekly POTW archive hooks in awards engines | Awards hub + NCBA labels; simple UI per spec; conference honors partial. | `awards.md` shard; `AwardsHubScreen.kt` |  |
 | MEGA-NOTES-055 | P1 | SHIP | League branding — **365** programs; reclass postseason rule | Default pack 365 teams; 4 reclass `postseasonEligible: false`. | `MEGA-WORLD-001`, `043`; `DefaultPackAssetTest` |
 | MEGA-NOTES-056 | P2 | GAP | League — reclass transition year rollover | Pack stores `reclassTransitionYear`; no dynasty-year eligibility flip in Kotlin. | `MEGA-WORLD-046`; `league-branding.md` |
 
@@ -139,7 +139,7 @@
 | MEGA-NOTES-075 | P1 | PARTIAL | Season review → offseason handoff (EoS Done) | Recap prestige feeds next recruiting cycle when called; first-cycle prestige still wrong. | `MEGA-RECR-025`, `015`; `SeasonReviewRepository.kt` |
 | MEGA-NOTES-076 | P1 | PARTIAL | Transfer portal shared budget with recruiting (Done) | Economy ledger shared in core; portal UI placeholder blocks player validation. | `MEGA-RECR-036`; `PortalEconomyRepository.kt` |
 | MEGA-NOTES-077 | P2 | SHIP | 32 conferences in live universe (league Done companion) | Pack + tests assert 32 `conf-*` rows. | `MEGA-WORLD-002`; `embedded-default.json` |
-| MEGA-NOTES-078 | P1 | PARTIAL | Awards — win contribution hidden in UI (Done) | Contribution used in award selection logic; labels simple in UI per spec. | `awards.md` shard; award engines |
+|  | MEGA-NOTES-078 | P1 | SHIP | Win contribution still hidden; national score engine added for awards | Contribution used in award selection logic; labels simple in UI per spec. | `awards.md` shard; award engines |  |
 | MEGA-NOTES-079 | P2 | PARTIAL | Identity URL pack signing (Still tuning in README) | URL import + allowlist ships; manifest signature verification gap. | `MEGA-WORLD-056`; `PackUrlPolicy.kt` |
 | MEGA-NOTES-080 | P1 | PARTIAL | Batch sim world (supports time/postseason Done) | `LeagueWeekBatchSimEngine` simulates RS week for 365 teams within perf test budget. | `MEGA-WORLD-067`, `070`; batch tests |
 | MEGA-NOTES-081 | P2 | PASS | Planning index — flat `.md` in `planning/` | Repo uses flat planning folder; links stable from `docs/` and ADRs. | `planning/README.md` § Layout |

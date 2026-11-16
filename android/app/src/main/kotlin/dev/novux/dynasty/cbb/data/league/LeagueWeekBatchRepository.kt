@@ -10,8 +10,10 @@ import dev.novux.dynasty.cbb.core.brackets.NciHeritageBracketEngine
 import dev.novux.dynasty.cbb.core.brackets.NcbaOpeningRoundEngine
 import dev.novux.dynasty.cbb.core.brackets.PostseasonUserGameResolver
 import dev.novux.dynasty.cbb.core.brackets.PostseasonWeekBatchEngine
+import dev.novux.dynasty.cbb.core.awards.WeeklyPotwBatchEngine
 import dev.novux.dynasty.cbb.core.calendar.CalendarPhase
 import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
+import dev.novux.dynasty.cbb.core.calendar.PhaseWeekPolicy
 import dev.novux.dynasty.cbb.core.calendar.checkpoint.ProvisionalGameMark
 import dev.novux.dynasty.cbb.core.balance.selectionTuning
 import dev.novux.dynasty.cbb.core.injuries.InjuryOccurrenceEngine
@@ -33,7 +35,9 @@ import dev.novux.dynasty.cbb.data.preseason.EarlySeasonBracketRepository
 import dev.novux.dynasty.cbb.core.league.PostseasonBatchSelectionBootstrapPolicy
 import dev.novux.dynasty.cbb.core.news.PostseasonTournamentNewsEngine
 import dev.novux.dynasty.cbb.core.selection.ConferenceChampionResolver
+import dev.novux.dynasty.cbb.core.selection.HeritageSelectionEligibilityPolicy
 import dev.novux.dynasty.cbb.core.selection.NcbaConferenceAutoBidPolicy
+import dev.novux.dynasty.cbb.core.selection.SelectionSundayNetFreezePolicy
 import dev.novux.dynasty.cbb.core.selection.SelectionSundayEngine
 import dev.novux.dynasty.cbb.core.selection.SelectionSundayInput
 import dev.novux.dynasty.cbb.core.selection.SelectionSundaySnapshot
@@ -62,6 +66,16 @@ class LeagueWeekBatchRepository(
     suspend fun loadStandings(dynastyId: String, seasonIndex: Int): LeagueStandingsState? {
         val raw = context.leagueStandingsStore.data.first()[key(dynastyId, seasonIndex)] ?: return null
         return Json.decodeFromString(raw)
+    }
+
+    /** Final NET attach after conference tournaments ([SelectionSundayNetFreezePolicy]). */
+    suspend fun freezeFinalNetBeforeSelection(dynastyId: String, seasonIndex: Int) {
+        if (!SelectionSundayNetFreezePolicy.refreshNetBeforeSelectionSunday()) return
+        val standings = loadStandings(dynastyId, seasonIndex) ?: return
+        if (standings.netRankByTeam.isEmpty()) return
+        val rsWeeks = PhaseWeekPolicy.weeksInPhase(CalendarPhase.RegularSeason)
+        val frozen = attachWeeklyNet(standings, rsWeeks)
+        persist(dynastyId, frozen)
     }
 
     suspend fun afterWeekAdvance(
@@ -132,11 +146,22 @@ class LeagueWeekBatchRepository(
                     batch = batchParams,
                 )
                 val withNet = attachWeeklyNet(batch.standings, committedWeek.weekIndex)
-                persist(dynastyId, withNet)
                 val packIndex = packRepository.activeSession().index
+                val userConf = packIndex.team(userTeamId)?.conferenceId.orEmpty()
+                val potwRows = WeeklyPotwBatchEngine.rowsForWeek(
+                    seasonIndex = seasonIndex,
+                    rsWeekIndex = committedWeek.weekIndex,
+                    weekResults = withNet.lastWeekResults,
+                    packIndex = packIndex,
+                    userConferenceId = userConf,
+                )
+                val archived = withNet.copy(
+                    weeklyPotwArchive = withNet.weeklyPotwArchive + potwRows,
+                )
+                persist(dynastyId, archived)
                 newsFeedRepository.appendLeagueWeek(
                     dynastyId = dynastyId,
-                    standings = withNet,
+                    standings = archived,
                     userTeamId = userTeamId,
                     teamDisplayName = { id -> packIndex.team(id)?.displayName ?: id },
                 )
@@ -239,7 +264,7 @@ class LeagueWeekBatchRepository(
                 postseasonEligible = teams.associate {
                     it.teamId to ReclassTransitionEligibilityEngine.effectivePostseasonEligible(it, seasonIndex)
                 },
-                heritageEligible = teams.associate { it.teamId to true },
+                heritageEligible = HeritageSelectionEligibilityPolicy.mapForNetTeams(net),
                 conferenceChampions = standings.conferenceTournaments?.let {
                     ConferenceChampionResolver.ncbaAutoBidsFromTournaments(it)
                 } ?: NcbaConferenceAutoBidPolicy.fromStandings(

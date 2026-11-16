@@ -2,6 +2,7 @@ package dev.novux.dynasty.cbb.data.selection
 
 import dev.novux.dynasty.cbb.core.balance.selectionTuning
 import dev.novux.dynasty.cbb.core.selection.ConferenceChampionResolver
+import dev.novux.dynasty.cbb.core.selection.HeritageSelectionEligibilityPolicy
 import dev.novux.dynasty.cbb.core.selection.NcbaConferenceAutoBidPolicy
 import dev.novux.dynasty.cbb.core.selection.SelectionSundayEngine
 import dev.novux.dynasty.cbb.core.selection.SelectionSundayInput
@@ -42,7 +43,7 @@ class SelectionSundayRepository(
                 postseasonEligible = teams.associate {
                     it.teamId to ReclassTransitionEligibilityEngine.effectivePostseasonEligible(it, seasonIndex)
                 },
-                heritageEligible = teams.associate { it.teamId to true },
+                heritageEligible = HeritageSelectionEligibilityPolicy.mapForNetTeams(net),
                 conferenceChampions = standings.conferenceTournaments?.let {
                     ConferenceChampionResolver.ncbaAutoBidsFromTournaments(it)
                 } ?: NcbaConferenceAutoBidPolicy.fromStandings(

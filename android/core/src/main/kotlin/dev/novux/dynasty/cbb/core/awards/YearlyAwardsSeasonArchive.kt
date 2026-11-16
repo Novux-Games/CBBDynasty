@@ -10,5 +10,7 @@ data class YearlyAwardsSeasonArchive(
     val ncbaCoaches: List<AwardHonorLine> = emptyList(),
     val ncbaByPosition: Map<String, List<AwardHonorLine>> = emptyMap(),
     val conferenceAwards: Map<String, List<AwardHonorLine>> = emptyMap(),
+    val ncbaAllAmerica: List<AwardHonorLine> = emptyList(),
+    val ncbaMvpRunners: List<AwardHonorLine> = emptyList(),
     val userTeamMvp: AwardHonorLine? = null,
 )

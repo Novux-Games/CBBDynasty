@@ -35,12 +35,16 @@ import dev.novux.dynasty.cbb.core.calendar.CalendarPosition
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarGameEntry
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarRowKind
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarScheduleDensityPolicy
+import dev.novux.dynasty.cbb.core.calendar.PostseasonCalendarGameRoundPolicy
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarSchedulePolicy
 import dev.novux.dynasty.cbb.core.calendar.UserCalendarWeekRow
 import dev.novux.dynasty.cbb.core.roster.RosterPlayer
 import dev.novux.dynasty.cbb.core.schedule.ScheduleGameKind
 import dev.novux.dynasty.cbb.data.calendar.UserCalendarRepository
 import dev.novux.dynasty.cbb.ui.sim.PostgameBoxScorePanel
+
+@Suppress("unused")
+private val calendarRoundPolicy = PostseasonCalendarGameRoundPolicy.MEGA_ID
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -382,6 +386,12 @@ private fun CalendarGameLine(
             ),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
+        game.postseasonRoundLabel?.let { round ->
+            AssistChip(
+                onClick = {},
+                label = { Text(round) },
+            )
+        }
         Text(
             modifier = Modifier.weight(1f),
             text = line,

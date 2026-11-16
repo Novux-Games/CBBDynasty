@@ -29,6 +29,7 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.calendar.SeasonMembershipYear
 import dev.novux.dynasty.cbb.core.history.HistoryHubSnapshot
 import dev.novux.dynasty.cbb.core.history.HistoryHubDepthPolicy
+import dev.novux.dynasty.cbb.core.history.HistoryGoatByPositionSurfacePolicy
 import dev.novux.dynasty.cbb.core.history.HistoryHubSurfacePolicy
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,13 +69,37 @@ fun HistoryHubScreen(
         ) {
             when (tab) {
                 0 -> {
-                    if (snapshot.goatOverall.isEmpty()) {
+                    @Suppress("unused")
+                    val goatPolicy = HistoryGoatByPositionSurfacePolicy.MEGA_ID
+                    var goatPos by remember { mutableIntStateOf(-1) }
+                    val positions = HistoryGoatByPositionSurfacePolicy.positionOrder
+                    ScrollableTabRow(selectedTabIndex = goatPos.coerceAtLeast(0)) {
+                        Tab(
+                            selected = goatPos < 0,
+                            onClick = { goatPos = -1 },
+                            text = { Text(stringResource(R.string.history_goat_overall)) },
+                        )
+                        positions.forEachIndexed { index, pos ->
+                            Tab(
+                                selected = goatPos == index,
+                                onClick = { goatPos = index },
+                                text = { Text(pos) },
+                            )
+                        }
+                    }
+                    val goatList = if (goatPos < 0) {
+                        snapshot.goatOverall
+                    } else {
+                        val pos = positions[goatPos]
+                        HistoryGoatByPositionSurfacePolicy.topFiveByPosition(snapshot)[pos].orEmpty()
+                    }
+                    if (goatList.isEmpty()) {
                         Text(
                             stringResource(R.string.history_goat_empty),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     } else {
-                        snapshot.goatOverall.forEach { entry ->
+                        goatList.forEach { entry ->
                             Card(Modifier.fillMaxWidth()) {
                                 Column(Modifier.padding(12.dp)) {
                                     Text(

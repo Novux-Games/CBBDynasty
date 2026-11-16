@@ -209,7 +209,11 @@ private fun AwardsYearlyScreen(
                                 } else {
                                     AwardsDemoCatalog.ncbaPositionPoy("PG")
                                 }
-                                YearlyNcbaSubTab.AllAmerica -> emptyList()
+                                YearlyNcbaSubTab.AllAmerica -> if (useArchive) {
+                                    currentSeasonArchive!!.ncbaAllAmerica
+                                } else {
+                                    AwardsDemoCatalog.ncbaOverview(displayLabel).take(5)
+                                }
                                 YearlyNcbaSubTab.Coaches -> if (useArchive) {
                                     currentSeasonArchive!!.ncbaCoaches
                                 } else {
