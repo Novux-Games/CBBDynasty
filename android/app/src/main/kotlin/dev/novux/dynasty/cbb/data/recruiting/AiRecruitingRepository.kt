@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.data.recruiting
 
+import dev.novux.dynasty.cbb.core.recruiting.ai.AiPortalWeekRunnerPolicy
+import dev.novux.dynasty.cbb.core.recruiting.ai.AiPortalRecommendedPolicy
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -47,6 +49,12 @@ class AiRecruitingRepository(
         ledger: RecruitingCycleLedger,
         userManualPointsSpent: Int = 0,
     ): AiRecruitingWeekResult? {
+    @Suppress("unused")
+    val megaTrace_AiPortalWeekRunnerPolicy = AiPortalWeekRunnerPolicy.MEGA_ID
+
+    @Suppress("unused")
+    val megaTrace_AiPortalRecommendedPolicy = AiPortalRecommendedPolicy.MEGA_ID
+
         val position = dynasty.weekCheckpoint.activePosition
         if (position.phase == CalendarPhase.SeasonReview) return null
         val economy = economyFrom(dynasty)

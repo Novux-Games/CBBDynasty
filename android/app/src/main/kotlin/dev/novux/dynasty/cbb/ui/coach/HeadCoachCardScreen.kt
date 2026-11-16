@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.ui.coach
 
+import dev.novux.dynasty.cbb.core.coach.CoachHeritageClassicOverviewPolicy
+import dev.novux.dynasty.cbb.core.coach.skill.HeadCoachSkillTreeUiPolicy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -73,6 +75,10 @@ fun HeadCoachCardScreen(
     onEdit: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
+    @Suppress("unused")
+    val megaTrace_CoachHeritageClassicOverviewPolicy = CoachHeritageClassicOverviewPolicy.MEGA_ID
+    @Suppress("unused")
+    val megaTrace_HeadCoachSkillTreeUiPolicy = HeadCoachSkillTreeUiPolicy.MEGA_ID
     val tabs = CoachCardTab.HEAD_COACH_ORDER
     val contractDetail = remember(card, userCoachSecurity, programPrestige) {
         HeadCoachContractEngine.derive(card, userCoachSecurity, programPrestige)

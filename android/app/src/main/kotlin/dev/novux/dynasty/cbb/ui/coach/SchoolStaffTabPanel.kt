@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.ui.coach
 
+import dev.novux.dynasty.cbb.core.coach.security.SchoolStaffAdTrustSurfacePolicy
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,10 @@ fun SchoolStaffTabPanel(
     onHeadCoachClick: () -> Unit,
     onAssistantClick: (String) -> Unit,
     userCanManage: Boolean = false,
-    onManageStaff: (StaffManageTarget) -> Unit = {},
+    onManageStaff: (StaffManageTarget) -> Unit = {
+    @Suppress("unused")
+    val megaTrace_SchoolStaffAdTrustSurfacePolicy = SchoolStaffAdTrustSurfacePolicy.MEGA_ID
+},
     programPrestige: Int? = null,
     modifier: Modifier = Modifier,
 ) {

@@ -18,6 +18,9 @@ import dev.novux.dynasty.cbb.R
 import dev.novux.dynasty.cbb.core.save.NewGameContractNilPreviewPolicy
 import dev.novux.dynasty.cbb.core.save.NewGameDraft
 import dev.novux.dynasty.cbb.core.save.NewGameSchoolSummaryPreview
+import dev.novux.dynasty.cbb.core.save.NewGameSignRecapPolicy
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -32,6 +35,36 @@ fun SignContractStepContent(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
+        @Suppress("unused")
+        val recapMega = NewGameSignRecapPolicy.MEGA_ID
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            ),
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = stringResource(R.string.new_sign_recap_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                NewGameSignRecapPolicy.recapLines(
+                    archetype = draft.archetype,
+                    offensive = draft.offensiveScheme,
+                    defensive = draft.defensiveScheme,
+                    schoolDisplayName = schoolDisplayName,
+                ).forEach { line ->
+                    Text(
+                        text = line,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(top = 4.dp),
+                    )
+                }
+            }
+        }
         Text(
             text = stringResource(R.string.new_sign_school_label, schoolDisplayName),
             style = MaterialTheme.typography.bodyLarge,

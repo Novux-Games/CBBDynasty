@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.ui.coach
 
+import dev.novux.dynasty.cbb.core.coach.security.ContractTabJobSecurityFactorsPolicy
+import dev.novux.dynasty.cbb.core.coach.security.ContractTabJobSecurityPolicy
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -30,6 +32,10 @@ fun HeadCoachContractTab(
     onAcceptExtension: () -> Unit = {},
     onDeclineExtension: () -> Unit = {},
 ) {
+    @Suppress("unused")
+    val megaTrace_ContractTabJobSecurityFactorsPolicy = ContractTabJobSecurityFactorsPolicy.MEGA_ID
+    @Suppress("unused")
+    val megaTrace_ContractTabJobSecurityPolicy = ContractTabJobSecurityPolicy.MEGA_ID
     val firedRisk = userCoachSecurity?.jobSecurity?.tier in setOf(
         JobSecurityTier.Critical,
         JobSecurityTier.HotSeat,

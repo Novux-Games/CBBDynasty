@@ -120,6 +120,7 @@
     <string name="new_step_school_subtitle">Pick a program and review the contract preview.</string>
     <string name="new_step_sign_title">Sign contract</string>
     <string name="new_step_sign_subtitle">Confirm and launch Season 1.</string>
+    <string name="new_sign_recap_title">Contract recap</string>
     <string name="new_sign_school_label">Program: %1$s</string>
     <string name="new_sign_coach_label">Head coach: %1$s</string>
     <string name="new_sign_nil_preview">Projected annual NIL pool (chosen school): %1$s</string>

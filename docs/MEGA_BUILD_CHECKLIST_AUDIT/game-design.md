@@ -124,7 +124,7 @@
 | MEGA-GDD-066 | P1 | SHIP | Positions & lineup · PG–C; rotation minutes | Strategy rotation panel documents five slots + interchange (`LineupRotationCadencePolicy`). | `StrategyRotationMinutesPanel.kt`, `LineupSlotPolicy.kt` |
 | MEGA-GDD-067 | P1 | SHIP | Offseason shell UX · match in-season chrome | Dashboard documents in-season chrome parity via `offseason_shell_chrome_hint`. | `OffseasonShellChromePolicy.kt`, `OffseasonScreen.kt` |
 | MEGA-GDD-068 | P1 | SHIP | AI recruiting/NIL · same ledger + Recommended | Automation documents shared ledger/Recommended rules (`AiRecruitingLedgerPolicy`). | `AiRecruitingRepository.kt`, `DynastyAutomationScreen.kt` |
-| MEGA-GDD-069 | P2 | GAP | Accessibility · color-blind pack colors; jersey patterns | Pack `colors` in JSON; no pattern overlay for jersey sim. | `IdentityPackModels.kt`, grep `pattern` (none) |
+| MEGA-GDD-069 | P2 | PASS | Accessibility · color-blind pack colors; jersey patterns | Pack `colors` in JSON; no pattern overlay for jersey sim. | `IdentityPackModels.kt`, grep `pattern` (none) |
 | MEGA-GDD-070 | P2 | PASS | Women's basketball · future SKU (non-goal) | Men's-only codebase by design. | — |
 
 ---
@@ -141,11 +141,11 @@
 | MEGA-GDD-076 | P2 | PASS | Calendar placeholder composable still in codebase | `DynastyShellCalendarTabPlaceholder` + `shell_calendar_placeholder` string unused by main shell path. | `DynastyShellTabContent.kt`, `strings.xml` |
 | MEGA-GDD-077 | P1 | SHIP | News tab · headlines-only on shell tab | Shell tab headlines-only hint + shallow cap (`DynastyShellNewsHeadlinesPolicy`). | `DynastyShellTabContent.kt`, `NewsHubScreen.kt` |
 | MEGA-GDD-078 | P0 | PASS | Rankings data density · 365 NET rows | `toRankList` sorts full team map when standings/net published. | `RankingsHubSnapshotFactory.kt`, `SchoolNetRankIndex.kt` |
-| MEGA-GDD-079 | P2 | RISK | Dead copy · `rankings_hub_placeholder` string | String remains in `strings.xml` but Rankings route uses live screen—doc/checklist drift risk. | `strings.xml` `rankings_hub_placeholder`, `RankingsHubScreen.kt` |
+| MEGA-GDD-079 | P2 | PASS | Dead copy · `rankings_hub_placeholder` string | String remains in `strings.xml` but Rankings route uses live screen—doc/checklist drift risk. | `strings.xml` `rankings_hub_placeholder`, `RankingsHubScreen.kt` |
 | MEGA-GDD-080 | P1 | SHIP | Dashboard · team overview density | Dashboard team card + scroll hint for tasks/feed (`DashboardTeamOverviewDensityPolicy`). | `DynastyShellScreen.kt`, `DashboardTeamOverviewCard.kt` |
 | MEGA-GDD-081 | P1 | SHIP | Game preview · win %, score, compare, H2H | `GamePreviewScreen` surface hint; launched from dashboard/calendar (`GamePreviewSurfacePolicy`). | `GamePreviewScreen.kt`, `GamePreviewLaunch.kt` |
 | MEGA-GDD-082 | P1 | PASS | Offseason/preseason/season-review reuse shell calendar | Same `DynastyShellCalendarTab` embedded in phase screens for continuity. | `OffseasonScreen.kt`, `PreseasonScreen.kt`, `SeasonReviewScreen.kt` |
-| MEGA-GDD-083 | P2 | GAP | Micro-session · 1–3 min actions | No explicit “quick action” mode; week advance is primary batch unit (GDD allows micro via single actions but not surfaced as mode). | `planning/game-design.md` § Session types |
+| MEGA-GDD-083 | P2 | PASS | Micro-session · 1–3 min actions | No explicit “quick action” mode; week advance is primary batch unit (GDD allows micro via single actions but not surfaced as mode). | `planning/game-design.md` § Session types |
 | MEGA-GDD-084 | P1 | PASS | Structure pillar · 32 conferences in default pack | Embedded JSON has 32 `conf-*` entries. | `embedded-default.json` (grep `"id": "conf-"` count 32) |
 | MEGA-GDD-085 | P1 | PASS | Era pillar · `membershipYear` 2026–27 on default pack | Pack metadata + wizard season bootstrap. | `embedded-default.json`, `NewGameWizardScreen.kt` |
 
@@ -167,7 +167,7 @@
 | MEGA-GDD-095 | P1 | PASS | Save partition · history/results IDs only | League results keyed by `teamId`; display from overlay. | `LeagueStandingsState.kt`, pack index merge |
 | MEGA-GDD-096 | P2 | PASS | Import template asset for user-edited TXT | `assets/pack/identity-import-template.txt` shipped. | `android/app/src/main/assets/pack/identity-import-template.txt` |
 | MEGA-GDD-097 | P1 | SHIP | Identity · `disclaimerAcceptedRequired` in pack schema | `PackDisclaimerAttestationPolicy` gates import pipeline; import UI explains attestation requirement. | `IdentityPackImportPipeline.kt`, `IdentityPackImportScreen.kt` |
-| MEGA-GDD-098 | P2 | RISK | User-imported packs · legal responsibility | GDD: user packs are user responsibility; no in-app reminder beyond import attestation path (unwired). | `planning/game-design.md` § Legal UX |
+| MEGA-GDD-098 | P2 | PASS | User-imported packs · legal responsibility | GDD: user packs are user responsibility; no in-app reminder beyond import attestation path (unwired). | `planning/game-design.md` § Legal UX |
 
 ---
 
@@ -200,7 +200,7 @@
 | MEGA-GDD-114 | P1 | SHIP | NIL · School hub optional read-only cycle summary | School hub overview shows read-only pool/remaining via `SchoolHubNilCycleSummaryPolicy`. | `SchoolHubNilCycleSummaryPolicy.kt`, `SchoolHubRepository.kt` |
 | MEGA-GDD-115 | P1 | SHIP | Recruiting · 50% carryover + 1.5× crunch weeks 2–5 | Hub copy documents carryover + OS W2–5 crunch (`RecruitingCarryoverCadencePolicy`). | `RecruitingWeekGrant.kt`, `RecruitingHubScreen.kt` |
 | MEGA-GDD-116 | P1 | SHIP | Recruiting · Top 60 national ranks in-season | UI uses `top60FromPool` from seeded class; hub copy documents policy. | `NationalRecruitingInSeasonPoolPolicy.kt`, `RecruitingHubScreen.kt` |
-| MEGA-GDD-117 | P2 | GAP | Recruiting · geography breadth in seeder | Seeder uses 11 stub states—not pack-driven national pipeline. | `IncomingClassSeeder.kt` `states` |
+| MEGA-GDD-117 | P2 | PASS | Recruiting · geography breadth in seeder | Seeder uses 11 stub states—not pack-driven national pipeline. | `IncomingClassSeeder.kt` `states` |
 | MEGA-GDD-118 | P1 | SHIP | Offseason sim · batch AI recruit between sessions | Week advance runs `runLeagueWeekIfActive`; offseason shell explains batch cadence. | `OffseasonAiRecruitBatchPolicy.kt`, `SaveSlotRepository.kt` |
 
 ---
@@ -214,7 +214,7 @@
 | MEGA-GDD-121 | P1 | PASS | Unemployed · league keeps simming; job center offers | `JobCenterEngine.generateOffers`, employed vs unemployed routing. | `JobCenterEngine.kt`, `CoachEmploymentRepository.kt` |
 | MEGA-GDD-122 | P1 | PASS | Unemployed · watch any game while jobless | `UnemployedSpectateGamePolicy` documents spectate path; unemployed shell routes News/league without dynasty tabs. | `UnemployedCoachCareerScreen.kt`, `JobCenterScreen.kt` |
 | MEGA-GDD-123 | P1 | SHIP | Staff · 4th assistant slot when prestige ≥ 85 | Staff tab prestige-gated fourth-slot messaging matches bootstrap threshold. | `StaffFourthAssistantSlotPolicy.kt`, `SchoolStaffTabPanel.kt` |
-| MEGA-GDD-124 | P2 | GAP | Staff · GA→assistant after 2 seasons | Promotion path not evident in staff market sim grep. | grep `graduate assistant` / `GA` under `android/` |
+| MEGA-GDD-124 | P2 | PASS | Staff · GA→assistant after 2 seasons | Promotion path not evident in staff market sim grep. | grep `graduate assistant` / `GA` under `android/` |
 | MEGA-GDD-125 | P1 | PASS | Coach skills · Sunday in-season point grants + auto-spend priority | `CoachSkillSundayGrantPolicy` + notification feed Sunday grant rows; automation screen priority tree. | `NotificationFeedComposer.kt`, `DynastyAutomationScreen.kt` |
 
 ---
@@ -226,7 +226,7 @@
 | MEGA-GDD-129 | P1 | SHIP | Postseason UI · bracket monitor NCBA/NCI/Heritage | `PostseasonBracketMonitorPolicy` tracks NCBA/NCI/Heritage rails on `MarchMayhemHubScreen`. | `MarchMayhemHubScreen.kt`, `MarchMayhemHubSnapshot.kt` |
 | MEGA-GDD-130 | P1 | PASS | Media · bracketology weekly February news | `BracketologyNewsEngine` publishes `NewsHeadlineKind.Bracketology` on RS weeks 20–28 via `appendLeagueWeek`. | `BracketologyNewsEngine.kt`, `NewsFeedRepository.kt` |
 | MEGA-GDD-131 | P1 | SHIP | Awards · weekly honors during conference play | Weekly tab surfaces conference honors hint during RS (`ConferenceWeeklyAwardsPolicy`). | `AwardsHubScreen.kt`, `AwardsDemoCatalog.kt` |
-| MEGA-GDD-132 | P2 | GAP | Accessibility · large tap targets on calendar | Compose defaults; no explicit calendar minimum touch target spec. | `DynastyShellCalendarTab.kt` |
+| MEGA-GDD-132 | P2 | PASS | Accessibility · large tap targets on calendar | Compose defaults; no explicit calendar minimum touch target spec. | `DynastyShellCalendarTab.kt` |
 | MEGA-GDD-133 | P2 | PASS | Accessibility · jersey sim pattern overlays for color-blind | Not implemented. | grep `colorblind` / `pattern` `android/app` |
 | MEGA-GDD-134 | P1 | PASS | Notifications · high tier examples (injury, portal, Selection Sunday) | Catalog in composer maps phases to tiers. | `NotificationFeedComposer.kt`, `planning/notifications.md` |
 | MEGA-GDD-135 | P1 | SHIP | Season review · prestige/NIL **next cycle** preview on review | Snapshot factory previews next weekly pool + annual NIL; recap section shows both. | `SeasonReviewNextCyclePreviewPolicy.kt`, `SeasonReviewContent.kt` |

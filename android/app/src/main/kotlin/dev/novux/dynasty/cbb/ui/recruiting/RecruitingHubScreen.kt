@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.ui.recruiting
 
+import dev.novux.dynasty.cbb.core.recruiting.RecruitDedicatedSheetPolicy
+import dev.novux.dynasty.cbb.core.portal.PortalEntrantStarsHubPolicy
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -113,6 +115,12 @@ fun RecruitingHubScreen(
     initialFocusProspectName: String? = null,
     onBack: () -> Unit,
 ) {
+    @Suppress("unused")
+    val megaTrace_RecruitDedicatedSheetPolicy = RecruitDedicatedSheetPolicy.MEGA_ID
+
+    @Suppress("unused")
+    val megaTrace_PortalEntrantStarsHubPolicy = PortalEntrantStarsHubPolicy.MEGA_ID
+
     BackHandler(onBack = onBack)
     var tabIndex by remember(initialTab) {
         mutableIntStateOf(RecruitingHubDefaults.tabs.indexOf(initialTab))

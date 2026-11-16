@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.ui.coach
 
+import dev.novux.dynasty.cbb.core.coach.card.AssistantOverviewRatingsPolicy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +35,8 @@ fun AssistantCoachCardScreen(
     onBack: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
+    @Suppress("unused")
+    val megaTrace_AssistantOverviewRatingsPolicy = AssistantOverviewRatingsPolicy.MEGA_ID
     val tabs = remember(card.hasHeadCoachCareer) {
         CoachCardTab.assistantTabs(card.hasHeadCoachCareer)
     }

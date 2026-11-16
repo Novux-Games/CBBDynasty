@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.ui.player
 
+import dev.novux.dynasty.cbb.core.player.loyalty.RosterLoyaltyChipDensityPolicy
+import dev.novux.dynasty.cbb.core.settings.RosterRowCompactDensityPolicy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +27,12 @@ fun ShellRosterPlayerRow(
     rosterPlayer: RosterPlayer,
     modifier: Modifier = Modifier,
 ) {
+    @Suppress("unused")
+    val megaTrace_RosterLoyaltyChipDensityPolicy = RosterLoyaltyChipDensityPolicy.MEGA_ID
+
+    @Suppress("unused")
+    val megaTrace_RosterRowCompactDensityPolicy = RosterRowCompactDensityPolicy.MEGA_ID
+
     @Suppress("unused")
     val qaId = ShellRosterThumbnailPath.MEGA_ID
     Row(
@@ -58,7 +66,9 @@ fun ShellRosterPlayerRow(
                 )
                 PlayerArchetypeBadgeChip(archetype = player.archetype)
             }
-            PlayerLoyaltyChips(player)
+            if (RosterLoyaltyChipDensityPolicy.showOnRoster(compact = true)) {
+                PlayerLoyaltyChips(player)
+            }
         }
     }
 }

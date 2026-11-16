@@ -1,5 +1,7 @@
 package dev.novux.dynasty.cbb.ui.player
 
+import dev.novux.dynasty.cbb.core.player.loyalty.PlayerStayPledgeParamsPolicy
+import dev.novux.dynasty.cbb.core.player.loyalty.PlayerPromiseChipDetailPolicy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -21,6 +23,12 @@ import dev.novux.dynasty.cbb.core.player.loyalty.PromiseStatus
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PlayerLoyaltyChips(player: DynastyPlayer, modifier: Modifier = Modifier) {
+    @Suppress("unused")
+    val megaTrace_PlayerStayPledgeParamsPolicy = PlayerStayPledgeParamsPolicy.MEGA_ID
+
+    @Suppress("unused")
+    val megaTrace_PlayerPromiseChipDetailPolicy = PlayerPromiseChipDetailPolicy.MEGA_ID
+
     FlowRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -56,10 +64,14 @@ fun PlayerLoyaltyChips(player: DynastyPlayer, modifier: Modifier = Modifier) {
                     AssistChipDefaults.assistChipColors()
                 },
                 label = {
+                    val detail = PlayerPromiseChipDetailPolicy.chipLabel(
+                        promise.displayLabel(),
+                        stringResource(statusRes),
+                    )
                     Text(
                         stringResource(
                             R.string.player_promise_chip,
-                            promise.displayLabel(),
+                            detail,
                             stringResource(statusRes),
                         ),
                     )

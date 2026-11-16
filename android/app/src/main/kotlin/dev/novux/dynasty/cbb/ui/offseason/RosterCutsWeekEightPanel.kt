@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.ui.offseason
 
+import dev.novux.dynasty.cbb.core.recruiting.WalkOnAfterSigningDayUiPolicy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,6 +43,9 @@ fun RosterCutsWeekEightPanel(
     onRosterChanged: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    @Suppress("unused")
+    val megaTrace_WalkOnAfterSigningDayUiPolicy = WalkOnAfterSigningDayUiPolicy.MEGA_ID
+
     var players by remember { mutableStateOf<List<RosterPlayer>>(emptyList()) }
     var walkOnsSigned by remember { mutableIntStateOf(0) }
     var rosterLocked by remember { mutableStateOf(false) }

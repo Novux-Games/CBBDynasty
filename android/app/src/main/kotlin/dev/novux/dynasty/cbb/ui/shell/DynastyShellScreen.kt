@@ -1,5 +1,6 @@
 package dev.novux.dynasty.cbb.ui.shell
 
+import dev.novux.dynasty.cbb.core.player.card.InSeasonRosterPlayerCardPolicy
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -194,8 +195,8 @@ fun DynastyShellScreen(
     mutedNotificationCategories: Set<dev.novux.dynasty.cbb.core.notification.NotificationFeedCategory> = emptySet(),
     hubMenuCallbacks: DynastyHubMenuCallbacks,
     onOpenDiscipline: (PendingDisciplineIncident) -> Unit,
-    onOpenGamePreview: () -> Unit = {},
     onOpenGameWatch: () -> Unit = {},
+    onOpenGamePreview: () -> Unit = {},
     onOpenSigningDay: (dev.novux.dynasty.cbb.core.dashboard.DashboardDeepLink) -> Unit = {},
     onOpenRecruitingTab: (RecruitingHubTab, String?) -> Unit = { _, _ -> },
     onOpenAutomation: () -> Unit = {},
@@ -203,6 +204,8 @@ fun DynastyShellScreen(
     postgameInjuryRefreshKey: Int = 0,
     disciplineDashboardRefreshKey: Int = 0,
 ) {
+    @Suppress("unused")
+    val megaTrace_InSeasonRosterPlayerCardPolicy = InSeasonRosterPlayerCardPolicy.MEGA_ID
     var loaded by remember(initial) { mutableStateOf(initial) }
     var pendingAdvanceConfirmation by remember { mutableStateOf<SimWeekConfirmation?>(null) }
     var weekAdvanceInProgress by remember { mutableStateOf(false) }
