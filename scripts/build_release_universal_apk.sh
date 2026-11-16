@@ -38,6 +38,14 @@ if [[ -n "$ks_path" && -f "$ks_path" ]]; then
     build_apks_args+=(--key-pass="pass:$ANDROID_KEY_PASSWORD")
   fi
 else
+  mkdir -p "$HOME/.android"
+  if [[ ! -f "$HOME/.android/debug.keystore" ]]; then
+    keytool -genkeypair -v \
+      -keystore "$HOME/.android/debug.keystore" \
+      -storepass android -alias androiddebugkey -keypass android \
+      -keyalg RSA -keysize 2048 -validity 10000 \
+      -dname "CN=Android Debug,O=Android,C=US"
+  fi
   build_apks_args+=(--ks="$HOME/.android/debug.keystore" --ks-pass=pass:android --ks-key-alias=androiddebugkey)
 fi
 
