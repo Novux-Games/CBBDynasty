@@ -789,9 +789,9 @@ fun DynastyApp(
                         balanceRulesetRepository =
                             LocalContext.current.requireDynastyApplication().balanceRulesetRepository,
                         onExitWizard = { navController.popBackStack() },
-                        onDynastyCreated = {
+                        onDynastyCreated = { loaded ->
                             scope.launch {
-                                ActiveDynastySession.current?.let { onDynastyReady(it) }
+                                onDynastyReady(loaded)
                                 navController.popBackStack()
                             }
                         },

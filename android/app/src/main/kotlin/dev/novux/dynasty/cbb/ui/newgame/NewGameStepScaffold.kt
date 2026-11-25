@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -27,6 +28,9 @@ fun NewGameStepScaffold(
     onNext: (() -> Unit)?,
     nextLabel: String,
     modifier: Modifier = Modifier,
+    primaryAction: (() -> Unit)? = null,
+    primaryLabel: String? = null,
+    primaryEnabled: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     val progress = step.index / NewGameStep.entries.size.toFloat()
@@ -74,12 +78,23 @@ fun NewGameStepScaffold(
             ) {
                 Text(stringResource(R.string.settings_back))
             }
-            if (onNext != null) {
-                OutlinedButton(
-                    onClick = onNext,
-                    modifier = Modifier.weight(1f),
-                ) {
-                    Text(nextLabel)
+            when {
+                onNext != null -> {
+                    OutlinedButton(
+                        onClick = onNext,
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Text(nextLabel)
+                    }
+                }
+                primaryAction != null && primaryLabel != null -> {
+                    Button(
+                        onClick = primaryAction,
+                        enabled = primaryEnabled,
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Text(primaryLabel)
+                    }
                 }
             }
         }

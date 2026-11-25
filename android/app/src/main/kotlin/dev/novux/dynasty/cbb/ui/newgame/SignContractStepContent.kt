@@ -3,7 +3,8 @@ package dev.novux.dynasty.cbb.ui.newgame
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,10 +35,13 @@ fun SignContractStepContent(
     contractNilPreview: NewGameSchoolSummaryPreview?,
     signError: SignContractError?,
     signingInProgress: Boolean,
-    onSign: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
+    ) {
         @Suppress("unused")
         val recapMega = NewGameSignRecapPolicy.MEGA_ID
         Card(
@@ -139,12 +143,13 @@ fun SignContractStepContent(
                 modifier = Modifier.padding(bottom = 8.dp),
             )
         }
-        Button(
-            onClick = onSign,
-            enabled = !signingInProgress,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(stringResource(R.string.new_sign_cta))
+        if (signingInProgress) {
+            Text(
+                text = stringResource(R.string.new_sign_in_progress),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 8.dp),
+            )
         }
     }
 }

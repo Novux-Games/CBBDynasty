@@ -3,6 +3,8 @@ package dev.novux.dynasty.cbb.ui.offseason
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -421,6 +423,7 @@ fun OffseasonScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
+                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = 28.dp, vertical = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
@@ -487,7 +490,7 @@ fun OffseasonScreen(
             PlayersLeavingPanel(
                 dynastyId = loaded.dynastyId,
                 rosterRepository = rosterRepository,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
                 onPlayersChanged = { weekOnePlayers = it },
                 navigationRequest = weekOneLeavingNav,
                 onNavigationRequestConsumed = { weekOneLeavingNav = null },
@@ -498,7 +501,7 @@ fun OffseasonScreen(
                 dynastyId = loaded.dynastyId,
                 seasonIndex = loaded.metadata.seasonIndex,
                 weekTwoRepository = offseasonWeekTwoRepository,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
             )
         } else if (inOffseason && position.weekIndex == OffseasonRosterLockConstants.OFFSEASON_WEEK_INDEX) {
             if (offseasonRequiredTasks.isNotEmpty()) {
@@ -521,7 +524,7 @@ fun OffseasonScreen(
                             (OffseasonRosterLockConstants.SCHOLARSHIP_ROSTER_CAP - scholarships).coerceAtLeast(0)
                     }
                 },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
             )
         } else if (inOffseason && position.weekIndex == OffseasonWeekNineConstants.OFFSEASON_WEEK_INDEX) {
             FundraisingWeekNinePanel(
@@ -532,7 +535,7 @@ fun OffseasonScreen(
                 onEconomyLoaded = { weekNineEconomy = it },
                 onOpenFullHub = { fundraisingSheetOpen = true },
                 compactSummary = true,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
             )
         } else if (inOffseason && position.weekIndex == OffseasonWeekTenConstants.OFFSEASON_WEEK_INDEX) {
             if (offseasonRequiredTasks.isNotEmpty()) {
@@ -559,7 +562,7 @@ fun OffseasonScreen(
                         )
                     }
                 },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
             )
         } else if (inOffseason && position.weekIndex == SummerWorkoutConstants.OFFSEASON_WEEK_INDEX) {
             SummerWorkoutReportPanel(
@@ -568,38 +571,38 @@ fun OffseasonScreen(
                 summerWorkoutRepository = summerWorkoutRepository,
                 report = summerWorkoutReport,
                 onOpenFullReport = { summerWorkoutSheetOpen = true },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
             )
         } else if (inOffseason && position.weekIndex == SigningDayConstants.OFFSEASON_WEEK_INDEX) {
             Text(
                 text = stringResource(R.string.offseason_signing_day_hint),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
             )
         } else if (inOffseason && position.weekIndex == 3) {
             Text(
                 text = stringResource(R.string.offseason_dashboard_week3_body),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
             )
         } else if (inOffseason && position.weekIndex == 4) {
             Text(
                 text = stringResource(R.string.offseason_dashboard_week4_body),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
             )
         } else if (inOffseason && position.weekIndex == 5) {
             Text(
                 text = stringResource(R.string.offseason_dashboard_week5_body),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
             )
         } else {
-            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
                     text = stringResource(R.string.offseason_shell_chrome_hint),
                     style = MaterialTheme.typography.bodySmall,

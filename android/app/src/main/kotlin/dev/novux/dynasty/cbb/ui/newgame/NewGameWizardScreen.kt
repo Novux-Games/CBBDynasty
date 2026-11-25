@@ -33,6 +33,7 @@ import dev.novux.dynasty.cbb.core.balance.BalanceRecruitingParser
 import dev.novux.dynasty.cbb.core.save.NewGameSchoolSummaryPreviewEngine
 import dev.novux.dynasty.cbb.data.balance.BalanceRulesetRepository
 import dev.novux.dynasty.cbb.data.pack.PackRepository
+import dev.novux.dynasty.cbb.core.save.LoadedDynasty
 import dev.novux.dynasty.cbb.data.save.SaveSlotRepository
 
 /** Multi-step **New** flow — [planning/game-start.md#new-game-wizard-overview]. */
@@ -43,7 +44,7 @@ fun NewGameWizardScreen(
     balanceRulesetRepository: BalanceRulesetRepository,
     onExitWizard: () -> Unit,
     onNoEmptySlot: () -> Unit,
-    onDynastyCreated: () -> Unit,
+    onDynastyCreated: (LoadedDynasty) -> Unit,
 ) {
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
@@ -56,6 +57,7 @@ fun NewGameWizardScreen(
     var packId by remember { mutableStateOf(dev.novux.dynasty.cbb.core.save.DynastySchema.DEFAULT_PACK_ID) }
     var signError by remember { mutableStateOf<SignContractError?>(null) }
     var signing by remember { mutableStateOf(false) }
+    var signCompleted by remember { mutableStateOf(false) }
     var wizardRecruitingEconomy by remember { mutableStateOf<BalanceRecruitingEconomy?>(null) }
     var wizardNilTables by remember { mutableStateOf<BalanceNilAnnualPoolTables?>(null) }
     var activePackLabel by remember { mutableStateOf("") }
@@ -97,9 +99,38 @@ fun NewGameWizardScreen(
                 val isLast = step == NewGameStep.SignContract
                 val isCoach = step == NewGameStep.Coach
                 val isSchool = step == NewGameStep.School
+                val signContract = signContract@{
+                    if (signCompleted || signing) return@signContract
+                    scope.launch {
+                        signing = true
+                        signError = null
+                        if (NewGameSignValidator.validate(draft) != null) {
+                            signError = SignContractError.IncompleteWizard
+                            signing = false
+                            return@launch
+                        }
+                        val schoolName = schools.firstOrNull {
+                            it.teamId == draft.selectedTeamId
+                        }?.displayName.orEmpty()
+                        val loaded = saveSlotRepository.signNewGameFromWizard(
+                            draft = draft,
+                            schoolDisplayName = schoolName,
+                            packId = packId,
+                        )
+                        signing = false
+                        if (loaded == null) {
+                            signError = SignContractError.SlotUnavailable
+                        } else {
+                            signCompleted = true
+                            ActiveDynastySession.set(loaded)
+                            onDynastyCreated(loaded)
+                        }
+                    }
+                }
                 NewGameStepScaffold(
                     step = step,
-                    onBack = {
+                    onBack = back@{
+                        if (signCompleted) return@back
                         when (step.previous) {
                             null -> onExitWizard()
                             else -> navController.popBackStack()
@@ -124,9 +155,10 @@ fun NewGameWizardScreen(
                             }
                         }
                     },
-                    nextLabel = stringResource(
-                        if (isLast) R.string.new_step_sign_title else R.string.new_wizard_next,
-                    ),
+                    nextLabel = stringResource(R.string.new_wizard_next),
+                    primaryAction = if (isLast) signContract else null,
+                    primaryLabel = if (isLast) stringResource(R.string.new_sign_cta) else null,
+                    primaryEnabled = !signing && !signCompleted,
                 ) {
                     when (step) {
                         NewGameStep.Coach -> CoachInfoStepContent(
@@ -199,30 +231,7 @@ fun NewGameWizardScreen(
                                 schoolDisplayName = schoolName,
                                 contractNilPreview = contractPreview,
                                 signError = signError,
-                                signingInProgress = signing,
-                                onSign = {
-                                    scope.launch {
-                                        signing = true
-                                        signError = null
-                                        if (NewGameSignValidator.validate(draft) != null) {
-                                            signError = SignContractError.IncompleteWizard
-                                            signing = false
-                                            return@launch
-                                        }
-                                        val loaded = saveSlotRepository.signNewGameFromWizard(
-                                            draft = draft,
-                                            schoolDisplayName = schoolName,
-                                            packId = packId,
-                                        )
-                                        signing = false
-                                        if (loaded == null) {
-                                            signError = SignContractError.SlotUnavailable
-                                        } else {
-                                            ActiveDynastySession.set(loaded)
-                                            onDynastyCreated()
-                                        }
-                                    }
-                                },
+                                signingInProgress = signing || signCompleted,
                             )
                         }
                     }
