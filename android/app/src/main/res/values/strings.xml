@@ -89,6 +89,7 @@
     <string name="new_coach_alma">Alma mater</string>
     <string name="new_coach_alma_none">None / N/A</string>
     <string name="new_coach_appearance_section">Appearance</string>
+    <string name="new_coach_portrait_preview_hint">Live portrait preview (same renderer as in-game cards).</string>
     <string name="new_coach_skin">Skin tone</string>
     <string name="new_coach_hair_color">Hair color</string>
     <string name="new_coach_hair_style">Hair style</string>
@@ -128,6 +129,7 @@
     <string name="new_sign_recap_schemes">Offense %1$s · Defense %2$s</string>
     <string name="new_sign_recap_school">School: %1$s</string>
     <string name="new_sign_cta">Sign contract</string>
+    <string name="new_sign_in_progress">Creating your dynasty…</string>
     <string name="new_sign_err_incomplete">Finish the earlier steps before signing.</string>
     <string name="new_school_search">Search schools</string>
     <string name="new_school_filter_starter">Showing programs with prestige 40 or lower.</string>

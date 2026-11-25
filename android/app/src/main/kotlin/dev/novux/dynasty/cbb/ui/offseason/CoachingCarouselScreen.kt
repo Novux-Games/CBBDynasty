@@ -2,6 +2,8 @@ package dev.novux.dynasty.cbb.ui.offseason
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -168,6 +170,7 @@ fun CoachingCarouselScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
+                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = 28.dp, vertical = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
@@ -182,7 +185,7 @@ fun CoachingCarouselScreen(
                     onStateChange = { carousel = it },
                     onComplete = onComplete,
                     scope = scope,
-                    modifier = Modifier.weight(1f, fill = false),
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         }

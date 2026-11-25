@@ -4,8 +4,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.ui.Alignment
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -27,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import dev.novux.dynasty.cbb.R
+import dev.novux.dynasty.cbb.ui.portrait.PresetHeadshot
 import dev.novux.dynasty.cbb.core.coach.CoachAvatarPresets
 import dev.novux.dynasty.cbb.core.coach.CoachCreateProfile
 import dev.novux.dynasty.cbb.core.coach.CoachCreateValidationError
@@ -105,29 +110,56 @@ fun CoachInfoStepContent(
             style = MaterialTheme.typography.titleSmall,
             modifier = Modifier.padding(top = 8.dp),
         )
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            PresetHeadshot(
+                avatarPresetId = profile.avatarPresetId,
+                size = 96.dp,
+                initialsFallbackName = profile.displayName(),
+            )
+            Text(
+                text = stringResource(R.string.new_coach_portrait_preview_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 8.dp),
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
         PresetChipRow(
             label = stringResource(R.string.new_coach_skin),
             options = CoachAvatarPresets.skinTones,
             selectedId = profile.skinToneId,
             onSelect = { onProfileChange(profile.copy(skinToneId = it)) },
+            previewPresetId = { optionId ->
+                "coach-$optionId-${profile.hairColorId}-${profile.hairStyleId}-${profile.beardStyleId}"
+            },
         )
         PresetChipRow(
             label = stringResource(R.string.new_coach_hair_color),
             options = CoachAvatarPresets.hairColors,
             selectedId = profile.hairColorId,
             onSelect = { onProfileChange(profile.copy(hairColorId = it)) },
+            previewPresetId = { optionId ->
+                "coach-${profile.skinToneId}-$optionId-${profile.hairStyleId}-${profile.beardStyleId}"
+            },
         )
         PresetChipRow(
             label = stringResource(R.string.new_coach_hair_style),
             options = CoachAvatarPresets.hairStyles,
             selectedId = profile.hairStyleId,
             onSelect = { onProfileChange(profile.copy(hairStyleId = it)) },
+            previewPresetId = { optionId ->
+                "coach-${profile.skinToneId}-${profile.hairColorId}-$optionId-${profile.beardStyleId}"
+            },
         )
         PresetChipRow(
             label = stringResource(R.string.new_coach_beard),
             options = CoachAvatarPresets.beardStyles,
             selectedId = profile.beardStyleId,
             onSelect = { onProfileChange(profile.copy(beardStyleId = it)) },
+            showPortraitChip = false,
         )
         val preview = profile.displayName()
         if (preview.isNotEmpty()) {
@@ -277,6 +309,8 @@ private fun PresetChipRow(
     options: List<dev.novux.dynasty.cbb.core.coach.AvatarPresetOption>,
     selectedId: String,
     onSelect: (String) -> Unit,
+    previewPresetId: (String) -> String = { it },
+    showPortraitChip: Boolean = true,
 ) {
     Column {
         Text(text = label, style = MaterialTheme.typography.labelLarge)
@@ -288,7 +322,20 @@ private fun PresetChipRow(
                 FilterChip(
                     selected = option.id == selectedId,
                     onClick = { onSelect(option.id) },
-                    label = { Text(option.label) },
+                    label = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        ) {
+                            if (showPortraitChip) {
+                                PresetHeadshot(
+                                    avatarPresetId = previewPresetId(option.id),
+                                    size = 28.dp,
+                                )
+                            }
+                            Text(option.label)
+                        }
+                    },
                 )
             }
         }
