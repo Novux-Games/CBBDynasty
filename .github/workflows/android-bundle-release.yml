@@ -41,6 +41,13 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Resolve version code (Play)
+        working-directory: ${{ github.workspace }}
+        run: |
+          CODE="$(bash scripts/resolve_app_version_code.sh)"
+          echo "VERSION_CODE=$CODE" >> "$GITHUB_ENV"
+          echo "Resolved versionCode=$CODE for AAB"
+
       - name: Decode upload keystore
         id: upload_keystore
         env:
@@ -65,6 +72,7 @@ jobs:
 
       - name: Bundle release AAB
         env:
+          VERSION_CODE: ${{ env.VERSION_CODE }}
           PLAY_SIGNING: ${{ steps.upload_keystore.outputs.play_signing }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}

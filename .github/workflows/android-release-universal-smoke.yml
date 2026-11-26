@@ -30,9 +30,17 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Resolve version code (Play)
+        working-directory: ${{ github.workspace }}
+        run: |
+          CODE="$(bash scripts/resolve_app_version_code.sh)"
+          echo "VERSION_CODE=$CODE" >> "$GITHUB_ENV"
+          echo "Resolved versionCode=$CODE"
+
       - name: Build release universal APK (sideload smoke)
         working-directory: ${{ github.workspace }}
         env:
+          VERSION_CODE: ${{ env.VERSION_CODE }}
           RELEASE_SIDELOAD_OUT: ${{ github.workspace }}/android/app/build/outputs/sideload/release
         run: bash scripts/build_release_universal_apk.sh
 
