@@ -5,6 +5,33 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+fun readPlayBaselineVersionCode(): Int =
+    rootProject.file("play_open_test_baseline_version_code.txt")
+        .takeIf { it.isFile }
+        ?.readText()
+        ?.trim()
+        ?.toIntOrNull() ?: 0
+
+fun resolveVersionCode(): Int {
+    System.getenv("VERSION_CODE")?.trim()?.toIntOrNull()?.let { return it }
+    val repoRoot = rootProject.rootDir.parentFile
+    val script = repoRoot.resolve("scripts/resolve_app_version_code.sh")
+    if (script.isFile) {
+        val proc =
+            ProcessBuilder("bash", script.absolutePath)
+                .directory(repoRoot)
+                .redirectErrorStream(true)
+                .start()
+        val text = proc.inputStream.bufferedReader().readText().trim()
+        proc.waitFor()
+        if (proc.exitValue() == 0) {
+            text.toIntOrNull()?.let { return it }
+        }
+    }
+    val baseline = readPlayBaselineVersionCode()
+    return baseline + 1
+}
+
 android {
     namespace = "dev.novux.dynasty.cbb"
     compileSdk = 36
@@ -13,7 +40,7 @@ android {
         applicationId = "com.dynasty.cbb"
         minSdk = 26
         targetSdk = 36
-        versionCode = 5
+        versionCode = resolveVersionCode()
         versionName = "0.1.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         ndk {

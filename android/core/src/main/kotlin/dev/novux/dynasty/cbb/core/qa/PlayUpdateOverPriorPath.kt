@@ -7,8 +7,9 @@ object PlayUpdateOverPriorPath {
     const val QA_ID: String = "MEGA-QA-136"
 
     /**
-     * Last version code published to open testing; current `versionCode` in `app/build.gradle.kts`
-     * must be strictly greater (`android/play_open_test_baseline_version_code.txt`).
+     * Last version code published to open testing; resolved `versionCode` (`scripts/resolve_app_version_code.sh`,
+     * git commit count + 1 over baseline in `android/app/build.gradle.kts`) must be strictly greater than
+     * `android/play_open_test_baseline_version_code.txt`.
      */
     const val BASELINE_FILE: String = "android/play_open_test_baseline_version_code.txt"
 

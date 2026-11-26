@@ -4,15 +4,13 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "$0")/.." && pwd)"
 baseline_file="$repo_root/android/play_open_test_baseline_version_code.txt"
-gradle_file="$repo_root/android/app/build.gradle.kts"
-
 if [[ ! -f "$baseline_file" ]]; then
   echo "Missing baseline file: $baseline_file" >&2
   exit 1
 fi
 
 baseline="$(tr -d ' \n\r' <"$baseline_file")"
-current="$(grep -E 'versionCode\s*=' "$gradle_file" | head -1 | sed -E 's/.*versionCode\s*=\s*([0-9]+).*/\1/')"
+current="$(bash "$repo_root/scripts/resolve_app_version_code.sh")"
 
 if [[ -z "$current" || -z "$baseline" ]]; then
   echo "Could not parse version codes (baseline=$baseline current=$current)" >&2
